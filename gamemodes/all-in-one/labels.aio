@@ -1,3 +1,22 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           labels.aio
+ *  @Module         all-in-one
+ */
+
 #include <ysilib\YSI_Coding\y_hooks>
 
 forward Create3DandP(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vVW, pickupid, Float:radius);

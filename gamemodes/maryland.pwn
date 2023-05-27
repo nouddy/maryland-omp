@@ -1,8 +1,22 @@
-/*
-	*TODO:
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           maryland.pwn
+ *  @Module         main
+ */
 
-	--SendPlayerNotify(playerid, "naslov teksta", "kurac teksta", SIMBOLI IMAS ISPISANE);
-*/
 #define YSI_YES_HEAP_MALLOC
 
 #define CGEN_MEMORY 60000
@@ -36,7 +50,8 @@
 #include <markerplus>
 #include <animated-textdraw>
 
-#define     c_server        "{86f5a7}"
+#define     c_server        "{8dc9f3}"
+#define     c_server2       "{c092de}"
 #define     c_red           "{ff1100}"
 #define     c_blue          "{0099cc}"
 #define     c_white         "{ffffff}"
@@ -49,7 +64,8 @@
 #define     c_purple        "{C2A2DA}"
 #define 	c_ogycolor		"{EB8C6C}"
 
-#define     x_server     0x86F5A7AA
+#define     x_server     0x8DC9F3FF
+#define     x_server2     0xC092DEFF
 #define     x_red        0xFF1100AA //error/important color
 #define     x_blue       0x0099CCAA //help color
 #define     x_white      0xffffffAA
@@ -87,10 +103,10 @@ public PlayerRegistered(playerid)
 main()
 {
     print("-                                     -");
-	print(" Founder : Poppy");
+	print(" Founder : Ogy & Lasee");
 	print(" Version : 1.0 - Maryland");
 	print(" Developer : Vostic & Ogy_ ");
-	print(" Credits : Muay, daddyDOT, Golubovic, realnaith");
+	print(" Credits : daddyDOT, realnaith");
 	print("-                                     -");
 	print("> Gamemode Starting...");
 	print(">> Maryland Gamemode Started");

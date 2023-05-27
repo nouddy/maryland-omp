@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2023 at 08:32 PM
+-- Generation Time: May 27, 2023 at 07:00 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `empire`
+-- Database: `maryland`
 --
 
 -- --------------------------------------------------------
@@ -145,7 +145,7 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`) VALUES
-(1, 'Vostic', 297206591, 1, 199250, 2, 21, 4, '22/05/2023 - 20:02', 'NEMA'),
+(1, 'Vostic', 297206591, 1, 198250, 2, 21, 4, '27/05/2023 - 14:51', 'NEMA'),
 (3, 'Ogy_', 252642079, 1, 38600, 299, 19, 4, '20/05/2023 - 18:22', '17/05/2023 - 19:57'),
 (4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59'),
 (5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00'),

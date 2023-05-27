@@ -1,3 +1,22 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           dynamicarea.csso
+ *  @Module         crossover
+ */
+
 #include <ysilib\YSI_Coding\y_hooks>
 
 public OnPlayerEnterDynamicArea(playerid, areaid) 

@@ -1,3 +1,22 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           staff.script
+ *  @Module         backend
+ */
+
 #include <ysilib\YSI_Coding\y_hooks>
 
 static  
@@ -422,9 +441,9 @@ YCMD:cc(playerid, params[], help)
 	}
 
 	static fmt_string[120], sati, minuta, sekunda; gettime(sati, minuta, sekunda);
-	format(fmt_string, sizeof(fmt_string), ""c_server"CHATBOX: "c_white"Chat je ocistio "c_server"%s", GetName(playerid));
+	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", GetName(playerid));
 	SendClientMessageToAll(-1, fmt_string);
-	SendClientMessageToAll(-1, ""c_white"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" );
+	SendClientMessageToAll(-1, ""c_white"••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" );
 	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" \187; "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
 	SendClientMessageToAll(-1, fmt_string );
 	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" \187; "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");

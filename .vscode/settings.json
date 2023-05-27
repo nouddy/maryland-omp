@@ -12,5 +12,6 @@
         "*.temp": "pawn",
         "*.asset": "pawn"
     },
-    "pawn.compilerPath": "D:\\Mods\\maryland\\compiler"
+    "pawn.compilerPath": "D:\\Mods\\maryland\\compiler",
+    "files.encoding": "windows1252"
 }

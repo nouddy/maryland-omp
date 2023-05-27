@@ -1,3 +1,22 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           discconnect.aio
+ *  @Module         all-in-one
+ */
+
 #include <ysilib\YSI_Coding\y_hooks>
 
 new DCC_Channel:g_Discord_Chat;
