@@ -148,9 +148,9 @@ timer Spawn_Player[100](playerid, type)
 		else if (type == e_SPAWN_TYPE_LOGIN)
 		{
 			new rand = random( sizeof( RandomSpawnCords ) );
-			//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Empire", "!", BOXCOLOR_GREEN);
+			//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Maryland", "!", BOXCOLOR_GREEN);
 
-			SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Empire", 3);
+			SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
 			SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
 				RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0,
 				0, 0, 0, 0, 0, 0
@@ -241,7 +241,7 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 	{
 		if(udb_hash(inputtext) == PlayerInfo[playerid][Password])
 		{
-			if(IgracUlogovan[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Empire \187; "c_white"Vec si ulogovan");
+			if(IgracUlogovan[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Maryland \187; "c_white"Vec si ulogovan");
 			defer Spawn_Player(playerid, 2);
 		}
 		else

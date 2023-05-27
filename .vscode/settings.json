@@ -9,6 +9,7 @@
         "*.script": "pawn",
         "*.stock": "pawn",
         "*.csso": "pawn",
+        "*.temp": "pawn",
         "*.asset": "pawn"
     },
     "pawn.compilerPath": "D:\\Mods\\maryland\\compiler"

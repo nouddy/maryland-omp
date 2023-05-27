@@ -88,12 +88,12 @@ main()
 {
     print("-                                     -");
 	print(" Founder : Poppy");
-	print(" Version : 1.0 - Empire");
+	print(" Version : 1.0 - Maryland");
 	print(" Developer : Vostic & Ogy_ ");
 	print(" Credits : Muay, daddyDOT, Golubovic, realnaith");
 	print("-                                     -");
 	print("> Gamemode Starting...");
-	print(">> Empire Gamemode Started");
+	print(">> Maryland Gamemode Started");
     print("-                                     -");
 }
 

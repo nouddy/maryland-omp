@@ -427,7 +427,7 @@ YCMD:cc(playerid, params[], help)
 	SendClientMessageToAll(-1, ""c_white"��������������������������������������������������" );
 	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" \187; "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
 	SendClientMessageToAll(-1, fmt_string );
-	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" \187; "c_white"Ugodnu igru na serveru zeli vam "c_server"Empire Staff Team");
+	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" \187; "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");
 
     return 1;
 }

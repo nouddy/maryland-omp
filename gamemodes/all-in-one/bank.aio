@@ -1,6 +1,6 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
-/*Dodati kredit, hipoteku i empire diamond funckije kao i funkcije za ostale kartice, proveriti transfer ne secam se kad sam ga radio dal je full gotov
+/*Dodati kredit, hipoteku i maryland diamond funckije kao i funkcije za ostale kartice, proveriti transfer ne secam se kad sam ga radio dal je full gotov
 - Prebaciti komande na dugmice (Y ILI ALT)
 !*/
 
@@ -115,7 +115,7 @@ Dialog: dialog_blagajna(const playerid, response, listitem, string: inputtext[])
 			case 0:
 			{
 				Dialog_Show(playerid, "dialog_deposit", DIALOG_STYLE_INPUT,
-					"Empire Banka",
+					"Maryland Banka",
 					"%s, Napisi kolicinu novca koju zelis da ostavis!",
 					"Odaberi", "Nazad", ReturnPlayerName(playerid)
 				);
@@ -123,7 +123,7 @@ Dialog: dialog_blagajna(const playerid, response, listitem, string: inputtext[])
 			case 1:
 			{
 				Dialog_Show(playerid, "dialog_withdraw", DIALOG_STYLE_INPUT,
-					"Empire Banka",
+					"Maryland Banka",
 					"%s, Napisi kolicinu novca koju zelis da podignes\nTvoj trenutni novac u banci je >> %d $!",
 					"Odaberi", "Nazad", ReturnPlayerName(playerid), PlayerFinance[playerid][pBankMoney]
 				);
@@ -131,7 +131,7 @@ Dialog: dialog_blagajna(const playerid, response, listitem, string: inputtext[])
 			case 2:
 			{
 				Dialog_Show(playerid, "dialog_transfer", DIALOG_STYLE_INPUT,
-					"Empire Banka",
+					"Maryland Banka",
 					"%s, unesi id igraca i kolicinu novca koju zelis prebaciti!",
 					"Odaberi", "Nazad", ReturnPlayerName(playerid)
 				);
@@ -145,14 +145,14 @@ Dialog: dialog_deposit(const playerid, response, listitem, string: inputtext[])
 {
 	if(!response) 
 		return Dialog_Show(playerid, "dialog_blagajna", DIALOG_STYLE_LIST,
-			"Empire Banka",
+			"Maryland Banka",
 			"Ostavi\nPodigni\nTransfer Novca",
 			"Odaberi", "Izlaz"
 		);
 
 	new string[128];
 
-	if(GetPlayerMoney(playerid) < strval(inputtext)) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemas toliko novca kod sebe!");
+	if(GetPlayerMoney(playerid) < strval(inputtext)) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemas toliko novca kod sebe!");
 
 	new novac1 = strval(inputtext);
 
@@ -174,14 +174,14 @@ Dialog: dialog_withdraw(const playerid, response, listitem, string: inputtext[])
 {
 	if(!response) 
 		return Dialog_Show(playerid, "dialog_blagajna", DIALOG_STYLE_LIST,
-			"Empire Banka",
+			"Maryland Banka",
 			"Ostavi\nPodigni\nTransfer Novca",
 			"Odaberi", "Izlaz"
 		);
 
 	new string[128];
 
-	if(PlayerFinance[playerid][pBankMoney] < strval(inputtext)) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemas toliko novca na racunu!");
+	if(PlayerFinance[playerid][pBankMoney] < strval(inputtext)) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemas toliko novca na racunu!");
 	
 	new novac1 = strval(inputtext);
 
@@ -203,7 +203,7 @@ Dialog: dialog_transfer(const playerid, response, listitem, string: inputtext[])
 {
 	if(!response) 
 		return Dialog_Show(playerid, "dialog_blagajna", DIALOG_STYLE_LIST,
-			"Empire Banka",
+			"Maryland Banka",
 			"Ostavi\nPodigni\nTransfer Novca",
 			"Odaberi", "Izlaz"
 		);
@@ -212,16 +212,16 @@ Dialog: dialog_transfer(const playerid, response, listitem, string: inputtext[])
 
 	if(sscanf(inputtext, "ui", id, cashdeposit)) 
 		return Dialog_Show(playerid, "dialog_transfer", DIALOG_STYLE_INPUT,
-			"Empire Banka",
+			"Maryland Banka",
 			"%s, unesi id igraca i kolicinu novca koju zelis prebaciti!",
 			"Odaberi", "Nazad", ReturnPlayerName(playerid)
 		);
 
-	if( cashdeposit > PlayerFinance[playerid][pBankMoney] || cashdeposit < 1 ) return SendClientMessage( playerid, x_red, "empire // "c_white"Nemate toliko novaca");
+	if( cashdeposit > PlayerFinance[playerid][pBankMoney] || cashdeposit < 1 ) return SendClientMessage( playerid, x_red, "maryland // "c_white"Nemate toliko novaca");
 
-	if( id == INVALID_PLAYER_ID ) return SendClientMessage(playerid, x_red, "empire // "c_white"Pogresan ID Igraca");
+	if( id == INVALID_PLAYER_ID ) return SendClientMessage(playerid, x_red, "maryland // "c_white"Pogresan ID Igraca");
 
-    if(!PlayerFinance[id][pBankAccount]) return SendClientMessage(playerid, x_red, "empire // "c_white"Taj igrac nema racun u banci!");
+    if(!PlayerFinance[id][pBankAccount]) return SendClientMessage(playerid, x_red, "maryland // "c_white"Taj igrac nema racun u banci!");
 
 	PlayerFinance[playerid][pBankMoney] -= cashdeposit;
     PlayerFinance[id][pBankMoney] += cashdeposit;
@@ -245,17 +245,17 @@ YCMD:otvoriracun(playerid, params[], help)
 
 	if(IsPlayerInRangeOfPoint(playerid, 3.0, 1689.8605,-1455.4658,13.5597))
     {
-		if(PlayerDocuments[playerid][pNationalID] == 0) return SendClientMessage(playerid, x_red, "empire // "c_white"Morate imati licnu kartu!");
-		if(PlayerFinance[playerid][pBankAccount] == 1) return SendClientMessage(playerid, x_red, "empire // "c_white"Vec imate racun u nasoj banci!");
+		if(PlayerDocuments[playerid][pNationalID] == 0) return SendClientMessage(playerid, x_red, "maryland // "c_white"Morate imati licnu kartu!");
+		if(PlayerFinance[playerid][pBankAccount] == 1) return SendClientMessage(playerid, x_red, "maryland // "c_white"Vec imate racun u nasoj banci!");
 
 		Dialog_Show(playerid, "dialog_kartica", DIALOG_STYLE_LIST,
 			"Odaberi Bankovnu Karticu",
-			"Master Card\nVisa\nAmerican Express\nEmpire Diamond",
+			"Master Card\nVisa\nAmerican Express\nMaryland Diamond",
 			"Odaberi", "Izlaz"
 		);
 
 	}
-	else SendClientMessage(playerid, x_red, "empire // "c_white"Morate biti u banci!");
+	else SendClientMessage(playerid, x_red, "maryland // "c_white"Morate biti u banci!");
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -268,17 +268,17 @@ YCMD:blagajna(playerid, params[], help)
         return 1;
     }
 
-	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemate racun u nasoj banci!");
+	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemate racun u nasoj banci!");
 
 	if(IsPlayerInRangeOfPoint(playerid, 3.0, 1689.8605,-1455.4658,13.5597))
 	{
 		Dialog_Show(playerid, "dialog_blagajna", DIALOG_STYLE_LIST,
-			"Empire Banka",
+			"Maryland Banka",
 			"Ostavi\nPodigni\nTransfer Novca",
 			"Odaberi", "Izlaz"
 		);
 	}
-	else SendClientMessage(playerid, x_red, "empire // "c_white"Morate biti na blagajni u banci da bi uradi ovo!");
+	else SendClientMessage(playerid, x_red, "maryland // "c_white"Morate biti na blagajni u banci da bi uradi ovo!");
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 
@@ -292,13 +292,13 @@ YCMD:kredit(playerid, params[], help)
         return 1;
     }
 
-	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemate racun u nasoj banci!");
+	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemate racun u nasoj banci!");
 
 	if(IsPlayerInRangeOfPoint(playerid, 3.0, 1814.0297,-1292.0894,22.2110))
 	{
 		SendClientMessage(playerid, x_green, "BANKA >> "c_white"Opcija kredita jos nije moguca!");
 	}
-	else SendClientMessage(playerid, x_red, "empire // "c_white"Morate biti na blagajni u banci!");
+	else SendClientMessage(playerid, x_red, "maryland // "c_white"Morate biti na blagajni u banci!");
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 
@@ -312,17 +312,17 @@ YCMD:balans(playerid, params[], help)
         return 1;
     }
 
-	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemate racun u nasoj banci!");
+	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemate racun u nasoj banci!");
 
 	if(IsPlayerInRangeOfPoint(playerid, 3.0, 1689.8605,-1455.4658,13.5597))
 	{
 		Dialog_Show(playerid, "dialog_balans", DIALOG_STYLE_MSGBOX,
-			"Empire Banka",
+			"Maryland Banka",
 			""c_white"%s, Vase treenutno stanje na racunu je >> "c_server"%d $!",
 			"U redu", "", ReturnPlayerName(playerid), PlayerFinance[playerid][pBankMoney]
 		);
 	}
-	else SendClientMessage(playerid, x_red, "empire // "c_white"Morate biti na blagajni u banci!");
+	else SendClientMessage(playerid, x_red, "maryland // "c_white"Morate biti na blagajni u banci!");
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 
@@ -338,21 +338,21 @@ YCMD:promenipinkod(playerid, params[], help)
 
 	new ranpin = 1000 + random(9999);
 
-	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "empire // "c_white"Nemate racun u nasoj banci!");
+	if(PlayerFinance[playerid][pBankAccount] == 0) return SendClientMessage(playerid, x_red, "maryland // "c_white"Nemate racun u nasoj banci!");
 
 	if(IsPlayerInRangeOfPoint(playerid, 3.0, 1689.8605,-1455.4658,13.5597))
 	{
 		PlayerFinance[playerid][pBankPin] = ranpin;
 
 		Dialog_Show(playerid, "dialog_promenapina", DIALOG_STYLE_MSGBOX,
-			"Empire Banka",
+			"Maryland Banka",
 			""c_white"%s, Vase novi pin od racuna je >> "c_server"%i, zapamtite ga dobro!",
 			"U redu", "", ReturnPlayerName(playerid), PlayerFinance[playerid][pBankPin]
 		);
 
 		SaveFinance(playerid);SavePlayer(playerid);
 	}
-	else SendClientMessage(playerid, x_red, "empire // "c_white"Morate biti na blagajni u banci!");
+	else SendClientMessage(playerid, x_red, "maryland // "c_white"Morate biti na blagajni u banci!");
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 

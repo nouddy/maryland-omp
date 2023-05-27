@@ -11,7 +11,7 @@
 	SendClientMessageEx(%0, x_ogycolor, "[?/Job]: {FFFFFF}"%1)
 
 #define SendInfoMessage(%0,%1) \
-	SendClientMessageEx(%0, x_server, "••» EMPIRE: {FFFFFF}"%1)
+	SendClientMessageEx(%0, x_server, "ï¿½ï¿½ï¿½ MARYLAND: {FFFFFF}"%1)
 /*
 	Hooks
 */

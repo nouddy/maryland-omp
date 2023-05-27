@@ -15,8 +15,8 @@ hook OnGameModeInit()
 	Create3DTextLabel(""c_server"[ daddyDOT ]\n"c_white"`Mehanicar`", x_white, 1104.9012,-1226.2242,15.8346, 20.0, 0, 1);
 	Create3DTextLabel(""c_server"[ JEVTIC ]\n"c_white"`Mehanicar`", x_white, 1098.3132,-1226.4584,15.8346, 20.0, 0, 1);
 
-    Create3DTextLabel(""c_server"[ Empire Customs ]\n"c_white"`/fixengine >> $400`\n`/fullservice >> $800`", x_white, 1107.8839,-1225.9181,15.9718, 20.0, 0, 1);
-    Create3DTextLabel(""c_server"[ Empire Customs ]\n"c_white"`/probnetablice >> $800`\n`/tehnickipregled >> $2000`", x_white, 1095.5005,-1225.7079,15.9721, 20.0, 0, 1);
+    Create3DTextLabel(""c_server"[ Maryland Customs ]\n"c_white"`/fixengine >> $400`\n`/fullservice >> $800`", x_white, 1107.8839,-1225.9181,15.9718, 20.0, 0, 1);
+    Create3DTextLabel(""c_server"[ Maryland Customs ]\n"c_white"`/probnetablice >> $800`\n`/tehnickipregled >> $2000`", x_white, 1095.5005,-1225.7079,15.9721, 20.0, 0, 1);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
