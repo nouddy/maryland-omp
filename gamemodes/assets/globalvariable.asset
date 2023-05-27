@@ -30,5 +30,4 @@ new IC_CHAT = 1;                                            //* Variabla za glob
 new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za proveru
 
 new Text:Global_TD[33];
-new Text:EmpireLogo_TD[76];
 new PlayerText:Player_TDs[MAX_PLAYERS][7];

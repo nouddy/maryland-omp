@@ -62,7 +62,7 @@
 
 // Healthbar foreground color
 #if !defined WC_HEALTH_BAR_FG_COLOR
-	#define WC_HEALTH_BAR_FG_COLOR 0x86F5A7AA //red
+	#define WC_HEALTH_BAR_FG_COLOR 0x8DC9F3FF //red
 #endif
 
 // Healthbar background color
