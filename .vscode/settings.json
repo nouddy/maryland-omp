@@ -11,5 +11,5 @@
         "*.csso": "pawn",
         "*.asset": "pawn"
     },
-    "pawn.compilerPath": "D:\\Mods\\empire-project\\compiler"
+    "pawn.compilerPath": "D:\\Mods\\maryland\\compiler"
 }
