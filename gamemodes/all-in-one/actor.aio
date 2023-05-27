@@ -1,0 +1,19 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+//! Task actor preload
+
+hook OnGameModeInit()
+{
+    print("actor/main.actor loaded");
+}
+
+task resetActorPos[4000]() 
+{
+    //! Gigatron aktori
+
+    SetActorPos(Gigatron1, 1484.5914,-1264.3303,14.5594);
+    SetActorFacingAngle(Gigatron1, 87.9902);
+    ApplyActorAnimation(Gigatron1, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
+
+    return 1;
+}

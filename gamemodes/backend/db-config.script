@@ -1,0 +1,45 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+#define local
+
+#if defined server
+#define MYSQL_HOST		"5.9.8.124"
+#define MYSQL_USER 		"u1608735_va98vTeT5o"
+#define MYSQL_PASS		"xD.ck8=9z^BLc^6=xKrweyrR"
+#define MYSQL_DB 		"s1608735_my-db1684172147"
+#endif
+
+#if defined local
+#define MYSQL_HOST		"localhost"
+#define MYSQL_USER 		"root"
+#define MYSQL_PASS		""
+#define MYSQL_DB 		"empire"
+#endif
+
+new MySQL:SQL;
+
+hook OnGameModeInit(){
+	//****************************************************************************//
+	// #if defined server
+	// new MySQLOpt:options = mysql_init_options();
+    // mysql_set_option(options, SERVER_PORT, 8888);
+    // SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB, options);
+	// #endif
+
+	SQL = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DB);
+	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)
+	{
+		print("MySQL \187; Niste se uspjeli konektovati na data bazu, gasim server.");
+		SendRconCommand("exit");
+		return 1;
+	}
+	print("MySQL \187; Uspjesno smo se konektovali na SQL server.");
+	print("backend/db-config.script loaded");
+	//****************************************************************************//
+	return 1;
+}
+
+hook OnGameModeExit(){
+	mysql_close(SQL);
+	return 1;
+}

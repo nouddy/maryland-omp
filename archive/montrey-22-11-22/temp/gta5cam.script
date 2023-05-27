@@ -1,0 +1,69 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+new gta5cam[MAX_PLAYERS];
+new Float:camx[MAX_PLAYERS];
+new Float:camy[MAX_PLAYERS];
+new Float:camz[MAX_PLAYERS];
+
+hook OnGameModeInit()
+{
+	print("name/name.extension loaded");
+
+
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+	gta5cam[playerid]=1;
+	return 1;
+}
+
+hook OnplayerSpawn(playerid)
+{
+	if(gta5cam[playerid] == 1)
+	{
+	SetCameraBehindPlayer(playerid);
+	GetPlayerPos(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]);
+	SetPlayerCameraPos(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]+20);
+	SetPlayerCameraLookAt(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]);
+ 	TogglePlayerControllable(playerid,0);
+ 	}
+	return 1;
+ }
+ 
+forward Camera(playerid);
+public Camera(playerid)
+{
+	SetPlayerCameraPos(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]+15);
+	SetPlayerCameraLookAt(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]);
+ 	SetTimerEx("OnCamera", 2000, false, "i", playerid);
+	return 1;
+}
+
+forward OnCamera(playerid);
+public OnCamera(playerid)
+{
+	SetPlayerCameraPos(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]+10);
+	SetPlayerCameraLookAt(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]);
+ 	SetTimerEx("OnpCamera", 1000, false, "i", playerid);
+	return 1;
+}
+
+forward OnpCamera(playerid);
+public OnpCamera(playerid)
+{
+	SetPlayerCameraPos(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]+5);
+	SetPlayerCameraLookAt(playerid, Float:camx[playerid], Float:camy[playerid], Float:camz[playerid]);
+ 	SetTimerEx("OneCamera", 500, false, "i", playerid);
+	return 1;
+}
+
+forward OneCamera(playerid);
+public OneCamera(playerid)
+{
+	TogglePlayerControllable(playerid,1);
+	SetCameraBehindPlayer(playerid);
+	gta5cam[playerid]=0;
+	return 1;
+}

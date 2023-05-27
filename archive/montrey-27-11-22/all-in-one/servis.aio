@@ -1,0 +1,121 @@
+//======================================================== Montrey Customs System ==============================================================//
+#include <ysilib\YSI_Coding\y_hooks>
+
+new 
+	mehanicar1, //actor
+	mehanicar2; //actor
+
+static player_Money[MAX_PLAYERS];
+
+hook Account_Load(const playerid, const string: name[], const string: value[]);
+hook Account_Load(const playerid, const string: name[], const string: value[])
+{
+    INI_Int("Money", player_Money[playerid]);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeInit()
+{
+	print("all-in-one/servis.aio loaded");
+
+	mehanicar1 = CreateActor(50, 1104.9012,-1226.2242,15.8346,275.4460);
+    mehanicar2 = CreateActor(50, 1098.3132,-1226.4584,15.8346,94.1730);
+
+	Create3DTextLabel(""c_server"[ daddyDOT ]\n"c_white"`Mehanicar`", x_white, 1104.9012,-1226.2242,15.8346, 20.0, 0, 1);
+	Create3DTextLabel(""c_server"[ JEVTIC ]\n"c_white"`Mehanicar`", x_white, 1098.3132,-1226.4584,15.8346, 20.0, 0, 1);
+
+    Create3DTextLabel(""c_server"[ Montrey Customs ]\n"c_white"`/fixengine >> $400`\n`/fullservice >> $800`", x_white, 1107.8839,-1225.9181,15.9718, 20.0, 0, 1);
+    Create3DTextLabel(""c_server"[ Montrey Customs ]\n"c_white"`/probnetablice >> $800`\n`/tehnickipregled >> $2000`", x_white, 1095.5005,-1225.7079,15.9721, 20.0, 0, 1);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerSpawn(playerid)
+{
+    SetPlayerMapIcon(playerid, 2, 1098.1017,-1210.0398,17.3807, 27, 0, MAPICON_GLOBAL); // Ikonica banke na mapi
+}
+
+forward service(playerid);
+public service(playerid)
+{
+    TogglePlayerControllable(playerid, 1);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:fixengine(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, 0xFFFFFFAA, "HELP: /help <otvoriracun> da otvoris racun.");
+        return 1;
+    }
+
+	/*new
+        vehicleid = GetPlayerVehicleID(playerid);*/
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1107.8839,-1225.9181,15.9718)) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Niste u servisu za popravku!");
+	if(GetPlayerMoney(playerid) < 400) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Nemate dovoljno novca!");
+
+	SetTimerEx("service", 4000, false, "i", playerid);
+    TogglePlayerControllable(playerid, 0);
+    SetVehicleHealth(GetPlayerVehicleID(playerid), 1000);
+    GivePlayerMoney(playerid, -400);
+    ApplyActorAnimation(mehanicar1, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
+    SendClientMessage(playerid, x_yellow,"SERVIS >> "c_white"Uspesno ste popravili motor vozila !");
+
+	new INI:File = INI_Open(Account_Path(playerid));
+	INI_SetTag( File, "data" );
+    INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+
+	INI_Close( File );
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:fullservice(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1107.8839,-1225.9181,15.9718)) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Niste u servisu za popravku!");
+	if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Nemate dovoljno novca!");
+
+	SetTimerEx("service", 4000, false, "i", playerid);
+    TogglePlayerControllable(playerid, 0);
+    RepairVehicle(GetPlayerVehicleID(playerid));
+    GivePlayerMoney(playerid, -800);
+    ApplyActorAnimation(mehanicar2, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
+    SendClientMessage(playerid, x_yellow,"SERVIS >> "c_white"Uspesno ste popravili vozilo !");
+
+	new INI:File = INI_Open(Account_Path(playerid));
+	INI_SetTag( File, "data" );
+    INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+
+	INI_Close( File );
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:probnetablice(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Niste u servisu za popravku!");
+	if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Nemate dovoljno novca!");
+
+    SendClientMessage(playerid, x_red,"SERVIS >> "c_white"Ova funkcija jos nije dodata!");
+
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:tehnickipregled(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Niste u servisu za popravku!");
+	if(GetPlayerMoney(playerid) < 800) return SendClientMessage(playerid, x_red, "SERVIS >> "c_white"Nemate dovoljno novca!");
+
+    SendClientMessage(playerid, x_red,"SERVIS >> "c_white"Ova funkcija jos nije dodata!");
+
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}

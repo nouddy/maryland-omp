@@ -1,0 +1,78 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+static  
+    player_Score[MAX_PLAYERS],
+    player_Money[MAX_PLAYERS],
+	player_Respect[MAX_PLAYERS],
+	player_RespectNeed[MAX_PLAYERS];
+
+hook Account_Load(const playerid, const string: name[], const string: value[]);
+hook Account_Load(const playerid, const string: name[], const string: value[])
+{
+    INI_Int("Level", player_Score[playerid]);
+    INI_Int("Respect", player_Respect[playerid]);
+	INI_Int("RespectNeed", player_RespectNeed[playerid]);
+    INI_Int("Money", player_Money[playerid]);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeInit()
+{
+    print("backend/payday.script loaded");
+
+    SetTimer("PayDay", 3600000, true);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    player_RespectNeed[playerid] = player_Score[playerid]*3+4;
+
+	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    new INI:File = INI_Open(Account_Path(playerid));
+    INI_SetTag(File,"data");
+    INI_WriteInt(File, "Level", GetPlayerScore(playerid));
+    INI_WriteInt(File, "Respect", player_Respect[playerid]);
+    INI_WriteInt(File, "RespectNeed", player_RespectNeed[playerid]);
+    INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+    INI_Close(File);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+forward PayDay(playerid);
+public PayDay(playerid)
+{
+    player_Respect[playerid]++;
+    static string[256];
+    format(string, sizeof(string), ""c_green"PAYDAY: "c_white"Primili ste platu u iznosu od $500! Ostatak plate vam je isplacen na racun!");
+    SendClientMessage(playerid, -1, string);
+    GivePlayerMoney(playerid, 500);
+    format(string, sizeof(string), ""c_green"PAYDAY: "c_white"Sada imas %d/%d respekata!", player_Respect[playerid], player_RespectNeed[playerid]);
+    SendClientMessage(playerid, -1, string);
+    if(player_Respect[playerid] >= player_RespectNeed[playerid])
+    {
+        player_Respect[playerid] = 0;
+        player_Score[playerid]++;
+        player_RespectNeed[playerid] = player_Score[playerid]*3+4;
+        format(string, sizeof(string), ""c_green"PAYDAY: "c_white"Cestitamo sada si level %d! Potrebno ti je %d respekata!", player_Score[playerid], player_RespectNeed[playerid]);
+        SendClientMessage(playerid, -1, string);
+    }
+    new INI:File = INI_Open(Account_Path(playerid));
+    INI_SetTag(File,"data");
+    INI_WriteInt(File, "Level", GetPlayerScore(playerid));
+    INI_WriteInt(File, "Respect", player_Respect[playerid]);
+    INI_WriteInt(File, "RespectNeed", player_RespectNeed[playerid]);
+    INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+    INI_Close(File);
+
+    SetPlayerScore(playerid, player_Score[playerid]); // Da refresha level u scoreboard kada se levelupuje lik
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}

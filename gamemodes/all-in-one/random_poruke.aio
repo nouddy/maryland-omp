@@ -1,0 +1,19 @@
+
+
+
+new const RandomSPoruke[4][128] =
+{
+	"~w~Poseti_nas_discord_\187;_https://discord.gg/JbYWfNDgcj_.",
+	"~w~Backend_\187;_Vostic_&_Ogy_",
+	"~w~Ako_si_nov_\187;_/pitaj",
+	"~w~vosta_i_ogy_su_kraljevi"
+
+};
+
+
+
+ptask RandomPorukice[7000](playerid)
+{
+	CreateTextdrawAnimation(playerid, Player_TDs[playerid][6], 55, "~w~",RandomSPoruke[ random( sizeof( RandomSPoruke ) ) ] );
+	return 1;
+}

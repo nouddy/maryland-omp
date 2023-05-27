@@ -1,0 +1,452 @@
+#include <ysilib\YSI_Coding\y_hooks>
+//////////////////////////////////////// Textdraws Imena (Defines) ///////////////////////////////////////////////////
+new Text:GlobalTD[39];
+//new PlayerText:ImeIgracaTD[MAX_PLAYERS];
+
+/////////////////////////////////////// Public za sve PlayerTdove  ////////////////////////////////////////////////////
+
+hook OnGameModeInit()
+{
+    print("frontend/main.tde loaded");
+
+    CreateTextdraws();		//Stock za tdove
+}
+
+hook OnPlayerSpawn(playerid)
+{
+    // GlobalTD
+    for(new i=0; i< 39; i++)
+    {
+        TextDrawShowForPlayer(playerid, GlobalTD[i]);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+stock CreateTextdraws() {
+
+    GlobalTD[0] = TextDrawCreate(310.333251, 91.948173, "mdl-2000:montery");
+    TextDrawTextSize(GlobalTD[0], 26.000000, 31.000000);
+    TextDrawAlignment(GlobalTD[0], 1);
+    TextDrawColor(GlobalTD[0], -154);
+    TextDrawSetShadow(GlobalTD[0], 0);
+    TextDrawBackgroundColor(GlobalTD[0], 255);
+    TextDrawFont(GlobalTD[0], 4);
+    TextDrawSetProportional(GlobalTD[0], 0);
+
+    GlobalTD[1] = TextDrawCreate(549.733154, 39.196327, "");
+    TextDrawTextSize(GlobalTD[1], 19.000000, -24.000000);
+    TextDrawAlignment(GlobalTD[1], 1);
+    TextDrawColor(GlobalTD[1], -1);
+    TextDrawSetShadow(GlobalTD[1], 0);
+    TextDrawBackgroundColor(GlobalTD[1], -256);
+    TextDrawFont(GlobalTD[1], 5);
+    TextDrawSetProportional(GlobalTD[1], 0);
+    TextDrawSetPreviewModel(GlobalTD[1], 1318);
+    TextDrawSetPreviewRot(GlobalTD[1], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    GlobalTD[2] = TextDrawCreate(551.733398, -5.518454, "");
+    TextDrawTextSize(GlobalTD[2], 18.000000, 49.000000);
+    TextDrawAlignment(GlobalTD[2], 1);
+    TextDrawColor(GlobalTD[2], -1);
+    TextDrawSetShadow(GlobalTD[2], 0);
+    TextDrawBackgroundColor(GlobalTD[2], -256);
+    TextDrawFont(GlobalTD[2], 5);
+    TextDrawSetProportional(GlobalTD[2], 0);
+    TextDrawSetPreviewModel(GlobalTD[2], 19177);
+    TextDrawSetPreviewRot(GlobalTD[2], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[3] = TextDrawCreate(551.533325, 37.196365, "");
+    TextDrawTextSize(GlobalTD[3], 17.000000, -20.000000);
+    TextDrawAlignment(GlobalTD[3], 1);
+    TextDrawColor(GlobalTD[3], -1);
+    TextDrawSetShadow(GlobalTD[3], 0);
+    TextDrawBackgroundColor(GlobalTD[3], -256);
+    TextDrawFont(GlobalTD[3], 5);
+    TextDrawSetProportional(GlobalTD[3], 0);
+    TextDrawSetPreviewModel(GlobalTD[3], 1318);
+    TextDrawSetPreviewRot(GlobalTD[3], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    GlobalTD[4] = TextDrawCreate(552.699707, 31.837007, "");
+    TextDrawTextSize(GlobalTD[4], 20.000000, -14.000000);
+    TextDrawAlignment(GlobalTD[4], 1);
+    TextDrawColor(GlobalTD[4], -1);
+    TextDrawSetShadow(GlobalTD[4], 0);
+    TextDrawBackgroundColor(GlobalTD[4], -256);
+    TextDrawFont(GlobalTD[4], 5);
+    TextDrawSetProportional(GlobalTD[4], 0);
+    TextDrawSetPreviewModel(GlobalTD[4], 1318);
+    TextDrawSetPreviewRot(GlobalTD[4], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    GlobalTD[5] = TextDrawCreate(551.899780, 36.770309, "");
+    TextDrawTextSize(GlobalTD[5], 20.000000, -14.000000);
+    TextDrawAlignment(GlobalTD[5], 1);
+    TextDrawColor(GlobalTD[5], -1);
+    TextDrawSetShadow(GlobalTD[5], 0);
+    TextDrawBackgroundColor(GlobalTD[5], -256);
+    TextDrawFont(GlobalTD[5], 5);
+    TextDrawSetProportional(GlobalTD[5], 0);
+    TextDrawSetPreviewModel(GlobalTD[5], 1318);
+    TextDrawSetPreviewRot(GlobalTD[5], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    GlobalTD[6] = TextDrawCreate(552.333068, 34.896244, "");
+    TextDrawTextSize(GlobalTD[6], 20.000000, -14.000000);
+    TextDrawAlignment(GlobalTD[6], 1);
+    TextDrawColor(GlobalTD[6], -1);
+    TextDrawSetShadow(GlobalTD[6], 0);
+    TextDrawBackgroundColor(GlobalTD[6], -256);
+    TextDrawFont(GlobalTD[6], 5);
+    TextDrawSetProportional(GlobalTD[6], 0);
+    TextDrawSetPreviewModel(GlobalTD[6], 1318);
+    TextDrawSetPreviewRot(GlobalTD[6], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    GlobalTD[7] = TextDrawCreate(554.166503, 36.937088, "");
+    TextDrawTextSize(GlobalTD[7], 12.000000, -14.000000);
+    TextDrawAlignment(GlobalTD[7], 1);
+    TextDrawColor(GlobalTD[7], -1);
+    TextDrawSetShadow(GlobalTD[7], 0);
+    TextDrawBackgroundColor(GlobalTD[7], -256);
+    TextDrawFont(GlobalTD[7], 5);
+    TextDrawSetProportional(GlobalTD[7], 0);
+    TextDrawSetPreviewModel(GlobalTD[7], 1318);
+    TextDrawSetPreviewRot(GlobalTD[7], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    GlobalTD[8] = TextDrawCreate(553.966674, 7.914912, "");
+    TextDrawTextSize(GlobalTD[8], 25.000000, 44.000000);
+    TextDrawAlignment(GlobalTD[8], 1);
+    TextDrawColor(GlobalTD[8], -1);
+    TextDrawSetShadow(GlobalTD[8], 0);
+    TextDrawBackgroundColor(GlobalTD[8], -256);
+    TextDrawFont(GlobalTD[8], 5);
+    TextDrawSetProportional(GlobalTD[8], 0);
+    TextDrawSetPreviewModel(GlobalTD[8], 19177);
+    TextDrawSetPreviewRot(GlobalTD[8], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[9] = TextDrawCreate(564.433166, 39.411170, "");
+    TextDrawTextSize(GlobalTD[9], 19.000000, -24.000000);
+    TextDrawAlignment(GlobalTD[9], 1);
+    TextDrawColor(GlobalTD[9], -1);
+    TextDrawSetShadow(GlobalTD[9], 0);
+    TextDrawBackgroundColor(GlobalTD[9], -256);
+    TextDrawFont(GlobalTD[9], 5);
+    TextDrawSetProportional(GlobalTD[9], 0);
+    TextDrawSetPreviewModel(GlobalTD[9], 1318);
+    TextDrawSetPreviewRot(GlobalTD[9], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    GlobalTD[10] = TextDrawCreate(563.333374, -5.518465, "");
+    TextDrawTextSize(GlobalTD[10], 18.000000, 49.000000);
+    TextDrawAlignment(GlobalTD[10], 1);
+    TextDrawColor(GlobalTD[10], -1);
+    TextDrawSetShadow(GlobalTD[10], 0);
+    TextDrawBackgroundColor(GlobalTD[10], -256);
+    TextDrawFont(GlobalTD[10], 5);
+    TextDrawSetProportional(GlobalTD[10], 0);
+    TextDrawSetPreviewModel(GlobalTD[10], 19177);
+    TextDrawSetPreviewRot(GlobalTD[10], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[11] = TextDrawCreate(564.299926, 38.170509, "");
+    TextDrawTextSize(GlobalTD[11], 17.000000, -20.000000);
+    TextDrawAlignment(GlobalTD[11], 1);
+    TextDrawColor(GlobalTD[11], -1);
+    TextDrawSetShadow(GlobalTD[11], 0);
+    TextDrawBackgroundColor(GlobalTD[11], -256);
+    TextDrawFont(GlobalTD[11], 5);
+    TextDrawSetProportional(GlobalTD[11], 0);
+    TextDrawSetPreviewModel(GlobalTD[11], 1318);
+    TextDrawSetPreviewRot(GlobalTD[11], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    GlobalTD[12] = TextDrawCreate(559.699584, 31.707368, "");
+    TextDrawTextSize(GlobalTD[12], 21.000000, -13.060001);
+    TextDrawAlignment(GlobalTD[12], 1);
+    TextDrawColor(GlobalTD[12], -1);
+    TextDrawSetShadow(GlobalTD[12], 0);
+    TextDrawBackgroundColor(GlobalTD[12], -256);
+    TextDrawFont(GlobalTD[12], 5);
+    TextDrawSetProportional(GlobalTD[12], 0);
+    TextDrawSetPreviewModel(GlobalTD[12], 1318);
+    TextDrawSetPreviewRot(GlobalTD[12], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    GlobalTD[13] = TextDrawCreate(560.799560, 35.848022, "");
+    TextDrawTextSize(GlobalTD[13], 21.000000, -13.060001);
+    TextDrawAlignment(GlobalTD[13], 1);
+    TextDrawColor(GlobalTD[13], -1);
+    TextDrawSetShadow(GlobalTD[13], 0);
+    TextDrawBackgroundColor(GlobalTD[13], -256);
+    TextDrawFont(GlobalTD[13], 5);
+    TextDrawSetProportional(GlobalTD[13], 0);
+    TextDrawSetPreviewModel(GlobalTD[13], 1318);
+    TextDrawSetPreviewRot(GlobalTD[13], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    GlobalTD[14] = TextDrawCreate(559.399658, 35.218387, "");
+    TextDrawTextSize(GlobalTD[14], 21.000000, -13.060001);
+    TextDrawAlignment(GlobalTD[14], 1);
+    TextDrawColor(GlobalTD[14], -1);
+    TextDrawSetShadow(GlobalTD[14], 0);
+    TextDrawBackgroundColor(GlobalTD[14], -256);
+    TextDrawFont(GlobalTD[14], 5);
+    TextDrawSetProportional(GlobalTD[14], 0);
+    TextDrawSetPreviewModel(GlobalTD[14], 1318);
+    TextDrawSetPreviewRot(GlobalTD[14], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    GlobalTD[15] = TextDrawCreate(310.333251, 91.948173, "mdl-2000:montery");
+    TextDrawTextSize(GlobalTD[15], 26.000000, 31.000000);
+    TextDrawAlignment(GlobalTD[15], 1);
+    TextDrawColor(GlobalTD[15], -154);
+    TextDrawSetShadow(GlobalTD[15], 0);
+    TextDrawBackgroundColor(GlobalTD[15], 255);
+    TextDrawFont(GlobalTD[15], 4);
+    TextDrawSetProportional(GlobalTD[15], 0);
+
+    GlobalTD[16] = TextDrawCreate(543.133178, 43.370460, "");
+    TextDrawTextSize(GlobalTD[16], 45.000000, -18.000000);
+    TextDrawAlignment(GlobalTD[16], 1);
+    TextDrawColor(GlobalTD[16], -1832518913);
+    TextDrawSetShadow(GlobalTD[16], 0);
+    TextDrawBackgroundColor(GlobalTD[16], -256);
+    TextDrawFont(GlobalTD[16], 5);
+    TextDrawSetProportional(GlobalTD[16], 0);
+    TextDrawSetPreviewModel(GlobalTD[16], 2965);
+    TextDrawSetPreviewRot(GlobalTD[16], 90.000000, 0.000000, 90.000000, 1.000000);
+
+    GlobalTD[17] = TextDrawCreate(146.666595, 71.622238, "mdl-2000:montery");
+    TextDrawTextSize(GlobalTD[17], 132.000000, 162.000000);
+    TextDrawAlignment(GlobalTD[17], 1);
+    TextDrawColor(GlobalTD[17], -1);
+    TextDrawSetShadow(GlobalTD[17], 0);
+    TextDrawBackgroundColor(GlobalTD[17], 255);
+    TextDrawFont(GlobalTD[17], 4);
+    TextDrawSetProportional(GlobalTD[17], 0);
+
+    GlobalTD[18] = TextDrawCreate(534.500000, 21.214885, "");
+    TextDrawTextSize(GlobalTD[18], 46.000000, 32.000000);
+    TextDrawAlignment(GlobalTD[18], 1);
+    TextDrawColor(GlobalTD[18], -1832518913);
+    TextDrawSetShadow(GlobalTD[18], 0);
+    TextDrawBackgroundColor(GlobalTD[18], -256);
+    TextDrawFont(GlobalTD[18], 5);
+    TextDrawSetProportional(GlobalTD[18], 0);
+    TextDrawSetPreviewModel(GlobalTD[18], 19177);
+    TextDrawSetPreviewRot(GlobalTD[18], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[19] = TextDrawCreate(552.300048, 21.085275, "");
+    TextDrawTextSize(GlobalTD[19], 46.000000, 32.000000);
+    TextDrawAlignment(GlobalTD[19], 1);
+    TextDrawColor(GlobalTD[19], -1832518913);
+    TextDrawSetShadow(GlobalTD[19], 0);
+    TextDrawBackgroundColor(GlobalTD[19], -256);
+    TextDrawFont(GlobalTD[19], 5);
+    TextDrawSetProportional(GlobalTD[19], 0);
+    TextDrawSetPreviewModel(GlobalTD[19], 19177);
+    TextDrawSetPreviewRot(GlobalTD[19], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[20] = TextDrawCreate(519.066589, 5.537127, "");
+    TextDrawTextSize(GlobalTD[20], 88.000000, 58.000000);
+    TextDrawAlignment(GlobalTD[20], 1);
+    TextDrawColor(GlobalTD[20], -1832518913);
+    TextDrawSetShadow(GlobalTD[20], 0);
+    TextDrawBackgroundColor(GlobalTD[20], -256);
+    TextDrawFont(GlobalTD[20], 5);
+    TextDrawSetProportional(GlobalTD[20], 0);
+    TextDrawSetPreviewModel(GlobalTD[20], 19177);
+    TextDrawSetPreviewRot(GlobalTD[20], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[21] = TextDrawCreate(525.466979, 5.537127, "");
+    TextDrawTextSize(GlobalTD[21], 88.000000, 58.000000);
+    TextDrawAlignment(GlobalTD[21], 1);
+    TextDrawColor(GlobalTD[21], -1832518913);
+    TextDrawSetShadow(GlobalTD[21], 0);
+    TextDrawBackgroundColor(GlobalTD[21], -256);
+    TextDrawFont(GlobalTD[21], 5);
+    TextDrawSetProportional(GlobalTD[21], 0);
+    TextDrawSetPreviewModel(GlobalTD[21], 19177);
+    TextDrawSetPreviewRot(GlobalTD[21], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[22] = TextDrawCreate(522.267089, 3.592641, "");
+    TextDrawTextSize(GlobalTD[22], 88.000000, 58.000000);
+    TextDrawAlignment(GlobalTD[22], 1);
+    TextDrawColor(GlobalTD[22], -1832518913);
+    TextDrawSetShadow(GlobalTD[22], 0);
+    TextDrawBackgroundColor(GlobalTD[22], -256);
+    TextDrawFont(GlobalTD[22], 5);
+    TextDrawSetProportional(GlobalTD[22], 0);
+    TextDrawSetPreviewModel(GlobalTD[22], 19177);
+    TextDrawSetPreviewRot(GlobalTD[22], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[23] = TextDrawCreate(559.733337, 37.088882, "LD_SPAC:white");
+    TextDrawTextSize(GlobalTD[23], 14.000000, 2.000000);
+    TextDrawAlignment(GlobalTD[23], 1);
+    TextDrawColor(GlobalTD[23], -1832518913);
+    TextDrawSetShadow(GlobalTD[23], 0);
+    TextDrawBackgroundColor(GlobalTD[23], 255);
+    TextDrawFont(GlobalTD[23], 4);
+    TextDrawSetProportional(GlobalTD[23], 0);
+
+    GlobalTD[24] = TextDrawCreate(550.233398, 28.681629, "");
+    TextDrawTextSize(GlobalTD[24], 28.000000, 19.160003);
+    TextDrawAlignment(GlobalTD[24], 1);
+    TextDrawColor(GlobalTD[24], -1);
+    TextDrawSetShadow(GlobalTD[24], 0);
+    TextDrawBackgroundColor(GlobalTD[24], -256);
+    TextDrawFont(GlobalTD[24], 5);
+    TextDrawSetProportional(GlobalTD[24], 0);
+    TextDrawSetPreviewModel(GlobalTD[24], 19177);
+    TextDrawSetPreviewRot(GlobalTD[24], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[25] = TextDrawCreate(555.033691, 28.681629, "");
+    TextDrawTextSize(GlobalTD[25], 28.000000, 19.160003);
+    TextDrawAlignment(GlobalTD[25], 1);
+    TextDrawColor(GlobalTD[25], -1);
+    TextDrawSetShadow(GlobalTD[25], 0);
+    TextDrawBackgroundColor(GlobalTD[25], -256);
+    TextDrawFont(GlobalTD[25], 5);
+    TextDrawSetProportional(GlobalTD[25], 0);
+    TextDrawSetPreviewModel(GlobalTD[25], 19177);
+    TextDrawSetPreviewRot(GlobalTD[25], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[26] = TextDrawCreate(543.133178, 43.370460, "");
+    TextDrawTextSize(GlobalTD[26], 45.000000, -18.000000);
+    TextDrawAlignment(GlobalTD[26], 1);
+    TextDrawColor(GlobalTD[26], -120);
+    TextDrawSetShadow(GlobalTD[26], 0);
+    TextDrawBackgroundColor(GlobalTD[26], -256);
+    TextDrawFont(GlobalTD[26], 5);
+    TextDrawSetProportional(GlobalTD[26], 0);
+    TextDrawSetPreviewModel(GlobalTD[26], 2965);
+    TextDrawSetPreviewRot(GlobalTD[26], 90.000000, 0.000000, 90.000000, 1.000000);
+
+    GlobalTD[27] = TextDrawCreate(545.533447, 88.226043, "");
+    TextDrawTextSize(GlobalTD[27], 42.000000, -93.000000);
+    TextDrawAlignment(GlobalTD[27], 1);
+    TextDrawColor(GlobalTD[27], 1537799935);
+    TextDrawSetShadow(GlobalTD[27], 0);
+    TextDrawBackgroundColor(GlobalTD[27], -256);
+    TextDrawFont(GlobalTD[27], 5);
+    TextDrawSetProportional(GlobalTD[27], 0);
+    TextDrawSetPreviewModel(GlobalTD[27], 19177);
+    TextDrawSetPreviewRot(GlobalTD[27], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[28] = TextDrawCreate(545.500122, -7.362924, "");
+    TextDrawTextSize(GlobalTD[28], 42.000000, 83.000000);
+    TextDrawAlignment(GlobalTD[28], 1);
+    TextDrawColor(GlobalTD[28], 1537799935);
+    TextDrawSetShadow(GlobalTD[28], 0);
+    TextDrawBackgroundColor(GlobalTD[28], -256);
+    TextDrawFont(GlobalTD[28], 5);
+    TextDrawSetProportional(GlobalTD[28], 0);
+    TextDrawSetPreviewModel(GlobalTD[28], 19177);
+    TextDrawSetPreviewRot(GlobalTD[28], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[29] = TextDrawCreate(561.666503, 25.196397, "V");
+    TextDrawLetterSize(GlobalTD[29], 0.352665, 1.890370);
+    TextDrawAlignment(GlobalTD[29], 1);
+    TextDrawColor(GlobalTD[29], -188);
+    TextDrawSetShadow(GlobalTD[29], 0);
+    TextDrawBackgroundColor(GlobalTD[29], 255);
+    TextDrawFont(GlobalTD[29], 2);
+    TextDrawSetProportional(GlobalTD[29], 1);
+
+    GlobalTD[30] = TextDrawCreate(562.066833, 51.081558, "");
+    TextDrawTextSize(GlobalTD[30], 9.000000, -21.000000);
+    TextDrawAlignment(GlobalTD[30], 1);
+    TextDrawColor(GlobalTD[30], -188);
+    TextDrawSetShadow(GlobalTD[30], 0);
+    TextDrawBackgroundColor(GlobalTD[30], -256);
+    TextDrawFont(GlobalTD[30], 5);
+    TextDrawSetProportional(GlobalTD[30], 0);
+    TextDrawSetPreviewModel(GlobalTD[30], 19177);
+    TextDrawSetPreviewRot(GlobalTD[30], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[31] = TextDrawCreate(562.233581, 15.633377, "");
+    TextDrawTextSize(GlobalTD[31], 8.709993, 33.400100);
+    TextDrawAlignment(GlobalTD[31], 1);
+    TextDrawColor(GlobalTD[31], -1);
+    TextDrawSetShadow(GlobalTD[31], 0);
+    TextDrawBackgroundColor(GlobalTD[31], -256);
+    TextDrawFont(GlobalTD[31], 5);
+    TextDrawSetProportional(GlobalTD[31], 0);
+    TextDrawSetPreviewModel(GlobalTD[31], 19177);
+    TextDrawSetPreviewRot(GlobalTD[31], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[32] = TextDrawCreate(562.533569, 25.133256, "");
+    TextDrawTextSize(GlobalTD[32], 8.000000, 18.000000);
+    TextDrawAlignment(GlobalTD[32], 1);
+    TextDrawColor(GlobalTD[32], -1);
+    TextDrawSetShadow(GlobalTD[32], 0);
+    TextDrawBackgroundColor(GlobalTD[32], -256);
+    TextDrawFont(GlobalTD[32], 5);
+    TextDrawSetProportional(GlobalTD[32], 0);
+    TextDrawSetPreviewModel(GlobalTD[32], 19177);
+    TextDrawSetPreviewRot(GlobalTD[32], 180.000000, 0.000000, 0.000000, 1.000000);
+
+    GlobalTD[33] = TextDrawCreate(609.062866, 18.500000, "12:45");
+    TextDrawLetterSize(GlobalTD[33], 0.274435, 1.214998);
+    TextDrawAlignment(GlobalTD[33], 2);
+    TextDrawColor(GlobalTD[33], -1);
+    TextDrawSetShadow(GlobalTD[33], 0);
+    TextDrawBackgroundColor(GlobalTD[33], 255);
+    TextDrawFont(GlobalTD[33], 3);
+    TextDrawSetProportional(GlobalTD[33], 1);
+
+    GlobalTD[34] = TextDrawCreate(607.188720, 29.583332, "15/11/2022");
+    TextDrawLetterSize(GlobalTD[34], 0.274435, 1.214998);
+    TextDrawAlignment(GlobalTD[34], 2);
+    TextDrawColor(GlobalTD[34], 10873599);
+    TextDrawSetShadow(GlobalTD[34], 0);
+    TextDrawBackgroundColor(GlobalTD[34], 255);
+    TextDrawFont(GlobalTD[34], 3);
+    TextDrawSetProportional(GlobalTD[34], 1);
+
+    GlobalTD[35] = TextDrawCreate(563.616394, 12.666673, "X");
+    TextDrawLetterSize(GlobalTD[35], 0.236017, 0.882498);
+    TextDrawAlignment(GlobalTD[35], 1);
+    TextDrawColor(GlobalTD[35], -1);
+    TextDrawSetShadow(GlobalTD[35], 0);
+    TextDrawBackgroundColor(GlobalTD[35], 255);
+    TextDrawFont(GlobalTD[35], 2);
+    TextDrawSetProportional(GlobalTD[35], 1);
+
+    GlobalTD[36] = TextDrawCreate(561.742492, 12.750006, "-");
+    TextDrawLetterSize(GlobalTD[36], 0.760293, 0.859166);
+    TextDrawAlignment(GlobalTD[36], 1);
+    TextDrawColor(GlobalTD[36], -1);
+    TextDrawSetShadow(GlobalTD[36], 0);
+    TextDrawBackgroundColor(GlobalTD[36], 255);
+    TextDrawFont(GlobalTD[36], 2);
+    TextDrawSetProportional(GlobalTD[36], 1);
+
+    GlobalTD[37] = TextDrawCreate(70.519790, 430.601287, "POLICIJSKA_UPRAVA");
+    TextDrawLetterSize(GlobalTD[37], 0.172297, 0.884167);
+    TextDrawAlignment(GlobalTD[37], 2);
+    TextDrawColor(GlobalTD[37], 10873599);
+    TextDrawSetShadow(GlobalTD[37], 0);
+    TextDrawBackgroundColor(GlobalTD[37], 255);
+    TextDrawFont(GlobalTD[37], 1);
+    TextDrawSetProportional(GlobalTD[37], 1);
+
+    GlobalTD[38] = TextDrawCreate(69.986816, 437.666656, "SAOBRACAJNA_POLICIJA");
+    TextDrawLetterSize(GlobalTD[38], 0.172297, 0.894167);
+    TextDrawAlignment(GlobalTD[38], 2);
+    TextDrawColor(GlobalTD[38], -1);
+    TextDrawSetShadow(GlobalTD[38], 0);
+    TextDrawBackgroundColor(GlobalTD[38], 255);
+    TextDrawFont(GlobalTD[38], 1);
+    TextDrawSetProportional(GlobalTD[38], 1);
+
+}
+
+task VremeDatum[1000]()
+{
+	new dan, godina, mesec;
+	getdate(godina, mesec, dan);
+	new sati,minuti;
+	gettime(sati, minuti);
+	new stringic[16];
+    format(stringic, sizeof(stringic), "%d/%s%d/%s%d", dan, ((mesec < 10) ? ("0") : ("")), mesec, (godina < 10) ? ("0") : (""), godina);
+	TextDrawSetString(GlobalTD[34], stringic);
+    format(stringic, sizeof(stringic), "%s%d:%s%d", (sati < 10) ? ("0") : (""), sati, (minuti < 10) ? ("0") : (""), minuti);
+	TextDrawSetString(GlobalTD[33], stringic);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}

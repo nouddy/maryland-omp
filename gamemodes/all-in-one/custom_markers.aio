@@ -1,0 +1,75 @@
+/***
+ *
+ *   _______  _______  _______ _________ _______  _______ 
+ *  (  ____ \(       )(  ____ )\__   __/(  ____ )(  ____ \
+ *  | (    \/| () () || (    )|   ) (   | (    )|| (    \/
+ *  | (__    | || || || (____)|   | |   | (____)|| (__    
+ *  |  __)   | |(_)| ||  _____)   | |   |     __)|  __)   
+ *  | (      | |   | || (         | |   | (\ (   | (      
+ *  | (____/\| )   ( || )      ___) (___| ) \ \__| (____/\
+ *  (_______/|/     \||/       \_______/|/   \__/(_______/
+                                                        
+ *
+ *  @Author         Ogy_
+ *  @Date           17th May 2023
+ *  @Weburl         https://empire-ogc.com
+ *  @Project        empire_gamemode
+ *
+ *  @File           custom_markers.pwn
+ *  @Module         all-in-one
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+
+/*
+     __     __                 _           _       _              
+     \ \   / /   __ _   _ __  (_)   __ _  | |__   | |   ___   ___ 
+      \ \ / /   / _` | | '__| | |  / _` | | '_ \  | |  / _ \ / __|
+       \ V /   | (_| | | |    | | | (_| | | |_) | | | |  __/ \__ \
+        \_/     \__,_| |_|    |_|  \__,_| |_.__/  |_|  \___| |___/
+
+*/
+
+new OpstinaUlazIzlaz[2],
+    SpawnUlazIzlaz[5],
+    BankaMarker[1];
+/*
+      _   _                   _          
+     | | | |   ___     ___   | | __  ___ 
+     | |_| |  / _ \   / _ \  | |/ / / __|
+     |  _  | | (_) | | (_) | |   <  \__ \
+     |_| |_|  \___/   \___/  |_|\_\ |___/
+
+*/
+
+hook OnGameModeInit()
+{
+    CreateMarkers();
+    return (true);
+}
+/*
+      _____                          _     _                       
+     |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___ 
+     | |_    | | | | | '_ \   / __| | __| | |  / _ \  | '_ \  / __|
+     |  _|   | |_| | | | | | | (__  | |_  | | | (_) | | | | | \__ \
+     |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
+
+*/
+forward CreateMarkers();
+public CreateMarkers()
+{
+    OpstinaUlazIzlaz[0] = CreateMarker(ICON_CITYHALL,random(5),true,1455.6853,-1809.7561,13.5661-1.0,0, 0);
+
+    //
+    SpawnUlazIzlaz[0] = CreateMarker(ICON_CITY,random(5),false,1759.9806,-2346.4353,-28.6042-0.9, 6, 6);
+    SpawnUlazIzlaz[1] = CreateMarker(ICON_CITY,random(5),false,1739.5133,-2366.7729,-28.6042-0.9, 6, 6);
+    SpawnUlazIzlaz[2] = CreateMarker(ICON_CITY,random(5),false,1758.8719,-2387.7422,-28.6042-0.9,6, 6);
+    SpawnUlazIzlaz[3] = CreateMarker(ICON_CITY,random(5),false,1779.4951,-2367.4021,-28.6042-0.9,6, 6);
+    SpawnUlazIzlaz[4] = CreateMarker(ICON_CITY,random(5),false,1642.1968,-2335.4883,13.5469-0.9, 0, 0);
+    //
+    BankaMarker[0] = CreateMarker(ICON_BANK,random(5),false,1689.8605,-1455.4658,13.5597-0.9, 0, 0);
+    //
+    return (true);
+}

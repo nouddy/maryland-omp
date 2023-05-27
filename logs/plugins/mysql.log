@@ -1,0 +1,72 @@
+[22:07:22] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:07:46] [ERROR] error #1054 while executing query "SELECT * FROM player_crypto WHERE crypto_id = '3'": Unknown column 'crypto_id' in 'where clause' (backend/crypto_ogy.script:113 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:07:46] [ERROR] error #1054 while executing query "SELECT * FROM player_documents WHERE player_id = '3'": Unknown column 'player_id' in 'where clause' (all-in-one/playerdocuments.aio:27 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:07:46] [ERROR] error #1054 while executing query "SELECT * FROM player_finance WHERE finance_id = '3'": Unknown column 'finance_id' in 'where clause' (all-in-one/bank.aio:26 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:10:07] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:10:28] [ERROR] error #1054 while executing query "SELECT * FROM player_crypto WHERE crypto_id = '3'": Unknown column 'crypto_id' in 'where clause' (backend/crypto_ogy.script:113 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:10:28] [ERROR] error #1054 while executing query "SELECT * FROM player_documents WHERE player_id = '3'": Unknown column 'player_id' in 'where clause' (all-in-one/playerdocuments.aio:27 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:10:28] [ERROR] error #1054 while executing query "SELECT * FROM player_finance WHERE finance_id = '3'": Unknown column 'finance_id' in 'where clause' (all-in-one/bank.aio:26 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:14:31] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:19:55] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:23:20] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:27:57] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:35:23] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[22:52:41] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[23:06:19] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[05:27:25] [WARNING] mysql_connect: no password specified
+[05:30:02] [WARNING] mysql_connect: no password specified
+[05:33:43] [WARNING] mysql_connect: no password specified
+[18:35:38] [WARNING] mysql_connect: no password specified
+[18:41:40] [WARNING] mysql_connect: no password specified
+[19:16:20] [WARNING] mysql_connect: no password specified
+[19:16:24] [WARNING] mysql_connect: no password specified
+[19:16:29] [WARNING] mysql_connect: no password specified
+[19:18:26] [WARNING] mysql_connect: no password specified
+[19:20:15] [WARNING] mysql_connect: no password specified
+[19:21:25] [WARNING] mysql_connect: no password specified
+[19:22:40] [WARNING] mysql_connect: no password specified
+[19:27:18] [WARNING] mysql_connect: no password specified
+[19:29:28] [WARNING] mysql_connect: no password specified
+[19:31:16] [WARNING] mysql_connect: no password specified
+[19:42:32] [WARNING] mysql_connect: no password specified
+[19:43:48] [WARNING] mysql_connect: no password specified
+[20:02:00] [WARNING] mysql_connect: no password specified
+[20:55:01] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[20:57:12] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[20:59:20] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:00:57] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:02:06] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:03:23] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:08:23] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:11:36] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:12:36] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:13:45] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:18:09] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:18:35] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:21:37] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:24:38] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:26:20] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:27:47] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:36:31] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:37:38] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:39:46] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:41:13] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:46:01] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:47:27] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:48:46] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:50:16] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[21:59:28] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[05:26:39] [WARNING] mysql_connect: no password specified
+[05:29:03] [WARNING] mysql_connect: no password specified
+[13:15:15] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:15:19] [ERROR] CConnection::CConnection - establishing connection to MySQL database failed: #2002 'Can't connect to MySQL server on 'localhost' (10061)'
+[13:16:30] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:27:33] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:29:15] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:30:08] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:35:47] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[13:39:31] [WARNING] mysql_connect: no password specified (backend/db-config.script:29 -> C:\Users\ogysha\Documents\GitHub\empire-project\compiler\include\ysilib\YSI_Data\y_foreach\..\..\YSI_Coding\y_hooks\..\y_cgen\y_cgen.inc:132)
+[16:57:05] [WARNING] mysql_connect: no password specified
+[17:00:35] [WARNING] mysql_connect: no password specified
+[17:03:41] [WARNING] mysql_connect: no password specified
+[17:12:23] [WARNING] mysql_connect: no password specified

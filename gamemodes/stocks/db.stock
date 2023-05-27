@@ -1,0 +1,87 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+hook OnGameModeInit()
+{
+	print("stocks/db.stock loaded");
+
+	return 1;
+}
+udb_hash(const buf[]) {
+    new length=strlen(buf);
+    new s1 = 1;
+    new s2 = 0;
+    new n;
+    for (n=0; n<length; n++)
+    {
+       s1 = (s1 + buf[n]) % 65521;
+       s2 = (s2 + s1)     % 65521;
+    }
+    return (s2 << 16) + s1;
+}
+
+//* Cuvanje naloga
+stock SavePlayer(playerid)
+{
+    if(IgracUlogovan[playerid] == true)
+    {
+        new query[500];
+		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d' WHERE `ID` = '%d'",
+			PlayerInfo[playerid][Level],
+			GetPlayerMoney(playerid),
+			PlayerInfo[playerid][Skin],
+			PlayerInfo[playerid][Godine],
+            PlayerInfo[playerid][Staff],
+			PlayerInfo[playerid][SQLID]);
+		mysql_tquery(SQL,query);        
+    }
+
+    return true;
+}
+stock SaveDocuments(playerid)
+{
+    if(IgracUlogovan[playerid] == true)
+    {
+        new query[500];
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`VoziloLicence` = '%d',`MotoLicence` = '%d', `BrodLicence` = '%d', `OruzjeLicence` = '%d' WHERE `player_id` = '%d'",
+            PlayerDocuments[playerid][pNationalID],
+            PlayerDocuments[playerid][pPassport],
+            PlayerDocuments[playerid][pDriveLicence],
+            PlayerDocuments[playerid][pMotoLicence],
+            PlayerDocuments[playerid][pBoatLicence],
+            PlayerDocuments[playerid][pGunLicence],
+            PlayerInfo[playerid][SQLID]);
+        mysql_tquery(SQL,query);      
+    }
+
+    return true;
+}
+
+stock SaveFinance(playerid)
+{
+    if(IgracUlogovan[playerid] == true)
+    {
+        new query[500];
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_finance` SET `BankAccount` = '%d',`BankMoney` = '%d',`BankPin` = '%d' WHERE `finance_id` = '%d'",
+            PlayerFinance[playerid][pBankAccount],
+            PlayerFinance[playerid][pBankMoney],
+            PlayerFinance[playerid][pBankPin],
+            PlayerInfo[playerid][SQLID]);
+        mysql_tquery(SQL,query);      
+    }
+
+    return true;
+}
+
+//
+ReturnDate()
+{
+    static
+        date[36];
+
+    getdate(date[2], date[1], date[0]);
+    gettime(date[3], date[4], date[5]);
+
+    format(date, sizeof(date), "%02d/%02d/%d - %02d:%02d", date[0], date[1], date[2], date[3], date[4]);
+    return date;
+}
+//

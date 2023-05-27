@@ -1,0 +1,202 @@
+/***
+ *
+ *   _______  _______  _______ _________ _______  _______ 
+ *  (  ____ \(       )(  ____ )\__   __/(  ____ )(  ____ \
+ *  | (    \/| () () || (    )|   ) (   | (    )|| (    \/
+ *  | (__    | || || || (____)|   | |   | (____)|| (__    
+ *  |  __)   | |(_)| ||  _____)   | |   |     __)|  __)   
+ *  | (      | |   | || (         | |   | (\ (   | (      
+ *  | (____/\| )   ( || )      ___) (___| ) \ \__| (____/\
+ *  (_______/|/     \||/       \_______/|/   \__/(_______/
+                                                        
+ *
+ *  @Author         Ogy_
+ *  @Date           15th May 2023
+ *  @Weburl         https://empire-ogc.com
+ *  @Project        empire_gamemode
+ *
+ *  @File           klupe_ogy.pwn
+ *  @Module         backend
+ */
+
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+new bool:finished = true;
+
+/*
+     ___                 _      
+    (  _)               ( )     
+    | |   ___  ____  __ | |  __ 
+    ( )_ ( o )( __ )(_' ( _)(_' 
+    /___\ \_/ /_\/_\/__)/_\ /__)
+                                
+*/
+const MAX_KLUPA = 100; // u slucaju da bude vise, povecati ovo sranje
+
+/*
+     ____                        
+    (  __)                       
+    | |_   ____  _ _  __  __  __ 
+    (  _) ( __ )( U )( _`'_ )(_' 
+    /____\/_\/_\/___\/_\`'/_\/__)
+
+*/
+
+enum SeatDowns
+{
+    seat_SQLID,
+    Float:seat_downx,
+    Float:seat_downy,
+    Float:seat_downz,
+    Float:seat_downa,
+    Text3D:seat_label
+};
+new SeatDownInfo[MAX_KLUPA][SeatDowns];
+new Iterator:iter_Klupa<MAX_KLUPA>;
+new bool:player_seatdown[MAX_PLAYERS];
+
+/*
+     _  _            _        
+    ( )( )          ( )       
+    | L| | ___  ___ | | _  __ 
+    ( __ )( o )( o )( _'( (_' 
+    /_\/_\ \_/  \_/ /_\\_|/__)
+
+*/
+
+hook OnGameModeInit()
+{
+    Iter_Init(iter_Klupa);
+    if(finished)
+    {
+        print("backend/klupe_ogy.script loaded");  
+    }
+
+    mysql_tquery(SQL, "SELECT * FROM `klupe`","KlupeLoading");
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    player_seatdown[playerid] = false;
+    // Preload animacije 
+
+    PreloadAnimations(playerid);
+    return 1;
+}
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) 
+{
+    if(PRESSED( KEY_CTRL_BACK ))
+    {
+        foreach(new i : iter_Klupa)
+        {
+            if(IsPlayerInRangeOfPoint(playerid, 1.0, SeatDownInfo[i][seat_downx],SeatDownInfo[i][seat_downy],SeatDownInfo[i][seat_downz]))
+            {
+                if(player_seatdown[playerid] != true)
+                {
+                    SetPlayerPos(playerid, SeatDownInfo[i][seat_downx], SeatDownInfo[i][seat_downy], SeatDownInfo[i][seat_downz]);
+                    SetPlayerFacingAngle(playerid, SeatDownInfo[i][seat_downa]);
+
+                    ApplyAnimation(playerid, !"PED", !"SEAT_down", 4.1, 0, 0, 0, 1, 0, 1);
+                    player_seatdown[playerid] = true;
+                }
+                else
+                {
+                    ApplyAnimation(playerid, !"PED", !"IDLE_STANCE", 4.1, 0, 0, 0, 0, 0);
+                    player_seatdown[playerid] = false;
+                    ClearAnimations(playerid);
+                }
+                break;
+            }
+        }
+    }
+    return (true);
+}
+/*
+     _                _      _   ___                 
+    ( )              ( )    / ) /  _)                
+    | |   ___  ___  _| |   / /  \_"-.  ___  _ _  ___ 
+    ( )_ ( o )( o )/ o )  ( /    __) )( o )( V )( o_)
+    /___\ \_/ /_^_\\___\ /_/    /___/ /_^_\ \_/  \(  
+
+*/
+
+forward KlupeLoading();
+public KlupeLoading()
+{
+    new iRows, id;
+    iRows = cache_num_rows();
+    if(iRows != 0)
+    {
+        for(new i = 0; i < iRows; i++)
+        {
+            cache_get_value_name_int(i, "seat_ID",id);
+            cache_get_value_name_float(i, "seat_x",SeatDownInfo[ id ][ seat_downx ]);
+            cache_get_value_name_float(i, "seat_y",SeatDownInfo[ id ][ seat_downy ]);
+            cache_get_value_name_float(i, "seat_z",SeatDownInfo[ id ][ seat_downz ]);
+            cache_get_value_name_float(i, "seat_a",SeatDownInfo[ id ][ seat_downa ]);
+
+            Iter_Add(iter_Klupa, id);
+        }
+        SeatDownInfo[id][seat_label] = CreateDynamic3DTextLabel("Klupa\n[{ffa220}H{ffffff}]", 0xFFFFFFFF, SeatDownInfo[id][seat_downx], SeatDownInfo[id][seat_downy], SeatDownInfo[id][seat_downz], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+    }
+    printf("backend/klupe_ogy.script loaded(%d) seats", iRows);
+    return (true);
+}
+/*
+     ____                _   _                
+    (  __)              ( ) (_)               
+    | |_   _ _  ____  __| |  _  ___  ____  __ 
+    ( __) ( U )( __ )/ /( _)( )( o )( __ )(_' 
+    /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
+
+*/
+forward KreirajKlupu(id);
+public KreirajKlupu(id) {
+
+    static q[300];
+    mysql_format( SQL, q, sizeof( q ),
+
+        "INSERT INTO `klupe` ( seat_x, seat_y, seat_z, seat_a) \
+        VALUES( '%f', '%f', '%f', '%f' )",
+
+        SeatDownInfo[id][seat_downx],SeatDownInfo[id][seat_downy], SeatDownInfo[id][seat_downz],SeatDownInfo[id][seat_downa]);
+
+    mysql_pquery( SQL, q, "KlupaKreirana", "i", id );
+    return (true);
+}
+// >>
+forward KlupaKreirana(createID);
+public KlupaKreirana(createID)
+{
+    Iter_Add(iter_Klupa, createID);
+    SeatDownInfo[ createID ][ seat_SQLID ] = cache_insert_id();
+    SeatDownInfo[createID][seat_label] = CreateDynamic3DTextLabel("Klupa\n[{ffa220}H{ffffff}]", 0xFFFFFFFF, SeatDownInfo[createID][seat_downx], SeatDownInfo[createID][seat_downy], SeatDownInfo[createID][seat_downz], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+    return 1;
+}
+forward NadjiNajblizuKlupu( playerid );
+public NadjiNajblizuKlupu(playerid) {
+
+    foreach(new i : iter_Klupa)
+    {
+        if(IsPlayerInRangeOfPoint( playerid, 1.0, SeatDownInfo[ i ][ seat_downx ], SeatDownInfo[ i ][ seat_downy ], SeatDownInfo[ i ][ seat_downz ] ) ) return i;
+    }
+    return false;
+}
+
+
+
+
+/*
+CREATE TABLE `klupe` (
+  `seat_ID` int(11) NOT NULL,
+  `seat_x` float NOT NULL,
+  `seat_y` float NOT NULL,
+  `seat_z` float NOT NULL,
+  `seat_a` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `klupe`
+  ADD PRIMARY KEY (`seat_ID`);
+*/

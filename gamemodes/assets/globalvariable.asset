@@ -1,0 +1,15 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+hook OnGameModeInit()
+{
+	print("assets/globalvariable.asset loaded");
+
+	return 1;
+}
+
+new IC_CHAT = 1;                                            //* Variabla za globalni chat
+new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za proveru
+
+new Text:Global_TD[33];
+new Text:EmpireLogo_TD[76];
+new PlayerText:Player_TDs[MAX_PLAYERS][7];

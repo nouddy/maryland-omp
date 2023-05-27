@@ -1,0 +1,79 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+new    player_Zaposljen[MAX_PLAYERS],
+       nosiuniformu[MAX_PLAYERS],
+       radiposao[MAX_PLAYERS];
+
+hook Account_Load(const playerid, const string: name[], const string: value[]);
+hook Account_Load(const playerid, const string: name[], const string: value[])
+{
+    INI_Int("Zaposljen", player_Zaposljen[playerid]);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	new INI:File = INI_Open(Account_Path(playerid));
+    INI_SetTag(File,"data");
+    INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+
+    INI_Close(File);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeInit()
+{
+    print("jobs/job_main.job loaded");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//! timer za reset posla
+timer otkazigraca[180000](playerid)
+{
+    player_Zaposljen[playerid] = 0;
+
+    new INI:File = INI_Open(Account_Path(playerid));
+    INI_SetTag(File,"data");
+    INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+
+    INI_Close(File);
+
+    SendClientMessage(playerid, x_blue, "montrey // "c_white"Prosla ti je zabrana rada, mozes se opet zaposliti!");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+YCMD:dajotkaz(playerid, params[], help)
+{
+    if(help)
+    {
+        SendClientMessage(playerid, 0xFFFFFFAA, "HELP: /help <dajotkaz> da das otkaz.");
+        return 1;
+    }
+
+    if(IsPlayerInRangeOfPoint(playerid, 3.0, 1383.3511,1.4850,1000.9424))
+    {
+        if(player_Zaposljen[playerid] == 0) return SendClientMessage(playerid, x_red, "montrey // "c_white"Ti ne radis nigde zaposli se!");
+        if(player_Zaposljen[playerid] == 2) return SendClientMessage(playerid, x_red, "montrey // "c_white"Vec si dao otkaz i ispunjavas kaznu od 3h!");
+
+        player_Zaposljen[playerid] = 2;
+
+        SendClientMessage(playerid, x_blue, "montrey // "c_white"Dao si otkaz uspesno, imas zabranu rada 3h!");
+    
+    	new INI:File = INI_Open(Account_Path(playerid));
+        INI_SetTag(File,"data");
+        INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+
+        INI_Close(File);
+
+        defer otkazigraca(playerid);
+    }
+    else SendClientMessage(playerid, x_red, "montrey // "c_white"Morate biti na salteru u opstini!");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+
+}

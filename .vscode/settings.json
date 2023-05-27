@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.pwn": "pawn",
+        "*.inc": "pawn",
+        "*.tde": "pawn",
+        "*.aio": "pawn",
+        "*.map": "pawn",
+        "*.job": "pawn",
+        "*.script": "pawn",
+        "*.stock": "pawn",
+        "*.csso": "pawn",
+        "*.asset": "pawn"
+    },
+    "pawn.compilerPath": "D:\\Mods\\empire-project\\compiler"
+}

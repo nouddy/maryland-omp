@@ -1,0 +1,31 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+hook OnGameModeInit()
+{
+	print("stocks/variable.stock loaded");
+
+	return 1;
+}
+
+ResetujVariable(playerid)
+{
+    // Main register
+    PlayerInfo[playerid][SQLID] = 0;
+    PlayerInfo[playerid][Novac] = 0;
+    PlayerInfo[playerid][Skin] = 29;
+    PlayerInfo[playerid][Level] = 1;
+    PlayerInfo[playerid][Godine] = 0;
+    PlayerInfo[playerid][Staff] = 0;
+    // Documents of player
+    PlayerDocuments[playerid][pNationalID] = 0;
+    PlayerDocuments[playerid][pPassport] = 0;
+    PlayerDocuments[playerid][pDriveLicence] = 0;
+    PlayerDocuments[playerid][pMotoLicence] = 0;
+    PlayerDocuments[playerid][pBoatLicence] = 0;
+    PlayerDocuments[playerid][pGunLicence] = 0;
+    // Finance of player
+    PlayerFinance[playerid][pBankAccount] = 0;
+    PlayerFinance[playerid][pBankMoney] = 0;
+    PlayerFinance[playerid][pBankPin] = 0;
+
+}

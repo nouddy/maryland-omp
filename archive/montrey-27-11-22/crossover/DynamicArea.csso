@@ -1,0 +1,68 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+public OnPlayerEnterDynamicArea(playerid, areaid) 
+{
+    new i = Streamer_GetIntData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID);
+
+    PlayerTextDrawSetString(playerid, p_LocationTextdraw[playerid][0], eZones[i][e_ZONE_NAME_1]);
+    PlayerTextDrawSetString(playerid, p_LocationTextdraw[playerid][1], eZones[i][e_ZONE_NAME_2]);
+
+
+// Bunker
+    if( areaid == g_EntryArea ) {
+        if( g_EntryExitSkip{playerid} ) 
+        {
+            g_EntryExitSkip{playerid} = false;
+        } else {
+            g_EntryExitSkip{playerid} = true;
+            SetPlayerPos(playerid, -1578.0275, -2569.4412, 28.8323);
+        }
+        return 1;
+    }
+
+    if( areaid == g_ExitArea ) {
+        if( g_EntryExitSkip{playerid} ) {
+            g_EntryExitSkip{playerid} = false;
+        } else {
+            g_EntryExitSkip{playerid} = true;
+            SetPlayerPos(playerid, -1584.0164, -2572.3108, 28.8232);
+        }
+        return 1;
+    }
+
+    for(new doorid; doorid < g_DoorsInitiated; doorid ++) {
+        if( areaid == g_DoorData[doorid][e_DoorDynArea] ) {
+            UpdateDoorState(doorid);
+            return 1;
+        }
+    }
+
+    for(new floor; floor < MAX_ELEVFLOORS; floor ++) {
+        if( areaid == g_ElevData[e_ElevDynArea][floor] ) {
+            if( g_ElevData[e_ElevFloor] != floor && g_ElevData[e_ElevState] == ELEVSTATE_OPEN ) {
+                g_ElevData[e_ElevState] = ELEVSTATE_CLOSING;
+                ApplyElevatorState();
+            }
+            return 1;
+        }
+    }
+    return 1;
+}
+
+public OnPlayerLeaveDynamicArea(playerid, areaid) 
+{
+    if (!IsPlayerInAnyDynamicArea(playerid)) 
+	{
+		PlayerTextDrawSetString(playerid, p_LocationTextdraw[playerid][0], "Montrey_Community");
+		PlayerTextDrawSetString(playerid, p_LocationTextdraw[playerid][1], "Nepoznato,_Van_radara");
+    }
+
+// Bunker    
+    for(new doorid; doorid < g_DoorsInitiated; doorid ++) {
+        if( areaid == g_DoorData[doorid][e_DoorDynArea] ) {
+            UpdateDoorState(doorid);
+            return 1;
+        }
+    }
+    return 1;
+}

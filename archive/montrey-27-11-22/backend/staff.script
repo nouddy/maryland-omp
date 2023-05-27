@@ -1,0 +1,636 @@
+/**
+TODO:
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+static  
+	player_Skin[MAX_PLAYERS],
+	player_Money[MAX_PLAYERS],
+	player_Staff[MAX_PLAYERS],
+	bool:StaffDuty[MAX_PLAYERS];
+
+new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
+
+hook Account_Load(const playerid, const string: name[], const string: value[]);
+hook Account_Load(const playerid, const string: name[], const string: value[])
+{
+	INI_Int("Skin", player_Skin[playerid]);
+	INI_Int("Money", player_Money[playerid]);
+	INI_Int("Staff", player_Staff[playerid]);
+
+	return 1;
+}
+
+hook OnGameModeInit()
+{
+	print("backend/staff.script loaded");
+
+	return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+	stfveh[playerid] = INVALID_VEHICLE_ID;
+
+	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	new INI:File = INI_Open(Account_Path(playerid));
+    INI_SetTag(File,"data");
+	INI_WriteInt(File, "Staff", player_Staff[playerid]);
+	INI_WriteInt(File, "Skin", GetPlayerSkin(playerid));
+    INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+    INI_Close(File);
+
+	DestroyVehicle(stfveh[playerid]);
+
+	stfveh[playerid] = INVALID_PLAYER_ID;
+	StaffDuty[playerid] = false;
+
+	return 1;
+}
+
+hook OnPlayerSpawn(playerid)
+{
+    SetPlayerSkin(playerid, player_Skin[playerid]);
+
+	return 1;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+	DestroyVehicle(stfveh[playerid]);
+
+	stfveh[playerid] = INVALID_PLAYER_ID;
+
+	return 1;
+}
+
+hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
+{
+	if(player_Staff[playerid] >= 1)
+	{
+		SetPlayerPosFindZ(playerid, fX, fY, fZ);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//
+Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
+{
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				SendClientMessage(playerid, x_server, "montrey // "c_white"Trenuto offline!" );
+			}
+			case 1:
+			{
+				SendClientMessage(playerid, x_server, "montrey // "c_white"Trenuto offline!" );
+			}
+			case 2:
+			{
+				Dialog_Show(playerid, "dialog_vreme", DIALOG_STYLE_LIST,
+					""c_server"montrey // "c_white"Vreme Panel",
+					"Noc\nDan",
+					"Odaberi", "Izlaz");
+			}
+			case 3:
+			{
+				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
+					""c_server"montrey // "c_white"Napravi Funkcije",
+					"Offline",
+					"Odaberi", "Izlaz");
+			}
+			case 4:
+			{
+				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
+					""c_server"montrey // "c_white"Izmeni Funkcije",
+					"Offline",
+					"Odaberi", "Izlaz");
+			}
+			case 5:
+			{
+				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
+					""c_server"montrey // "c_white"Izbrisi Funkcije",
+					"Offline",
+					"Odaberi", "Izlaz");
+			}
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: dialog_vreme(const playerid, response, listitem, string: inputtext[])
+{	
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				SetWorldTime(2);
+				SendClientMessage(playerid, x_server, "montrey // "c_white"Postavili ste vreme na noc!" );
+			}
+			case 1:
+			{
+				SetWorldTime(14);
+				SendClientMessage(playerid, x_server, "montrey // "c_white"Postavili ste vreme na dan!" );
+			}
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
+{	
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				return SendClientMessage(playerid, x_red, "montrey // "c_white"Nema ponudjenih stvari!");
+			}
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
+{	
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				return SendClientMessage(playerid, x_red, "montrey // "c_white"Nema ponudjenih stvari!");
+			}
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
+{	
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				return SendClientMessage(playerid, x_red, "montrey // "c_white"Nema ponudjenih stvari!");
+			}
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+//
+YCMD:sduty(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam omogucava da budete na Staff Duznosti.");
+        return 1;
+    }
+
+	if(!player_Staff[playerid])
+		return SendClientMessage(playerid, x_red, "GRESKA >> "c_white"Niste clan Staffa Team-a.");
+
+	static string[128];
+	if(StaffDuty[playerid] == false )
+ 	{
+		SetPlayerHealth( playerid, 100);
+		SetPlayerArmour( playerid, 99);
+		
+		StaffDuty[ playerid ] = true;
+		format(string, sizeof(string), "Staff %s je sada na duznosti /report", ReturnPlayerName(playerid));
+	  	SendClientMessageToAll(-1, string);	
+	}
+	else if(StaffDuty[playerid] == true)
+	{
+	 	StaffDuty[playerid] = false;
+		format(string, sizeof(string), "Staff %s vise nije na duznosti", ReturnPlayerName(playerid));
+	 	SendClientMessageToAll(-1, string);
+	}
+    return true;
+}
+/*
+YCMD:staffcmd(playerid, const string: params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, 0xFFFFFFAA, "HELP: /help <otvoriracun> da otvoris racun.");
+        return 1;
+    }
+
+	if(!player_Staff[playerid])
+		return SendClientMessage(playerid, x_red, "montrey // "c_white"Samo staff moze ovo!");
+
+	Dialog_Show(playerid, "dialog_staffcmd", DIALOG_STYLE_MSGBOX,
+	""c_server"montrey // "c_white"Staff Commands",
+	""c_white"%s, Vi ste deo naseg "c_server"staff "c_white"tima!\n\
+	"c_server"SLVL1 >> "c_white"/sduty\n\
+	"c_server"SLVL1 >> "c_white"/sc\n\
+	"c_server"SLVL1 >> "c_white"/staffcmd\n\
+	"c_server"SLVL1 >> "c_white"/sveh\n\
+	"c_server"SLVL1 >> "c_white"/goto\n\
+	"c_server"SLVL1 >> "c_white"/cc\n\
+	"c_server"SLVL1 >> "c_white"/fv\n\
+	"c_server"SLVL2 >> "c_white"/gethere\n\
+	"c_server"SLVL3 >> "c_white"/nitro\n\
+	"c_server"SLVL4 >> "c_white"/jetpack\n\
+	"c_server"SLVL4 >> "c_white"/setskin\n\
+	"c_server"SLVL4 >> "c_white"/xgoto\n\
+	"c_server"SLVL4 >> "c_white"/spanel\n\
+	"c_server"SLVL4 >> "c_white"/setstaff",
+	"U redu", "", ReturnPlayerName(playerid)
+	);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+*/
+YCMD:sc(playerid, const string: params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam omogucava da pisete u Staff Chat.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	if (isnull(params))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"/sc [text]");
+
+	static tmp_str[128];
+
+	format(tmp_str, sizeof(tmp_str), "Staff - %s(%d): "c_white"%s", ReturnPlayerName(playerid), playerid, params);
+
+	foreach (new i: Player)
+		if (player_Staff[i])
+			SendClientMessage(i, x_purple, tmp_str);
+	
+    return 1;
+}
+
+YCMD:sveh(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam Kreira Staff Vozilo.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	new Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
+	if (stfveh[playerid] == INVALID_VEHICLE_ID) 
+	{
+		if (isnull(params))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+		new modelid = strval(params);
+
+		if (400 > modelid > 611)
+			return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"* Validni modeli su od 400 do 611.");
+
+		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z, 0.0, 1, 0, -1);
+
+		SetVehicleNumberPlate(vehicleid, "STAFF");
+		PutPlayerInVehicle(playerid, vehicleid, 0);
+		
+	    new engine, lights, alarm, doors, bonnet, boot, objective;
+	    GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
+
+	    if (IsVehicleBicycle(GetVehicleModel(vehicleid)))
+	    {
+	        SetVehicleParamsEx(vehicleid, 1, 0, 0, doors, bonnet, boot, objective);
+	    }
+	    else
+	    {
+	        SetVehicleParamsEx(vehicleid, 0, 0, 0, doors, bonnet, boot, objective);
+	    }
+		SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Stvorili ste vozilo, da ga unistite kucajte '/sveh'.");
+	}
+	else 
+	{
+		DestroyVehicle(stfveh[playerid]);
+		stfveh[playerid] = INVALID_PLAYER_ID;
+		SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Unistili ste vozilo, da ga stvorite kucajte '/veh [Model ID]'.");
+	}
+	
+    return 1;
+}
+
+YCMD:goto(playerid, params[],help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam  omogucava da odete do odredjenog igraca.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	new giveplayerid, giveplayer[MAX_PLAYER_NAME];
+
+	new Float:plx,Float:ply,Float:plz;
+
+	GetPlayerName(giveplayerid, giveplayer, sizeof(giveplayer));
+
+	if(!sscanf(params, "u", giveplayerid))
+	{	
+		GetPlayerPos(giveplayerid, plx, ply, plz);
+			
+		if (GetPlayerState(playerid) == 2)
+		{
+			new tmpcar = GetPlayerVehicleID(playerid);
+			SetVehiclePos(tmpcar, plx, ply+4, plz);
+		}
+		else
+		{
+			SetPlayerPos(playerid,plx,ply+2, plz);
+		}
+		SetPlayerInterior(playerid, GetPlayerInterior(giveplayerid));
+	}
+    return 1;
+}
+
+YCMD:cc(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja ce Ocistiti Chat svim igracima.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	for(new cc; cc < 110; cc++)
+	{
+		SendClientMessageToAll(-1, "");
+	}
+
+	if(player_Staff[playerid] < 1)
+	{
+		static fmt_string[120];
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"chat je ocistio"c_server" %s", ReturnPlayerName(playerid));
+		SendClientMessageToAll(-1, fmt_string);
+	}
+    return 1;
+}
+
+YCMD:fv(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam Popravlja Vozilo.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	new vehicleid = GetPlayerVehicleID(playerid);
+
+	if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Niste u vozilu!");
+
+	RepairVehicle(vehicleid);
+
+	SetVehicleHealth(vehicleid, 999.0);
+
+	return 1;
+}
+YCMD:gethere(playerid, const params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, 0xFFFFFFAA, "HELP: /help <otvoriracun> da otvoris racun.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	new targetid = INVALID_PLAYER_ID;
+
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"/gethere [id]");
+
+	if(targetid == INVALID_PLAYER_ID) return SendClientMessage(playerid, x_server, "montrey // "c_white"Taj ID nije konektovan.");
+
+	new Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
+	SetPlayerPos(targetid, x+1, y, z+1);
+
+	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
+
+	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+
+	new name[MAX_PLAYER_NAME];
+	GetPlayerName(targetid, name, sizeof(name));
+
+	static fmt_string[60];
+
+	format(fmt_string, sizeof(fmt_string),""c_server"montrey // "c_white"Teleportovali ste igraca %s do sebe.", name);
+	SendClientMessage(playerid, -1, fmt_string);
+
+	GetPlayerName(playerid, name, sizeof(name));
+
+	format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"Staff %s vas je teleportovao do sebe.", name);
+	SendClientMessage(targetid, -1, fmt_string);
+
+    return 1;
+}
+
+YCMD:nitro(playerid, params[], help)
+{
+	if(help)
+    {
+		SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam daje Nitro.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	AddVehicleComponent(GetPlayerVehicleID(playerid), 1010);
+
+	SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Ugradili ste nitro u vase vozilo.");
+
+	return 1;
+}
+YCMD:jetpack(playerid, params[], help)
+{
+	if(help)
+    {
+		SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam daje Jetpack.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
+
+	SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Uzeli ste Jetpack.");
+
+	return 1;
+}
+
+YCMD:setskin(playerid, const string: params[], help)
+{
+	if(help)
+    {
+		SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam omogucava da postavite odredjeni skin od 1 do 311.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	static
+		targetid,
+		skinid;
+
+	if (sscanf(params, "ri", targetid, skinid))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"/setskin [targetid] [skinid]");
+
+	if (!(1 <= skinid <= 311))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Pogresan ID skina.");
+
+	if (GetPlayerSkin(targetid) == skinid)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Taj igrac vec ima taj skin.");
+
+	SetPlayerSkin(targetid, skinid);
+
+	player_Skin[targetid] = skinid;
+
+    new INI:File = INI_Open(Account_Path(playerid));
+	INI_SetTag( File, "data" );
+    INI_WriteInt(File, "Skin", GetPlayerSkin(playerid));
+	INI_Close( File );
+
+    return 1;
+}
+
+YCMD:xgoto(playerid, params[], help)
+{
+	if(help)
+    {
+		SendClientMessage(playerid, x_blue, "HELP >> "c_white"Komanda koja vam pruza mogucnost teleportiranja na odredjene koordinate.");
+        return 1;
+    }
+
+	if (player_Staff[playerid] < 1)
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Samo Staff Team moze ovo.");
+
+	new Float:x, Float:y, Float:z;
+
+	static fmt_string[100];
+
+	if (sscanf(params, "fff", x, y, z)) SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"xgoto <X Float> <Y Float> <Z Float>");
+	else
+	{
+		if(IsPlayerInAnyVehicle(playerid))
+		{
+		    SetVehiclePos(GetPlayerVehicleID(playerid), x,y,z);
+		}
+		else
+		{
+		    SetPlayerPos(playerid, x, y, z);
+		}
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"Postavili ste koordinate na %f, %f, %f", x, y, z);
+		SendClientMessage(playerid, x_ltblue, fmt_string);
+	}
+ 	return 1;
+}
+
+YCMD:spanel(playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"Server Panel na koji ima pristup samo RCON Administrator.");
+        return 1;
+    }
+
+	if(!IsPlayerAdmin(playerid))
+		return SendClientMessage(playerid, x_red, "montrey // "c_white"Samo RCON Administrator.");
+	
+	Dialog_Show(playerid, "dialog_spanel", DIALOG_STYLE_LIST,
+		""c_server"montrey // "c_white"Owner Panel",
+		"Podesavanja\nAdmini\nVreme\nNapravi\nIzmeni\nIzbrisi",
+		"Odaberi", "Izlaz"
+	);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+YCMD:setstaff(playerid, const string: params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_blue, "HELP >> "c_white"0 - Skinut Admin | 1. Assistent | 2. Admin | 3. Manager | 4. High Command.");
+        return 1;
+    }
+
+	if(!IsPlayerAdmin(playerid))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Morate biti RCON!");
+
+	static
+		targetid,
+		level;
+
+	if (sscanf(params, "ri", targetid, level))
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"/setstaff [targetid] [0/4]");
+
+	if (!level && !player_Staff[targetid])
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Taj igrac nije u staff-u.");
+
+	if (level == player_Staff[targetid])
+		return SendClientMessage(playerid, -1, ""c_server"montrey // "c_white"Taj igrac je vec u staff-u.");
+
+	player_Staff[targetid] = level;
+	
+	if (!level)
+	{
+		static fmt_string[128];
+
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"%s Vas je izbacio iz staff-a.", ReturnPlayerName(playerid));
+		SendClientMessage(targetid, -1, fmt_string);
+
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"Izbacili ste %s iz staff-a.", ReturnPlayerName(targetid));
+		SendClientMessage(playerid, -1, fmt_string);
+	}
+	else if(level < 0 || level > 4) return SendClientMessage(playerid, x_blue, "montrey // "c_white"Molimo vas koristite "c_blue"-/help setstaff- "c_white"kako bi ste videli validne staff levele.");
+	{
+		static fmt_string[128];
+
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"%s Vas je ubacio u staff, nivo %d.", ReturnPlayerName(playerid), level);
+		SendClientMessage(targetid, -1, fmt_string);
+
+		format(fmt_string, sizeof(fmt_string), ""c_server"montrey // "c_white"Ubacili ste %s u staff, nivo %d.", ReturnPlayerName(targetid));
+		SendClientMessage(playerid, -1, fmt_string);
+	}
+    new INI:File = INI_Open(Account_Path(playerid));
+	INI_SetTag( File, "data" );
+    INI_WriteInt(File, "Staff", player_Staff[playerid]);
+	INI_Close( File );
+	
+    return 1;
+}

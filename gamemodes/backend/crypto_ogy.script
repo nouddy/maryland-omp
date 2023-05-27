@@ -1,0 +1,1741 @@
+/***
+ *
+ *   _______  _______  _______ _________ _______  _______ 
+ *  (  ____ \(       )(  ____ )\__   __/(  ____ )(  ____ \
+ *  | (    \/| () () || (    )|   ) (   | (    )|| (    \/
+ *  | (__    | || || || (____)|   | |   | (____)|| (__    
+ *  |  __)   | |(_)| ||  _____)   | |   |     __)|  __)   
+ *  | (      | |   | || (         | |   | (\ (   | (      
+ *  | (____/\| )   ( || )      ___) (___| ) \ \__| (____/\
+ *  (_______/|/     \||/       \_______/|/   \__/(_______/
+                                                        
+ *
+ *  @Author         Ogy_
+ *  @Date           17th May 2023
+ *  @Weburl         https://empire-ogc.com
+ *  @Project        empire_gamemode
+ *
+ *  @File           crypto_ogy.pwn
+ *  @Module         backend
+ *  @Kurac          floatstr / strval
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+/*
+     __     __                 _           _       _              
+     \ \   / /   __ _   _ __  (_)   __ _  | |__   | |   ___   ___ 
+      \ \ / /   / _` | | '__| | |  / _` | | '_ \  | |  / _ \ / __|
+       \ V /   | (_| | | |    | | | (_| | | |_) | | | |  __/ \__ \
+        \_/     \__,_| |_|    |_|  \__,_| |_.__/  |_|  \___| |___/
+
+*/
+new transactions,
+    transactionsBTC,
+    transactionsLTC,
+    transactionsDOT,
+    transactionsXRP,
+    transactionsUSDT;
+
+new PlayerText:BinanceTD[MAX_PLAYERS][160];
+
+new bool:finishedyet = false;
+
+new bool:GledaCryptoTextdraw[MAX_PLAYERS];
+
+/*
+      ____            __   _                      
+     |  _ \    ___   / _| (_)  _ __     ___   ___ 
+     | | | |  / _ \ | |_  | | | '_ \   / _ \ / __|
+     | |_| | |  __/ |  _| | | | | | | |  __/ \__ \
+     |____/   \___| |_|   |_| |_| |_|  \___| |___/
+
+*/
+#define CRYPTO_COLOR                        0x33FFBFFF
+#define CRYPTO_HEX                          "{33FFBF}"
+/*
+      _____                                   
+     | ____|  _ __    _   _   _ __ ___    ___ 
+     |  _|   | '_ \  | | | | | '_ ` _ \  / __|
+     | |___  | | | | | |_| | | | | | | | \__ \
+     |_____| |_| |_|  \__,_| |_| |_| |_| |___/
+
+*/
+
+enum e_Crypto {
+
+    BitcoinPrice,
+    RipplePrice,
+    TetherUSPrice,
+    LitecoinPrice,
+    PolkadotPrice
+}
+
+new CryptoPrices[e_Crypto];
+
+enum player_Crypto {
+
+    Float:countBTC,
+    Float:countXRP,
+    Float:countUSDT,
+    Float:countLTC,
+    Float:countDOT
+}
+new PlayerCrypto[MAX_PLAYERS][player_Crypto];
+
+/*
+      _   _                   _          
+     | | | |   ___     ___   | | __  ___ 
+     | |_| |  / _ \   / _ \  | |/ / / __|
+     |  _  | | (_) | | (_) | |   <  \__ \
+     |_| |_|  \___/   \___/  |_|\_\ |___/
+
+*/
+hook OnGameModeInit()
+{
+    transactions = 
+    transactionsBTC = 
+    transactionsDOT = 
+    transactionsLTC =
+    transactionsXRP = 
+    transactionsUSDT = 0;
+
+    // Crypto pocetne cene
+    CryptoPrices[BitcoinPrice] = 27000;
+    CryptoPrices[RipplePrice] = 1;
+    CryptoPrices[TetherUSPrice] = 1;
+    CryptoPrices[LitecoinPrice] = 93;
+    CryptoPrices[PolkadotPrice] = 5;
+
+    if(finishedyet)
+    {
+        print("backend/crypto_ogy.script loaded");
+    }
+
+    return 1;
+}
+
+hook OnPlayerLoaded(playerid)
+{
+    new q[150];
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_crypto WHERE crypto_id = '%d'", PlayerInfo[playerid][SQLID]);
+    mysql_tquery(SQL, q, "LoadPlayerCrypto", "i", playerid);
+    return true;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    ResetPlayersCrypto(playerid);
+
+    return (true);
+}
+
+/*
+hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+{
+    if(playertextid == BinanceTD[playerid][149])
+    {
+        print("btc");
+    }
+    else if(playertextid == BinanceTD[playerid][150])
+    {
+        print("ltc");
+    }
+    return 1;
+}
+*/
+/*
+      _____                          _     _                       
+     |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___ 
+     | |_    | | | | | '_ \   / __| | __| | |  / _ \  | '_ \  / __|
+     |  _|   | |_| | | | | | | (__  | |_  | | | (_) | | | | | \__ \
+     |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
+
+*/
+
+forward LoadPlayerCrypto(playerid);
+public LoadPlayerCrypto(playerid)
+{
+    new rows;
+    cache_get_row_count(rows);
+    if(!rows)
+    {  
+        new q[300];
+        mysql_format(SQL, q, sizeof(q), 
+           "INSERT INTO `player_crypto` (crypto_id, KolicinaBTC, KolicinaETH, KolicinaLTC, KolicinaDOT, KolicinaUSDT) \ 
+            VALUES('%d', '0', '0', '0', '0', '0')", PlayerInfo[playerid][SQLID]);
+        mysql_tquery(SQL, q);
+    }
+    else
+    {
+        cache_get_value_name_float(0, "KolicinaBTC", PlayerCrypto[playerid][countBTC]);
+        cache_get_value_name_float(0, "KolicinaETH", PlayerCrypto[playerid][countXRP]);
+        cache_get_value_name_float(0, "KolicinaLTC", PlayerCrypto[playerid][countLTC]);
+        cache_get_value_name_float(0, "KolicinaUSDT", PlayerCrypto[playerid][countUSDT]);
+        cache_get_value_name_float(0, "KolicinaDOT", PlayerCrypto[playerid][countDOT]);
+    }
+}
+forward BuildCryptoTextDraws(playerid, bool:show);
+public BuildCryptoTextDraws(playerid, bool:show)
+{
+    if(show == true)
+    {
+        for(new i = 0; i < 160; i++)
+        {
+            PlayerTextDrawHide( playerid, BinanceTD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, BinanceTD[ playerid ][ i ] );
+            BinanceTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+        BinanceTD[playerid][0] = CreatePlayerTextDraw(playerid, -303.333343, 156.659362, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][0], 1134.000000, 487.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][0], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][0], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][0], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][0], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][0], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][0], 0);
+
+        BinanceTD[playerid][1] = CreatePlayerTextDraw(playerid, -120.666687, 146.289001, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][1], 1134.000000, 487.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][1], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][1], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][1], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][1], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][1], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][1], 0);
+
+        BinanceTD[playerid][2] = CreatePlayerTextDraw(playerid, -348.666656, 145.044586, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][2], 1134.000000, 487.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][2], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][2], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][2], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][2], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][2], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][2], 0);
+
+        BinanceTD[playerid][3] = CreatePlayerTextDraw(playerid, -407.000061, 313.874206, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][3], 1041.000000, -368.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][3], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][3], -103663271);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][3], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][3], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][3], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][3], 0);
+
+        BinanceTD[playerid][4] = CreatePlayerTextDraw(playerid, -20.666704, 293.133331, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][4], 1041.000000, -368.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][4], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][4], -103663340);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][4], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][4], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][4], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][4], 0);
+
+        BinanceTD[playerid][5] = CreatePlayerTextDraw(playerid, 140.333297, 282.348175, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][5], 1041.000000, -368.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][5], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][5], -103663196);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][5], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][5], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][5], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][5], 0);
+
+        BinanceTD[playerid][6] = CreatePlayerTextDraw(playerid, 171.999954, 154.170379, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][6], 288.000000, 195.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][6], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][6], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][6], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][6], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][6], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][6], 0);
+
+        BinanceTD[playerid][7] = CreatePlayerTextDraw(playerid, 162.299972, 150.322265, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][7], 20.000000, 24.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][7], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][7], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][7], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][7], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][7], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][7], 0);
+
+        BinanceTD[playerid][8] = CreatePlayerTextDraw(playerid, 162.299972, 329.107513, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][8], 20.000000, 24.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][8], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][8], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][8], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][8], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][8], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][8], 0);
+
+        BinanceTD[playerid][9] = CreatePlayerTextDraw(playerid, 450.633209, 329.107513, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][9], 20.000000, 24.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][9], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][9], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][9], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][9], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][9], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][9], 0);
+
+        BinanceTD[playerid][10] = CreatePlayerTextDraw(playerid, 450.633209, 150.007507, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][10], 20.000000, 24.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][10], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][10], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][10], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][10], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][10], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][10], 0);
+
+        BinanceTD[playerid][11] = CreatePlayerTextDraw(playerid, 165.333282, 162.881484, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][11], 22.000000, 177.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][11], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][11], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][11], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][11], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][11], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][11], 0);
+
+        BinanceTD[playerid][12] = CreatePlayerTextDraw(playerid, 445.000091, 162.881484, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][12], 22.000000, 177.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][12], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][12], 252843263);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][12], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][12], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][12], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][12], 0);
+
+        BinanceTD[playerid][13] = CreatePlayerTextDraw(playerid, 281.999938, 124.718505, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][13], 57.000000, 78.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][13], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][13], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][13], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][13], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][13], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][13], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][13], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][13], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][14] = CreatePlayerTextDraw(playerid, 282.033203, 127.262939, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][14], 57.000000, 78.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][14], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][14], 252909055);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][14], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][14], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][14], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][14], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][14], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][14], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][15] = CreatePlayerTextDraw(playerid, 281.966644, 137.844665, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][15], 57.000000, 78.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][15], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][15], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][15], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][15], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][15], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][15], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][15], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][15], 0.000000, 180.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][16] = CreatePlayerTextDraw(playerid, 282.033203, 135.370498, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][16], 57.000000, 78.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][16], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][16], 252909055);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][16], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][16], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][16], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][16], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][16], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][16], 0.000000, 180.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][17] = CreatePlayerTextDraw(playerid, 300.833282, 154.237274, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][17], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][17], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][17], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][17], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][17], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][17], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][17], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][17], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][17], 0.000000, 90.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][18] = CreatePlayerTextDraw(playerid, 302.566497, 154.137268, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][18], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][18], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][18], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][18], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][18], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][18], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][18], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][18], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][18], 0.000000, 270.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][19] = CreatePlayerTextDraw(playerid, 295.833312, 154.237274, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][19], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][19], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][19], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][19], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][19], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][19], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][19], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][19], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][19], 0.000000, 90.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][20] = CreatePlayerTextDraw(playerid, 305.299804, 154.137268, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][20], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][20], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][20], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][20], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][20], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][20], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][20], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][20], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][20], 0.000000, 90.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][21] = CreatePlayerTextDraw(playerid, 297.566467, 154.137268, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][21], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][21], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][21], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][21], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][21], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][21], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][21], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][21], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][21], 0.000000, 270.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][22] = CreatePlayerTextDraw(playerid, 306.899871, 154.137268, "");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][22], 18.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][22], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][22], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][22], 0);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][22], 5);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][22], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][22], 0);
+        PlayerTextDrawSetPreviewModel(playerid, BinanceTD[playerid][22], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, BinanceTD[playerid][22], 0.000000, 270.000000, 0.000000, 1.000000);
+
+        BinanceTD[playerid][23] = CreatePlayerTextDraw(playerid, 309.333374, 182.118499, "BINANCE");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][23], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][23], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][23], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][23], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][23], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][23], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][23], 1);
+
+        BinanceTD[playerid][24] = CreatePlayerTextDraw(playerid, 165.333374, 194.732147, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][24], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][24], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][24], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][24], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][24], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][24], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][24], 0);
+
+        BinanceTD[playerid][25] = CreatePlayerTextDraw(playerid, 165.333374, 218.614593, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][25], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][25], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][25], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][25], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][25], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][25], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][25], 0);
+
+        BinanceTD[playerid][26] = CreatePlayerTextDraw(playerid, 165.333374, 242.196975, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][26], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][26], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][26], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][26], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][26], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][26], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][26], 0);
+
+        BinanceTD[playerid][27] = CreatePlayerTextDraw(playerid, 165.333374, 267.424011, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][27], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][27], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][27], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][27], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][27], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][27], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][27], 0);
+
+        BinanceTD[playerid][28] = CreatePlayerTextDraw(playerid, 165.333374, 291.583831, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][28], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][28], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][28], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][28], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][28], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][28], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][28], 0);
+
+        BinanceTD[playerid][29] = CreatePlayerTextDraw(playerid, 165.333374, 315.284149, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][29], 301.568603, 1.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][29], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][29], 1549556830);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][29], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][29], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][29], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][29], 0);
+
+        BinanceTD[playerid][30] = CreatePlayerTextDraw(playerid, 165.666641, 198.970367, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][30], 15.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][30], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][30], -5963521);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][30], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][30], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][30], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][30], 0);
+
+        BinanceTD[playerid][31] = CreatePlayerTextDraw(playerid, 169.666671, 203.159301, "]");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][31], 0.212666, 0.770370);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][31], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][31], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][31], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][31], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][31], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][31], 1);
+
+        BinanceTD[playerid][32] = CreatePlayerTextDraw(playerid, 171.233383, 202.544479, "B");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][32], 0.259000, 0.986073);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][32], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][32], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][32], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][32], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][32], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][32], 1);
+
+        BinanceTD[playerid][33] = CreatePlayerTextDraw(playerid, 171.500030, 209.770355, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][33], 0.939998, 1.890001);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][33], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][33], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][33], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][33], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][33], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][33], 0);
+
+        BinanceTD[playerid][34] = CreatePlayerTextDraw(playerid, 173.000122, 209.570343, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][34], 0.939998, 1.890001);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][34], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][34], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][34], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][34], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][34], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][34], 0);
+
+        BinanceTD[playerid][35] = CreatePlayerTextDraw(playerid, 173.000122, 203.069946, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][35], 0.939998, 1.890001);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][35], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][35], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][35], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][35], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][35], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][35], 0);
+
+        BinanceTD[playerid][36] = CreatePlayerTextDraw(playerid, 171.600036, 203.069946, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][36], 0.939998, 1.890001);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][36], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][36], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][36], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][36], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][36], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][36], 0);
+
+        BinanceTD[playerid][37] = CreatePlayerTextDraw(playerid, 165.666641, 222.614791, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][37], 15.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][37], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][37], 1854584319);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][37], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][37], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][37], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][37], 0);
+
+        BinanceTD[playerid][38] = CreatePlayerTextDraw(playerid, 171.233383, 225.774108, "L");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][38], 0.259000, 0.986073);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][38], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][38], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][38], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][38], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][38], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][38], 1);
+
+        BinanceTD[playerid][39] = CreatePlayerTextDraw(playerid, 168.666763, 227.948226, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][39], 0.496666, 0.529778);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][39], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][39], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][39], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][39], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][39], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][39], 1);
+
+        BinanceTD[playerid][40] = CreatePlayerTextDraw(playerid, 165.666641, 246.259231, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][40], 15.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][40], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][40], 1505342975);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][40], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][40], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][40], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][40], 0);
+
+        BinanceTD[playerid][41] = CreatePlayerTextDraw(playerid, 170.800048, 249.703811, "T");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][41], 0.259000, 0.986073);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][41], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][41], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][41], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][41], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][41], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][41], 1);
+
+        BinanceTD[playerid][42] = CreatePlayerTextDraw(playerid, 169.099929, 252.996261, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][42], 8.000000, 4.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][42], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][42], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][42], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][42], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][42], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][42], 0);
+
+        BinanceTD[playerid][43] = CreatePlayerTextDraw(playerid, 169.466583, 253.681503, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][43], 7.000000, 2.840001);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][43], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][43], 1505342975);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][43], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][43], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][43], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][43], 0);
+
+        BinanceTD[playerid][44] = CreatePlayerTextDraw(playerid, 169.333282, 269.903686, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][44], 7.000000, 6.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][44], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][44], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][44], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][44], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][44], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][44], 0);
+
+        BinanceTD[playerid][45] = CreatePlayerTextDraw(playerid, 169.333282, 281.518585, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][45], 7.000000, 6.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][45], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][45], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][45], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][45], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][45], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][45], 0);
+
+        BinanceTD[playerid][46] = CreatePlayerTextDraw(playerid, 166.666595, 277.785186, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][46], 4.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][46], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][46], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][46], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][46], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][46], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][46], 0);
+
+        BinanceTD[playerid][47] = CreatePlayerTextDraw(playerid, 166.999923, 272.392547, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][47], 4.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][47], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][47], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][47], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][47], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][47], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][47], 0);
+
+        BinanceTD[playerid][48] = CreatePlayerTextDraw(playerid, 174.999923, 272.807403, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][48], 4.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][48], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][48], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][48], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][48], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][48], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][48], 0);
+
+        BinanceTD[playerid][49] = CreatePlayerTextDraw(playerid, 174.999908, 278.200073, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][49], 4.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][49], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][49], -307041025);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][49], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][49], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][49], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][49], 0);
+
+        BinanceTD[playerid][50] = CreatePlayerTextDraw(playerid, 165.666641, 295.622314, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][50], 15.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][50], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][50], -2139062017);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][50], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][50], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][50], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][50], 0);
+
+        BinanceTD[playerid][51] = CreatePlayerTextDraw(playerid, 169.866714, 303.933410, "ld_beat:down");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][51], 7.000000, 5.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][51], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][51], 255);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][51], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][51], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][51], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][51], 0);
+
+        BinanceTD[playerid][52] = CreatePlayerTextDraw(playerid, 169.866714, 299.370391, "ld_beat:up");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][52], 7.000000, 5.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][52], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][52], 255);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][52], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][52], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][52], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][52], 0);
+
+        BinanceTD[playerid][53] = CreatePlayerTextDraw(playerid, 171.466369, 300.385833, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][53], 3.379998, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][53], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][53], -2139062017);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][53], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][53], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][53], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][53], 0);
+
+        BinanceTD[playerid][54] = CreatePlayerTextDraw(playerid, 215.000198, 204.103698, "BITCOIN~w~(BTC)");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][54], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][54], 3);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][54], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][54], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][54], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][54], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][54], 1);
+
+        BinanceTD[playerid][55] = CreatePlayerTextDraw(playerid, 216.100158, 227.333328, "LITECOIN~w~(LTC)");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][55], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][55], 3);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][55], -1615989249);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][55], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][55], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][55], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][55], 1);
+
+        BinanceTD[playerid][56] = CreatePlayerTextDraw(playerid, 215.100173, 251.392593, "TETHER~w~(USDT)");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][56], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][56], 3);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][56], -1680436481);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][56], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][56], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][56], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][56], 1);
+
+        BinanceTD[playerid][57] = CreatePlayerTextDraw(playerid, 223.100173, 275.866821, "POLKADOT~w~(DOT)");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][57], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][57], 3);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][57], -156502017);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][57], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][57], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][57], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][57], 1);
+
+        BinanceTD[playerid][58] = CreatePlayerTextDraw(playerid, 210.433486, 301.170562, "RIPPLE~w~(XRP)");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][58], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][58], 3);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][58], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][58], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][58], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][58], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][58], 1);
+
+        BinanceTD[playerid][59] = CreatePlayerTextDraw(playerid, 250.333557, 204.103698, "27_000$");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][59], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][59], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][59], -103663105);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][59], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][59], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][59], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][59], 1);
+
+        BinanceTD[playerid][60] = CreatePlayerTextDraw(playerid, 249.433456, 227.333328, "91$");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][60], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][60], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][60], -1615989249);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][60], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][60], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][60], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][60], 1);
+
+        BinanceTD[playerid][61] = CreatePlayerTextDraw(playerid, 249.766815, 251.392593, "0.99$");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][61], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][61], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][61], -1680436481);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][61], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][61], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][61], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][61], 1);
+
+        BinanceTD[playerid][62] = CreatePlayerTextDraw(playerid, 249.100173, 275.866821, "4.90$");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][62], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][62], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][62], -156502017);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][62], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][62], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][62], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][62], 1);
+
+        BinanceTD[playerid][63] = CreatePlayerTextDraw(playerid, 248.766784, 301.170562, "0.46$");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][63], 0.162664, 0.654222);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][63], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][63], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][63], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][63], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][63], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][63], 1);
+
+        BinanceTD[playerid][64] = CreatePlayerTextDraw(playerid, 303.666778, 200.370391, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][64], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][64], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][64], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][64], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][64], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][64], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][64], 1);
+
+        BinanceTD[playerid][65] = CreatePlayerTextDraw(playerid, 307.133453, 201.255661, "\\");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][65], 0.290333, 1.064888);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][65], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][65], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][65], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][65], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][65], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][65], 1);
+
+        BinanceTD[playerid][66] = CreatePlayerTextDraw(playerid, 309.666870, 198.296310, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][66], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][66], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][66], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][66], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][66], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][66], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][66], 1);
+
+        BinanceTD[playerid][67] = CreatePlayerTextDraw(playerid, 303.666778, 224.844451, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][67], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][67], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][67], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][67], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][67], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][67], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][67], 1);
+
+        BinanceTD[playerid][68] = CreatePlayerTextDraw(playerid, 307.133453, 226.144577, "\\");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][68], 0.290333, 1.064888);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][68], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][68], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][68], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][68], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][68], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][68], 1);
+
+        BinanceTD[playerid][69] = CreatePlayerTextDraw(playerid, 310.000183, 222.640823, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][69], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][69], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][69], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][69], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][69], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][69], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][69], 1);
+
+        BinanceTD[playerid][70] = CreatePlayerTextDraw(playerid, 303.666778, 248.903717, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][70], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][70], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][70], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][70], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][70], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][70], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][70], 1);
+
+        BinanceTD[playerid][71] = CreatePlayerTextDraw(playerid, 307.233398, 249.818588, "\\");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][71], 0.290333, 1.064888);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][71], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][71], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][71], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][71], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][71], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][71], 1);
+
+        BinanceTD[playerid][72] = CreatePlayerTextDraw(playerid, 310.000183, 246.285232, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][72], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][72], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][72], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][72], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][72], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][72], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][72], 1);
+
+        BinanceTD[playerid][73] = CreatePlayerTextDraw(playerid, 303.666778, 273.377807, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][73], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][73], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][73], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][73], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][73], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][73], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][73], 1);
+
+        BinanceTD[playerid][74] = CreatePlayerTextDraw(playerid, 307.233398, 274.707489, "\\");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][74], 0.290333, 1.064888);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][74], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][74], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][74], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][74], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][74], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][74], 1);
+
+        BinanceTD[playerid][75] = CreatePlayerTextDraw(playerid, 310.000183, 271.174072, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][75], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][75], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][75], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][75], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][75], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][75], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][75], 1);
+
+        BinanceTD[playerid][76] = CreatePlayerTextDraw(playerid, 303.666778, 297.851806, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][76], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][76], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][76], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][76], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][76], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][76], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][76], 1);
+
+        BinanceTD[playerid][77] = CreatePlayerTextDraw(playerid, 307.233398, 298.766754, "\\");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][77], 0.290333, 1.064888);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][77], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][77], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][77], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][77], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][77], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][77], 1);
+
+        BinanceTD[playerid][78] = CreatePlayerTextDraw(playerid, 310.000183, 295.648193, "/");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][78], 0.333666, 1.483852);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][78], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][78], 16711935);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][78], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][78], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][78], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][78], 1);
+
+        BinanceTD[playerid][79] = CreatePlayerTextDraw(playerid, 343.200103, 201.059234, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][79], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][79], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][79], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][79], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][79], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][79], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][79], 0);
+
+        BinanceTD[playerid][80] = CreatePlayerTextDraw(playerid, 407.200164, 201.059234, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][80], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][80], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][80], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][80], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][80], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][80], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][80], 0);
+
+        BinanceTD[playerid][81] = CreatePlayerTextDraw(playerid, 339.733551, 200.000015, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][81], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][81], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][81], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][81], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][81], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][81], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][81], 0);
+
+        BinanceTD[playerid][82] = CreatePlayerTextDraw(playerid, 339.733551, 207.351898, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][82], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][82], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][82], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][82], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][82], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][82], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][82], 0);
+
+        BinanceTD[playerid][83] = CreatePlayerTextDraw(playerid, 390.733581, 207.351898, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][83], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][83], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][83], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][83], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][83], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][83], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][83], 0);
+
+        BinanceTD[playerid][84] = CreatePlayerTextDraw(playerid, 390.733581, 199.985260, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][84], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][84], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][84], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][84], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][84], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][84], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][84], 0);
+
+        BinanceTD[playerid][85] = CreatePlayerTextDraw(playerid, 340.866851, 203.548141, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][85], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][85], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][85], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][85], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][85], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][85], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][85], 0);
+
+        BinanceTD[playerid][86] = CreatePlayerTextDraw(playerid, 387.866912, 203.548141, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][86], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][86], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][86], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][86], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][86], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][86], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][86], 0);
+
+        BinanceTD[playerid][87] = CreatePlayerTextDraw(playerid, 404.066955, 200.000015, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][87], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][87], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][87], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][87], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][87], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][87], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][87], 0);
+
+        BinanceTD[playerid][88] = CreatePlayerTextDraw(playerid, 404.066955, 207.051879, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][88], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][88], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][88], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][88], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][88], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][88], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][88], 0);
+
+        BinanceTD[playerid][89] = CreatePlayerTextDraw(playerid, 454.400146, 207.051879, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][89], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][89], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][89], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][89], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][89], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][89], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][89], 0);
+
+        BinanceTD[playerid][90] = CreatePlayerTextDraw(playerid, 454.400146, 200.000030, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][90], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][90], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][90], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][90], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][90], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][90], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][90], 0);
+
+        BinanceTD[playerid][91] = CreatePlayerTextDraw(playerid, 405.066833, 203.548141, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][91], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][91], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][91], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][91], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][91], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][91], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][91], 0);
+
+        BinanceTD[playerid][92] = CreatePlayerTextDraw(playerid, 451.400054, 203.548141, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][92], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][92], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][92], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][92], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][92], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][92], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][92], 0);
+
+        BinanceTD[playerid][93] = CreatePlayerTextDraw(playerid, 343.200103, 225.118484, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][93], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][93], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][93], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][93], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][93], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][93], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][93], 0);
+
+        BinanceTD[playerid][94] = CreatePlayerTextDraw(playerid, 343.200103, 250.007385, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][94], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][94], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][94], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][94], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][94], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][94], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][94], 0);
+
+        BinanceTD[playerid][95] = CreatePlayerTextDraw(playerid, 343.200103, 274.481445, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][95], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][95], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][95], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][95], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][95], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][95], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][95], 0);
+
+        BinanceTD[playerid][96] = CreatePlayerTextDraw(playerid, 343.200103, 298.125976, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][96], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][96], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][96], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][96], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][96], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][96], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][96], 0);
+
+        BinanceTD[playerid][97] = CreatePlayerTextDraw(playerid, 407.200164, 224.703704, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][97], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][97], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][97], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][97], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][97], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][97], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][97], 0);
+
+        BinanceTD[playerid][98] = CreatePlayerTextDraw(playerid, 407.200164, 250.007476, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][98], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][98], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][98], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][98], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][98], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][98], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][98], 0);
+
+        BinanceTD[playerid][99] = CreatePlayerTextDraw(playerid, 407.200164, 274.481597, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][99], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][99], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][99], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][99], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][99], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][99], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][99], 0);
+
+        BinanceTD[playerid][100] = CreatePlayerTextDraw(playerid, 407.200164, 297.926177, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][100], 50.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][100], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][100], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][100], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][100], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][100], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][100], 0);
+
+        BinanceTD[playerid][101] = CreatePlayerTextDraw(playerid, 340.300231, 223.859252, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][101], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][101], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][101], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][101], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][101], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][101], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][101], 0);
+
+        BinanceTD[playerid][102] = CreatePlayerTextDraw(playerid, 340.300231, 231.359710, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][102], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][102], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][102], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][102], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][102], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][102], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][102], 0);
+
+        BinanceTD[playerid][103] = CreatePlayerTextDraw(playerid, 340.300231, 248.860778, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][103], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][103], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][103], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][103], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][103], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][103], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][103], 0);
+
+        BinanceTD[playerid][104] = CreatePlayerTextDraw(playerid, 340.300231, 256.261230, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][104], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][104], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][104], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][104], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][104], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][104], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][104], 0);
+
+        BinanceTD[playerid][105] = CreatePlayerTextDraw(playerid, 340.300231, 273.262268, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][105], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][105], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][105], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][105], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][105], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][105], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][105], 0);
+
+        BinanceTD[playerid][106] = CreatePlayerTextDraw(playerid, 340.300231, 280.762725, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][106], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][106], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][106], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][106], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][106], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][106], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][106], 0);
+
+        BinanceTD[playerid][107] = CreatePlayerTextDraw(playerid, 340.300231, 296.963714, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][107], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][107], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][107], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][107], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][107], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][107], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][107], 0);
+
+        BinanceTD[playerid][108] = CreatePlayerTextDraw(playerid, 340.300231, 304.464172, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][108], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][108], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][108], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][108], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][108], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][108], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][108], 0);
+
+        BinanceTD[playerid][109] = CreatePlayerTextDraw(playerid, 390.200317, 223.890090, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][109], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][109], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][109], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][109], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][109], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][109], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][109], 0);
+
+        BinanceTD[playerid][110] = CreatePlayerTextDraw(playerid, 390.200317, 231.290542, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][110], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][110], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][110], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][110], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][110], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][110], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][110], 0);
+
+        BinanceTD[playerid][111] = CreatePlayerTextDraw(playerid, 390.200317, 248.791610, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][111], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][111], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][111], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][111], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][111], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][111], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][111], 0);
+
+        BinanceTD[playerid][112] = CreatePlayerTextDraw(playerid, 390.200317, 256.292053, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][112], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][112], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][112], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][112], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][112], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][112], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][112], 0);
+
+        BinanceTD[playerid][113] = CreatePlayerTextDraw(playerid, 390.200317, 273.293090, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][113], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][113], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][113], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][113], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][113], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][113], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][113], 0);
+
+        BinanceTD[playerid][114] = CreatePlayerTextDraw(playerid, 390.200317, 280.693542, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][114], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][114], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][114], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][114], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][114], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][114], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][114], 0);
+
+        BinanceTD[playerid][115] = CreatePlayerTextDraw(playerid, 390.200317, 296.894531, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][115], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][115], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][115], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][115], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][115], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][115], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][115], 0);
+
+        BinanceTD[playerid][116] = CreatePlayerTextDraw(playerid, 390.200317, 304.294982, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][116], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][116], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][116], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][116], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][116], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][116], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][116], 0);
+
+        BinanceTD[playerid][117] = CreatePlayerTextDraw(playerid, 404.066955, 223.520874, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][117], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][117], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][117], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][117], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][117], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][117], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][117], 0);
+
+        BinanceTD[playerid][118] = CreatePlayerTextDraw(playerid, 404.066955, 231.021331, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][118], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][118], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][118], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][118], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][118], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][118], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][118], 0);
+
+        BinanceTD[playerid][119] = CreatePlayerTextDraw(playerid, 404.066955, 248.922424, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][119], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][119], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][119], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][119], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][119], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][119], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][119], 0);
+
+        BinanceTD[playerid][120] = CreatePlayerTextDraw(playerid, 404.066955, 256.322875, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][120], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][120], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][120], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][120], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][120], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][120], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][120], 0);
+
+        BinanceTD[playerid][121] = CreatePlayerTextDraw(playerid, 404.066955, 273.323913, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][121], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][121], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][121], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][121], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][121], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][121], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][121], 0);
+
+        BinanceTD[playerid][122] = CreatePlayerTextDraw(playerid, 404.066955, 280.824371, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][122], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][122], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][122], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][122], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][122], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][122], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][122], 0);
+
+        BinanceTD[playerid][123] = CreatePlayerTextDraw(playerid, 404.066955, 296.725341, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][123], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][123], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][123], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][123], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][123], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][123], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][123], 0);
+
+        BinanceTD[playerid][124] = CreatePlayerTextDraw(playerid, 404.066955, 304.125793, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][124], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][124], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][124], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][124], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][124], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][124], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][124], 0);
+
+        BinanceTD[playerid][125] = CreatePlayerTextDraw(playerid, 454.566986, 223.507278, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][125], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][125], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][125], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][125], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][125], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][125], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][125], 0);
+
+        BinanceTD[playerid][126] = CreatePlayerTextDraw(playerid, 454.566986, 230.907730, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][126], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][126], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][126], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][126], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][126], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][126], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][126], 0);
+
+        BinanceTD[playerid][127] = CreatePlayerTextDraw(playerid, 454.566986, 248.808822, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][127], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][127], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][127], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][127], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][127], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][127], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][127], 0);
+
+        BinanceTD[playerid][128] = CreatePlayerTextDraw(playerid, 454.566986, 256.209259, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][128], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][128], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][128], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][128], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][128], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][128], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][128], 0);
+
+        BinanceTD[playerid][129] = CreatePlayerTextDraw(playerid, 454.566986, 273.410308, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][129], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][129], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][129], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][129], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][129], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][129], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][129], 0);
+
+        BinanceTD[playerid][130] = CreatePlayerTextDraw(playerid, 454.566986, 280.810760, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][130], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][130], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][130], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][130], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][130], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][130], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][130], 0);
+
+        BinanceTD[playerid][131] = CreatePlayerTextDraw(playerid, 454.566986, 296.711730, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][131], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][131], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][131], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][131], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][131], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][131], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][131], 0);
+
+        BinanceTD[playerid][132] = CreatePlayerTextDraw(playerid, 454.566986, 304.112182, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][132], 6.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][132], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][132], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][132], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][132], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][132], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][132], 0);
+
+        BinanceTD[playerid][133] = CreatePlayerTextDraw(playerid, 341.200134, 227.651794, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][133], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][133], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][133], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][133], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][133], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][133], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][133], 0);
+
+        BinanceTD[playerid][134] = CreatePlayerTextDraw(playerid, 387.166748, 227.651794, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][134], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][134], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][134], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][134], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][134], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][134], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][134], 0);
+
+        BinanceTD[playerid][135] = CreatePlayerTextDraw(playerid, 405.133483, 227.651794, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][135], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][135], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][135], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][135], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][135], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][135], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][135], 0);
+
+        BinanceTD[playerid][136] = CreatePlayerTextDraw(playerid, 451.366790, 227.651794, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][136], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][136], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][136], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][136], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][136], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][136], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][136], 0);
+
+        BinanceTD[playerid][137] = CreatePlayerTextDraw(playerid, 341.166778, 252.540664, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][137], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][137], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][137], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][137], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][137], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][137], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][137], 0);
+
+        BinanceTD[playerid][138] = CreatePlayerTextDraw(playerid, 387.500122, 252.540664, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][138], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][138], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][138], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][138], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][138], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][138], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][138], 0);
+
+        BinanceTD[playerid][139] = CreatePlayerTextDraw(playerid, 405.166748, 252.540664, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][139], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][139], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][139], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][139], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][139], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][139], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][139], 0);
+
+        BinanceTD[playerid][140] = CreatePlayerTextDraw(playerid, 451.700134, 252.540664, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][140], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][140], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][140], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][140], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][140], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][140], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][140], 0);
+
+        BinanceTD[playerid][141] = CreatePlayerTextDraw(playerid, 341.166839, 276.799896, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][141], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][141], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][141], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][141], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][141], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][141], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][141], 0);
+
+        BinanceTD[playerid][142] = CreatePlayerTextDraw(playerid, 387.166748, 276.799896, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][142], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][142], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][142], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][142], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][142], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][142], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][142], 0);
+
+        BinanceTD[playerid][143] = CreatePlayerTextDraw(playerid, 405.166748, 276.799896, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][143], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][143], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][143], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][143], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][143], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][143], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][143], 0);
+
+        BinanceTD[playerid][144] = CreatePlayerTextDraw(playerid, 451.499938, 276.799896, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][144], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][144], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][144], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][144], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][144], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][144], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][144], 0);
+
+        BinanceTD[playerid][145] = CreatePlayerTextDraw(playerid, 341.333160, 300.544464, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][145], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][145], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][145], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][145], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][145], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][145], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][145], 0);
+
+        BinanceTD[playerid][146] = CreatePlayerTextDraw(playerid, 387.099884, 300.129699, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][146], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][146], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][146], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][146], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][146], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][146], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][146], 0);
+
+        BinanceTD[playerid][147] = CreatePlayerTextDraw(playerid, 405.134216, 300.959259, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][147], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][147], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][147], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][147], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][147], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][147], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][147], 0);
+
+        BinanceTD[playerid][148] = CreatePlayerTextDraw(playerid, 451.467559, 300.959259, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][148], 8.000000, 7.000000);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][148], 1);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][148], 1549556991);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][148], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][148], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][148], 4);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][148], 0);
+
+        BinanceTD[playerid][149] = CreatePlayerTextDraw(playerid, 368.666595, 203.274078, "BUY");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][149], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][149], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][149], 2026017535);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][149], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][149], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][149], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][149], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][149], true);
+
+        BinanceTD[playerid][150] = CreatePlayerTextDraw(playerid, 368.666595, 227.333312, "BUY");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][150], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][150], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][150], 2026017535);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][150], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][150], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][150], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][150], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][150], true);
+
+        BinanceTD[playerid][151] = CreatePlayerTextDraw(playerid, 368.666595, 252.222259, "BUY");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][151], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][151], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][151], 2026017535);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][151], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][151], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][151], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][151], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][151], true);
+
+        BinanceTD[playerid][152] = CreatePlayerTextDraw(playerid, 368.666595, 276.696350, "BUY");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][152], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][152], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][152], 2026017535);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][152], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][152], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][152], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][152], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][152], true);
+
+        BinanceTD[playerid][153] = CreatePlayerTextDraw(playerid, 368.666595, 300.340850, "BUY");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][153], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][153], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][153], 2026017535);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][153], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][153], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][153], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][153], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][153], true);
+
+        BinanceTD[playerid][154] = CreatePlayerTextDraw(playerid, 432.999938, 203.274078, "SELL");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][154], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][154], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][154], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][154], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][154], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][154], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][154], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][154], true);
+
+        BinanceTD[playerid][155] = CreatePlayerTextDraw(playerid, 432.999938, 227.333297, "SELL");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][155], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][155], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][155], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][155], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][155], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][155], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][155], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][155], true);
+
+        BinanceTD[playerid][156] = CreatePlayerTextDraw(playerid, 432.999938, 251.807388, "SELL");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][156], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][156], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][156], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][156], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][156], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][156], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][156], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][156], true);
+
+        BinanceTD[playerid][157] = CreatePlayerTextDraw(playerid, 432.999938, 276.696258, "SELL");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][157], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][157], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][157], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][157], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][157], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][157], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][157], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][157], true);
+
+        BinanceTD[playerid][158] = CreatePlayerTextDraw(playerid, 432.999938, 300.755554, "SELL");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][158], 0.138333, 0.753777);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][158], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][158], -16776961);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][158], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][158], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][158], 2);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][158], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][158], true);
+
+        BinanceTD[playerid][159] = CreatePlayerTextDraw(playerid, 319.000030, 328.548187, "FAQ");
+        PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][159], 0.183000, 1.064889);
+        PlayerTextDrawAlignment(playerid, BinanceTD[playerid][159], 2);
+        PlayerTextDrawColor(playerid, BinanceTD[playerid][159], -1);
+        PlayerTextDrawSetShadow(playerid, BinanceTD[playerid][159], 0);
+        PlayerTextDrawBackgroundColor(playerid, BinanceTD[playerid][159], 255);
+        PlayerTextDrawFont(playerid, BinanceTD[playerid][159], 1);
+        PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][159], 1);
+        PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][159], true);
+
+        for(new i = 0; i < 160; i++) { PlayerTextDrawShow(playerid, BinanceTD[playerid][i]); }
+
+        GledaCryptoTextdraw[playerid] = true;
+
+        SelectTextDraw(playerid, CRYPTO_COLOR);
+    }
+    else
+    {
+        for(new i = 0; i < 160; i++)
+        {
+            PlayerTextDrawHide( playerid, BinanceTD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, BinanceTD[ playerid ][ i ] );
+            BinanceTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+        GledaCryptoTextdraw[playerid] = false;
+    }
+}
+/*
+      ____    _                    _          
+     / ___|  | |_    ___     ___  | | __  ___ 
+     \___ \  | __|  / _ \   / __| | |/ / / __|
+      ___) | | |_  | (_) | | (__  |   <  \__ \
+     |____/   \__|  \___/   \___| |_|\_\ |___/
+
+*/
+
+stock ResetPlayersCrypto(playerid)
+{
+    PlayerCrypto[playerid][countBTC] = 
+    PlayerCrypto[playerid][countXRP] = 
+    PlayerCrypto[playerid][countUSDT] = 
+    PlayerCrypto[playerid][countLTC] = 
+    PlayerCrypto[playerid][countDOT] = 0.0;
+
+    GledaCryptoTextdraw[playerid] = false;
+}
+/*
+      _____   _                                 
+     |_   _| (_)  _ __ ___     ___   _ __   ___ 
+       | |   | | | '_ ` _ \   / _ \ | '__| / __|
+       | |   | | | | | | | | |  __/ | |    \__ \
+       |_|   |_| |_| |_| |_|  \___| |_|    |___/
+
+*/
+
+task CryptoMessageTransactions[180000]()
+{
+    va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}U proteklih 3minuta obavljeno je "CRYPTO_HEX"%d{ffffff} tansakcija na trzistu.",transactions);
+    va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}BTC: %d | USDT: %d | DOT: %d | XRP: %d | LTC: %d",transactionsBTC,transactionsUSDT, transactionsDOT, transactionsXRP, transactionsLTC);
+}
+
+task CryptoChangePrice[60000]()
+{
+
+    return 1;
+}
+/*
+       ____                                                       _       
+      / ___|   ___    _ __ ___    _ __ ___     __ _   _ __     __| |  ___ 
+     | |      / _ \  | '_ ` _ \  | '_ ` _ \   / _` | | '_ \   / _` | / __|
+     | |___  | (_) | | | | | | | | | | | | | | (_| | | | | | | (_| | \__ \
+      \____|  \___/  |_| |_| |_| |_| |_| |_|  \__,_| |_| |_|  \__,_| |___/
+
+*/
+YCMD:crypto(const playerid, params[], help)
+{
+    if(help)
+    {
+        SendClientMessage(playerid, CRYPTO_COLOR, "[Crypto]: Ova komanda vam dozvoljava da kupujete/prodajete crypto valute.");
+        return 1;
+    }
+    if(GledaCryptoTextdraw[playerid])
+    {
+        BuildCryptoTextDraws(playerid, false);
+    }
+    else if(!GledaCryptoTextdraw[playerid])
+    {
+        BuildCryptoTextDraws(playerid, true);
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
