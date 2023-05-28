@@ -15,6 +15,10 @@ hook OnGameModeInit()
 hook OnPlayerSpawn(playerid)
 {
     //! GlobalTD
+    for(new i=0; i< 17; i++)
+    {
+        TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+    }
 
     for(new i=0; i< 33; i++)
     {
@@ -60,6 +64,174 @@ hook OnPlayerConnect(playerid)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 stock CreateTextdraws() {
+
+    //Logo
+    MarylandLogo[0] = TextDrawCreate(552.942016, 11.303692, "LD_SPAC:white");
+    TextDrawTextSize(MarylandLogo[0], 24.000000, 27.000000);
+    TextDrawAlignment(MarylandLogo[0], 1);
+    TextDrawColor(MarylandLogo[0], 404232447);
+    TextDrawSetShadow(MarylandLogo[0], 0);
+    TextDrawBackgroundColor(MarylandLogo[0], 255);
+    TextDrawFont(MarylandLogo[0], 4);
+    TextDrawSetProportional(MarylandLogo[0], 0);
+
+    MarylandLogo[1] = TextDrawCreate(548.275329, 28.425914, "ld_beat:chit");
+    TextDrawTextSize(MarylandLogo[1], 10.000000, 12.000000);
+    TextDrawAlignment(MarylandLogo[1], 1);
+    TextDrawColor(MarylandLogo[1], 404232447);
+    TextDrawSetShadow(MarylandLogo[1], 0);
+    TextDrawBackgroundColor(MarylandLogo[1], 255);
+    TextDrawFont(MarylandLogo[1], 4);
+    TextDrawSetProportional(MarylandLogo[1], 0);
+
+    MarylandLogo[2] = TextDrawCreate(548.275329, 9.344429, "ld_beat:chit");
+    TextDrawTextSize(MarylandLogo[2], 10.000000, 12.000000);
+    TextDrawAlignment(MarylandLogo[2], 1);
+    TextDrawColor(MarylandLogo[2], 404232447);
+    TextDrawSetShadow(MarylandLogo[2], 0);
+    TextDrawBackgroundColor(MarylandLogo[2], 255);
+    TextDrawFont(MarylandLogo[2], 4);
+    TextDrawSetProportional(MarylandLogo[2], 0);
+
+    MarylandLogo[3] = TextDrawCreate(571.608825, 9.344429, "ld_beat:chit");
+    TextDrawTextSize(MarylandLogo[3], 10.000000, 12.000000);
+    TextDrawAlignment(MarylandLogo[3], 1);
+    TextDrawColor(MarylandLogo[3], 404232447);
+    TextDrawSetShadow(MarylandLogo[3], 0);
+    TextDrawBackgroundColor(MarylandLogo[3], 255);
+    TextDrawFont(MarylandLogo[3], 4);
+    TextDrawSetProportional(MarylandLogo[3], 0);
+
+    MarylandLogo[4] = TextDrawCreate(571.608825, 28.425905, "ld_beat:chit");
+    TextDrawTextSize(MarylandLogo[4], 10.000000, 12.000000);
+    TextDrawAlignment(MarylandLogo[4], 1);
+    TextDrawColor(MarylandLogo[4], 404232447);
+    TextDrawSetShadow(MarylandLogo[4], 0);
+    TextDrawBackgroundColor(MarylandLogo[4], 255);
+    TextDrawFont(MarylandLogo[4], 4);
+    TextDrawSetProportional(MarylandLogo[4], 0);
+
+    MarylandLogo[5] = TextDrawCreate(549.908447, 15.807507, "LD_SPAC:white");
+    TextDrawTextSize(MarylandLogo[5], 7.000000, 17.979999);
+    TextDrawAlignment(MarylandLogo[5], 1);
+    TextDrawColor(MarylandLogo[5], 404232447);
+    TextDrawSetShadow(MarylandLogo[5], 0);
+    TextDrawBackgroundColor(MarylandLogo[5], 255);
+    TextDrawFont(MarylandLogo[5], 4);
+    TextDrawSetProportional(MarylandLogo[5], 0);
+
+    MarylandLogo[6] = TextDrawCreate(572.875793, 15.851840, "LD_SPAC:white");
+    TextDrawTextSize(MarylandLogo[6], 7.000000, 18.000000);
+    TextDrawAlignment(MarylandLogo[6], 1);
+    TextDrawColor(MarylandLogo[6], 404232447);
+    TextDrawSetShadow(MarylandLogo[6], 0);
+    TextDrawBackgroundColor(MarylandLogo[6], 255);
+    TextDrawFont(MarylandLogo[6], 4);
+    TextDrawSetProportional(MarylandLogo[6], 0);
+
+    MarylandLogo[7] = TextDrawCreate(525.333129, 11.288880, "");
+    TextDrawTextSize(MarylandLogo[7], 106.000000, 19.000000);
+    TextDrawAlignment(MarylandLogo[7], 1);
+    TextDrawColor(MarylandLogo[7], 404232447);
+    TextDrawSetShadow(MarylandLogo[7], 0);
+    TextDrawBackgroundColor(MarylandLogo[7], -256);
+    TextDrawFont(MarylandLogo[7], 5);
+    TextDrawSetProportional(MarylandLogo[7], 0);
+    TextDrawSetPreviewModel(MarylandLogo[7], 1317);
+    TextDrawSetPreviewRot(MarylandLogo[7], 155.000000, 270.000000, 90.000000, 1.000000);
+
+    MarylandLogo[8] = TextDrawCreate(549.866271, 7.940886, "ld_beat:chit");
+    TextDrawTextSize(MarylandLogo[8], 31.000000, 34.000000);
+    TextDrawAlignment(MarylandLogo[8], 1);
+    TextDrawColor(MarylandLogo[8], -1916144641);
+    TextDrawSetShadow(MarylandLogo[8], 0);
+    TextDrawBackgroundColor(MarylandLogo[8], 255);
+    TextDrawFont(MarylandLogo[8], 4);
+    TextDrawSetProportional(MarylandLogo[8], 0);
+
+    MarylandLogo[9] = TextDrawCreate(549.966613, 9.570482, "");
+    TextDrawTextSize(MarylandLogo[9], 14.000000, 20.000000);
+    TextDrawAlignment(MarylandLogo[9], 1);
+    TextDrawColor(MarylandLogo[9], -1064116481);
+    TextDrawSetShadow(MarylandLogo[9], 0);
+    TextDrawBackgroundColor(MarylandLogo[9], -256);
+    TextDrawFont(MarylandLogo[9], 5);
+    TextDrawSetProportional(MarylandLogo[9], 0);
+    TextDrawSetPreviewModel(MarylandLogo[9], 1317);
+    TextDrawSetPreviewRot(MarylandLogo[9], 0.000000, 313.000000, 0.000000, 1.000000);
+
+    MarylandLogo[10] = TextDrawCreate(548.533081, 15.951848, "");
+    TextDrawTextSize(MarylandLogo[10], 24.000000, 20.000000);
+    TextDrawAlignment(MarylandLogo[10], 1);
+    TextDrawColor(MarylandLogo[10], -1064116523);
+    TextDrawSetShadow(MarylandLogo[10], 0);
+    TextDrawBackgroundColor(MarylandLogo[10], -256);
+    TextDrawFont(MarylandLogo[10], 5);
+    TextDrawSetProportional(MarylandLogo[10], 0);
+    TextDrawSetPreviewModel(MarylandLogo[10], 1317);
+    TextDrawSetPreviewRot(MarylandLogo[10], 0.000000, 320.000000, 0.000000, 1.000000);
+
+    MarylandLogo[11] = TextDrawCreate(551.533020, 10.844408, "");
+    TextDrawTextSize(MarylandLogo[11], 27.000000, 28.000000);
+    TextDrawAlignment(MarylandLogo[11], 1);
+    TextDrawColor(MarylandLogo[11], -1);
+    TextDrawSetShadow(MarylandLogo[11], 0);
+    TextDrawBackgroundColor(MarylandLogo[11], -256);
+    TextDrawFont(MarylandLogo[11], 5);
+    TextDrawSetProportional(MarylandLogo[11], 0);
+    TextDrawSetPreviewModel(MarylandLogo[11], 1316);
+    TextDrawSetPreviewRot(MarylandLogo[11], 90.000000, 0.000000, 0.000000, 1.000000);
+
+    MarylandLogo[12] = TextDrawCreate(562.066894, 33.988891, "ld_spac:white");
+    TextDrawTextSize(MarylandLogo[12], 6.000000, 4.000000);
+    TextDrawAlignment(MarylandLogo[12], 1);
+    TextDrawColor(MarylandLogo[12], 404232447);
+    TextDrawSetShadow(MarylandLogo[12], 0);
+    TextDrawBackgroundColor(MarylandLogo[12], 255);
+    TextDrawFont(MarylandLogo[12], 4);
+    TextDrawSetProportional(MarylandLogo[12], 0);
+
+    MarylandLogo[13] = TextDrawCreate(562.066894, 12.833341, "ld_spac:white");
+    TextDrawTextSize(MarylandLogo[13], 6.000000, 4.000000);
+    TextDrawAlignment(MarylandLogo[13], 1);
+    TextDrawColor(MarylandLogo[13], 404232447);
+    TextDrawSetShadow(MarylandLogo[13], 0);
+    TextDrawBackgroundColor(MarylandLogo[13], 255);
+    TextDrawFont(MarylandLogo[13], 4);
+    TextDrawSetProportional(MarylandLogo[13], 0);
+
+    MarylandLogo[14] = TextDrawCreate(546.666748, 15.207397, "");
+    TextDrawTextSize(MarylandLogo[14], 29.000000, 15.000000);
+    TextDrawAlignment(MarylandLogo[14], 1);
+    TextDrawColor(MarylandLogo[14], -1);
+    TextDrawSetShadow(MarylandLogo[14], 0);
+    TextDrawBackgroundColor(MarylandLogo[14], -256);
+    TextDrawFont(MarylandLogo[14], 5);
+    TextDrawSetProportional(MarylandLogo[14], 0);
+    TextDrawSetPreviewModel(MarylandLogo[14], 1318);
+    TextDrawSetPreviewRot(MarylandLogo[14], 0.000000, 200.000000, 0.000000, 1.000000);
+
+    MarylandLogo[15] = TextDrawCreate(553.666625, 16.451835, "");
+    TextDrawTextSize(MarylandLogo[15], 29.000000, 15.000000);
+    TextDrawAlignment(MarylandLogo[15], 1);
+    TextDrawColor(MarylandLogo[15], -1);
+    TextDrawSetShadow(MarylandLogo[15], 0);
+    TextDrawBackgroundColor(MarylandLogo[15], -256);
+    TextDrawFont(MarylandLogo[15], 5);
+    TextDrawSetProportional(MarylandLogo[15], 0);
+    TextDrawSetPreviewModel(MarylandLogo[15], 1318);
+    TextDrawSetPreviewRot(MarylandLogo[15], 0.000000, 343.000000, 0.000000, 1.000000);
+
+    MarylandLogo[16] = TextDrawCreate(603.000000, 22.829616, "Maryland");
+    TextDrawLetterSize(MarylandLogo[16], 0.128666, 0.571259);
+    TextDrawAlignment(MarylandLogo[16], 2);
+    TextDrawColor(MarylandLogo[16], -1);
+    TextDrawSetShadow(MarylandLogo[16], 0);
+    TextDrawBackgroundColor(MarylandLogo[16], 255);
+    TextDrawFont(MarylandLogo[16], 2);
+    TextDrawSetProportional(MarylandLogo[16], 1);
+
+    //Global
 
     Global_TD[0] = TextDrawCreate(135.000030, 424.529602, "LD_SPAC:white");
     TextDrawTextSize(Global_TD[0], 511.000000, 16.190004);

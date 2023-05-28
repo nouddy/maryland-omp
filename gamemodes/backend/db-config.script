@@ -22,10 +22,10 @@
 #define local
 
 #if defined server
-#define MYSQL_HOST		"5.9.8.124"
-#define MYSQL_USER 		"u1608735_va98vTeT5o"
-#define MYSQL_PASS		"xD.ck8=9z^BLc^6=xKrweyrR"
-#define MYSQL_DB 		"s1608735_my-db1684172147"
+#define MYSQL_HOST		"db.zlaja.eu"
+#define MYSQL_USER 		"u1_n6IPi5KL7a"
+#define MYSQL_PASS		"XwiVOqdLZzFIg^!4@ymbKwFB"
+#define MYSQL_DB 		"s1_maryland"
 #endif
 
 #if defined local
