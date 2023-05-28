@@ -556,3 +556,5 @@
 [05/28/23 12:18:04] [ERROR] DCC_SendChannelMessage: invalid channel id '0'
 [05/28/23 12:20:27] [ERROR] DCC_SendChannelMessage: invalid channel id '0'
 [05/28/23 12:26:46] [ERROR] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 15:34:12] [ERROR] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 15:38:16] [ERROR] DCC_SendChannelMessage: invalid channel id '0'
