@@ -502,7 +502,7 @@ CheckSymbolColor(playerid,idsymbola, PlayerText:td)
     {
         case 1: PlayerTextDrawColor(playerid, td, 0xFF0000FF); // UZVICNIK
         case 2: PlayerTextDrawColor(playerid, td, 0x0086E3FF); // UPITNIK
-        case 3: PlayerTextDrawColor(playerid, td, 1924239615); // PLUS
+        case 3: PlayerTextDrawColor(playerid, td, 0xC092DEFF); // PLUS
     }
     return (true);
 }

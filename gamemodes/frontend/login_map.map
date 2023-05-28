@@ -1,0 +1,194 @@
+
+
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+hook OnGameModeInit()
+{
+
+	print("frontend/login_map.map loaded");
+
+	new loginmap;
+
+	loginmap = CreateDynamicObject(7420, 1177.390014, 2753.229980, 9.734375, 0.000009, 0.000000, 0.000009, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(7602, 1237.390014, 2813.229980, 9.726554, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	SetDynamicObjectMaterial(loginmap, 2, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(7604, 1157.390014, 2793.229980, 9.734375, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(7421, 1237.390014, 2763.229980, 9.726554, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1175.261230, 2746.996093, 8.598106, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1179.760742, 2745.144775, 8.598106, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1179.210937, 2752.416259, 8.598106, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1175.171142, 2743.187988, 8.378103, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1170.911376, 2743.187988, 8.378103, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1170.911376, 2750.798828, 8.378103, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1175.531494, 2754.769042, 8.378103, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1185.804199, 2738.250000, 8.598106, -0.000006, 0.000011, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1186.860351, 2733.500732, 8.598106, -0.000006, 0.000011, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1192.509399, 2738.111572, 9.078116, 0.000000, 0.000007, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1182.629516, 2736.145263, 8.858113, 0.000000, 0.000007, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1180.192260, 2739.638916, 8.858113, 0.000000, 0.000007, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1186.434204, 2743.993408, 8.858113, 0.000000, 0.000007, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1192.333862, 2742.475585, 8.858113, 0.000000, 0.000007, -55.100002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1202.978393, 2748.950195, 9.078116, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1206.702026, 2745.818847, 9.078116, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1208.389160, 2752.912597, 9.078116, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1201.734741, 2745.349853, 8.858113, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1197.676635, 2746.645019, 8.858113, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1199.990478, 2753.895263, 8.858113, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1205.599121, 2756.272949, 8.858113, -0.000006, 0.000011, -17.700002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1195.508911, 2762.667968, 9.078116, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1199.232543, 2759.536621, 9.078116, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1200.919677, 2766.630371, 9.078116, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1194.265258, 2759.067626, 8.858113, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1190.207153, 2760.362792, 8.858113, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1192.520996, 2767.613037, 8.858113, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1198.129638, 2769.990722, 8.858113, -0.000008, 0.000019, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1180.089233, 2762.667968, 9.078116, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1183.812866, 2759.536621, 9.078116, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1185.500000, 2766.630371, 9.078116, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1178.845581, 2759.067626, 8.858113, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1174.787475, 2760.362792, 8.858113, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1177.101318, 2767.613037, 8.858113, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1182.709960, 2769.990722, 8.858113, -0.000010, 0.000026, -17.700000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1167.913574, 2757.778320, 9.078116, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1172.770629, 2758.061767, 9.078116, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1169.122436, 2764.375000, 9.078116, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1169.483764, 2754.307861, 8.858113, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1165.645385, 2752.460693, 8.858113, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1162.344970, 2759.318359, 8.858113, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1164.786376, 2764.899414, 8.858113, -0.000013, 0.000033, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1167.913574, 2743.676269, 9.078116, -0.000009, 0.000040, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1172.770629, 2743.959716, 8.598106, -0.000006, 0.000047, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1169.122436, 2750.272949, 8.598106, -0.000006, 0.000047, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1169.483764, 2740.205810, 8.858113, -0.000009, 0.000040, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1165.645385, 2738.358642, 8.858113, -0.000009, 0.000040, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1162.344970, 2745.216308, 8.858113, -0.000009, 0.000040, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(826, 1164.786376, 2750.797363, 8.858113, -0.000009, 0.000040, 25.699991, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1199.709594, 2757.252441, 9.418124, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1186.369140, 2774.311767, 9.418124, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1210.759521, 2777.421875, 9.418124, 0.000000, 0.000000, 54.899990, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1209.564208, 2746.677734, 9.418124, 0.000000, 0.000000, 54.899990, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1190.711914, 2737.728759, 9.418124, 0.000000, 0.000000, 54.899990, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(731, 1175.699340, 2762.177001, 9.418124, 0.000000, 0.000000, 54.899990, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(782, 1208.344360, 2752.603515, 9.828124, 0.000000, 0.000000, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(782, 1202.894042, 2768.993652, 9.828124, 0.000000, 0.000000, 103.799987, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(782, 1188.618896, 2768.874023, 9.828124, 0.000000, 0.000000, 159.299987, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(744, 1177.682495, 2758.698730, 7.278125, 0.000000, 0.000000, 180.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(744, 1181.511596, 2758.698730, 7.278125, 0.000000, 0.000000, 270.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(744, 1180.141357, 2755.459716, 5.698123, 0.000000, 0.000000, -35.000003, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(744, 1186.131958, 2758.074951, 6.668125, 0.000000, 0.000000, 48.600002, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(3593, 1176.791137, 2752.241699, 10.678130, -1.700000, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, 10765, "airportgnd_sfse", "black64", 0xFFFFFFFF);
+	SetDynamicObjectMaterial(loginmap, 1, 9514, "711_sfw", "ws_carpark2", 0x00000000);
+	SetDynamicObjectMaterial(loginmap, 2, 18800, "mroadhelix1", "road1-3", 0x00000000);
+	SetDynamicObjectMaterial(loginmap, 3, 18800, "mroadhelix1", "road1-3", 0x00000000);
+	loginmap = CreateDynamicObject(1109, 1173.803710, 2752.272705, 10.698133, 360.000000, 360.000000, 270.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, 18996, "mattextures", "sampwhite", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(1109, 1179.974853, 2752.272705, 10.728134, 360.000000, 180.000000, 450.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, 18996, "mattextures", "sampred", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(1562, 1177.282348, 2751.734619, 10.978121, 0.000000, 0.000000, -90.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(1562, 1177.282348, 2752.735595, 10.978121, 0.000000, 0.000000, -90.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(19917, 1174.312988, 2752.284667, 10.478081, -4.799999, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterial(loginmap, 0, -1, "none", "none", 0xFFFFFFFF);
+	loginmap = CreateDynamicObject(2736, 1176.655639, 2750.970703, 10.818134, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterialText(loginmap, 0, ""c_server"MARY"c_server2"LAND", 140, "Arial", 70, 1, 0x00000000, 0x00000000, 1);
+	loginmap = CreateDynamicObject(2736, 1176.655639, 2750.930664, 10.518129, 0.000000, 0.000007, 0.000000, -1, -1, -1, 600.00, 600.00);
+	SetDynamicObjectMaterialText(loginmap, 0, "{FFFFFF}ROLE_PLAY", 140, "Arial", 70, 0, 0x00000000, 0x00000000, 1);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	loginmap = CreateDynamicObject(1085, 1174.756469, 2750.906738, 10.308132, 0.000000, 0.000000, -105.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1085, 1178.736572, 2750.906738, 10.288131, 0.000000, 0.000000, -90.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1085, 1174.756469, 2753.628906, 10.308132, 0.000000, 0.000000, 75.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1085, 1178.796508, 2753.628906, 10.308132, 0.000000, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1128, 1176.928833, 2752.075683, 11.036767, 6.399989, 0.000000, -89.999977, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1128, 1176.928833, 2752.426025, 11.036767, 6.399989, 0.000000, -89.999977, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1023, 1179.948974, 2751.950195, 11.008130, 0.000000, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1023, 1179.948974, 2752.530761, 11.008130, 0.000000, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	loginmap = CreateDynamicObject(1034, 1177.922485, 2752.274658, 10.698581, 0.000000, 0.000000, 90.000000, -1, -1, -1, 600.00, 600.00);
+	return (true);
+
+}
+
+
+hook OnPlayerConnect(playerid)
+{
+	RemoveBuildingForPlayer(playerid, 7420, 1177.390, 2753.229, 9.734, 0.250);
+	RemoveBuildingForPlayer(playerid, 7812, 1177.390, 2753.229, 9.734, 0.250);
+	RemoveBuildingForPlayer(playerid, 7602, 1237.390, 2813.229, 9.726, 0.250);
+	RemoveBuildingForPlayer(playerid, 7810, 1237.390, 2813.229, 9.726, 0.250);
+	RemoveBuildingForPlayer(playerid, 7604, 1157.390, 2793.229, 9.734, 0.250);
+	RemoveBuildingForPlayer(playerid, 7808, 1157.390, 2793.229, 9.734, 0.250);
+	RemoveBuildingForPlayer(playerid, 7421, 1237.390, 2763.229, 9.726, 0.250);
+	RemoveBuildingForPlayer(playerid, 7809, 1237.390, 2763.229, 9.726, 0.250);
+	return (true);
+}

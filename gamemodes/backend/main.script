@@ -25,11 +25,14 @@ const MAX_LOGIN_ATTEMPTS = 	3;
 static player_LoginAttempts[MAX_PLAYERS];
 
 
+static LoginActor[MAX_PLAYERS];
+
+
 
 new bool:UcitavanjeObjekata[MAX_PLAYERS],
 	bool:ImaLoginTD[MAX_PLAYERS];
 
-new Text:Login_TD[102];
+new Text:Login_TD[71];
 
 enum
 {
@@ -48,7 +51,10 @@ enum PlayerInformation
 	Godine,
 	Staff,
 	LastLogin[50],
-	RegisterDate[50]
+	RegisterDate[50],
+	Email[50],
+	Drzava[50],
+	Pol[10]
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 
@@ -68,11 +74,15 @@ hook SQL_AccountLoad(playerid)
 	cache_get_row_count(rows);
 	if(!rows)
 	{
+
+		RegisterIgraca(playerid);
+		/*
 		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
 					"Registracija",
 					"%s, unesite Vasu zeljenu lozinku: ",
 					"Potvrdi", "Izlaz", GetName(playerid)
 				);		
+		*/
 	}
 	else
 	{
@@ -158,6 +168,10 @@ timer Spawn_Player[100](playerid, type)
 			UcitajIgracuObjekte(playerid);
 			SpawnPlayer(playerid);
 			SetCameraBehindPlayer(playerid);
+
+			TogglePlayerSpectating(playerid, false);
+
+			SetCameraBehindPlayer(playerid);
 		}
 
 		else if (type == e_SPAWN_TYPE_LOGIN)
@@ -188,6 +202,10 @@ timer Spawn_Player[100](playerid, type)
 			SpawnPlayer(playerid);
 			SetCameraBehindPlayer(playerid);
 
+			TogglePlayerSpectating(playerid, false);
+
+			SetCameraBehindPlayer(playerid);
+
 			//
 			static q[ 120 ];
 			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'",ReturnDate(), GetName(playerid));
@@ -196,6 +214,24 @@ timer Spawn_Player[100](playerid, type)
 		}
 }
 
+
+//
+timer Register_Player[500](playerid)
+{
+	if(!Registered[playerid])
+		return 1;
+
+	InterpolateCameraPos(playerid, 526.880737, -3685.986328, 27.082427, 527.714477, -3703.954101, 14.042599, 4000);
+	InterpolateCameraLookAt(playerid, 526.876220, -3689.528320, 23.553344, 528.050537, -3708.888427, 13.308375, 1500);
+
+	OnRegisterSkinLoad[playerid] = true;
+
+	//
+	IzborSkinaTextDraws(playerid, true);
+	//
+	return 1;
+}
+//
 Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 {
 	if (!response)
@@ -210,11 +246,9 @@ Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 
 	PlayerInfo[playerid][Password] = udb_hash(inputtext);
 
-	Dialog_Show(playerid, "dialog_regages", DIALOG_STYLE_INPUT,
-		"Godine",
-		"Koliko imate godina: ",
-		"Unesi", "Izlaz"
-	);
+	RegisterPass[playerid] = true;
+
+	SendClientMessage(playerid, x_ogycolor, "> Uneli ste vasu lozinku.");
 
 	return 1;
 }
@@ -233,20 +267,77 @@ Dialog: dialog_regages(const playerid, response, listitem, string: inputtext[])
 	
 	PlayerInfo[playerid][Godine] = strval(inputtext);
 
-	//*
-	new query[500];
-	mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`) \ 
-		VALUES ('%e', '%d', '29', '1', '2000', '%d', '%e')", 
-		GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Godine], ReturnDate());
-	mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
-	printf("Main insert");
-	//*
+	RegisterGodine[playerid] = true;
 
-	defer Spawn_Player(playerid, 1);
+	SendClientMessage(playerid, x_ogycolor, "> Uneli ste vase godine.");
 
 	return 1;
 }
+Dialog:dialog_reggmail(const playerid, response, listitem , string: inputtext[])
+{
+	if(!response)
+		return Kick(playerid);
 
+	if(response)
+	{
+	    new mailstring = strfind( inputtext, "@", true);
+        if( mailstring == -1 ) {
+      		
+			Dialog_Show(playerid, "dialog_reggmail", DIALOG_STYLE_INPUT,
+				"Email",
+				"Upisite vas email, sa kojim cete u slucaju gubitka akaunta vratiti isti.",
+				"Unesi", "Izlaz"
+				);
+		}
+
+		strmid( PlayerInfo[ playerid ][ Email ], inputtext, 0, strlen( inputtext ), 34 );
+
+		RegisterEmail[playerid] = true;
+
+		SendClientMessage(playerid, x_ogycolor, "> Uneli ste vas email.");
+
+	}
+	return (true);
+}
+Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
+{
+	if(!response)
+		return Kick(playerid);
+
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: { strmid( PlayerInfo[ playerid ][ Drzava ], "Srbija", 0, strlen( "Srbija" ), 50 ); }
+			case 1: { strmid( PlayerInfo[ playerid ][ Drzava ], "Crna Gora", 0, strlen( "Crna Gora"), 50 ); }
+			case 2: { strmid( PlayerInfo[ playerid ][ Drzava ], "Bosna i Hercegovina", 0, strlen( "Bosna i Hercegovina"), 50 ); }
+			case 3: { strmid( PlayerInfo[ playerid ][ Drzava ], "Makedonija", 0, strlen( "Makedonija"), 50 ); }
+			case 4: { strmid( PlayerInfo[ playerid ][ Drzava ], "Hrvatska", 0, strlen( "Hrvatska"), 50 ); }
+			case 5: { strmid( PlayerInfo[ playerid ][ Drzava ], "Slovenija", 0, strlen( "Slovenija"), 50 ); }
+		}
+		RegisterDrzava[playerid] = true;
+		SendClientMessage(playerid, x_ogycolor, "> Odabrali ste vasu drzavu.");
+	}
+	return (true);
+}
+Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
+{
+	if(!response)
+		return Kick(playerid);
+
+	if(response)
+	{
+		new odabir = 0;
+
+		odabir = listitem +1;
+
+		strmid( PlayerInfo[ playerid ][ Pol ], (odabir == 1 ? ("Musko") : ("Zensko")), 0, strlen( (odabir == 1 ? ("Musko") : ("Zensko")) ), 50 );
+
+		RegisterPol[playerid] = true;
+		SendClientMessage(playerid, x_ogycolor, "> Odabrali ste vas pol.");
+	}
+	return (true);
+}
 Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 {
 	if (!response)
@@ -303,7 +394,28 @@ forward LoginIgraca(playerid);
 public LoginIgraca(playerid)
 {
 
+	TogglePlayerSpectating(playerid, true);
+	SetPlayerInterior( playerid, 0 );
+	SetPlayerVirtualWorld( playerid, playerid+1 );
+	SetPlayerPos(playerid,633.7927,-1765.8979,19.4339);
+	SetPlayerFacingAngle(playerid,176.0717);
+	InterpolateCameraPos(playerid, 628.761047, -1764.393554, 19.677539, 628.761047, -1764.393554, 19.677539, 1000);
+	InterpolateCameraLookAt(playerid, 629.909790, -1769.228637, 19.127872, 629.909790, -1769.228637, 19.127872, 1000);
+
+	LoginActor[playerid] = CreateActor(29, 632.1260,-1769.9631,18.9629,169.9771);
+	SetActorVirtualWorld(LoginActor[playerid], playerid+1);
+	ApplyActorAnimation(LoginActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, 1, 0, 0, 0, 0); 
+
+
+
+
 	PrikaziLoginTDs(playerid, true);
+	Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,
+			"Login Dialog",
+			"\\c {ffffff}Dobro nam dosli nazad na "c_server"Mary"c_server2"land {ffffff}Community.\n\
+			 \\c Vase ime: %s unesite Vasu tacnu lozinku: ",
+			"Potvrdi", "Izlaz", GetName(playerid)
+	);	
 
 	ImaLoginTD[playerid] = true;
 
@@ -311,14 +423,11 @@ public LoginIgraca(playerid)
 }
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	if(clickedid == Login_TD[85])
-	{
-		Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,
-			"Prijavljivanje",
-			"%s, unesite Vasu tacnu lozinku: ",
-			"Potvrdi", "Izlaz", GetName(playerid)
-		);	
-
-	}
 	return 1;
+}
+forward RegisterIgraca(playerid);
+public RegisterIgraca(playerid)
+{
+	CreatePlayerRegister(playerid, true);
+	return (true);
 }

@@ -245,7 +245,7 @@ stock CreateTextdraws() {
     Global_TD[1] = TextDrawCreate(104.366683, 391.114929, "");
     TextDrawTextSize(Global_TD[1], 61.000000, 90.000000);
     TextDrawAlignment(Global_TD[1], 1);
-    TextDrawColor(Global_TD[1], 547118847);
+    TextDrawColor(Global_TD[1], 0x8DC9F3FF);
     TextDrawSetShadow(Global_TD[1], 0);
     TextDrawBackgroundColor(Global_TD[1], 0xFFFFFF00);
     TextDrawFont(Global_TD[1], 5);
@@ -256,7 +256,7 @@ stock CreateTextdraws() {
     Global_TD[2] = TextDrawCreate(100.366744, 383.814483, "");
     TextDrawTextSize(Global_TD[2], 61.000000, 90.000000);
     TextDrawAlignment(Global_TD[2], 1);
-    TextDrawColor(Global_TD[2], 547118847);
+    TextDrawColor(Global_TD[2], 0x8DC9F3FF);
     TextDrawSetShadow(Global_TD[2], 0);
     TextDrawBackgroundColor(Global_TD[2], 0xFFFFFF00);
     TextDrawFont(Global_TD[2], 5);
@@ -267,7 +267,7 @@ stock CreateTextdraws() {
     Global_TD[3] = TextDrawCreate(104.666679, 383.814483, "");
     TextDrawTextSize(Global_TD[3], 61.000000, 90.000000);
     TextDrawAlignment(Global_TD[3], 1);
-    TextDrawColor(Global_TD[3], 547118847);
+    TextDrawColor(Global_TD[3], 0x8DC9F3FF);
     TextDrawSetShadow(Global_TD[3], 0);
     TextDrawBackgroundColor(Global_TD[3], 0xFFFFFF00);
     TextDrawFont(Global_TD[3], 5);
@@ -278,7 +278,7 @@ stock CreateTextdraws() {
     Global_TD[4] = TextDrawCreate(108.366622, 391.314941, "");
     TextDrawTextSize(Global_TD[4], 61.000000, 90.000000);
     TextDrawAlignment(Global_TD[4], 1);
-    TextDrawColor(Global_TD[4], 547118847);
+    TextDrawColor(Global_TD[4], 0x8DC9F3FF);
     TextDrawSetShadow(Global_TD[4], 0);
     TextDrawBackgroundColor(Global_TD[4], 0xFFFFFF00);
     TextDrawFont(Global_TD[4], 5);
@@ -289,7 +289,7 @@ stock CreateTextdraws() {
     Global_TD[5] = TextDrawCreate(128.266647, 417.448333, "");
     TextDrawTextSize(Global_TD[5], 29.000000, 31.150003);
     TextDrawAlignment(Global_TD[5], 1);
-    TextDrawColor(Global_TD[5], 404232447);
+    TextDrawColor(Global_TD[5], 404232192);
     TextDrawSetShadow(Global_TD[5], 0);
     TextDrawBackgroundColor(Global_TD[5], 404232192);
     TextDrawFont(Global_TD[5], 5);
@@ -300,7 +300,7 @@ stock CreateTextdraws() {
     Global_TD[6] = TextDrawCreate(128.766677, 417.448333, "");
     TextDrawTextSize(Global_TD[6], 29.000000, 31.000000);
     TextDrawAlignment(Global_TD[6], 1);
-    TextDrawColor(Global_TD[6], 404232447);
+    TextDrawColor(Global_TD[6], 404232192);
     TextDrawSetShadow(Global_TD[6], 0);
     TextDrawBackgroundColor(Global_TD[6], 404232192);
     TextDrawFont(Global_TD[6], 5);
@@ -320,7 +320,7 @@ stock CreateTextdraws() {
     Global_TD[8] = TextDrawCreate(128.333908, 438.503692, "particle:lamp_shad_64");
     TextDrawTextSize(Global_TD[8], 22.899997, -14.000000);
     TextDrawAlignment(Global_TD[8], 1);
-    TextDrawColor(Global_TD[8], 547118652);
+    TextDrawColor(Global_TD[8], 0x8DC9F34D);
     TextDrawSetShadow(Global_TD[8], 0);
     TextDrawBackgroundColor(Global_TD[8], 0x00000000);
     TextDrawFont(Global_TD[8], 4);

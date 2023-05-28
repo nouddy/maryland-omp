@@ -49,6 +49,7 @@
 #include <notify>
 #include <markerplus>
 #include <animated-textdraw>
+#include <DialogCenter>
 
 #define     c_server        "{8dc9f3}"
 #define     c_server2       "{c092de}"
@@ -90,7 +91,6 @@ public SQL_AccountLoad(playerid)
 {
 
 }
-
 //? Sitna provera
 
 forward PlayerRegistered(playerid);
@@ -345,6 +345,7 @@ public OnPlayerLeaveMarker(playerid, markerid) {
 
 	return 1;
 }
+
 /*
 public OnPlayerEnterDynamicArea(playerid, areaid) 
 {
@@ -400,6 +401,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //- Frontend
 #include "frontend/main.tde"
 #include "frontend/login.tde"
+#include "frontend/register.tde"
+#include "frontend/izborskina.tde"
 #include "frontend/starbucks.map"
 #include "frontend/opstina.map"
 #include "frontend/opstina-int.map"
@@ -417,6 +420,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/spawn-int.map"
 #include "frontend/granice.map"
 #include "frontend/metro-ext-ent.map"
+#include "frontend/login_map.map"
 //-
 #include "frontend/end/do-not-look.end"
 
@@ -436,3 +440,107 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "stocks/db.stock"
 #include "stocks/vehicle.stock"
 #include "stocks/variable.stock"
+
+
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+{
+	if(playertextid == Register_PTD[playerid][28])
+	{
+		if(RegisterPass[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
+
+		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
+					"Registracija",
+					"%s, unesite Vasu zeljenu lozinku: ",
+					"Potvrdi", "Izlaz", GetName(playerid)
+				);		
+	}
+	else if(playertextid == Register_PTD[playerid][27]) // email
+	{
+		if(RegisterEmail[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
+
+
+		Dialog_Show(playerid, "dialog_reggmail", DIALOG_STYLE_INPUT,
+			"Email",
+			"Upisite vas email, sa kojim cete u slucaju gubitka akaunta vratiti isti.",
+			"Unesi", "Izlaz"
+			);
+	}
+	else if(playertextid == Register_PTD[playerid][29]) // drzava
+	{
+		if(RegisterDrzava[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
+
+
+		Dialog_Show(playerid, "dialog_regdrzava", DIALOG_STYLE_LIST,
+			"Izaberite drzavu",
+			"Srbija\nCrna Gora\nBosna i Hercegovina\nMakedonija\nHrvatska\nSlovenija",
+			"Unesi", "Izlaz"
+			);
+	}	
+	else if(playertextid == Register_PTD[playerid][30])
+	{
+		if(RegisterGodine[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
+
+
+		Dialog_Show(playerid, "dialog_regages", DIALOG_STYLE_INPUT,
+			"Godine",
+			"Koliko imate godina: ",
+			"Unesi", "Izlaz"
+			);
+	}
+	else if(playertextid == Register_PTD[playerid][31]) // pol
+	{
+		if(RegisterPol[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
+
+
+		Dialog_Show(playerid, "dialog_regpol", DIALOG_STYLE_LIST,
+			"Odaberite koji ste pol",
+			"Musko\nZensko",
+			"Unesi", "Izlaz"
+			);
+	}
+	else if(playertextid == Register_PTD[playerid][33])
+	{
+		if(!RegisterPol[playerid] || !RegisterPass[playerid] || !RegisterEmail[playerid] || !RegisterDrzava[playerid] || !RegisterGodine[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Nesto od ponudjenih delova registera niste popunili.");
+
+
+		if(Registered[playerid])
+			return SendClientMessage(playerid, x_ogycolor, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+
+
+		CreatePlayerRegister(playerid, false);
+		new query[550];
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+			VALUES ('%e', '%d', '29', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+			GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+		//Registered[playerid] = true;
+		defer Spawn_Player(playerid, 1);
+	}
+	else if(playertextid == OdabirSkina_PTD[playerid][8])
+	{
+		
+	}
+	else if(playertextid == OdabirSkina_PTD[playerid][7])
+	{
+		print("naocare");
+	}
+	// tdovi za attach
+	/*
+		if(OnRegisterSkinLoad[playerid])
+		{
+			Spawn_Player(playerid, 1);
+
+			SendClientMessage(playerid, -1, "Uspesno ste stavili vase dodatke.");
+		}
+	*/
+	return 1;
+}
