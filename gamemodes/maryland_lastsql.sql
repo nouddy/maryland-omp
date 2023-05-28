@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2023 at 07:00 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Generation Time: May 28, 2023 at 09:30 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -80,7 +80,8 @@ INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carP
 (7, 522, 0, 1546.84, -2337.25, 13.5547, 181.784, 16, 52, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (8, 522, 0, 1548.88, -2339.04, 13.5547, 236.305, 56, 122, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (9, 522, 0, 1545.99, -2343.26, 14.3759, 142.199, 28, 30, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 522, 0, 1542.29, -2342.98, 13.5469, 62.4758, 75, 20, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(10, 522, 0, 1542.29, -2342.98, 13.5469, 62.4758, 75, 20, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 522, 0, 1551.61, -2337.78, 13.5546, 0.5395, 70, 17, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -106,6 +107,14 @@ CREATE TABLE `houses` (
   `InteriorZ` float DEFAULT 0,
   `Custom_Interior` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `houses`
+--
+
+INSERT INTO `houses` (`ID`, `Address`, `Description`, `Owner`, `Owned`, `Locked`, `Price`, `InteriorE`, `InteriorI`, `ExteriorX`, `ExteriorY`, `ExteriorZ`, `InteriorX`, `InteriorY`, `InteriorZ`, `Custom_Interior`) VALUES
+(0, '0, Commerce, Los Santos', 'Stan', 'Vostic', 1, 0, 15000, 0, 0, 1470.24, -1746.51, 13.5761, 1429.43, -1221.33, 152.818, 0),
+(1, '1, Commerce, Los Santos', 'Cao', 'Ogy_', 1, 0, 1000, 0, 1, 1465.1, -1734.67, 13.3828, 1429.43, -1221.33, 152.818, 0);
 
 -- --------------------------------------------------------
 
@@ -137,19 +146,21 @@ CREATE TABLE `players` (
   `Godine` int(11) NOT NULL,
   `Staff` int(11) NOT NULL DEFAULT 0,
   `LastLogin` varchar(50) NOT NULL DEFAULT 'NEMA',
-  `RegisterDate` varchar(50) NOT NULL DEFAULT 'NEMA'
+  `RegisterDate` varchar(50) NOT NULL DEFAULT 'NEMA',
+  `Drzava` varchar(50) NOT NULL DEFAULT 'Srbija',
+  `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
+  `Email` varchar(50) NOT NULL DEFAULT '@gmail.com'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `players`
 --
 
-INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`) VALUES
-(1, 'Vostic', 297206591, 1, 198250, 2, 21, 4, '27/05/2023 - 14:51', 'NEMA'),
-(3, 'Ogy_', 252642079, 1, 38600, 299, 19, 4, '20/05/2023 - 18:22', '17/05/2023 - 19:57'),
-(4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59'),
-(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00'),
-(6, 'Djura_Snajder', 229900973, 1, 0, 29, 19, 0, '19/05/2023 - 22:55', '19/05/2023 - 22:47');
+INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`) VALUES
+(1, 'Vostic', 297206591, 1, 200650, 299, 21, 4, '17/05/2023 - 13:30', 'NEMA', 'Srbija', '0', '@gmail.com'),
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '28/05/2023 - 21:24', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com'),
+(4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59', 'Srbija', '0', '@gmail.com'),
+(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00', 'Srbija', '0', '@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -171,7 +182,8 @@ CREATE TABLE `player_crypto` (
 --
 
 INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
-(1, 0, 0, 0, 0, 0);
+(3, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -194,7 +206,8 @@ CREATE TABLE `player_documents` (
 --
 
 INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLicence`, `MotoLicence`, `BrodLicence`, `OruzjeLicence`) VALUES
-(1, 1, 0, 0, 0, 0, 0);
+(3, 1, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -214,7 +227,8 @@ CREATE TABLE `player_finance` (
 --
 
 INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin`) VALUES
-(1, 0, 0, 0);
+(3, 0, 0, 0),
+(10, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -270,13 +284,13 @@ ALTER TABLE `player_finance`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
