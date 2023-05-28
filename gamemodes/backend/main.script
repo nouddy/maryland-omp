@@ -395,7 +395,7 @@ public LoginIgraca(playerid)
 {
 
 	TogglePlayerSpectating(playerid, true);
-	SetPlayerInterior( playerid, 0 );
+	SetPlayerInterior(playerid, 0);
 	SetPlayerVirtualWorld( playerid, playerid+1 );
 	SetPlayerPos(playerid,633.7927,-1765.8979,19.4339);
 	SetPlayerFacingAngle(playerid,176.0717);
@@ -405,9 +405,6 @@ public LoginIgraca(playerid)
 	LoginActor[playerid] = CreateActor(29, 632.1260,-1769.9631,18.9629,169.9771);
 	SetActorVirtualWorld(LoginActor[playerid], playerid+1);
 	ApplyActorAnimation(LoginActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, 1, 0, 0, 0, 0); 
-
-
-
 
 	PrikaziLoginTDs(playerid, true);
 	Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,

@@ -20,10 +20,10 @@
 
 new const RandomSPoruke[4][128] =
 {
-	"~w~Poseti_nas_discord_›_https://discord.gg/JbYWfNDgcj_.",
-	"~w~Backend_›_Vostic_&_Ogy_",
-	"~w~Ako_si_nov_›_/pitaj",
-	"~w~vosta_i_ogy_su_kraljevi"
+	"~w~Poseti nas discord » https://discord.gg/JbYWfNDgcj .",
+	"~w~Backend » Vostic & Ogy_",
+	"~w~Ako si nov » /pitaj",
+	"~w~vosta i ogy su kraljevi"
 
 };
 

@@ -52,8 +52,6 @@
 #include <DialogCenter>
 
 
-
-
 #define     c_server        "{8dc9f3}"
 #define     c_server2       "{c092de}"
 #define     c_red           "{ff1100}"

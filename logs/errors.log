@@ -1,2 +1,4 @@
-[05/28/23 21:24:27] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
-[05/28/23 21:28:31] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 21:56:47] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 21:58:02] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 21:58:28] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
+[05/28/23 22:01:31] [plugins/discord-connector] DCC_SendChannelMessage: invalid channel id '0'
