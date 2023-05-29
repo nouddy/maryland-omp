@@ -47,4 +47,9 @@ ResetujVariable(playerid)
     PlayerFinance[playerid][pBankMoney] = 0;
     PlayerFinance[playerid][pBankPin] = 0;
 
+    for(new i = 0; i < 2; i++)
+    {
+        PlayerInfo[playerid][AttachedObject][i] = -1;
+    }
+
 }

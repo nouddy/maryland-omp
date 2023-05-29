@@ -44,12 +44,15 @@ stock SavePlayer(playerid)
     if(IgracUlogovan[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d' WHERE `ID` = '%d'",
+		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d', `Objekat0` = '%d', `Objekat1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
 			PlayerInfo[playerid][Level],
 			GetPlayerMoney(playerid),
 			PlayerInfo[playerid][Skin],
 			PlayerInfo[playerid][Godine],
             PlayerInfo[playerid][Staff],
+            PlayerInfo[playerid][AttachedObject][0],
+            PlayerInfo[playerid][AttachedObject][1],
+            ReturnDate(),
 			PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL,query);        
     }

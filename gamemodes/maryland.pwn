@@ -523,25 +523,33 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
 
-		//Registered[playerid] = true;
-		defer Spawn_Player(playerid, 1);
+		Registered[playerid] = true;
+		defer Register_Player(playerid);
 	}
-	else if(playertextid == OdabirSkina_PTD[playerid][8])
-	{
-		
-	}
-	else if(playertextid == OdabirSkina_PTD[playerid][7])
-	{
-		print("naocare");
-	}
-	// tdovi za attach
-	/*
-		if(OnRegisterSkinLoad[playerid])
-		{
-			Spawn_Player(playerid, 1);
+	else if(playertextid == OdabirSkina_PTD[playerid][3]) // sesir promeni samo ono sranje td
+	{	
+		if(PlayerInfo[playerid][AttachedObject][0] != -1)
+			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
 
-			SendClientMessage(playerid, -1, "Uspesno ste stavili vase dodatke.");
-		}
-	*/
+
+		PlayerInfo[playerid][AttachedObject][0] = SetPlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][0], 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
+		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
+	}
+	else if(playertextid == OdabirSkina_PTD[playerid][7]) // naocare promeni samo ono sranje td
+	{
+		if(PlayerInfo[playerid][AttachedObject][1] != -1)
+			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
+		PlayerInfo[playerid][AttachedObject][1] = SetPlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][1], 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
+
+		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
+	}
+	else if(playertextid == OdabirSkina_PTD[playerid][8]) // nastavi deo promeni samo ono sranje td
+	{
+		Dialog_Show(playerid, "dialog_confirmreg", DIALOG_STYLE_MSGBOX,
+				"Odabir karaktera.",
+				"Postovani %s, posedujete dodatke\nObjekat1 > %s\nObjekat2 > %s\nDa li zelite da nastavite?",
+				"Nastavi", "Skini Objekat", GetName(playerid),PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
+		);
+	}
 	return 1;
 }

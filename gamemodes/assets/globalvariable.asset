@@ -35,6 +35,10 @@ new PlayerText:Player_TDs[MAX_PLAYERS][7];
 new PlayerText:Register_PTD[MAX_PLAYERS][55];
 new PlayerText:OdabirSkina_PTD[MAX_PLAYERS][9];
 
+
+
+new RegisterActor[MAX_PLAYERS];
+
 new bool:RegisterPol[MAX_PLAYERS],
     bool:RegisterPass[MAX_PLAYERS],
     bool:RegisterGodine[MAX_PLAYERS],

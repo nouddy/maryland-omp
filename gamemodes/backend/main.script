@@ -54,7 +54,8 @@ enum PlayerInformation
 	RegisterDate[50],
 	Email[50],
 	Drzava[50],
-	Pol[10]
+	Pol[10],
+	AttachedObject[2]
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 
@@ -172,6 +173,10 @@ timer Spawn_Player[100](playerid, type)
 			TogglePlayerSpectating(playerid, false);
 
 			SetCameraBehindPlayer(playerid);
+
+			DestroyDynamicActor(RegisterActor[playerid]);
+
+			CancelSelectTextDraw(playerid);
 		}
 
 		else if (type == e_SPAWN_TYPE_LOGIN)
@@ -206,6 +211,8 @@ timer Spawn_Player[100](playerid, type)
 
 			SetCameraBehindPlayer(playerid);
 
+			DestroyDynamicActor(LoginActor[playerid]);
+
 			//
 			static q[ 120 ];
 			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'",ReturnDate(), GetName(playerid));
@@ -221,8 +228,13 @@ timer Register_Player[500](playerid)
 	if(!Registered[playerid])
 		return 1;
 
+	SetPlayerVirtualWorld(playerid, playerid+2);
+	TogglePlayerSpectating(playerid, true);
 	InterpolateCameraPos(playerid, 526.880737, -3685.986328, 27.082427, 527.714477, -3703.954101, 14.042599, 4000);
 	InterpolateCameraLookAt(playerid, 526.876220, -3689.528320, 23.553344, 528.050537, -3708.888427, 13.308375, 1500);
+
+
+	RegisterActor[playerid] = CreateDynamicActor(29, 527.7463,-3714.8406,10.0209,0.8036, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
 
 	OnRegisterSkinLoad[playerid] = true;
 
@@ -356,17 +368,91 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 				return Kick(playerid);
 
 			++player_LoginAttempts[playerid];
+			new sDStrg[ 560 ],ip[50];
+			GetPlayerIp(playerid, ip, sizeof(ip));
+			format( sDStrg, sizeof( sDStrg ), "{ffffff}Dobro nam dosli nazad na "c_server"Mary"c_server2"Land Community.\n \n\
+					\t\t{ffffff}Ime: "c_server"%s\n\
+					\t\t{ffffff}IP: "c_server2"%s \n \n\
+					{ffffff}Molimo vas da unesete vasu lozinku.\n\
+					{ffffff}kako biste se uspesno prijavili na  server\n\
+					{ffffff}Imate 3 pokusaja da unesete tacnu lozinku i 60 sekundi.\n\
+					\n\
+					Uzivajte igrajuci na nasem serveru!\n\
+					",GetName(playerid),ip);
+
+			
 			Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,
-				"Prijavljivanje",
-				"%s, unesite Vasu tacnu lozinku: ",
-				"Potvrdi", "Izlaz", GetName(playerid)
+					"Login Dialog",
+					sDStrg,
+					"Potvrdi", "Izlaz"
 			);
+
+			va_SendClientMessage(playerid, 0xFF0064FF, "[Login Podatci]: {ffffff}Pogresili ste lozinku [%d/3]",player_LoginAttempts[playerid]);
 		}
 	}
 
 	return 1;
 }
+Dialog:dialog_obrisiobjekte(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return Kick(playerid);
 
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				if(PlayerInfo[playerid][AttachedObject][0] == -1)
+					return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
+
+				PlayerInfo[playerid][AttachedObject][0] = -1;
+
+				RemovePlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][0]);
+
+				SavePlayer(playerid);
+
+				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
+			}
+			case 1:
+			{
+				if(PlayerInfo[playerid][AttachedObject][1] == -1)
+					return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
+
+				RemovePlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][1]);
+
+				PlayerInfo[playerid][AttachedObject][1] = -1;
+
+				SavePlayer(playerid);
+
+				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}.");
+			}
+		}
+	}
+	return (true);
+}
+Dialog:dialog_confirmreg(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+	{
+		if(PlayerInfo[playerid][AttachedObject][0] == -1 && PlayerInfo[playerid][AttachedObject][1] == -1)
+			Spawn_Player(playerid, 1);
+
+
+		Dialog_Show(playerid, "dialog_obrisiobjekte", DIALOG_STYLE_LIST,
+				"Trenutno posedujete.",
+				"%s\n%s\n",
+				"Odaberi", "Izlaz",PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
+		);
+	}
+
+	if(response)
+	{
+		Spawn_Player(playerid, 1);
+	}
+	return (true);
+}
 //
 stock UcitajIgracuObjekte( playerid ) {
 
@@ -402,16 +488,29 @@ public LoginIgraca(playerid)
 	InterpolateCameraPos(playerid, 628.761047, -1764.393554, 19.677539, 628.761047, -1764.393554, 19.677539, 1000);
 	InterpolateCameraLookAt(playerid, 629.909790, -1769.228637, 19.127872, 629.909790, -1769.228637, 19.127872, 1000);
 
-	LoginActor[playerid] = CreateActor(29, 632.1260,-1769.9631,18.9629,169.9771);
+	LoginActor[playerid] = CreateActor(PlayerInfo[playerid][Skin], 632.1260,-1769.9631,18.9629,169.9771);
 	SetActorVirtualWorld(LoginActor[playerid], playerid+1);
 	ApplyActorAnimation(LoginActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, 1, 0, 0, 0, 0); 
 
 	PrikaziLoginTDs(playerid, true);
+
+	new sDStrg[ 560 ],ip[50];
+	GetPlayerIp(playerid, ip, sizeof(ip));
+	format( sDStrg, sizeof( sDStrg ), "{ffffff}Dobro nam dosli nazad na "c_server"Mary"c_server2"Land Community.\n \n\
+			\t\t{ffffff}Ime: "c_server"%s\n\
+			\t\t{ffffff}IP: "c_server2"%s \n \n\
+			{ffffff}Molimo vas da unesete vasu lozinku.\n\
+			{ffffff}kako biste se uspesno prijavili na  server\n\
+			{ffffff}Imate 3 pokusaja da unesete tacnu lozinku i 60 sekundi.\n\
+			\n\
+			Uzivajte igrajuci na nasem serveru!\n\
+			",GetName(playerid),ip);
+
+
 	Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,
 			"Login Dialog",
-			"\\c {ffffff}Dobro nam dosli nazad na "c_server"Mary"c_server2"land {ffffff}Community.\n\
-			 \\c Vase ime: %s unesite Vasu tacnu lozinku: ",
-			"Potvrdi", "Izlaz", GetName(playerid)
+			sDStrg,
+			"Potvrdi", "Izlaz"
 	);	
 
 	ImaLoginTD[playerid] = true;
