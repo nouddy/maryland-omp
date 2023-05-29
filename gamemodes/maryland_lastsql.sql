@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2023 at 02:01 PM
+-- Generation Time: May 29, 2023 at 05:02 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,22 +18,151 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `insanity`
+-- Database: `maryland`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `banned`
+-- Table structure for table `cars`
 --
 
-CREATE TABLE `banned` (
-  `BannedUserID` int(11) NOT NULL,
-  `BannedUser` varchar(50) NOT NULL DEFAULT 'Niko',
-  `BannedReason` varchar(50) NOT NULL DEFAULT 'Proseravanje',
-  `BannedAdmin` varchar(50) NOT NULL DEFAULT 'Niko',
-  `BannedIP` varchar(50) NOT NULL DEFAULT '0.0.0.0'
+CREATE TABLE `cars` (
+  `carID` int(12) NOT NULL,
+  `carModel` int(12) DEFAULT 0,
+  `carOwner` int(12) DEFAULT 0,
+  `carPosX` float DEFAULT 0,
+  `carPosY` float DEFAULT 0,
+  `carPosZ` float DEFAULT 0,
+  `carPosR` float DEFAULT 0,
+  `carColor1` int(12) DEFAULT 0,
+  `carColor2` int(12) DEFAULT 0,
+  `carPaintjob` int(12) DEFAULT -1,
+  `carLocked` int(4) DEFAULT 0,
+  `carMod1` int(12) DEFAULT 0,
+  `carMod2` int(12) DEFAULT 0,
+  `carMod3` int(12) DEFAULT 0,
+  `carMod4` int(12) DEFAULT 0,
+  `carMod5` int(12) DEFAULT 0,
+  `carMod6` int(12) DEFAULT 0,
+  `carMod7` int(12) DEFAULT 0,
+  `carMod8` int(12) DEFAULT 0,
+  `carMod9` int(12) DEFAULT 0,
+  `carMod10` int(12) DEFAULT 0,
+  `carMod11` int(12) DEFAULT 0,
+  `carMod12` int(12) DEFAULT 0,
+  `carMod13` int(12) DEFAULT 0,
+  `carMod14` int(12) DEFAULT 0,
+  `carImpounded` int(12) DEFAULT 0,
+  `carWeapon1` int(12) DEFAULT 0,
+  `carAmmo1` int(12) DEFAULT 0,
+  `carWeapon2` int(12) DEFAULT 0,
+  `carAmmo2` int(12) DEFAULT 0,
+  `carWeapon3` int(12) DEFAULT 0,
+  `carAmmo3` int(12) DEFAULT 0,
+  `carWeapon4` int(12) DEFAULT 0,
+  `carAmmo4` int(12) DEFAULT 0,
+  `carWeapon5` int(12) DEFAULT 0,
+  `carAmmo5` int(12) DEFAULT 0,
+  `carImpoundPrice` int(12) DEFAULT 0,
+  `carFaction` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `cars`
+--
+
+INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carPosZ`, `carPosR`, `carColor1`, `carColor2`, `carPaintjob`, `carLocked`, `carMod1`, `carMod2`, `carMod3`, `carMod4`, `carMod5`, `carMod6`, `carMod7`, `carMod8`, `carMod9`, `carMod10`, `carMod11`, `carMod12`, `carMod13`, `carMod14`, `carImpounded`, `carWeapon1`, `carAmmo1`, `carWeapon2`, `carAmmo2`, `carWeapon3`, `carAmmo3`, `carWeapon4`, `carAmmo4`, `carWeapon5`, `carAmmo5`, `carImpoundPrice`, `carFaction`) VALUES
+(3, 53, 0, 1554.11, -2332.82, 13.5546, 246.54, 4, 4, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 53, 0, 1549.4, -2327.92, 13.5546, 161.971, 70, 79, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 53, 0, 1551.04, -2331.14, 13.5547, 177.421, 92, 111, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 522, 0, 1548.47, -2334.36, 13.5547, 191.843, 75, 38, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 522, 0, 1546.84, -2337.25, 13.5547, 181.784, 16, 52, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 522, 0, 1548.88, -2339.04, 13.5547, 236.305, 56, 122, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(9, 522, 0, 1545.99, -2343.26, 14.3759, 142.199, 28, 30, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 522, 0, 1542.29, -2342.98, 13.5469, 62.4758, 75, 20, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 522, 0, 1551.61, -2337.78, 13.5546, 0.5395, 70, 17, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `houses`
+--
+
+CREATE TABLE `houses` (
+  `ID` int(11) NOT NULL,
+  `Address` varchar(35) DEFAULT '0,Los Santos',
+  `Description` varchar(128) DEFAULT 'House',
+  `Owner` varchar(25) DEFAULT 'The State',
+  `Owned` tinyint(1) DEFAULT 0,
+  `Locked` tinyint(1) DEFAULT 0,
+  `Price` int(11) DEFAULT 0,
+  `InteriorE` int(11) DEFAULT 0,
+  `InteriorI` int(11) NOT NULL DEFAULT 0,
+  `ExteriorX` float DEFAULT 0,
+  `ExteriorY` float DEFAULT 0,
+  `ExteriorZ` float DEFAULT 0,
+  `InteriorX` float DEFAULT 0,
+  `InteriorY` float DEFAULT 0,
+  `InteriorZ` float DEFAULT 0,
+  `Custom_Interior` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `houses`
+--
+
+INSERT INTO `houses` (`ID`, `Address`, `Description`, `Owner`, `Owned`, `Locked`, `Price`, `InteriorE`, `InteriorI`, `ExteriorX`, `ExteriorY`, `ExteriorZ`, `InteriorX`, `InteriorY`, `InteriorZ`, `Custom_Interior`) VALUES
+(0, '0, Commerce, Los Santos', 'Stan', 'Vostic', 1, 0, 15000, 0, 0, 1470.24, -1746.51, 13.5761, 1429.43, -1221.33, 152.818, 0),
+(1, '1, Commerce, Los Santos', 'Cao', 'Ogy_', 1, 0, 1000, 0, 1, 1465.1, -1734.67, 13.3828, 1429.43, -1221.33, 152.818, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `klupe`
+--
+
+CREATE TABLE `klupe` (
+  `seat_ID` int(11) NOT NULL,
+  `seat_x` float NOT NULL,
+  `seat_y` float NOT NULL,
+  `seat_z` float NOT NULL,
+  `seat_a` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `players`
+--
+
+CREATE TABLE `players` (
+  `ID` int(11) NOT NULL,
+  `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
+  `Password` int(11) NOT NULL,
+  `Level` int(11) NOT NULL DEFAULT 1,
+  `Novac` int(11) NOT NULL DEFAULT 2000,
+  `Skin` int(11) NOT NULL DEFAULT 29,
+  `Godine` int(11) NOT NULL,
+  `Staff` int(11) NOT NULL DEFAULT 0,
+  `LastLogin` varchar(50) NOT NULL DEFAULT 'NEMA',
+  `RegisterDate` varchar(50) NOT NULL DEFAULT 'NEMA',
+  `Drzava` varchar(50) NOT NULL DEFAULT 'Srbija',
+  `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
+  `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
+  `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
+  `Objekat1` tinyint(4) NOT NULL DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `players`
+--
+
+INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
+(1, 'Vostic', 297206591, 1, 200650, 299, 21, 4, '17/05/2023 - 13:30', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '29/05/2023 - 14:18', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
+(4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59', 'Srbija', '0', '@gmail.com', -1, -1),
+(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00', 'Srbija', '0', '@gmail.com', -1, -1);
 
 -- --------------------------------------------------------
 
@@ -42,207 +171,128 @@ CREATE TABLE `banned` (
 --
 
 CREATE TABLE `player_crypto` (
-  `player_id` int(11) NOT NULL,
-  `KolicinaBTC` float NOT NULL,
-  `KolicinaETH` float NOT NULL,
-  `KolicinaLTC` float NOT NULL,
-  `KolicinaUSDT` float NOT NULL,
-  `KolicinaDOT` float NOT NULL
+  `crypto_id` int(11) NOT NULL,
+  `KolicinaBTC` float DEFAULT NULL,
+  `KolicinaETH` float DEFAULT NULL,
+  `KolicinaLTC` float DEFAULT NULL,
+  `KolicinaUSDT` float DEFAULT NULL,
+  `KolicinaDOT` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `player_crypto`
 --
 
-INSERT INTO `player_crypto` (`player_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
-(0, 0, 0, 0, 0, 0);
+INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
+(3, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `player_utakmice`
+-- Table structure for table `player_documents`
 --
 
-CREATE TABLE `player_utakmice` (
-  `sqlid` int(11) NOT NULL,
-  `parid_1` int(11) NOT NULL DEFAULT -1,
-  `parid_2` int(11) NOT NULL DEFAULT -1,
-  `parid_3` int(11) NOT NULL DEFAULT -1,
-  `parid_4` int(11) NOT NULL DEFAULT -1,
-  `parid_5` int(11) NOT NULL DEFAULT -1,
-  `Uplaceno` tinyint(1) NOT NULL DEFAULT 0,
-  `Zavrseno` tinyint(1) NOT NULL DEFAULT 0,
-  `StatusTiketa` tinyint(1) NOT NULL DEFAULT 0,
-  `Dobitak` float NOT NULL,
-  `Uplata` int(11) NOT NULL DEFAULT 0,
-  `Kvota` float NOT NULL
+CREATE TABLE `player_documents` (
+  `player_id` int(11) NOT NULL,
+  `NationalID` int(11) NOT NULL,
+  `Passport` int(11) NOT NULL,
+  `VoziloLicence` int(11) NOT NULL,
+  `MotoLicence` int(11) NOT NULL,
+  `BrodLicence` int(11) NOT NULL,
+  `OruzjeLicence` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `player_documents`
+--
+
+INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLicence`, `MotoLicence`, `BrodLicence`, `OruzjeLicence`) VALUES
+(3, 1, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `safezones`
+-- Table structure for table `player_finance`
 --
 
-CREATE TABLE `safezones` (
-  `safeSQLID` int(11) NOT NULL,
-  `MinX` float NOT NULL,
-  `MinY` float NOT NULL,
-  `MaxX` float NOT NULL,
-  `MaxY` float NOT NULL,
-  `Radius` float NOT NULL,
-  `Color` int(11) NOT NULL,
-  `PickupX` float NOT NULL,
-  `PickupY` float NOT NULL,
-  `PickupZ` float NOT NULL
+CREATE TABLE `player_finance` (
+  `finance_id` int(11) NOT NULL,
+  `BankAccount` tinyint(4) NOT NULL DEFAULT 0,
+  `BankMoney` int(11) NOT NULL DEFAULT 0,
+  `BankPin` mediumint(9) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `safezones`
+-- Dumping data for table `player_finance`
 --
 
-INSERT INTO `safezones` (`safeSQLID`, `MinX`, `MinY`, `MaxX`, `MaxY`, `Radius`, `Color`, `PickupX`, `PickupY`, `PickupZ`) VALUES
-(1, 1113.82, -1755.55, 1166.94, -1729.48, 30, 8840191, 1136.89, -1739.09, 13.4703);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `server_settings`
---
-
-CREATE TABLE `server_settings` (
-  `ID` int(11) NOT NULL DEFAULT 0,
-  `PoseteServera` int(11) NOT NULL DEFAULT 0,
-  `Registrovanih` int(11) NOT NULL DEFAULT 0,
-  `Banovanih` int(11) NOT NULL DEFAULT 0,
-  `Kickovanih` int(11) NOT NULL DEFAULT 0,
-  `Registracija` tinyint(1) NOT NULL DEFAULT 1,
-  `Report` tinyint(1) NOT NULL DEFAULT 1,
-  `Rekord` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `server_settings`
---
-
-INSERT INTO `server_settings` (`ID`, `PoseteServera`, `Registrovanih`, `Banovanih`, `Kickovanih`, `Registracija`, `Report`, `Rekord`) VALUES
-(0, 15, 0, 0, 3, 1, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `SQLID` int(11) NOT NULL,
-  `Ime_Prezime` varchar(26) NOT NULL DEFAULT 'Niko',
-  `Novac` int(11) NOT NULL DEFAULT -1,
-  `Lozinka` varchar(255) NOT NULL,
-  `Registrovan` int(11) NOT NULL DEFAULT -1,
-  `BankaNovac` int(11) NOT NULL DEFAULT -1,
-  `IP` varchar(70) NOT NULL,
-  `Skin` int(11) NOT NULL DEFAULT -1,
-  `Pol` int(11) NOT NULL DEFAULT -1,
-  `Drzava` varchar(30) NOT NULL DEFAULT 'Drzava',
-  `LastSeen` varchar(70) NOT NULL DEFAULT '00/00:/00 00:00',
-  `LoginDatum` varchar(70) NOT NULL DEFAULT '00/00:/00 00:00',
-  `Admin` int(11) NOT NULL DEFAULT -1,
-  `Godine` int(11) NOT NULL DEFAULT -1,
-  `EmailAdresa` varchar(50) NOT NULL,
-  `Level` int(11) NOT NULL DEFAULT -1,
-  `AdminCode` int(11) NOT NULL DEFAULT -1,
-  `SRank` smallint(6) NOT NULL DEFAULT -1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`SQLID`, `Ime_Prezime`, `Novac`, `Lozinka`, `Registrovan`, `BankaNovac`, `IP`, `Skin`, `Pol`, `Drzava`, `LastSeen`, `LoginDatum`, `Admin`, `Godine`, `EmailAdresa`, `Level`, `AdminCode`, `SRank`) VALUES
-(1, 'ogy', 3231, 'D75CA686E1CD8E9D11E56EF1FB6DB6717DD52680D66D2A62860011A408469CE5', 1, -1, '', 29, 1, 'Drzava', '29/05/2023 - 13:36', '11/02/2023 - 01:54', 6, 19, 'dsasd@gmail.com', 1, 1, 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `utakmice`
---
-
-CREATE TABLE `utakmice` (
-  `utakmica_id` int(11) NOT NULL,
-  `utakmica_domacin` varchar(40) NOT NULL DEFAULT 'Nema',
-  `utakmica_gost` varchar(40) NOT NULL DEFAULT 'Nema',
-  `utakmica_kvota1` float NOT NULL,
-  `utakmica_kvotax` float NOT NULL,
-  `utakmica_kvota2` float NOT NULL,
-  `utakmica_2plus` float NOT NULL,
-  `utakmica_3plus` float NOT NULL,
-  `utakmica_vreme` varchar(40) NOT NULL DEFAULT '12-12-1212 12:00',
-  `utakmica_uplata` tinyint(1) NOT NULL DEFAULT 0,
-  `utakmica_rezultat` varchar(40) NOT NULL DEFAULT '6:0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin`) VALUES
+(3, 0, 0, 0),
+(10, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`carID`);
+
+--
+-- Indexes for table `houses`
+--
+ALTER TABLE `houses`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `klupe`
+--
+ALTER TABLE `klupe`
+  ADD PRIMARY KEY (`seat_ID`);
+
+--
+-- Indexes for table `players`
+--
+ALTER TABLE `players`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `player_crypto`
 --
 ALTER TABLE `player_crypto`
-  ADD PRIMARY KEY (`player_id`);
+  ADD UNIQUE KEY `crypto_id` (`crypto_id`);
 
 --
--- Indexes for table `player_utakmice`
+-- Indexes for table `player_documents`
 --
-ALTER TABLE `player_utakmice`
-  ADD UNIQUE KEY `sqlid` (`sqlid`);
+ALTER TABLE `player_documents`
+  ADD UNIQUE KEY `player_id` (`player_id`);
 
 --
--- Indexes for table `safezones`
+-- Indexes for table `player_finance`
 --
-ALTER TABLE `safezones`
-  ADD PRIMARY KEY (`safeSQLID`);
-
---
--- Indexes for table `server_settings`
---
-ALTER TABLE `server_settings`
-  ADD UNIQUE KEY `ID` (`ID`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`SQLID`);
-
---
--- Indexes for table `utakmice`
---
-ALTER TABLE `utakmice`
-  ADD PRIMARY KEY (`utakmica_id`);
+ALTER TABLE `player_finance`
+  ADD UNIQUE KEY `finance_id` (`finance_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `safezones`
+-- AUTO_INCREMENT for table `cars`
 --
-ALTER TABLE `safezones`
-  MODIFY `safeSQLID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `cars`
+  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `players`
 --
-ALTER TABLE `users`
-  MODIFY `SQLID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `utakmice`
---
-ALTER TABLE `utakmice`
-  MODIFY `utakmica_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `players`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
