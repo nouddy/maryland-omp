@@ -109,16 +109,17 @@ stock IzborSkinaTextDraws(playerid, bool:show)
         PlayerTextDrawSetPreviewModel(playerid, OdabirSkina_PTD[playerid][7], 19025);
         PlayerTextDrawSetPreviewRot(playerid, OdabirSkina_PTD[playerid][7], 0.000000, 360.000000, 90.000000, 1.000000);
 
-        OdabirSkina_PTD[playerid][8] = CreatePlayerTextDraw(playerid, 577.333374, 343.481475, "IZABERI_DODATAK");
-        PlayerTextDrawLetterSize(playerid, OdabirSkina_PTD[playerid][8], 0.134333, 0.500741);
-        PlayerTextDrawAlignment(playerid, OdabirSkina_PTD[playerid][8], 2);
+        OdabirSkina_PTD[playerid][8] = CreatePlayerTextDraw(playerid, 569.666503, 403.474334, "");
+        PlayerTextDrawTextSize(playerid, OdabirSkina_PTD[playerid][8], 23.000000, 29.000000);
+        PlayerTextDrawAlignment(playerid, OdabirSkina_PTD[playerid][8], 1);
         PlayerTextDrawColor(playerid, OdabirSkina_PTD[playerid][8], -1);
         PlayerTextDrawSetShadow(playerid, OdabirSkina_PTD[playerid][8], 0);
-        PlayerTextDrawBackgroundColor(playerid, OdabirSkina_PTD[playerid][8], 255);
-        PlayerTextDrawFont(playerid, OdabirSkina_PTD[playerid][8], 2);
-        PlayerTextDrawSetProportional(playerid, OdabirSkina_PTD[playerid][8], 1);
+        PlayerTextDrawBackgroundColor(playerid, OdabirSkina_PTD[playerid][8], -256);
+        PlayerTextDrawFont(playerid, OdabirSkina_PTD[playerid][8], 5);
+        PlayerTextDrawSetProportional(playerid, OdabirSkina_PTD[playerid][8], 0);
         PlayerTextDrawSetSelectable(playerid, OdabirSkina_PTD[playerid][8], true);
-        PlayerTextDrawTextSize(playerid, OdabirSkina_PTD[playerid][8], 350, 5);
+        PlayerTextDrawSetPreviewModel(playerid, OdabirSkina_PTD[playerid][8], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, OdabirSkina_PTD[playerid][8], 0.000000, 90.000000, 90.000000, 1.000000);
 
 
         for(new izz = 0; izz < 9; izz++) { PlayerTextDrawShow(playerid, OdabirSkina_PTD[playerid][izz]); }

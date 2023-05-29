@@ -479,4 +479,14 @@
 [14:18:01] [INFO] received Windows console close event; shutting log-core down
 [14:20:18] [INFO] received Windows console close event; shutting log-core down
 [14:20:27] [INFO] received Windows console close event; shutting log-core down
+<<<<<<< HEAD
 [17:12:18] [INFO] received Windows console close event; shutting log-core down
+=======
+[17:16:09] [INFO] received Windows console close event; shutting log-core down
+[17:17:28] [INFO] received Windows console close event; shutting log-core down
+[17:17:44] [INFO] received Windows console close event; shutting log-core down
+[17:19:59] [INFO] received Windows console close event; shutting log-core down
+[17:22:32] [INFO] received Windows console close event; shutting log-core down
+[17:26:14] [INFO] received Windows console close event; shutting log-core down
+[17:28:36] [INFO] received Windows console close event; shutting log-core down
+>>>>>>> e513ba66243f79a5e5e2130b0096f20b954e6418

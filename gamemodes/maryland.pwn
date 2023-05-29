@@ -170,6 +170,9 @@ public OnPlayerSpawn(playerid)
 {
 	SetPlayerTeam(playerid, NO_TEAM);
 
+	//
+
+	//
 	return 1;
 }
 
@@ -532,14 +535,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
 
 
-		PlayerInfo[playerid][AttachedObject][0] = SetPlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][0], 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
+		PlayerInfo[playerid][AttachedObject][0] = SetPlayerAttachedObject(playerid, 1, 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
 		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
+
+		PlayerInfo[playerid][AttachedObject][0]  = 1;
 	}
 	else if(playertextid == OdabirSkina_PTD[playerid][7]) // naocare promeni samo ono sranje td
 	{
 		if(PlayerInfo[playerid][AttachedObject][1] != -1)
 			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
-		PlayerInfo[playerid][AttachedObject][1] = SetPlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][1], 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
+
+
+
+		PlayerInfo[playerid][AttachedObject][1] = SetPlayerAttachedObject(playerid, 1, 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
+
+		PlayerInfo[playerid][AttachedObject][1] = 1;
 
 		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
 	}
