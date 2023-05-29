@@ -110,10 +110,9 @@ public OnPlayerLoaded(playerid)
 hook PlayerRegistered(playerid);
 hook PlayerRegistered(playerid)
 {
-    PlayerInfo[playerid][Novac] = 2000;
-	PlayerInfo[playerid][Skin] = 29;
-	PlayerInfo[playerid][Level] = 1;
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
+    PlayerInfo[playerid][Novac] = 2000;
+	PlayerInfo[playerid][Level] = 1;
     TogglePlayerSpectating(playerid, false);
     IgracUlogovan[playerid] = true;
 	SavePlayer(playerid);
@@ -237,7 +236,7 @@ timer Register_Player[500](playerid)
 	InterpolateCameraLookAt(playerid, 526.876220, -3689.528320, 23.553344, 528.050537, -3708.888427, 13.308375, 1500);
 
 
-	RegisterActor[playerid] = CreateDynamicActor(29, 527.7463,-3714.8406,10.0209,0.8036, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
+	RegisterActor[playerid] = CreateDynamicActor(PlayerInfo[playerid][Skin], 527.7463,-3714.8406,10.0209,0.8036, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
 
 	OnRegisterSkinLoad[playerid] = true;
 
@@ -349,6 +348,10 @@ Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 		strmid( PlayerInfo[ playerid ][ Pol ], (odabir == 1 ? ("Musko") : ("Zensko")), 0, strlen( (odabir == 1 ? ("Musko") : ("Zensko")) ), 50 );
 
 		RegisterPol[playerid] = true;
+
+		if(odabir == 1){PlayerInfo[playerid][Skin] = 250;}
+		else if(odabir == 2){PlayerInfo[playerid][Skin] = 191;}
+
 		SendClientMessage(playerid, x_ogycolor, "> Odabrali ste vas pol.");
 	}
 	return (true);

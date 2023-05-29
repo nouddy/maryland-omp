@@ -30,10 +30,7 @@ ResetujVariable(playerid)
 {
     // Main register
     PlayerInfo[playerid][SQLID] = 0;
-    PlayerInfo[playerid][Novac] = 0;
-    PlayerInfo[playerid][Skin] = 29;
     PlayerInfo[playerid][Level] = 1;
-    PlayerInfo[playerid][Godine] = 0;
     PlayerInfo[playerid][Staff] = 0;
     // Documents of player
     PlayerDocuments[playerid][pNationalID] = 0;

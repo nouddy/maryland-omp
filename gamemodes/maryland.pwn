@@ -516,13 +516,11 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		if(Registered[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
 
-
-
 		CreatePlayerRegister(playerid, false);
 		new query[550];
 		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
-			VALUES ('%e', '%d', '29', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+			GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
 
