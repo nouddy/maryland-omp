@@ -177,6 +177,8 @@ timer Spawn_Player[100](playerid, type)
 			DestroyDynamicActor(RegisterActor[playerid]);
 
 			CancelSelectTextDraw(playerid);
+
+			IzborSkinaTextDraws(playerid, false);
 		}
 
 		else if (type == e_SPAWN_TYPE_LOGIN)
@@ -219,6 +221,7 @@ timer Spawn_Player[100](playerid, type)
 			mysql_tquery(SQL, q);
 			//
 		}
+	return (true);
 }
 
 
@@ -413,7 +416,7 @@ Dialog:dialog_obrisiobjekte(const playerid, response, listitem, string:inputtext
 
 				SavePlayer(playerid);
 
-				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
+				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Uspesno ste obrisali ovaj objekat.");
 			}
 			case 1:
 			{
@@ -426,7 +429,7 @@ Dialog:dialog_obrisiobjekte(const playerid, response, listitem, string:inputtext
 
 				SavePlayer(playerid);
 
-				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}.");
+				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Uspesno ste obrisali ovaj objekat.");
 			}
 		}
 	}
@@ -437,7 +440,7 @@ Dialog:dialog_confirmreg(const playerid, response, listitem, string:inputtext[])
 	if(!response)
 	{
 		if(PlayerInfo[playerid][AttachedObject][0] == -1 && PlayerInfo[playerid][AttachedObject][1] == -1)
-			Spawn_Player(playerid, 1);
+			return Spawn_Player(playerid, 1);
 
 
 		Dialog_Show(playerid, "dialog_obrisiobjekte", DIALOG_STYLE_LIST,
@@ -516,6 +519,15 @@ public LoginIgraca(playerid)
 	ImaLoginTD[playerid] = true;
 
 	return 1;
+}
+hook OnPlayerSpawn(playerid)
+{
+	if(PlayerInfo[playerid][AttachedObject][0] != -1)
+		return SetPlayerAttachedObject(playerid, 1, 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
+
+	else if(PlayerInfo[playerid][AttachedObject][1] != -1)
+		return SetPlayerAttachedObject(playerid, 1, 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
+	return (true);
 }
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
