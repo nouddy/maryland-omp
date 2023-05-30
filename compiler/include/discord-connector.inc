@@ -1,5 +1,5 @@
 /* Discord Connector
- * Version v0.3.5
+ * Version v0.3.2
  * made by maddinat0r
  */
 
@@ -39,13 +39,6 @@ enum DCC_BotPresenceStatus
 	OFFLINE
 };
 
-enum DCC_MessageReactionType
-{
-	REACTION_ADD = 0, // Sent when a user adds a reaction to a message.
-	REACTION_REMOVE, // Sent when a user removes a reaction from a message.
-	REACTION_REMOVE_ALL, // Sent when a user explicitly removes all reactions from a message.
-	REACTION_REMOVE_EMOJI // Sent when a bot removes all instances of a given emoji from the reactions of a message.
-};
 
 #define DCC_INVALID_CHANNEL DCC_Channel:0
 #define DCC_INVALID_USER DCC_User:0
@@ -53,9 +46,9 @@ enum DCC_MessageReactionType
 #define DCC_INVALID_GUILD DCC_Guild:0
 
 #define DCC_ID_SIZE (20 + 1)
-#define DCC_USERNAME_SIZE (32 + 1)
-#define DCC_NICKNAME_SIZE (32 + 1)
-#define DCC_EMOJI_NAME_SIZE (32 + 1)
+
+
+
 // natives
 //  channels
 native DCC_Channel:DCC_FindChannelByName(const channel_name[]);
@@ -95,18 +88,13 @@ native DCC_DeleteMessage(DCC_Message:message);
 
 native DCC_Message:DCC_GetCreatedMessage(); // for use in DCC_SendChannelMessage result callback
 
-native DCC_DeleteInternalMessage(DCC_Message:message); // This deletes a stored message, this DOES NOT delete it on discord, this is for persistent messages.
 
-native DCC_EditMessage(DCC_Message:message, const content[], DCC_Embed:embed = DCC_Embed:0);
-
-native DCC_SetMessagePersistent(DCC_Message:message, bool:persistent);
-native DCC_CacheChannelMessage(const channel_id[DCC_ID_SIZE], const message_id[DCC_ID_SIZE], const callback[] = "", const format[] = "", {Float, _}:...);
 //  users
 native DCC_User:DCC_FindUserByName(const user_name[], const user_discriminator[]);
 native DCC_User:DCC_FindUserById(const user_id[]);
 
-native DCC_GetUserName(DCC_User:user, dest[DCC_USERNAME_SIZE], max_size = sizeof dest);
 native DCC_GetUserId(DCC_User:user, dest[DCC_ID_SIZE], max_size = DCC_ID_SIZE);
+native DCC_GetUserName(DCC_User:user, dest[], max_size = sizeof dest);
 native DCC_GetUserDiscriminator(DCC_User:user, dest[], max_size = sizeof dest);
 native DCC_IsUserBot(DCC_User:user, &bool:is_bot);
 native DCC_IsUserVerified(DCC_User:user, &bool:is_verified);
@@ -138,7 +126,7 @@ native DCC_GetGuildRoleCount(DCC_Guild:guild, &count);
 native DCC_GetGuildMember(DCC_Guild:guild, offset, &DCC_User:user);
 native DCC_GetGuildMemberCount(DCC_Guild:guild, &count);
 native DCC_GetGuildMemberVoiceChannel(DCC_Guild:guild, DCC_User:user, &DCC_Channel:channel);
-native DCC_GetGuildMemberNickname(DCC_Guild:guild, DCC_User:user, dest[DCC_NICKNAME_SIZE], max_size = sizeof dest);
+native DCC_GetGuildMemberNickname(DCC_Guild:guild, DCC_User:user, dest[], max_size = sizeof dest);
 native DCC_GetGuildMemberRole(DCC_Guild:guild, DCC_User:user, offset, &DCC_Role:role);
 native DCC_GetGuildMemberRoleCount(DCC_Guild:guild, DCC_User:user, &count);
 native DCC_HasGuildMemberRole(DCC_Guild:guild, DCC_User:user, DCC_Role:role, &bool:has_role);
@@ -167,6 +155,7 @@ native DCC_CreateGuildRole(DCC_Guild:guild, const name[], const callback[] = "",
 native DCC_Role:DCC_GetCreatedGuildRole();
 native DCC_DeleteGuildRole(DCC_Guild:guild, DCC_Role:role);
 
+
 // bot
 native DCC_BotPresenceStatus:DCC_GetBotPresenceStatus();
 
@@ -176,7 +165,7 @@ stock DCC_ClearBotNickname(DCC_Guild:guild)
 {
 	return DCC_SetBotNickname(guild, "");
 }
-native DCC_CreatePrivateChannel(DCC_User:user, const callback[], const format[] = "", {Float, _}:...);
+native DCC_CreatePrivateChannel(DCC_User:user, const callback[] = "", const format[] = "", {Float, _}:...);
 native DCC_Channel:DCC_GetCreatedPrivateChannel();
 native DCC_SetBotPresenceStatus(DCC_BotPresenceStatus:status);
 native DCC_SetBotActivity(const name[]);
@@ -189,29 +178,7 @@ stock DCC_ClearBotActivity()
 // misc
 native DCC_EscapeMarkdown(const src[], dest[], max_size = sizeof dest);
 
-// embedded messages
-native DCC_Embed:DCC_CreateEmbed(const title[] = "", const description[] = "", const url[] = "", const timestamp[] = "", color = 0, const footer_text[] = "", const footer_icon_url[] = "", const thumbnail_url[] = "", const image_url[] = "");
-native DCC_DeleteEmbed(DCC_Embed:embed);
-native DCC_SendChannelEmbedMessage(DCC_Channel:channel, DCC_Embed:embed, const message[] = "", const callback[] = "", const format[] = "", {Float, _}:...);
-native DCC_AddEmbedField(DCC_Embed:embed, const name[], const value[], bool:inline = false);
-native DCC_SetEmbedTitle(DCC_Embed:embed, const title[]);
-native DCC_SetEmbedDescription(DCC_Embed:embed, const description[]);
-native DCC_SetEmbedUrl(DCC_Embed:embed, const url[]);
-native DCC_SetEmbedTimestamp(DCC_Embed:embed, const timestamp[]);
-native DCC_SetEmbedColor(DCC_Embed:embed, color);
-native DCC_SetEmbedColour(DCC_Embed:embed, colour) = DCC_SetEmbedColor; // oi m8
-native DCC_SetEmbedFooter(DCC_Embed:embed, const footer_text[], const footer_icon_url[] = "");
-native DCC_SetEmbedThumbnail(DCC_Embed:embed, const thumbnail_url[]);
-native DCC_SetEmbedImage(DCC_Embed:embed, const image_url[]);
 
-// emoji
-native DCC_Emoji:DCC_CreateEmoji(const name[DCC_EMOJI_NAME_SIZE], const snowflake[DCC_ID_SIZE] = "");
-native DCC_DeleteEmoji(DCC_Emoji:emoji);
-native DCC_GetEmojiName(DCC_Emoji:emoji, dest[DCC_EMOJI_NAME_SIZE], maxlen = DCC_EMOJI_NAME_SIZE);
-
-// reaction
-native DCC_CreateReaction(DCC_Message:message, DCC_Emoji:reaction_emoji);
-native DCC_DeleteMessageReaction(DCC_Message:message, DCC_Emoji:reaction_emoji = DCC_Emoji:0); // if reaction_emoji is 0 (default value) this will delete ALL of the reactions on the message.
 
 // callbacks
 //  channels
@@ -222,7 +189,6 @@ forward DCC_OnChannelDelete(DCC_Channel:channel);
 // messages
 forward DCC_OnMessageCreate(DCC_Message:message);
 forward DCC_OnMessageDelete(DCC_Message:message);
-forward DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Emoji:emoji, DCC_MessageReactionType:reaction_type);
 
 //  users
 forward DCC_OnUserUpdate(DCC_User:user);
