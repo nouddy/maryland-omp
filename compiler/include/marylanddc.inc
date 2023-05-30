@@ -24,7 +24,7 @@
 #define _included_discord_command
 
 #if !defined MARYLAND_PREFIX
-	#define MARYLAND_PREFIX '!'
+	#define MARYLAND_PREFIX '>'
 #endif
 
 

@@ -351,11 +351,6 @@ public OnPlayerLeaveMarker(playerid, markerid) {
 	return 1;
 }
 
-public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
-{
-	return 1;
-}
-
 /*
 public OnPlayerEnterDynamicArea(playerid, areaid) 
 {

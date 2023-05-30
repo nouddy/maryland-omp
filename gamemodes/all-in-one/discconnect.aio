@@ -9,39 +9,67 @@
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
  *  @Author         Vostic & Ogy_
- *  @Date           29th May 2023
+ *  @Date           05th May 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
  *
  *  @File           discconnect.aio
  *  @Module         all-in-one
-*/
+ ?Proveriti zasto ne rade cmd moze biti do permi bota
+ */
+
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-
-#define serverconnect       "1075456522500460704"
-#define playerconnect       "1075456522500460704"
-#define playerdisconnect    "1075456522500460704"
-#define commandlogs         "1075456522500460704"
-#define playerchat          "1075456522500460704"
-#define adminchannel        "1075456522500460704"
-#define securitychannel     "1075456522500460704"
+#define serverconnect       "1112383659555684373"
+#define playerconnect       "1112383659555684373"
+#define playerdisconnect    "1112383659555684373"
+#define commandlogs         "1112383659555684373"
+#define playerchat          "1112383659555684373"
+#define adminchannel        "1112383659555684373"
+#define securitychannel     "1112383659555684373"
+#define bugsuggestchannel   "1112383659555684373"
+#define randommsgchannel    "1112383659555684373"
+#define cordchannel         "1112383659555684373"
 
 new stock                                   //
                                            /////////////////////////////////////////////
-     DCC_Channel:Server_Connect,          // Server connection   //
-     DCC_Channel:Player_Connect,         // Player connection   /////////////////////////////////
-     DCC_Channel:Player_Disconnect,     //Player disconnection //
-     DCC_Channel:Command_Logs,         //Command Logs         ////////////////////////
-     DCC_Channel:Player_Chat,         //Player chats         //
-     DCC_Channel:Admin_Channel,      //Admins Channel       ///////////////////////////////////
-     DCC_Channel:Security_Channel   // Security Channel    //
-                                   /////////////////////////////////////////////////
-                                  //
+     DCC_Channel:Server_Connect,          // Server connection         //
+     DCC_Channel:Player_Connect,         // Player connection         /////////////////////////////////
+     DCC_Channel:Player_Disconnect,     //Player disconnection       //
+     DCC_Channel:Command_Logs,         //Command Logs               ////////////////////////
+     DCC_Channel:Player_Chat,         //Player chats               //
+     DCC_Channel:Admin_Channel,      //Admins Channel             ///////////////////////////////////
+     DCC_Channel:Security_Channel,  // Security Channel          //
+     DCC_Channel:BS_Channel,       // bug/suggestion Channel    ///////////////////////////
+     DCC_Channel:RM_Channel,      // random message Channel    //
+     DCC_Channel:Cord_Channel    // cord saving    Channel    //
+                                 /////////////////////////////////////////////////
+                                //
 
 ;
+#define  MAX_QUOTES  5
+#define  MAX_MESSAGES 5
 
+ new RandomMSG[][] =
+{
+    "Zdravo svima!",
+    "Kako ste?",
+    "Dobrodosli na Maryland Community - Feel the Vibe!",
+    "Hvala sto igrate na nasem serveru!",
+    "Zelimo vam sjajan dan uz Maryland Community!"
+};
+
+new const quotes[MAX_QUOTES][128] = {
+    "```The only way to do great work is to love what you do. - Steve Jobs```",
+    "```Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill```",
+    "```Believe you can and you're halfway there. - Theodore Roosevelt```",
+    "```I have not failed. I've just found 10,000 ways that won't work. - Thomas A. Edison```",
+    "```If you want to live a happy life, tie it to a goal, not to people or things. - Albert Einstein```"
+};
+new random_message_timer;
+
+new bugreport[MAX_PLAYERS];
 
 forward DiscordSendLog(playerid,command[]);
 forward DiscordSendLogTarget(playerid,command[],target);
@@ -52,10 +80,18 @@ stock DCC_SendChannelMessageFormatted( DCC_Channel: channel, const format[ ])
     return 1;
 }
 
+forward SendMSG();
+public SendMSG()
+{
+    new randMSG = random(sizeof(RandomMSG));
+    DCC_SendChannelMessage(RM_Channel,RandomMSG[randMSG]);
+
+}
 #define MAX_CLIENT_MSG_LENGTH 144
 
 hook OnGameModeInit()
 {	
+    new string[128],string2[128];
     Server_Connect = DCC_FindChannelById( serverconnect );
 
     Player_Connect = DCC_FindChannelById( playerconnect );
@@ -70,17 +106,35 @@ hook OnGameModeInit()
 
     Security_Channel = DCC_FindChannelById( securitychannel );
 	
+    BS_Channel = DCC_FindChannelById( bugsuggestchannel );
 
-	new string[128],string2[128];
-	format(string,sizeof (string),"Server startovan uspesno");
+    Cord_Channel = DCC_FindChannelById( cordchannel );
+
+    RM_Channel = DCC_FindChannelById( randommsgchannel );
+
+
+
+    print("=======================================");
+    print("|                                     |");
+    print("|            Maryland Discord         |");
+    print("|               version 1.0           |");
+    print("|                                     |");
+    print("=======================================");
+    SetTimer("SendMSG", 60000, true);
+	format(string,sizeof (string),"Server uspesno pokrenut !!");
 	DCC_SendChannelMessage(Server_Connect,string);
 	SetTimer("BotStatus", 1000, true);
-    format(string2,sizeof (string2),"**Maryland Security System running** :sunglasses:");
+    format(string2,sizeof (string2),"**M-Guard Security System running** :switch:");
     DCC_SendChannelMessage(Security_Channel,string2);
+    
 	return 1;
 
 }
-
+hook OnGameModeExit()
+{
+        KillTimer(random_message_timer);
+        return 1;
+}
 forward BotStatus(playerid);
 public BotStatus(playerid)
 {
@@ -101,7 +155,7 @@ public BotStatus(playerid)
         }
     if(count == 0)
     {
-        format( szBigString, sizeof( szBigString ), "Nema nikoga online.", count );
+        format( szBigString, sizeof( szBigString ), "Dosadno ti je ?? Pridruzi nam se i zabavi se samo na <samp.maryland-ogc.com>", count );
         DCC_SetBotActivity(szBigString);
         DCC_SetBotPresenceStatus(DCC_BotPresenceStatus:ONLINE);
     }
@@ -125,17 +179,16 @@ hook OnPlayerConnect(playerid)
     new pip[100],client1[24];
     GetPlayerIp(playerid, pip, sizeof(pip));
     GetPlayerVersion(playerid, client1, sizeof(client1));
+    bugreport[playerid] = 0;
     new string[250];
-    format(string,sizeof (string),":white_check_mark: **%s se pridruzio serveru**",GetName(playerid));
+
+    format(string,sizeof (string),":bluehearts: **%s se pridruzio serveru**",GetName(playerid));
     DCC_SendChannelMessage(Player_Connect,string);
-    new str[2048],str2[100], footer[1024];
-    format(str, sizeof(str), "Player Commands");
-    format(str2,sizeof (str2),"[Security System] {Player-Connected}\nPlayer Name - `%s`\nPlayer id - `%d`\nPlayer ip - `%s`\n**Client Version - `V%s` ",GetName(playerid),playerid,pip,client1);
-    new DCC_Embed:embed = DCC_CreateEmbed(str, str2);
-    DCC_SetEmbedColor(embed, 0xFF0000);
-    format(footer, sizeof(footer), "Note: Ovo je samo u svrhe zastite servera.");
-    DCC_SetEmbedFooter(embed, footer);
-    DCC_SendChannelEmbedMessage(Security_Channel, embed);
+    new str[2048],str2[500];
+    format(str, sizeof(str), "Nova Konekcija");
+    format(str2,sizeof (str2),"[M-Guard] {Igrac Konektovan}\nIme - `%s`\nID - `%d`\nIP - `%s`\nKlient Verzija - `V%s` ",GetName(playerid),playerid,pip,client1);
+    DCC_SendChannelMessage(Security_Channel, str);
+    DCC_SendChannelMessage(Security_Channel, str2);
 	return 1;
 }
 
@@ -143,7 +196,7 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 
     new string[250];
-    format(string,sizeof (string),":no_entry: **%s je napustio server**",GetName(playerid));
+    format(string,sizeof (string),":smiling_face_with_tear: **%s nas je napustio**",GetName(playerid));
     DCC_SendChannelMessage(Player_Disconnect,string);
 	return 1;
 }
@@ -159,7 +212,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
     new DCC_User:author;
     DCC_GetMessageAuthor(message, author);
     DCC_IsUserBot(author, IsBot);
-    if(channel == Player_Chat && !IsBot) //!IsBot blokira bot poruke na srv
+    if(channel == Player_Chat && !IsBot) //!IsBot will block BOT's message in game
     {
         new user_name[32 + 1], str[152];
         DCC_GetUserName(author, user_name, 32);
@@ -184,13 +237,13 @@ hook OnRconLoginAttempt(ip[], password[], success)
     if(!success)
     {
         new msg[250];
-        format(msg, sizeof(msg),"**[Security System]**`%s` **attempted a rcon login with password** `%s` **and failed, Ban him quickly if it's not you or your friend**", GetName(playerid),password);
+        format(msg, sizeof(msg),"**[M-Guard]**`%s` **je pokusao rcon login s lozinkom** `%s` **ali neuspesno, banuj ga ukoliko ga ne poznajes**", GetName(playerid),password);
         DCC_SendChannelMessage(Security_Channel,msg);
     }
     if(success == 1)
     {
         new msg[128];
-        format(msg, sizeof(msg),"[Security System]%s successfully logged into rcon\n Use /ban <name> to ban him if it's not you", GetName(playerid));
+        format(msg, sizeof(msg),"[M-Guard]%s se uspesno ulogovao kao rcon staff\n Koristi /ban <ime> da banujes igraca ukoliko je uljez", GetName(playerid));
         DCC_SendChannelMessage(Security_Channel,msg);
     }
     return 1;
@@ -200,6 +253,38 @@ hook OnRconCommand(cmd[])
 
     return 1;
 }
+Dialog: DIALOG_BUGSUGGEST(const playerid, response, listitem, string: inputtext[])
+{
+
+    if(!response)
+    {
+        return 1;
+
+    }
+    if(response)
+    {
+
+        if(bugreport[playerid] == 1)
+        {
+            new string[1000];
+            bugreport[playerid] = 0;
+            format(string, sizeof(string), "```Nova Bug Prijava  %s(%i) : %s```",GetName(playerid),playerid,inputtext);
+            DCC_SendChannelMessage(BS_Channel,string);
+            SendClientMessage(playerid, x_ogycolor, "maryland > Uspesno si prijavio bag.");
+        }
+        else
+        {
+            new string[1000];
+            format(string, sizeof(string), "```Nova sugestija od  %s(%i) : %s```",GetName(playerid),playerid,inputtext);
+            DCC_SendChannelMessage(BS_Channel,string);
+            SendClientMessage(playerid, x_ogycolor, "maryland > Uspesno si dao sugestiju.");
+        }
+
+                                
+
+    }
+    return 1;
+}
 
 /////////////////////////////COMMANDS//////////////////////COMMANDS///////////////////////////////////////////COMMANDS///////////////////////////////COMMANDS/////////
 public OnDiscordCommandPerformed(DCC_User:user, DCC_Channel:channel, cmdtext[], success)
@@ -207,68 +292,29 @@ public OnDiscordCommandPerformed(DCC_User:user, DCC_Channel:channel, cmdtext[], 
 /*
     if(channel != Server_Connect || Player_Connect || Player_Disconnect || Command_Logs || Player_Chat || Admin_Channel || Security_Channel )
     {
-        DCC_SendChannelMessage(channel, "[ERROR] You can use B-Discord commands only in B-Discord affected channels" );
+        DCC_SendChannelMessage(channel, "[GRESKA] You can use B-Discord commands only in B-Discord affected channels" );
     }
 */
     if(!success) {
     
-        DCC_SendChannelMessage(channel, "[ERROR] **This command does not exist!**");
+        DCC_SendChannelMessage(channel, "[GRESKA] **Ova Komanda ne postoji!**");
     }
 
     return 1;
-}
-MARYLAND:info(user, channel, params[]) 
-{
-        new str[2048], footer[1024];
-        format(str, sizeof(str), "Server Information.");
-        new DCC_Embed:embed = DCC_CreateEmbed(str, "IP - Coming SOON\nGamemode - YOUR GAMEMODE \nServer Slot - SERVESLOT \nLanguage - SERVERLANGUAGE \nForums - FORUMS ");
-        DCC_SetEmbedColor(embed, 0xFF0000);
-        format(footer, sizeof(footer), "Note: ADD YOUR NOTE HERE.");
-        DCC_SetEmbedFooter(embed, footer);
-        return DCC_SendChannelEmbedMessage(channel, embed);
-    
-}
-MARYLAND:cmds(user, channel, params[]) 
-{
-        new str[2048], footer[1024];
-        format(str, sizeof(str), "Player Commands");
-        new DCC_Embed:embed = DCC_CreateEmbed(str, "!info \n!players \n!say{text} \n!credits \n !admins \n!helpers \n !testers ");
-        DCC_SetEmbedColor(embed, 0xFF0000);
-        format(footer, sizeof(footer), "Note: Different level required for different command use.");
-        DCC_SetEmbedFooter(embed, footer);
-        return DCC_SendChannelEmbedMessage(channel, embed);
-   
 }
 
 public DiscordSendLog(playerid,command[])
 {
   new loggertext[128];
-  format(loggertext,sizeof(loggertext),"```%s(%i) Used %s command.```",GetName(playerid),playerid,command);
+  format(loggertext,sizeof(loggertext),"```%s(%i) Koristi %s komandu.```",GetName(playerid),playerid,command);
   return DCC_SendChannelMessage(Command_Logs, loggertext);
 }
 public DiscordSendLogTarget(playerid,command[],target)
 {
   new loggertext[128];
-  format(loggertext,sizeof(loggertext),"```%s(%i) Used %s command on %s(%i).```",GetName(playerid),playerid,command,GetName(target),target);
+  format(loggertext,sizeof(loggertext),"```%s(%i) Koristi %s koristi komandu na igracu %s(%i).```",GetName(playerid),playerid,command,GetName(target),target);
   DCC_SendChannelMessage(Command_Logs, loggertext);
 }
-MARYLAND:acmds(user, channel, params[]) 
-{
-    if (channel == Admin_Channel) 
-    {
-        new str[2048], footer[1024];
-        format(str, sizeof(str), "Discord Admin Commands.");
-        new DCC_Embed:embed = DCC_CreateEmbed(str, "\n!getstats [id]\n!aclear \n!aslap[id]\n!kick[id] \n!freeze[id] \n!unfreeze[id] \n!ban[id] \n!restart  \n !time \n!giveallcash [amount]\n!giveallscore\n!healall \n!armourall\n!explode [id] " );
-        format(footer, sizeof(footer), "Note: Different level required for different command use.");
-        DCC_SetEmbedFooter(embed, footer);
-        return DCC_SendChannelEmbedMessage(channel, embed);
-    }
-
-    else DCC_SendChannelMessage(channel, "[ERROR] You don't have an appropriate role to use this command." );
-    
-    return 1;
-}
-
 
 MARYLAND:players(user, channel, params[]) 
 {
@@ -285,14 +331,14 @@ MARYLAND:players(user, channel, params[])
             }
         }
         }
-        format( szBigString, sizeof( szBigString ), "%sThere are %d player(s) online.", szBigString, count );
+        format( szBigString, sizeof( szBigString ), "%sTrenutno je %d igraca online.", szBigString, count );
         DCC_SendChannelMessage(channel,szBigString);
         //DCC_TriggerBotTypingIndicator(channel);
         return 1;
 }
 MARYLAND:say(user, channel, params[]) {
 
-        if(isnull(params)) return DCC_SendChannelMessage(channel, "**Usage: !say [msg]**");
+        if(isnull(params)) return DCC_SendChannelMessage(channel, "**Koriscenje: !say [msg]**");
         if(channel == Player_Chat)
         {
             new str[144], str1[144],username[33];
@@ -303,138 +349,38 @@ MARYLAND:say(user, channel, params[]) {
             DCC_SendChannelMessage(channel, str1);
             return 1;
         }
-        else return DCC_SendChannelMessage(channel, "[ERROR] You can  use this command only in player-chat channel !");
+        else return DCC_SendChannelMessage(channel, "[GRESKA] Mozes koristiti ovu komandu jedino u player-chat kanalu !");
 }
 
-//DISCORD ADMINS 
-SendClientMessage2(playerid, color, message[])
-{
-  if (strlen(message) <= MAX_CLIENT_MSG_LENGTH) {
-    SendClientMessage(playerid, color, message);
-  }
-  else {
-    new string[MAX_CLIENT_MSG_LENGTH + 1];
-    strmid(string, message, 0, MAX_CLIENT_MSG_LENGTH);
-    SendClientMessage(playerid, color, string);
-  }
-  return 1;
-}
-
-MARYLAND:freeze(user, channel, params[])
-{
-    if (channel != Admin_Channel) 
-    {
-      DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-      return 1;
-    }
-    new playerid;
-    if(sscanf(params, "u", playerid))
-        {
-                    DCC_SendChannelMessage(Admin_Channel, "**Usage: !FREEZE [ID]**");
-        }
-    {
-        if(IsPlayerConnected(playerid))
-        {
-            new msg[128];
-            format(msg, sizeof(msg), "**[FREEZE] You have frozzed** ``%s.``", GetName(playerid));
-            DCC_SendChannelMessage(Admin_Channel, msg);
-            format(msg, sizeof(msg), "{FF0000}You {00CCCC}had been frozen by {247A46}Discord Administrator.");
-            SendClientMessage2(playerid, 0xFF0000C8, msg);
-            TogglePlayerControllable(playerid, 0);
-        }
-    }
-    return 1;
-}
-MARYLAND:unfreeze(user, channel, params[])
-{
-    new playerid;
-    if (channel != Admin_Channel) 
-    {
-      DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-      return 1;
-    }
-    if(sscanf(params, "u", playerid))
-        {
-                    DCC_SendChannelMessage(Admin_Channel, "**[USAGE]: !UNFREEZE [ID]**");
-                    return 1;
-        }
-    {
-
-        if(IsPlayerConnected(playerid))
-        {
-            new msg[128];
-            format(msg, sizeof(msg), "```[UNFREEZE]You  unfrozed  %s.```", GetName(playerid));
-            DCC_SendChannelMessage(Admin_Channel, msg);
-            format(msg, sizeof(msg), "{FF0000}You {00CCCC}had been unfrozen by {247A46}Discord Administrator.");
-            SendClientMessage2(playerid, 0xFF0000C8, msg);
-            TogglePlayerControllable(playerid, 1);
-        }
-    }
-    return 1;
-}
 MARYLAND:kick(user, channel, params[])
 {
     if (channel != Admin_Channel) 
         {
-          DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
+          DCC_SendChannelMessage(channel, ":no_entry_sign: **[GRESKA] Ovu komandu mozes koristiti samo u Staff ili Security Kanalu!**");
           return 1;
         }
     new targetid;
     if(IsPlayerConnected(targetid))
     {
         new string[125],string2[125];
-        if(sscanf(params,"u",targetid)) return DCC_SendChannelMessage(channel,"**[USAGE]:/kick [playerid]**");
-        if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid)) return DCC_SendChannelMessage(channel," [ERROR] : The id you have typed is invalid!");
-        format(string, sizeof(string), "SERVER:{FF0000} %s {00CCCC}has been kicked from the server by {247A46}Discord Administrator.", GetName(targetid));
-        SendClientMessageToAll(COLOR_RED, string);
-        format(string2, sizeof(string2), "```SERVER: You kicked %s.```", GetName(targetid));
+        if(sscanf(params,"u",targetid)) return DCC_SendChannelMessage(channel,"**[Koriscenje]:/kick [playerid]**");
+        if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid)) return DCC_SendChannelMessage(channel," [GRESKA] : ID koji si uneo je invalidan!");
+        format(string, sizeof(string), "SERVER:{FF0000} %s {00CCCC}je kikovan sa servera od strane {247A46}Discord Staffa.", GetName(targetid));
+        SendClientMessageToAll(x_red, string);
+        format(string2, sizeof(string2), "```SERVER: Izbacio si sa servera igraca %s.```", GetName(targetid));
         DCC_SendChannelMessage(Admin_Channel, string2);
         Kick(targetid);
         return 1;
     }
-    else return DCC_SendChannelMessage(Admin_Channel, "Id not found");
+    else return DCC_SendChannelMessage(Admin_Channel, "ID nepoznat");
 
 }
-MARYLAND:aslap(user, channel, params[])
-{
-    new id, str2[128], Float:x, Float:y, Float:z;
-    if (channel == Admin_Channel) 
-    {
-      if(sscanf(params, "u", id)) return DCC_SendChannelMessage(Admin_Channel, "**Usage: !aslap [ID]**");
-      if(id == INVALID_PLAYER_ID || !IsPlayerConnected(id)) return  DCC_SendChannelMessage(channel," [ERROR] : The id you have typed is invalid!");
-      format(str2, sizeof(str2), "{FF0000}You {00CCCC} have been Slapped By {247A46}Discord Administrator.");
-      SendClientMessageToAll(0x0000FFFF, str2);
-      format(str2, sizeof(str2), "**[SLAP] You have slapped %s.**", GetName(id));
-      DCC_SendChannelMessage(Admin_Channel, str2);
-      GetPlayerPos(id, x, y, z);
-      SetPlayerPos(id, x, y, z+10);
-      return 1;
-    }
-    else return DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-}
-MARYLAND:aclear(user, channel, message[])
-{
-  if (channel != Admin_Channel) 
-    {
-      DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-      return 1;
-    }
-  {
-  for( new i = 0; i <= 100; i ++ ) SendClientMessageToAll(COLOR_WHITE, "" );
-  }
-  new string[256];
-  format(string, sizeof(string), "{247A46}* Discord Administrator {FFFFFF}has cleared the chat.");
-  SendClientMessageToAll(COLOR_WHITE, string);
-  format(string, sizeof(string), "**[CHAT] You have cleared the chat.**");
-  DCC_SendChannelMessage(Admin_Channel, string);
-  #pragma unused message
-  return 1;
-}
+
 MARYLAND:getstats(user, channel, params[])
 {
         if (channel != Admin_Channel) 
         {
-            DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
+            DCC_SendChannelMessage(channel, ":no_entry_sign: **[GRESKA] Ovu komandu mozes koristiti samo u Staff ili Security Kanalu!**");
             return 1;
         }
         new targetid;
@@ -442,8 +388,8 @@ MARYLAND:getstats(user, channel, params[])
         {
 
                 new msg[600],  pIP[128], Float:health, Float:armour;
-                if(sscanf(params, "u",  targetid)) return DCC_SendChannelMessage(Admin_Channel, "**Usage: !getstats [ID]**");
-                if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid)) return DCC_SendChannelMessage(channel," [ERROR] : The id you have typed is invalid!");
+                if(sscanf(params, "u",  targetid)) return DCC_SendChannelMessage(Admin_Channel, "**Koriscenje: !getstats [ID]**");
+                if(targetid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid)) return DCC_SendChannelMessage(channel," [GRESKA] : ID koji si uneo je invalidan!");
                 GetPlayerIp(targetid, pIP, 128);
                 GetPlayerHealth(targetid, health);
                 GetPlayerArmour(targetid, armour);
@@ -453,20 +399,20 @@ MARYLAND:getstats(user, channel, params[])
                 DCC_SendChannelMessage(Admin_Channel, msg);
                 return 1;
         }
-        else return  DCC_SendChannelMessage(channel, "[ERROR] Player is not connected !");
+        else return  DCC_SendChannelMessage(channel, "[GRESKA] Taj igrac nije online !");
 }
 MARYLAND:announce(user, channel, params[])
 {
   if (channel == Admin_Channel) 
     {
         new string[128]; //Making new text.
-        if(isnull(params)) return DCC_SendChannelMessage(Admin_Channel, "**USAGE: /announce [text]**"); //If you only type /announce this will happen.
+        if(isnull(params)) return DCC_SendChannelMessage(Admin_Channel, "**Koriscenje: /announce [text]**"); //If you only type /announce this will happen.
         format(string,sizeof(string),"{247A46}*Discord Announcement: {00CCCC}%s",params);
-        SendClientMessageToAll(COLOR_WHITE,string);
-        DCC_SendChannelMessage(channel,":loudspeaker: **Announcement has been  successfully sended to the server**");
+        SendClientMessageToAll(x_white,string);
+        DCC_SendChannelMessage(channel,":loudspeaker: **Announcement je uspesno sacuvan na serveru**");
         return 1;
     }
-  else return DCC_SendChannelMessage(channel, ":no_entry_sign: :no_entry_sign: **[ERROR] You can  use this command only in Admin channels**!");
+  else return DCC_SendChannelMessage(channel, ":no_entry_sign: :no_entry_sign: **[GRESKA] Ovu komandu mozes koristiti samo u Staff kanalu**!");
 }
 MARYLAND:ban(user, channel , params[])
 {
@@ -475,10 +421,10 @@ MARYLAND:ban(user, channel , params[])
     {
         if(IsPlayerConnected(targetid))
         {
-            if(sscanf(params, "u", targetid)) return DCC_SendChannelMessage(Admin_Channel, "**Usage: !ban [ID]**");
-            format(msg, sizeof(msg),"{247A46}Discord Administrator has banned {00CCCC}%s.", GetName(targetid));
-            SendClientMessageToAll(COLOR_RED,msg);
-            format(msg2, sizeof(msg2),"```[Discord Security] You have banned %s.```", GetName(targetid));
+            if(sscanf(params, "u", targetid)) return DCC_SendChannelMessage(Admin_Channel, "**Koriscenje: !ban [ID]**");
+            format(msg, sizeof(msg),"{247A46}Discord Staff je banovao {00CCCC}%s.", GetName(targetid));
+            SendClientMessageToAll(x_red,msg);
+            format(msg2, sizeof(msg2),"```[Discord Security] Banovao si igraca %s.```", GetName(targetid));
             DCC_SendChannelMessage(channel,msg2);
             Ban(targetid);
             return 1;
@@ -486,139 +432,55 @@ MARYLAND:ban(user, channel , params[])
         return 1;
         
     }
-    else return DCC_SendChannelMessage(channel,":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
+    else return DCC_SendChannelMessage(channel,":no_entry_sign: **[GRESKA] Ovu komandu mozes koristiti samo u Staff ili Security Kanalu!**");
 }
 MARYLAND:credits(user, channel, params[]) 
 {
-        DCC_SendChannelMessage(channel, "> **B-Discord System**\n> **Created/Scripted by - Bo$$** \n> **Beta Testers - Mahian Mahmud(CxB) , Link (Ultra-h Staff) , Protector ** \n> **Speical thanks to --> Ultra-h ,Sa-Mp team & Protector** \n> **You can directly dm me via discord - Bo$$#5950**\n> **In-Case you want to report a bug then -** https://github.com/BOSS294/Boss-Discord-System\n>" );
+        DCC_SendChannelMessage(channel, "> **Maryland Discord Guard**\n> **Created/Scripted by - Vostic & Ogy_**" );
         return 1;
 }
 MARYLAND:restart(user, channel , params[])
 {
     if(channel == Admin_Channel || Security_Channel)
     {
-        SendClientMessageToAll(COLOR_RED,"{00CCCC}Server Has been Restarted by {247A46}Discord Administrator");
-        DCC_SendChannelMessage(Admin_Channel,"**Server is now restarting...**");
+        SendClientMessageToAll(x_red,"{00CCCC}Server je restartovao {247A46}Discord Staff");
+        DCC_SendChannelMessage(Admin_Channel,"**Server se restartujete, molimo sacekajte...**");
         SendRconCommand("gmx");
         return 1;
     }
-    else return DCC_SendChannelMessage(channel,":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-}
-MARYLAND:time(user, channel , params[])
-{
-        if (channel != Admin_Channel) 
-        {
-            DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-            return 1;
-        }
-        new string[125];
-        new hour,minuite,second;
-        gettime(hour,minuite,second);
-        format(string, sizeof(string), "In-Game time `%d:%d:%d`", hour, minuite, second);
-        DCC_SendChannelMessage(Admin_Channel,string);
-        return 1;
+    else return DCC_SendChannelMessage(channel,":no_entry_sign: **[GRESKA] Ovu komandu mozes koristiti samo u Staff ili Security Kanalu!**");
 }
 
-MARYLAND:giveallcash(user, channel , params[])
-{
-  for(new i = 0; i < MAX_PLAYERS; i ++)
-  {
-        if (channel != Admin_Channel) 
-        {
-            DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-            return 1;
-        }
-        new ammount;
-        if(sscanf(params,"d", ammount)) return  DCC_SendChannelMessage(Admin_Channel,"**[USAGE]: !giveallcash [amount]**");
-        if(IsPlayerConnected(i))
-        {
-                GivePlayerMoney(i, ammount);
-                new str[150],string[256];
-                format(str, sizeof(str),"{247A46}Discord Administrator {00CCCC}has given everyone $%d money",ammount);
-                SendClientMessageToAll(COLOR_ORANGE, str);
-                format(string, sizeof(string), "**Successfully given all the players $%d amount of cash**",ammount);
-                DCC_SendChannelMessage(Admin_Channel,string);
-         }
-  }
-  return 1;
-}
-MARYLAND:giveallscore(user, channel , params[])
-{
-  for(new i = 0; i < MAX_PLAYERS; i ++)
-  {
-        if (channel != Admin_Channel) 
-        {
-            DCC_SendChannelMessage(channel, "**:no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!****");
-            return 1;
-        }
-        new ammount;
-        if(sscanf(params,"d", ammount)) return  DCC_SendChannelMessage(Admin_Channel,"**[USAGE]: /giveallscore [ammount]**");
-        if(IsPlayerConnected(i))
-        {
-                SetPlayerScore(i, GetPlayerScore(i)+ammount);
-                new str[150],string[256];
-                format(str, sizeof(str),"{247A46}Discord Administrator {00CCCC}has given everyone %d score(s)",ammount);
-                SendClientMessageToAll(COLOR_ORANGE, str);
-                format(string, sizeof(string), "Successfully given all the players %d score",ammount);
-                DCC_SendChannelMessage(Admin_Channel,string);
-         }
-  }
-  return 1;
+MARYLAND:quote(user, channel, params[])
+{ 
+        new random_index = random(MAX_QUOTES - 1); // Generate a random index number for the quotes array
+        DCC_SendChannelMessage(channel, quotes[random_index]);
+        return 1;
+
 }
 
-MARYLAND:healall(user, channel , params[])
+//INGAME COMMANDS
+YCMD:bug(playerid,params[], help)
 {
-        if (channel != Admin_Channel) 
-        {
-            DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-            return 1;
-        }
-        for(new i =0; i < MAX_PLAYERS; i ++ )
-           {
-                 if(IsPlayerConnected(i))
-                 {
-                   SetPlayerHealth(i, 100.0);
-                   SendClientMessageToAll(COLOR_ORANGE, "{247A46}Discord Administrator {00CCCC}has healed all players!");
-                   DCC_SendChannelMessage(Admin_Channel,"Successfully healed all the players ");
-                 }
-           }
-        return 1;
+    bugreport[playerid] = 1;
+    Dialog_Show(playerid, "DIALOG_BUGSUGGEST", DIALOG_STYLE_INPUT, "Enter the bug", "Type the bug below", "Ok", "Cancel");
+    return 1 ;
 }
-MARYLAND:armourall(user, channel , params[])
+YCMD:suggestion(playerid,params[], help)
 {
-        if (channel != Admin_Channel) 
-        {
-            DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-            return 1;
-        }
-        for(new i =0; i < MAX_PLAYERS; i ++ )
-           {
-                 if(IsPlayerConnected(i))
-                 {
-                   SetPlayerArmour(i, 100.0);
-                   SendClientMessageToAll(COLOR_ORANGE, "{247A46}Discord Administrator {00CCCC}has armoured all players!");
-                   DCC_SendChannelMessage(Admin_Channel,"Successfully armoured all the players ");
-                 }
-           }
-        return 1;
+    Dialog_Show(playerid, "DIALOG_BUGSUGGEST", DIALOG_STYLE_INPUT, "Enter the suggestion", "Type the suggestion below", "Ok", "Cancel");
+    return 1;
 }
-MARYLAND:explode(user, channel , params[])
+YCMD:savecord(playerid,params[], help)
 {
-          if (channel != Admin_Channel) 
-          {
-                DCC_SendChannelMessage(channel, ":no_entry_sign: **[ERROR] You can use this command only in Admin or Security Channel!**");
-                return 1;
-          }
-          new player1, Float:x, Float:y, Float:z, str[70];
-          if(sscanf(params,"d", player1)) return DCC_SendChannelMessage(Admin_Channel,"**[USAGE]: /explode [playerid]**");
-          if(IsPlayerConnected(player1))
-          {
-                 GetPlayerPos(player1, x, y, z);
-                 CreateExplosion(x, y, z, 7, 10.0);
-                 format(str, sizeof(str),"```You have exploded %s!```", GetName(player1));
-                 DCC_SendChannelMessage(Admin_Channel,str);
-                 SendClientMessage(player1,COLOR_RED, "{247A46}Discord Administrator {00CCCC}has used explosions on you");
-          }
-                 else return DCC_SendChannelMessage(Admin_Channel,"That player is not connected!");
-          return 1;
+    //x,y,z,facingangle,interior,virtualid
+    new Float:posx,Float:posy,Float:posz,Float:ang,inter,vWrld,string[128];
+    GetPlayerPos(playerid, posx, posy, posz);
+    GetPlayerFacingAngle(playerid, ang);
+    inter = GetPlayerInterior(playerid);
+    vWrld = GetPlayerVirtualWorld(playerid);
+    format(string, sizeof(string),"```Saved position -> %f,%f,%f,%f,%i,%i```",posx,posy,posz,ang,inter,vWrld);
+    DCC_SendChannelMessage(Cord_Channel,string);
+    SendClientMessage(playerid,x_ogycolor,"Cords saved succesfully");
+    return 1;
 }
