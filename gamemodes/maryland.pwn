@@ -50,7 +50,8 @@
 #include <markerplus>
 #include <animated-textdraw>
 #include <DialogCenter>
-#include <marylanddc> // Custom diskord komands za bota
+#include <marylanddc> 					//* Custom diskord komands za bota
+#include <coloredmoney>  				//* Player cash u hudu u boji > 1 player td
 
 
 #define     c_server        "{8dc9f3}"

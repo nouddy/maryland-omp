@@ -185,3 +185,15 @@
 [18:32:11] [WARNING] mysql_connect: no password specified
 [18:34:37] [WARNING] mysql_connect: no password specified
 [18:52:16] [WARNING] mysql_connect: no password specified
+[19:35:52] [WARNING] mysql_connect: no password specified
+[19:35:56] [ERROR] CConnection::CConnection - establishing connection to MySQL database failed: #2002 'Can't connect to MySQL server on 'localhost' (10061)'
+[19:36:14] [WARNING] mysql_connect: no password specified
+[19:36:14] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[19:47:01] [WARNING] mysql_connect: no password specified
+[19:47:01] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[19:51:42] [WARNING] mysql_connect: no password specified
+[19:51:42] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[19:52:33] [WARNING] mysql_connect: no password specified
+[19:52:33] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[19:53:06] [WARNING] mysql_connect: no password specified
+[19:53:06] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
