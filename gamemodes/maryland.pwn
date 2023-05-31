@@ -390,11 +390,12 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "all-in-one/playerlocation.aio"
 #include "all-in-one/bunker.aio"
 //#include "all-in-one/actor.aio" // -- prebaciti u sql
-#include "all-in-one/houses.aio"
+#include "all-in-one/houses.aio"					//* Imovina
+#include "all-in-one/biz.aio"						//* Firme
 #include "all-in-one/custom_markers.aio"
 #include "all-in-one/random_poruke.aio"
 #include "all-in-one/notifikacije.aio"
-#include "backend/vehicle_ownership.script"
+#include "backend/vehicle_ownership.script"			//* Vehicle ownership
 //-
 #include "all-in-one/end/do-not-look.end"
 
