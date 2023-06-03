@@ -32,6 +32,7 @@
 
 new OpstinaUlazIzlaz[2],
     SpawnUlazIzlaz[5],
+    TehnomediaMarker[2],
     BankaMarker[1];
 /*
       _   _                   _          
@@ -66,6 +67,10 @@ public CreateMarkers()
     SpawnUlazIzlaz[2] = CreateMarker(ICON_CITY,random(5),false,1758.8719,-2387.7422,-28.6042-0.9,6, 6);
     SpawnUlazIzlaz[3] = CreateMarker(ICON_CITY,random(5),false,1779.4951,-2367.4021,-28.6042-0.9,6, 6);
     SpawnUlazIzlaz[4] = CreateMarker(ICON_CITY,random(5),false,1642.1968,-2335.4883,13.5469-0.9, 0, 0);
+    //
+    TehnomediaMarker[0] = CreateMarker(ICON_KEYBOARD,random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
+    TehnomediaMarker[1] = CreateMarker(ICON_KEYBOARD,random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);
+    //
     //
     BankaMarker[0] = CreateMarker(ICON_BANK,random(5),false,1689.8605,-1455.4658,13.5597-0.9, 0, 0);
     //

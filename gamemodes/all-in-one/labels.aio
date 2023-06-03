@@ -56,8 +56,8 @@ CreatePickupsAnd3Ds()
 
     //! Gigatron
     Create3DandP(""c_server"[ Gigatron ]\n"c_white"'ENTER' za ulaz", 1473.0039,-1264.6689,14.5625, -1, -1, 19133, 2.0); // Gigatron ulaz    
-    Create3DandP(""c_server"[ Gigatron ]\n"c_white"'Y' za kupovinu elektronike", 1482.5288,-1264.8221,14.5594, -1, -1, 1239, 2.0); // Gigatron ulaz  
-    Create3DandP(""c_server"[ Gigatron ]\n"c_white"'Y' za pomoc u radnji", 1483.8894,-1272.2617,14.5594, -1, -1, 1239, 2.0); // Gigatron ulaz      
+    // Create3DandP(""c_server"[ Gigatron ]\n"c_white"'Y' za kupovinu elektronike", 1482.5288,-1264.8221,14.5594, -1, -1, 1239, 2.0); // Gigatron ulaz  
+    // Create3DandP(""c_server"[ Gigatron ]\n"c_white"'Y' za pomoc u radnji", 1483.8894,-1272.2617,14.5594, -1, -1, 1239, 2.0); // Gigatron ulaz      
 
     // //! Prevoznik novca labeli
     // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da se zaposlis", 1811.8564,-1308.6644,22.2110, -1, -1, 1210, 3.0); // Bankar zaposli se
@@ -107,6 +107,20 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             SetPlayerInterior(playerid, 6);
             SetPlayerVirtualWorld(playerid, 6);
             SetPlayerPos(playerid, 1739.5133,-2366.7729,-28.6042);
+            SetCameraBehindPlayer(playerid);
+        }
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1676.1896,-1634.7426,14.2265) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Tehnomedia ulaz
+        {
+            UcitajIgracuObjekte(playerid);
+            SetPlayerPos(playerid, 1674.1040, -1634.8239, 14.2263);
+            SetCameraBehindPlayer(playerid);
+        }
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1674.1040, -1634.8239, 14.2263)) // Tehnomedia ulaz
+        {
+            UcitajIgracuObjekte(playerid);
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 1676.1896,-1634.7426,14.2265);
             SetCameraBehindPlayer(playerid);
         }
     }

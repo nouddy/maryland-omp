@@ -390,11 +390,13 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "all-in-one/labels.aio"
 #include "all-in-one/playerlocation.aio"
 #include "all-in-one/bunker.aio"
-//#include "all-in-one/actor.aio" // -- prebaciti u sql
+#include "all-in-one/actor.aio"						//* Aktori bebo
 #include "all-in-one/houses.aio"					//* Imovina
 #include "all-in-one/biz.aio"						//* Firme tek zapocete soo
 #include "all-in-one/custom_markers.aio"
 #include "all-in-one/random_poruke.aio"
+#include "all-in-one/tehnomedia.aio"
+#include "all-in-one/drone.aio"
 #include "all-in-one/notifikacije.aio"
 #include "backend/vehicle_ownership.script"			//* Vehicle ownership
 #include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
@@ -415,7 +417,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/starbucks.map"
 #include "frontend/opstina.map"
 #include "frontend/opstina-int.map"
-#include "frontend/gigatron.map"
+#include "frontend/tehnomedia.map"
 #include "frontend/flecca-bank.map"
 #include "frontend/glavnaulica.map"
 #include "frontend/crnotrziste.map"

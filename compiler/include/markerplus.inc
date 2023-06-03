@@ -34,17 +34,18 @@ enum {
     ICON_POLICE_CAR,
     ICON_SHIP,
     ICON_BUS,
-    ICON_CITYHALL
+    ICON_CITYHALL,
+    ICON_KEYBOARD
 }
 
 static const ICON_LETTER[][5] = {
-    "NULL", "F", "A", "G", "H", "J", "K", "C", "B", "h", "f", "p", "o", "v", "&"
+    "NULL", "F", "A", "G", "H", "J", "K", "C", "B", "h", "f", "p", "o", "v", "&", "7"
 };
 
-static const ICON_FONT[][15] = {
+static const ICON_FONT[][16] = {
     "NULL", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
     "Webdings", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
-    "Webdings", "Webdings", "Wingdings"
+    "Webdings", "Webdings", "Wingdings", "Wingdings"
 };
 
 static const COLOR_ARRAY[] =

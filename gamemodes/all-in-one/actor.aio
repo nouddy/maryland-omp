@@ -19,20 +19,25 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+new TehnomediaActor;
+
 //! Task actor preload
 
 hook OnGameModeInit()
 {
     print("actor/main.actor loaded");
+
+	TehnomediaActor = CreateActor(289, 1672.1211,-1641.8762,14.2263,359.9053);
+	ApplyActorAnimation(TehnomediaActor, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
 }
 
 task resetActorPos[4000]() 
 {
-    //! Gigatron aktori
+    //! Tehnomedia Actor
 
-    SetActorPos(Gigatron1, 1484.5914,-1264.3303,14.5594);
-    SetActorFacingAngle(Gigatron1, 87.9902);
-    ApplyActorAnimation(Gigatron1, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
+    SetActorPos(TehnomediaActor, 1672.1211,-1641.8762,14.2263);
+    SetActorFacingAngle(TehnomediaActor, 359.9053);
+    ApplyActorAnimation(TehnomediaActor, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
 
     return 1;
 }
