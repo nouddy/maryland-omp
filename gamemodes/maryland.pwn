@@ -392,11 +392,13 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "all-in-one/bunker.aio"
 //#include "all-in-one/actor.aio" // -- prebaciti u sql
 #include "all-in-one/houses.aio"					//* Imovina
-#include "all-in-one/biz.aio"						//* Firme
+#include "all-in-one/biz.aio"						//* Firme tek zapocete soo
 #include "all-in-one/custom_markers.aio"
 #include "all-in-one/random_poruke.aio"
 #include "all-in-one/notifikacije.aio"
 #include "backend/vehicle_ownership.script"			//* Vehicle ownership
+#include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+
 //-
 #include "all-in-one/end/do-not-look.end"
 

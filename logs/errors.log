@@ -1,1 +1,2 @@
-[12:18:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[10:56:42] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[10:56:42] [plugins/mysql] cache_get_value_name_int: field 'fPoliceExtVW' not found
