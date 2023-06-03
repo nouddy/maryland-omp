@@ -108,7 +108,7 @@ public PoliceLoad()
 
 		if(fPoliceInfo[i][fPoliceExist])
 		{
-            format(Label, sizeof(Label), ""c_server"» "c_server"%s "c_server"«\n"c_server"» "c_white"%s\n"c_server"» "c_white"%s\n"c_server"Boss » "c_white"%s",fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceShortName], fPoliceInfo[i][fPoliceAdress], fPoliceInfo[i][fPoliceBoss]);
+            format(Label, sizeof(Label), ""c_server"» "c_white"%s "c_server"«\n"c_server"» "c_white"%s "c_server"«\n"c_server"» "c_white"%s\n"c_server"Boss » "c_white"%s",fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceShortName], fPoliceInfo[i][fPoliceAdress], fPoliceInfo[i][fPoliceBoss]);
 		}
 		fPoliceInfo[i][fPoliceLabel] = CreateDynamic3DTextLabel(Label, x_server, fPoliceInfo[i][fPoliceExterior][0], fPoliceInfo[i][fPoliceExterior][1], fPoliceInfo[i][fPoliceExterior][2]+0.5,30.0, .testlos = 1, .streamdistance = 30.0);
 
