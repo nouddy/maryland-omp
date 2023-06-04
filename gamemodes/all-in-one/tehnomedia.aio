@@ -22,7 +22,8 @@
 enum PlayerTehnomedia
 {
     eDronItem,
-    eBaterijaItem
+    eBaterijaItem,
+    eNavigacijaItem
 }
 new PlayerElectronic[MAX_PLAYERS][PlayerTehnomedia];
 
@@ -51,14 +52,15 @@ public SQL_ElectronicLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_electronic` (player_id, Dron, Baterije) \ 
-            VALUES('%d', '0', '0')", PlayerInfo[playerid][SQLID]);
+           "INSERT INTO `player_electronic` (player_id, Dron, Baterije, Navigacija) \ 
+            VALUES('%d', '0', '0', '0')", PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL, q);
     }
     else 
     {
         cache_get_value_name_int(0, "Dron", PlayerElectronic[playerid][eDronItem]);
         cache_get_value_name_int(0, "Baterije", PlayerElectronic[playerid][eBaterijaItem]);
+        cache_get_value_name_int(0, "Navigacija", PlayerElectronic[playerid][eNavigacijaItem]);
     }
 }
 
@@ -70,7 +72,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
         {
             Dialog_Show(playerid, "dialog_elektronik", DIALOG_STYLE_LIST,
 			    ""c_server"Tehnomedia » "c_white"Kupi uredjaj",
-			    ""c_server"Telefon "c_white"(Vise modela)\n"c_server"Dron "c_white"(700$)\n"c_server"Baterija "c_white"(150$ / 1 kom)",
+			    ""c_server"Telefon "c_white"(Vise modela)\n"c_server"Dron "c_white"(700$)\n"c_server"Baterija "c_white"(150$ / 1 kom)\n"c_server"Navigacija "c_white"(300$)",
 			    "Odaberi", "Izlaz"
 		    );
         }
@@ -119,6 +121,22 @@ Dialog: dialog_elektronik(const playerid, response, listitem, string: inputtext[
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste baterije!");
+
+                SaveElectronic(playerid);SavePlayer(playerid);
+
+                return Y_HOOKS_CONTINUE_RETURN_1;
+			}
+			case 3:
+			{
+                if(PlayerElectronic[playerid][eNavigacijaItem] == 1) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Vec imate navigaciju!");
+                if(GetPlayerMoney(playerid) < 300) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Nemate dovoljno novca!");
+
+                PlayerElectronic[playerid][eNavigacijaItem] = 1;
+
+                GivePlayerMoney(playerid, -300);
+                ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
+
+                SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste navigaciju!");
 
                 SaveElectronic(playerid);SavePlayer(playerid);
 

@@ -51,7 +51,6 @@
 #include <animated-textdraw>
 #include <DialogCenter>
 #include <marylanddc> 					//* Custom diskord komands za bota
-#include <coloredmoney>  				//* Player cash u hudu u boji > 1 player td
 
 
 #define     c_server        "{8dc9f3}"
@@ -379,6 +378,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "backend/attach.script"
 #include "backend/klupe_ogy.script"
 #include "backend/crypto_ogy.script"
+#include "backend/vehicle_ownership.script"			//* Vehicle ownership
+#include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 //-
 #include "backend/end/do-not-look.end"
 
@@ -398,8 +399,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "all-in-one/tehnomedia.aio"
 #include "all-in-one/drone.aio"
 #include "all-in-one/notifikacije.aio"
-#include "backend/vehicle_ownership.script"			//* Vehicle ownership
-#include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+#include "all-in-one/navigation.aio"				//* Navigacija odraditi da bude sql dynamic za sad je staticna
 
 //-
 #include "all-in-one/end/do-not-look.end"

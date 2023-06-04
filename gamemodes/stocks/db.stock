@@ -83,9 +83,10 @@ stock SaveElectronic(playerid)
     if(IgracUlogovan[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Baterije` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Baterije` = '%d',`Navigacija` = '%d' WHERE `player_id` = '%d'",
             PlayerElectronic[playerid][eDronItem],
             PlayerElectronic[playerid][eBaterijaItem],
+            PlayerElectronic[playerid][eNavigacijaItem],
             PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL,query);      
     }
