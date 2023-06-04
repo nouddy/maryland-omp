@@ -41,7 +41,7 @@ hook OnGameModeInit()
 hook OnPlayerLoaded(playerid)
 {
     new q[128];
-	mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_finance WHERE finance_id = '%d'", PlayerInfo[playerid][SQLID]);
+	mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_finance WHERE finance_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
     mysql_tquery(SQL, q, "SQL_AccountFinanceLoad", "i", playerid);
     return true;
 }

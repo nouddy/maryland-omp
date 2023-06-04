@@ -116,7 +116,7 @@ hook OnGameModeInit()
 hook OnPlayerLoaded(playerid)
 {
     new q[150];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_crypto WHERE crypto_id = '%d'", PlayerInfo[playerid][SQLID]);
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_crypto WHERE crypto_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
     mysql_tquery(SQL, q, "LoadPlayerCrypto", "i", playerid);
     return true;
 }

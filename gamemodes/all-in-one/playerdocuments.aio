@@ -42,7 +42,7 @@ new PlayerDocuments[MAX_PLAYERS][PlayerDocumentsz];
 hook OnPlayerLoaded(playerid)
 {   
     new q[120];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE player_id = '%d'", PlayerInfo[playerid][SQLID]);
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE player_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
     mysql_tquery(SQL, q, "SQL_AccountDocumentsLoad", "i", playerid);
 
 	return 1;
