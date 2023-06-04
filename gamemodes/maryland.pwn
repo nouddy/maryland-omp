@@ -365,73 +365,71 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //-
 //-
-#include "assets/proxdetect.asset" 
-#include "assets/anims.asset"
+#include "assets/proxdetect.asset" 					//* ProxDetector
+#include "assets/anims.asset"						//* Anim preload
 //-
 #include "assets/end/do-not-look.end" 
 
 //-
-#include "backend/main.script"
-#include "backend/brzinomer.script"
-#include "backend/vehicle.script"
-#include "backend/chat.script"
-#include "backend/attach.script"
-#include "backend/klupe_ogy.script"
-#include "backend/crypto_ogy.script"
+#include "backend/main.script"						//* Log/Reg
+#include "backend/brzinomer.script"					//* Brzinomer
+#include "backend/vehicle.script"					//* Vozila paljenje gasenje itd
+#include "backend/chat.script"						//* Chat
+#include "backend/attach.script"					//* Attach
+#include "backend/klupe_ogy.script"					//* Klupe
+#include "backend/crypto_ogy.script"				//* Crypto
 #include "backend/vehicle_ownership.script"			//* Vehicle ownership
 #include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 //-
 #include "backend/end/do-not-look.end"
 
 //-
-#include "all-in-one/discconnect.aio"
-#include "all-in-one/playerdocuments.aio"
-#include "all-in-one/bank.aio"
+#include "all-in-one/discconnect.aio"				//* Discord Konektor
+#include "all-in-one/playerdocuments.aio"			//* Dokumenta
+#include "all-in-one/bank.aio"						//* Bankarstvo
 //#include "all-in-one/servis.aio"// -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
-#include "all-in-one/labels.aio"
-#include "all-in-one/playerlocation.aio"
-#include "all-in-one/bunker.aio"
+#include "all-in-one/labels.aio"					//* Labeli
+#include "all-in-one/playerlocation.aio"			//* Lokacija
+#include "all-in-one/bunker.aio"					//* Bunker
 #include "all-in-one/actor.aio"						//* Aktori bebo
 #include "all-in-one/houses.aio"					//* Imovina
 #include "all-in-one/biz.aio"						//* Firme tek zapocete soo
-#include "all-in-one/custom_markers.aio"
-#include "all-in-one/random_poruke.aio"
-#include "all-in-one/tehnomedia.aio"
-#include "all-in-one/drone.aio"
-#include "all-in-one/notifikacije.aio"
-#include "all-in-one/navigation.aio"				//* Navigacija odraditi da bude sql dynamic za sad je staticna
+#include "all-in-one/custom_markers.aio"			//* Markeri
+#include "all-in-one/random_poruke.aio"				//* Random poruke
+#include "all-in-one/tehnomedia.aio"				//* Tehnomedia prodavnica
+#include "all-in-one/drone.aio"						//* Drone
+#include "all-in-one/notifikacije.aio"				//* Notifikacije
+#include "all-in-one/navigation.aio"				//* Navigacija
 
 //-
 #include "all-in-one/end/do-not-look.end"
 
 //-
-#include "crossover/DynamicArea.csso"
+#include "crossover/DynamicArea.csso"				//* Dynamic Area
 //-
 #include "crossover/end/do-not-look.end"
 
 //- Frontend
-#include "frontend/main.tde"
-#include "frontend/login.tde"
-#include "frontend/register.tde"
-#include "frontend/izborskina.tde"
-#include "frontend/starbucks.map"
-#include "frontend/opstina.map"
-#include "frontend/opstina-int.map"
-#include "frontend/tehnomedia.map"
-#include "frontend/flecca-bank.map"
-#include "frontend/glavnaulica.map"
-#include "frontend/crnotrziste.map"
-#include "frontend/garaza.map"
-#include "frontend/apartman.map"
-#include "frontend/izborskina.map"
-#include "frontend/kanalizacija.map"
-#include "frontend/astoyota.map"
-#include "frontend/mafiaint.map"
-#include "frontend/spawn.map"
-#include "frontend/spawn-int.map"
-#include "frontend/granice.map"
-#include "frontend/metro-ext-ent.map"
-#include "frontend/login_map.map"
+#include "frontend/main.tde"						//* Glavni tdovi
+#include "frontend/login.tde"						//* Login tdovi
+#include "frontend/register.tde"					//* Register tdovi
+#include "frontend/izborskina.tde"					//* Izborskina tdovi na registeru
+#include "frontend/starbucks.map"					//* Starbucks map
+#include "frontend/opstina.map"						//* Opstina map
+#include "frontend/opstina-int.map"					//* Opstina int map
+#include "frontend/tehnomedia.map"					//* Tehnomedia map Ogy
+#include "frontend/flecca-bank.map"					//* Flecca bank map
+#include "frontend/glavnaulica.map"					//* Glavna ulica map
+#include "frontend/crnotrziste.map"					//* Crno trziste map
+#include "frontend/garaza.map"						//* Garaza mapa
+#include "frontend/apartman.map"					//* Apartman map
+#include "frontend/izborskina.map"					//* Izbor skina mapa
+#include "frontend/kanalizacija.map"				//* Kanalizacija map
+#include "frontend/astoyota.map"					//* Auto salon toyota mapa
+#include "frontend/mafiaint.map"					//* Mafia int mapa muay
+#include "frontend/spawn.map"						//* Spawn Mapa
+#include "frontend/spawn-int.map"					//* Spawn Int Mapa
+#include "frontend/login_map.map"					//* Login Soba Mapa
 //-
 #include "frontend/end/do-not-look.end"
 
@@ -443,14 +441,14 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "jobs/end/do-not-look.end"
 
 //-Important for all systems
-#include "backend/staff.script"
+#include "backend/staff.script"						//* Staff script
 //-
 #include "temp/end/do-not-look.end"
 
-#include "stocks/chat.stock"
-#include "stocks/db.stock"
-#include "stocks/vehicle.stock"
-#include "stocks/variable.stock"
+#include "stocks/chat.stock"						//* Chat Stock
+#include "stocks/db.stock"							//* Database Stock Cuvanja
+#include "stocks/vehicle.stock"						//* Vehicle Stock Provere
+#include "stocks/variable.stock"					//* Variable stock rest
 
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)

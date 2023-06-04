@@ -18,6 +18,7 @@
  */
 
  //* Fixati bug kada umres u dronu spawnas se s CJ skin i moras da kliknes spawn dugme.
+ //* Dodati kada dron explodira da mu se dron vraca na -1 i da mora opet da ga kupi
 
 #include <ysilib\YSI_Coding\y_hooks>
 

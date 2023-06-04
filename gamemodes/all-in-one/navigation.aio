@@ -17,6 +17,7 @@
  *  @Module         all-in-one
  */
 
+//* Dodati sve u sql da se prave dinamicne gps lokacije po sql idu i da mogu da se izmene i obrisu
 #include <ysilib\YSI_Coding\y_hooks>
 
 new 
@@ -41,7 +42,7 @@ new const NavData[][Navigacija] = {
 
 hook OnGameModeInit()
 {
-    print("backend/navigation.aio loaded");
+    print("all-in-one/navigation.aio loaded");
 
 	return (true);
 }
