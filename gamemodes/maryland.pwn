@@ -400,6 +400,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "all-in-one/drone.aio"						//* Drone
 #include "all-in-one/notifikacije.aio"				//* Notifikacije
 #include "all-in-one/navigation.aio"				//* Navigacija
+#include "all-in-one/bank_ogy.aio"					//* Bankarstvo
 
 //-
 #include "all-in-one/end/do-not-look.end"

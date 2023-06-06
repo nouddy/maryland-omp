@@ -37,7 +37,54 @@ udb_hash(const buf[]) {
     }
     return (s2 << 16) + s1;
 }
+formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
+{
+    /*
+        By Kar
+        https://gist.github.com/Kar2k/bfb0eafb2caf71a1237b349684e091b9/8849dad7baa863afb1048f40badd103567c005a5#file-formatint-function
+    */
+    static
+        s_szReturn[ 32 ],
+        s_szThousandSeparator[ 2 ] = { ' ', EOS },
+        s_szCurrencyChar[ 2 ] = { ' ', EOS },
+        s_iVariableLen,
+        s_iChar,
+        s_iSepPos,
+        bool:s_isNegative
+    ;
 
+    format( s_szReturn, sizeof( s_szReturn ), "%d", intVariable );
+
+    if(s_szReturn[0] == '-')
+        s_isNegative = true;
+    else
+        s_isNegative = false;
+
+    s_iVariableLen = strlen( s_szReturn );
+
+    if ( s_iVariableLen >= 4 && iThousandSeparator)
+    {
+        s_szThousandSeparator[ 0 ] = iThousandSeparator;
+
+        s_iChar = s_iVariableLen;
+        s_iSepPos = 0;
+
+        while ( --s_iChar > _:s_isNegative )
+        {
+            if ( ++s_iSepPos == 3 )
+            {
+                strins( s_szReturn, s_szThousandSeparator, s_iChar );
+
+                s_iSepPos = 0;
+            }
+        }
+    }
+    if(iCurrencyChar) {
+        s_szCurrencyChar[ 0 ] = iCurrencyChar;
+        strins( s_szReturn, s_szCurrencyChar, _:s_isNegative );
+    }
+    return s_szReturn;
+}
 //* Cuvanje naloga
 stock SavePlayer(playerid)
 {

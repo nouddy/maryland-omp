@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2023 at 12:01 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Generation Time: Jun 06, 2023 at 04:06 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,69 @@ SET time_zone = "+00:00";
 --
 -- Database: `maryland`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bankers`
+--
+
+CREATE TABLE `bankers` (
+  `ID` int(11) NOT NULL,
+  `Skin` smallint(3) NOT NULL,
+  `PosX` float NOT NULL,
+  `PosY` float NOT NULL,
+  `PosZ` float NOT NULL,
+  `PosA` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_accounts`
+--
+
+CREATE TABLE `bank_accounts` (
+  `ID` int(11) NOT NULL,
+  `Owner` varchar(24) NOT NULL,
+  `Password` varchar(32) NOT NULL,
+  `Balance` int(11) NOT NULL,
+  `CreatedOn` int(11) NOT NULL,
+  `LastAccess` int(11) NOT NULL,
+  `Disabled` smallint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_atms`
+--
+
+CREATE TABLE `bank_atms` (
+  `ID` int(11) NOT NULL,
+  `PosX` float NOT NULL,
+  `PosY` float NOT NULL,
+  `PosZ` float NOT NULL,
+  `RotX` float NOT NULL,
+  `RotY` float NOT NULL,
+  `RotZ` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_logs`
+--
+
+CREATE TABLE `bank_logs` (
+  `ID` int(11) NOT NULL,
+  `AccountID` int(11) NOT NULL,
+  `ToAccountID` int(11) NOT NULL DEFAULT -1,
+  `Type` smallint(1) NOT NULL,
+  `Player` varchar(24) NOT NULL,
+  `Amount` int(11) NOT NULL,
+  `Date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -82,48 +145,6 @@ INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carP
 (9, 522, 0, 1545.99, -2343.26, 14.3759, 142.199, 28, 30, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (10, 522, 0, 1542.29, -2342.98, 13.5469, 62.4758, 75, 20, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (11, 522, 0, 1551.61, -2337.78, 13.5546, 0.5395, 70, 17, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `faction_police`
---
-
-CREATE TABLE `faction_police` (
-  `fPoliceID` int(11) NOT NULL,
-  `fPoliceName` varchar(60) CHARACTER SET utf32 COLLATE utf32_general_ci DEFAULT 'Nema',
-  `fPoliceShortName` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Nema',
-  `fPoliceAdress` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '0,Maryland',
-  `fPoliceBoss` int(11) NOT NULL DEFAULT 0,
-  `fPoliceType` int(11) NOT NULL DEFAULT 0,
-  `fPoliceX` float NOT NULL DEFAULT 0,
-  `fPoliceY` float NOT NULL DEFAULT 0,
-  `fPoliceZ` float NOT NULL DEFAULT 0,
-  `fPoliceA` float NOT NULL DEFAULT 0,
-  `fPoliceInteriorX` float NOT NULL DEFAULT 0,
-  `fPoliceInteriorY` float NOT NULL DEFAULT 0,
-  `fPoliceInteriorZ` float NOT NULL DEFAULT 0,
-  `fPoliceInteriorA` float NOT NULL DEFAULT 0,
-  `fPoliceInt` int(11) NOT NULL DEFAULT 0,
-  `fPoliceExt` int(11) NOT NULL DEFAULT 0,
-  `fPoliceExtVW` int(11) NOT NULL DEFAULT 0,
-  `fPoliceLocked` tinyint(1) NOT NULL DEFAULT 0,
-  `fPoliceVault` int(11) NOT NULL DEFAULT 0,
-  `fPoliceRank1` varchar(32) NOT NULL DEFAULT 'Nema',
-  `fPoliceRank2` varchar(32) NOT NULL DEFAULT 'Nema',
-  `fPoliceRank3` varchar(32) NOT NULL DEFAULT 'Nema',
-  `fPoliceSkins1` int(11) NOT NULL,
-  `fPoliceSkins2` int(11) NOT NULL,
-  `fPoliceSkins3` int(11) NOT NULL,
-  `fPoliceSkins4` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `faction_police`
---
-
-INSERT INTO `faction_police` (`fPoliceID`, `fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceBoss`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceA`, `fPoliceInteriorX`, `fPoliceInteriorY`, `fPoliceInteriorZ`, `fPoliceInteriorA`, `fPoliceInt`, `fPoliceExt`, `fPoliceExtVW`, `fPoliceLocked`, `fPoliceVault`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES
-(1, 'Maryland Police', 'MLPD', '0,Maryland Centar', 1, 0, 1553.85, -1675.54, 16.1953, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nema', 'Nema', 'Nema', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -201,10 +222,16 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Vostic', 297206591, 1, 199050, 2, 21, 4, '03/06/2023 - 23:59', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
-(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '29/05/2023 - 14:18', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
+(1, 'Vostic', 297206591, 1, 200650, 299, 21, 4, '17/05/2023 - 13:30', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
 (4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59', 'Srbija', '0', '@gmail.com', -1, -1),
-(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00', 'Srbija', '0', '@gmail.com', -1, -1);
+(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00', 'Srbija', '0', '@gmail.com', -1, -1),
+(25, 'Ogyzzasd', 143917681, 1, 0, 29, 19, 0, '29/05/2023 - 17:14', '29/05/2023 - 17:14', 'Srbija', 'Musko', 'dsads@gmail.com', -1, -1),
+(26, 'Ogyzzasdas', 196543201, 1, 0, 29, 19, 0, '29/05/2023 - 17:17', '29/05/2023 - 17:17', 'Srbija', 'Musko', 'dsa@gmail.com', -1, -1),
+(27, 'Ogyzzasdass', 308478892, 1, 0, 29, 19, 0, '29/05/2023 - 17:18', '29/05/2023 - 17:18', 'Srbija', 'Musko', 'dsadsa@gmail.com', -1, 1),
+(28, 'Ogyazzasdass', 631244116, 1, 0, 29, 19, 0, '29/05/2023 - 17:21', '29/05/2023 - 17:20', 'Srbija', 'Musko', 'sahjsafjh@gmail.com', -1, -1),
+(29, 'jkdsagldsadsa', 146866813, 1, 0, 29, 19, 0, '29/05/2023 - 17:23', '29/05/2023 - 17:23', 'Srbija', 'Musko', 'sahjhfsajsa@gmail.com', -1, -1),
+(30, 'dsadasdsahj', 246481736, 1, 0, 29, 19, 0, '29/05/2023 - 17:28', '29/05/2023 - 17:27', 'Srbija', 'Musko', 'dsadsa@gmail.com', 1, -1);
 
 -- --------------------------------------------------------
 
@@ -226,7 +253,6 @@ CREATE TABLE `player_crypto` (
 --
 
 INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
-(1, 0, 0, 0, 0, 0),
 (3, 0, 0, 0, 0, 0),
 (10, 0, 0, 0, 0, 0);
 
@@ -251,28 +277,8 @@ CREATE TABLE `player_documents` (
 --
 
 INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLicence`, `MotoLicence`, `BrodLicence`, `OruzjeLicence`) VALUES
-(1, 0, 0, 0, 0, 0, 0),
 (3, 1, 0, 0, 0, 0, 0),
 (10, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `player_electronic`
---
-
-CREATE TABLE `player_electronic` (
-  `player_id` int(11) NOT NULL,
-  `Dron` int(11) NOT NULL DEFAULT 0,
-  `Baterije` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `player_electronic`
---
-
-INSERT INTO `player_electronic` (`player_id`, `Dron`, `Baterije`) VALUES
-(1, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -292,7 +298,6 @@ CREATE TABLE `player_finance` (
 --
 
 INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin`) VALUES
-(1, 0, 0, 0),
 (3, 0, 0, 0),
 (10, 0, 0, 0);
 
@@ -301,16 +306,23 @@ INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin
 --
 
 --
+-- Indexes for table `bank_accounts`
+--
+ALTER TABLE `bank_accounts`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bank_logs`
+--
+ALTER TABLE `bank_logs`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `bank_logs_ibfk_1` (`AccountID`);
+
+--
 -- Indexes for table `cars`
 --
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`carID`);
-
---
--- Indexes for table `faction_police`
---
-ALTER TABLE `faction_police`
-  ADD PRIMARY KEY (`fPoliceID`);
 
 --
 -- Indexes for table `houses`
@@ -343,12 +355,6 @@ ALTER TABLE `player_documents`
   ADD UNIQUE KEY `player_id` (`player_id`);
 
 --
--- Indexes for table `player_electronic`
---
-ALTER TABLE `player_electronic`
-  ADD UNIQUE KEY `player_id` (`player_id`);
-
---
 -- Indexes for table `player_finance`
 --
 ALTER TABLE `player_finance`
@@ -359,28 +365,38 @@ ALTER TABLE `player_finance`
 --
 
 --
+-- AUTO_INCREMENT for table `bank_accounts`
+--
+ALTER TABLE `bank_accounts`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_logs`
+--
+ALTER TABLE `bank_logs`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
   MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `faction_police`
---
-ALTER TABLE `faction_police`
-  MODIFY `fPoliceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `klupe`
---
-ALTER TABLE `klupe`
-  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bank_logs`
+--
+ALTER TABLE `bank_logs`
+  ADD CONSTRAINT `bank_logs_ibfk_1` FOREIGN KEY (`AccountID`) REFERENCES `bank_accounts` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

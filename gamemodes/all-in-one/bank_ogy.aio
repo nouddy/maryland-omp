@@ -1,0 +1,938 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           6th Jun 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           bank_ogy.aio
+ *  @Module         all-in-one
+ */
+
+
+// Warninzi su zbog dialoga koji trebaju u easy( nemoj dirati sve ce se resiti preko easy-a kad budemo prebacili sve )
+//
+new bool:created_tables = true; // true da ne kreira i ne forsira query dzabe // false ako nema tabela i trebaju automatski da se kreiraju
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+
+const MAX_BANKERS = 20; // promeniti ako je malo
+const MAX_ATMS = 500; // promeniti ako je mnogo
+
+/*
+      ____            __   _                      
+     |  _ \    ___   / _| (_)  _ __     ___   ___ 
+     | | | |  / _ \ | |_  | | | '_ \   / _ \ / __|
+     | |_| | |  __/ |  _| | | | | | | |  __/ \__ \
+     |____/   \___| |_|   |_| |_| |_|  \___| |___/
+
+*/
+//#define     BANKER_USE_MAPICON                  // obrisi komentar ako zelis da banker ima mapikonicu(za sada nepotrebno)
+#define     ATM_USE_MAPICON                     // obrisi komentar ako zelis da atm ima mapikonicu(za sada potrebno)
+
+//#define     BANKER_ICON_RANGE       (10.0)      // banker ikonica radius (ovo pod komentar jer izlazi error ako je i gore komentar)
+#define     ATM_ICON_RANGE          (50.0)     // atm ikonicca za mapu default je 100.0 - trenutno 50.0
+
+#define     ACCOUNT_PRICE           (0)       // koliko da kosta da se otvori novi akaunt u banci(defaullt je 100 = mislim da je okej i 0 da bude)
+#define     ACCOUNT_CLIMIT          (5)         // maksimalno koliko moze akaunta da se napravi prema jednom igracu client_side staviti pod komentar ako beskonacno
+#define     ACCOUNT_LIMIT           (500000000) // maks za limit na jednom akauntu u banci = default 50.000.000$
+
+
+
+#define SendBankMessage(%0,%1) \
+    va_SendClientMessage(%0, 0xF4AD81FF, "[ML-Bank]: {FFFFFF}"%1)  // promeniti prefix u slucaju da nam se ne svidja
+
+
+enum    E_BANKER
+{
+    // saved
+    Skin,
+    Float: bankerX,
+    Float: bankerY,
+    Float: bankerZ,
+    Float: bankerA,
+    // temp
+    bankerActorID,
+    #if defined BANKER_USE_MAPICON
+    bankerIconID,
+    #endif
+    Text3D: bankerLabel
+}
+enum    _:E_BANK_DIALOG
+{
+    DIALOG_BANK_MENU_NOLOGIN = 12450,
+    DIALOG_BANK_MENU,
+    DIALOG_BANK_CREATE_ACCOUNT,
+    DIALOG_BANK_ACCOUNTS,
+    DIALOG_BANK_LOGIN_ID,
+    DIALOG_BANK_LOGIN_PASS,
+    DIALOG_BANK_DEPOSIT,
+    DIALOG_BANK_WITHDRAW,
+    DIALOG_BANK_TRANSFER_1,
+    DIALOG_BANK_TRANSFER_2,
+    DIALOG_BANK_PASSWORD,
+    DIALOG_BANK_REMOVE,
+    DIALOG_BANK_LOGS,
+    DIALOG_BANK_LOG_PAGE
+}
+
+enum    _:E_BANK_LOGTYPE
+{
+    TYPE_NONE,
+    TYPE_LOGIN,
+    TYPE_DEPOSIT,
+    TYPE_WITHDRAW,
+    TYPE_TRANSFER,
+    TYPE_PASSCHANGE
+}
+
+enum    E_ATM
+{
+    // saved
+    Float: atmX,
+    Float: atmY,
+    Float: atmZ,
+    Float: atmRX,
+    Float: atmRY,
+    Float: atmRZ,
+    // temp
+    atmObjID,
+    #if defined ATM_USE_MAPICON
+    atmIconID,
+    #endif
+    Text3D: atmLabel
+}
+
+new
+    BankerData[MAX_BANKERS][E_BANKER],
+    ATMData[MAX_ATMS][E_ATM];
+    
+new
+    Iterator: Bankers<MAX_BANKERS>,
+    Iterator: ATMs<MAX_ATMS>;
+
+
+new
+    CurrentAccountID[MAX_PLAYERS] = {-1, ...},
+    LogListType[MAX_PLAYERS] = {TYPE_NONE, ...},
+    LogListPage[MAX_PLAYERS],
+    EditingATMID[MAX_PLAYERS] = {-1, ...};
+
+/*
+      _   _                   _          
+     | | | |   ___     ___   | | __  ___ 
+     | |_| |  / _ \   / _ \  | |/ / / __|
+     |  _  | | (_) | | (_) | |   <  \__ \
+     |_| |_|  \___/   \___/  |_|\_\ |___/
+
+*/
+hook OnGameModeInit()
+{
+    print("all-in-one/bank_ogy.aio loaded");
+
+
+
+    for(new i; i < MAX_BANKERS; i++)
+    {
+        BankerData[i][bankerActorID] = -1;
+        
+        #if defined BANKER_USE_MAPICON
+        BankerData[i][bankerIconID] = -1;
+        #endif
+        
+        BankerData[i][bankerLabel] = Text3D: -1;
+    }
+    
+    for(new i; i < MAX_ATMS; i++)
+    {
+        ATMData[i][atmObjID] = -1;
+
+        #if defined ATM_USE_MAPICON
+        ATMData[i][atmIconID] = -1;
+        #endif
+
+        ATMData[i][atmLabel] = Text3D: -1;
+    }
+    if(created_tables == false)
+    {
+        // create tables if they don't exist
+        mysql_tquery(SQL, "CREATE TABLE IF NOT EXISTS `bankers` (\
+          `ID` int(11) NOT NULL,\
+          `Skin` smallint(3) NOT NULL,\
+          `PosX` float NOT NULL,\
+          `PosY` float NOT NULL,\
+          `PosZ` float NOT NULL,\
+          `PosA` float NOT NULL\
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+        
+        mysql_tquery(SQL, "CREATE TABLE IF NOT EXISTS `bank_atms` (\
+          `ID` int(11) NOT NULL,\
+          `PosX` float NOT NULL,\
+          `PosY` float NOT NULL,\
+          `PosZ` float NOT NULL,\
+          `RotX` float NOT NULL,\
+          `RotY` float NOT NULL,\
+          `RotZ` float NOT NULL\
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+        
+        mysql_tquery(SQL, "CREATE TABLE IF NOT EXISTS `bank_accounts` (\
+          `ID` int(11) NOT NULL auto_increment,\
+          `Owner` varchar(24) NOT NULL,\
+          `Password` varchar(32) NOT NULL,\
+          `Balance` int(11) NOT NULL,\
+          `CreatedOn` int(11) NOT NULL,\
+          `LastAccess` int(11) NOT NULL,\
+          `Disabled` smallint(1) NOT NULL,\
+          PRIMARY KEY  (`ID`)\
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+        
+        new query[512];
+        mysql_format(SQL, query, sizeof(query), "CREATE TABLE IF NOT EXISTS `bank_logs` (\
+            `ID` int(11) NOT NULL auto_increment,\
+            `AccountID` int(11) NOT NULL,\
+            `ToAccountID` int(11) NOT NULL default '-1',\
+            `Type` smallint(1) NOT NULL,\
+            `Player` varchar(24) NOT NULL,\
+            `Amount` int(11) NOT NULL,\
+            `Date` int(11) NOT NULL,");
+        
+        mysql_format(SQL, query, sizeof(query), "%s\
+            PRIMARY KEY  (`ID`),\
+            KEY `bank_logs_ibfk_1` (`AccountID`),\
+            CONSTRAINT `bank_logs_ibfk_1` FOREIGN KEY (`AccountID`) REFERENCES `bank_accounts` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE\
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", query);
+        
+        mysql_tquery(SQL, query);
+
+        print("all-in-one/bank_ogy.aio created - tables.");
+    }
+    mysql_tquery(SQL, "SELECT * FROM bankers", "LoadBankers");
+    mysql_tquery(SQL, "SELECT * FROM bank_atms", "LoadATMs");
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeExit()
+{
+    foreach(new i : Bankers)
+    {
+        if(IsValidActor(BankerData[i][bankerActorID])) DestroyActor(BankerData[i][bankerActorID]);
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+hook OnPlayerConnect(playerid)
+{
+    CurrentAccountID[playerid] = -1;
+    LogListType[playerid] = TYPE_NONE;
+    LogListPage[playerid] = 0;
+    
+    EditingATMID[playerid] = -1;
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+
+/*
+      ____                              __  _                           _ 
+     / ___|    __ _  __   __   ___     / / | |       ___     __ _    __| |
+     \___ \   / _` | \ \ / /  / _ \   / /  | |      / _ \   / _` |  / _` |
+      ___) | | (_| |  \ V /  |  __/  / /   | |___  | (_) | | (_| | | (_| |
+     |____/   \__,_|   \_/    \___| /_/    |_____|  \___/   \__,_|  \__,_|
+                                                                      
+*/
+
+
+forward LoadBankers();
+public LoadBankers()
+{
+    new rows = cache_num_rows();
+    if(rows)
+    {
+        new id, label_string[64];
+        for(new i; i < rows; i++)
+        {
+            cache_get_value_name_int(i, "ID", id);
+            cache_get_value_name_int(i, "Skin",BankerData[id][Skin]);
+            cache_get_value_name_float(i, "PosX",BankerData[id][bankerX]);
+            cache_get_value_name_float(i, "PosY",BankerData[id][bankerY]);
+            cache_get_value_name_float(i, "PosZ",BankerData[id][bankerZ] );
+            cache_get_value_name_float(i, "PosA",BankerData[id][bankerA]);
+            
+            BankerData[id][bankerActorID] = CreateActor(BankerData[id][Skin], BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
+            if(!IsValidActor(BankerData[id][bankerActorID])) {
+                printf("all-in-one/bank_ogy.aoi - Couldn't create an actor for banker ID %d.", id);
+            }else{
+                SetActorInvulnerable(BankerData[id][bankerActorID], true); // people may use a version where actors aren't invulnerable by default
+            }
+            
+            #if defined BANKER_USE_MAPICON
+            BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
+            #endif
+            
+            format(label_string, sizeof(label_string), "Banker (%d)\n\n{FFFFFF}Use {F1C40F}/bank!", id);
+            BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25, 5.0, .testlos = 1);
+
+            Iter_Add(Bankers, id);
+        }
+    }
+
+    printf("all-in-one/bank_ogy.aoi loaded(%d) bankers", Iter_Count(Bankers));
+    return 1;
+}
+
+forward LoadATMs();
+public LoadATMs()
+{
+    new rows = cache_num_rows();
+    if(rows)
+    {
+        new id, label_string[64];
+        for(new i; i < rows; i++)
+        {
+            cache_get_value_name_int(i, "ID", id);
+            cache_get_value_name_float(i, "PosX",ATMData[id][atmX]);
+            cache_get_value_name_float(i, "PosY",ATMData[id][atmY]);
+            cache_get_value_name_float(i, "PosZ",ATMData[id][atmZ]);
+            cache_get_value_name_float(i, "RotX",ATMData[id][atmRX]);
+            cache_get_value_name_float(i, "RotY",ATMData[id][atmRY]);
+            cache_get_value_name_float(i, "RotZ",ATMData[id][atmRZ]);
+
+            ATMData[id][atmObjID] = CreateDynamicObject(2942, ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ], ATMData[id][atmRX], ATMData[id][atmRY], ATMData[id][atmRZ]);
+            if(!IsValidDynamicObject(ATMData[id][atmObjID])) printf("all-in-one/bank_ogy.aoi - Couldn't create an ATM object for ATM ID %d.", id);
+            
+            #if defined ATM_USE_MAPICON
+            ATMData[id][atmIconID] = CreateDynamicMapIcon(ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ], 52, 0, .streamdistance = ATM_ICON_RANGE);
+            #endif
+
+            format(label_string, sizeof(label_string), "ATM (%d)\n\n{FFFFFF}Use {F1C40F}/atm!", id);
+            ATMData[id][atmLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ] + 0.85, 5.0, .testlos = 1);
+
+            Iter_Add(ATMs, id);
+        }
+    }
+
+    printf("all-in-one/bank_ogy.aoi loaded(%d) atms", Iter_Count(ATMs));
+    return 1;
+}
+/*
+      _____                          _     _                       
+     |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___ 
+     | |_    | | | | | '_ \   / __| | __| | |  / _ \  | '_ \  / __|
+     |  _|   | |_| | | | | | | (__  | |_  | | | (_) | | | | | \__ \
+     |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
+                                                               
+*/
+
+IsPlayerNearBanker(playerid)
+{
+    foreach(new i : Bankers)
+    {
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, BankerData[i][bankerX], BankerData[i][bankerY], BankerData[i][bankerZ])) return 1;
+    }
+    
+    return 0;
+}
+
+IsPlayerNearATM(playerid)
+{
+    foreach(new i : ATMs)
+    {
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, ATMData[i][atmX], ATMData[i][atmY], ATMData[i][atmZ])) return 1;
+    }
+
+    return 0;
+}
+
+
+Bank_SaveLog(playerid, type, accid, toaccid, amount)
+{
+    if(type == TYPE_NONE) return 1;
+    new query[256];
+    
+    switch(type)
+    {
+        case TYPE_LOGIN, TYPE_PASSCHANGE: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Date=UNIX_TIMESTAMP()", accid, type, Player_GetName(playerid));
+        case TYPE_DEPOSIT, TYPE_WITHDRAW: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, type, Player_GetName(playerid), amount);
+        case TYPE_TRANSFER: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, ToAccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, toaccid, type, Player_GetName(playerid), amount);
+    }
+    
+    mysql_tquery(SQL, query);
+    return 1;
+}
+
+Bank_ShowMenu(playerid)
+{
+    new string[256], using_atm = GetPVarInt(playerid, "usingATM");
+    if(CurrentAccountID[playerid] == -1) {
+        format(string, sizeof(string), "{%06x}Create Account\t{2ECC71}%s\nMy Accounts\t{F1C40F}%d\nAccount Login", (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8), (using_atm ? ("") : formatInt(ACCOUNT_PRICE)), Bank_AccountCount(playerid));
+        Dialog_Show(playerid, DIALOG_BANK_MENU_NOLOGIN, DIALOG_STYLE_TABLIST, "{F1C40F}Bank: {FFFFFF}Menu", string, "Choose", "Close");
+    }else{
+        new balance = Bank_GetBalance(CurrentAccountID[playerid]), menu_title[64];
+        format(menu_title, sizeof(menu_title), "{F1C40F}Bank: {FFFFFF}Menu (Account ID: {F1C40F}%d{FFFFFF})", CurrentAccountID[playerid]);
+        
+        format(
+            string,
+            sizeof(string),
+            "{%06x}Create Account\t{2ECC71}%s\nMy Accounts\t{F1C40F}%d\nDeposit\t{2ECC71}%s\nWithdraw\t{2ECC71}%s\nTransfer\t{2ECC71}%s\n{%06x}Account Logs\n{%06x}Change Password\n{%06x}Remove Account\nLogout",
+            (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8),
+            (using_atm ? ("") : formatInt(ACCOUNT_PRICE)),
+            Bank_AccountCount(playerid),
+            formatInt(GetPlayerMoney(playerid)),
+            formatInt(balance),
+            formatInt(balance),
+            (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8),
+            (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8),
+            (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8)
+        );
+
+        Dialog_Show(playerid, dialog_banka_menu, DIALOG_STYLE_TABLIST, menu_title, string, "Odaberi", "Izadji");
+    }
+    
+    DeletePVar(playerid, "bankLoginAccount");
+    DeletePVar(playerid, "bankTransferAccount");
+    return 1;
+}
+
+Bank_ShowLogMenu(playerid)
+{
+    LogListType[playerid] = TYPE_NONE;
+    LogListPage[playerid] = 0;
+    ShowPlayerDialog(playerid, DIALOG_BANK_LOGS, DIALOG_STYLE_LIST, "{F1C40F}Bank: {FFFFFF}Logs", "Deposited Money\nWithdrawn Money\nTransfers\nLogins\nPassword Changes", "Show", "Back");
+    return 1;
+}
+
+Player_GetName(playerid)
+{
+    new name[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+    return name;
+}
+
+Bank_AccountCount(playerid)
+{
+    new query[144], Cache: find_accounts;
+    mysql_format(SQL, query, sizeof(query), "SELECT null FROM bank_accounts WHERE Owner='%e' && Disabled=0", Player_GetName(playerid));
+    find_accounts = mysql_query(SQL, query);
+    
+    new count = cache_num_rows();
+    cache_delete(find_accounts);
+    return count;
+}
+
+Bank_GetBalance(accountid)
+{
+    new query[144], Cache: get_balance;
+    mysql_format(SQL, query, sizeof(query), "SELECT Balance FROM bank_accounts WHERE ID=%d && Disabled=0", accountid);
+    get_balance = mysql_query(SQL, query);
+
+    new balance = cache_get_value_name_int(0, "Balance");
+    cache_delete(get_balance);
+    return balance;
+}
+
+Bank_GetOwner(accountid)
+{
+    new query[144], owner[MAX_PLAYER_NAME], Cache: get_owner;
+    mysql_format(SQL, query, sizeof(query), "SELECT Owner FROM bank_accounts WHERE ID=%d && Disabled=0", accountid);
+    get_owner = mysql_query(SQL, query);
+
+    cache_get_value_name(0, "Owner", owner, 26);
+    cache_delete(get_owner);
+    return owner;
+}
+
+Bank_ListAccounts(playerid)
+{
+    new query[256], Cache: get_accounts;
+    mysql_format(SQL, query, sizeof(query), "SELECT ID, Balance, LastAccess, FROM_UNIXTIME(CreatedOn, '%%d/%%m/%%Y %%H:%%i:%%s') AS Created, FROM_UNIXTIME(LastAccess, '%%d/%%m/%%Y %%H:%%i:%%s') AS Last FROM bank_accounts WHERE Owner='%e' && Disabled=0 ORDER BY CreatedOn DESC", Player_GetName(playerid));
+    get_accounts = mysql_query(SQL, query);
+    new rows = cache_num_rows();
+
+    if(rows) {
+        new string[1024], cdate[24], ldate[24];
+        format(string, sizeof(string), "ID\tBalance\tCreated On\tLast Access\n");
+        for(new i; i < rows; ++i)
+        {
+            cache_get_value_name(i, "Created", cdate, 24);
+            cache_get_value_name(i, "Last", ldate, 24);
+            format(string, sizeof(string), "%s{FFFFFF}%d\t{2ECC71}%s\t{FFFFFF}%s\t%s\n", string, cache_get_value_name_int(i, "ID"), formatInt(cache_get_value_name_int(i, "Balance")), cdate, (cache_get_value_name_int(i, "LastAccess") == 0) ? ("Never") : ldate);
+        }
+
+        ShowPlayerDialog(playerid, DIALOG_BANK_ACCOUNTS, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Bank: {FFFFFF}My Accounts", string, "Login", "Back");
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have any bank accounts.");
+        Bank_ShowMenu(playerid);
+    }
+
+    cache_delete(get_accounts);
+    return 1;
+}
+
+Bank_ShowLogs(playerid)
+{
+    new query[196], type = LogListType[playerid], Cache: bank_logs;
+    mysql_format(SQL, query, sizeof(query), "SELECT *, FROM_UNIXTIME(Date, '%%d/%%m/%%Y %%H:%%i:%%s') as ActionDate FROM bank_logs WHERE AccountID=%d && Type=%d ORDER BY Date DESC LIMIT %d, 15", CurrentAccountID[playerid], type, LogListPage[playerid] * 15);
+    bank_logs = mysql_query(SQL, query);
+    
+    new rows = cache_num_rows();
+    if(rows) {
+        new list[1512], title[96], name[MAX_PLAYER_NAME], date[24];
+        switch(type)
+        {
+            case TYPE_LOGIN:
+            {
+                format(list, sizeof(list), "By\tAction Date\n");
+                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Login History (Page %d)", LogListPage[playerid] + 1);
+            }
+            
+            case TYPE_DEPOSIT:
+            {
+                format(list, sizeof(list), "By\tAmount\tDeposit Date\n");
+                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Deposit History (Page %d)", LogListPage[playerid] + 1);
+            }
+
+            case TYPE_WITHDRAW:
+            {
+                format(list, sizeof(list), "By\tAmount\tWithdraw Date\n");
+                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Withdraw History (Page %d)", LogListPage[playerid] + 1);
+            }
+            
+            case TYPE_TRANSFER:
+            {
+                format(list, sizeof(list), "By\tTo Account\tAmount\tTransfer Date\n");
+                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Transfer History (Page %d)", LogListPage[playerid] + 1);
+            }
+            
+            case TYPE_PASSCHANGE:
+            {
+                format(list, sizeof(list), "By\tAction Date\n");
+                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Password Changes (Page %d)", LogListPage[playerid] + 1);
+            }
+        }
+        
+        for(new i; i < rows; ++i)
+        {
+            cache_get_field_content(i, "Player", name);
+            cache_get_field_content(i, "ActionDate", date);
+
+            switch(type)
+            {
+                case TYPE_LOGIN:
+                {
+                    format(list, sizeof(list), "%s%s\t%s\n", list, name, date);
+                }
+
+                case TYPE_DEPOSIT:
+                {
+                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(cache_get_value_name_int(i, "Amount")), date);
+                }
+
+                case TYPE_WITHDRAW:
+                {
+                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(cache_get_value_name_int(i, "Amount")), date);
+                }
+
+                case TYPE_TRANSFER:
+                {
+                    format(list, sizeof(list), "%s%s\t%d\t{2ECC71}%s\t%s\n", list, name, cache_get_value_name_int(i, "ToAccountID"), formatInt(cache_get_value_name_int(i, "Amount")), date);
+                }
+
+                case TYPE_PASSCHANGE:
+                {
+                    format(list, sizeof(list), "%s%s\t%s\n", list, name, date);
+                }
+            }
+        }
+
+        ShowPlayerDialog(playerid, DIALOG_BANK_LOG_PAGE, DIALOG_STYLE_TABLIST_HEADERS, title, list, "Next", "Previous");
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't find any more records.");
+        Bank_ShowLogMenu(playerid);
+    }
+
+    cache_delete(bank_logs);
+    return 1;
+}
+/*
+      _____                                                _       
+     |  ___|   ___    _ __  __      __   __ _   _ __    __| |  ___ 
+     | |_     / _ \  | '__| \ \ /\ / /  / _` | | '__|  / _` | / __|
+     |  _|   | (_) | | |     \ V  V /  | (_| | | |    | (_| | \__ \
+     |_|      \___/  |_|      \_/\_/    \__,_| |_|     \__,_| |___/
+
+*/
+
+forward OnBankAccountCreated(playerid, pass[]);
+public OnBankAccountCreated(playerid, pass[])
+{
+    GivePlayerMoney(playerid, -ACCOUNT_PRICE);
+    
+    new id = cache_insert_id(), string[64];
+    SendBankMessage(playerid, "Uspesno ste napravili vas bankovni racun!");
+    
+    format(string, sizeof(string), "[ML-Bank]: {ffffff}Vas bankovni racun je broj: {F4AD81}%d", id);
+    va_SendClientMessage(playerid,0xF4AD81FF,  string);
+    
+    format(string, sizeof(string), "[ML-Bank]: {ffffff}Vasa lozinka za racun je: {F4AD81}%s", pass);
+    va_SendClientMessage(playerid,0xF4AD81FF, string);
+    return 1;
+}
+
+forward OnBankAccountLogin(playerid, id);
+public OnBankAccountLogin(playerid, id)
+{
+    if(cache_num_rows() > 0) {
+        new string[128], owner[MAX_PLAYER_NAME], ldate[24];
+        cache_get_value_name(0, "Owner", owner, 25);
+        cache_get_value_name(0, "Last", ldate, 24);
+        
+        format(string, sizeof(string), "[ML-Bank]: {ffffff}Ovaj bankovni racun je u vlasnistvu gradjanina: {F4AD81}%s.", owner);
+        va_SendClientMessage(playerid,0xF4AD81FF, string);
+        format(string, sizeof(string), "[ML-Bank]: {ffffff}Poslednji put prijavljen: {F4AD81}%s", (cache_get_value_name_int(0, "LastAccess") == 0) ? ("Nikad") : ldate);
+        va_SendClientMessage(playerid,0xF4AD81FF, string);
+        
+        CurrentAccountID[playerid] = id;
+        Bank_ShowMenu(playerid);
+        
+        new query[96];
+        mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET LastAccess=UNIX_TIMESTAMP() WHERE ID=%d && Disabled=0", id);
+        mysql_tquery(SQL, query);
+        
+        Bank_SaveLog(playerid, TYPE_LOGIN, id, -1, 0);
+    }else{
+
+        SendBankMessage(playerid, "Invalid credentials.");
+        Bank_ShowMenu(playerid);
+    }
+    
+    return 1;
+}
+
+forward OnBankAccountDeposit(playerid, amount);
+public OnBankAccountDeposit(playerid, amount)
+{
+    if(cache_affected_rows() > 0) {
+        new string[64];
+        format(string, sizeof(string), "BANK: {FFFFFF}Successfully deposited {2ECC71}%s.", formatInt(amount));
+        SendClientMessage(playerid, 0x3498DBFF, string);
+        
+        GivePlayerMoney(playerid, -amount);
+        Bank_SaveLog(playerid, TYPE_DEPOSIT, CurrentAccountID[playerid], -1, amount);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+    }
+    
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+forward OnBankAccountWithdraw(playerid, amount);
+public OnBankAccountWithdraw(playerid, amount)
+{
+    if(cache_affected_rows() > 0) {
+        new string[64];
+        format(string, sizeof(string), "BANK: {FFFFFF}Successfully withdrawn {2ECC71}%s.", formatInt(amount));
+        SendClientMessage(playerid, 0x3498DBFF, string);
+
+        GivePlayerMoney(playerid, amount);
+        Bank_SaveLog(playerid, TYPE_WITHDRAW, CurrentAccountID[playerid], -1, amount);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+    }
+
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+forward OnBankAccountTransfer(playerid, id, amount);
+public OnBankAccountTransfer(playerid, id, amount)
+{
+    if(cache_affected_rows() > 0) {
+        new query[144];
+        mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance-%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]);
+        mysql_tquery(SQL, query, "OnBankAccountTransferDone", "iii", playerid, id, amount);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        Bank_ShowMenu(playerid);
+    }
+
+    return 1;
+}
+
+forward OnBankAccountTransferDone(playerid, id, amount);
+public OnBankAccountTransferDone(playerid, id, amount)
+{
+    if(cache_affected_rows() > 0) {
+        new string[128];
+        format(string, sizeof(string), "BANK: {FFFFFF}Successfully transferred {2ECC71}%s {FFFFFF}to account ID {F1C40F}%d.", formatInt(amount), id);
+        SendClientMessage(playerid, 0x3498DBFF, string);
+        
+        Bank_SaveLog(playerid, TYPE_TRANSFER, CurrentAccountID[playerid], id, amount);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        
+    }
+
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+forward OnBankAccountPassChange(playerid, newpass[]);
+public OnBankAccountPassChange(playerid, newpass[])
+{
+    if(cache_affected_rows() > 0) {
+        new string[128];
+        format(string, sizeof(string), "BANK: {FFFFFF}Account password set to {F1C40F}%s.", newpass);
+        SendClientMessage(playerid, 0x3498DBFF, string);
+        
+        Bank_SaveLog(playerid, TYPE_PASSCHANGE, CurrentAccountID[playerid], -1, 0);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Password change failed.");
+    }
+
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+forward OnBankAccountDeleted(playerid, id, amount);
+public OnBankAccountDeleted(playerid, id, amount)
+{
+    if(cache_affected_rows() > 0) {
+        GivePlayerMoney(playerid, amount);
+        
+        foreach(new i : Player)
+        {
+            if(i == playerid) continue;
+            if(CurrentAccountID[i] == id) CurrentAccountID[i] = -1;
+        }
+        
+        new string[128];
+        format(string, sizeof(string), "BANK: {FFFFFF}Account removed, you got the {2ECC71}%s {FFFFFF}left in the account.", formatInt(amount));
+        SendClientMessage(playerid, 0x3498DBFF, string);
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Account removal failed.");
+    }
+
+    CurrentAccountID[playerid] = -1;
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+forward OnBankAccountAdminEdit(playerid);
+public OnBankAccountAdminEdit(playerid)
+{
+    if(cache_affected_rows() > 0) {
+        SendClientMessage(playerid, 0x3498DBFF, "BANK: {FFFFFF}Account edited.");
+    }else{
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Account editing failed. (No affected rows)");
+    }
+    
+    return 1;
+}
+
+/*
+      ____    _           _                       
+     |  _ \  (_)   __ _  | |   ___     __ _   ___ 
+     | | | | | |  / _` | | |  / _ \   / _` | / __|
+     | |_| | | | | (_| | | | | (_) | | (_| | \__ \
+     |____/  |_|  \__,_| |_|  \___/   \__, | |___/
+                                      |___/       
+*/
+
+
+
+
+Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        if(listitem == 0)
+        {
+            if(GetPVarInt(playerid, "usingATM"))
+            {
+                SendBankMessage(playerid, "Ne mozete to na bankomatu, posetite banku.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            if(ACCOUNT_PRICE > GetPlayerMoney(playerid))
+            {
+                SendBankMessage(playerid, "Nemate dovoljno novca za otvaranje racuna.");
+                return Bank_ShowMenu(playerid);
+            }
+
+            #if defined ACCOUNT_CLIMIT
+            if(Bank_AccountCount(playerid) >= ACCOUNT_CLIMIT)
+            {
+                SendBankMessage(playerid, "Dostigli ste limit bankovnih racuna.");
+                return Bank_ShowMenu(playerid);
+            }
+            #endif
+
+            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Odaberite lozinku koju zelite da koristite za novi racun:", "Create", "Back");
+        }
+
+        if(listitem == 1) Bank_ListAccounts(playerid);
+        if(listitem == 2) ShowPlayerDialog(playerid, DIALOG_BANK_DEPOSIT, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
+        if(listitem == 3) ShowPlayerDialog(playerid, DIALOG_BANK_WITHDRAW, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
+        if(listitem == 4) ShowPlayerDialog(playerid, DIALOG_BANK_TRANSFER_1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+        if(listitem == 5)
+        {
+            if(GetPVarInt(playerid, "usingATM"))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            Bank_ShowLogMenu(playerid);
+        }
+        
+        if(listitem == 6)
+        {
+            if(GetPVarInt(playerid, "usingATM"))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only the account owner can do this.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            ShowPlayerDialog(playerid, DIALOG_BANK_PASSWORD, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "Write a new password:", "Change", "Back");
+        }
+        
+        if(listitem == 7)
+        {
+            if(GetPVarInt(playerid, "usingATM"))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only the account owner can do this.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            ShowPlayerDialog(playerid, DIALOG_BANK_REMOVE, DIALOG_STYLE_MSGBOX, "{F1C40F}Bank: {FFFFFF}Remove Account", "Are you sure? This account will get deleted {E74C3C}permanently.", "Yes", "Back");
+            // https://youtu.be/rcjpags7JT8 - because it doesn't get deleted actually
+        }
+        
+        if(listitem == 8)
+        {
+            SendClientMessage(playerid, 0x3498DBFF, "BANK: {FFFFFF}Successfully logged out.");
+            
+            CurrentAccountID[playerid] = -1;
+            Bank_ShowMenu(playerid);
+        }
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+Dialog:dialog_bank_nologin(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+    if(response)
+    {
+        if(listitem == 0)
+        {
+            if(GetPVarInt(playerid, "usingATM"))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            if(ACCOUNT_PRICE > GetPlayerMoney(playerid))
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have enough money to create a bank account.");
+                return Bank_ShowMenu(playerid);
+            }
+            
+            #if defined ACCOUNT_CLIMIT
+            if(Bank_AccountCount(playerid) >= ACCOUNT_CLIMIT)
+            {
+                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't create any more bank accounts.");
+                return Bank_ShowMenu(playerid);
+            }
+            #endif
+            
+            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Choose a password for your new bank account:", "Create", "Back");
+        }
+        
+        if(listitem == 1) Bank_ListAccounts(playerid);
+        if(listitem == 2) ShowPlayerDialog(playerid, DIALOG_BANK_LOGIN_ID, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Login", "Account ID:", "Continue", "Cancel");
+        return 1;
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog:dialog_bank_create(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "{E74C3C}You can't leave your account password empty.\n\n{FFFFFF}Choose a password for your new bank account:", "Create", "Back");
+    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "{E74C3C}Account password can't be more than 16 characters.\n\n{FFFFFF}Choose a password for your new bank account:", "Create", "Back");
+    if(ACCOUNT_PRICE > GetPlayerMoney(playerid))
+    {
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have enough money to create a bank account.");
+        return Bank_ShowMenu(playerid);
+    }
+
+    #if defined ACCOUNT_CLIMIT
+    if(Bank_AccountCount(playerid) >= ACCOUNT_CLIMIT)
+    {
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't create any more bank accounts.");
+        return Bank_ShowMenu(playerid);
+    }
+    #endif
+
+    new query[144];
+    mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_accounts SET Owner='%e', Password=md5('%e'), CreatedOn=UNIX_TIMESTAMP()", Player_GetName(playerid), inputtext);
+    mysql_tquery(SQL, query, "OnBankAccountCreated", "is", playerid, inputtext);
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog:dialog_bank_accounts(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+
+    SetPVarInt(playerid, "bankLoginAccount", strval(inputtext));
+    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+Dialog:dialog_bank_login_pass(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "{E74C3C}You can't leave the password empty.\n\n{FFFFFF}Account Password:", "Login", "Cancel");
+
+    new query[200], id = GetPVarInt(playerid, "bankLoginAccount");
+    mysql_format(SQL, query, sizeof(query), "SELECT Owner, LastAccess, FROM_UNIXTIME(LastAccess, '%%d/%%m/%%Y %%H:%%i:%%s') AS Last FROM bank_accounts WHERE ID=%d && Password=md5('%e') && Disabled=0 LIMIT 1", id, inputtext);
+    mysql_tquery(SQL, query, "OnBankAccountLogin", "ii", playerid, id);
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+/*
+
+*/
+CMD:bank(const playerid, params[])
+{
+    if(!IsPlayerNearBanker(playerid)) return SendBankMessage(playerid, "Niste u blizini radnika banke.");
+    SetPVarInt(playerid, "usingATM", 0);
+    Bank_ShowMenu(playerid);
+    return 1;
+}
