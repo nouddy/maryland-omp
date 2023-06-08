@@ -280,7 +280,7 @@ public LoadBankers()
             BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
             #endif
             
-            format(label_string, sizeof(label_string), "Banker (%d)\n\n{FFFFFF}Use {F1C40F}/bank!", id);
+            format(label_string, sizeof(label_string), "Radnik banke(%d)\n\n{FFFFFF}Koristite {F1C40F}/banka", id);
             BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25, 5.0, .testlos = 1);
 
             Iter_Add(Bankers, id);
@@ -408,7 +408,7 @@ Bank_ShowLogMenu(playerid)
 {
     LogListType[playerid] = TYPE_NONE;
     LogListPage[playerid] = 0;
-    ShowPlayerDialog(playerid, DIALOG_BANK_LOGS, DIALOG_STYLE_LIST, "{F1C40F}Bank: {FFFFFF}Logs", "Deposited Money\nWithdrawn Money\nTransfers\nLogins\nPassword Changes", "Show", "Back");
+    Dialog_Show(playerid, dialog_bank_logs, DIALOG_STYLE_LIST, "{F1C40F}Bank: {FFFFFF}Logs", "Deposited Money\nWithdrawn Money\nTransfers\nLogins\nPassword Changes", "Show", "Back");
     return 1;
 }
 
@@ -436,7 +436,8 @@ Bank_GetBalance(accountid)
     mysql_format(SQL, query, sizeof(query), "SELECT Balance FROM bank_accounts WHERE ID=%d && Disabled=0", accountid);
     get_balance = mysql_query(SQL, query);
 
-    new balance = cache_get_value_name_int(0, "Balance");
+    new balance;
+    cache_get_value_name_int(0, "Balance", balance);
     cache_delete(get_balance);
     return balance;
 }
@@ -469,7 +470,7 @@ Bank_ListAccounts(playerid)
             format(string, sizeof(string), "%s{FFFFFF}%d\t{2ECC71}%s\t{FFFFFF}%s\t%s\n", string, cache_get_value_name_int(i, "ID"), formatInt(cache_get_value_name_int(i, "Balance")), cdate, (cache_get_value_name_int(i, "LastAccess") == 0) ? ("Never") : ldate);
         }
 
-        ShowPlayerDialog(playerid, DIALOG_BANK_ACCOUNTS, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Bank: {FFFFFF}My Accounts", string, "Login", "Back");
+        Dialog_Show(playerid, dialog_bank_accounts, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Bank: {FFFFFF}My Accounts", string, "Login", "Back");
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have any bank accounts.");
         Bank_ShowMenu(playerid);
@@ -523,8 +524,8 @@ Bank_ShowLogs(playerid)
         
         for(new i; i < rows; ++i)
         {
-            cache_get_field_content(i, "Player", name);
-            cache_get_field_content(i, "ActionDate", date);
+            cache_get_value_name(i, "Player", name, 30);
+            cache_get_value_name(i, "ActionDate", date, 24);
 
             switch(type)
             {
@@ -555,7 +556,7 @@ Bank_ShowLogs(playerid)
             }
         }
 
-        ShowPlayerDialog(playerid, DIALOG_BANK_LOG_PAGE, DIALOG_STYLE_TABLIST_HEADERS, title, list, "Next", "Previous");
+        Dialog_Show(playerid, dialog_bank_nologs, DIALOG_STYLE_TABLIST_HEADERS, title, list, "Next", "Previous");
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't find any more records.");
         Bank_ShowLogMenu(playerid);
@@ -786,9 +787,9 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
         }
 
         if(listitem == 1) Bank_ListAccounts(playerid);
-        if(listitem == 2) ShowPlayerDialog(playerid, DIALOG_BANK_DEPOSIT, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
-        if(listitem == 3) ShowPlayerDialog(playerid, DIALOG_BANK_WITHDRAW, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
-        if(listitem == 4) ShowPlayerDialog(playerid, DIALOG_BANK_TRANSFER_1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+        if(listitem == 2) Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
+        if(listitem == 3) Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
+        if(listitem == 4) Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
         if(listitem == 5)
         {
             if(GetPVarInt(playerid, "usingATM"))
@@ -814,7 +815,7 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
                 return Bank_ShowMenu(playerid);
             }
             
-            ShowPlayerDialog(playerid, DIALOG_BANK_PASSWORD, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "Write a new password:", "Change", "Back");
+            Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "Write a new password:", "Change", "Back");
         }
         
         if(listitem == 7)
@@ -831,7 +832,7 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
                 return Bank_ShowMenu(playerid);
             }
             
-            ShowPlayerDialog(playerid, DIALOG_BANK_REMOVE, DIALOG_STYLE_MSGBOX, "{F1C40F}Bank: {FFFFFF}Remove Account", "Are you sure? This account will get deleted {E74C3C}permanently.", "Yes", "Back");
+            Dialog_Show(playerid, dialog_remove, DIALOG_STYLE_MSGBOX, "{F1C40F}Bank: {FFFFFF}Remove Account", "Are you sure? This account will get deleted {E74C3C}permanently.", "Yes", "Back");
             // https://youtu.be/rcjpags7JT8 - because it doesn't get deleted actually
         }
         
@@ -844,6 +845,69 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+Dialog:dialog_depositzz(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
+    new amount = strval(inputtext);
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You can't deposit less than $1 or more than $250,000,000 at once. ($5,000,000 at once on ATMs)\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
+    if(amount > GetPlayerMoney(playerid)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You don't have enough money.\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
+    if((amount + Bank_GetBalance(CurrentAccountID[playerid])) > ACCOUNT_LIMIT)
+    {
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't deposit any more money to this account.");
+        return Bank_ShowMenu(playerid);
+    }
+    
+    new query[96];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance+%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]);
+    mysql_tquery(SQL, query, "OnBankAccountDeposit", "ii", playerid, amount);
+    return 1;
+}
+Dialog:dialog_withdrawzzzz(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
+    new amount = strval(inputtext);
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}You can't withdraw less than $1 or more than $250,000,000 at once. ($5,000,000 at once on ATMs)\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
+    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}Account doesn't have enough money.\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
+    
+    new query[96];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance-%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]);
+    mysql_tquery(SQL, query, "OnBankAccountWithdraw", "ii", playerid, amount);
+    return 1;
+}
+Dialog:dialog_transfer1(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Specify an account ID:", "Continue", "Back");
+    if(strval(inputtext) == CurrentAccountID[playerid]) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't transfer money to your current account.\n\n{FFFFFF}Specify an account ID:", "Continue", "Back");
+    SetPVarInt(playerid, "bankTransferAccount", strval(inputtext));
+    Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an amount:", "Transfer", "Back");
+    return 1;
+}
+Dialog:dialog_transfer2(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+    if(CurrentAccountID[playerid] == -1) return 1;
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
+    new amount = strval(inputtext);
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't transfer less than $1 or more than $250,000,000 at once. ($5,000,000 on ATMs)\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
+    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}Account doesn't have enough money.\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
+    new id = GetPVarInt(playerid, "bankTransferAccount");
+    if((amount + Bank_GetBalance(id)) > ACCOUNT_LIMIT)
+    {
+        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't deposit any more money to the account you specified.");
+        return Bank_ShowMenu(playerid);
+    }
+    
+    new query[96];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance+%d WHERE ID=%d && Disabled=0", amount, id);
+    mysql_tquery(SQL, query, "OnBankAccountTransfer", "iii", playerid, id, amount);
+    return 1;
 }
 Dialog:dialog_bank_nologin(const playerid, response, listitem, string:inputtext[])
 {
@@ -877,7 +941,7 @@ Dialog:dialog_bank_nologin(const playerid, response, listitem, string:inputtext[
         }
         
         if(listitem == 1) Bank_ListAccounts(playerid);
-        if(listitem == 2) ShowPlayerDialog(playerid, DIALOG_BANK_LOGIN_ID, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Login", "Account ID:", "Continue", "Cancel");
+        if(listitem == 2) Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
         return 1;
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -916,6 +980,15 @@ Dialog:dialog_bank_accounts(const playerid, response, listitem, string:inputtext
     Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
+Dialog:dialog_bank_loginid(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Login", "{E74C3C}You can't leave the ID empty.\n\n{FFFFFF}Account ID:", "Continue", "Cancel");
+
+    SetPVarInt(playerid, "bankLoginAccount", strval(inputtext));
+    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
+    return 1;
+}
 Dialog:dialog_bank_login_pass(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
@@ -926,13 +999,153 @@ Dialog:dialog_bank_login_pass(const playerid, response, listitem, string:inputte
     mysql_tquery(SQL, query, "OnBankAccountLogin", "ii", playerid, id);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
-/*
+Dialog:dialog_password(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Write a new password:", "Change", "Back");
+    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "{E74C3C}New password can't be more than 16 characters.\n\n{FFFFFF}Write a new password:", "Change", "Back");
+    
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Password=md5('%e') WHERE ID=%d && Disabled=0", inputtext, CurrentAccountID[playerid]);
+    mysql_tquery(SQL, query, "OnBankAccountPassChange", "is", playerid, inputtext);
+    return 1;
+}
+Dialog:dialog_remove(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    
+    new query[96], amount = Bank_GetBalance(CurrentAccountID[playerid]);
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Disabled=1 WHERE ID=%d", CurrentAccountID[playerid]);
+    mysql_tquery(SQL, query, "OnBankAccountDeleted", "iii", playerid, CurrentAccountID[playerid], amount);
+    return 1;
+}
+Dialog:dialog_bank_logs(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
+    
+    new typelist[6] = {TYPE_NONE, TYPE_DEPOSIT, TYPE_WITHDRAW, TYPE_TRANSFER, TYPE_LOGIN, TYPE_PASSCHANGE};
+    LogListType[playerid] = typelist[listitem + 1];
+    LogListPage[playerid] = 0;
+    Bank_ShowLogs(playerid);
+    return 1;
+}
+Dialog:dialog_bank_nologs(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return Bank_ShowMenu(playerid);
+    if(CurrentAccountID[playerid] == -1) return 1;
 
+    new typelist[6] = {TYPE_NONE, TYPE_DEPOSIT, TYPE_WITHDRAW, TYPE_TRANSFER, TYPE_LOGIN, TYPE_PASSCHANGE};
+    LogListType[playerid] = typelist[listitem + 1];
+    LogListPage[playerid] = 0;
+    Bank_ShowLogs(playerid);
+    return 1;
+}
+/*
+       ____                                                       _       
+      / ___|   ___    _ __ ___    _ __ ___     __ _   _ __     __| |  ___ 
+     | |      / _ \  | '_ ` _ \  | '_ ` _ \   / _` | | '_ \   / _` | / __|
+     | |___  | (_) | | | | | | | | | | | | | | (_| | | | | | | (_| | \__ \
+      \____|  \___/  |_| |_| |_| |_| |_| |_|  \__,_| |_| |_|  \__,_| |___/
+                                                                          
 */
-CMD:bank(const playerid, params[])
+CMD:banka(const playerid, params[])
 {
     if(!IsPlayerNearBanker(playerid)) return SendBankMessage(playerid, "Niste u blizini radnika banke.");
     SetPVarInt(playerid, "usingATM", 0);
     Bank_ShowMenu(playerid);
+    return 1;
+}
+
+CMD:atm(const playerid, params[])
+{
+    if(!IsPlayerNearATM(playerid)) return SendBankMessage(playerid, "Niste u blizini bankomata");
+    SetPVarInt(playerid, "usingATM", 1);
+    Bank_ShowMenu(playerid);
+    return 1;
+}
+
+CMD:asetowner(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id, owner[MAX_PLAYER_NAME];
+    if(sscanf(params, "is[24]", id, owner)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetowner [account id] [new owner]");
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Owner='%e' WHERE ID=%d", owner, id);
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
+    return 1;
+}
+
+CMD:asetpassword(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id, password[16];
+    if(sscanf(params, "is[16]", id, password)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetpassword [account id] [new password]");
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Password=md5('%e') WHERE ID=%d", password, id);
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
+    return 1;
+}
+
+CMD:asetbalance(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id, balance;
+    if(sscanf(params, "ii", id, balance)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetbalance [account id] [balance]");
+    if(balance > ACCOUNT_LIMIT) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Balance you specified exceeds account money limit.");
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=%d WHERE ID=%d", balance, id);
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
+    return 1;
+}
+
+CMD:aclearlogs(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id, type;
+    if(sscanf(params, "iI(0)", id, type))
+    {
+        SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/aclearlogs [account id] [log type (optional)]");
+        SendClientMessage(playerid, 0xE88732FF, "TYPES: {FFFFFF}0- All | 1- Logins | 2- Deposits | 3- Withdraws | 4- Transfers | 5- Password Changes");
+        return 1;
+    }
+
+    new query[128];
+    if(type > 0) {
+        mysql_format(SQL, query, sizeof(query), "DELETE FROM bank_logs WHERE AccountID=%d && Type=%d", id, type);
+    }else{
+        mysql_format(SQL, query, sizeof(query), "DELETE FROM bank_logs WHERE AccountID=%d", id);
+    }
+
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
+    return 1;
+}
+
+CMD:aremoveaccount(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id;
+    if(sscanf(params, "i", id)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/aremoveaccount [account id]");
+    foreach(new i : Player)
+    {
+        if(CurrentAccountID[i] == id) CurrentAccountID[i] = -1;
+    }
+    
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Disabled=1 WHERE ID=%d", id);
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
+    return 1;
+}
+
+CMD:areturnaccount(const playerid, params[])
+{
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    new id;
+    if(sscanf(params, "i", id)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/areturnaccount [account id]");
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Disabled=0 WHERE ID=%d", id);
+    mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
     return 1;
 }

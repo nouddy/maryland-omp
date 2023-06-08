@@ -67,6 +67,51 @@ hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+{
+	if(Iter_Contains(ATMs, EditingATMID[playerid]))
+	{
+	    if(response == EDIT_RESPONSE_FINAL)
+	    {
+	        new idzzs = EditingATMID[playerid];
+	        ATMData[idzzs][atmX] = x;
+	        ATMData[idzzs][atmY] = y;
+	        ATMData[idzzs][atmZ] = z;
+	        ATMData[idzzs][atmRX] = rx;
+	        ATMData[idzzs][atmRY] = ry;
+	        ATMData[idzzs][atmRZ] = rz;
+	        
+	        SetDynamicObjectPos(objectid, ATMData[idzzs][atmX], ATMData[idzzs][atmY], ATMData[idzzs][atmZ]);
+	        SetDynamicObjectRot(objectid, ATMData[idzzs][atmRX], ATMData[idzzs][atmRY], ATMData[idzzs][atmRZ]);
+	        
+	        #if defined ATM_USE_MAPICON
+			Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_X, ATMData[idzzs][atmX]);
+			Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_Y, ATMData[idzzs][atmY]);
+			Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_Z, ATMData[idzzs][atmZ]);
+			#endif
+
+			Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_X, ATMData[idzzs][atmX]);
+			Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_Y, ATMData[idzzs][atmY]);
+			Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_Z, ATMData[idzzs][atmZ] + 0.85);
+
+			new queryzz[144];
+			mysql_format(SQL, queryzz, sizeof(queryzz), "UPDATE bank_atms SET PosX='%f', PosY='%f', PosZ='%f', RotX='%f', RotY='%f', RotZ='%f' WHERE ID=%d", x, y, z, rx, ry, rz, idzzs);
+			mysql_tquery(SQL, queryzz);
+	        
+	        EditingATMID[playerid] = -1;
+	    }
+	    
+	    if(response == EDIT_RESPONSE_CANCEL)
+	    {
+	        new idzzz = EditingATMID[playerid];
+
+	        SetDynamicObjectPos(objectid, ATMData[idzzz][atmX], ATMData[idzzz][atmY], ATMData[idzzz][atmZ]);
+	        SetDynamicObjectRot(objectid, ATMData[idzzz][atmRX], ATMData[idzzz][atmRY], ATMData[idzzz][atmRZ]);
+	        EditingATMID[playerid] = -1;
+	    }
+	}
+	return (true);
+}
 //
 Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 {
@@ -94,21 +139,21 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu",
+					"Kucu\nKlupu\nActor Banker\nBankomat",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu",
+					"Kucu\nActor Banker\nBankomat",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu",
+					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -210,11 +255,91 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 
 			    va_SendClientMessage(playerid, 0x0086E3FF, "[Klupe] > {ffffff}Kreirali ste klupu pod id(%d).",id);
 			}
+			case 2:
+			{
+				Dialog_Show(playerid, "kreiraj_bankera", DIALOG_STYLE_INPUT,
+					"Kreiraj bankera",
+					"Unesi skin bankera kojeg kreirate",
+					"Odaberi", "Izlaz");
+			}
+			case 3:
+			{
+				new idzz = Iter_Free(ATMs);
+				if(idzz == -1) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't create any more ATMs.");
+				ATMData[idzz][atmRX] = ATMData[idzz][atmRY] = 0.0;
+				
+				GetPlayerPos(playerid, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ]);
+				GetPlayerFacingAngle(playerid, ATMData[idzz][atmRZ]);
+
+				ATMData[idzz][atmX] += (2.0 * floatsin(-ATMData[idzz][atmRZ], degrees));
+			    ATMData[idzz][atmY] += (2.0 * floatcos(-ATMData[idzz][atmRZ], degrees));
+			    ATMData[idzz][atmZ] -= 0.3;
+			    
+				ATMData[idzz][atmObjID] = CreateDynamicObject(2942, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
+			    if(IsValidDynamicObject(ATMData[idzz][atmObjID]))
+			    {
+			        EditingATMID[playerid] = idzz;
+			        EditDynamicObject(playerid, ATMData[idzz][atmObjID]);
+			    }
+			    
+				#if defined ATM_USE_MAPICON
+				ATMData[idzz][atmIconID] = CreateDynamicMapIcon(ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], 52, 0, .streamdistance = ATM_ICON_RANGE);
+				#endif
+
+				new label_string[64];
+				format(label_string, sizeof(label_string), "ATM (%d)\n\n{FFFFFF}Use {F1C40F}/atm!", idzz);
+				ATMData[idzz][atmLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ] + 0.85, 5.0, .testlos = 1);
+
+				new query[144];
+				mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_atms SET ID=%d, PosX='%f', PosY='%f', PosZ='%f', RotX='%f', RotY='%f', RotZ='%f'", idzz, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
+				mysql_tquery(SQL, query);
+
+				Iter_Add(ATMs, idzz);
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
+	if(response)
+	{
+		new id = Iter_Free(Bankers);
+		if(id == -1) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Dostigli ste limit bankera.");
+		new skin;
+		if(sscanf(inputtext, "i", skin)) return 				
+			Dialog_Show(playerid, "kreiraj_bankera", DIALOG_STYLE_INPUT,
+					"Kreiraj bankera",
+					"Unesi skin bankera kojeg kreirate",
+					"Odaberi", "Izlaz");
+		if(!(0 <= skin <= 311)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Ne moze taj skin.");
 
+		BankerData[id][Skin] = skin;
+		GetPlayerPos(playerid, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ]);
+		GetPlayerFacingAngle(playerid, BankerData[id][bankerA]);
+		SetPlayerPos(playerid, BankerData[id][bankerX] + (1.0 * floatsin(-BankerData[id][bankerA], degrees)), BankerData[id][bankerY] + (1.0 * floatcos(-BankerData[id][bankerA], degrees)), BankerData[id][bankerZ]);
+
+		BankerData[id][bankerActorID] = CreateActor(skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
+		if(IsValidActor(BankerData[id][bankerActorID])) SetActorInvulnerable(BankerData[id][bankerActorID], true);
+		
+		#if defined BANKER_USE_MAPICON
+		BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
+		#endif
+
+		new label_string[64];
+		format(label_string, sizeof(label_string), "Radnik banke(%d)\n\n{FFFFFF}Koristite {F1C40F}/banka", id);
+		BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25, 5.0, .testlos = 1);
+
+		new query[144];
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO bankers SET ID=%d, Skin=%d, PosX='%f', PosY='%f', PosZ='%f', PosA='%f'", id, skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
+		mysql_tquery(SQL, query);
+		
+		Iter_Add(Bankers, id);
+	}
+	return (true);
+}
 Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 {	
 	if(response)
@@ -279,9 +404,91 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 
 	            va_SendClientMessage(playerid, 0x0086E3FF, "[Klupe] > {ffffff}Obrisali ste klupu pod id(%d).",i);
 			}
+			case 3:
+			{
+				Dialog_Show(playerid, "obrisi_bankera", DIALOG_STYLE_INPUT,
+						"Obrisite bankera",
+						"Unesite id bankera kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);	
+			}
+			case 4:
+			{
+				Dialog_Show(playerid, "obrisi_bankomat", DIALOG_STYLE_INPUT,
+						"Obrisite bankomat",
+						"Unesite id bankomata kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);	
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
+
+	if(response)
+	{
+		new id;
+		if(sscanf(inputtext, "i", id)) return 				
+				Dialog_Show(playerid, "obrisi_bankomat", DIALOG_STYLE_INPUT,
+						"Obrisite bankomat",
+						"Unesite id bankomata kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);	
+
+		if(!Iter_Contains(ATMs, id)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Invalid ATM ID.");
+		if(IsValidDynamicObject(ATMData[id][atmObjID])) DestroyDynamicObject(ATMData[id][atmObjID]);
+		ATMData[id][atmObjID] = -1;
+
+		#if defined ATM_USE_MAPICON
+		if(IsValidDynamicMapIcon(ATMData[id][atmIconID])) DestroyDynamicMapIcon(ATMData[id][atmIconID]);
+	    ATMData[id][atmIconID] = -1;
+	    #endif
+
+	    if(IsValidDynamic3DTextLabel(ATMData[id][atmLabel])) DestroyDynamic3DTextLabel(ATMData[id][atmLabel]);
+	    ATMData[id][atmLabel] = Text3D: -1;
+
+		new query[48];
+		mysql_format(SQL, query, sizeof(query), "DELETE FROM bank_atms WHERE ID=%d", id);
+		mysql_tquery(SQL, query);
+	}
+	return (true);
+}
+Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
+
+	if(response)
+	{
+		new id;
+		if(sscanf(inputtext, "i", id)) return 				
+			Dialog_Show(playerid, "obrisi_bankera", DIALOG_STYLE_INPUT,
+						"Obrisite bankera",
+						"Unesite id bankera kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);	
+
+		if(!Iter_Contains(Bankers, id)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Invalid banker ID.");
+		if(IsValidActor(BankerData[id][bankerActorID])) DestroyActor(BankerData[id][bankerActorID]);
+		BankerData[id][bankerActorID] = -1;
+		
+		#if defined BANKER_USE_MAPICON
+		if(IsValidDynamicMapIcon(BankerData[id][bankerIconID])) DestroyDynamicMapIcon(BankerData[id][bankerIconID]);
+	    BankerData[id][bankerIconID] = -1;
+	    #endif
+
+	    if(IsValidDynamic3DTextLabel(BankerData[id][bankerLabel])) DestroyDynamic3DTextLabel(BankerData[id][bankerLabel]);
+	    BankerData[id][bankerLabel] = Text3D: -1;
+	    
+		new query[48];
+		mysql_format(SQL, query, sizeof(query), "DELETE FROM bankers WHERE ID=%d", id);
+		mysql_tquery(SQL, query);
+	}
+	return (true);
 }
 //
 YCMD:sduty(playerid, params[], help)
