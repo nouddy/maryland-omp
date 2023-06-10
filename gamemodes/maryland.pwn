@@ -453,7 +453,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
-	if(playertextid == Register_PTD[playerid][28])
+	if(playertextid == Register_PTD[playerid][50])
 	{
 		if(RegisterPass[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
@@ -464,7 +464,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					"Potvrdi", "Izlaz", GetName(playerid)
 				);		
 	}
-	else if(playertextid == Register_PTD[playerid][27]) // email
+	else if(playertextid == Register_PTD[playerid][49]) // email
 	{
 		if(RegisterEmail[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
@@ -476,7 +476,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Unesi", "Izlaz"
 			);
 	}
-	else if(playertextid == Register_PTD[playerid][29]) // drzava
+	else if(playertextid == Register_PTD[playerid][51]) // drzava
 	{
 		if(RegisterDrzava[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
@@ -488,7 +488,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Unesi", "Izlaz"
 			);
 	}	
-	else if(playertextid == Register_PTD[playerid][30])
+	else if(playertextid == Register_PTD[playerid][52])
 	{
 		if(RegisterGodine[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
@@ -500,7 +500,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Unesi", "Izlaz"
 			);
 	}
-	else if(playertextid == Register_PTD[playerid][31]) // pol
+	else if(playertextid == Register_PTD[playerid][53]) // pol
 	{
 		if(RegisterPol[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
@@ -512,7 +512,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Unesi", "Izlaz"
 			);
 	}
-	else if(playertextid == Register_PTD[playerid][33])
+	else if(playertextid == Register_PTD[playerid][55])
 	{
 		if(!RegisterPol[playerid] || !RegisterPass[playerid] || !RegisterEmail[playerid] || !RegisterDrzava[playerid] || !RegisterGodine[playerid])
 			return SendClientMessage(playerid, x_ogycolor, "> Nesto od ponudjenih delova registera niste popunili.");
