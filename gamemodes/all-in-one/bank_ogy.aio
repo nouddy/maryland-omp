@@ -144,7 +144,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     }
     else if(clickedid == BankAccountTD[51])
     {
-        Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Choose a password for your new bank account:", "Create", "Back");
+        Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Napravi Nalog", "Izaberi lozinku za svoj novi nalog:", "Kreiraj", "Nazad");
     }
     else if(clickedid == BankAccountTD[57])
     {
@@ -152,15 +152,15 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     }
     else if(clickedid == BankAccountTD[67])
     {
-        Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
+        Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Ostavi Novac", "Koliko novca zelis da ostavis na racun?", "Ostavi", "Nazad");
     }
     else if(clickedid == BankAccountTD[69])
     {
-        Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+        Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "Upisi Account ID kojem zelis izvrsiti transfer:", "Nastavi", "Nazad");
     }
     else if(clickedid == BankAccountTD[68])
     {
-        Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
+        Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "Koliko novca zelis da podignes?", "Podigni", "Nazad");
     }
     return (true);
 }
@@ -305,7 +305,7 @@ public LoadBankers()
             
             BankerData[id][bankerActorID] = CreateActor(BankerData[id][Skin], BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
             if(!IsValidActor(BankerData[id][bankerActorID])) {
-                printf("all-in-one/bank_ogy.aoi - Couldn't create an actor for banker ID %d.", id);
+                printf("all-in-one/bank_ogy.aoi - Nisam mogao da kreiram aktora za Banker ID > %d.", id);
             }else{
                 SetActorInvulnerable(BankerData[id][bankerActorID], true); // people may use a version where actors aren't invulnerable by default
             }
@@ -321,7 +321,7 @@ public LoadBankers()
         }
     }
 
-    printf("all-in-one/bank_ogy.aoi loaded(%d) bankers", Iter_Count(Bankers));
+    printf("all-in-one/bank_ogy.aoi loaded(%d) bankara", Iter_Count(Bankers));
     return 1;
 }
 
@@ -343,13 +343,13 @@ public LoadATMs()
             cache_get_value_name_float(i, "RotZ",ATMData[id][atmRZ]);
 
             ATMData[id][atmObjID] = CreateDynamicObject(2942, ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ], ATMData[id][atmRX], ATMData[id][atmRY], ATMData[id][atmRZ]);
-            if(!IsValidDynamicObject(ATMData[id][atmObjID])) printf("all-in-one/bank_ogy.aoi - Couldn't create an ATM object for ATM ID %d.", id);
+            if(!IsValidDynamicObject(ATMData[id][atmObjID])) printf("all-in-one/bank_ogy.aoi - Nisam mogao kreirati objekat ATM za ATM ID %d.", id);
             
             #if defined ATM_USE_MAPICON
             ATMData[id][atmIconID] = CreateDynamicMapIcon(ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ], 52, 0, .streamdistance = ATM_ICON_RANGE);
             #endif
 
-            format(label_string, sizeof(label_string), "ATM (%d)\n\n{FFFFFF}Use {F1C40F}/atm!", id);
+            format(label_string, sizeof(label_string), "ATM (%d)\n\n{FFFFFF}Koristi {F1C40F}/atm!", id);
             ATMData[id][atmLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, ATMData[id][atmX], ATMData[id][atmY], ATMData[id][atmZ] + 0.85, 5.0, .testlos = 1);
 
             Iter_Add(ATMs, id);
@@ -409,16 +409,16 @@ Bank_ShowMenu(playerid)
 {
     new string[256], using_atm = GetPVarInt(playerid, "usingATM");
     if(CurrentAccountID[playerid] == -1) {
-        format(string, sizeof(string), "{%06x}Create Account\t{2ECC71}%s\nMy Accounts\t{F1C40F}%d\nAccount Login", (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8), (using_atm ? ("") : formatInt(ACCOUNT_PRICE)), Bank_AccountCount(playerid));
-        Dialog_Show(playerid, DIALOG_BANK_MENU_NOLOGIN, DIALOG_STYLE_TABLIST, "{F1C40F}Bank: {FFFFFF}Menu", string, "Choose", "Close");
+        format(string, sizeof(string), "{%06x}Napravi Nalog\t{2ECC71}%s\nMoji Nalozi\t{F1C40F}%d\nPrijava na Nalog", (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8), (using_atm ? ("") : formatInt(ACCOUNT_PRICE)), Bank_AccountCount(playerid));
+        Dialog_Show(playerid, DIALOG_BANK_MENU_NOLOGIN, DIALOG_STYLE_TABLIST, "{F1C40F}Banka: {FFFFFF}Home", string, "Odaberi", "Zatvori");
     }else{
         new balance = Bank_GetBalance(CurrentAccountID[playerid]), menu_title[64];
-        format(menu_title, sizeof(menu_title), "{F1C40F}Bank: {FFFFFF}Menu (Account ID: {F1C40F}%d{FFFFFF})", CurrentAccountID[playerid]);
+        format(menu_title, sizeof(menu_title), "{F1C40F}Banka: {FFFFFF}Home (Account ID: {F1C40F}%d{FFFFFF})", CurrentAccountID[playerid]);
         
         format(
             string,
             sizeof(string),
-            "{%06x}Create Account\t{2ECC71}%s\nMy Accounts\t{F1C40F}%d\nDeposit\t{2ECC71}%s\nWithdraw\t{2ECC71}%s\nTransfer\t{2ECC71}%s\n{%06x}Account Logs\n{%06x}Change Password\n{%06x}Remove Account\nLogout",
+            "{%06x}Napravi Nalog\t{2ECC71}%s\nMoji Nalozi\t{F1C40F}%d\nOstavi\t{2ECC71}%s\nPodigni\t{2ECC71}%s\nTransfer\t{2ECC71}%s\n{%06x}Evidencije Naloga\n{%06x}Promeni Lozinku\n{%06x}Ukloni Nalog\nOdjava",
             (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8),
             (using_atm ? ("") : formatInt(ACCOUNT_PRICE)),
             Bank_AccountCount(playerid),
@@ -442,7 +442,7 @@ Bank_ShowLogMenu(playerid)
 {
     LogListType[playerid] = TYPE_NONE;
     LogListPage[playerid] = 0;
-    Dialog_Show(playerid, dialog_bank_logs, DIALOG_STYLE_LIST, "{F1C40F}Bank: {FFFFFF}Logs", "Deposited Money\nWithdrawn Money\nTransfers\nLogins\nPassword Changes", "Show", "Back");
+    Dialog_Show(playerid, dialog_bank_logs, DIALOG_STYLE_LIST, "{F1C40F}Banka: {FFFFFF}Evidencije", "Ostavljen Novac\nPodignut Novac\nTransferi\nPrijave na Nalog\nPromene Lozinke", "Pokazi", "Nazad");
     return 1;
 }
 
@@ -496,7 +496,7 @@ Bank_ListAccounts(playerid)
 
     if(rows) {
         new string[1024], cdate[24], ldate[24];
-        format(string, sizeof(string), "ID\tBalance\tCreated On\tLast Access\n");
+        format(string, sizeof(string), "ID\tBalans\tNapravljen\tPoslednji put Vidjen\n");
         for(new i; i < rows; ++i)
         {
             cache_get_value_name(i, "Created", cdate, 24);
@@ -504,9 +504,9 @@ Bank_ListAccounts(playerid)
             format(string, sizeof(string), "%s{FFFFFF}%d\t{2ECC71}%s\t{FFFFFF}%s\t%s\n", string, cache_get_value_name_int(i, "ID"), formatInt(cache_get_value_name_int(i, "Balance")), cdate, (cache_get_value_name_int(i, "LastAccess") == 0) ? ("Never") : ldate);
         }
 
-        Dialog_Show(playerid, dialog_bank_accounts, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Bank: {FFFFFF}My Accounts", string, "Login", "Back");
+        Dialog_Show(playerid, dialog_bank_accounts, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Banka: {FFFFFF}Moji Nalozi", string, "Prijava", "Nazad");
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have any bank accounts.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nemas ni jedan racun u nasoj banci.");
         Bank_ShowMenu(playerid);
     }
 
@@ -527,32 +527,32 @@ Bank_ShowLogs(playerid)
         {
             case TYPE_LOGIN:
             {
-                format(list, sizeof(list), "By\tAction Date\n");
-                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Login History (Page %d)", LogListPage[playerid] + 1);
+                format(list, sizeof(list), "Po\tDatumu\n");
+                format(title, sizeof(title), "{F1C40F}Banka: {FFFFFF}Istorija Prijave (Strana %d)", LogListPage[playerid] + 1);
             }
             
             case TYPE_DEPOSIT:
             {
-                format(list, sizeof(list), "By\tAmount\tDeposit Date\n");
-                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Deposit History (Page %d)", LogListPage[playerid] + 1);
+                format(list, sizeof(list), "Po\tVrednosti\tDatumu Depozita\n");
+                format(title, sizeof(title), "{F1C40F}Banka: {FFFFFF}Istorija Depozita (Strana %d)", LogListPage[playerid] + 1);
             }
 
             case TYPE_WITHDRAW:
             {
-                format(list, sizeof(list), "By\tAmount\tWithdraw Date\n");
-                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Withdraw History (Page %d)", LogListPage[playerid] + 1);
+                format(list, sizeof(list), "Po\tVrednosti\tDatumu Podizanja\n");
+                format(title, sizeof(title), "{F1C40F}Banka: {FFFFFF}Istorija Podizanja (Strana %d)", LogListPage[playerid] + 1);
             }
             
             case TYPE_TRANSFER:
             {
-                format(list, sizeof(list), "By\tTo Account\tAmount\tTransfer Date\n");
-                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Transfer History (Page %d)", LogListPage[playerid] + 1);
+                format(list, sizeof(list), "Po\tPrimaocu\tVrednosti\tDatumu Transfera\n");
+                format(title, sizeof(title), "{F1C40F}Banka: {FFFFFF}Istorija Transfera (Strana %d)", LogListPage[playerid] + 1);
             }
             
             case TYPE_PASSCHANGE:
             {
-                format(list, sizeof(list), "By\tAction Date\n");
-                format(title, sizeof(title), "{F1C40F}Bank: {FFFFFF}Password Changes (Page %d)", LogListPage[playerid] + 1);
+                format(list, sizeof(list), "Po\tDatumu\n");
+                format(title, sizeof(title), "{F1C40F}Banka: {FFFFFF}Promene Lozinke (Strana %d)", LogListPage[playerid] + 1);
             }
         }
         
@@ -590,9 +590,9 @@ Bank_ShowLogs(playerid)
             }
         }
 
-        Dialog_Show(playerid, dialog_bank_nologs, DIALOG_STYLE_TABLIST_HEADERS, title, list, "Next", "Previous");
+        Dialog_Show(playerid, dialog_bank_nologs, DIALOG_STYLE_TABLIST_HEADERS, title, list, "Dalje", "Nazad");
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't find any more records.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozemo da pronadjemo vise evidencija.");
         Bank_ShowLogMenu(playerid);
     }
 
@@ -659,13 +659,13 @@ public OnBankAccountDeposit(playerid, amount)
 {
     if(cache_affected_rows() > 0) {
         new string[64];
-        format(string, sizeof(string), "BANK: {FFFFFF}Successfully deposited {2ECC71}%s.", formatInt(amount));
+        format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno depozitovano {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
         
         GivePlayerMoney(playerid, -amount);
         Bank_SaveLog(playerid, TYPE_DEPOSIT, CurrentAccountID[playerid], -1, amount);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
     }
     
     Bank_ShowMenu(playerid);
@@ -677,13 +677,13 @@ public OnBankAccountWithdraw(playerid, amount)
 {
     if(cache_affected_rows() > 0) {
         new string[64];
-        format(string, sizeof(string), "BANK: {FFFFFF}Successfully withdrawn {2ECC71}%s.", formatInt(amount));
+        format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno podignuto {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
 
         GivePlayerMoney(playerid, amount);
         Bank_SaveLog(playerid, TYPE_WITHDRAW, CurrentAccountID[playerid], -1, amount);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
     }
 
     Bank_ShowMenu(playerid);
@@ -698,7 +698,7 @@ public OnBankAccountTransfer(playerid, id, amount)
         mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance-%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]);
         mysql_tquery(SQL, query, "OnBankAccountTransferDone", "iii", playerid, id, amount);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
         Bank_ShowMenu(playerid);
     }
 
@@ -710,12 +710,12 @@ public OnBankAccountTransferDone(playerid, id, amount)
 {
     if(cache_affected_rows() > 0) {
         new string[128];
-        format(string, sizeof(string), "BANK: {FFFFFF}Successfully transferred {2ECC71}%s {FFFFFF}to account ID {F1C40F}%d.", formatInt(amount), id);
+        format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno prebaceno {2ECC71}%s {FFFFFF}igracu ciji je bankovni Nalog ID {F1C40F}%d.", formatInt(amount), id);
         SendClientMessage(playerid, 0x3498DBFF, string);
         
         Bank_SaveLog(playerid, TYPE_TRANSFER, CurrentAccountID[playerid], id, amount);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Transaction failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
         
     }
 
@@ -728,12 +728,12 @@ public OnBankAccountPassChange(playerid, newpass[])
 {
     if(cache_affected_rows() > 0) {
         new string[128];
-        format(string, sizeof(string), "BANK: {FFFFFF}Account password set to {F1C40F}%s.", newpass);
+        format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Lozinka postavljena na {F1C40F}%s.", newpass);
         SendClientMessage(playerid, 0x3498DBFF, string);
         
         Bank_SaveLog(playerid, TYPE_PASSCHANGE, CurrentAccountID[playerid], -1, 0);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Password change failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna promena lozinke.");
     }
 
     Bank_ShowMenu(playerid);
@@ -753,10 +753,10 @@ public OnBankAccountDeleted(playerid, id, amount)
         }
         
         new string[128];
-        format(string, sizeof(string), "BANK: {FFFFFF}Account removed, you got the {2ECC71}%s {FFFFFF}left in the account.", formatInt(amount));
+        format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Nalog uklonjen, imate preostalih {2ECC71}%s {FFFFFF}na racunu.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Account removal failed.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesno uklanjanje naloga.");
     }
 
     CurrentAccountID[playerid] = -1;
@@ -768,9 +768,9 @@ forward OnBankAccountAdminEdit(playerid);
 public OnBankAccountAdminEdit(playerid)
 {
     if(cache_affected_rows() > 0) {
-        SendClientMessage(playerid, 0x3498DBFF, "BANK: {FFFFFF}Account edited.");
+        SendClientMessage(playerid, 0x3498DBFF, "[ML-BANKA]: {FFFFFF}Nalog izmenjen.");
     }else{
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Account editing failed. (No affected rows)");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Izmena naloga neuspela. (Ni jedna kolona nije ostecena)");
     }
     
     return 1;
@@ -817,18 +817,18 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
             }
             #endif
 
-            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Odaberite lozinku koju zelite da koristite za novi racun:", "Create", "Back");
+            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Napravi Nalog", "Odaberite lozinku koju zelite da koristite za novi racun:", "Napravi", "Nazad");
         }
 
         if(listitem == 1) Bank_ListAccounts(playerid);
-        if(listitem == 2) Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
-        if(listitem == 3) Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
-        if(listitem == 4) Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+        if(listitem == 2) Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Ostavi", "Koliko novca zelis da ostavis na racun?", "Ostavi", "Nazad");
+        if(listitem == 3) Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "Koliko novca zelis da podignes?", "Podigni", "Nazad");
+        if(listitem == 4) Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "Upisi Account ID kojem zelis izvrsiti transfer:", "Nastavi", "Nazad");
         if(listitem == 5)
         {
             if(GetPVarInt(playerid, "usingATM"))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes ovo na bankomatu, poseti banku.");
                 return Bank_ShowMenu(playerid);
             }
             
@@ -839,40 +839,40 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
         {
             if(GetPVarInt(playerid, "usingATM"))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes ovo na bankomatu, poseti banku.");
                 return Bank_ShowMenu(playerid);
             }
             
             if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only the account owner can do this.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
                 return Bank_ShowMenu(playerid);
             }
             
-            Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "Write a new password:", "Change", "Back");
+            Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Promeni Lozinku", "Unesi novu lozinku:", "Promeni", "Nazad");
         }
         
         if(listitem == 7)
         {
             if(GetPVarInt(playerid, "usingATM"))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes ovo na bankomatu, poseti banku.");
                 return Bank_ShowMenu(playerid);
             }
             
             if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only the account owner can do this.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
                 return Bank_ShowMenu(playerid);
             }
             
-            Dialog_Show(playerid, dialog_remove, DIALOG_STYLE_MSGBOX, "{F1C40F}Bank: {FFFFFF}Remove Account", "Are you sure? This account will get deleted {E74C3C}permanently.", "Yes", "Back");
+            Dialog_Show(playerid, dialog_remove, DIALOG_STYLE_MSGBOX, "{F1C40F}Banka: {FFFFFF}Ukloni Nalog", "Da li ste sigurni? Nalog ce biti uklonjen {E74C3C}zauvek.", "Da", "Nazad");
             // https://youtu.be/rcjpags7JT8 - because it doesn't get deleted actually
         }
         
         if(listitem == 8)
         {
-            SendClientMessage(playerid, 0x3498DBFF, "BANK: {FFFFFF}Successfully logged out.");
+            SendClientMessage(playerid, 0x3498DBFF, "[ML-BANKA]: {FFFFFF}Uspesno izlogovan.");
             
             CurrentAccountID[playerid] = -1;
             Bank_ShowMenu(playerid);
@@ -884,13 +884,13 @@ Dialog:dialog_depositzz(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
     if(CurrentAccountID[playerid] == -1) return 1;
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Ostavi", "{E74C3C}Ne moze biti prazno.\n\n{FFFFFF}Koliko novca zelis da ostavis na racun?", "Ostavi", "Nazad");
     new amount = strval(inputtext);
-    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You can't deposit less than $1 or more than $250,000,000 at once. ($5,000,000 at once on ATMs)\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
-    if(amount > GetPlayerMoney(playerid)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "{E74C3C}You don't have enough money.\n\n{FFFFFF}How much money do you want to deposit?", "Deposit", "Back");
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Ostavi", "{E74C3C}Ne mozes depozitovati manje od $1 ili vise od $250,000,000 odjednom. ($5,000,000 odjednom na ATMs)\n\n{FFFFFF}Koliko novca zelis da ostavis na racun?", "Ostavi", "Nazad");
+    if(amount > GetPlayerMoney(playerid)) return Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Ostavi", "{E74C3C}Nemas dovoljno novca.\n\n{FFFFFF}Koliko novca zelis da ostavis na racun?", "Ostavi", "Nazad");
     if((amount + Bank_GetBalance(CurrentAccountID[playerid])) > ACCOUNT_LIMIT)
     {
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't deposit any more money to this account.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes vise depozitovati na ovaj nalog novac.");
         return Bank_ShowMenu(playerid);
     }
     
@@ -903,10 +903,10 @@ Dialog:dialog_withdrawzzzz(const playerid, response, listitem, string:inputtext[
 {
     if(!response) return Bank_ShowMenu(playerid);
     if(CurrentAccountID[playerid] == -1) return 1;
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "{E74C3C}Ne moze biti prazno.\n\n{FFFFFF}Koliko novca zelis da podignes?", "Podigni", "Nazad");
     new amount = strval(inputtext);
-    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}You can't withdraw less than $1 or more than $250,000,000 at once. ($5,000,000 at once on ATMs)\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
-    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "{E74C3C}Account doesn't have enough money.\n\n{FFFFFF}How much money do you want to withdraw?", "Withdraw", "Back");
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "{E74C3C}Ne mozes podici manje od $1 ili vise od $250,000,000 odjednom. ($5,000,000 odjednom na ATMs)\n\n{FFFFFF}Koliko novca zelis da podignes?", "Podigni", "Nazad");
+    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "{E74C3C}Nalog nema dovoljno novca.\n\n{FFFFFF}Koliko novca zelis da podignes?", "Podigni", "Nazad");
     
     new query[96];
     mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=Balance-%d WHERE ID=%d && Disabled=0", amount, CurrentAccountID[playerid]);
@@ -917,24 +917,24 @@ Dialog:dialog_transfer1(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
     if(CurrentAccountID[playerid] == -1) return 1;
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Specify an account ID:", "Continue", "Back");
-    if(strval(inputtext) == CurrentAccountID[playerid]) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't transfer money to your current account.\n\n{FFFFFF}Specify an account ID:", "Continue", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "{E74C3C}Ne moze biti prazno.\n\n{FFFFFF}Upisi Account ID kojem zelis izvrsiti transfer:", "Nastavi", "Nazad");
+    if(strval(inputtext) == CurrentAccountID[playerid]) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "{E74C3C}Ne mozes transferovati novac na sopstveni nalog.\n\n{FFFFFF}Upisi Account ID kojem zelis izvrsiti transfer:", "Nastavi", "Nazad");
     SetPVarInt(playerid, "bankTransferAccount", strval(inputtext));
-    Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an amount:", "Transfer", "Back");
+    Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "Cifra koju zelis prebaciti:", "Transfer", "Nazad");
     return 1;
 }
 Dialog:dialog_transfer2(const playerid, response, listitem, string:inputtext[])
 {
-    if(!response) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+    if(!response) return Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "Upisi Account ID kojem zelis izvrsiti transfer:", "Nastavi", "Nazad");
     if(CurrentAccountID[playerid] == -1) return 1;
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "{E74C3C}Ne moze biti prazno.\n\n{FFFFFF}Cifra koju zelis prebaciti:", "Transfer", "Nazad");
     new amount = strval(inputtext);
-    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}You can't transfer less than $1 or more than $250,000,000 at once. ($5,000,000 on ATMs)\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
-    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "{E74C3C}Account doesn't have enough money.\n\n{FFFFFF}Specify an amount:", "Transfer", "Back");
+    if(!(1 <= amount <= (GetPVarInt(playerid, "usingATM") ? 5000000 : 250000000))) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "{E74C3C}Ne mozes transfer manje od $1 ili vise od $250,000,000 odjednom. ($5,000,000 na ATMs)\n\n{FFFFFF}Cifra koju zelis prebaciti:", "Transfer", "Nazad");
+    if(amount > Bank_GetBalance(CurrentAccountID[playerid])) return Dialog_Show(playerid, dialog_transfer2, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Transfer", "{E74C3C}Nalog nema dovoljno novca.\n\n{FFFFFF}Cifra koju zelis prebaciti:", "Transfer", "Nazad");
     new id = GetPVarInt(playerid, "bankTransferAccount");
     if((amount + Bank_GetBalance(id)) > ACCOUNT_LIMIT)
     {
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't deposit any more money to the account you specified.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes depozitovati vise novca na nalog ciji ste uneli ID.");
         return Bank_ShowMenu(playerid);
     }
     
@@ -953,29 +953,29 @@ Dialog:dialog_bank_nologin(const playerid, response, listitem, string:inputtext[
         {
             if(GetPVarInt(playerid, "usingATM"))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't do this at an ATM, visit a banker.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes ovo na bankomatu, poseti banku.");
                 return Bank_ShowMenu(playerid);
             }
             
             if(ACCOUNT_PRICE > GetPlayerMoney(playerid))
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have enough money to create a bank account.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nemas dovoljno novca da kreiras nalog u banci.");
                 return Bank_ShowMenu(playerid);
             }
             
             #if defined ACCOUNT_CLIMIT
             if(Bank_AccountCount(playerid) >= ACCOUNT_CLIMIT)
             {
-                SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't create any more bank accounts.");
+                SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes kreirati vise bankovnih racuna.");
                 return Bank_ShowMenu(playerid);
             }
             #endif
             
-            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Choose a password for your new bank account:", "Create", "Back");
+            Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Napravi Nalog", "Izaberi lozinku za svoj novi bankovni racun:", "Kreiraj", "Nazad");
         }
         
         if(listitem == 1) Bank_ListAccounts(playerid);
-        if(listitem == 2) Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
+        if(listitem == 2) Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Banka: {FFFFFF}Prijava", "Lozinka Naloga:", "Prijava", "Odustani");
         return 1;
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -984,18 +984,18 @@ Dialog:dialog_bank_nologin(const playerid, response, listitem, string:inputtext[
 Dialog:dialog_bank_create(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "{E74C3C}You can't leave your account password empty.\n\n{FFFFFF}Choose a password for your new bank account:", "Create", "Back");
-    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "{E74C3C}Account password can't be more than 16 characters.\n\n{FFFFFF}Choose a password for your new bank account:", "Create", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Napravi Nalog", "{E74C3C}Ne mozes ostaviti Lozinku Naloga praznu.\n\n{FFFFFF}Izaberi lozinku za svoj novi bankovni racun:", "Kreiraj", "Nazad");
+    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Napravi Nalog", "{E74C3C}Lozinka Naloga ne sme biti duza od 16 karaktera.\n\n{FFFFFF}Izaberi lozinku za svoj novi bankovni racun:", "Kreiraj", "Nazad");
     if(ACCOUNT_PRICE > GetPlayerMoney(playerid))
     {
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You don't have enough money to create a bank account.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nemas dovoljno novca da kreiras nalog u banci.");
         return Bank_ShowMenu(playerid);
     }
 
     #if defined ACCOUNT_CLIMIT
     if(Bank_AccountCount(playerid) >= ACCOUNT_CLIMIT)
     {
-        SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You can't create any more bank accounts.");
+        SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes kreirati vise bankovnih racuna.");
         return Bank_ShowMenu(playerid);
     }
     #endif
@@ -1011,22 +1011,22 @@ Dialog:dialog_bank_accounts(const playerid, response, listitem, string:inputtext
     if(!response) return Bank_ShowMenu(playerid);
 
     SetPVarInt(playerid, "bankLoginAccount", strval(inputtext));
-    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
+    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Banka: {FFFFFF}Prijava", "Lozinka Naloga:", "Prijava", "Odustani");
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 Dialog:dialog_bank_loginid(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Login", "{E74C3C}You can't leave the ID empty.\n\n{FFFFFF}Account ID:", "Continue", "Cancel");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Prijava", "{E74C3C}Ne mozes polje za ID ostaviti prazno.\n\n{FFFFFF}Account ID:", "Nastavi", "Odustani");
 
     SetPVarInt(playerid, "bankLoginAccount", strval(inputtext));
-    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "Account Password:", "Login", "Cancel");
+    Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Banka: {FFFFFF}Prijava", "Lozinka Naloga:", "Prijava", "Odustani");
     return 1;
 }
 Dialog:dialog_bank_login_pass(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Bank: {FFFFFF}Login", "{E74C3C}You can't leave the password empty.\n\n{FFFFFF}Account Password:", "Login", "Cancel");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_bank_login_pass, DIALOG_STYLE_PASSWORD, "{F1C40F}Banka: {FFFFFF}Prijava", "{E74C3C}Ne mozes ostaviti polje za lozinku prazno.\n\n{FFFFFF}Lozinka Naloga:", "Prijava", "Odustani");
 
     new query[200], id = GetPVarInt(playerid, "bankLoginAccount");
     mysql_format(SQL, query, sizeof(query), "SELECT Owner, LastAccess, FROM_UNIXTIME(LastAccess, '%%d/%%m/%%Y %%H:%%i:%%s') AS Last FROM bank_accounts WHERE ID=%d && Password=md5('%e') && Disabled=0 LIMIT 1", id, inputtext);
@@ -1037,8 +1037,8 @@ Dialog:dialog_password(const playerid, response, listitem, string:inputtext[])
 {
     if(!response) return Bank_ShowMenu(playerid);
     if(CurrentAccountID[playerid] == -1) return 1;
-    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "{E74C3C}You can't leave the input empty.\n\n{FFFFFF}Write a new password:", "Change", "Back");
-    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Change Password", "{E74C3C}New password can't be more than 16 characters.\n\n{FFFFFF}Write a new password:", "Change", "Back");
+    if(isnull(inputtext)) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Promena Lozinke", "{E74C3C}Ne moze biti prazno.\n\n{FFFFFF}Unesi novu lozinku:", "Change", "Nazad");
+    if(strlen(inputtext) > 16) return Dialog_Show(playerid, dialog_password, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Promena Lozinke", "{E74C3C}Nova lozinka ne moze biti duza od 16 karaktera.\n\n{FFFFFF}Unesi novu lozinku:", "Change", "Nazad");
     
     new query[128];
     mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Password=md5('%e') WHERE ID=%d && Disabled=0", inputtext, CurrentAccountID[playerid]);
@@ -1126,7 +1126,7 @@ CMD:atm(const playerid, params[])
 
 CMD:asetowner(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id, owner[MAX_PLAYER_NAME];
     if(sscanf(params, "is[24]", id, owner)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetowner [account id] [new owner]");
     new query[128];
@@ -1137,7 +1137,7 @@ CMD:asetowner(const playerid, params[])
 
 CMD:asetpassword(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id, password[16];
     if(sscanf(params, "is[16]", id, password)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetpassword [account id] [new password]");
     new query[128];
@@ -1148,10 +1148,10 @@ CMD:asetpassword(const playerid, params[])
 
 CMD:asetbalance(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id, balance;
     if(sscanf(params, "ii", id, balance)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/asetbalance [account id] [balance]");
-    if(balance > ACCOUNT_LIMIT) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Balance you specified exceeds account money limit.");
+    if(balance > ACCOUNT_LIMIT) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nalog koji ste odabrali je presao limit.");
     new query[128];
     mysql_format(SQL, query, sizeof(query), "UPDATE bank_accounts SET Balance=%d WHERE ID=%d", balance, id);
     mysql_tquery(SQL, query, "OnBankAccountAdminEdit", "i", playerid);
@@ -1160,12 +1160,12 @@ CMD:asetbalance(const playerid, params[])
 
 CMD:aclearlogs(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id, type;
     if(sscanf(params, "iI(0)", id, type))
     {
-        SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/aclearlogs [account id] [log type (optional)]");
-        SendClientMessage(playerid, 0xE88732FF, "TYPES: {FFFFFF}0- All | 1- Logins | 2- Deposits | 3- Withdraws | 4- Transfers | 5- Password Changes");
+        SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/aclearlogs [account id] [log tip (opcionalno)]");
+        SendClientMessage(playerid, 0xE88732FF, "TYPES: {FFFFFF}0- Sve | 1- Prijave | 2- Depoziti | 3- Podizanja | 4- Transferi | 5- Promene Lozinke");
         return 1;
     }
 
@@ -1182,7 +1182,7 @@ CMD:aclearlogs(const playerid, params[])
 
 CMD:aremoveaccount(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id;
     if(sscanf(params, "i", id)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/aremoveaccount [account id]");
     foreach(new i : Player)
@@ -1198,7 +1198,7 @@ CMD:aremoveaccount(const playerid, params[])
 
 CMD:areturnaccount(const playerid, params[])
 {
-    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Only RCON admins can use this command.");
+    if(PlayerInfo[playerid][Staff] < 4) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo RCON staff moze koristiti ovu komandu.");
     new id;
     if(sscanf(params, "i", id)) return SendClientMessage(playerid, 0xE88732FF, "SYNTAX: {FFFFFF}/areturnaccount [account id]");
     new query[128];

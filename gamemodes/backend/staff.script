@@ -267,7 +267,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			case 3:
 			{
 				new idzz = Iter_Free(ATMs);
-				if(idzz == -1) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Can't create any more ATMs.");
+				if(idzz == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mogu kreirati vise ATMs.");
 				ATMData[idzz][atmRX] = ATMData[idzz][atmRY] = 0.0;
 				
 				GetPlayerPos(playerid, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ]);
@@ -309,14 +309,14 @@ Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
 	if(response)
 	{
 		new id = Iter_Free(Bankers);
-		if(id == -1) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Dostigli ste limit bankera.");
+		if(id == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Dostigli ste limit bankera.");
 		new skin;
 		if(sscanf(inputtext, "i", skin)) return 				
 			Dialog_Show(playerid, "kreiraj_bankera", DIALOG_STYLE_INPUT,
 					"Kreiraj bankera",
 					"Unesi skin bankera kojeg kreirate",
 					"Odaberi", "Izlaz");
-		if(!(0 <= skin <= 311)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Ne moze taj skin.");
+		if(!(0 <= skin <= 311)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne moze taj skin.");
 
 		BankerData[id][Skin] = skin;
 		GetPlayerPos(playerid, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ]);
@@ -441,7 +441,7 @@ Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
 						"Nastavi", "Nazad"
 					);	
 
-		if(!Iter_Contains(ATMs, id)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Invalid ATM ID.");
+		if(!Iter_Contains(ATMs, id)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Invalid ATM ID.");
 		if(IsValidDynamicObject(ATMData[id][atmObjID])) DestroyDynamicObject(ATMData[id][atmObjID]);
 		ATMData[id][atmObjID] = -1;
 
@@ -474,7 +474,7 @@ Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
 						"Nastavi", "Nazad"
 					);	
 
-		if(!Iter_Contains(Bankers, id)) return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}Invalid banker ID.");
+		if(!Iter_Contains(Bankers, id)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Invalid banker ID.");
 		if(IsValidActor(BankerData[id][bankerActorID])) DestroyActor(BankerData[id][bankerActorID]);
 		BankerData[id][bankerActorID] = -1;
 		
