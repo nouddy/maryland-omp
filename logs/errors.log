@@ -1,8 +1,8 @@
-[17:41:25] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
-[17:41:25] [plugins/mysql] error #1146 while executing query "SELECT * FROM bankers": Table 'maryland.bankers' doesn't exist
-[17:41:25] [plugins/mysql] error #1146 while executing query "SELECT * FROM bank_atms": Table 'maryland.bank_atms' doesn't exist
-[17:44:48] [plugins/mysql] error #1146 while executing query "INSERT INTO bankers SET ID=0, Skin=1, PosX='1685.225464', PosY='-1631.274414', PosZ='13.382813', PosA='45.651730'": Table 'maryland.bankers' doesn't exist
-[17:44:58] [plugins/mysql] error #1146 while executing query "SELECT null FROM bank_accounts WHERE Owner='Vostic' && Disabled=0": Table 'maryland.bank_accounts' doesn't exist
-[17:44:58] [plugins/mysql] cache_get_row_count: no active cache
-[17:44:58] [plugins/mysql] cache_delete: invalid cache id '0'
-[17:45:12] [plugins/mysql] error #1146 while executing query "DELETE FROM bankers WHERE ID=0": Table 'maryland.bankers' doesn't exist
+[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `klupe`": Table 'maryland.klupe' doesn't exist in engine
+[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `cars`": Table 'maryland.cars' doesn't exist in engine
+[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `faction_police`": Table 'maryland.faction_police' doesn't exist in engine
+[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * from `houses`": Table 'maryland.houses' doesn't exist in engine
+[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM bankers": Table 'maryland.bankers' doesn't exist
+[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM bank_atms": Table 'maryland.bank_atms' doesn't exist
+[09:56:25] [plugins/mysql] error #1932 while executing query "SELECT * FROM `players` WHERE `Username` = 'Vostic'": Table 'maryland.players' doesn't exist in engine

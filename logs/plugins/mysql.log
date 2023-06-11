@@ -92,3 +92,24 @@
 [17:44:58] [ERROR] cache_get_row_count: no active cache
 [17:44:58] [ERROR] cache_delete: invalid cache id '0'
 [17:45:12] [ERROR] error #1146 while executing query "DELETE FROM bankers WHERE ID=0": Table 'maryland.bankers' doesn't exist
+[09:46:30] [WARNING] mysql_connect: no password specified
+[09:46:34] [ERROR] CConnection::CConnection - establishing connection to MySQL database failed: #2002 'Can't connect to MySQL server on 'localhost' (10061)'
+[09:48:24] [WARNING] mysql_connect: no password specified
+[09:48:24] [ERROR] error #1932 while executing query "SELECT * FROM `klupe`": Table 'maryland.klupe' doesn't exist in engine
+[09:48:24] [ERROR] error #1932 while executing query "SELECT * FROM `cars`": Table 'maryland.cars' doesn't exist in engine
+[09:48:24] [ERROR] error #1932 while executing query "SELECT * FROM `faction_police`": Table 'maryland.faction_police' doesn't exist in engine
+[09:48:24] [ERROR] error #1932 while executing query "SELECT * from `houses`": Table 'maryland.houses' doesn't exist in engine
+[09:48:24] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[09:48:24] [ERROR] error #1146 while executing query "SELECT * FROM bankers": Table 'maryland.bankers' doesn't exist
+[09:48:24] [ERROR] error #1146 while executing query "SELECT * FROM bank_atms": Table 'maryland.bank_atms' doesn't exist
+[09:54:40] [ERROR] error #1932 while executing query "SELECT * FROM `players` WHERE `Username` = 'Vostic'": Table 'maryland.players' doesn't exist in engine
+[09:55:34] [ERROR] error #1932 while executing query "SELECT * FROM `players` WHERE `Username` = 'Vostic'": Table 'maryland.players' doesn't exist in engine
+[09:56:06] [WARNING] mysql_connect: no password specified
+[09:56:06] [ERROR] error #1932 while executing query "SELECT * FROM `klupe`": Table 'maryland.klupe' doesn't exist in engine
+[09:56:06] [ERROR] error #1932 while executing query "SELECT * FROM `cars`": Table 'maryland.cars' doesn't exist in engine
+[09:56:06] [ERROR] error #1932 while executing query "SELECT * FROM `faction_police`": Table 'maryland.faction_police' doesn't exist in engine
+[09:56:06] [ERROR] error #1932 while executing query "SELECT * from `houses`": Table 'maryland.houses' doesn't exist in engine
+[09:56:06] [ERROR] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[09:56:06] [ERROR] error #1146 while executing query "SELECT * FROM bankers": Table 'maryland.bankers' doesn't exist
+[09:56:06] [ERROR] error #1146 while executing query "SELECT * FROM bank_atms": Table 'maryland.bank_atms' doesn't exist
+[09:56:25] [ERROR] error #1932 while executing query "SELECT * FROM `players` WHERE `Username` = 'Vostic'": Table 'maryland.players' doesn't exist in engine
