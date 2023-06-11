@@ -1,8 +1,4 @@
-[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `klupe`": Table 'maryland.klupe' doesn't exist in engine
-[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `cars`": Table 'maryland.cars' doesn't exist in engine
-[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * FROM `faction_police`": Table 'maryland.faction_police' doesn't exist in engine
-[09:56:06] [plugins/mysql] error #1932 while executing query "SELECT * from `houses`": Table 'maryland.houses' doesn't exist in engine
-[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
-[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM bankers": Table 'maryland.bankers' doesn't exist
-[09:56:06] [plugins/mysql] error #1146 while executing query "SELECT * FROM bank_atms": Table 'maryland.bank_atms' doesn't exist
-[09:56:25] [plugins/mysql] error #1932 while executing query "SELECT * FROM `players` WHERE `Username` = 'Vostic'": Table 'maryland.players' doesn't exist in engine
+[10:16:02] [plugins/mysql] error #1146 while executing query "SELECT * FROM `faction_police`": Table 'maryland.faction_police' doesn't exist
+[10:16:02] [plugins/mysql] error #1146 while executing query "SELECT * FROM `businesses`": Table 'maryland.businesses' doesn't exist
+[10:16:04] [plugins/mysql] error #1146 while executing query "SELECT * FROM player_electronic WHERE player_id = '1'": Table 'maryland.player_electronic' doesn't exist
+[10:22:30] [plugins/mysql] error #1146 while executing query "SELECT * FROM player_electronic WHERE player_id = '1'": Table 'maryland.player_electronic' doesn't exist

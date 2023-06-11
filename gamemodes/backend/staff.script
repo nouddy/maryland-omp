@@ -572,6 +572,7 @@ YCMD:sveh(playerid, params[], help)
 
 		SetVehicleNumberPlate(vehicleid, "STAFF");
 		PutPlayerInVehicle(playerid, vehicleid, 0);
+		ChangeVehicleColor(vehicleid, 0, 0);
 		
 	    new engine, lights, alarm, doors, bonnet, boot, objective;
 	    GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
