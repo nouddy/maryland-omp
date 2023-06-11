@@ -54,8 +54,8 @@ const MAX_ATMS = 500; // promeniti ako je mnogo
 
 
 //
-new Text:BankLoginTD[24];
-new Text:BankAccountTD[54];
+new Text:BankLoginTD[46];
+new Text:BankAccountTD[76];
 new PlayerText:BankAccountPTD[MAX_PLAYERS][16];
 new bool:GledaLoginTD[MAX_PLAYERS],
     bool:GledaBankaAcc[MAX_PLAYERS];
@@ -131,9 +131,9 @@ new
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-    if(clickedid == BankLoginTD[20])
+    if(clickedid == BankLoginTD[42])
     {
-        for(new i = 0; i < 24; i++)
+        for(new i = 0; i < 46; i++)
         {
             TextDrawHideForPlayer(playerid, BankLoginTD[i]);
         }
@@ -141,6 +141,26 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
         GledaLoginTD[playerid] = false;  
 
         BuildBankAccountTDs(playerid, true);
+    }
+    else if(clickedid == BankAccountTD[51])
+    {
+        Dialog_Show(playerid, dialog_bank_create, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Create Account", "Choose a password for your new bank account:", "Create", "Back");
+    }
+    else if(clickedid == BankAccountTD[57])
+    {
+        Bank_ListAccounts(playerid);
+    }
+    else if(clickedid == BankAccountTD[67])
+    {
+        Dialog_Show(playerid, dialog_depositzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Deposit", "How much money do you want to deposit?", "Deposit", "Back");
+    }
+    else if(clickedid == BankAccountTD[69])
+    {
+        Dialog_Show(playerid, dialog_transfer1, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Transfer", "Specify an account ID:", "Continue", "Back");
+    }
+    else if(clickedid == BankAccountTD[68])
+    {
+        Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Bank: {FFFFFF}Withdraw", "How much money do you want to withdraw?", "Withdraw", "Back");
     }
     return (true);
 }
@@ -1073,7 +1093,7 @@ CMD:banka(const playerid, params[])
 
     if(!GledaLoginTD[playerid])
     {
-        for(new i = 0; i < 24; i++)
+        for(new i = 0; i < 46; i++)
         {
             TextDrawShowForPlayer(playerid, BankLoginTD[i]);
         }
@@ -1082,7 +1102,7 @@ CMD:banka(const playerid, params[])
     }
     else if(GledaLoginTD[playerid])
     {
-        for(new i = 0; i < 24; i++)
+        for(new i = 0; i < 46; i++)
         {
             TextDrawHideForPlayer(playerid, BankLoginTD[i]);
         }
@@ -1208,7 +1228,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
             PlayerTextDrawDestroy( playerid, BankAccountPTD[ playerid ][ i ] );
             BankAccountPTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
         }
-        for(new izz = 0; izz < 54; izz++)
+        for(new izz = 0; izz < 76; izz++)
         {
             TextDrawShowForPlayer(playerid, BankAccountTD[izz]);
         }
@@ -1224,7 +1244,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
         PlayerTextDrawSetPreviewRot(playerid, BankAccountPTD[playerid][0], 0.000000, 0.000000, 0.000000, 1.000000);
 
         BankAccountPTD[playerid][1] = CreatePlayerTextDraw(playerid, 492.000091, 116.577888, "Vostic");
-        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][1], 0.136666, 0.633481);
+        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][1], 0.136665, 0.633481);
         PlayerTextDrawAlignment(playerid, BankAccountPTD[playerid][1], 3);
         PlayerTextDrawColor(playerid, BankAccountPTD[playerid][1], -1);
         PlayerTextDrawSetShadow(playerid, BankAccountPTD[playerid][1], 0);
@@ -1233,7 +1253,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
         PlayerTextDrawSetProportional(playerid, BankAccountPTD[playerid][1], 1);
 
         BankAccountPTD[playerid][2] = CreatePlayerTextDraw(playerid, 486.000122, 124.459365, "Nalog_ID:_(1)");
-        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][2], 0.136666, 0.633481);
+        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][2], 0.136665, 0.633481);
         PlayerTextDrawAlignment(playerid, BankAccountPTD[playerid][2], 2);
         PlayerTextDrawColor(playerid, BankAccountPTD[playerid][2], -1);
         PlayerTextDrawSetShadow(playerid, BankAccountPTD[playerid][2], 0);
@@ -1362,7 +1382,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
         PlayerTextDrawSetProportional(playerid, BankAccountPTD[playerid][14], 1);
 
         BankAccountPTD[playerid][15] = CreatePlayerTextDraw(playerid, 470.000000, 329.063293, "87487414_$");
-        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][15], 0.123333, 0.633481);
+        PlayerTextDrawLetterSize(playerid, BankAccountPTD[playerid][15], 0.123332, 0.633481);
         PlayerTextDrawTextSize(playerid, BankAccountPTD[playerid][15], 0.000000, -60.000000);
         PlayerTextDrawAlignment(playerid, BankAccountPTD[playerid][15], 2);
         PlayerTextDrawColor(playerid, BankAccountPTD[playerid][15], -1916144641);
@@ -1385,7 +1405,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
             PlayerTextDrawDestroy( playerid, BankAccountPTD[ playerid ][ i ] );
             BankAccountPTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
         }
-        for(new izz = 0; izz < 54; izz++)
+        for(new izz = 0; izz < 76; izz++)
         {
             TextDrawHideForPlayer(playerid, BankAccountTD[izz]);
         }
@@ -1472,67 +1492,74 @@ CreateBankTDs()
     TextDrawSetPreviewModel(BankLoginTD[7], 1317);
     TextDrawSetPreviewRot(BankLoginTD[7], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankLoginTD[8] = TextDrawCreate(376.866241, 318.637298, "ld_beat:chit");
-    TextDrawTextSize(BankLoginTD[8], 31.000000, 34.000000);
+    BankLoginTD[8] = TextDrawCreate(367.399871, 341.181549, "");
+    TextDrawTextSize(BankLoginTD[8], 19.000000, -24.000000);
     TextDrawAlignment(BankLoginTD[8], 1);
-    TextDrawColor(BankLoginTD[8], -1916144641);
+    TextDrawColor(BankLoginTD[8], -1);
     TextDrawSetShadow(BankLoginTD[8], 0);
-    TextDrawBackgroundColor(BankLoginTD[8], 255);
-    TextDrawFont(BankLoginTD[8], 4);
+    TextDrawBackgroundColor(BankLoginTD[8], -256);
+    TextDrawFont(BankLoginTD[8], 5);
     TextDrawSetProportional(BankLoginTD[8], 0);
+    TextDrawSetPreviewModel(BankLoginTD[8], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[8], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[9] = TextDrawCreate(376.966583, 320.266906, "");
-    TextDrawTextSize(BankLoginTD[9], 14.000000, 20.000000);
+    BankLoginTD[9] = TextDrawCreate(369.400115, 296.466766, "");
+    TextDrawTextSize(BankLoginTD[9], 18.000000, 49.000000);
     TextDrawAlignment(BankLoginTD[9], 1);
-    TextDrawColor(BankLoginTD[9], -1064116481);
+    TextDrawColor(BankLoginTD[9], -1);
     TextDrawSetShadow(BankLoginTD[9], 0);
     TextDrawBackgroundColor(BankLoginTD[9], -256);
     TextDrawFont(BankLoginTD[9], 5);
     TextDrawSetProportional(BankLoginTD[9], 0);
-    TextDrawSetPreviewModel(BankLoginTD[9], 1317);
-    TextDrawSetPreviewRot(BankLoginTD[9], 0.000000, 313.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[9], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[9], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankLoginTD[10] = TextDrawCreate(375.533020, 326.648254, "");
-    TextDrawTextSize(BankLoginTD[10], 24.000000, 20.000000);
+    BankLoginTD[10] = TextDrawCreate(369.200042, 339.181579, "");
+    TextDrawTextSize(BankLoginTD[10], 17.000000, -20.000000);
     TextDrawAlignment(BankLoginTD[10], 1);
-    TextDrawColor(BankLoginTD[10], -1064116523);
+    TextDrawColor(BankLoginTD[10], -1);
     TextDrawSetShadow(BankLoginTD[10], 0);
     TextDrawBackgroundColor(BankLoginTD[10], -256);
     TextDrawFont(BankLoginTD[10], 5);
     TextDrawSetProportional(BankLoginTD[10], 0);
-    TextDrawSetPreviewModel(BankLoginTD[10], 1317);
-    TextDrawSetPreviewRot(BankLoginTD[10], 0.000000, 320.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[10], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[10], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[11] = TextDrawCreate(378.532989, 321.540832, "");
-    TextDrawTextSize(BankLoginTD[11], 27.000000, 28.000000);
+    BankLoginTD[11] = TextDrawCreate(370.366424, 333.822204, "");
+    TextDrawTextSize(BankLoginTD[11], 20.000000, -14.000000);
     TextDrawAlignment(BankLoginTD[11], 1);
     TextDrawColor(BankLoginTD[11], -1);
     TextDrawSetShadow(BankLoginTD[11], 0);
+    TextDrawBackgroundColor(BankLoginTD[11], -256);
     TextDrawFont(BankLoginTD[11], 5);
     TextDrawSetProportional(BankLoginTD[11], 0);
-    TextDrawSetPreviewModel(BankLoginTD[11], 1316);
-    TextDrawSetPreviewRot(BankLoginTD[11], 90.000000, 0.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[11], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[11], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[12] = TextDrawCreate(389.066864, 344.685302, "ld_spac:white");
-    TextDrawTextSize(BankLoginTD[12], 6.000000, 4.000000);
+    BankLoginTD[12] = TextDrawCreate(369.566497, 338.755523, "");
+    TextDrawTextSize(BankLoginTD[12], 20.000000, -14.000000);
     TextDrawAlignment(BankLoginTD[12], 1);
-    TextDrawColor(BankLoginTD[12], 329471);
+    TextDrawColor(BankLoginTD[12], -1);
     TextDrawSetShadow(BankLoginTD[12], 0);
-    TextDrawBackgroundColor(BankLoginTD[12], 255);
-    TextDrawFont(BankLoginTD[12], 4);
+    TextDrawBackgroundColor(BankLoginTD[12], -256);
+    TextDrawFont(BankLoginTD[12], 5);
     TextDrawSetProportional(BankLoginTD[12], 0);
+    TextDrawSetPreviewModel(BankLoginTD[12], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[12], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[13] = TextDrawCreate(389.066864, 323.529754, "ld_spac:white");
-    TextDrawTextSize(BankLoginTD[13], 6.000000, 4.000000);
+    BankLoginTD[13] = TextDrawCreate(369.999786, 336.881439, "");
+    TextDrawTextSize(BankLoginTD[13], 20.000000, -14.000000);
     TextDrawAlignment(BankLoginTD[13], 1);
-    TextDrawColor(BankLoginTD[13], 329471);
+    TextDrawColor(BankLoginTD[13], -1);
     TextDrawSetShadow(BankLoginTD[13], 0);
-    TextDrawBackgroundColor(BankLoginTD[13], 255);
-    TextDrawFont(BankLoginTD[13], 4);
+    TextDrawBackgroundColor(BankLoginTD[13], -256);
+    TextDrawFont(BankLoginTD[13], 5);
     TextDrawSetProportional(BankLoginTD[13], 0);
+    TextDrawSetPreviewModel(BankLoginTD[13], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[13], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[14] = TextDrawCreate(373.666687, 325.903808, "");
-    TextDrawTextSize(BankLoginTD[14], 29.000000, 15.000000);
+    BankLoginTD[14] = TextDrawCreate(371.833221, 338.922302, "");
+    TextDrawTextSize(BankLoginTD[14], 12.000000, -14.000000);
     TextDrawAlignment(BankLoginTD[14], 1);
     TextDrawColor(BankLoginTD[14], -1);
     TextDrawSetShadow(BankLoginTD[14], 0);
@@ -1540,98 +1567,336 @@ CreateBankTDs()
     TextDrawFont(BankLoginTD[14], 5);
     TextDrawSetProportional(BankLoginTD[14], 0);
     TextDrawSetPreviewModel(BankLoginTD[14], 1318);
-    TextDrawSetPreviewRot(BankLoginTD[14], 0.000000, 200.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewRot(BankLoginTD[14], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[15] = TextDrawCreate(380.666595, 327.148254, "");
-    TextDrawTextSize(BankLoginTD[15], 29.000000, 15.000000);
+    BankLoginTD[15] = TextDrawCreate(371.633392, 309.900115, "");
+    TextDrawTextSize(BankLoginTD[15], 25.000000, 44.000000);
     TextDrawAlignment(BankLoginTD[15], 1);
     TextDrawColor(BankLoginTD[15], -1);
     TextDrawSetShadow(BankLoginTD[15], 0);
     TextDrawBackgroundColor(BankLoginTD[15], -256);
     TextDrawFont(BankLoginTD[15], 5);
     TextDrawSetProportional(BankLoginTD[15], 0);
-    TextDrawSetPreviewModel(BankLoginTD[15], 1318);
-    TextDrawSetPreviewRot(BankLoginTD[15], 0.000000, 343.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[15], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[15], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankLoginTD[16] = TextDrawCreate(314.333557, 104.962966, "Dobrodosli_u_maryland_banking_system");
-    TextDrawLetterSize(BankLoginTD[16], 0.096332, 0.579554);
-    TextDrawAlignment(BankLoginTD[16], 2);
+    BankLoginTD[16] = TextDrawCreate(382.099884, 341.396392, "");
+    TextDrawTextSize(BankLoginTD[16], 19.000000, -24.000000);
+    TextDrawAlignment(BankLoginTD[16], 1);
     TextDrawColor(BankLoginTD[16], -1);
     TextDrawSetShadow(BankLoginTD[16], 0);
-    TextDrawBackgroundColor(BankLoginTD[16], 255);
-    TextDrawFont(BankLoginTD[16], 2);
-    TextDrawSetProportional(BankLoginTD[16], 1);
+    TextDrawBackgroundColor(BankLoginTD[16], -256);
+    TextDrawFont(BankLoginTD[16], 5);
+    TextDrawSetProportional(BankLoginTD[16], 0);
+    TextDrawSetPreviewModel(BankLoginTD[16], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[16], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[17] = TextDrawCreate(314.333557, 113.674079, "prislonite_otisak_za_nastavak");
-    TextDrawLetterSize(BankLoginTD[17], 0.096332, 0.579554);
-    TextDrawAlignment(BankLoginTD[17], 2);
-    TextDrawColor(BankLoginTD[17], -175);
+    BankLoginTD[17] = TextDrawCreate(381.000091, 296.466766, "");
+    TextDrawTextSize(BankLoginTD[17], 18.000000, 49.000000);
+    TextDrawAlignment(BankLoginTD[17], 1);
+    TextDrawColor(BankLoginTD[17], -1);
     TextDrawSetShadow(BankLoginTD[17], 0);
-    TextDrawBackgroundColor(BankLoginTD[17], 255);
-    TextDrawFont(BankLoginTD[17], 2);
-    TextDrawSetProportional(BankLoginTD[17], 1);
+    TextDrawBackgroundColor(BankLoginTD[17], -256);
+    TextDrawFont(BankLoginTD[17], 5);
+    TextDrawSetProportional(BankLoginTD[17], 0);
+    TextDrawSetPreviewModel(BankLoginTD[17], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[17], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankLoginTD[18] = TextDrawCreate(317.000213, 154.325912, "$");
-    TextDrawLetterSize(BankLoginTD[18], 3.427999, 15.699558);
-    TextDrawAlignment(BankLoginTD[18], 2);
-    TextDrawColor(BankLoginTD[18], -251);
+    BankLoginTD[18] = TextDrawCreate(381.966644, 340.155731, "");
+    TextDrawTextSize(BankLoginTD[18], 17.000000, -20.000000);
+    TextDrawAlignment(BankLoginTD[18], 1);
+    TextDrawColor(BankLoginTD[18], -1);
     TextDrawSetShadow(BankLoginTD[18], 0);
-    TextDrawBackgroundColor(BankLoginTD[18], 255);
-    TextDrawFont(BankLoginTD[18], 3);
-    TextDrawSetProportional(BankLoginTD[18], 1);
+    TextDrawBackgroundColor(BankLoginTD[18], -256);
+    TextDrawFont(BankLoginTD[18], 5);
+    TextDrawSetProportional(BankLoginTD[18], 0);
+    TextDrawSetPreviewModel(BankLoginTD[18], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[18], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankLoginTD[19] = TextDrawCreate(296.333343, 210.585189, "");
-    TextDrawTextSize(BankLoginTD[19], 37.000000, 42.000000);
+    BankLoginTD[19] = TextDrawCreate(377.366302, 333.692565, "");
+    TextDrawTextSize(BankLoginTD[19], 21.000000, -13.060001);
     TextDrawAlignment(BankLoginTD[19], 1);
-    TextDrawColor(BankLoginTD[19], -205);
+    TextDrawColor(BankLoginTD[19], -1);
     TextDrawSetShadow(BankLoginTD[19], 0);
     TextDrawBackgroundColor(BankLoginTD[19], -256);
     TextDrawFont(BankLoginTD[19], 5);
     TextDrawSetProportional(BankLoginTD[19], 0);
-    TextDrawSetPreviewModel(BankLoginTD[19], 1316);
-    TextDrawSetPreviewRot(BankLoginTD[19], 270.000000, 180.000000, 90.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[19], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[19], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankLoginTD[20] = TextDrawCreate(307.666687, 223.859329, "particle:bloodpool_64");
-    TextDrawTextSize(BankLoginTD[20], 15.000000, 18.000000);
+    BankLoginTD[20] = TextDrawCreate(378.466278, 337.833221, "");
+    TextDrawTextSize(BankLoginTD[20], 21.000000, -13.060001);
     TextDrawAlignment(BankLoginTD[20], 1);
-    TextDrawColor(BankLoginTD[20], 16777215);
+    TextDrawColor(BankLoginTD[20], -1);
     TextDrawSetShadow(BankLoginTD[20], 0);
-    TextDrawBackgroundColor(BankLoginTD[20], 255);
-    TextDrawFont(BankLoginTD[20], 4);
+    TextDrawBackgroundColor(BankLoginTD[20], -256);
+    TextDrawFont(BankLoginTD[20], 5);
     TextDrawSetProportional(BankLoginTD[20], 0);
-    TextDrawSetSelectable(BankLoginTD[20], true);
+    TextDrawSetPreviewModel(BankLoginTD[20], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[20], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankLoginTD[21] = TextDrawCreate(308.899963, 123.474029, "");
-    TextDrawTextSize(BankLoginTD[21], 12.000000, 13.000000);
+    BankLoginTD[21] = TextDrawCreate(377.066375, 337.203582, "");
+    TextDrawTextSize(BankLoginTD[21], 21.000000, -13.060001);
     TextDrawAlignment(BankLoginTD[21], 1);
     TextDrawColor(BankLoginTD[21], -1);
     TextDrawSetShadow(BankLoginTD[21], 0);
     TextDrawBackgroundColor(BankLoginTD[21], -256);
     TextDrawFont(BankLoginTD[21], 5);
     TextDrawSetProportional(BankLoginTD[21], 0);
-    TextDrawSetPreviewModel(BankLoginTD[21], 1316);
-    TextDrawSetPreviewRot(BankLoginTD[21], 270.000000, 180.000000, 90.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[21], 1318);
+    TextDrawSetPreviewRot(BankLoginTD[21], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankLoginTD[22] = TextDrawCreate(295.333221, 110.614784, "");
-    TextDrawTextSize(BankLoginTD[22], 39.000000, 40.000000);
+    BankLoginTD[22] = TextDrawCreate(360.799926, 345.355682, "");
+    TextDrawTextSize(BankLoginTD[22], 45.000000, -18.000000);
     TextDrawAlignment(BankLoginTD[22], 1);
-    TextDrawColor(BankLoginTD[22], -1);
+    TextDrawColor(BankLoginTD[22], -1064116481);
     TextDrawSetShadow(BankLoginTD[22], 0);
     TextDrawBackgroundColor(BankLoginTD[22], -256);
     TextDrawFont(BankLoginTD[22], 5);
     TextDrawSetProportional(BankLoginTD[22], 0);
-    TextDrawSetPreviewModel(BankLoginTD[22], 19177);
-    TextDrawSetPreviewRot(BankLoginTD[22], 0.000000, 180.000000, 90.000000, 1.000000);
+    TextDrawSetPreviewModel(BankLoginTD[22], 2965);
+    TextDrawSetPreviewRot(BankLoginTD[22], 90.000000, 0.000000, 90.000000, 1.000000);
 
-    BankLoginTD[23] = TextDrawCreate(314.333251, 267.985168, "NEMAS_NALOG?~n~KREIRAJ");
-    TextDrawLetterSize(BankLoginTD[23], 0.124666, 0.600296);
-    TextDrawAlignment(BankLoginTD[23], 2);
-    TextDrawColor(BankLoginTD[23], -149);
+    BankLoginTD[23] = TextDrawCreate(352.166687, 323.200103, "");
+    TextDrawTextSize(BankLoginTD[23], 46.000000, 32.000000);
+    TextDrawAlignment(BankLoginTD[23], 1);
+    TextDrawColor(BankLoginTD[23], -1064116481);
     TextDrawSetShadow(BankLoginTD[23], 0);
-    TextDrawBackgroundColor(BankLoginTD[23], 255);
-    TextDrawFont(BankLoginTD[23], 2);
-    TextDrawSetProportional(BankLoginTD[23], 1);
-    TextDrawSetSelectable(BankLoginTD[23], true);
+    TextDrawBackgroundColor(BankLoginTD[23], -256);
+    TextDrawFont(BankLoginTD[23], 5);
+    TextDrawSetProportional(BankLoginTD[23], 0);
+    TextDrawSetPreviewModel(BankLoginTD[23], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[23], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[24] = TextDrawCreate(369.966766, 323.070495, "");
+    TextDrawTextSize(BankLoginTD[24], 46.000000, 32.000000);
+    TextDrawAlignment(BankLoginTD[24], 1);
+    TextDrawColor(BankLoginTD[24], -1064116481);
+    TextDrawSetShadow(BankLoginTD[24], 0);
+    TextDrawBackgroundColor(BankLoginTD[24], -256);
+    TextDrawFont(BankLoginTD[24], 5);
+    TextDrawSetProportional(BankLoginTD[24], 0);
+    TextDrawSetPreviewModel(BankLoginTD[24], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[24], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[25] = TextDrawCreate(336.733276, 307.522338, "");
+    TextDrawTextSize(BankLoginTD[25], 88.000000, 58.000000);
+    TextDrawAlignment(BankLoginTD[25], 1);
+    TextDrawColor(BankLoginTD[25], -1064116481);
+    TextDrawSetShadow(BankLoginTD[25], 0);
+    TextDrawBackgroundColor(BankLoginTD[25], -256);
+    TextDrawFont(BankLoginTD[25], 5);
+    TextDrawSetProportional(BankLoginTD[25], 0);
+    TextDrawSetPreviewModel(BankLoginTD[25], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[25], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[26] = TextDrawCreate(343.133666, 307.522338, "");
+    TextDrawTextSize(BankLoginTD[26], 88.000000, 58.000000);
+    TextDrawAlignment(BankLoginTD[26], 1);
+    TextDrawColor(BankLoginTD[26], -1064116481);
+    TextDrawSetShadow(BankLoginTD[26], 0);
+    TextDrawBackgroundColor(BankLoginTD[26], -256);
+    TextDrawFont(BankLoginTD[26], 5);
+    TextDrawSetProportional(BankLoginTD[26], 0);
+    TextDrawSetPreviewModel(BankLoginTD[26], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[26], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[27] = TextDrawCreate(339.933776, 305.577850, "");
+    TextDrawTextSize(BankLoginTD[27], 88.000000, 58.000000);
+    TextDrawAlignment(BankLoginTD[27], 1);
+    TextDrawColor(BankLoginTD[27], -1064116481);
+    TextDrawSetShadow(BankLoginTD[27], 0);
+    TextDrawBackgroundColor(BankLoginTD[27], -256);
+    TextDrawFont(BankLoginTD[27], 5);
+    TextDrawSetProportional(BankLoginTD[27], 0);
+    TextDrawSetPreviewModel(BankLoginTD[27], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[27], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[28] = TextDrawCreate(377.400054, 339.074096, "LD_SPAC:white");
+    TextDrawTextSize(BankLoginTD[28], 14.000000, 2.000000);
+    TextDrawAlignment(BankLoginTD[28], 1);
+    TextDrawColor(BankLoginTD[28], -1064116481);
+    TextDrawSetShadow(BankLoginTD[28], 0);
+    TextDrawBackgroundColor(BankLoginTD[28], 255);
+    TextDrawFont(BankLoginTD[28], 4);
+    TextDrawSetProportional(BankLoginTD[28], 0);
+
+    BankLoginTD[29] = TextDrawCreate(367.900115, 330.666839, "");
+    TextDrawTextSize(BankLoginTD[29], 28.000000, 19.160003);
+    TextDrawAlignment(BankLoginTD[29], 1);
+    TextDrawColor(BankLoginTD[29], -1);
+    TextDrawSetShadow(BankLoginTD[29], 0);
+    TextDrawBackgroundColor(BankLoginTD[29], -256);
+    TextDrawFont(BankLoginTD[29], 5);
+    TextDrawSetProportional(BankLoginTD[29], 0);
+    TextDrawSetPreviewModel(BankLoginTD[29], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[29], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[30] = TextDrawCreate(372.700408, 330.666839, "");
+    TextDrawTextSize(BankLoginTD[30], 28.000000, 19.160003);
+    TextDrawAlignment(BankLoginTD[30], 1);
+    TextDrawColor(BankLoginTD[30], -1);
+    TextDrawSetShadow(BankLoginTD[30], 0);
+    TextDrawBackgroundColor(BankLoginTD[30], -256);
+    TextDrawFont(BankLoginTD[30], 5);
+    TextDrawSetProportional(BankLoginTD[30], 0);
+    TextDrawSetPreviewModel(BankLoginTD[30], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[30], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[31] = TextDrawCreate(360.799926, 345.355682, "");
+    TextDrawTextSize(BankLoginTD[31], 45.000000, -18.000000);
+    TextDrawAlignment(BankLoginTD[31], 1);
+    TextDrawColor(BankLoginTD[31], -120);
+    TextDrawSetShadow(BankLoginTD[31], 0);
+    TextDrawBackgroundColor(BankLoginTD[31], -256);
+    TextDrawFont(BankLoginTD[31], 5);
+    TextDrawSetProportional(BankLoginTD[31], 0);
+    TextDrawSetPreviewModel(BankLoginTD[31], 2965);
+    TextDrawSetPreviewRot(BankLoginTD[31], 90.000000, 0.000000, 90.000000, 1.000000);
+
+    BankLoginTD[32] = TextDrawCreate(363.200225, 390.211212, "");
+    TextDrawTextSize(BankLoginTD[32], 42.000000, -93.000000);
+    TextDrawAlignment(BankLoginTD[32], 1);
+    TextDrawColor(BankLoginTD[32], -1064116481);
+    TextDrawSetShadow(BankLoginTD[32], 0);
+    TextDrawBackgroundColor(BankLoginTD[32], -256);
+    TextDrawFont(BankLoginTD[32], 5);
+    TextDrawSetProportional(BankLoginTD[32], 0);
+    TextDrawSetPreviewModel(BankLoginTD[32], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[32], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[33] = TextDrawCreate(363.166900, 294.622314, "");
+    TextDrawTextSize(BankLoginTD[33], 42.000000, 83.000000);
+    TextDrawAlignment(BankLoginTD[33], 1);
+    TextDrawColor(BankLoginTD[33], -1064116481);
+    TextDrawSetShadow(BankLoginTD[33], 0);
+    TextDrawBackgroundColor(BankLoginTD[33], -256);
+    TextDrawFont(BankLoginTD[33], 5);
+    TextDrawSetProportional(BankLoginTD[33], 0);
+    TextDrawSetPreviewModel(BankLoginTD[33], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[33], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[34] = TextDrawCreate(379.333221, 327.181610, "V");
+    TextDrawLetterSize(BankLoginTD[34], 0.352665, 1.890370);
+    TextDrawAlignment(BankLoginTD[34], 1);
+    TextDrawColor(BankLoginTD[34], -188);
+    TextDrawSetShadow(BankLoginTD[34], 0);
+    TextDrawBackgroundColor(BankLoginTD[34], 255);
+    TextDrawFont(BankLoginTD[34], 2);
+    TextDrawSetProportional(BankLoginTD[34], 1);
+
+    BankLoginTD[35] = TextDrawCreate(379.733551, 353.066741, "");
+    TextDrawTextSize(BankLoginTD[35], 9.000000, -21.000000);
+    TextDrawAlignment(BankLoginTD[35], 1);
+    TextDrawColor(BankLoginTD[35], -188);
+    TextDrawSetShadow(BankLoginTD[35], 0);
+    TextDrawBackgroundColor(BankLoginTD[35], -256);
+    TextDrawFont(BankLoginTD[35], 5);
+    TextDrawSetProportional(BankLoginTD[35], 0);
+    TextDrawSetPreviewModel(BankLoginTD[35], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[35], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[36] = TextDrawCreate(379.900299, 317.618591, "");
+    TextDrawTextSize(BankLoginTD[36], 8.709993, 33.400100);
+    TextDrawAlignment(BankLoginTD[36], 1);
+    TextDrawColor(BankLoginTD[36], -1);
+    TextDrawSetShadow(BankLoginTD[36], 0);
+    TextDrawBackgroundColor(BankLoginTD[36], -256);
+    TextDrawFont(BankLoginTD[36], 5);
+    TextDrawSetProportional(BankLoginTD[36], 0);
+    TextDrawSetPreviewModel(BankLoginTD[36], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[36], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[37] = TextDrawCreate(380.200286, 327.118469, "");
+    TextDrawTextSize(BankLoginTD[37], 8.000000, 18.000000);
+    TextDrawAlignment(BankLoginTD[37], 1);
+    TextDrawColor(BankLoginTD[37], -1);
+    TextDrawSetShadow(BankLoginTD[37], 0);
+    TextDrawBackgroundColor(BankLoginTD[37], -256);
+    TextDrawFont(BankLoginTD[37], 5);
+    TextDrawSetProportional(BankLoginTD[37], 0);
+    TextDrawSetPreviewModel(BankLoginTD[37], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[37], 180.000000, 0.000000, 0.000000, 1.000000);
+
+    BankLoginTD[38] = TextDrawCreate(314.333557, 104.962966, "Dobrodosli_u_maryland_banking_system");
+    TextDrawLetterSize(BankLoginTD[38], 0.096331, 0.579554);
+    TextDrawAlignment(BankLoginTD[38], 2);
+    TextDrawColor(BankLoginTD[38], -1);
+    TextDrawSetShadow(BankLoginTD[38], 0);
+    TextDrawBackgroundColor(BankLoginTD[38], 255);
+    TextDrawFont(BankLoginTD[38], 2);
+    TextDrawSetProportional(BankLoginTD[38], 1);
+
+    BankLoginTD[39] = TextDrawCreate(314.333557, 113.674079, "prislonite_otisak_za_nastavak");
+    TextDrawLetterSize(BankLoginTD[39], 0.096331, 0.579554);
+    TextDrawAlignment(BankLoginTD[39], 2);
+    TextDrawColor(BankLoginTD[39], -175);
+    TextDrawSetShadow(BankLoginTD[39], 0);
+    TextDrawBackgroundColor(BankLoginTD[39], 255);
+    TextDrawFont(BankLoginTD[39], 2);
+    TextDrawSetProportional(BankLoginTD[39], 1);
+
+    BankLoginTD[40] = TextDrawCreate(317.000213, 154.325912, "$");
+    TextDrawLetterSize(BankLoginTD[40], 3.427999, 15.699558);
+    TextDrawAlignment(BankLoginTD[40], 2);
+    TextDrawColor(BankLoginTD[40], -251);
+    TextDrawSetShadow(BankLoginTD[40], 0);
+    TextDrawBackgroundColor(BankLoginTD[40], 255);
+    TextDrawFont(BankLoginTD[40], 3);
+    TextDrawSetProportional(BankLoginTD[40], 1);
+
+    BankLoginTD[41] = TextDrawCreate(296.333343, 210.585189, "");
+    TextDrawTextSize(BankLoginTD[41], 37.000000, 42.000000);
+    TextDrawAlignment(BankLoginTD[41], 1);
+    TextDrawColor(BankLoginTD[41], -205);
+    TextDrawSetShadow(BankLoginTD[41], 0);
+    TextDrawBackgroundColor(BankLoginTD[41], -256);
+    TextDrawFont(BankLoginTD[41], 5);
+    TextDrawSetProportional(BankLoginTD[41], 0);
+    TextDrawSetPreviewModel(BankLoginTD[41], 1316);
+    TextDrawSetPreviewRot(BankLoginTD[41], 270.000000, 180.000000, 90.000000, 1.000000);
+
+    BankLoginTD[42] = TextDrawCreate(307.666687, 223.859329, "particle:bloodpool_64");
+    TextDrawTextSize(BankLoginTD[42], 15.000000, 18.000000);
+    TextDrawAlignment(BankLoginTD[42], 1);
+    TextDrawColor(BankLoginTD[42], 16777215);
+    TextDrawSetShadow(BankLoginTD[42], 0);
+    TextDrawBackgroundColor(BankLoginTD[42], 255);
+    TextDrawFont(BankLoginTD[42], 4);
+    TextDrawSetProportional(BankLoginTD[42], 0);
+    TextDrawSetSelectable(BankLoginTD[42], true);
+
+    BankLoginTD[43] = TextDrawCreate(308.899963, 123.474029, "");
+    TextDrawTextSize(BankLoginTD[43], 12.000000, 13.000000);
+    TextDrawAlignment(BankLoginTD[43], 1);
+    TextDrawColor(BankLoginTD[43], -1);
+    TextDrawSetShadow(BankLoginTD[43], 0);
+    TextDrawBackgroundColor(BankLoginTD[43], -256);
+    TextDrawFont(BankLoginTD[43], 5);
+    TextDrawSetProportional(BankLoginTD[43], 0);
+    TextDrawSetPreviewModel(BankLoginTD[43], 1316);
+    TextDrawSetPreviewRot(BankLoginTD[43], 270.000000, 180.000000, 90.000000, 1.000000);
+
+    BankLoginTD[44] = TextDrawCreate(295.333221, 110.614784, "");
+    TextDrawTextSize(BankLoginTD[44], 39.000000, 40.000000);
+    TextDrawAlignment(BankLoginTD[44], 1);
+    TextDrawColor(BankLoginTD[44], -1);
+    TextDrawSetShadow(BankLoginTD[44], 0);
+    TextDrawBackgroundColor(BankLoginTD[44], -256);
+    TextDrawFont(BankLoginTD[44], 5);
+    TextDrawSetProportional(BankLoginTD[44], 0);
+    TextDrawSetPreviewModel(BankLoginTD[44], 19177);
+    TextDrawSetPreviewRot(BankLoginTD[44], 0.000000, 180.000000, 90.000000, 1.000000);
+
+    BankLoginTD[45] = TextDrawCreate(314.333251, 267.985168, "NEMAS_NALOG?~n~KREIRAJ");
+    TextDrawLetterSize(BankLoginTD[45], 0.124664, 0.600296);
+    TextDrawAlignment(BankLoginTD[45], 2);
+    TextDrawColor(BankLoginTD[45], -149);
+    TextDrawSetShadow(BankLoginTD[45], 0);
+    TextDrawBackgroundColor(BankLoginTD[45], 255);
+    TextDrawFont(BankLoginTD[45], 2);
+    TextDrawSetProportional(BankLoginTD[45], 1);
+    TextDrawSetSelectable(BankLoginTD[45], true);
     //
     BankAccountTD[0] = TextDrawCreate(125.333374, 109.370292, "LD_SPAC:white");
     TextDrawTextSize(BankAccountTD[0], 401.000000, 233.000000);
@@ -1705,67 +1970,74 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[7], 4);
     TextDrawSetProportional(BankAccountTD[7], 0);
 
-    BankAccountTD[8] = TextDrawCreate(120.532844, 110.815139, "ld_beat:chit");
-    TextDrawTextSize(BankAccountTD[8], 31.000000, 34.000000);
+    BankAccountTD[8] = TextDrawCreate(140.399871, 137.507431, "");
+    TextDrawTextSize(BankAccountTD[8], 19.000000, -24.000000);
     TextDrawAlignment(BankAccountTD[8], 1);
-    TextDrawColor(BankAccountTD[8], -1916144641);
+    TextDrawColor(BankAccountTD[8], -1);
     TextDrawSetShadow(BankAccountTD[8], 0);
-    TextDrawBackgroundColor(BankAccountTD[8], 255);
-    TextDrawFont(BankAccountTD[8], 4);
+    TextDrawBackgroundColor(BankAccountTD[8], -256);
+    TextDrawFont(BankAccountTD[8], 5);
     TextDrawSetProportional(BankAccountTD[8], 0);
+    TextDrawSetPreviewModel(BankAccountTD[8], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[8], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[9] = TextDrawCreate(120.633186, 112.444732, "");
-    TextDrawTextSize(BankAccountTD[9], 14.000000, 20.000000);
+    BankAccountTD[9] = TextDrawCreate(142.400100, 92.792671, "");
+    TextDrawTextSize(BankAccountTD[9], 18.000000, 49.000000);
     TextDrawAlignment(BankAccountTD[9], 1);
-    TextDrawColor(BankAccountTD[9], -1064116481);
+    TextDrawColor(BankAccountTD[9], -1);
     TextDrawSetShadow(BankAccountTD[9], 0);
     TextDrawBackgroundColor(BankAccountTD[9], -256);
     TextDrawFont(BankAccountTD[9], 5);
     TextDrawSetProportional(BankAccountTD[9], 0);
-    TextDrawSetPreviewModel(BankAccountTD[9], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[9], 0.000000, 313.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[9], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[9], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[10] = TextDrawCreate(119.199600, 118.826080, "");
-    TextDrawTextSize(BankAccountTD[10], 24.000000, 20.000000);
+    BankAccountTD[10] = TextDrawCreate(142.200027, 135.507461, "");
+    TextDrawTextSize(BankAccountTD[10], 17.000000, -20.000000);
     TextDrawAlignment(BankAccountTD[10], 1);
-    TextDrawColor(BankAccountTD[10], -1064116523);
+    TextDrawColor(BankAccountTD[10], -1);
     TextDrawSetShadow(BankAccountTD[10], 0);
     TextDrawBackgroundColor(BankAccountTD[10], -256);
     TextDrawFont(BankAccountTD[10], 5);
     TextDrawSetProportional(BankAccountTD[10], 0);
-    TextDrawSetPreviewModel(BankAccountTD[10], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[10], 0.000000, 320.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[10], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[10], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[11] = TextDrawCreate(122.199607, 113.718658, "");
-    TextDrawTextSize(BankAccountTD[11], 27.000000, 28.000000);
+    BankAccountTD[11] = TextDrawCreate(143.366409, 130.148132, "");
+    TextDrawTextSize(BankAccountTD[11], 20.000000, -14.000000);
     TextDrawAlignment(BankAccountTD[11], 1);
     TextDrawColor(BankAccountTD[11], -1);
     TextDrawSetShadow(BankAccountTD[11], 0);
+    TextDrawBackgroundColor(BankAccountTD[11], -256);
     TextDrawFont(BankAccountTD[11], 5);
     TextDrawSetProportional(BankAccountTD[11], 0);
-    TextDrawSetPreviewModel(BankAccountTD[11], 1316);
-    TextDrawSetPreviewRot(BankAccountTD[11], 90.000000, 0.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[11], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[11], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[12] = TextDrawCreate(132.733505, 136.863098, "ld_spac:white");
-    TextDrawTextSize(BankAccountTD[12], 6.000000, 4.000000);
+    BankAccountTD[12] = TextDrawCreate(142.566482, 135.081405, "");
+    TextDrawTextSize(BankAccountTD[12], 20.000000, -14.000000);
     TextDrawAlignment(BankAccountTD[12], 1);
-    TextDrawColor(BankAccountTD[12], 329471);
+    TextDrawColor(BankAccountTD[12], -1);
     TextDrawSetShadow(BankAccountTD[12], 0);
-    TextDrawBackgroundColor(BankAccountTD[12], 255);
-    TextDrawFont(BankAccountTD[12], 4);
+    TextDrawBackgroundColor(BankAccountTD[12], -256);
+    TextDrawFont(BankAccountTD[12], 5);
     TextDrawSetProportional(BankAccountTD[12], 0);
+    TextDrawSetPreviewModel(BankAccountTD[12], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[12], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[13] = TextDrawCreate(132.733505, 115.707580, "ld_spac:white");
-    TextDrawTextSize(BankAccountTD[13], 6.000000, 4.000000);
+    BankAccountTD[13] = TextDrawCreate(142.999771, 133.207366, "");
+    TextDrawTextSize(BankAccountTD[13], 20.000000, -14.000000);
     TextDrawAlignment(BankAccountTD[13], 1);
-    TextDrawColor(BankAccountTD[13], 329471);
+    TextDrawColor(BankAccountTD[13], -1);
     TextDrawSetShadow(BankAccountTD[13], 0);
-    TextDrawBackgroundColor(BankAccountTD[13], 255);
-    TextDrawFont(BankAccountTD[13], 4);
+    TextDrawBackgroundColor(BankAccountTD[13], -256);
+    TextDrawFont(BankAccountTD[13], 5);
     TextDrawSetProportional(BankAccountTD[13], 0);
+    TextDrawSetPreviewModel(BankAccountTD[13], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[13], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[14] = TextDrawCreate(117.333274, 118.081634, "");
-    TextDrawTextSize(BankAccountTD[14], 29.000000, 15.000000);
+    BankAccountTD[14] = TextDrawCreate(144.833236, 135.248184, "");
+    TextDrawTextSize(BankAccountTD[14], 12.000000, -14.000000);
     TextDrawAlignment(BankAccountTD[14], 1);
     TextDrawColor(BankAccountTD[14], -1);
     TextDrawSetShadow(BankAccountTD[14], 0);
@@ -1773,309 +2045,317 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[14], 5);
     TextDrawSetProportional(BankAccountTD[14], 0);
     TextDrawSetPreviewModel(BankAccountTD[14], 1318);
-    TextDrawSetPreviewRot(BankAccountTD[14], 0.000000, 200.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewRot(BankAccountTD[14], 0.000000, 15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[15] = TextDrawCreate(124.333213, 119.326080, "");
-    TextDrawTextSize(BankAccountTD[15], 29.000000, 15.000000);
+    BankAccountTD[15] = TextDrawCreate(144.633392, 106.226036, "");
+    TextDrawTextSize(BankAccountTD[15], 25.000000, 44.000000);
     TextDrawAlignment(BankAccountTD[15], 1);
     TextDrawColor(BankAccountTD[15], -1);
     TextDrawSetShadow(BankAccountTD[15], 0);
     TextDrawBackgroundColor(BankAccountTD[15], -256);
     TextDrawFont(BankAccountTD[15], 5);
     TextDrawSetProportional(BankAccountTD[15], 0);
-    TextDrawSetPreviewModel(BankAccountTD[15], 1318);
-    TextDrawSetPreviewRot(BankAccountTD[15], 0.000000, 343.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[15], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[15], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[16] = TextDrawCreate(168.666595, 123.214836, "MARYLAND");
-    TextDrawLetterSize(BankAccountTD[16], 0.135666, 0.654221);
-    TextDrawAlignment(BankAccountTD[16], 2);
-    TextDrawColor(BankAccountTD[16], -1916144641);
+    BankAccountTD[16] = TextDrawCreate(155.099884, 137.722274, "");
+    TextDrawTextSize(BankAccountTD[16], 19.000000, -24.000000);
+    TextDrawAlignment(BankAccountTD[16], 1);
+    TextDrawColor(BankAccountTD[16], -1);
     TextDrawSetShadow(BankAccountTD[16], 0);
-    TextDrawBackgroundColor(BankAccountTD[16], 255);
-    TextDrawFont(BankAccountTD[16], 1);
-    TextDrawSetProportional(BankAccountTD[16], 1);
+    TextDrawBackgroundColor(BankAccountTD[16], -256);
+    TextDrawFont(BankAccountTD[16], 5);
+    TextDrawSetProportional(BankAccountTD[16], 0);
+    TextDrawSetPreviewModel(BankAccountTD[16], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[16], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[17] = TextDrawCreate(168.666595, 130.266723, "BANKING_SYSTEM");
-    TextDrawLetterSize(BankAccountTD[17], 0.135666, 0.654221);
-    TextDrawAlignment(BankAccountTD[17], 2);
-    TextDrawColor(BankAccountTD[17], -1064116481);
+    BankAccountTD[17] = TextDrawCreate(154.000091, 92.792655, "");
+    TextDrawTextSize(BankAccountTD[17], 18.000000, 49.000000);
+    TextDrawAlignment(BankAccountTD[17], 1);
+    TextDrawColor(BankAccountTD[17], -1);
     TextDrawSetShadow(BankAccountTD[17], 0);
-    TextDrawBackgroundColor(BankAccountTD[17], 255);
-    TextDrawFont(BankAccountTD[17], 1);
-    TextDrawSetProportional(BankAccountTD[17], 1);
+    TextDrawBackgroundColor(BankAccountTD[17], -256);
+    TextDrawFont(BankAccountTD[17], 5);
+    TextDrawSetProportional(BankAccountTD[17], 0);
+    TextDrawSetPreviewModel(BankAccountTD[17], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[17], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[18] = TextDrawCreate(212.333267, 120.311126, "HOME");
-    TextDrawLetterSize(BankAccountTD[18], 0.237000, 1.056591);
-    TextDrawAlignment(BankAccountTD[18], 2);
-    TextDrawColor(BankAccountTD[18], -1916144641);
+    BankAccountTD[18] = TextDrawCreate(154.966644, 136.481613, "");
+    TextDrawTextSize(BankAccountTD[18], 17.000000, -20.000000);
+    TextDrawAlignment(BankAccountTD[18], 1);
+    TextDrawColor(BankAccountTD[18], -1);
     TextDrawSetShadow(BankAccountTD[18], 0);
-    TextDrawBackgroundColor(BankAccountTD[18], 255);
-    TextDrawFont(BankAccountTD[18], 1);
-    TextDrawSetProportional(BankAccountTD[18], 1);
+    TextDrawBackgroundColor(BankAccountTD[18], -256);
+    TextDrawFont(BankAccountTD[18], 5);
+    TextDrawSetProportional(BankAccountTD[18], 0);
+    TextDrawSetPreviewModel(BankAccountTD[18], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[18], 0.000000, -15.000000, -1.000000, 1.000000);
 
-    BankAccountTD[19] = TextDrawCreate(502.000030, 130.525939, "LD_SPAC:white");
-    TextDrawTextSize(BankAccountTD[19], 28.000000, 85.000000);
+    BankAccountTD[19] = TextDrawCreate(150.366302, 130.018493, "");
+    TextDrawTextSize(BankAccountTD[19], 21.000000, -13.060001);
     TextDrawAlignment(BankAccountTD[19], 1);
-    TextDrawColor(BankAccountTD[19], 329471);
+    TextDrawColor(BankAccountTD[19], -1);
     TextDrawSetShadow(BankAccountTD[19], 0);
-    TextDrawBackgroundColor(BankAccountTD[19], 255);
-    TextDrawFont(BankAccountTD[19], 4);
+    TextDrawBackgroundColor(BankAccountTD[19], -256);
+    TextDrawFont(BankAccountTD[19], 5);
     TextDrawSetProportional(BankAccountTD[19], 0);
+    TextDrawSetPreviewModel(BankAccountTD[19], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[19], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankAccountTD[20] = TextDrawCreate(505.100067, 112.803733, "");
-    TextDrawTextSize(BankAccountTD[20], 20.000000, 21.000000);
+    BankAccountTD[20] = TextDrawCreate(151.466278, 134.159118, "");
+    TextDrawTextSize(BankAccountTD[20], 21.000000, -13.060001);
     TextDrawAlignment(BankAccountTD[20], 1);
-    TextDrawColor(BankAccountTD[20], -1916144641);
+    TextDrawColor(BankAccountTD[20], -1);
     TextDrawSetShadow(BankAccountTD[20], 0);
     TextDrawBackgroundColor(BankAccountTD[20], -256);
     TextDrawFont(BankAccountTD[20], 5);
     TextDrawSetProportional(BankAccountTD[20], 0);
-    TextDrawSetPreviewModel(BankAccountTD[20], 1316);
-    TextDrawSetPreviewRot(BankAccountTD[20], 270.000000, 180.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[20], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[20], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankAccountTD[21] = TextDrawCreate(198.700042, 136.703598, "LD_SPAC:white");
-    TextDrawTextSize(BankAccountTD[21], 327.000000, 1.340000);
+    BankAccountTD[21] = TextDrawCreate(150.066375, 133.529510, "");
+    TextDrawTextSize(BankAccountTD[21], 21.000000, -13.060001);
     TextDrawAlignment(BankAccountTD[21], 1);
-    TextDrawColor(BankAccountTD[21], -232);
+    TextDrawColor(BankAccountTD[21], -1);
     TextDrawSetShadow(BankAccountTD[21], 0);
-    TextDrawBackgroundColor(BankAccountTD[21], 255);
-    TextDrawFont(BankAccountTD[21], 4);
+    TextDrawBackgroundColor(BankAccountTD[21], -256);
+    TextDrawFont(BankAccountTD[21], 5);
     TextDrawSetProportional(BankAccountTD[21], 0);
+    TextDrawSetPreviewModel(BankAccountTD[21], 1318);
+    TextDrawSetPreviewRot(BankAccountTD[21], 0.000000, 15.000000, 180.000000, 1.000000);
 
-    BankAccountTD[22] = TextDrawCreate(100.333335, 135.088821, "");
-    TextDrawTextSize(BankAccountTD[22], 197.000000, 30.000000);
+    BankAccountTD[22] = TextDrawCreate(133.799911, 141.681564, "");
+    TextDrawTextSize(BankAccountTD[22], 45.000000, -18.000000);
     TextDrawAlignment(BankAccountTD[22], 1);
-    TextDrawColor(BankAccountTD[22], -1916144753);
+    TextDrawColor(BankAccountTD[22], -1064116481);
     TextDrawSetShadow(BankAccountTD[22], 0);
     TextDrawBackgroundColor(BankAccountTD[22], -256);
     TextDrawFont(BankAccountTD[22], 5);
     TextDrawSetProportional(BankAccountTD[22], 0);
-    TextDrawSetPreviewModel(BankAccountTD[22], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[22], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[22], 2965);
+    TextDrawSetPreviewRot(BankAccountTD[22], 90.000000, 0.000000, 90.000000, 1.000000);
 
-    BankAccountTD[23] = TextDrawCreate(321.666809, 135.088821, "");
-    TextDrawTextSize(BankAccountTD[23], 197.000000, 30.000000);
+    BankAccountTD[23] = TextDrawCreate(125.166732, 119.526008, "");
+    TextDrawTextSize(BankAccountTD[23], 46.000000, 32.000000);
     TextDrawAlignment(BankAccountTD[23], 1);
-    TextDrawColor(BankAccountTD[23], -1916144753);
+    TextDrawColor(BankAccountTD[23], -1064116481);
     TextDrawSetShadow(BankAccountTD[23], 0);
     TextDrawBackgroundColor(BankAccountTD[23], -256);
     TextDrawFont(BankAccountTD[23], 5);
     TextDrawSetProportional(BankAccountTD[23], 0);
-    TextDrawSetPreviewModel(BankAccountTD[23], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[23], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[23], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[23], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[24] = TextDrawCreate(61.666801, 304.848236, "");
-    TextDrawTextSize(BankAccountTD[24], 127.000000, 23.000000);
+    BankAccountTD[24] = TextDrawCreate(142.966751, 119.396400, "");
+    TextDrawTextSize(BankAccountTD[24], 46.000000, 32.000000);
     TextDrawAlignment(BankAccountTD[24], 1);
-    TextDrawColor(BankAccountTD[24], -1916144753);
+    TextDrawColor(BankAccountTD[24], -1064116481);
     TextDrawSetShadow(BankAccountTD[24], 0);
     TextDrawBackgroundColor(BankAccountTD[24], -256);
     TextDrawFont(BankAccountTD[24], 5);
     TextDrawSetProportional(BankAccountTD[24], 0);
-    TextDrawSetPreviewModel(BankAccountTD[24], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[24], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[24], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[24], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[25] = TextDrawCreate(61.666801, 178.744201, "");
-    TextDrawTextSize(BankAccountTD[25], 127.000000, 23.000000);
+    BankAccountTD[25] = TextDrawCreate(109.733283, 103.848258, "");
+    TextDrawTextSize(BankAccountTD[25], 88.000000, 58.000000);
     TextDrawAlignment(BankAccountTD[25], 1);
-    TextDrawColor(BankAccountTD[25], -1916144753);
+    TextDrawColor(BankAccountTD[25], -1064116481);
     TextDrawSetShadow(BankAccountTD[25], 0);
     TextDrawBackgroundColor(BankAccountTD[25], -256);
     TextDrawFont(BankAccountTD[25], 5);
     TextDrawSetProportional(BankAccountTD[25], 0);
-    TextDrawSetPreviewModel(BankAccountTD[25], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[25], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[25], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[25], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[26] = TextDrawCreate(61.666801, 159.247802, "");
-    TextDrawTextSize(BankAccountTD[26], 127.000000, 23.000000);
+    BankAccountTD[26] = TextDrawCreate(116.133674, 103.848258, "");
+    TextDrawTextSize(BankAccountTD[26], 88.000000, 58.000000);
     TextDrawAlignment(BankAccountTD[26], 1);
-    TextDrawColor(BankAccountTD[26], -1916144753);
+    TextDrawColor(BankAccountTD[26], -1064116481);
     TextDrawSetShadow(BankAccountTD[26], 0);
     TextDrawBackgroundColor(BankAccountTD[26], -256);
     TextDrawFont(BankAccountTD[26], 5);
     TextDrawSetProportional(BankAccountTD[26], 0);
-    TextDrawSetPreviewModel(BankAccountTD[26], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[26], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[26], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[26], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[27] = TextDrawCreate(61.666801, 139.336685, "");
-    TextDrawTextSize(BankAccountTD[27], 127.000000, 23.000000);
+    BankAccountTD[27] = TextDrawCreate(112.933784, 101.903770, "");
+    TextDrawTextSize(BankAccountTD[27], 88.000000, 58.000000);
     TextDrawAlignment(BankAccountTD[27], 1);
-    TextDrawColor(BankAccountTD[27], -1916144753);
+    TextDrawColor(BankAccountTD[27], -1064116481);
     TextDrawSetShadow(BankAccountTD[27], 0);
     TextDrawBackgroundColor(BankAccountTD[27], -256);
     TextDrawFont(BankAccountTD[27], 5);
     TextDrawSetProportional(BankAccountTD[27], 0);
-    TextDrawSetPreviewModel(BankAccountTD[27], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[27], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[27], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[27], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[28] = TextDrawCreate(61.666801, 200.214736, "");
-    TextDrawTextSize(BankAccountTD[28], 127.000000, 23.000000);
+    BankAccountTD[28] = TextDrawCreate(150.400054, 135.399978, "LD_SPAC:white");
+    TextDrawTextSize(BankAccountTD[28], 14.000000, 2.000000);
     TextDrawAlignment(BankAccountTD[28], 1);
-    TextDrawColor(BankAccountTD[28], -1916144753);
+    TextDrawColor(BankAccountTD[28], -1064116481);
     TextDrawSetShadow(BankAccountTD[28], 0);
-    TextDrawBackgroundColor(BankAccountTD[28], -256);
-    TextDrawFont(BankAccountTD[28], 5);
+    TextDrawBackgroundColor(BankAccountTD[28], 255);
+    TextDrawFont(BankAccountTD[28], 4);
     TextDrawSetProportional(BankAccountTD[28], 0);
-    TextDrawSetPreviewModel(BankAccountTD[28], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[28], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[29] = TextDrawCreate(158.000015, 153.496276, "NAPRAVI_NALOG");
-    TextDrawLetterSize(BankAccountTD[29], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[29], 2);
+    BankAccountTD[29] = TextDrawCreate(140.900115, 126.992774, "");
+    TextDrawTextSize(BankAccountTD[29], 28.000000, 19.160003);
+    TextDrawAlignment(BankAccountTD[29], 1);
     TextDrawColor(BankAccountTD[29], -1);
     TextDrawSetShadow(BankAccountTD[29], 0);
-    TextDrawBackgroundColor(BankAccountTD[29], 255);
-    TextDrawFont(BankAccountTD[29], 1);
-    TextDrawSetProportional(BankAccountTD[29], 1);
-    TextDrawSetSelectable(BankAccountTD[29], true);
+    TextDrawBackgroundColor(BankAccountTD[29], -256);
+    TextDrawFont(BankAccountTD[29], 5);
+    TextDrawSetProportional(BankAccountTD[29], 0);
+    TextDrawSetPreviewModel(BankAccountTD[29], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[29], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[30] = TextDrawCreate(157.333374, 173.407409, "SVI_LOGOVI");
-    TextDrawLetterSize(BankAccountTD[30], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[30], 2);
+    BankAccountTD[30] = TextDrawCreate(145.700424, 126.992774, "");
+    TextDrawTextSize(BankAccountTD[30], 28.000000, 19.160003);
+    TextDrawAlignment(BankAccountTD[30], 1);
     TextDrawColor(BankAccountTD[30], -1);
     TextDrawSetShadow(BankAccountTD[30], 0);
-    TextDrawBackgroundColor(BankAccountTD[30], 255);
-    TextDrawFont(BankAccountTD[30], 1);
-    TextDrawSetProportional(BankAccountTD[30], 1);
-    TextDrawSetSelectable(BankAccountTD[30], true);
+    TextDrawBackgroundColor(BankAccountTD[30], -256);
+    TextDrawFont(BankAccountTD[30], 5);
+    TextDrawSetProportional(BankAccountTD[30], 0);
+    TextDrawSetPreviewModel(BankAccountTD[30], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[30], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[31] = TextDrawCreate(156.666687, 192.903717, "PROMENI_LOZINKU");
-    TextDrawLetterSize(BankAccountTD[31], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[31], 2);
-    TextDrawColor(BankAccountTD[31], -1);
+    BankAccountTD[31] = TextDrawCreate(133.799911, 141.681564, "");
+    TextDrawTextSize(BankAccountTD[31], 45.000000, -18.000000);
+    TextDrawAlignment(BankAccountTD[31], 1);
+    TextDrawColor(BankAccountTD[31], -120);
     TextDrawSetShadow(BankAccountTD[31], 0);
-    TextDrawBackgroundColor(BankAccountTD[31], 255);
-    TextDrawFont(BankAccountTD[31], 1);
-    TextDrawSetProportional(BankAccountTD[31], 1);
-    TextDrawSetSelectable(BankAccountTD[31], true);
+    TextDrawBackgroundColor(BankAccountTD[31], -256);
+    TextDrawFont(BankAccountTD[31], 5);
+    TextDrawSetProportional(BankAccountTD[31], 0);
+    TextDrawSetPreviewModel(BankAccountTD[31], 2965);
+    TextDrawSetPreviewRot(BankAccountTD[31], 90.000000, 0.000000, 90.000000, 1.000000);
 
-    BankAccountTD[32] = TextDrawCreate(156.666687, 214.474105, "UKLONI_NALOG");
-    TextDrawLetterSize(BankAccountTD[32], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[32], 2);
-    TextDrawColor(BankAccountTD[32], -1);
+    BankAccountTD[32] = TextDrawCreate(136.200180, 186.537139, "");
+    TextDrawTextSize(BankAccountTD[32], 42.000000, -93.000000);
+    TextDrawAlignment(BankAccountTD[32], 1);
+    TextDrawColor(BankAccountTD[32], -1064116481);
     TextDrawSetShadow(BankAccountTD[32], 0);
-    TextDrawBackgroundColor(BankAccountTD[32], 255);
-    TextDrawFont(BankAccountTD[32], 1);
-    TextDrawSetProportional(BankAccountTD[32], 1);
-    TextDrawSetSelectable(BankAccountTD[32], true);
+    TextDrawBackgroundColor(BankAccountTD[32], -256);
+    TextDrawFont(BankAccountTD[32], 5);
+    TextDrawSetProportional(BankAccountTD[32], 0);
+    TextDrawSetPreviewModel(BankAccountTD[32], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[32], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[33] = TextDrawCreate(156.666687, 319.007537, "ODJAVI_SE");
-    TextDrawLetterSize(BankAccountTD[33], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[33], 2);
-    TextDrawColor(BankAccountTD[33], -1);
+    BankAccountTD[33] = TextDrawCreate(136.166854, 90.948204, "");
+    TextDrawTextSize(BankAccountTD[33], 42.000000, 83.000000);
+    TextDrawAlignment(BankAccountTD[33], 1);
+    TextDrawColor(BankAccountTD[33], -1064116481);
     TextDrawSetShadow(BankAccountTD[33], 0);
-    TextDrawBackgroundColor(BankAccountTD[33], 255);
-    TextDrawFont(BankAccountTD[33], 1);
-    TextDrawSetProportional(BankAccountTD[33], 1);
-    TextDrawSetSelectable(BankAccountTD[33], true);
+    TextDrawBackgroundColor(BankAccountTD[33], -256);
+    TextDrawFont(BankAccountTD[33], 5);
+    TextDrawSetProportional(BankAccountTD[33], 0);
+    TextDrawSetPreviewModel(BankAccountTD[33], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[33], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[34] = TextDrawCreate(61.666801, 221.785079, "");
-    TextDrawTextSize(BankAccountTD[34], 127.000000, 23.000000);
+    BankAccountTD[34] = TextDrawCreate(152.333221, 123.507514, "V");
+    TextDrawLetterSize(BankAccountTD[34], 0.352665, 1.890370);
     TextDrawAlignment(BankAccountTD[34], 1);
-    TextDrawColor(BankAccountTD[34], -1916144753);
+    TextDrawColor(BankAccountTD[34], -188);
     TextDrawSetShadow(BankAccountTD[34], 0);
-    TextDrawBackgroundColor(BankAccountTD[34], -256);
-    TextDrawFont(BankAccountTD[34], 5);
-    TextDrawSetProportional(BankAccountTD[34], 0);
-    TextDrawSetPreviewModel(BankAccountTD[34], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[34], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawBackgroundColor(BankAccountTD[34], 255);
+    TextDrawFont(BankAccountTD[34], 2);
+    TextDrawSetProportional(BankAccountTD[34], 1);
 
-    BankAccountTD[35] = TextDrawCreate(156.666687, 236.459396, "MOJI_NALOZI");
-    TextDrawLetterSize(BankAccountTD[35], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[35], 2);
-    TextDrawColor(BankAccountTD[35], -1);
+    BankAccountTD[35] = TextDrawCreate(152.733551, 149.392654, "");
+    TextDrawTextSize(BankAccountTD[35], 9.000000, -21.000000);
+    TextDrawAlignment(BankAccountTD[35], 1);
+    TextDrawColor(BankAccountTD[35], -188);
     TextDrawSetShadow(BankAccountTD[35], 0);
-    TextDrawBackgroundColor(BankAccountTD[35], 255);
-    TextDrawFont(BankAccountTD[35], 1);
-    TextDrawSetProportional(BankAccountTD[35], 1);
-    TextDrawSetSelectable(BankAccountTD[35], true);
+    TextDrawBackgroundColor(BankAccountTD[35], -256);
+    TextDrawFont(BankAccountTD[35], 5);
+    TextDrawSetProportional(BankAccountTD[35], 0);
+    TextDrawSetPreviewModel(BankAccountTD[35], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[35], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[36] = TextDrawCreate(470.333404, 154.326049, "BANKA");
-    TextDrawLetterSize(BankAccountTD[36], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[36], 2);
+    BankAccountTD[36] = TextDrawCreate(152.900299, 113.944496, "");
+    TextDrawTextSize(BankAccountTD[36], 8.709993, 33.400100);
+    TextDrawAlignment(BankAccountTD[36], 1);
     TextDrawColor(BankAccountTD[36], -1);
     TextDrawSetShadow(BankAccountTD[36], 0);
-    TextDrawBackgroundColor(BankAccountTD[36], 255);
-    TextDrawFont(BankAccountTD[36], 1);
-    TextDrawSetProportional(BankAccountTD[36], 1);
+    TextDrawBackgroundColor(BankAccountTD[36], -256);
+    TextDrawFont(BankAccountTD[36], 5);
+    TextDrawSetProportional(BankAccountTD[36], 0);
+    TextDrawSetPreviewModel(BankAccountTD[36], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[36], 0.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[37] = TextDrawCreate(248.000015, 154.326049, "TRANSAKCIJE_$");
-    TextDrawLetterSize(BankAccountTD[37], 0.136666, 0.633481);
-    TextDrawAlignment(BankAccountTD[37], 2);
+    BankAccountTD[37] = TextDrawCreate(153.200286, 123.444374, "");
+    TextDrawTextSize(BankAccountTD[37], 8.000000, 18.000000);
+    TextDrawAlignment(BankAccountTD[37], 1);
     TextDrawColor(BankAccountTD[37], -1);
     TextDrawSetShadow(BankAccountTD[37], 0);
-    TextDrawBackgroundColor(BankAccountTD[37], 255);
-    TextDrawFont(BankAccountTD[37], 1);
-    TextDrawSetProportional(BankAccountTD[37], 1);
+    TextDrawBackgroundColor(BankAccountTD[37], -256);
+    TextDrawFont(BankAccountTD[37], 5);
+    TextDrawSetProportional(BankAccountTD[37], 0);
+    TextDrawSetPreviewModel(BankAccountTD[37], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[37], 180.000000, 0.000000, 0.000000, 1.000000);
 
-    BankAccountTD[38] = TextDrawCreate(199.033370, 170.303558, "LD_SPAC:white");
-    TextDrawTextSize(BankAccountTD[38], 98.000000, 164.000000);
-    TextDrawAlignment(BankAccountTD[38], 1);
-    TextDrawColor(BankAccountTD[38], -234);
+    BankAccountTD[38] = TextDrawCreate(353.999908, 117.407409, "MARYLAND");
+    TextDrawLetterSize(BankAccountTD[38], 0.135665, 0.654220);
+    TextDrawAlignment(BankAccountTD[38], 2);
+    TextDrawColor(BankAccountTD[38], -1916144641);
     TextDrawSetShadow(BankAccountTD[38], 0);
     TextDrawBackgroundColor(BankAccountTD[38], 255);
-    TextDrawFont(BankAccountTD[38], 4);
-    TextDrawSetProportional(BankAccountTD[38], 0);
+    TextDrawFont(BankAccountTD[38], 1);
+    TextDrawSetProportional(BankAccountTD[38], 1);
 
-    BankAccountTD[39] = TextDrawCreate(128.666824, 192.748077, "");
-    TextDrawTextSize(BankAccountTD[39], 155.000000, 3.000000);
-    TextDrawAlignment(BankAccountTD[39], 1);
-    TextDrawColor(BankAccountTD[39], -1916144753);
+    BankAccountTD[39] = TextDrawCreate(353.333221, 124.459312, "BANKING_SYSTEM");
+    TextDrawLetterSize(BankAccountTD[39], 0.135665, 0.654220);
+    TextDrawAlignment(BankAccountTD[39], 2);
+    TextDrawColor(BankAccountTD[39], -1064116481);
     TextDrawSetShadow(BankAccountTD[39], 0);
-    TextDrawBackgroundColor(BankAccountTD[39], -256);
-    TextDrawFont(BankAccountTD[39], 5);
-    TextDrawSetProportional(BankAccountTD[39], 0);
-    TextDrawSetPreviewModel(BankAccountTD[39], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[39], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawBackgroundColor(BankAccountTD[39], 255);
+    TextDrawFont(BankAccountTD[39], 1);
+    TextDrawSetProportional(BankAccountTD[39], 1);
 
-    BankAccountTD[40] = TextDrawCreate(128.666824, 225.203567, "");
-    TextDrawTextSize(BankAccountTD[40], 155.000000, 3.000000);
-    TextDrawAlignment(BankAccountTD[40], 1);
-    TextDrawColor(BankAccountTD[40], -1916144753);
+    BankAccountTD[40] = TextDrawCreate(212.333267, 120.311126, "HOME");
+    TextDrawLetterSize(BankAccountTD[40], 0.237000, 1.056591);
+    TextDrawAlignment(BankAccountTD[40], 2);
+    TextDrawColor(BankAccountTD[40], -1916144641);
     TextDrawSetShadow(BankAccountTD[40], 0);
-    TextDrawBackgroundColor(BankAccountTD[40], -256);
-    TextDrawFont(BankAccountTD[40], 5);
-    TextDrawSetProportional(BankAccountTD[40], 0);
-    TextDrawSetPreviewModel(BankAccountTD[40], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[40], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawBackgroundColor(BankAccountTD[40], 255);
+    TextDrawFont(BankAccountTD[40], 1);
+    TextDrawSetProportional(BankAccountTD[40], 1);
 
-    BankAccountTD[41] = TextDrawCreate(128.666824, 264.196197, "");
-    TextDrawTextSize(BankAccountTD[41], 155.000000, 3.000000);
+    BankAccountTD[41] = TextDrawCreate(502.000030, 130.525939, "LD_SPAC:white");
+    TextDrawTextSize(BankAccountTD[41], 28.000000, 85.000000);
     TextDrawAlignment(BankAccountTD[41], 1);
-    TextDrawColor(BankAccountTD[41], -1916144753);
+    TextDrawColor(BankAccountTD[41], 329471);
     TextDrawSetShadow(BankAccountTD[41], 0);
-    TextDrawBackgroundColor(BankAccountTD[41], -256);
-    TextDrawFont(BankAccountTD[41], 5);
+    TextDrawBackgroundColor(BankAccountTD[41], 255);
+    TextDrawFont(BankAccountTD[41], 4);
     TextDrawSetProportional(BankAccountTD[41], 0);
-    TextDrawSetPreviewModel(BankAccountTD[41], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[41], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[42] = TextDrawCreate(353.333465, 169.203674, "");
-    TextDrawTextSize(BankAccountTD[42], 155.000000, 27.000000);
+    BankAccountTD[42] = TextDrawCreate(505.100067, 112.803733, "");
+    TextDrawTextSize(BankAccountTD[42], 20.000000, 21.000000);
     TextDrawAlignment(BankAccountTD[42], 1);
-    TextDrawColor(BankAccountTD[42], -1064116481);
+    TextDrawColor(BankAccountTD[42], -1916144641);
     TextDrawSetShadow(BankAccountTD[42], 0);
     TextDrawBackgroundColor(BankAccountTD[42], -256);
     TextDrawFont(BankAccountTD[42], 5);
     TextDrawSetProportional(BankAccountTD[42], 0);
-    TextDrawSetPreviewModel(BankAccountTD[42], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[42], 0.000000, -90.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[42], 1316);
+    TextDrawSetPreviewRot(BankAccountTD[42], 270.000000, 180.000000, 0.000000, 1.000000);
 
-    BankAccountTD[43] = TextDrawCreate(353.333465, 199.070343, "");
-    TextDrawTextSize(BankAccountTD[43], 155.000000, 27.000000);
+    BankAccountTD[43] = TextDrawCreate(198.700042, 136.703598, "LD_SPAC:white");
+    TextDrawTextSize(BankAccountTD[43], 327.000000, 1.340000);
     TextDrawAlignment(BankAccountTD[43], 1);
-    TextDrawColor(BankAccountTD[43], -1064116481);
+    TextDrawColor(BankAccountTD[43], -232);
     TextDrawSetShadow(BankAccountTD[43], 0);
-    TextDrawBackgroundColor(BankAccountTD[43], -256);
-    TextDrawFont(BankAccountTD[43], 5);
+    TextDrawBackgroundColor(BankAccountTD[43], 255);
+    TextDrawFont(BankAccountTD[43], 4);
     TextDrawSetProportional(BankAccountTD[43], 0);
-    TextDrawSetPreviewModel(BankAccountTD[43], 1317);
-    TextDrawSetPreviewRot(BankAccountTD[43], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[44] = TextDrawCreate(353.333465, 232.255538, "");
-    TextDrawTextSize(BankAccountTD[44], 155.000000, 27.000000);
+    BankAccountTD[44] = TextDrawCreate(100.333335, 135.088821, "");
+    TextDrawTextSize(BankAccountTD[44], 197.000000, 30.000000);
     TextDrawAlignment(BankAccountTD[44], 1);
-    TextDrawColor(BankAccountTD[44], -1064116481);
+    TextDrawColor(BankAccountTD[44], -1916144753);
     TextDrawSetShadow(BankAccountTD[44], 0);
     TextDrawBackgroundColor(BankAccountTD[44], -256);
     TextDrawFont(BankAccountTD[44], 5);
@@ -2083,97 +2363,327 @@ CreateBankTDs()
     TextDrawSetPreviewModel(BankAccountTD[44], 1317);
     TextDrawSetPreviewRot(BankAccountTD[44], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[45] = TextDrawCreate(470.999969, 186.366699, "OSTAVI");
-    TextDrawLetterSize(BankAccountTD[45], 0.123333, 0.633481);
-    TextDrawTextSize(BankAccountTD[45], 0.000000, -60.000000);
-    TextDrawAlignment(BankAccountTD[45], 2);
-    TextDrawColor(BankAccountTD[45], -1);
+    BankAccountTD[45] = TextDrawCreate(321.666809, 135.088821, "");
+    TextDrawTextSize(BankAccountTD[45], 197.000000, 30.000000);
+    TextDrawAlignment(BankAccountTD[45], 1);
+    TextDrawColor(BankAccountTD[45], -1916144753);
     TextDrawSetShadow(BankAccountTD[45], 0);
-    TextDrawBackgroundColor(BankAccountTD[45], 255);
-    TextDrawFont(BankAccountTD[45], 1);
-    TextDrawSetProportional(BankAccountTD[45], 1);
-    TextDrawSetSelectable(BankAccountTD[45], true);
+    TextDrawBackgroundColor(BankAccountTD[45], -256);
+    TextDrawFont(BankAccountTD[45], 5);
+    TextDrawSetProportional(BankAccountTD[45], 0);
+    TextDrawSetPreviewModel(BankAccountTD[45], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[45], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[46] = TextDrawCreate(470.999969, 216.233367, "PODIGNI");
-    TextDrawLetterSize(BankAccountTD[46], 0.123333, 0.633481);
-    TextDrawTextSize(BankAccountTD[46], 0.000000, -60.000000);
-    TextDrawAlignment(BankAccountTD[46], 2);
-    TextDrawColor(BankAccountTD[46], -1);
+    BankAccountTD[46] = TextDrawCreate(61.666801, 304.848236, "");
+    TextDrawTextSize(BankAccountTD[46], 127.000000, 23.000000);
+    TextDrawAlignment(BankAccountTD[46], 1);
+    TextDrawColor(BankAccountTD[46], -1916144753);
     TextDrawSetShadow(BankAccountTD[46], 0);
-    TextDrawBackgroundColor(BankAccountTD[46], 255);
-    TextDrawFont(BankAccountTD[46], 1);
-    TextDrawSetProportional(BankAccountTD[46], 1);
-    TextDrawSetSelectable(BankAccountTD[46], true);
+    TextDrawBackgroundColor(BankAccountTD[46], -256);
+    TextDrawFont(BankAccountTD[46], 5);
+    TextDrawSetProportional(BankAccountTD[46], 0);
+    TextDrawSetPreviewModel(BankAccountTD[46], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[46], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[47] = TextDrawCreate(470.999969, 249.418563, "PREBACI");
-    TextDrawLetterSize(BankAccountTD[47], 0.123333, 0.633481);
-    TextDrawTextSize(BankAccountTD[47], 0.000000, -60.000000);
-    TextDrawAlignment(BankAccountTD[47], 2);
-    TextDrawColor(BankAccountTD[47], -1);
+    BankAccountTD[47] = TextDrawCreate(61.666801, 178.744201, "");
+    TextDrawTextSize(BankAccountTD[47], 127.000000, 23.000000);
+    TextDrawAlignment(BankAccountTD[47], 1);
+    TextDrawColor(BankAccountTD[47], -1916144753);
     TextDrawSetShadow(BankAccountTD[47], 0);
-    TextDrawBackgroundColor(BankAccountTD[47], 255);
-    TextDrawFont(BankAccountTD[47], 1);
-    TextDrawSetProportional(BankAccountTD[47], 1);
-    TextDrawSetSelectable(BankAccountTD[47], true);
+    TextDrawBackgroundColor(BankAccountTD[47], -256);
+    TextDrawFont(BankAccountTD[47], 5);
+    TextDrawSetProportional(BankAccountTD[47], 0);
+    TextDrawSetPreviewModel(BankAccountTD[47], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[47], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[48] = TextDrawCreate(469.666656, 319.522521, "TRENUTNI_BALANS");
-    TextDrawLetterSize(BankAccountTD[48], 0.123333, 0.633481);
-    TextDrawTextSize(BankAccountTD[48], 0.000000, -60.000000);
-    TextDrawAlignment(BankAccountTD[48], 2);
-    TextDrawColor(BankAccountTD[48], -1);
+    BankAccountTD[48] = TextDrawCreate(61.666801, 159.247802, "");
+    TextDrawTextSize(BankAccountTD[48], 127.000000, 23.000000);
+    TextDrawAlignment(BankAccountTD[48], 1);
+    TextDrawColor(BankAccountTD[48], -1916144753);
     TextDrawSetShadow(BankAccountTD[48], 0);
-    TextDrawBackgroundColor(BankAccountTD[48], 255);
-    TextDrawFont(BankAccountTD[48], 1);
-    TextDrawSetProportional(BankAccountTD[48], 1);
+    TextDrawBackgroundColor(BankAccountTD[48], -256);
+    TextDrawFont(BankAccountTD[48], 5);
+    TextDrawSetProportional(BankAccountTD[48], 0);
+    TextDrawSetPreviewModel(BankAccountTD[48], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[48], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[49] = TextDrawCreate(450.666748, 141.311141, "");
-    TextDrawTextSize(BankAccountTD[49], 41.000000, 48.000000);
+    BankAccountTD[49] = TextDrawCreate(61.666801, 139.336685, "");
+    TextDrawTextSize(BankAccountTD[49], 127.000000, 23.000000);
     TextDrawAlignment(BankAccountTD[49], 1);
-    TextDrawColor(BankAccountTD[49], -1);
+    TextDrawColor(BankAccountTD[49], -1916144753);
     TextDrawSetShadow(BankAccountTD[49], 0);
     TextDrawBackgroundColor(BankAccountTD[49], -256);
     TextDrawFont(BankAccountTD[49], 5);
     TextDrawSetProportional(BankAccountTD[49], 0);
-    TextDrawSetPreviewModel(BankAccountTD[49], 19177);
-    TextDrawSetPreviewRot(BankAccountTD[49], 180.000000, 0.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[49], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[49], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[50] = TextDrawCreate(227.666763, 141.311141, "");
-    TextDrawTextSize(BankAccountTD[50], 41.000000, 48.000000);
+    BankAccountTD[50] = TextDrawCreate(61.666801, 200.214736, "");
+    TextDrawTextSize(BankAccountTD[50], 127.000000, 23.000000);
     TextDrawAlignment(BankAccountTD[50], 1);
-    TextDrawColor(BankAccountTD[50], -1);
+    TextDrawColor(BankAccountTD[50], -1916144753);
     TextDrawSetShadow(BankAccountTD[50], 0);
     TextDrawBackgroundColor(BankAccountTD[50], -256);
     TextDrawFont(BankAccountTD[50], 5);
     TextDrawSetProportional(BankAccountTD[50], 0);
-    TextDrawSetPreviewModel(BankAccountTD[50], 19177);
-    TextDrawSetPreviewRot(BankAccountTD[50], 180.000000, 0.000000, 0.000000, 1.000000);
+    TextDrawSetPreviewModel(BankAccountTD[50], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[50], 0.000000, -90.000000, 0.000000, 1.000000);
 
-    BankAccountTD[51] = TextDrawCreate(305.333312, 141.311126, "ld_shtr:fstar");
-    TextDrawTextSize(BankAccountTD[51], 67.000000, 65.000000);
-    TextDrawAlignment(BankAccountTD[51], 1);
-    TextDrawColor(BankAccountTD[51], -193);
+    BankAccountTD[51] = TextDrawCreate(158.000015, 153.496276, "NAPRAVI_NALOG");
+    TextDrawLetterSize(BankAccountTD[51], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[51], 2);
+    TextDrawColor(BankAccountTD[51], -1);
     TextDrawSetShadow(BankAccountTD[51], 0);
     TextDrawBackgroundColor(BankAccountTD[51], 255);
-    TextDrawFont(BankAccountTD[51], 4);
-    TextDrawSetProportional(BankAccountTD[51], 0);
+    TextDrawFont(BankAccountTD[51], 1);
+    TextDrawSetProportional(BankAccountTD[51], 1);
+    TextDrawSetSelectable(BankAccountTD[51], true);
 
-    BankAccountTD[52] = TextDrawCreate(324.666717, 204.362960, "ld_shtr:fstar");
-    TextDrawTextSize(BankAccountTD[52], 67.000000, 65.000000);
-    TextDrawAlignment(BankAccountTD[52], 1);
-    TextDrawColor(BankAccountTD[52], -193);
+    BankAccountTD[52] = TextDrawCreate(157.333374, 173.407409, "SVI_LOGOVI");
+    TextDrawLetterSize(BankAccountTD[52], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[52], 2);
+    TextDrawColor(BankAccountTD[52], -1);
     TextDrawSetShadow(BankAccountTD[52], 0);
     TextDrawBackgroundColor(BankAccountTD[52], 255);
-    TextDrawFont(BankAccountTD[52], 4);
-    TextDrawSetProportional(BankAccountTD[52], 0);
+    TextDrawFont(BankAccountTD[52], 1);
+    TextDrawSetProportional(BankAccountTD[52], 1);
+    TextDrawSetSelectable(BankAccountTD[52], true);
 
-    BankAccountTD[53] = TextDrawCreate(339.333465, 268.244415, "ld_shtr:fstar");
-    TextDrawTextSize(BankAccountTD[53], 67.000000, 65.000000);
-    TextDrawAlignment(BankAccountTD[53], 1);
-    TextDrawColor(BankAccountTD[53], -193);
+    BankAccountTD[53] = TextDrawCreate(156.666687, 192.903717, "PROMENI_LOZINKU");
+    TextDrawLetterSize(BankAccountTD[53], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[53], 2);
+    TextDrawColor(BankAccountTD[53], -1);
     TextDrawSetShadow(BankAccountTD[53], 0);
     TextDrawBackgroundColor(BankAccountTD[53], 255);
-    TextDrawFont(BankAccountTD[53], 4);
-    TextDrawSetProportional(BankAccountTD[53], 0);
+    TextDrawFont(BankAccountTD[53], 1);
+    TextDrawSetProportional(BankAccountTD[53], 1);
+    TextDrawSetSelectable(BankAccountTD[53], true);
+
+    BankAccountTD[54] = TextDrawCreate(156.666687, 214.474105, "UKLONI_NALOG");
+    TextDrawLetterSize(BankAccountTD[54], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[54], 2);
+    TextDrawColor(BankAccountTD[54], -1);
+    TextDrawSetShadow(BankAccountTD[54], 0);
+    TextDrawBackgroundColor(BankAccountTD[54], 255);
+    TextDrawFont(BankAccountTD[54], 1);
+    TextDrawSetProportional(BankAccountTD[54], 1);
+    TextDrawSetSelectable(BankAccountTD[54], true);
+
+    BankAccountTD[55] = TextDrawCreate(156.666687, 319.007537, "ODJAVI_SE");
+    TextDrawLetterSize(BankAccountTD[55], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[55], 2);
+    TextDrawColor(BankAccountTD[55], -1);
+    TextDrawSetShadow(BankAccountTD[55], 0);
+    TextDrawBackgroundColor(BankAccountTD[55], 255);
+    TextDrawFont(BankAccountTD[55], 1);
+    TextDrawSetProportional(BankAccountTD[55], 1);
+    TextDrawSetSelectable(BankAccountTD[55], true);
+
+    BankAccountTD[56] = TextDrawCreate(61.666801, 221.785079, "");
+    TextDrawTextSize(BankAccountTD[56], 127.000000, 23.000000);
+    TextDrawAlignment(BankAccountTD[56], 1);
+    TextDrawColor(BankAccountTD[56], -1916144753);
+    TextDrawSetShadow(BankAccountTD[56], 0);
+    TextDrawBackgroundColor(BankAccountTD[56], -256);
+    TextDrawFont(BankAccountTD[56], 5);
+    TextDrawSetProportional(BankAccountTD[56], 0);
+    TextDrawSetPreviewModel(BankAccountTD[56], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[56], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[57] = TextDrawCreate(156.666687, 236.459396, "MOJI_NALOZI");
+    TextDrawLetterSize(BankAccountTD[57], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[57], 2);
+    TextDrawColor(BankAccountTD[57], -1);
+    TextDrawSetShadow(BankAccountTD[57], 0);
+    TextDrawBackgroundColor(BankAccountTD[57], 255);
+    TextDrawFont(BankAccountTD[57], 1);
+    TextDrawSetProportional(BankAccountTD[57], 1);
+    TextDrawSetSelectable(BankAccountTD[57], true);
+
+    BankAccountTD[58] = TextDrawCreate(470.333404, 154.326049, "BANKA");
+    TextDrawLetterSize(BankAccountTD[58], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[58], 2);
+    TextDrawColor(BankAccountTD[58], -1);
+    TextDrawSetShadow(BankAccountTD[58], 0);
+    TextDrawBackgroundColor(BankAccountTD[58], 255);
+    TextDrawFont(BankAccountTD[58], 1);
+    TextDrawSetProportional(BankAccountTD[58], 1);
+
+    BankAccountTD[59] = TextDrawCreate(248.000015, 154.326049, "TRANSAKCIJE_$");
+    TextDrawLetterSize(BankAccountTD[59], 0.136665, 0.633481);
+    TextDrawAlignment(BankAccountTD[59], 2);
+    TextDrawColor(BankAccountTD[59], -1);
+    TextDrawSetShadow(BankAccountTD[59], 0);
+    TextDrawBackgroundColor(BankAccountTD[59], 255);
+    TextDrawFont(BankAccountTD[59], 1);
+    TextDrawSetProportional(BankAccountTD[59], 1);
+
+    BankAccountTD[60] = TextDrawCreate(199.033370, 170.303558, "LD_SPAC:white");
+    TextDrawTextSize(BankAccountTD[60], 98.000000, 164.000000);
+    TextDrawAlignment(BankAccountTD[60], 1);
+    TextDrawColor(BankAccountTD[60], -234);
+    TextDrawSetShadow(BankAccountTD[60], 0);
+    TextDrawBackgroundColor(BankAccountTD[60], 255);
+    TextDrawFont(BankAccountTD[60], 4);
+    TextDrawSetProportional(BankAccountTD[60], 0);
+
+    BankAccountTD[61] = TextDrawCreate(128.666824, 192.748077, "");
+    TextDrawTextSize(BankAccountTD[61], 155.000000, 3.000000);
+    TextDrawAlignment(BankAccountTD[61], 1);
+    TextDrawColor(BankAccountTD[61], -1916144753);
+    TextDrawSetShadow(BankAccountTD[61], 0);
+    TextDrawBackgroundColor(BankAccountTD[61], -256);
+    TextDrawFont(BankAccountTD[61], 5);
+    TextDrawSetProportional(BankAccountTD[61], 0);
+    TextDrawSetPreviewModel(BankAccountTD[61], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[61], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[62] = TextDrawCreate(128.666824, 225.203567, "");
+    TextDrawTextSize(BankAccountTD[62], 155.000000, 3.000000);
+    TextDrawAlignment(BankAccountTD[62], 1);
+    TextDrawColor(BankAccountTD[62], -1916144753);
+    TextDrawSetShadow(BankAccountTD[62], 0);
+    TextDrawBackgroundColor(BankAccountTD[62], -256);
+    TextDrawFont(BankAccountTD[62], 5);
+    TextDrawSetProportional(BankAccountTD[62], 0);
+    TextDrawSetPreviewModel(BankAccountTD[62], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[62], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[63] = TextDrawCreate(128.666824, 264.196197, "");
+    TextDrawTextSize(BankAccountTD[63], 155.000000, 3.000000);
+    TextDrawAlignment(BankAccountTD[63], 1);
+    TextDrawColor(BankAccountTD[63], -1916144753);
+    TextDrawSetShadow(BankAccountTD[63], 0);
+    TextDrawBackgroundColor(BankAccountTD[63], -256);
+    TextDrawFont(BankAccountTD[63], 5);
+    TextDrawSetProportional(BankAccountTD[63], 0);
+    TextDrawSetPreviewModel(BankAccountTD[63], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[63], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[64] = TextDrawCreate(353.333465, 169.203674, "");
+    TextDrawTextSize(BankAccountTD[64], 155.000000, 27.000000);
+    TextDrawAlignment(BankAccountTD[64], 1);
+    TextDrawColor(BankAccountTD[64], -1064116481);
+    TextDrawSetShadow(BankAccountTD[64], 0);
+    TextDrawBackgroundColor(BankAccountTD[64], -256);
+    TextDrawFont(BankAccountTD[64], 5);
+    TextDrawSetProportional(BankAccountTD[64], 0);
+    TextDrawSetPreviewModel(BankAccountTD[64], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[64], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[65] = TextDrawCreate(353.333465, 199.070343, "");
+    TextDrawTextSize(BankAccountTD[65], 155.000000, 27.000000);
+    TextDrawAlignment(BankAccountTD[65], 1);
+    TextDrawColor(BankAccountTD[65], -1064116481);
+    TextDrawSetShadow(BankAccountTD[65], 0);
+    TextDrawBackgroundColor(BankAccountTD[65], -256);
+    TextDrawFont(BankAccountTD[65], 5);
+    TextDrawSetProportional(BankAccountTD[65], 0);
+    TextDrawSetPreviewModel(BankAccountTD[65], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[65], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[66] = TextDrawCreate(353.333465, 232.255538, "");
+    TextDrawTextSize(BankAccountTD[66], 155.000000, 27.000000);
+    TextDrawAlignment(BankAccountTD[66], 1);
+    TextDrawColor(BankAccountTD[66], -1064116481);
+    TextDrawSetShadow(BankAccountTD[66], 0);
+    TextDrawBackgroundColor(BankAccountTD[66], -256);
+    TextDrawFont(BankAccountTD[66], 5);
+    TextDrawSetProportional(BankAccountTD[66], 0);
+    TextDrawSetPreviewModel(BankAccountTD[66], 1317);
+    TextDrawSetPreviewRot(BankAccountTD[66], 0.000000, -90.000000, 0.000000, 1.000000);
+
+    BankAccountTD[67] = TextDrawCreate(470.999969, 186.366699, "OSTAVI");
+    TextDrawLetterSize(BankAccountTD[67], 0.123332, 0.633481);
+    TextDrawTextSize(BankAccountTD[67], 0.000000, -60.000000);
+    TextDrawAlignment(BankAccountTD[67], 2);
+    TextDrawColor(BankAccountTD[67], -1);
+    TextDrawSetShadow(BankAccountTD[67], 0);
+    TextDrawBackgroundColor(BankAccountTD[67], 255);
+    TextDrawFont(BankAccountTD[67], 1);
+    TextDrawSetProportional(BankAccountTD[67], 1);
+    TextDrawSetSelectable(BankAccountTD[67], true);
+
+    BankAccountTD[68] = TextDrawCreate(470.999969, 216.233367, "PODIGNI");
+    TextDrawLetterSize(BankAccountTD[68], 0.123332, 0.633481);
+    TextDrawTextSize(BankAccountTD[68], 0.000000, -60.000000);
+    TextDrawAlignment(BankAccountTD[68], 2);
+    TextDrawColor(BankAccountTD[68], -1);
+    TextDrawSetShadow(BankAccountTD[68], 0);
+    TextDrawBackgroundColor(BankAccountTD[68], 255);
+    TextDrawFont(BankAccountTD[68], 1);
+    TextDrawSetProportional(BankAccountTD[68], 1);
+    TextDrawSetSelectable(BankAccountTD[68], true);
+
+    BankAccountTD[69] = TextDrawCreate(470.999969, 249.418563, "PREBACI");
+    TextDrawLetterSize(BankAccountTD[69], 0.123332, 0.633481);
+    TextDrawTextSize(BankAccountTD[69], 0.000000, -60.000000);
+    TextDrawAlignment(BankAccountTD[69], 2);
+    TextDrawColor(BankAccountTD[69], -1);
+    TextDrawSetShadow(BankAccountTD[69], 0);
+    TextDrawBackgroundColor(BankAccountTD[69], 255);
+    TextDrawFont(BankAccountTD[69], 1);
+    TextDrawSetProportional(BankAccountTD[69], 1);
+    TextDrawSetSelectable(BankAccountTD[69], true);
+
+    BankAccountTD[70] = TextDrawCreate(469.666656, 319.522521, "TRENUTNI_BALANS");
+    TextDrawLetterSize(BankAccountTD[70], 0.123332, 0.633481);
+    TextDrawTextSize(BankAccountTD[70], 0.000000, -60.000000);
+    TextDrawAlignment(BankAccountTD[70], 2);
+    TextDrawColor(BankAccountTD[70], -1);
+    TextDrawSetShadow(BankAccountTD[70], 0);
+    TextDrawBackgroundColor(BankAccountTD[70], 255);
+    TextDrawFont(BankAccountTD[70], 1);
+    TextDrawSetProportional(BankAccountTD[70], 1);
+
+    BankAccountTD[71] = TextDrawCreate(450.666748, 141.311141, "");
+    TextDrawTextSize(BankAccountTD[71], 41.000000, 48.000000);
+    TextDrawAlignment(BankAccountTD[71], 1);
+    TextDrawColor(BankAccountTD[71], -1);
+    TextDrawSetShadow(BankAccountTD[71], 0);
+    TextDrawBackgroundColor(BankAccountTD[71], -256);
+    TextDrawFont(BankAccountTD[71], 5);
+    TextDrawSetProportional(BankAccountTD[71], 0);
+    TextDrawSetPreviewModel(BankAccountTD[71], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[71], 180.000000, 0.000000, 0.000000, 1.000000);
+
+    BankAccountTD[72] = TextDrawCreate(227.666763, 141.311141, "");
+    TextDrawTextSize(BankAccountTD[72], 41.000000, 48.000000);
+    TextDrawAlignment(BankAccountTD[72], 1);
+    TextDrawColor(BankAccountTD[72], -1);
+    TextDrawSetShadow(BankAccountTD[72], 0);
+    TextDrawBackgroundColor(BankAccountTD[72], -256);
+    TextDrawFont(BankAccountTD[72], 5);
+    TextDrawSetProportional(BankAccountTD[72], 0);
+    TextDrawSetPreviewModel(BankAccountTD[72], 19177);
+    TextDrawSetPreviewRot(BankAccountTD[72], 180.000000, 0.000000, 0.000000, 1.000000);
+
+    BankAccountTD[73] = TextDrawCreate(305.333312, 141.311126, "ld_shtr:fstar");
+    TextDrawTextSize(BankAccountTD[73], 67.000000, 65.000000);
+    TextDrawAlignment(BankAccountTD[73], 1);
+    TextDrawColor(BankAccountTD[73], -193);
+    TextDrawSetShadow(BankAccountTD[73], 0);
+    TextDrawBackgroundColor(BankAccountTD[73], 255);
+    TextDrawFont(BankAccountTD[73], 4);
+    TextDrawSetProportional(BankAccountTD[73], 0);
+
+    BankAccountTD[74] = TextDrawCreate(324.666717, 204.362960, "ld_shtr:fstar");
+    TextDrawTextSize(BankAccountTD[74], 67.000000, 65.000000);
+    TextDrawAlignment(BankAccountTD[74], 1);
+    TextDrawColor(BankAccountTD[74], -193);
+    TextDrawSetShadow(BankAccountTD[74], 0);
+    TextDrawBackgroundColor(BankAccountTD[74], 255);
+    TextDrawFont(BankAccountTD[74], 4);
+    TextDrawSetProportional(BankAccountTD[74], 0);
+
+    BankAccountTD[75] = TextDrawCreate(339.333465, 268.244415, "ld_shtr:fstar");
+    TextDrawTextSize(BankAccountTD[75], 67.000000, 65.000000);
+    TextDrawAlignment(BankAccountTD[75], 1);
+    TextDrawColor(BankAccountTD[75], -193);
+    TextDrawSetShadow(BankAccountTD[75], 0);
+    TextDrawBackgroundColor(BankAccountTD[75], 255);
+    TextDrawFont(BankAccountTD[75], 4);
+    TextDrawSetProportional(BankAccountTD[75], 0);
 }
 
 forward StringBankTDs(playerid);
@@ -2186,7 +2696,7 @@ public StringBankTDs(playerid)
     PlayerTextDrawSetString(playerid, BankAccountPTD[playerid][1], namestr);
 
     new string[80];
-    format(string,sizeof(string),"%d",GetPlayerMoney(playerid));
+    format(string,sizeof(string),"%d$",PlayerFinance[playerid][pBankMoney]);
     PlayerTextDrawSetString(playerid, BankAccountPTD[playerid][15], string);
     return (true);
 }

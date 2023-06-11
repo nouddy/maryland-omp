@@ -63,6 +63,8 @@ hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	if(PlayerInfo[playerid][Staff] >= 1)
 	{
 		SetPlayerPosFindZ(playerid, fX, fY, fZ);
+		SetPlayerInterior(playerid, 0);
+		SetPlayerVirtualWorld(playerid, 0);
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
