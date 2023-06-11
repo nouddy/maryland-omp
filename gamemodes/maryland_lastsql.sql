@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2023 at 04:06 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Jun 11, 2023 at 10:04 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -131,21 +131,6 @@ CREATE TABLE `cars` (
   `carFaction` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `cars`
---
-
-INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carPosZ`, `carPosR`, `carColor1`, `carColor2`, `carPaintjob`, `carLocked`, `carMod1`, `carMod2`, `carMod3`, `carMod4`, `carMod5`, `carMod6`, `carMod7`, `carMod8`, `carMod9`, `carMod10`, `carMod11`, `carMod12`, `carMod13`, `carMod14`, `carImpounded`, `carWeapon1`, `carAmmo1`, `carWeapon2`, `carAmmo2`, `carWeapon3`, `carAmmo3`, `carWeapon4`, `carAmmo4`, `carWeapon5`, `carAmmo5`, `carImpoundPrice`, `carFaction`) VALUES
-(3, 53, 0, 1554.11, -2332.82, 13.5546, 246.54, 4, 4, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 53, 0, 1549.4, -2327.92, 13.5546, 161.971, 70, 79, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 53, 0, 1551.04, -2331.14, 13.5547, 177.421, 92, 111, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 522, 0, 1548.47, -2334.36, 13.5547, 191.843, 75, 38, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 522, 0, 1546.84, -2337.25, 13.5547, 181.784, 16, 52, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 522, 0, 1548.88, -2339.04, 13.5547, 236.305, 56, 122, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 522, 0, 1545.99, -2343.26, 14.3759, 142.199, 28, 30, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 522, 0, 1542.29, -2342.98, 13.5469, 62.4758, 75, 20, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 522, 0, 1551.61, -2337.78, 13.5546, 0.5395, 70, 17, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -170,14 +155,6 @@ CREATE TABLE `houses` (
   `InteriorZ` float DEFAULT 0,
   `Custom_Interior` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `houses`
---
-
-INSERT INTO `houses` (`ID`, `Address`, `Description`, `Owner`, `Owned`, `Locked`, `Price`, `InteriorE`, `InteriorI`, `ExteriorX`, `ExteriorY`, `ExteriorZ`, `InteriorX`, `InteriorY`, `InteriorZ`, `Custom_Interior`) VALUES
-(0, '0, Commerce, Los Santos', 'Stan', 'Vostic', 1, 0, 15000, 0, 0, 1470.24, -1746.51, 13.5761, 1429.43, -1221.33, 152.818, 0),
-(1, '1, Commerce, Los Santos', 'Cao', 'Ogy_', 1, 0, 1000, 0, 1, 1465.1, -1734.67, 13.3828, 1429.43, -1221.33, 152.818, 0);
 
 -- --------------------------------------------------------
 
@@ -223,15 +200,7 @@ CREATE TABLE `players` (
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
 (1, 'Vostic', 297206591, 1, 200650, 299, 21, 4, '17/05/2023 - 13:30', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
-(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
-(4, 'Ogysha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 20:59', 'Srbija', '0', '@gmail.com', -1, -1),
-(5, 'Ogyzsha_', 68944173, 1, 0, 29, 19, 0, 'NEMA', '17/05/2023 - 21:00', 'Srbija', '0', '@gmail.com', -1, -1),
-(25, 'Ogyzzasd', 143917681, 1, 0, 29, 19, 0, '29/05/2023 - 17:14', '29/05/2023 - 17:14', 'Srbija', 'Musko', 'dsads@gmail.com', -1, -1),
-(26, 'Ogyzzasdas', 196543201, 1, 0, 29, 19, 0, '29/05/2023 - 17:17', '29/05/2023 - 17:17', 'Srbija', 'Musko', 'dsa@gmail.com', -1, -1),
-(27, 'Ogyzzasdass', 308478892, 1, 0, 29, 19, 0, '29/05/2023 - 17:18', '29/05/2023 - 17:18', 'Srbija', 'Musko', 'dsadsa@gmail.com', -1, 1),
-(28, 'Ogyazzasdass', 631244116, 1, 0, 29, 19, 0, '29/05/2023 - 17:21', '29/05/2023 - 17:20', 'Srbija', 'Musko', 'sahjsafjh@gmail.com', -1, -1),
-(29, 'jkdsagldsadsa', 146866813, 1, 0, 29, 19, 0, '29/05/2023 - 17:23', '29/05/2023 - 17:23', 'Srbija', 'Musko', 'sahjhfsajsa@gmail.com', -1, -1),
-(30, 'dsadasdsahj', 246481736, 1, 0, 29, 19, 0, '29/05/2023 - 17:28', '29/05/2023 - 17:27', 'Srbija', 'Musko', 'dsadsa@gmail.com', 1, -1);
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1);
 
 -- --------------------------------------------------------
 
@@ -306,9 +275,21 @@ INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin
 --
 
 --
+-- Indexes for table `bankers`
+--
+ALTER TABLE `bankers`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `bank_accounts`
 --
 ALTER TABLE `bank_accounts`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bank_atms`
+--
+ALTER TABLE `bank_atms`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -365,9 +346,21 @@ ALTER TABLE `player_finance`
 --
 
 --
+-- AUTO_INCREMENT for table `bankers`
+--
+ALTER TABLE `bankers`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `bank_accounts`
 --
 ALTER TABLE `bank_accounts`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_atms`
+--
+ALTER TABLE `bank_atms`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -381,6 +374,18 @@ ALTER TABLE `bank_logs`
 --
 ALTER TABLE `cars`
   MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `houses`
+--
+ALTER TABLE `houses`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `klupe`
+--
+ALTER TABLE `klupe`
+  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `players`

@@ -32,7 +32,7 @@ static LoginActor[MAX_PLAYERS];
 new bool:UcitavanjeObjekata[MAX_PLAYERS],
 	bool:ImaLoginTD[MAX_PLAYERS];
 
-new Text:Login_TD[71];
+new Text:Login_TD[93];
 
 enum
 {

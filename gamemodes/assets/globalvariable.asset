@@ -30,9 +30,9 @@ new IC_CHAT = 1;                                            //* Variabla za glob
 new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za proveru
 
 new Text:Global_TD[33];
-new Text:MarylandLogo[17];
+new Text:MarylandLogo[30];
 new PlayerText:Player_TDs[MAX_PLAYERS][7];
-new PlayerText:Register_PTD[MAX_PLAYERS][55];
+new PlayerText:Register_PTD[MAX_PLAYERS][77];
 new PlayerText:OdabirSkina_PTD[MAX_PLAYERS][9];
 
 
