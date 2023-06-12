@@ -425,11 +425,14 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/apartman.map"					//* Apartman map
 #include "frontend/izborskina.map"					//* Izbor skina mapa
 #include "frontend/kanalizacija.map"				//* Kanalizacija map
-#include "frontend/astoyota.map"					//* Auto salon toyota mapa
+#include "frontend/glenpark.map"					//* Glen park map
 #include "frontend/mafiaint.map"					//* Mafia int mapa muay
 #include "frontend/spawn.map"						//* Spawn Mapa
 #include "frontend/spawn-int.map"					//* Spawn Int Mapa
 #include "frontend/login_map.map"					//* Login Soba Mapa
+#include "frontend/bolnica-ext.map"					//* Bolnica ext Mapa
+#include "frontend/hotel-ext.map"					//* Hotel Mapa
+#include "frontend/maryland-pd.map"					//* MLPD Mapa Ext
 //-
 #include "frontend/end/do-not-look.end"
 

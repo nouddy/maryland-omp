@@ -42,7 +42,7 @@ enum fPoliceData {
     bool:fPolIDUsed,                 //* Da li je id Policije iskoriscen
     fPolicePickup,                   //* Pickup (Create marker)
     Text3D: fPoliceLabel,            //* Label
-    fPoliceRanks[3],  //* Rankovi u svakoj policiji ima ih 3 (3 ranka i 3 skina), 4 je boss
+    fPoliceRanks[3],                 //* Rankovi u svakoj policiji ima ih 3 (3 ranka i 3 skina), 4 je boss
     fPoliceSkins[4]                  //* Skinovi za rankove i tip svake policije   
 //? > Za da li je igrac clan orge imacemo drugu tabelu player_faction (i imace dal je police, id orge kojoj pripada itd bolje nego da radimo ovde array od 30 membera i da ucitava nije pregledno i smor je za cuvanje)
 };

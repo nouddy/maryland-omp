@@ -13,5 +13,9 @@
         "*.asset": "pawn"
     },
     "pawn.compilerPath": "D:\\Mods\\maryland\\compiler",
-    "files.encoding": "windows1252"
+    "files.encoding": "windows1252",
+    "vscord.app.whitelist": [
+        "1047020192863096862"
+    ],
+    "vscord.enabled": true
 }

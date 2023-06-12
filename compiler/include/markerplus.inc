@@ -35,17 +35,26 @@ enum {
     ICON_SHIP,
     ICON_BUS,
     ICON_CITYHALL,
-    ICON_KEYBOARD
+    ICON_KEYBOARD,
+    ICON_MOON,
+    ICON_MARTINI,
+    ICON_BED,
+    ICON_VEVERICA,
+    ICON_SKIJANJE,
+    ICON_LAN_MREZA,
+    ICON_INVALID_KOLICA,
+    ICON_GYM,
+    ICON_MARKET
 }
 
 static const ICON_LETTER[][5] = {
-    "NULL", "F", "A", "G", "H", "J", "K", "C", "B", "h", "f", "p", "o", "v", "&", "7"
+    "NULL", "F", "A", "G", "H", "J", "K", "C", "B", "h", "f", "p", "o", "v", "&", "7", "à", "å", "ã", "ò", "‡", "Â", "é","†","ç"
 };
 
-static const ICON_FONT[][16] = {
+static const ICON_FONT[][25] = {
     "NULL", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
     "Webdings", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
-    "Webdings", "Webdings", "Wingdings", "Wingdings"
+    "Webdings", "Webdings", "Wingdings", "Wingdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings"
 };
 
 static const COLOR_ARRAY[] =
