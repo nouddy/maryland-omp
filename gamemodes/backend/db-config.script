@@ -19,13 +19,13 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define local
+#define server
 
 #if defined server
-#define MYSQL_HOST		"db.zlaja.eu"
-#define MYSQL_USER 		"u1_n6IPi5KL7a"
-#define MYSQL_PASS		"XwiVOqdLZzFIg^!4@ymbKwFB"
-#define MYSQL_DB 		"s1_maryland"
+#define MYSQL_HOST		"db.vostic.wtf"
+#define MYSQL_USER 		"u1_hVvwrNQbkw"
+#define MYSQL_PASS		"n1bgTob=PZgwB!VbSddHq9Kb"
+#define MYSQL_DB 		"s1_Maryland"
 #endif
 
 #if defined local
