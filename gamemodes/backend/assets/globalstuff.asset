@@ -1,0 +1,73 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           globalstuff.asset
+ *  @Module         assets
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+/*
+	Defines
+*/
+#define SendErrorMessage(%0,%1) \
+	SendClientMessageEx(%0, x_red, "[!/Error]: {FFFFFF}"%1) 
+
+#define SendJobMessage(%0,%1) \
+	SendClientMessageEx(%0, x_ogycolor, "[?/Job]: {FFFFFF}"%1)
+
+#define SendInfoMessage(%0,%1) \
+	SendClientMessageEx(%0, x_server, "��� MARYLAND: {FFFFFF}"%1)
+
+hook OnGameModeInit()
+{
+	print("assets/globalstuff.asset loaded");
+
+	return 1;
+}
+
+new IC_CHAT = 1;                                            //* Variabla za globalni chat
+new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za proveru
+
+new Text:Global_TD[33];
+new Text:MarylandLogo[30];
+new PlayerText:Player_TDs[MAX_PLAYERS][7];
+new PlayerText:Register_PTD[MAX_PLAYERS][77];
+new PlayerText:OdabirSkina_PTD[MAX_PLAYERS][9];
+
+
+
+new RegisterActor[MAX_PLAYERS];
+
+new bool:RegisterPol[MAX_PLAYERS],
+    bool:RegisterPass[MAX_PLAYERS],
+    bool:RegisterGodine[MAX_PLAYERS],
+    bool:RegisterEmail[MAX_PLAYERS],
+    bool:RegisterDrzava[MAX_PLAYERS],
+    bool:Registered[MAX_PLAYERS],
+    bool:OnRegisterSkinLoad[MAX_PLAYERS];
+
+
+hook OnPlayerConnect(playerid)
+{
+    RegisterPol[playerid] =
+    RegisterPass[playerid] =
+    RegisterGodine[playerid] =
+    RegisterEmail[playerid] = 
+    RegisterDrzava[playerid] =
+    Registered[playerid] =
+    OnRegisterSkinLoad[playerid] = false;
+    return 1;
+}

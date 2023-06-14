@@ -1,0 +1,119 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           playerlocation.script
+ *  @Module         tehnomedia
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+enum e_ZONE_INFO {
+	e_ZONE_NAME[64],
+	Float:e_ZONE_MIN_X,
+	Float:e_ZONE_MIN_Y,
+	Float:e_ZONE_MAX_X,
+	Float:e_ZONE_MAX_Y,
+	e_ZONE_GANGZONE,
+	e_ZONE_RECTANGLE
+};
+
+new Float:eZones[][e_ZONE_INFO] = {
+{ "Ganton_Blue_Projects", 2223.0, -1825.0, 2408.0, -1739.0 },
+{ "East_Beach_Stadium", 2622.0, -1900.0, 2814.0, -1651.0 },
+{ "Alhambra_Club", 1813.0, -1757.0, 1949.0, -1605.0 },
+{ "Idlewood_415", 1949.0, -1758.0, 2095.0, -1605.0 },
+{ "Pizza_Stacks", 2095.0, -1830.0, 2136.0, -1745.0 },
+{ "Idlewood_Motel", 2136.0, -1830.0, 2193.0, -1745.0 },
+{ "Crystal_Gardens", 2095.0, -1745.0, 2179.0, -1637.0 },
+{ "Idlewood_Gas", 1902.0, -1792.0, 1953.0, -1757.0 },
+{ "Eastern_Idlewood_Sewers", 2543.0, -2142.0, 2622.0, -1628.0 },
+{ "Northern_Idlewood_Sewers", 2545.0, -1595.0, 2636.0, -1572.0 },
+{ "Northern_Idlewood_Sewers", 2560.0, -1572.0, 2636.0, -1529.0 },
+{ "Northern_Idlewood_Sewers", 2581.0, -1529.0, 2636.0, -1458.0 },
+{ "Playa_Del_Seville", 2622.0, -2040.0, 2814.0, -1900.0 },
+{ "Outer_Playa_Del_Seville", 2622.0, -2143.0, 2722.0, -2040.0 },
+{ "Outer_Playa_Del_Seville", 2722.0, -2090.0, 2814.0, -2040.0 },
+{ "Outer_Playa_Del_Seville", 2722.0, -2106.0, 2808.0, -2090.0 },
+{ "Outer_Playa_Del_Seville", 2722.0, -2128.0, 2794.0, -2106.0 },
+{ "Unity_Station", 1699.0, -1948.0, 1811.0, -1846.0 },
+{ "Unity_Station", 1684.0, -1947.0, 1699.0, -1868.0 },
+{ "Altura_Street", 1699.0, -1847.0, 1811.0, -1804.0 },
+{ "Glen_Park_Bridge", 1961.0, -1251.0, 1984.0, -1142.0 },
+{ "Glen_Park", 1984.0, -1251.0, 2056.0, -1142.0 },
+{ "Glen_Park", 1877.0, -1250.0, 1961.0, -1142.0 },
+{ "Northern_Glen_Park", 1878.0, -1142.0, 2056.0, -1122.0 },
+{ "Southern_Glen_Park", 1878.0, -1271.0, 2056.0, -1251.0 },
+{ "El_Corona_Dead_End", 1657.0, -2105.0, 1814.0, -2066.0 },
+{ "Western_Glen_Park", 1839.0, -1271.0, 1877.0, -1122.0 },
+{ "Eastern_Glen_Park", 2056.0, -1271.0, 2084.0, -1096.0 },
+{ "LSIX_Pond", 1192.0, -2419.0, 1289.0, -2343.0 },
+{ "LSIX_Runway_69L", 810.0, -2518.0, 2134.0, -2466.0 },
+{ "LSIX_Runway_Swapover", 2081.0, -2566.0, 2134.0, -2518.0 },
+{ "LSIX_Runway_69R", 810.0, -2624.0, 2134.0, -2566.0 },
+{ "LSIX_Runway_Offramp", 1396.0, -2566.0, 2082.0, -2518.0 },
+{ "LSIX_Hanger_Row", 1422.0, -2653.0, 2082.0, -2624.0 },
+{ "Grove_Circle", 2443.0, -1722.0, 2543.0, -1628.0 },
+{ "Ganton_Boulevard", 2223.0, -1739.0, 2542.0, -1723.0 },
+{ "Grove_Street", 2336.0, -1723.0, 2443.0, -1649.0 },
+{ "Ganton_Gym", 2212.0, -1723.0, 2300.0, -1663.0 },
+{ "Grove_Street", 2212.0, -1663.0, 2335.0, -1649.0 },
+{ "Ten_Green_Bottles_Bar", 2296.0, -1649.0, 2336.0, -1630.0 },
+{ "Grove_Street", 2226.0, -1649.0, 2296.0, -1621.0 },
+{ "Grove_Housing", 2300.0, -1723.0, 2336.0, -1663.0 },
+{ "Willowfield_Dead_End", 2427.0, -2039.0, 2543.0, -1978.0 },
+{ "LSIX_Terminal", 1565.0, -2335.0, 1823.0, -2239.0 },
+{ "El_Corona_Flats", 1806.0, -2045.0, 1956.0, -1963.0 },
+{ "El_Corona_Housing", 1831.0, -2158.0, 1921.0, -2061.0 },
+{ "El_Corona_Sex_Shop", 1921.0, -2158.0, 1954.0, -2061.0 },
+{ "Lucas_Avenue", 1683.0, -1868.0, 1699.0, -1597.0 },
+{ "El_Corona_Dead_End", 1657.0, -2156.0, 1814.0, -2117.0 },
+{ "18th_Street", 1657.0, -2117.0, 1814.0, -2105.0 },
+{ "Palmwood_Avenue",  2179.0, -1745.0, 2197.0, -1651.0 },
+{ "Palmwood_Avenue_/_~w~Idlewood_Tracks", 2197.0, -1745.0, 2212.0, -1651.0 },
+{ "Idlewood_Tracks", 2193.0, -1906.0, 2211.0, -1745.0 },
+{ "Willowfield_Avenue", 2211.0, -1825.0, 2223.0, -1745.0 },
+{ "Willowfield_Avenue_/_~w~Ganton Boulevard", 2211.0, -1745.0, 2223.0, -1723.0 },
+{ "Gilmore_Avenue", 2074.0, -1842.0, 2095.0, -1758.0 },
+{ "Gilmore_Avenue", 2074.0, -1936.0, 2090.0, -1865.0 },
+{ "Dona_Avenue", 1967.0, -1819.0, 2074.0, -1803.0 },
+{ "San_Fierro", -2997.40, -1115.50, -242.90, -1213.90 }
+};
+
+hook OnGameModeInit()
+{
+	print("tehnomedia/playerlocation.script loaded");
+
+	for(new i = 0; i < sizeof eZones; i++) {
+		eZones[i][e_ZONE_GANGZONE] = GangZoneCreate(eZones[i][e_ZONE_MIN_X], eZones[i][e_ZONE_MIN_Y], 
+			eZones[i][e_ZONE_MAX_X], eZones[i][e_ZONE_MAX_Y]);
+
+		eZones[i][e_ZONE_RECTANGLE] = CreateDynamicRectangle(eZones[i][e_ZONE_MIN_X], eZones[i][e_ZONE_MIN_Y], 
+			eZones[i][e_ZONE_MAX_X], eZones[i][e_ZONE_MAX_Y]);
+
+        Streamer_SetIntData(STREAMER_TYPE_AREA, eZones[i][e_ZONE_RECTANGLE], E_STREAMER_EXTRA_ID, i);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeExit() 
+{
+	for(new i = 0; i < sizeof eZones; i++) 
+	{
+		GangZoneDestroy(eZones[i][e_ZONE_GANGZONE]);
+	}
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}

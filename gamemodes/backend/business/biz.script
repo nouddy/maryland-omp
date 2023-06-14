@@ -1,0 +1,138 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           29th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           biz.script
+ *  @Module         business
+*/
+
+ //? Takodje oni imaju kul stvar za druge firme pogledaj car dealership, ako je biz type 5 ucitava firmu iz druge sql tabele, rasterecuje enum i pregledniji je sql.
+ //? Primer na liniji u scrp (6709)
+
+ /* if (BusinessData[i][bizType] == 5) {
+			format(str, sizeof(str), "SELECT * FROM `dealervehicles` WHERE `ID` = '%d'", BusinessData[i][bizID]);
+
+			mysql_tquery(g_iHandle, str, "Business_LoadCars", "d", i);
+		}
+*/
+
+//============================================================ Includes
+#include <ysilib\YSI_Coding\y_hooks>
+
+//============================================================ Defines
+#define MAX_BUSINESS (500)
+
+//============================================================ Enums
+
+enum businessData {
+    bizID,                  //* Biz ID (SQL ID)                                                                           
+    bool:bizExists,         //* Dali biz postoji logic
+    bizName[32],            //* Biz Ime
+    bizOpis[128],           //* Biz deskripcija firme cime se firma bavi
+    bizAddress[35],         //* Biz adresa (GetPlayer2DZone) koristi za adresu imas u houses
+    bizOwner,               //* SQL ID Ownera biza
+    bizType,                //* Tip firme treba odrediti koje ce firme biti
+    bizPrice,               //* Cena biza
+    Float:bizExt[4],        //* x, y, z, a
+    Float:bizInt[4],        //* x,y,z, a
+    bizInterior,            //* interijer id od biza
+    bizExterior,            //* interijer na izlazu koji se seta
+    bizExteriorVW,          //* Vw za izlaz jer se za ulaz povecava logic
+    bool:bizLocked,         //* Boolean locked / unlocked
+    bizVault,               //* Sef firme
+    bizProducts,            //* Produkti u firmi
+    bizPickup,              //* Pickup (Create marker & Dynamic 3d text label)
+    bizPrices[20],          //* cene produkata array (scrp stil kul fora)  pogledaj SCRP linija 9469 (Business_Create) bice ti jasno > Iskoristi njihov system samo cemo ga preurediti na bolji nacin
+    bizInvestor             //* investitor bira ga vlasnik moze da edituje neke stvari u firmi ukratko na kontu firme drugari mogu voditi (Isto treba sql id investora)
+};
+new mBizInfo[MAX_BUSINESS][businessData];
+
+//============================================================ Boze Pomozi
+
+hook OnGameModeInit()
+{
+    print("business/biz.script loaded");
+
+    mysql_tquery(SQL, "SELECT * FROM `businesses`", "BizLoad", "");
+}
+
+forward BizLoad();
+public BizLoad()
+{
+    if(!cache_num_rows())
+		return print("\n[Business]: 0 business ucitano.\n");
+
+    static
+        rows,
+        str[64];
+
+    cache_get_row_count(rows);
+
+    for(new i=0; i < rows; i++) if(i < MAX_BUSINESS)
+    {
+        mBizInfo[i][bizExists] = true;
+        cache_get_value_name_int(i, "bizID", mBizInfo[i][bizID]);
+
+        cache_get_value_name(i, "bizName", mBizInfo[i][bizName], 32);
+        cache_get_value_name(i, "bizOpis", mBizInfo[i][bizOpis], 128);
+        cache_get_value_name(i, "bizAddress", mBizInfo[i][bizAddress], 35);
+
+        cache_get_value_name_int(i, "bizOwner", mBizInfo[i][bizOwner]);
+        cache_get_value_name_int(i, "bizType", mBizInfo[i][bizType]);
+ 		cache_get_value_name_float(i, "bizPosX", mBizInfo[i][bizExt][0]);
+		cache_get_value_name_float(i, "bizPosY", mBizInfo[i][bizExt][1]);
+		cache_get_value_name_float(i, "bizPosZ", mBizInfo[i][bizExt][2]);
+		cache_get_value_name_float(i, "bizPosA", mBizInfo[i][bizExt][3]);
+		cache_get_value_name_float(i, "bizIntX", mBizInfo[i][bizInt][0]);
+		cache_get_value_name_float(i, "bizIntY", mBizInfo[i][bizInt][1]);
+		cache_get_value_name_float(i, "bizIntZ", mBizInfo[i][bizInt][2]);
+		cache_get_value_name_float(i, "bizIntA", mBizInfo[i][bizInt][3]);       
+		cache_get_value_name_int(i, "bizInterior", mBizInfo[i][bizInterior]);
+		cache_get_value_name_int(i, "bizExterior", mBizInfo[i][bizExterior]);
+		cache_get_value_name_int(i, "bizExteriorVW", mBizInfo[i][bizExteriorVW]);
+		cache_get_value_name_int(i, "bizLocked", mBizInfo[i][bizLocked]);
+		cache_get_value_name_int(i, "bizVault", mBizInfo[i][bizVault]);
+		cache_get_value_name_int(i, "bizProducts", mBizInfo[i][bizProducts]);
+        cache_get_value_name_int(i, "bizInvestor", mBizInfo[i][bizInvestor]);
+
+		for (new j = 0; j < 20; j ++)
+		{
+			format(str, 32, "bizPrice%d", j + 1);
+			cache_get_value_name_int(i, str, mBizInfo[i][bizPrices][j]);
+		}
+
+    }
+    printf("\n[Business]: %d Business ucitano.\n",rows);
+    return (true);
+}
+
+//============================================================ Stocks
+GetClosestBusiness(playerid, type)
+{
+	new
+	    Float:bizDistance[2] = {99999.0, 0.0},
+	    iIndex = -1
+	;
+	for (new i = 0; i < MAX_BUSINESSES; i ++) if(mBizInfo[i][bizExists] && mBizInfo[i][bizType] == type && GetPlayerInterior(playerid) == mBizInfo[i][bizExterior] && GetPlayerVirtualWorld(playerid) == mBizInfo[i][bizExteriorVW])
+	{
+		bizDistance[1] = GetPlayerDistanceFromPoint(playerid, mBizInfo[i][bizExt][0], mBizInfo[i][bizExt][1], mBizInfo[i][bizExt][2]);
+
+		if (bizDistance[1] < bizDistance[0])
+		{
+		    bizDistance[0] = bizDistance[1];
+		    iIndex = i;
+		}
+	}
+	return iIndex;
+}

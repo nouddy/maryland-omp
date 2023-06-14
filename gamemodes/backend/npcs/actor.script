@@ -1,0 +1,43 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           actor.script
+ *  @Module         npcs
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+new TehnomediaActor;
+
+//! Task actor preload
+
+hook OnGameModeInit()
+{
+    print("npcs/actor.script loaded");
+
+	TehnomediaActor = CreateActor(289, 1672.1211,-1641.8762,14.2263,359.9053);
+	ApplyActorAnimation(TehnomediaActor, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
+}
+
+task resetActorPos[4000]() 
+{
+    //! Tehnomedia Actor
+
+    SetActorPos(TehnomediaActor, 1672.1211,-1641.8762,14.2263);
+    SetActorFacingAngle(TehnomediaActor, 359.9053);
+    ApplyActorAnimation(TehnomediaActor, "GANGS", "prtial_gngtlkA", 4.1, 1, 0, 0, 0, 0);
+
+    return 1;
+}

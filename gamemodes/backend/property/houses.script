@@ -1,0 +1,943 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           24th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           houses.script
+ *  @Module         property
+ */
+
+/*
+}=====================================[Vostic Imovina System]============================================={
+|	X = 1429.4281 Y =-1221.3313 Z =152.8182                                             				|
+|__ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ _|				*/
+
+
+//==================={Includes}=========================
+#include <ysilib\YSI_Coding\y_hooks>
+//======================================================
+
+new TotalHouses = 0;
+
+//Pickup IDs
+#define PICKUP_NEWHOUSE 19524 //Yellow House Icon
+#define PICKUP_HOUSWOWNED 1273 //Green House Icon
+
+#define MAX_HOUSES 1000  //1024 limit Global/Player 3DTextLabels.
+
+//==========================================
+
+//=================={forwards}================
+
+forward LoadHouses(); //For Loading houses from database
+forward OnCreateHouse(playerid, houseID, price, Float:HX, Float:HY, Float:HZ);
+forward OnDeleteHouse(playerid, houseID);
+forward OnDeleteAllHouses(playerid);
+forward OnUpdateHouseExterior(playerid, HouseID, Float:HX, Float:HY, Float:HZ, Interior);
+forward OnUpdateHouseInterior(playerid, HouseID, Float:HX, Float:HY, Float:HZ, Interior);
+forward OnUpdateHouseDesc(playerid, HouseID, desc[]);
+forward OnUpdateHouseOwner(playerid, HouseID, owner[]);
+forward OnUpdateHousePrice(playerid, HouseID, price);
+forward OnHouseLeft(playerid, HouseID);
+forward OnHouseSold(playerid, targetid, HouseID, price);
+forward SendPlayerInside(playerid, HouseID);
+forward SendPlayerOutside(playerid, HouseID);
+
+//============================================
+
+//==============={Enums}======================
+enum hInfo
+{
+	hID,
+	hAdd[35],
+	Text3D: hLabel,
+	hDesc[128],
+	bool:hOwned,
+	hOwner[MAX_PLAYER_NAME+1],
+	bool:hLocked,
+	hMapIcon,
+	hPickupModel,
+	hPrice,
+	hInteriorE,
+	hInteriorI,
+	Float: hExteriorX,
+	Float: hExteriorY,
+	Float: hExteriorZ,
+	Float: hInteriorX,
+	Float: hInteriorY,
+	Float: hInteriorZ,
+	bool:hCustInt,
+ 	bool:hIDUsed
+};
+new HouseInfo[MAX_HOUSES][hInfo];
+//============================================
+
+hook OnGameModeInit()
+{
+	print("property/houses.script loaded");
+
+	mysql_tquery(SQL,"SELECT * from `houses`","LoadHouses"); //Loading Houses
+	
+	return 1;
+}
+
+hook OnGameModeExit()
+{
+	DestroyAllDynamicMapIcons();
+	DestroyAllDynamic3DTextLabels();
+	DestroyAllDynamicPickups();
+	return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+	SetPVarInt(playerid, "DeletingHouseID", -1);
+	return 1;
+}
+
+//====================================================[Other Functions]========================================
+GetHouseID()
+{
+	for(new i=0;i<MAX_HOUSES;i++)
+	{
+		if(!HouseInfo[i][hIDUsed])
+			return i;
+	}
+	return MAX_HOUSES;
+}
+
+PlayerToPoint(Float:radi, playerid, Float:x, Float:y, Float:z)
+{
+  if(IsPlayerConnected(playerid))
+  {
+    new Float:oldposx, Float:oldposy, Float:oldposz;
+    new Float:tempposx, Float:tempposy, Float:tempposz;
+    GetPlayerPos(playerid, oldposx, oldposy, oldposz);
+    tempposx = (oldposx -x);
+    tempposy = (oldposy -y);
+    tempposz = (oldposz -z);
+    if (((tempposx < radi) && (tempposx > -radi)) && ((tempposy < radi) && (tempposy > -radi)) && ((tempposz < radi) && (tempposz > -radi)))
+    {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+GetNearbyHouse(playerid)
+{
+	for(new i=0; i<MAX_HOUSES; i++)
+  	{
+      if(PlayerToPoint(1.5, playerid, HouseInfo[i][hExteriorX], HouseInfo[i][hExteriorY], HouseInfo[i][hExteriorZ]))
+      	return i;
+  	}
+	return MAX_HOUSES;
+}
+GetHouseExitPoint(playerid)
+{
+    for(new i=0; i<MAX_HOUSES; i++)
+  	{
+      if(PlayerToPoint(1.5, playerid, HouseInfo[i][hInteriorX], HouseInfo[i][hInteriorY], HouseInfo[i][hInteriorZ]))
+      	return i;
+  	}
+	return MAX_HOUSES;
+}
+
+//==========================[Custom Public functions]=======================
+public LoadHouses()
+{
+	    
+    if(!cache_num_rows())
+		return print("\n[Imovina]: 0 Kuca ucitano.\n");
+
+	new Label[256], rows;
+	cache_get_row_count(rows);
+	
+
+	TotalHouses = rows;
+	for(new i=0;i<rows;i++)
+	{
+        cache_get_value_name_int(i, "ID", HouseInfo[i][hID]);
+
+		cache_get_value_name(i, "Address", HouseInfo[i][hAdd], 35);
+		cache_get_value_name(i, "Description",HouseInfo[i][hDesc], 128);
+		cache_get_value_name(i, "Owner", HouseInfo[i][hOwner], MAX_PLAYER_NAME+1);
+
+  		cache_get_value_name_int(i, "Owned", bool:HouseInfo[i][hOwned]);
+        cache_get_value_name_int(i, "Locked", bool:HouseInfo[i][hLocked]);
+        cache_get_value_name_int(i, "Price", HouseInfo[i][hPrice]);
+        cache_get_value_name_int(i, "InteriorE", HouseInfo[i][hInteriorE]);
+        cache_get_value_name_int(i, "InteriorI", HouseInfo[i][hInteriorI]);
+        
+        cache_get_value_name_float(i, "ExteriorX", HouseInfo[i][hExteriorX]);
+        cache_get_value_name_float(i, "ExteriorY", HouseInfo[i][hExteriorY]);
+        cache_get_value_name_float(i, "ExteriorZ", HouseInfo[i][hExteriorZ]);
+        
+        cache_get_value_name_float(i, "InteriorX", HouseInfo[i][hInteriorX]);
+        cache_get_value_name_float(i, "InteriorY", HouseInfo[i][hInteriorY]);
+        cache_get_value_name_float(i, "InteriorZ", HouseInfo[i][hInteriorZ]);
+        
+        cache_get_value_name_int(i, "Custom_Interior", bool:HouseInfo[i][hCustInt]);
+
+
+		//Assigning the Values and all:
+		HouseInfo[i][hPickupModel] = CreateDynamicPickup(PICKUP_NEWHOUSE, 1, HouseInfo[i][hExteriorX],  HouseInfo[i][hExteriorY],  HouseInfo[i][hExteriorZ], 0, 0);
+		HouseInfo[i][hIDUsed] = true;
+
+		if(HouseInfo[i][hOwned])
+		{
+            format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: "c_server"%s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[i][hOwner],HouseInfo[i][hAdd]);
+		}
+		else
+		{
+		    format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[i][hOwner],HouseInfo[i][hAdd], HouseInfo[i][hPrice], HouseInfo[i][hDesc]);
+            HouseInfo[i][hMapIcon] = CreateDynamicMapIcon(HouseInfo[i][hExteriorX], HouseInfo[i][hExteriorY], HouseInfo[i][hExteriorZ], 31, 1);
+		}
+		HouseInfo[i][hLabel] = CreateDynamic3DTextLabel(Label, x_server, HouseInfo[i][hExteriorX], HouseInfo[i][hExteriorY], HouseInfo[i][hExteriorZ]+0.5,30.0, .testlos = 1, .streamdistance = 30.0);
+	}
+	printf("\n[Imovina]: %d Kuca ucitano.\n",rows);
+	return 1;
+}
+
+public OnCreateHouse(playerid, houseID, price, Float:HX, Float:HY, Float:HZ)
+{
+	TotalHouses++;
+	HouseInfo[houseID][hExteriorX] = HX;
+	HouseInfo[houseID][hExteriorY] = HY;
+	HouseInfo[houseID][hExteriorZ] = HZ;
+	HouseInfo[houseID][hInteriorE] = 0;
+	HouseInfo[houseID][hOwned] = false;
+	HouseInfo[houseID][hID] = houseID;
+	HouseInfo[houseID][hPrice] = price;
+	HouseInfo[houseID][hIDUsed] = true;
+
+	new Label[256];
+	format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[houseID][hOwner],HouseInfo[houseID][hAdd], HouseInfo[houseID][hPrice], HouseInfo[houseID][hDesc]);
+
+	HouseInfo[houseID][hLabel] = CreateDynamic3DTextLabel(Label, x_server, HouseInfo[houseID][hExteriorX], HouseInfo[houseID][hExteriorY], HouseInfo[houseID][hExteriorZ]+0.5,30.0, .testlos = 1, .streamdistance = 30.0);
+	HouseInfo[houseID][hMapIcon] = CreateDynamicMapIcon(HouseInfo[houseID][hExteriorX], HouseInfo[houseID][hExteriorY], HouseInfo[houseID][hExteriorZ], 31, 1);
+	HouseInfo[houseID][hPickupModel] = CreateDynamicPickup(PICKUP_NEWHOUSE, 1, HouseInfo[houseID][hExteriorX],  HouseInfo[houseID][hExteriorY],  HouseInfo[houseID][hExteriorZ], 0, 0);
+	format(Label, sizeof(Label), "Napravio si kucu. ID KUCE: %d. Ukupno kuca sada: %d",houseID, TotalHouses);
+	notification.Show(playerid, "USPESNO", Label , "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnDeleteHouse(playerid, houseID)
+{
+	TotalHouses--;
+	if(TotalHouses <= 0) TotalHouses = 0;
+	HouseInfo[houseID][hIDUsed] = false;
+	HouseInfo[houseID][hID] = MAX_HOUSES;
+	DestroyDynamicPickup(HouseInfo[houseID][hPickupModel]);
+	DestroyDynamicMapIcon(HouseInfo[houseID][hMapIcon]);
+	DestroyDynamic3DTextLabel(HouseInfo[houseID][hLabel]);
+
+	new str[65];
+	format(str, sizeof(str), "You have Deleted a House. House ID: %d. TotalHouses Now: %d",houseID,TotalHouses);
+	notification.Show(playerid, "USPESNO", str , "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnDeleteAllHouses(playerid)
+{
+	for(new houseID=0;houseID < TotalHouses; houseID++)
+	{
+	    if(!HouseInfo[houseID][hIDUsed]) continue;
+		HouseInfo[houseID][hIDUsed] = false;
+		HouseInfo[houseID][hID] = MAX_HOUSES;
+		DestroyDynamicPickup(HouseInfo[houseID][hPickupModel]);
+		DestroyDynamicMapIcon(HouseInfo[houseID][hMapIcon]);
+		DestroyDynamic3DTextLabel(HouseInfo[houseID][hLabel]);
+	}
+	TotalHouses=0;
+	new str[65];
+	format(str, sizeof(str), "Obrisao si sve kuce.");
+	notification.Show(playerid, "USPESNO", str , "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnUpdateHouseExterior(playerid, HouseID, Float:HX, Float:HY, Float:HZ, Interior)
+{
+	HouseInfo[HouseID][hExteriorX] = HX;
+	HouseInfo[HouseID][hExteriorY] = HY;
+	HouseInfo[HouseID][hExteriorZ] = HZ;
+	
+	HouseInfo[HouseID][hInteriorE] = Interior;
+
+	DestroyDynamicPickup(HouseInfo[HouseID][hPickupModel]);
+	DestroyDynamicMapIcon(HouseInfo[HouseID][hMapIcon]);
+	DestroyDynamic3DTextLabel(HouseInfo[HouseID][hLabel]);
+	
+	new Label[256];
+	if(HouseInfo[HouseID][hOwned]) format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: "c_server"%s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd]);
+	else format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
+
+	HouseInfo[HouseID][hLabel] = CreateDynamic3DTextLabel(Label, x_server, HouseInfo[HouseID][hExteriorX], HouseInfo[HouseID][hExteriorY], HouseInfo[HouseID][hExteriorZ]+0.5,30.0, .testlos = 1, .streamdistance = 30.0);
+	HouseInfo[HouseID][hMapIcon] = CreateDynamicMapIcon(HouseInfo[HouseID][hExteriorX], HouseInfo[HouseID][hExteriorY], HouseInfo[HouseID][hExteriorZ], 31, 1);
+	HouseInfo[HouseID][hPickupModel] = CreateDynamicPickup(PICKUP_NEWHOUSE, 1, HouseInfo[HouseID][hExteriorX],  HouseInfo[HouseID][hExteriorY],  HouseInfo[HouseID][hExteriorZ], 0, 0);
+
+	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+
+	notification.Show(playerid, "Uspesno", "Zavrsen edit exteriora kuce!", "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnUpdateHouseInterior(playerid, HouseID, Float:HX, Float:HY, Float:HZ, Interior)
+{
+    HouseInfo[HouseID][hInteriorX] = HX;
+	HouseInfo[HouseID][hInteriorY] = HY;
+	HouseInfo[HouseID][hInteriorZ] = HZ;
+
+	HouseInfo[HouseID][hInteriorI] = Interior;
+	
+	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+	notification.Show(playerid, "Uspesno", "Zavrsen edit interiora kuce!", "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnUpdateHouseDesc(playerid, HouseID, desc[])
+{
+	format(HouseInfo[HouseID][hDesc], 128 ,"%s",desc);
+	new Label[256];
+	
+	if(HouseInfo[HouseID][hOwned]) format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: "c_server"%s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd]);
+	else format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
+
+	UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);
+	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+	notification.Show(playerid, "Uspesno", "Zavrsen edit deskripcije kuce!", "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnUpdateHouseOwner(playerid, HouseID, owner[])
+{
+	DestroyDynamicMapIcon(HouseInfo[HouseID][hMapIcon]);
+    format(HouseInfo[HouseID][hOwner],25,"%s",owner);
+	new Label[256];
+	
+	if(!strcmp(owner, "The State", true))
+		HouseInfo[HouseID][hOwned] = false;
+
+	else HouseInfo[HouseID][hOwned] = true;
+
+	if(HouseInfo[HouseID][hOwned]) format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: %s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd]);
+	else
+	{
+		format(Label, sizeof(Label), ""c_server"\187; "c_white" %s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
+        HouseInfo[HouseID][hMapIcon] = CreateDynamicMapIcon(HouseInfo[HouseID][hExteriorX], HouseInfo[HouseID][hExteriorY], HouseInfo[HouseID][hExteriorZ], 31, 1);
+	}
+	UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);
+	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+	if(PlayerInfo[playerid][Staff] == 4) notification.Show(playerid, "Uspesno", "Promenjen vlasnik kuce!", "!", BOXCOLOR_GREEN);
+	else notification.Show(playerid, "Uspesno", "Kupio si kucu", "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnUpdateHousePrice(playerid, HouseID, price)
+{
+	HouseInfo[HouseID][hPrice] = price;
+	
+	if(!HouseInfo[HouseID][hOwned])
+	{
+	    new Label[256];
+		format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
+        UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);
+	}
+	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+	notification.Show(playerid, "Uspesno", "Zavrsen edit cene kuce!", "!", BOXCOLOR_GREEN);
+	return 1;
+}
+
+public OnHouseLeft(playerid, HouseID)
+{
+	new str[64], HouseCost = HouseInfo[HouseID][hPrice]/2;
+	format(str, sizeof(str), "Jel si siguran da zelis da predas kucu drzavi? Dobices $%d. (Ne moze se ponistiti).", HouseCost);
+	Dialog_Show(playerid, "DIALOG_HOUSE_LEAVE", DIALOG_STYLE_INPUT,
+				"Da li si siguran??",
+				str,
+				"Odaberi", "Odustani"
+			);
+	SetPVarInt(playerid, "HouseLeaving",HouseID);
+	return 1;
+}
+
+public OnHouseSold(playerid, targetid, HouseID, price)
+{
+    new str[100];
+    new pName[MAX_PLAYER_NAME+1]; GetPlayerName(targetid, pName, sizeof(pName));
+    format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"Ponudio si {00FFFF}%s {FFFFFF}da kupi tvoju kucu za {FFFF00}$%d{FFFFFF}. Ceka se na njihov odgovor.",pName, price);
+    SendClientMessage(playerid, -1, str);
+    GetPlayerName(playerid, pName, sizeof(pName));
+	format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"%s zeli da vam proda svoju kucu za $%d. Da li prihvatate?", pName, price);
+	Dialog_Show(playerid, "DIALOG_HOUSE_ACCEPT", DIALOG_STYLE_MSGBOX,
+				"Da li si siguran??",
+				str,
+				"Odaberi", "Odustani"
+			);
+	SetPVarInt(targetid, "HouseBuying",HouseID);
+	SetPVarInt(targetid, "HousePrice",price);
+	SetPVarInt(targetid, "BuyingFrom",playerid);
+	return 1;
+}
+
+public SendPlayerInside(playerid, HouseID)
+{
+	if(HouseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Moras biti na pickupu kuce", "!", BOXCOLOR_RED);
+	if(HouseInfo[HouseID][hLocked]) return notification.Show(playerid, "GRESKA", "Kuca je zakljucana", "!", BOXCOLOR_RED);
+	new pName[MAX_PLAYER_NAME+1];
+	GetPlayerName(playerid, pName, sizeof(pName));
+	if(HouseInfo[HouseID][hLocked] && HouseInfo[HouseID][hOwned] &&!strcmp(pName, HouseInfo[HouseID][hOwner])) return SendClientMessage(playerid, 0xCCAA11FF,""c_server"nekretnine \187; "c_white"Ovo je tvoja kuca ali je zakljucana. Koristi /hlock da je otkljucas.");
+	new Float:hx = HouseInfo[HouseID][hInteriorX], Float:hy = HouseInfo[HouseID][hInteriorY], Float:hz = HouseInfo[HouseID][hInteriorZ], hvw=HouseInfo[HouseID][hID];
+	SetPlayerPos(playerid, hx, hy, hz);
+	SetPlayerInterior(playerid, 1);
+	SetPlayerVirtualWorld(playerid, hvw);
+	notification.Show(playerid, "INFO", "Usao si u kucu", "!", BOXCOLOR_BLUE);
+	SetPVarInt(playerid, "InsideHouse", HouseID);
+	return 1;
+}
+
+public SendPlayerOutside(playerid, HouseID)
+{
+	if(HouseID != MAX_HOUSES)
+	{
+		new Float:hx = HouseInfo[HouseID][hExteriorX], Float:hy = HouseInfo[HouseID][hExteriorY], Float:hz = HouseInfo[HouseID][hExteriorZ], hint=HouseInfo[HouseID][hInteriorE];
+		SetPlayerPos(playerid, hx, hy, hz);
+		SetPlayerInterior(playerid, hint);
+		SetPlayerVirtualWorld(playerid, 0);
+		notification.Show(playerid, "INFO", "Napustio si kucu", "!", BOXCOLOR_BLUE);
+
+	}
+	else notification.Show(playerid, "GRESKA", "Moras biti u kuci", "!", BOXCOLOR_RED);
+	return 1;
+}
+
+//====================================================================================================
+
+//==================================[Commands]========================================================
+
+YCMD:househelp(playerid, params[], help)
+{
+	new playercmds[128];
+	format(playercmds, sizeof(playercmds)," Player Commands: /hlock{FFFF00}[Lock/Unlock House]{654321} /henter{FFFF00}[Enter House]{654321} /hexit{FFFF00}[Exit House]");
+    SendClientMessage(playerid,0x654321FF, playercmds);
+	format(playercmds, sizeof(playercmds),"{654321}/prodajdrzavi{FFFF00}[Prodaj kucu drzavi u pola cene]{654321} /prodajkucu {FFFF00}[Da prodas kucu drugom igracu.]{654321}\n");
+	SendClientMessage(playerid,0x654321FF, playercmds);
+	format(playercmds, sizeof(playercmds),"{654321} /prodajkucu {FFFF00}[Da prodas kucu drugom igracu.]{654321}\n");
+	SendClientMessage(playerid,0x654321FF, playercmds);
+	return 1;
+}
+
+YCMD:henter(playerid, params[], help)
+{
+    new HouseID = GetNearbyHouse(playerid);
+    SendPlayerInside(playerid, HouseID);
+    return 1;
+}
+
+YCMD:hexit(playerid, params[], help)
+{
+    new HouseID = GetHouseExitPoint(playerid);
+    SendPlayerOutside(playerid, HouseID);
+    return 1;
+}
+
+YCMD:hlock(playerid, params[], help)
+{
+    new HouseID = GetNearbyHouse(playerid);
+    if(HouseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Moras biti u svojoj kuci.", "!", BOXCOLOR_RED);
+    new pName[MAX_PLAYER_NAME+1], HouseOwner[MAX_PLAYER_NAME+1];
+    GetPlayerName(playerid, pName, sizeof(pName));
+	format(HouseOwner, sizeof(HouseOwner), "%s",HouseInfo[HouseID][hOwner]);
+	if(strcmp(pName, HouseOwner))
+	{
+	    notification.Show(playerid, "GRESKA", "Moras biti u svojoj kuci.", "!", BOXCOLOR_RED);
+		return 1;
+	}
+	if(HouseInfo[HouseID][hLocked])
+	{
+			HouseInfo[HouseID][hLocked] = false;
+			notification.Show(playerid, "USPESNO", "Otkljucao si svoju kucu.", "!", BOXCOLOR_GREEN);
+	}
+	else
+	{
+        	HouseInfo[HouseID][hLocked] = true;
+			notification.Show(playerid, "USPESNO", "Zakljucao si svoju kucu.", "!", BOXCOLOR_GREEN);
+	}
+	return 1;
+}
+
+YCMD:kupikucu(playerid, params[], help)
+{
+    new HouseID = GetNearbyHouse(playerid);
+    if(HouseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Moras biti kod kuce koju kupujes.", "!", BOXCOLOR_RED);
+	if(HouseInfo[HouseID][hOwned]) return notification.Show(playerid, "GRESKA", "Moras biti kod kuce koja je na prodaju.", "!", BOXCOLOR_RED);
+	
+	new query[128], pName[MAX_PLAYER_NAME+1], housecost = HouseInfo[HouseID][hPrice];
+	GivePlayerMoney(playerid, -housecost);
+	SendPlayerInside(playerid, HouseID);
+	GetPlayerName(playerid, pName, sizeof(pName));
+	mysql_format(SQL, query, sizeof(query), "UPDATE `houses` SET Owner='%s', Owned=1 WHERE ID=%d",pName,HouseID);
+	mysql_tquery(SQL,query,"OnUpdateHouseOwner","iis",playerid, HouseID, pName);
+	SavePlayer(playerid);
+	return 1;
+}
+
+YCMD:prodajdrzavi(playerid, params[], help)
+{
+	new HouseID = GetNearbyHouse(playerid);
+	if(HouseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Moras biti kod kuce koju kupujes.", "!", BOXCOLOR_RED);
+	if(!HouseInfo[HouseID][hOwned]) return notification.Show(playerid, "GRESKA", "Moras biti u kuci koja nije na prodaju.", "!", BOXCOLOR_RED);
+	new pName[MAX_PLAYER_NAME+1], HouseOwner[MAX_PLAYER_NAME+1];
+	GetPlayerName(playerid, pName, sizeof(pName));
+	format(HouseOwner, sizeof(HouseOwner), "%s",HouseInfo[HouseID][hOwner]);
+	if(strcmp(HouseOwner, pName)) return notification.Show(playerid, "GRESKA", "Moras biti u svojoj kuci.", "!", BOXCOLOR_RED);
+	
+	new query[128];
+	mysql_format(SQL,query, sizeof(query), "UPDATE `houses` SET Owner='The State',Owned=0 WHERE ID = %d",HouseID);
+	mysql_tquery(SQL,query, "OnHouseLeft","ii",playerid, HouseID);
+
+	SavePlayer(playerid);
+	return 1;
+	
+}
+
+YCMD:prodajkucu(playerid, params[], help)
+{
+	new HouseID = GetNearbyHouse(playerid);
+	if(HouseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Moras biti kod kuce koju kupujes.", "!", BOXCOLOR_RED);
+	if(!HouseInfo[HouseID][hOwned]) return notification.Show(playerid, "GRESKA", "Moras biti u kuci koja nije na prodaju.", "!", BOXCOLOR_RED);
+	new pName[MAX_PLAYER_NAME+1], HouseOwner[MAX_PLAYER_NAME+1];
+	GetPlayerName(playerid, pName, sizeof(pName));
+	format(HouseOwner, sizeof(HouseOwner), "%s",HouseInfo[HouseID][hOwner]);
+	if(strcmp(HouseOwner, pName)) return notification.Show(playerid, "GRESKA", "Moras biti u svojoj kuci.", "!", BOXCOLOR_RED);
+
+	new targetid, price, Float:px, Float:py, Float:pz;
+	if(sscanf(params,"ui",targetid,price)) return SendClientMessage(playerid, -1, ""c_server"nekretnine \187; "c_white"/prodajkucu {FFFF00}[Playerid/Name] {FF00FF}[Price]");
+	GetPlayerName(targetid, pName, sizeof(pName));
+	GetPlayerPos(targetid, px, py, pz);
+	if(!PlayerToPoint(5.0,playerid, px, py, pz)) return notification.Show(playerid, "GRESKA", "Moras biti u blizini igraca.", "!", BOXCOLOR_RED);
+	
+	new query[128];
+	mysql_format(SQL,query, sizeof(query), "UPDATE `houses` SET Owner='%s',Owned=1 WHERE ID = %d",pName,HouseID);
+	mysql_tquery(SQL,query, "OnHouseSold","iiii", playerid, targetid, HouseID, price);
+
+	SavePlayer(playerid);
+	SavePlayer(targetid);
+	return 1;
+}
+
+
+//****************************************************************************/ Dialozi
+
+Dialog: kreiraj_kucu(const playerid, response, listitem, string: inputtext[])
+{	
+	if(!response) return 0;
+	if(response)
+	{
+		new desc[128],price, houseID = GetHouseID();
+		if(houseID == MAX_HOUSES) return notification.Show(playerid, "GRESKA", "Ne mozes kreirati vise kuca", "!", BOXCOLOR_RED);
+		if(sscanf(inputtext,"s[128]i",desc,price)) return Dialog_Show(playerid, "kreiraj_kucu", DIALOG_STYLE_INPUT,
+														"Kreiraj kucu",
+														"Unesi deskripciju i cenu kuce",
+														"Odaberi", "Izlaz");
+		new Float:PX, Float:PY, Float:PZ, query[512],zone[28], add[35];
+		GetPlayerPos(playerid, PX, PY, PZ);
+		GetPlayer2DZone(playerid, zone, sizeof(zone));
+		format(add, sizeof(add), "%d, %s, Los Santos",houseID,zone);
+		strmid(HouseInfo[houseID][hAdd], add, 0, sizeof(add), 255);
+		strmid(HouseInfo[houseID][hDesc], desc, 0, sizeof(desc), 255);
+		strmid(HouseInfo[houseID][hOwner], "The State", 0, 9, 255);		
+
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `houses`(`ID`,`ExteriorX`,`ExteriorY`, `ExteriorZ`, `Address`,`Price`, `Description`) VALUES (%d, %f, %f, %f, '%s', %i,'%s')",houseID, PX, PY, PZ, add,price, desc);
+		mysql_tquery(SQL, query, "OnCreateHouse", "iiifff",playerid, houseID, price, PX, PY, PZ);												
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_HOUSE_1(const playerid, response, listitem, string: inputtext[])
+{
+	if(!response) return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	if(!IsNumeric(inputtext)) return Dialog_Show(playerid, "DIALOG_EDIT_HOUSE_1", DIALOG_STYLE_INPUT,
+																"Unesi ID Kuce",
+																"Unesi ID Kuce koju zelis da editujes.",
+																"Nastavi", "Nazad"
+															);
+	new hid = strval(inputtext);
+	if(!HouseInfo[hid][hIDUsed]) return notification.Show(playerid, "GRESKA", "Ta kuca ne postoji.", "!", BOXCOLOR_RED);
+	SetPVarInt(playerid, "EditingHouse",hid);
+	new str[65];
+	format(str, sizeof(str),""c_server"nekretnine \187; "c_white"Sada editujes, Kucu ID-a: {00FF13}%d",hid);
+	SendClientMessage(playerid, -1, str);
+	format(str, sizeof(str),"Kuca ID: {FF0000}%d",hid);
+	Dialog_Show(playerid, "DIALOG_EDIT_HOUSE_2", DIALOG_STYLE_LIST,
+							str,
+							"Promeni Exterior\nPromeni Interior\nPromeni Opis\nPostavi vlasnika\nPostavi cenu",
+							"Odaberi", "Nazad"
+						);
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_HOUSE_2(const playerid, response, listitem, string: inputtext[])
+{
+
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+			
+	switch(listitem)
+	{
+		case 0:
+		{
+			Dialog_Show(playerid, "DIALOG_EDIT_EXTERIOR", DIALOG_STYLE_LIST,
+						"Promeni Exterior Kuce",
+						"Postavi Trenutne Koordinate\nUnesi Koordinate",
+						"Odaberi", "Odustani"
+					);
+		}
+		case 1:
+		{
+			Dialog_Show(playerid, "DIALOG_EDIT_INTERIOR", DIALOG_STYLE_LIST,
+						"Promeni Interior Kuce",
+						"Postavi Trenutne Koordinate\nUnesi Koordinate",
+						"Odaberi", "Odustani"
+					);
+		}
+		case 2:
+		{
+			Dialog_Show(playerid, "DIALOG_EDIT_DESC", DIALOG_STYLE_INPUT,
+						"Promeni Opis Kuce",
+						"Unesi novi opis kuce",
+						"Update", "Odustani"
+			);
+		}
+		case 3:
+		{
+			Dialog_Show(playerid, "DIALOG_EDIT_OWNER", DIALOG_STYLE_INPUT,
+						"Promeni Vlasnika Kuce",
+						"Unesi ime novog vlasnika: \n({0000FF}Hint:Ukucaj \"{000088}The State{FFFFFF}\" bez navodnika da kucu postavis na hOwned=0.{FFFFFF})!",
+						"Update", "Odustani"
+			);
+		}
+		case 4:
+		{
+			Dialog_Show(playerid, "DIALOG_EDIT_PRICE", DIALOG_STYLE_INPUT,
+						"Promeni Cenu Kuce",
+						"Unesi novu cenu kuce",
+						"Update", "Odustani"
+					);
+		}
+
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_EXTERIOR(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+			
+	switch(listitem)
+	{
+		case 0: //Postavi Trenutne Koordinate
+		{
+			new Float:px, Float:py, Float:pz, pint=GetPlayerInterior(playerid), hid=GetPVarInt(playerid, "EditingHouse"), query[256];
+			GetPlayerPos(playerid, px, py, pz);
+			mysql_format(SQL,query,sizeof(query),"UPDATE `houses` SET ExteriorX=%f, ExteriorY=%f, ExteriorZ=%f, InteriorE=%d WHERE ID=%d", px, py, pz, pint, hid);
+			mysql_tquery(SQL,query,"OnUpdateHouseExterior","ifffii",playerid, hid,  px, py, pz, pint);
+		}
+		case 1: //Manually Add Coordinates
+		{
+			Dialog_Show(playerid, "DIALOG_EXT_X", DIALOG_STYLE_INPUT,
+						"Exterior X",
+						"Insert Coordinate :{FF0000} X",
+						"Dalje", "Odustani"
+					);
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EXT_X(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED); 
+	}
+
+	new Float:hx = floatstr(inputtext);
+	SetPVarFloat(playerid, "PlayerHX", hx);
+	Dialog_Show(playerid, "DIALOG_EXT_Y", DIALOG_STYLE_INPUT,
+				"Exterior Y",
+				"Insert Coordinate :{FF0000} Y",
+				"Dalje", "Odustani"
+			);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EXT_Y(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED); 
+	}
+
+	new Float:hy = floatstr(inputtext);
+	SetPVarFloat(playerid, "PlayerHY", hy);
+	Dialog_Show(playerid, "DIALOG_EXT_Z", DIALOG_STYLE_INPUT,
+				"Exterior Z",
+				"Insert Coordinate :{FF0000} Z",
+				"Zavrsi", "Odustani"
+			);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EXT_Z(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED); 
+	}
+
+	new query[256], Float:hz = floatstr(inputtext), Float:hx = GetPVarFloat(playerid, "PlayerHX"), Float:hy = GetPVarFloat(playerid, "PlayerHY"), hid = GetPVarInt(playerid, "EditingHouse"), pint = GetPlayerInterior(playerid);
+	mysql_format(SQL,query,sizeof(query),"UPDATE `houses` SET ExteriorX=%f, ExteriorY=%f, ExteriorZ=%f, InteriorE=%d WHERE ID=%d", hx, hy, hz, pint, hid);
+	mysql_tquery(SQL,query,"OnUpdateHouseExterior","ifffii",playerid, hid,  hx, hy, hz, pint);	
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_INTERIOR(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+
+	switch(listitem)
+	{
+		case 0: //Postavi Trenutne Koordinate
+		{
+			new Float:px, Float:py, Float:pz, pint=GetPlayerInterior(playerid), hid=GetPVarInt(playerid, "EditingHouse"), query[256];
+			GetPlayerPos(playerid, px, py, pz);
+			mysql_format(SQL,query,sizeof(query),"UPDATE `houses` SET InteriorX=%f, InteriorY=%f, InteriorZ=%f, InteriorI=%d WHERE ID=%d", px, py, pz, pint, hid);
+			mysql_tquery(SQL,query, "OnUpdateHouseInterior", "ifffii", playerid, hid,  px, py, pz, pint);
+		}
+		case 1: //Manually Add Coordinates
+		{
+			Dialog_Show(playerid, "DIALOG_INT_X", DIALOG_STYLE_INPUT,
+						"Interior X",
+						"Insert Coordinate :{FF0000} X",
+						"Nastavi", "Odustani"
+					);
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_INT_X(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+    	SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+
+	new Float:hx = floatstr(inputtext); SetPVarFloat(playerid, "PlayerHX", hx);
+	Dialog_Show(playerid, "DIALOG_INT_Y", DIALOG_STYLE_INPUT,
+				"Interior Y",
+				"Insert Coordinate :{FF0000} Y",
+				"Nastavi", "Odustani"
+			);
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_INT_Y(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+
+	new Float:hy = floatstr(inputtext); SetPVarFloat(playerid, "PlayerHY", hy);
+	Dialog_Show(playerid, "DIALOG_INT_Z", DIALOG_STYLE_INPUT,
+				"Interior Z",
+				"Insert Coordinate :{FF0000} Z",
+				"Nastavi", "Odustani"
+			);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;	
+}
+
+Dialog: DIALOG_INT_Z(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+
+    new Float:hz = floatstr(inputtext); SetPVarFloat(playerid, "PlayerHZ", hz);
+	Dialog_Show(playerid, "DIALOG_INT_I", DIALOG_STYLE_INPUT,
+				"Interior ID",
+				"Enter Value for Interior ID",
+				"Zavrsi", "Odustani"
+			);
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_INT_I(const playerid, response, listitem, string: inputtext[])
+{
+	if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+
+	new query[256], pint = strval(inputtext), Float:hz = GetPVarFloat(playerid, "PlayerHZ"), Float:hx = GetPVarFloat(playerid, "PlayerHX"), Float:hy = GetPVarFloat(playerid, "PlayerHY"), hid = GetPVarInt(playerid, "EditingHouse");
+	mysql_format(SQL,query,sizeof(query),"UPDATE `houses` SET InteriorX=%f, InteriorY=%f, InteriorZ=%f, InteriorI=%d WHERE ID=%d", hx, hy, hz, pint, hid);
+	mysql_tquery(SQL,query, "OnUpdateHouseInterior", "ifffii", playerid, hid,  hx, hy, hz, pint);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_DESC(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+	if(strlen(inputtext) > 128)
+	{
+		Dialog_Show(playerid, "DIALOG_EDIT_DESC", DIALOG_STYLE_INPUT,
+					"Promeni Opis Kuce",
+					"Maksimalno 128 karaktera, probaj opet",
+					"Update", "Odustani"
+				);
+	}
+	new query[128], hid=GetPVarInt(playerid, "EditingHouse"),desc[128];
+	format(desc, sizeof(desc), "%s",inputtext);
+	mysql_format(SQL, query, sizeof(query), "UPDATE `houses` SET Description = '%s' WHERE ID=%i",desc,hid);
+	mysql_tquery(SQL, query, "OnUpdateHouseDesc","iis",playerid, hid, desc);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_OWNER(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+			
+	if(strlen(inputtext) > 25)
+	{
+		Dialog_Show(playerid, "DIALOG_EDIT_OWNER", DIALOG_STYLE_INPUT,
+					"Promeni Vlasnika Kuce",
+					"Maksimum 24 karaktera, probaj opet!",
+					"Update", "Odustani"
+				);
+	}
+	new query[128], hid=GetPVarInt(playerid, "EditingHouse"), owner[MAX_PLAYER_NAME+1];
+	format(owner, sizeof(owner), "%s",inputtext);
+	if(!strcmp(owner,"The State",true))
+	{
+		mysql_format(SQL, query, sizeof(query), "UPDATE `houses` SET Owner='The State',Owned=0 WHERE ID=%d",hid);
+	}
+	else mysql_format(SQL, query, sizeof(query), "UPDATE `houses` SET Owner='%s', Owned=1 WHERE ID=%d", owner, hid);
+
+	mysql_tquery(SQL,query,"OnUpdateHouseOwner","iis", playerid, hid, owner);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_EDIT_PRICE(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        SetPVarInt(playerid, "EditingHouse", MAX_HOUSES);
+		return notification.Show(playerid, "GRESKA", "Odustao si od editovanja kuce.", "!", BOXCOLOR_RED);
+	}
+			
+	if(!IsNumeric(inputtext)) return SendClientMessage(playerid, x_red, ""c_server"nekretnine \187; "c_white"Pogresna {0000FF}Cena{FFFFFF}!");
+	new price = strval(inputtext); if(price < 1) return SendClientMessage(playerid, 0xFF0000, ""c_server"nekretnine \187; "c_white"Minimum cena 0.");
+	new query[128], hid = GetPVarInt(playerid, "EditingHouse");
+	mysql_format(SQL, query, sizeof(query),"UPDATE `houses` SET Price=%d WHERE ID=%d",price,hid);
+	mysql_tquery(SQL, query, "OnUpdateHousePrice","iii",playerid, hid, price);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_HOUSE_ACCEPT(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+	{
+        new str[64], pName[25], targetid = GetPVarInt(playerid, "BuyingFrom"); GetPlayerName(targetid, pName, sizeof(pName));
+        format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"%s je odbio vasu ponudu za kupovinu kuce.",pName );
+		SendClientMessage(playerid, 0x22CCCCBB, ""c_server"nekretnine \187; "c_white"Odabrao si da ne kupis kucu.");
+		SendClientMessage(targetid, 0x22CCCCBB, str);
+    }
+    else
+	{
+	    new HouseID = GetPVarInt(playerid, "HouseBuying"), targetid=GetPVarInt(playerid, "BuyingFrom"), price=GetPVarInt(playerid, "HousePrice");
+		new pName[MAX_PLAYER_NAME+1]; GetPlayerName(playerid, pName, sizeof(pName));
+		HouseInfo[HouseID][hOwned] = true;
+		format(HouseInfo[HouseID][hOwner],25,"%s",pName);
+		new str[100],Label[256];
+
+		format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: "c_server"%s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd]);format(Label, sizeof(Label), ""c_server"\187; "c_white"Owner: "c_server"%s "c_server"\171;\n"c_server"\187; "c_white"%s",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd]);
+		UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);
+
+		format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"Prodao si svoju kucu %s za $%d.",pName,price);
+		SendClientMessage(targetid, 0x0000EEAA, str);
+		GetPlayerName(targetid, pName, sizeof(pName));
+		format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"Kupio si kucu od %s za $%d. Cestitamo!",pName,price);
+		SendClientMessage(playerid,0x0000EEAA, str);
+		GivePlayerMoney(targetid, price);
+		GivePlayerMoney(playerid, -price);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: DIALOG_HOUSE_LEAVE(const playerid, response, listitem, string: inputtext[])
+{
+	if(!response) return SendClientMessage(playerid, 0x22CCCCBB, ""c_server"nekretnine \187; "c_white"Odabrao si da ne prodas kucu.");
+
+	new HouseID = GetPVarInt(playerid, "HouseLeaving");
+    HouseInfo[HouseID][hOwned] = false;
+	format(HouseInfo[HouseID][hOwner],25, "The State");
+
+	new Label[256], HouseCost = HouseInfo[HouseID][hPrice]/2;
+	format(Label, sizeof(Label), ""c_server"nekretnine \187; "c_white"Prodao si kucu drzavi za {FF9911}$%d.", HouseCost);
+	SendClientMessage(playerid, -1, Label);
+	GivePlayerMoney(playerid, HouseCost);
+			
+	format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
+	UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}

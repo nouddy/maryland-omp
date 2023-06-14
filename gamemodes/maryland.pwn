@@ -83,23 +83,8 @@
 
 
 //* Bitno jako da bude medju define
-#include "backend/db-config.script" 
-#include "assets/globalvariable.asset"
-
-//? Ucitavanje accounta
-
-forward SQL_AccountLoad(playerid);
-public SQL_AccountLoad(playerid)
-{
-
-}
-//? Sitna provera
-
-forward PlayerRegistered(playerid);
-public PlayerRegistered(playerid)
-{
-	return true;
-}
+#include "backend/database/db-config.script" 
+#include "backend/assets/globalstuff.asset"
 
 //
 main()
@@ -362,210 +347,161 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 }
 */
 
+//- Includes List
+
+//- Assets
+#include "backend/assets/proxdetect.asset" 						//* ProxDetector
+#include "backend/assets/anims.asset"							//* Anim preload
 //-
+#include "backend/assets/end/do-not-look.end" 
+
+//- Main
+#include "backend/main/main.script"								//* Log/Reg
 //-
-#include "assets/proxdetect.asset" 					//* ProxDetector
-#include "assets/anims.asset"						//* Anim preload
+#include "backend/main/end/do-not-look.end"
+
+//- Documentation
+#include "backend/documentation/playerdocuments.script"			//* Dokumenta
 //-
-#include "assets/end/do-not-look.end" 
+#include "backend/documentation/end/do-not-look.end"
+
+//- Vehicle
+#include "backend/vehicle/brzinomer.script"						//* Brzinomer
+#include "backend/vehicle/vehicle.script"						//* Vozila paljenje gasenje itd
+#include "backend/vehicle/veh_ownership.script"					//* Vehicle ownership
+//#include "backend/vehicle/servis.script"						//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
+//-
+#include "backend/vehicle/end/do-not-look.end"
+
+//- Crypto
+#include "backend/crypto/crypto_ogy.script"						//* Crypto
+//-
+#include "backend/crypto/end/do-not-look.end"
+
+//- Finances
+#include "backend/finance/bank_old.script"						//* Bankarstvo
+#include "backend/finance/bank_ogy.script"						//* Bankarstvo
+//-
+#include "backend/finance/end/do-not-look.end"
+
+//- Property
+#include "backend/property/houses.script"						//* Imovina
+//-
+#include "backend/property/end/do-not-look.end"
+
+//- Business
+#include "backend/business/biz.script"							//* Firme tek zapocete soo
+//-
+#include "backend/business/end/do-not-look.end"
+
+//- Benches
+#include "backend/benches/klupe_ogy.script"						//* Klupe
+//-
+#include "backend/benches/end/do-not-look.end"
+
+//- Attachments
+#include "backend/attachments/attach.script"					//* Attach
+//-
+#include "backend/attachments/end/do-not-look.end"
+
+//- Factions
+
+//- State Factions
+#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+
+//- Illegal Factions
+#include "backend/factions/illegal/bunker.script"				//* Bunker
 
 //-
-#include "backend/main.script"						//* Log/Reg
-#include "backend/brzinomer.script"					//* Brzinomer
-#include "backend/vehicle.script"					//* Vozila paljenje gasenje itd
-#include "backend/chat.script"						//* Chat
-#include "backend/attach.script"					//* Attach
-#include "backend/klupe_ogy.script"					//* Klupe
-#include "backend/crypto_ogy.script"				//* Crypto
-#include "backend/vehicle_ownership.script"			//* Vehicle ownership
-#include "backend/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
-//-
-#include "backend/end/do-not-look.end"
+#include "backend/factions/end/do-not-look.end"
 
-//-
-#include "all-in-one/discconnect.aio"				//* Discord Konektor
-#include "all-in-one/playerdocuments.aio"			//* Dokumenta
-#include "all-in-one/bank.aio"						//* Bankarstvo
-//#include "all-in-one/servis.aio"// -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
-#include "all-in-one/labels.aio"					//* Labeli
-#include "all-in-one/playerlocation.aio"			//* Lokacija
-#include "all-in-one/bunker.aio"					//* Bunker
-#include "all-in-one/actor.aio"						//* Aktori bebo
-#include "all-in-one/houses.aio"					//* Imovina
-#include "all-in-one/biz.aio"						//* Firme tek zapocete soo
-#include "all-in-one/custom_markers.aio"			//* Markeri
-#include "all-in-one/random_poruke.aio"				//* Random poruke
-#include "all-in-one/tehnomedia.aio"				//* Tehnomedia prodavnica
-#include "all-in-one/drone.aio"						//* Drone
-#include "all-in-one/notifikacije.aio"				//* Notifikacije
-#include "all-in-one/navigation.aio"				//* Navigacija
-#include "all-in-one/bank_ogy.aio"					//* Bankarstvo
+//- Messages
 
+#include "backend/messages/chat.script"							//* Chat
+#include "backend/messages/random_poruke.script"				//* Random poruke
+#include "backend/messages/notifikacije.script"					//* Notifikacije
 //-
-#include "all-in-one/end/do-not-look.end"
+#include "backend/messages/end/do-not-look.end"
 
+//- Discord
+#include "backend/discord/discconnect.script"					//* Discord Konektor
 //-
-#include "crossover/DynamicArea.csso"				//* Dynamic Area
+#include "backend/discord/end/do-not-look.end"
+
+//- All NPCs, Actors
+#include "backend/npcs/actor.script"							//* Aktori bebo
 //-
-#include "crossover/end/do-not-look.end"
+#include "backend/npcs/end/do-not-look.end"
+
+//- Tehnomedia
+#include "backend/tehnomedia/tehnomedia.script"					//* Tehnomedia prodavnica
+#include "backend/tehnomedia/drone.script"						//* Drone
+#include "backend/tehnomedia/navigation.script"					//* Navigacija
+#include "backend/tehnomedia/playerlocation.script"				//* Lokacija
+//-
+#include "backend/tehnomedia/end/do-not-look.end"
+
+//- Assets Continue
+#include "backend/assets/labels.asset"							//* Labeli
+#include "backend/assets/custom_markers.asset"					//* Markeri
+
+//- Crossover > Koristi se kad je 31 characters hook truncated
+#include "backend/crossover/DynamicArea.csso"					//* Dynamic Area Crossover
+//-
+#include "backend/crossover/end/do-not-look.end"
 
 //- Frontend
-#include "frontend/main.tde"						//* Glavni tdovi
-#include "frontend/login.tde"						//* Login tdovi
-#include "frontend/register.tde"					//* Register tdovi
-#include "frontend/izborskina.tde"					//* Izborskina tdovi na registeru
-#include "frontend/starbucks.map"					//* Starbucks map
-#include "frontend/opstina.map"						//* Opstina map
-#include "frontend/opstina-int.map"					//* Opstina int map
-#include "frontend/tehnomedia.map"					//* Tehnomedia map Ogy
-#include "frontend/flecca-bank.map"					//* Flecca bank map
-#include "frontend/glavnaulica.map"					//* Glavna ulica map
-#include "frontend/crnotrziste.map"					//* Crno trziste map
-#include "frontend/garaza.map"						//* Garaza mapa
-#include "frontend/apartman.map"					//* Apartman map
-#include "frontend/izborskina.map"					//* Izbor skina mapa
-#include "frontend/kanalizacija.map"				//* Kanalizacija map
-#include "frontend/glenpark.map"					//* Glen park map
-#include "frontend/mafiaint.map"					//* Mafia int mapa muay
-#include "frontend/spawn.map"						//* Spawn Mapa
-#include "frontend/spawn-int.map"					//* Spawn Int Mapa
-#include "frontend/login_map.map"					//* Login Soba Mapa
-#include "frontend/bolnica-ext.map"					//* Bolnica ext Mapa
-#include "frontend/hotel-ext.map"					//* Hotel Mapa
-#include "frontend/maryland-pd.map"					//* MLPD Mapa Ext
+
+//- Textdraws
+#include "frontend/textdraws/main.tde"							//* Glavni tdovi
+#include "frontend/textdraws/login.tde"							//* Login tdovi
+#include "frontend/textdraws/register.tde"						//* Register tdovi
+#include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
+
+//- Exteriors
+#include "frontend/exterior/starbucks.map"						//* Starbucks map 
+#include "frontend/exterior/opstina.map"						//* Opstina map
+#include "frontend/exterior/glavnaulica.map"					//* Glavna ulica map
+#include "frontend/exterior/crnotrziste.map"					//* Crno trziste map
+#include "frontend/exterior/tehnomedia.map"						//* Tehnomedia map Ogy
+#include "frontend/exterior/spawn.map"							//* Spawn Mapa
+#include "frontend/exterior/izborskina.map"						//* Izbor skina mapa
+#include "frontend/exterior/glenpark.map"						//* Glen park map
+#include "frontend/exterior/maryland-pd.map"					//* MLPD Mapa Ext
+#include "frontend/exterior/bolnica-ext.map"					//* Bolnica ext Mapa
+#include "frontend/exterior/hotel-ext.map"						//* Hotel Mapa
+
+//- Interiors
+#include "frontend/interior/opstina-int.map"					//* Opstina int map
+#include "frontend/interior/flecca-bank.map"					//* Flecca bank map
+#include "frontend/interior/garaza.map"							//* Garaza mapa
+#include "frontend/interior/apartman.map"						//* Apartman map
+#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map
+#include "frontend/interior/mafiaint.map"						//* Mafia int mapa muay
+#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa
+#include "frontend/interior/login_map.map"						//* Login Soba Mapa
+
 //-
 #include "frontend/end/do-not-look.end"
 
 //- Jobs
-// #include "jobs/job_main.job"
-// #include "jobs/transport_novca.job"
+// #include "backend/jobs/job_main.job"
+// #include "backend/jobs/transport_novca.job"
 
 //-
-#include "jobs/end/do-not-look.end"
+#include "backend/jobs/end/do-not-look.end"
 
 //-Important for all systems
-#include "backend/staff.script"						//* Staff script
-//-
+#include "backend/staff/staff.script"							//* Staff script
+
+//- Stocks
+#include "backend/stocks/chat.stock"							//* Chat Stock
+#include "backend/stocks/db.stock"								//* Database Stock Cuvanja
+#include "backend/stocks/vehicle.stock"							//* Vehicle Stock Provere
+#include "backend/stocks/variable.stock"						//* Variable stock rest
+
+//- Assets Continue
+#include "backend/assets/clickplayertd.asset"					//* OnPlayerClickPlayerTextdraw
+
+//- Temp
 #include "temp/end/do-not-look.end"
-
-#include "stocks/chat.stock"						//* Chat Stock
-#include "stocks/db.stock"							//* Database Stock Cuvanja
-#include "stocks/vehicle.stock"						//* Vehicle Stock Provere
-#include "stocks/variable.stock"					//* Variable stock rest
-
-
-public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
-{
-	if(playertextid == Register_PTD[playerid][50])
-	{
-		if(RegisterPass[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
-
-		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
-					"Registracija",
-					"%s, unesite Vasu zeljenu lozinku: ",
-					"Potvrdi", "Izlaz", GetName(playerid)
-				);		
-	}
-	else if(playertextid == Register_PTD[playerid][49]) // email
-	{
-		if(RegisterEmail[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
-
-
-		Dialog_Show(playerid, "dialog_reggmail", DIALOG_STYLE_INPUT,
-			"Email",
-			"Upisite vas email, sa kojim cete u slucaju gubitka akaunta vratiti isti.",
-			"Unesi", "Izlaz"
-			);
-	}
-	else if(playertextid == Register_PTD[playerid][51]) // drzava
-	{
-		if(RegisterDrzava[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
-
-
-		Dialog_Show(playerid, "dialog_regdrzava", DIALOG_STYLE_LIST,
-			"Izaberite drzavu",
-			"Srbija\nCrna Gora\nBosna i Hercegovina\nMakedonija\nHrvatska\nSlovenija",
-			"Unesi", "Izlaz"
-			);
-	}	
-	else if(playertextid == Register_PTD[playerid][52])
-	{
-		if(RegisterGodine[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
-
-
-		Dialog_Show(playerid, "dialog_regages", DIALOG_STYLE_INPUT,
-			"Godine",
-			"Koliko imate godina: ",
-			"Unesi", "Izlaz"
-			);
-	}
-	else if(playertextid == Register_PTD[playerid][53]) // pol
-	{
-		if(RegisterPol[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vec ste popunili ovo polje.");
-
-
-		Dialog_Show(playerid, "dialog_regpol", DIALOG_STYLE_LIST,
-			"Odaberite koji ste pol",
-			"Musko\nZensko",
-			"Unesi", "Izlaz"
-			);
-	}
-	else if(playertextid == Register_PTD[playerid][55])
-	{
-		if(!RegisterPol[playerid] || !RegisterPass[playerid] || !RegisterEmail[playerid] || !RegisterDrzava[playerid] || !RegisterGodine[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Nesto od ponudjenih delova registera niste popunili.");
-
-
-		if(Registered[playerid])
-			return SendClientMessage(playerid, x_ogycolor, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
-
-		CreatePlayerRegister(playerid, false);
-		new query[550];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
-			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
-		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
-
-
-		Registered[playerid] = true;
-		defer Register_Player(playerid);
-	}
-	else if(playertextid == OdabirSkina_PTD[playerid][3]) // sesir promeni samo ono sranje td
-	{	
-		if(PlayerInfo[playerid][AttachedObject][0] != -1)
-			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
-
-
-		PlayerInfo[playerid][AttachedObject][0] = SetPlayerAttachedObject(playerid, 1, 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
-		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
-
-		PlayerInfo[playerid][AttachedObject][0]  = 1;
-	}
-	else if(playertextid == OdabirSkina_PTD[playerid][7]) // naocare promeni samo ono sranje td
-	{
-		if(PlayerInfo[playerid][AttachedObject][1] != -1)
-			return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Vec posedujete objekat na tom delu.");
-
-
-
-		PlayerInfo[playerid][AttachedObject][1] = SetPlayerAttachedObject(playerid, 1, 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
-
-		PlayerInfo[playerid][AttachedObject][1] = 1;
-
-		SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Dodali ste objekat na vase telo.");
-	}
-	else if(playertextid == OdabirSkina_PTD[playerid][8]) // nastavi deo promeni samo ono sranje td
-	{
-		Dialog_Show(playerid, "dialog_confirmreg", DIALOG_STYLE_MSGBOX,
-				"Odabir karaktera.",
-				"Postovani %s, posedujete dodatke\nObjekat1 > %s\nObjekat2 > %s\nDa li zelite da nastavite?",
-				"Nastavi", "Skini Objekat", GetName(playerid),PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
-		);
-	}
-	return 1;
-}

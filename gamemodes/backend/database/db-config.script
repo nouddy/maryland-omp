@@ -1,0 +1,64 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           db-config.script
+ *  @Module         database
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+#define local
+
+#if defined server
+#define MYSQL_HOST		"db.vostic.wtf"
+#define MYSQL_USER 		"u1_hVvwrNQbkw"
+#define MYSQL_PASS		"n1bgTob=PZgwB!VbSddHq9Kb"
+#define MYSQL_DB 		"s1_Maryland"
+#endif
+
+#if defined local
+#define MYSQL_HOST		"localhost"
+#define MYSQL_USER 		"root"
+#define MYSQL_PASS		""
+#define MYSQL_DB 		"maryland"
+#endif
+
+new MySQL:SQL;
+
+hook OnGameModeInit(){
+	//****************************************************************************//
+	#if defined server
+	new MySQLOpt:options = mysql_init_options();
+    mysql_set_option(options, SERVER_PORT, 3306);
+    SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB, options);
+	#endif
+
+	SQL = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DB);
+	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)
+	{
+		print("MySQL \187; Niste se uspjeli konektovati na data bazu, gasim server.");
+		SendRconCommand("exit");
+		return 1;
+	}
+	print("MySQL \187; Uspjesno smo se konektovali na SQL server.");
+	print("database/db-config.script loaded");
+	//****************************************************************************//
+	return 1;
+}
+
+hook OnGameModeExit(){
+	mysql_close(SQL);
+	return 1;
+}
