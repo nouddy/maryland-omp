@@ -17,6 +17,15 @@
  *  @Module         main
  */
 
+/*
+
+TO DO >
+			1. Kreirati bazu za faction police (jer si ti doktore push staru bazu a nisi getao novu i onda je mene nesto mrzelo da kreiram opet)
+			2. Prebaciti Navigaciju u sql (Kreiranje, brisanje, izmena lokacije i imena lokacije)
+
+*/
+
+
 #define YSI_YES_HEAP_MALLOC
 
 #define CGEN_MEMORY 60000
