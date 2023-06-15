@@ -502,6 +502,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //-Important for all systems
 #include "backend/staff/staff.script"							//* Staff script
+#include "backend/staff/spanel.script"							//* Staff Panel Dynamic Stuff
 
 //- Stocks
 #include "backend/stocks/chat.stock"							//* Chat Stock
