@@ -16,10 +16,6 @@
  *  @File           bank_ogy.script
  *  @Module         finance
  */
-
-
-// Warninzi su zbog dialoga koji trebaju u easy( nemoj dirati sve ce se resiti preko easy-a kad budemo prebacili sve )
-//
 new bool:created_tables = true; // true da ne kreira i ne forsira query dzabe // false ako nema tabela i trebaju automatski da se kreiraju
 
 #include <ysilib\YSI_Coding\y_hooks>
@@ -161,6 +157,29 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     else if(clickedid == BankAccountTD[68])
     {
         Dialog_Show(playerid, dialog_withdrawzz, DIALOG_STYLE_INPUT, "{F1C40F}Banka: {FFFFFF}Podigni", "Koliko novca zelis da podignes?", "Podigni", "Nazad");
+    }
+    else if(clickedid == BankAccountTD[55])
+    {
+        SendClientMessage(playerid, 0x3498DBFF, "[ML-BANKA]: {FFFFFF}Uspesno izlogovan.");
+        
+        CurrentAccountID[playerid] = -1;
+        Bank_ShowMenu(playerid);
+    }
+    else if(clickedid == BankAccountTD[54])
+    {
+        if(GetPVarInt(playerid, "usingATM"))
+        {
+            SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mozes ovo na bankomatu, poseti banku.");
+            return Bank_ShowMenu(playerid);
+        }
+        
+        if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+        {
+            SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
+            return Bank_ShowMenu(playerid);
+        }
+        
+        Dialog_Show(playerid, dialog_remove, DIALOG_STYLE_MSGBOX, "{F1C40F}Banka: {FFFFFF}Ukloni Nalog", "Da li ste sigurni? Nalog ce biti uklonjen {E74C3C}zauvek.", "Da", "Nazad");
     }
     return (true);
 }
@@ -495,13 +514,16 @@ Bank_ListAccounts(playerid)
     new rows = cache_num_rows();
 
     if(rows) {
-        new string[1024], cdate[24], ldate[24];
+        new string[1024], cdate[24], ldate[24],id,balance,lastacces;
         format(string, sizeof(string), "ID\tBalans\tNapravljen\tPoslednji put Vidjen\n");
         for(new i; i < rows; ++i)
         {
             cache_get_value_name(i, "Created", cdate, 24);
             cache_get_value_name(i, "Last", ldate, 24);
-            format(string, sizeof(string), "%s{FFFFFF}%d\t{2ECC71}%s\t{FFFFFF}%s\t%s\n", string, cache_get_value_name_int(i, "ID"), formatInt(cache_get_value_name_int(i, "Balance")), cdate, (cache_get_value_name_int(i, "LastAccess") == 0) ? ("Never") : ldate);
+            cache_get_value_name_int(i, "ID", id);
+            cache_get_value_name_int(i, "Balance", balance);
+            cache_get_value_name_int(i, "LastAccess", lastacces);
+            format(string, sizeof(string), "%s{FFFFFF}%d\t{2ECC71}%s\t{FFFFFF}%s\t%s\n", string, id, formatInt(balance), cdate, lastacces == 0 ? ("Never") : ldate);
         }
 
         Dialog_Show(playerid, dialog_bank_accounts, DIALOG_STYLE_TABLIST_HEADERS, "{F1C40F}Banka: {FFFFFF}Moji Nalozi", string, "Prijava", "Nazad");
@@ -570,17 +592,24 @@ Bank_ShowLogs(playerid)
 
                 case TYPE_DEPOSIT:
                 {
-                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(cache_get_value_name_int(i, "Amount")), date);
+                    new amount;
+                    cache_get_value_name_int(i, "Amount", amount);
+                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(amount), date);
                 }
 
                 case TYPE_WITHDRAW:
                 {
-                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(cache_get_value_name_int(i, "Amount")), date);
+                    new amount;
+                    cache_get_value_name_int(i, "Amount", amount);
+                    format(list, sizeof(list), "%s%s\t{2ECC71}%s\t%s\n", list, name, formatInt(amount), date);
                 }
 
                 case TYPE_TRANSFER:
                 {
-                    format(list, sizeof(list), "%s%s\t%d\t{2ECC71}%s\t%s\n", list, name, cache_get_value_name_int(i, "ToAccountID"), formatInt(cache_get_value_name_int(i, "Amount")), date);
+                    new toaccountid,amount;
+                    cache_get_value_name_int(i, "ToAccountID", toaccountid);
+                    cache_get_value_name_int(i, "Amount", amount);
+                    format(list, sizeof(list), "%s%s\t%d\t{2ECC71}%s\t%s\n", list, name, toaccountid, formatInt(amount), date);
                 }
 
                 case TYPE_PASSCHANGE:
@@ -628,13 +657,15 @@ forward OnBankAccountLogin(playerid, id);
 public OnBankAccountLogin(playerid, id)
 {
     if(cache_num_rows() > 0) {
-        new string[128], owner[MAX_PLAYER_NAME], ldate[24];
+        new string[128], owner[MAX_PLAYER_NAME], ldate[24],lastacces;
         cache_get_value_name(0, "Owner", owner, 25);
         cache_get_value_name(0, "Last", ldate, 24);
         
         format(string, sizeof(string), "[ML-Bank]: {ffffff}Ovaj bankovni racun je u vlasnistvu gradjanina: {F4AD81}%s.", owner);
         va_SendClientMessage(playerid,0xF4AD81FF, string);
-        format(string, sizeof(string), "[ML-Bank]: {ffffff}Poslednji put prijavljen: {F4AD81}%s", (cache_get_value_name_int(0, "LastAccess") == 0) ? ("Nikad") : ldate);
+
+        cache_get_value_name_int(0, "LastAccess", lastacces);
+        format(string, sizeof(string), "[ML-Bank]: {ffffff}Poslednji put prijavljen: {F4AD81}%s", lastacces ? ("Nikad") : ldate);
         va_SendClientMessage(playerid,0xF4AD81FF, string);
         
         CurrentAccountID[playerid] = id;
@@ -2438,6 +2469,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[51], 1);
     TextDrawSetProportional(BankAccountTD[51], 1);
     TextDrawSetSelectable(BankAccountTD[51], true);
+    TextDrawTextSize(BankAccountTD[51], 360, 7);
 
     BankAccountTD[52] = TextDrawCreate(157.333374, 173.407409, "SVI_LOGOVI");
     TextDrawLetterSize(BankAccountTD[52], 0.136665, 0.633481);
@@ -2448,6 +2480,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[52], 1);
     TextDrawSetProportional(BankAccountTD[52], 1);
     TextDrawSetSelectable(BankAccountTD[52], true);
+    TextDrawTextSize(BankAccountTD[52], 360, 7);
 
     BankAccountTD[53] = TextDrawCreate(156.666687, 192.903717, "PROMENI_LOZINKU");
     TextDrawLetterSize(BankAccountTD[53], 0.136665, 0.633481);
@@ -2458,6 +2491,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[53], 1);
     TextDrawSetProportional(BankAccountTD[53], 1);
     TextDrawSetSelectable(BankAccountTD[53], true);
+    TextDrawTextSize(BankAccountTD[53], 360, 7);
 
     BankAccountTD[54] = TextDrawCreate(156.666687, 214.474105, "UKLONI_NALOG");
     TextDrawLetterSize(BankAccountTD[54], 0.136665, 0.633481);
@@ -2468,6 +2502,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[54], 1);
     TextDrawSetProportional(BankAccountTD[54], 1);
     TextDrawSetSelectable(BankAccountTD[54], true);
+    TextDrawTextSize(BankAccountTD[54], 360, 7);
 
     BankAccountTD[55] = TextDrawCreate(156.666687, 319.007537, "ODJAVI_SE");
     TextDrawLetterSize(BankAccountTD[55], 0.136665, 0.633481);
@@ -2478,6 +2513,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[55], 1);
     TextDrawSetProportional(BankAccountTD[55], 1);
     TextDrawSetSelectable(BankAccountTD[55], true);
+    TextDrawTextSize(BankAccountTD[55], 360, 7);
 
     BankAccountTD[56] = TextDrawCreate(61.666801, 221.785079, "");
     TextDrawTextSize(BankAccountTD[56], 127.000000, 23.000000);
@@ -2499,6 +2535,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[57], 1);
     TextDrawSetProportional(BankAccountTD[57], 1);
     TextDrawSetSelectable(BankAccountTD[57], true);
+    TextDrawTextSize(BankAccountTD[57], 360, 7);
 
     BankAccountTD[58] = TextDrawCreate(470.333404, 154.326049, "BANKA");
     TextDrawLetterSize(BankAccountTD[58], 0.136665, 0.633481);
@@ -2603,6 +2640,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[67], 1);
     TextDrawSetProportional(BankAccountTD[67], 1);
     TextDrawSetSelectable(BankAccountTD[67], true);
+    TextDrawTextSize(BankAccountTD[67], 360, 7);
 
     BankAccountTD[68] = TextDrawCreate(470.999969, 216.233367, "PODIGNI");
     TextDrawLetterSize(BankAccountTD[68], 0.123332, 0.633481);
@@ -2614,6 +2652,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[68], 1);
     TextDrawSetProportional(BankAccountTD[68], 1);
     TextDrawSetSelectable(BankAccountTD[68], true);
+    TextDrawTextSize(BankAccountTD[68], 360, 7);
 
     BankAccountTD[69] = TextDrawCreate(470.999969, 249.418563, "PREBACI");
     TextDrawLetterSize(BankAccountTD[69], 0.123332, 0.633481);
@@ -2625,6 +2664,7 @@ CreateBankTDs()
     TextDrawFont(BankAccountTD[69], 1);
     TextDrawSetProportional(BankAccountTD[69], 1);
     TextDrawSetSelectable(BankAccountTD[69], true);
+    TextDrawTextSize(BankAccountTD[69], 360, 7);
 
     BankAccountTD[70] = TextDrawCreate(469.666656, 319.522521, "TRENUTNI_BALANS");
     TextDrawLetterSize(BankAccountTD[70], 0.123332, 0.633481);

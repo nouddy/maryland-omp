@@ -83,3 +83,48 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
     }
     return 1;
 }
+public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+{
+    if(Iter_Contains(ATMs, EditingATMID[playerid]))
+    {
+        if(response == EDIT_RESPONSE_FINAL)
+        {
+            new idzzs = EditingATMID[playerid];
+            ATMData[idzzs][atmX] = x;
+            ATMData[idzzs][atmY] = y;
+            ATMData[idzzs][atmZ] = z;
+            ATMData[idzzs][atmRX] = rx;
+            ATMData[idzzs][atmRY] = ry;
+            ATMData[idzzs][atmRZ] = rz;
+            
+            SetDynamicObjectPos(objectid, ATMData[idzzs][atmX], ATMData[idzzs][atmY], ATMData[idzzs][atmZ]);
+            SetDynamicObjectRot(objectid, ATMData[idzzs][atmRX], ATMData[idzzs][atmRY], ATMData[idzzs][atmRZ]);
+            
+            #if defined ATM_USE_MAPICON
+            Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_X, ATMData[idzzs][atmX]);
+            Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_Y, ATMData[idzzs][atmY]);
+            Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, ATMData[idzzs][atmIconID], E_STREAMER_Z, ATMData[idzzs][atmZ]);
+            #endif
+
+            Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_X, ATMData[idzzs][atmX]);
+            Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_Y, ATMData[idzzs][atmY]);
+            Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, ATMData[idzzs][atmLabel], E_STREAMER_Z, ATMData[idzzs][atmZ] + 0.85);
+
+            new queryzz[144];
+            mysql_format(SQL, queryzz, sizeof(queryzz), "UPDATE bank_atms SET PosX='%f', PosY='%f', PosZ='%f', RotX='%f', RotY='%f', RotZ='%f' WHERE ID=%d", x, y, z, rx, ry, rz, idzzs);
+            mysql_tquery(SQL, queryzz);
+            
+            EditingATMID[playerid] = -1;
+        }
+        
+        if(response == EDIT_RESPONSE_CANCEL)
+        {
+            new idzzz = EditingATMID[playerid];
+
+            SetDynamicObjectPos(objectid, ATMData[idzzz][atmX], ATMData[idzzz][atmY], ATMData[idzzz][atmZ]);
+            SetDynamicObjectRot(objectid, ATMData[idzzz][atmRX], ATMData[idzzz][atmRY], ATMData[idzzz][atmRZ]);
+            EditingATMID[playerid] = -1;
+        }
+    }
+    return (true);
+}

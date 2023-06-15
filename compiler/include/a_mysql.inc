@@ -114,7 +114,6 @@ enum E_MYSQL_EXECTIME_UNIT
 #define MYSQL_INVALID_ORM ORM:0
 
 
-
 // ORM functions
 native ORM:orm_create(const table[], MySQL:handle = MYSQL_DEFAULT_HANDLE);
 native orm_destroy(ORM:id);

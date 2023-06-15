@@ -17,15 +17,6 @@
  *  @Module         main
  */
 
-/*
-
-TO DO >
-			1. Kreirati bazu za faction police (jer si ti doktore push staru bazu a nisi getao novu i onda je mene nesto mrzelo da kreiram opet)
-			2. Prebaciti Navigaciju u sql (Kreiranje, brisanje, izmena lokacije i imena lokacije)
-
-*/
-
-
 #define YSI_YES_HEAP_MALLOC
 
 #define CGEN_MEMORY 60000
@@ -77,7 +68,7 @@ TO DO >
 #define 	c_ogycolor		"{EB8C6C}"
 
 #define     x_server     0x8DC9F3FF
-#define     x_server2     0xC092DEFF
+#define     x_server2    0xC092DEFF
 #define     x_red        0xFF1100AA //error/important color
 #define     x_blue       0x0099CCAA //help color
 #define     x_white      0xffffffAA

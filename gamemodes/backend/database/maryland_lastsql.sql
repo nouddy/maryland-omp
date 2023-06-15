@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2023 at 09:45 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Generation Time: Jun 15, 2023 at 07:21 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,13 +20,15 @@ SET time_zone = "+00:00";
 --
 -- Database: `maryland`
 --
-CREATE DATABASE IF NOT EXISTS `maryland` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `maryland` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `maryland`;
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bankers`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `bankers`;
@@ -40,10 +42,21 @@ CREATE TABLE IF NOT EXISTS `bankers` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `bankers`:
+--
+
+--
+-- Truncate table before insert `bankers`
+--
+
+TRUNCATE TABLE `bankers`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_accounts`
+--
+-- Creation: Jun 06, 2023 at 01:10 PM
 --
 
 DROP TABLE IF EXISTS `bank_accounts`;
@@ -58,10 +71,21 @@ CREATE TABLE IF NOT EXISTS `bank_accounts` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `bank_accounts`:
+--
+
+--
+-- Truncate table before insert `bank_accounts`
+--
+
+TRUNCATE TABLE `bank_accounts`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_atms`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `bank_atms`;
@@ -76,10 +100,21 @@ CREATE TABLE IF NOT EXISTS `bank_atms` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `bank_atms`:
+--
+
+--
+-- Truncate table before insert `bank_atms`
+--
+
+TRUNCATE TABLE `bank_atms`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_logs`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `bank_logs`;
@@ -95,44 +130,93 @@ CREATE TABLE IF NOT EXISTS `bank_logs` (
   KEY `bank_logs_ibfk_1` (`AccountID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `bank_logs`:
+--   `AccountID`
+--       `bank_accounts` -> `ID`
+--
+
+--
+-- Truncate table before insert `bank_logs`
+--
+
+TRUNCATE TABLE `bank_logs`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `businesses`
 --
+-- Creation: Jun 15, 2023 at 05:19 PM
+--
 
 DROP TABLE IF EXISTS `businesses`;
 CREATE TABLE IF NOT EXISTS `businesses` (
-  `bizID` int(11) NOT NULL,
-  `bizName` varchar(32) NOT NULL DEFAULT 'Nema',
-  `bizOpis` varchar(128) NOT NULL DEFAULT 'Nema',
-  `bizAddress` varchar(35) NOT NULL DEFAULT 'Nepoznata',
-  `bizOwner` int(11) NOT NULL,
-  `bizType` int(11) NOT NULL DEFAULT 0,
-  `bizPosX` float NOT NULL DEFAULT 0,
-  `bizPosY` float NOT NULL DEFAULT 0,
-  `bizPosZ` float NOT NULL DEFAULT 0,
-  `bizPosA` float NOT NULL DEFAULT 0,
-  `bizIntX` float NOT NULL DEFAULT 0,
-  `bizIntY` float NOT NULL DEFAULT 0,
-  `bizIntZ` float NOT NULL DEFAULT 0,
-  `bizIntA` float NOT NULL DEFAULT 0,
-  `bizInterior` int(11) NOT NULL,
-  `bizExterior` int(11) NOT NULL,
-  `bizExteriorVW` int(11) NOT NULL,
-  `bizLocked` tinyint(1) NOT NULL DEFAULT 0,
-  `bizVault` int(11) NOT NULL DEFAULT 0,
-  `bizProducts` int(11) NOT NULL,
-  `bizInvestor` int(11) NOT NULL,
-  PRIMARY KEY (`bizID`),
-  UNIQUE KEY `bizOwner` (`bizOwner`),
-  UNIQUE KEY `bizInvestor` (`bizInvestor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `bizID` int(12) NOT NULL AUTO_INCREMENT,
+  `bizName` varchar(32) DEFAULT NULL,
+  `bizOwner` int(12) DEFAULT 0,
+  `bizType` int(12) DEFAULT 0,
+  `bizPrice` int(12) DEFAULT 0,
+  `bizPosX` float DEFAULT 0,
+  `bizPosY` float DEFAULT 0,
+  `bizPosZ` float DEFAULT 0,
+  `bizPosA` float DEFAULT 0,
+  `bizIntX` float DEFAULT 0,
+  `bizIntY` float DEFAULT 0,
+  `bizIntZ` float DEFAULT 0,
+  `bizIntA` float DEFAULT 0,
+  `bizInterior` int(12) DEFAULT 0,
+  `bizExterior` int(12) DEFAULT 0,
+  `bizExteriorVW` int(12) DEFAULT 0,
+  `bizLocked` int(4) DEFAULT 0,
+  `bizVault` int(12) DEFAULT 0,
+  `bizProducts` int(12) DEFAULT 0,
+  `bizPrice1` int(12) DEFAULT 0,
+  `bizPrice2` int(12) DEFAULT 0,
+  `bizPrice3` int(12) DEFAULT 0,
+  `bizPrice4` int(12) DEFAULT 0,
+  `bizPrice5` int(12) DEFAULT 0,
+  `bizPrice6` int(12) DEFAULT 0,
+  `bizPrice7` int(12) DEFAULT 0,
+  `bizPrice8` int(12) DEFAULT 0,
+  `bizPrice9` int(12) DEFAULT 0,
+  `bizPrice10` int(12) DEFAULT 0,
+  `bizSpawnX` float DEFAULT 0,
+  `bizSpawnY` float DEFAULT 0,
+  `bizSpawnZ` float DEFAULT 0,
+  `bizSpawnA` float DEFAULT 0,
+  `bizDeliverX` float DEFAULT 0,
+  `bizDeliverY` float DEFAULT 0,
+  `bizDeliverZ` float DEFAULT 0,
+  `bizMessage` varchar(128) DEFAULT NULL,
+  `bizPrice11` int(12) DEFAULT 0,
+  `bizPrice12` int(12) DEFAULT 0,
+  `bizPrice13` int(12) DEFAULT 0,
+  `bizPrice14` int(12) DEFAULT 0,
+  `bizPrice15` int(12) DEFAULT 0,
+  `bizPrice16` int(12) DEFAULT 0,
+  `bizPrice17` int(12) DEFAULT 0,
+  `bizPrice18` int(12) DEFAULT 0,
+  `bizPrice19` int(12) DEFAULT 0,
+  `bizPrice20` int(12) DEFAULT 0,
+  `bizShipment` int(4) DEFAULT 0,
+  PRIMARY KEY (`bizID`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `businesses`:
+--
+
+--
+-- Truncate table before insert `businesses`
+--
+
+TRUNCATE TABLE `businesses`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `cars`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `cars`;
@@ -178,10 +262,21 @@ CREATE TABLE IF NOT EXISTS `cars` (
   PRIMARY KEY (`carID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `cars`:
+--
+
+--
+-- Truncate table before insert `cars`
+--
+
+TRUNCATE TABLE `cars`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `faction_police`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `faction_police`;
@@ -216,10 +311,21 @@ CREATE TABLE IF NOT EXISTS `faction_police` (
   UNIQUE KEY `fPoliceBoss` (`fPoliceBoss`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `faction_police`:
+--
+
+--
+-- Truncate table before insert `faction_police`
+--
+
+TRUNCATE TABLE `faction_police`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `houses`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `houses`;
@@ -243,10 +349,21 @@ CREATE TABLE IF NOT EXISTS `houses` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `houses`:
+--
+
+--
+-- Truncate table before insert `houses`
+--
+
+TRUNCATE TABLE `houses`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `klupe`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `klupe`;
@@ -259,10 +376,22 @@ CREATE TABLE IF NOT EXISTS `klupe` (
   PRIMARY KEY (`seat_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `klupe`:
+--
+
+--
+-- Truncate table before insert `klupe`
+--
+
+TRUNCATE TABLE `klupe`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `players`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
+-- Last update: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `players`;
@@ -286,6 +415,15 @@ CREATE TABLE IF NOT EXISTS `players` (
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `players`:
+--
+
+--
+-- Truncate table before insert `players`
+--
+
+TRUNCATE TABLE `players`;
+--
 -- Dumping data for table `players`
 --
 
@@ -297,6 +435,9 @@ INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `
 
 --
 -- Table structure for table `player_crypto`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
+-- Last update: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `player_crypto`;
@@ -311,6 +452,15 @@ CREATE TABLE IF NOT EXISTS `player_crypto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `player_crypto`:
+--
+
+--
+-- Truncate table before insert `player_crypto`
+--
+
+TRUNCATE TABLE `player_crypto`;
+--
 -- Dumping data for table `player_crypto`
 --
 
@@ -322,6 +472,9 @@ INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `Kolicin
 
 --
 -- Table structure for table `player_documents`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
+-- Last update: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `player_documents`;
@@ -337,6 +490,15 @@ CREATE TABLE IF NOT EXISTS `player_documents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `player_documents`:
+--
+
+--
+-- Truncate table before insert `player_documents`
+--
+
+TRUNCATE TABLE `player_documents`;
+--
 -- Dumping data for table `player_documents`
 --
 
@@ -349,6 +511,8 @@ INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLi
 --
 -- Table structure for table `player_electronic`
 --
+-- Creation: Jun 15, 2023 at 05:19 PM
+--
 
 DROP TABLE IF EXISTS `player_electronic`;
 CREATE TABLE IF NOT EXISTS `player_electronic` (
@@ -359,10 +523,22 @@ CREATE TABLE IF NOT EXISTS `player_electronic` (
   UNIQUE KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `player_electronic`:
+--
+
+--
+-- Truncate table before insert `player_electronic`
+--
+
+TRUNCATE TABLE `player_electronic`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `player_finance`
+--
+-- Creation: Jun 15, 2023 at 05:19 PM
+-- Last update: Jun 15, 2023 at 05:19 PM
 --
 
 DROP TABLE IF EXISTS `player_finance`;
@@ -374,6 +550,15 @@ CREATE TABLE IF NOT EXISTS `player_finance` (
   UNIQUE KEY `finance_id` (`finance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- RELATIONSHIPS FOR TABLE `player_finance`:
+--
+
+--
+-- Truncate table before insert `player_finance`
+--
+
+TRUNCATE TABLE `player_finance`;
 --
 -- Dumping data for table `player_finance`
 --

@@ -118,7 +118,7 @@ public PoliceLoad()
 }
 
 //============================================================ Stocks
-IsNearPolice(playerid, type)
+stock IsNearPolice(playerid, type)
 {
 	new
 	    Float:fPoliceDistance[2] = {99999.0, 0.0},

@@ -45,6 +45,22 @@ enum carData {
 };
 new CarData[MAX_DYNAMIC_CARS][carData];
 
+
+enum impoundData {
+	impoundID,
+	impoundExists,
+	Float:impoundLot[3],
+	Float:impoundRelease[4],
+	Text3D:impoundText3D,
+	impoundPickup
+};
+new ImpoundData[MAX_IMPOUND_LOTS][impoundData];
+
+
+
+
+new ListedVehicles[MAX_PLAYERS][MAX_OWNABLE_CARS];
+
 stock SetVehicleColor(vehicleid, color1, color2)
 {
     new id = Car_GetID(vehicleid);
@@ -57,8 +73,35 @@ stock SetVehicleColor(vehicleid, color1, color2)
 	}
 	return ChangeVehicleColor(vehicleid, color1, color2);
 }
+FormatNumber(number, const prefix[] = "$")
+{
+	static
+		value[32],
+		length;
 
+	format(value, sizeof(value), "%d", (number < 0) ? (-number) : (number));
 
+	if ((length = strlen(value)) > 3)
+	{
+		for (new i = length, l = 0; --i >= 0; l ++) {
+		    if ((l > 0) && (l % 3 == 0)) strins(value, ",", i + 1);
+		}
+	}
+	if (prefix[0] != 0)
+	    strins(value, prefix, 0);
+
+	if (number < 0)
+		strins(value, "-", 0);
+
+	return value;
+}
+stock GetImpoundByID(sqlid)
+{
+	for (new i = 0; i < MAX_IMPOUND_LOTS; i ++) if (ImpoundData[i][impoundExists] && ImpoundData[i][impoundID] == sqlid) {
+	    return i;
+	}
+	return -1;
+}
 hook OnGameModeInit()
 {
 	mysql_tquery(SQL, "SELECT * FROM `cars`", "Car_Load", "");
@@ -117,48 +160,48 @@ stock IsVehicleImpounded(vehicleid)
 
 	return 0;
 }
-// stock Impound_Nearest(playerid)
-// {
-// 	for (new i = 0; i < MAX_IMPOUND_LOTS; i ++) if (ImpoundData[i][impoundExists] && IsPlayerInRangeOfPoint(playerid, 20.0, ImpoundData[i][impoundLot][0], ImpoundData[i][impoundLot][1], ImpoundData[i][impoundLot][2])) {
-// 	    return i;
-// 	}
-// 	return -1;
-// }
+stock Impound_Nearest(playerid)
+{
+	for (new i = 0; i < MAX_IMPOUND_LOTS; i ++) if (ImpoundData[i][impoundExists] && IsPlayerInRangeOfPoint(playerid, 20.0, ImpoundData[i][impoundLot][0], ImpoundData[i][impoundLot][1], ImpoundData[i][impoundLot][2])) {
+	    return i;
+	}
+	return -1;
+}
 
-// stock Impound_Delete(impoundid)
-// {
-//     if (impoundid != -1 && ImpoundData[impoundid][impoundExists])
-// 	{
-// 	    new
-// 	        query[64];
+stock Impound_Delete(impoundid)
+{
+    if (impoundid != -1 && ImpoundData[impoundid][impoundExists])
+	{
+	    new
+	        query[64];
 
-// 		format(query, sizeof(query), "DELETE FROM `impoundlots` WHERE `impoundID` = '%d'", ImpoundData[impoundid][impoundID]);
-// 		mysql_tquery(SQL, query);
+		format(query, sizeof(query), "DELETE FROM `impoundlots` WHERE `impoundID` = '%d'", ImpoundData[impoundid][impoundID]);
+		mysql_tquery(SQL, query);
 
-//         if (IsValidDynamic3DTextLabel(ImpoundData[impoundid][impoundText3D]))
-// 		    DestroyDynamic3DTextLabel(ImpoundData[impoundid][impoundText3D]);
+        if (IsValidDynamic3DTextLabel(ImpoundData[impoundid][impoundText3D]))
+		    DestroyDynamic3DTextLabel(ImpoundData[impoundid][impoundText3D]);
 
-// 	    if (IsValidDynamicPickup(ImpoundData[impoundid][impoundPickup]))
-// 		    DestroyDynamicPickup(ImpoundData[impoundid][impoundPickup]);
+	    if (IsValidDynamicPickup(ImpoundData[impoundid][impoundPickup]))
+		    DestroyDynamicPickup(ImpoundData[impoundid][impoundPickup]);
 
-// 		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (CarData[i][carExists] && CarData[i][carImpounded] == ImpoundData[impoundid][impoundID]) {
-// 		    CarData[i][carImpounded] = 0;
-// 		    CarData[i][carImpoundPrice] = 0;
-// 		    Car_Save(i);
-// 		}
-//         ImpoundData[impoundid][impoundExists] = false;
-//         ImpoundData[impoundid][impoundID] = 0;
-// 	}
-// 	return 1;
-// }
+		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (CarData[i][carExists] && CarData[i][carImpounded] == ImpoundData[impoundid][impoundID]) {
+		    CarData[i][carImpounded] = 0;
+		    CarData[i][carImpoundPrice] = 0;
+		    Car_Save(i);
+		}
+        ImpoundData[impoundid][impoundExists] = false;
+        ImpoundData[impoundid][impoundID] = 0;
+	}
+	return 1;
+}
 
-// stock GetVehicleBackpack(carid)
-// {
-// 	for (new i = 0; i != MAX_BACKPACKS; i ++) if (BackpackData[i][backpackExists] && BackpackData[i][backpackVehicle] == CarData[carid][carID]) {
-// 	    return i;
-// 	}
-// 	return -1;
-// }
+stock GetVehicleBackpack(carid)
+{
+	for (new i = 0; i != MAX_BACKPACKS; i ++) if (BackpackData[i][backpackExists] && BackpackData[i][backpackVehicle] == CarData[carid][carID]) {
+	    return i;
+	}
+	return -1;
+}
 stock Car_GetRealID(carid)
 {
 	if (carid == -1 || !CarData[carid][carExists] || CarData[carid][carVehicle] == INVALID_VEHICLE_ID)
@@ -273,6 +316,16 @@ Car_GetCount(playerid)
 	}
 	return count;
 }
+Car_Inside(playerid)
+{
+	new carid;
+
+	if (IsPlayerInAnyVehicle(playerid) && (carid = Car_GetID(GetPlayerVehicleID(playerid))) != -1)
+	    return carid;
+
+	return -1;
+}
+
 Car_IsOwner(playerid, carid)
 {
 	if (!IgracUlogovan[playerid] || PlayerInfo[playerid][SQLID] == -1)
@@ -283,28 +336,6 @@ Car_IsOwner(playerid, carid)
 
 	return 0;
 }
-// Car_WeaponStorage(playerid, carid)
-// {
-//     if (!CarData[carid][carExists] || CarData[carid][carLocked])
-// 	    return 0;
-
-//     static
-// 	    string[164];
-
-// 	string[0] = 0;
-
-// 	for (new i = 0; i < 5; i ++)
-// 	{
-// 	    if (22 <= CarData[carid][carWeapons][i] <= 38)
-// 	        format(string, sizeof(string), "%s%s - Ammo: %d\n", string, ReturnWeaponName(CarData[carid][carWeapons][i]), CarData[carid][carAmmo][i]);
-
-// 		else
-// 		    format(string, sizeof(string), "%s%s\n", string, (CarData[carid][carWeapons][i]) ? (ReturnWeaponName(CarData[carid][carWeapons][i])) : ("Empty Slot"));
-// 	}
-// 	Dialog_Show(playerid, Trunk, DIALOG_STYLE_LIST, "Car Trunk", string, "Select", "Cancel");
-// 	return 1;
-// }
-
 
 Car_Delete(carid)
 {
@@ -319,10 +350,6 @@ Car_Delete(carid)
 		if (IsValidVehicle(CarData[carid][carVehicle]))
 			DestroyVehicle(CarData[carid][carVehicle]);
 
-		for (new i = 0; i < MAX_BACKPACKS; i ++) if (BackpackData[i][backpackExists] && BackpackData[i][backpackVehicle] == CarData[carid][carID]) {
-		    Backpack_Delete(i);
-		}
-		Car_RemoveAllItems(carid);
 
         CarData[carid][carExists] = false;
 	    CarData[carid][carID] = 0;
@@ -408,130 +435,6 @@ Car_Nearest(playerid)
 	}
 	return -1;
 }
-
-stock Car_GetItemID(carid, item[])
-{
-	if (carid == -1 || !CarData[carid][carExists])
-	    return 0;
-
-	for (new i = 0; i < MAX_CAR_STORAGE; i ++)
-	{
-	    if (!CarStorage[carid][i][cItemExists])
-	        continue;
-
-		if (!strcmp(CarStorage[carid][i][cItemName], item)) return i;
-	}
-	return -1;
-}
-
-stock Car_GetFreeID(carid)
-{
-	if (carid == -1 || !CarData[carid][carExists])
-	    return 0;
-
-	for (new i = 0; i < MAX_CAR_STORAGE; i ++)
-	{
-	    if (!CarStorage[carid][i][cItemExists])
-	        return i;
-	}
-	return -1;
-}
-
-// stock Car_AddItem(carid, item[], model, quantity = 1, slotid = -1)
-// {
-//     if (carid == -1 || !CarData[carid][carExists])
-// 	    return 0;
-
-// 	new
-// 		itemid = Car_GetItemID(carid, item),
-// 		string[128];
-
-// 	if (itemid == -1)
-// 	{
-// 	    itemid = Car_GetFreeID(carid);
-
-// 	    if (itemid != -1)
-// 	    {
-// 	        if (slotid != -1)
-// 	            itemid = slotid;
-
-// 	        CarStorage[carid][itemid][cItemExists] = true;
-// 	        CarStorage[carid][itemid][cItemModel] = model;
-// 	        CarStorage[carid][itemid][cItemQuantity] = quantity;
-
-// 	        strpack(CarStorage[carid][itemid][cItemName], item, 32 char);
-
-// 			format(string, sizeof(string), "INSERT INTO `carstorage` (`ID`, `itemName`, `itemModel`, `itemQuantity`) VALUES('%d', '%s', '%d', '%d')", CarData[carid][carID], item, model, quantity);
-// 			mysql_tquery(SQL, string, "OnCarStorageAdd", "dd", carid, itemid);
-
-// 	        return itemid;
-// 		}
-// 		return -1;
-// 	}
-// 	else
-// 	{
-// 	    format(string, sizeof(string), "UPDATE `carstorage` SET `itemQuantity` = `itemQuantity` + %d WHERE `ID` = '%d' AND `itemID` = '%d'", quantity, CarData[carid][carID], CarStorage[carid][itemid][cItemID]);
-// 	    mysql_tquery(SQL, string);
-
-// 	    CarStorage[carid][itemid][cItemQuantity] += quantity;
-// 	}
-// 	return itemid;
-// }
-
-// stock Car_RemoveItem(carid, item[], quantity = 1)
-// {
-//     if (carid == -1 || !CarData[carid][carExists])
-// 	    return 0;
-
-// 	new
-// 		itemid = Car_GetItemID(carid, item),
-// 		string[128];
-
-// 	if (itemid != -1)
-// 	{
-// 	    if (CarStorage[carid][itemid][cItemQuantity] > 0)
-// 	    {
-// 	        CarStorage[carid][itemid][cItemQuantity] -= quantity;
-// 		}
-// 		if (quantity == -1 || CarStorage[carid][itemid][cItemQuantity] < 1)
-// 		{
-// 		    CarStorage[carid][itemid][cItemExists] = false;
-// 		    CarStorage[carid][itemid][cItemModel] = 0;
-// 		    CarStorage[carid][itemid][cItemQuantity] = 0;
-
-// 		    format(string, sizeof(string), "DELETE FROM `carstorage` WHERE `ID` = '%d' AND `itemID` = '%d'", CarData[carid][carID], CarStorage[carid][itemid][cItemID]);
-// 	        mysql_tquery(SQL, string);
-// 		}
-// 		else if (quantity != -1 && CarStorage[carid][itemid][cItemQuantity] > 0)
-// 		{
-// 			format(string, sizeof(string), "UPDATE `carstorage` SET `itemQuantity` = `itemQuantity` - %d WHERE `ID` = '%d' AND `itemID` = '%d'", quantity, CarData[carid][carID], CarStorage[carid][itemid][cItemID]);
-//             mysql_tquery(SQL, string);
-// 		}
-// 		return 1;
-// 	}
-// 	return 0;
-// }
-
-// Car_RemoveAllItems(carid)
-// {
-// 	static
-// 	    query[64];
-
-// 	for (new i = 0; i != MAX_CAR_STORAGE; i ++) {
-//         CarStorage[carid][i][cItemExists] = false;
-//         CarStorage[carid][i][cItemModel] = 0;
-//         CarStorage[carid][i][cItemQuantity] = 0;
-// 	}
-// 	format(query, 64, "DELETE FROM `carstorage` WHERE `ID` = '%d'", CarData[carid][carID]);
-// 	mysql_tquery(SQL, query);
-
-// 	for (new i = 0; i < 5; i ++) {
-// 	    CarData[carid][carWeapons][i] = 0;
-// 	    CarData[carid][carAmmo][i] = 0;
-// 	}
-// 	return 1;
-// }
-
 forward OnCarCreated(carid);
 public OnCarCreated(carid)
 {
@@ -607,395 +510,162 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	return 1;
 }
 
-// Dialog:ReleaseCar(playerid, response, listitem, inputtext[])
-// {
-// 	if (response)
-// 	{
-// 	    new
-// 			carid = ListedVehicles[playerid][listitem],
-// 			id = GetImpoundByID(CarData[carid][carImpounded]);
-
-// 	    if (carid != -1 && id != -1 && CarData[carid][carExists] && CarData[carid][carImpounded] != -1)
-// 	    {
-// 	        if (GetMoney(playerid) < CarData[carid][carImpoundPrice])
-// 	            return SendErrorMessage(playerid, "You can't afford to release this vehicle.");
-
-//             GiveMoney(playerid, -CarData[carid][carImpoundPrice]);
-
-//             CarData[carid][carPos][0] = ImpoundData[id][impoundRelease][0];
-//             CarData[carid][carPos][1] = ImpoundData[id][impoundRelease][1];
-//             CarData[carid][carPos][2] = ImpoundData[id][impoundRelease][2];
-//             CarData[carid][carPos][3] = ImpoundData[id][impoundRelease][3];
-
-// 			SetVehiclePos(CarData[carid][carVehicle], CarData[carid][carPos][0], CarData[carid][carPos][1], CarData[carid][carPos][2]);
-// 			SetVehicleZAngle(CarData[carid][carVehicle], CarData[carid][carPos][3]);
-
-// 			SendInfoMessage(playerid, "You have released your %s for %s.", ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(CarData[carid][carImpoundPrice]));
-
-//             CarData[carid][carImpounded] = -1;
-//             CarData[carid][carImpoundPrice] = 0;
-
-//             Car_Save(carid);
-// 	    }
-// 	}
-// 	return 1;
-// }
-
-// Dialog:Trunk(playerid, response, listitem, inputtext[])
-// {
-//     new carid = Car_Nearest(playerid);
-
-// 	if (CarData[carid][carImpounded] != -1)
-//     	return SendErrorMessage(playerid, "This vehicle is impounded and you can't use it.");
-
-// 	if (carid != -1 && !CarData[carid][carLocked])
-//  	{
-// 		if (response)
-// 		{
-// 			if (!CarData[carid][carWeapons][listitem])
-// 			{
-// 			    if (!GetWeapon(playerid))
-// 			        return SendErrorMessage(playerid, "You aren't holding any weapon.");
-
-//        			if (GetWeapon(playerid) == 23 && PlayerData[playerid][pTazer])
-// 	    			return SendErrorMessage(playerid, "You can't store a tazer into your trunk.");
-
-//                 if (GetWeapon(playerid) == 25 && PlayerData[playerid][pBeanBag])
-// 	    			return SendErrorMessage(playerid, "You can't store a beanbag shotgun into your trunk.");
-
-// 				if (!Car_IsOwner(playerid, carid) && GetFactionType(playerid) == FACTION_POLICE)
-//         			return SendErrorMessage(playerid, "You can't store weapons since you're a police officer.");
-
-// 	   			CarData[carid][carWeapons][listitem] = GetWeapon(playerid);
-// 	            CarData[carid][carAmmo][listitem] = GetPlayerAmmo(playerid);
-
-// 	            ResetWeapon(playerid, CarData[carid][carWeapons][listitem]);
-// 	            SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s stored a %s into the trunk.", ReturnName(playerid, 0), ReturnWeaponName(CarData[carid][carWeapons][listitem]));
-
-// 	            Car_Save(carid);
-// 				Car_WeaponStorage(playerid, carid);
-// 			}
-// 			else
-// 			{
-// 			    GiveWeaponToPlayer(playerid, CarData[carid][carWeapons][listitem], CarData[carid][carAmmo][listitem]);
-// 	            SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s takes a %s from the trunk.", ReturnName(playerid, 0), ReturnWeaponName(CarData[carid][carWeapons][listitem]));
-
-// 	            CarData[carid][carWeapons][listitem] = 0;
-// 	            CarData[carid][carAmmo][listitem] = 0;
-
-// 	            Car_Save(carid);
-// 	            Car_WeaponStorage(playerid, carid);
-// 			}
-// 	    }
-// 		else {
-// 		    Car_ShowTrunk(playerid, carid);
-// 		}
-// 	}
-// 	return 1;
-// }
-
-// Dialog:CarDeposit(playerid, response, listitem, inputtext[])
-// {
-// 	static
-// 	    carid = -1,
-// 	    string[32];
-
-//     if ((carid = Car_Nearest(playerid)) != -1 && !CarData[carid][carLocked])
-// 	{
-// 	    strunpack(string, InventoryData[playerid][PlayerData[playerid][pInventoryItem]][invItem]);
-
-// 		if (response)
-// 		{
-// 			new amount = strval(inputtext);
-
-// 			if (amount < 1 || amount > InventoryData[playerid][PlayerData[playerid][pInventoryItem]][invQuantity])
-// 			    return Dialog_Show(playerid, CarDeposit, DIALOG_STYLE_INPUT, "Car Deposit", "Item: %s (Quantity: %d)\n\nPlease enter the quantity that you wish to store for this item:", "Store", "Back", string, InventoryData[playerid][PlayerData[playerid][pInventoryItem]][invQuantity]);
-
-// 			Car_AddItem(carid, string, InventoryData[playerid][PlayerData[playerid][pInventoryItem]][invModel], amount);
-// 			Inventory_Remove(playerid, string, amount);
-
-// 			SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s has stored a \"%s\" into the trunk.", ReturnName(playerid, 0), string);
-// 			Car_ShowTrunk(playerid, carid);
-// 		}
-// 		else Car_ShowTrunk(playerid, carid);
-// 	}
-// 	return 1;
-// }
-
-// Dialog:CarTake(playerid, response, listitem, inputtext[])
-// {
-// 	static
-// 	    carid = -1,
-// 	    string[32];
-
-//     if ((carid = Car_Nearest(playerid)) != -1 && !CarData[carid][carLocked])
-// 	{
-// 	    strunpack(string, CarStorage[carid][PlayerData[playerid][pStorageItem]][cItemName]);
-
-// 		if (response)
-// 		{
-// 			new amount = strval(inputtext);
-
-// 			if (amount < 1 || amount > CarStorage[carid][PlayerData[playerid][pStorageItem]][cItemQuantity])
-// 			    return Dialog_Show(playerid, CarTake, DIALOG_STYLE_INPUT, "Car Take", "Item: %s (Quantity: %d)\n\nPlease enter the quantity that you wish to take for this item:", "Take", "Back", string, CarStorage[carid][PlayerData[playerid][pInventoryItem]][cItemQuantity]);
-
-// 			new id = Inventory_Add(playerid, string, CarStorage[carid][PlayerData[playerid][pStorageItem]][cItemModel], amount);
-
-// 			if (id == -1)
-// 				return SendErrorMessage(playerid, "You don't have any inventory slots left.");
-
-// 			Car_RemoveItem(carid, string, amount);
-
-// 			SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s has taken a \"%s\" from the trunk.", ReturnName(playerid, 0), string);
-// 			Car_ShowTrunk(playerid, carid);
-// 		}
-// 		else Car_ShowTrunk(playerid, carid);
-// 	}
-// 	return 1;
-// }
-
-// Dialog:CarStorage(playerid, response, listitem, inputtext[])
-// {
-// 	static
-// 	    carid = -1,
-// 		string[64];
-
-// 	if ((carid = Car_Nearest(playerid)) != -1 && !CarData[carid][carLocked])
-// 	{
-// 		if (response)
-// 		{
-// 		    if (listitem == MAX_CAR_STORAGE) {
-//     			Car_WeaponStorage(playerid, carid);
-// 		    }
-// 		    else if (CarStorage[carid][listitem][cItemExists])
-// 			{
-//    				PlayerData[playerid][pStorageItem] = listitem;
-//    				PlayerData[playerid][pInventoryItem] = listitem;
-
-// 				strunpack(string, CarStorage[carid][listitem][cItemName]);
-
-// 				format(string, sizeof(string), "%s (Quantity: %d)", string, CarStorage[carid][listitem][cItemQuantity]);
-// 				Dialog_Show(playerid, TrunkOptions, DIALOG_STYLE_LIST, string, "Take Item\nStore Item", "Select", "Back");
-// 			}
-// 			else {
-//    				OpenInventory(playerid);
-
-// 				PlayerData[playerid][pStorageSelect] = 2;
-// 			}
-// 		}
-// 	}
-// 	return 1;
-// }
-
-// Dialog:TrunkOptions(playerid, response, listitem, inputtext[])
-// {
-//     static
-// 	    carid = -1,
-// 		itemid = -1,
-// 		backpack = -1,
-// 		string[32];
-
-// 	if ((carid = Car_Nearest(playerid)) != -1 && !CarData[carid][carLocked])
-// 	{
-// 	    itemid = PlayerData[playerid][pStorageItem];
-
-// 	    strunpack(string, CarStorage[carid][itemid][cItemName]);
-
-// 		if (response)
-// 		{
-// 			switch (listitem)
-// 			{
-// 			    case 0:
-// 			    {
-// 			        if (CarStorage[carid][itemid][cItemQuantity] == 1)
-// 			        {
-// 			            if (!strcmp(string, "Backpack") && Inventory_HasItem(playerid, "Backpack"))
-// 			                return SendErrorMessage(playerid, "You already have a backpack in your inventory.");
-
-// 			            new id = Inventory_Add(playerid, string, CarStorage[carid][itemid][cItemModel], 1);
-
-// 						if (id == -1)
-//         					return SendErrorMessage(playerid, "You don't have any inventory slots left.");
-
-//                         if (!strcmp(string, "Backpack") && (backpack = GetVehicleBackpack(carid)) != -1)
-// 						{
-// 						    BackpackData[backpack][backpackVehicle] = 0;
-// 						    BackpackData[backpack][backpackPlayer] = PlayerInfo[playerid][SQLID];
-
-// 						    Backpack_Save(backpack);
-// 						    SetAccessories(playerid);
-// 						}
-// 			            Car_RemoveItem(carid, string);
-
-// 			            SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s has taken a \"%s\" from the trunk.", ReturnName(playerid, 0), string);
-// 						Car_ShowTrunk(playerid, carid);
-// 			        }
-// 			        else
-// 			        {
-// 			            Dialog_Show(playerid, CarTake, DIALOG_STYLE_INPUT, "Car Take", "Item: %s (Quantity: %d)\n\nPlease enter the quantity that you wish to take for this item:", "Take", "Back", string, CarStorage[carid][itemid][cItemQuantity]);
-// 			        }
-// 			    }
-// 				case 1:
-// 				{
-// 					new id = Inventory_GetItemID(playerid, string);
-
-// 					if (!strcmp(string, "Backpack")) {
-// 					    Car_ShowTrunk(playerid, carid);
-
-// 						return SendErrorMessage(playerid, "You can only store one backpack in your trunk.");
-// 					}
-// 					else if (id == -1) {
-// 						Car_ShowTrunk(playerid, carid);
-
-// 						return SendErrorMessage(playerid, "You don't have anymore of this item to store!");
-// 					}
-// 					else if (InventoryData[playerid][id][invQuantity] == 1)
-// 					{
-// 					    Car_AddItem(carid, string, InventoryData[playerid][id][invModel], 1);
-// 						Inventory_Remove(playerid, string);
-
-// 						SendNearbyMessage(playerid, 30.0, x_ogycolor, "** %s has stored a \"%s\" into the trunk.", ReturnName(playerid, 0), string);
-// 						Car_ShowTrunk(playerid, carid);
-// 					}
-// 					else if (InventoryData[playerid][id][invQuantity] > 1) {
-// 					    PlayerData[playerid][pInventoryItem] = id;
-
-//                         Dialog_Show(playerid, CarDeposit, DIALOG_STYLE_INPUT, "Car Deposit", "Item: %s (Quantity: %d)\n\nPlease enter the quantity that you wish to store for this item:", "Store", "Back", string, InventoryData[playerid][id][invQuantity]);
-// 					}
-// 				}
-// 			}
-// 		}
-// 		else
-// 		{
-// 		    Car_ShowTrunk(playerid, carid);
-// 		}
-// 	}
-// 	return 1;
-// }
-
-// YCMD:abandon(playerid, params[], help)
-// {
-// 	static
-// 	    id = -1;
-
-// 	if ((id = Car_Inside(playerid)) != -1 && Car_IsOwner(playerid, id))
-// 	{
-// 	    if (isnull(params) || (!isnull(params) && strcmp(params, "confirm", true) != 0))
-// 	    {
-// 	        SendInfoMessage(playerid, "/abandon [confirm]");
-// 	        SendClientMessage(playerid, x_purple, "[WARNING]:{FFFFFF} You are about to abandon your vehicle with no refund.");
-// 		}
-// 		else if (CarData[id][carImpounded] != -1)
-//     		return SendErrorMessage(playerid, "This vehicle is impounded and you can't use it.");
-
-// 		else if (!strcmp(params, "confirm", true))
-// 		{
-// 			new
-// 			    model = CarData[id][carModel];
-
-// 			Car_Delete(id);
-
-// 			SendInfoMessage(playerid, "You have abandoned your %s.", ReturnVehicleModelName(model));
-// 			Log_Write("logs/car_log.txt", "[%s] %s has abandoned their %s.", ReturnDate(), ReturnName(playerid), ReturnVehicleModelName(model));
-// 		}
-// 	}
-// 	else SendErrorMessage(playerid, "You are not in range of anything you can abandon.");
-// 	return 1;
-// }
-
-// YCMD:lock(playerid, params[], help)
-// {
-// 	static
-// 	    id = -1;
-
-// 	if ((id = Car_Nearest(playerid)) != -1)
-// 	{
-// 	    static
-// 	        engine,
-// 	        lights,
-// 	        alarm,
-// 	        doors,
-// 	        bonnet,
-// 	        boot,
-// 	        objective;
-
-// 	    GetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, doors, bonnet, boot, objective);
-
-// 	    if (Car_IsOwner(playerid, id))
-// 	    {
-// 			if (!CarData[id][carLocked])
-// 			{
-// 				CarData[id][carLocked] = true;
-// 				Car_Save(id);
-
-// 				//ShowPlayerFooter(playerid, "You have ~r~locked~w~ the vehicle!");
-// 				PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
-
-// 				SetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, 1, bonnet, boot, objective);
-// 			}
-// 			else
-// 			{
-// 				CarData[id][carLocked] = false;
-// 				Car_Save(id);
-
-// 				//ShowPlayerFooter(playerid, "You have ~g~unlocked~w~ the vehicle!");
-// 				PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
-
-// 				SetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, 0, bonnet, boot, objective);
-// 			}
-// 		}
-// 	}
-// 	else SendErrorMessage(playerid, "You are not in range of anything you can lock.");
-// 	return 1;
-// }
-
-// YCMD:sell(playerid, params[], help)
-// {
-// 	static
-// 	    targetid,
-// 	    type[24],
-// 	    string[128];
-
-// 	if (sscanf(params, "us[24]S()[128]", targetid, type, string))
-// 	{
-// 	    SendInfoMessage(playerid, "/sell [playerid/name] [name]");
-// 	    SendClientMessage(playerid, x_yellow, "[NAMES]:{FFFFFF} vehicle");
-// 	    return 1;
-// 	}
-// 	if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
-// 	{
-// 		SendErrorMessage(playerid, "The player is disconnected or not near you.");
-// 		return 1;
-// 	}
-// 	if (targetid == playerid)
-// 	{
-// 		SendErrorMessage(playerid, "You cannot sell to yourself.");
-// 		return 1;
-// 	}
-// 	if (!strcmp(type, "vehicle", true))
-// 	{
-// 		static
-// 		    price,
-// 			carid = -1;
-
-// 		if (sscanf(string, "d", price))
-// 			return SendInfoMessage(playerid, "/sell [playerid/name] [veh] [price]");
-
-// 		if (price < 1)
-// 		    return SendErrorMessage(playerid, "The price you've entered cannot below the value of $1.");
-
-// 		if ((carid = Car_Inside(playerid)) != -1 && Car_IsOwner(playerid, carid)) {
-// 			PlayerData[targetid][pCarSeller] = playerid;
-// 			PlayerData[targetid][pCarOffered] = carid;
-// 			PlayerData[targetid][pCarValue] = price;
-
-// 		    SendInfoMessage(playerid, "You have requested %s to purchase your %s (%s).", ReturnName(targetid, 0), ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(price));
-//             SendInfoMessage(targetid, "%s has offered you their %s for %s (type \"/approve car\" to accept).", ReturnName(playerid, 0), ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(price));
-// 		}
-// 		else SendErrorMessage(playerid, "You are not inside any of your vehicles.");
-// 	}
-// 	return 1;
-// }
+Dialog:ReleaseCar(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new
+			carid = ListedVehicles[playerid][listitem],
+			id = GetImpoundByID(CarData[carid][carImpounded]);
+
+	    if (carid != -1 && id != -1 && CarData[carid][carExists] && CarData[carid][carImpounded] != -1)
+	    {
+	        if (GetPlayerMoney(playerid) < CarData[carid][carImpoundPrice])
+	            return SendErrorMessage(playerid, "You can't afford to release this vehicle.");
+
+            GivePlayerMoney(playerid, -CarData[carid][carImpoundPrice]);
+
+            CarData[carid][carPos][0] = ImpoundData[id][impoundRelease][0];
+            CarData[carid][carPos][1] = ImpoundData[id][impoundRelease][1];
+            CarData[carid][carPos][2] = ImpoundData[id][impoundRelease][2];
+            CarData[carid][carPos][3] = ImpoundData[id][impoundRelease][3];
+
+			SetVehiclePos(CarData[carid][carVehicle], CarData[carid][carPos][0], CarData[carid][carPos][1], CarData[carid][carPos][2]);
+			SetVehicleZAngle(CarData[carid][carVehicle], CarData[carid][carPos][3]);
+
+			//SendInfoMessage(playerid, "You have released your %s for %s.", ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(CarData[carid][carImpoundPrice]));
+
+            CarData[carid][carImpounded] = -1;
+            CarData[carid][carImpoundPrice] = 0;
+
+            Car_Save(carid);
+	    }
+	}
+	return 1;
+}
+
+YCMD:abandon(playerid, params[], help)
+{
+ 	static
+	    id = -1;
+
+	if ((id = Car_Inside(playerid)) != -1 && Car_IsOwner(playerid, id))
+	{
+	    if (isnull(params) || (!isnull(params) && strcmp(params, "confirm", true) != 0))
+	    {
+	        //SendInfoMessage(playerid, "/abandon [confirm]");
+	        SendClientMessage(playerid, x_purple, "[WARNING]:{FFFFFF} You are about to abandon your vehicle with no refund.");
+		}
+		else if (CarData[id][carImpounded] != -1)
+    		return 1;//SendErrorMessage(playerid, "This vehicle is impounded and you can't use it.");
+
+		else if (!strcmp(params, "confirm", true))
+		{
+			new
+			    model = CarData[id][carModel];
+
+			Car_Delete(id);
+
+			va_SendClientMessage(playerid,-1,"You have abandoned your %s.", ReturnVehicleModelName(model));
+			//Log_Write("logs/car_log.txt", "[%s] %s has abandoned their %s.", ReturnDate(), ReturnName(playerid), ReturnVehicleModelName(model));
+		}
+	}
+	return 1;
+}
+
+YCMD:lock(playerid, params[], help)
+{
+	static
+	    id = -1;
+
+	if ((id = Car_Nearest(playerid)) != -1)
+	{
+	    static
+	        engine,
+	        lights,
+	        alarm,
+	        doors,
+	        bonnet,
+	        boot,
+	        objective;
+
+	    GetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, doors, bonnet, boot, objective);
+
+	    if (Car_IsOwner(playerid, id))
+	    {
+			if (!CarData[id][carLocked])
+			{
+				CarData[id][carLocked] = true;
+				Car_Save(id);
+
+				//ShowPlayerFooter(playerid, "You have ~r~locked~w~ the vehicle!");
+				PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+
+				SetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, 1, bonnet, boot, objective);
+			}
+			else
+			{
+				CarData[id][carLocked] = false;
+				Car_Save(id);
+
+				//ShowPlayerFooter(playerid, "You have ~g~unlocked~w~ the vehicle!");
+				PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+
+				SetVehicleParamsEx(CarData[id][carVehicle], engine, lights, alarm, 0, bonnet, boot, objective);
+			}
+		}
+	}
+	else SendErrorMessage(playerid, "You are not in range of anything you can lock.");
+	return 1;
+}
+
+YCMD:sell(playerid, params[], help)
+{
+	static
+	    targetid,
+	    type[24],
+	    string[128];
+
+	if (sscanf(params, "us[24]S()[128]", targetid, type, string))
+	{
+	    SendClientMessage(playerid,-1, "/sell [playerid/name] [name]");
+	    SendClientMessage(playerid, x_yellow, "[NAMES]:{FFFFFF} vehicle");
+	    return 1;
+	}
+	if (targetid == INVALID_PLAYER_ID)
+	{
+		SendClientMessage(playerid,-1, "The player is disconnected or not near you.");
+		return 1;
+	}
+	if (targetid == playerid)
+	{
+		SendClientMessage(playerid,-1, "You cannot sell to yourself.");
+		return 1;
+	}
+	if (!strcmp(type, "vehicle", true))
+	{
+		static
+		    price,
+			carid = -1;
+
+ 		if (sscanf(string, "d", price))
+ 			return SendClientMessage(playerid,-1, "/sell [playerid/name] [veh] [price]");
+
+ 		if (price < 1)
+ 		    return SendClientMessage(playerid,-1, "The price you've entered cannot below the value of $1.");
+
+ 		if ((carid = Car_Inside(playerid)) != -1 && Car_IsOwner(playerid, carid)) {
+ 			//PlayerData[targetid][pCarSeller] = playerid;
+ 			//PlayerData[targetid][pCarOffered] = carid;
+ 			//PlayerData[targetid][pCarValue] = price;
+
+ 		    va_SendClientMessage(playerid,-1, "You have requested %s to purchase your %s (%s).", ReturnPlayerName(targetid), ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(price));
+            va_SendClientMessage(targetid,-1, "%s has offered you their %s for %s (type \"/approve car\" to accept).", ReturnPlayerName(playerid), ReturnVehicleModelName(CarData[carid][carModel]), FormatNumber(price));
+ 		}
+ 		else SendClientMessage(playerid,-1, "You are not inside any of your vehicles.");
+ 	}
+ 	return 1;
+}
 
 // YCMD:approve(playerid, params[], help)
 // {
@@ -1097,172 +767,50 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 // }
 
 
+YCMD:listcars(playerid, params[], help)
+{
+	new
+	    Float:fX,
+	    Float:fY,
+	    Float:fZ,
+		userid,
+		count;
 
-// YCMD:unmod(playerid, params[], help)
-// {
-// 	new
-// 	    carid = GetPlayerVehicleID(playerid);
+	if (sscanf(params, "u", userid))
+	{
+		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
 
-// 	if (!carid)
-// 	    return SendErrorMessage(playerid, "You must be inside your vehicle.");
+		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (Car_IsOwner(playerid, i)) {
+	    	GetVehiclePos(CarData[i][carVehicle], fX, fY, fZ);
 
-//     if (IsVehicleImpounded(carid))
-//     	return SendErrorMessage(playerid, "This vehicle is impounded and you can't use it.");
+			SendClientMessageEx(playerid, x_white, "** ID: %d | Model: %s | Location: %s", CarData[i][carVehicle], ReturnVehicleModelName(CarData[i][carModel])/*, Get(fX, fY, fZ)*/);
+		    count++;
+		}
+		if (!count)
+		    SendClientMessage(playerid, x_white, "You don't own any vehicles.");
 
-// 	if ((carid = Car_GetID(carid)) != -1 && Car_IsOwner(playerid, carid))
-// 	{
-// 	    if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-// 	        return SendErrorMessage(playerid, "You must be the driver!");
+ 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
+ 	}
+ 	else if (PlayerInfo[playerid][Staff] >= 3)
+ 	{
+		if (userid == INVALID_PLAYER_ID)
+	    	return SendErrorMessage(playerid, "You have specified an invalid player.");
 
-// 		for (new i = 0; i < 14; i ++) {
-// 		    RemoveVehicleComponent(CarData[carid][carVehicle], CarData[carid][carMods][i]);
+ 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
+   		SendClientMessageEx(playerid, x_yellow, "Vehicles registered to %s (ID: %d):", ReturnPlayerName(userid), userid);
 
-// 		    CarData[carid][carMods][i] = 0;
-// 		}
-// 		Car_Save(carid);
-// 		SendInfoMessage(playerid, "You have removed the modifications from this vehicle.");
-// 	}
-// 	else SendErrorMessage(playerid, "You are not inside anything you can unmodify.");
-// 	return 1;
-// }
+ 		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (Car_IsOwner(userid, i)) {
+   			GetVehiclePos(CarData[i][carVehicle], fX, fY, fZ);
 
-// YCMD:trunk(playerid, params[], help)
-// {
-// 	new
-// 	    id = -1;
+ 			SendClientMessageEx(playerid, x_white, "** ID: %d | Model: %s | Location: %s", CarData[i][carVehicle], ReturnVehicleModelName(CarData[i][carModel])/*, GetLocation(fX, fY, fZ)*/);
+ 			count++;
+ 		}
+ 		if (!count)
+ 		    SendClientMessage(playerid, x_white, "That player doesn't own any vehicles.");
 
-// 	if ((id = Car_Nearest(playerid)) != -1)
-// 	{
-// 	    if (IsVehicleImpounded(CarData[id][carVehicle]))
-// 	        return SendErrorMessage(playerid, "This vehicle is impounded and you can't use it.");
-
-// 	    if (IsPlayerInAnyVehicle(playerid))
-// 	        return SendErrorMessage(playerid, "You must exit the vehicle first.");
-
-// 		if (!IsDoorVehicle(CarData[id][carVehicle]))
-// 		    return SendErrorMessage(playerid, "This vehicle doesn't have a trunk.");
-
-// 		if (CarData[id][carLocked])
-// 		    return SendErrorMessage(playerid, "The vehicle's trunk is locked.");
-
-// 		Car_ShowTrunk(playerid, id);
-// 	}
-// 	else SendErrorMessage(playerid, "You are not in range of any vehicle.");
-// 	return 1;
-// }
-
-
-// YCMD:releasecar(playerid, params[], help)
-// {
-// 	if (!IsPlayerInRangeOfPoint(playerid, 3.0, 361.1653, 175.8127, 1008.3828))
-// 	    return SendErrorMessage(playerid, "You must be at city hall to release a vehicle.");
-
-// 	new
-// 	    string[32 * MAX_OWNABLE_CARS],
-// 		count;
-
-// 	for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (count < MAX_OWNABLE_CARS && CarData[i][carExists] && Car_IsOwner(playerid, i) && CarData[i][carImpounded] != -1)
-// 	{
-// 		format(string, sizeof(string), "%s%d: %s (%s)\n", string, count + 1, ReturnVehicleName(CarData[i][carVehicle]), FormatNumber(CarData[i][carImpoundPrice]));
-//         ListedVehicles[playerid][count++] = i;
-// 	}
-// 	if (!count)
-// 	    SendErrorMessage(playerid, "You don't have any impounded vehicles.");
-
-// 	else Dialog_Show(playerid, ReleaseCar, DIALOG_STYLE_LIST, "Release Vehicle", string, "Select", "Cancel");
-// 	return 1;
-// }
-
-// YCMD:impound(playerid, params[], help)
-// {
-// 	new
-// 		price,
-// 		id = Impound_Nearest(playerid),
-// 		vehicleid = GetPlayerVehicleID(playerid);
-
-//     if (GetFactionType(playerid) != FACTION_POLICE)
-// 		return SendErrorMessage(playerid, "You must be a police officer.");
-
-//     if (sscanf(params, "d", price))
-//         return SendInfoMessage(playerid, "/impound [price]");
-
-// 	if (price < 1 || price > 1000)
-// 	    return SendErrorMessage(playerid, "The price can't be above $1,000 or below $1.");
-
-// 	if (GetVehicleModel(vehicleid) != 525)
-// 	    return SendErrorMessage(playerid, "You are not driving a tow truck.");
-
-// 	if (id == -1)
-// 	    return SendErrorMessage(playerid, "You are not in range of any impound lot.");
-
-// 	if (!GetVehicleTrailer(vehicleid))
-// 	    return SendErrorMessage(playerid, "There is no vehicle hooked.");
-
-//  	vehicleid = Car_GetID(GetVehicleTrailer(vehicleid));
-
-// 	if (vehicleid == -1)
-// 	    return SendErrorMessage(playerid, "You can't tow this vehicle.");
-
-// 	if (CarData[vehicleid][carImpounded] != -1)
-// 	    return SendErrorMessage(playerid, "This vehicle is already impounded.");
-
-// 	CarData[vehicleid][carImpounded] = ImpoundData[id][impoundID];
-// 	CarData[vehicleid][carImpoundPrice] = price;
-
-// 	GetVehiclePos(CarData[vehicleid][carVehicle], CarData[vehicleid][carPos][0], CarData[vehicleid][carPos][1], CarData[vehicleid][carPos][2]);
-// 	Car_Save(vehicleid);
-
-// 	SendFactionMessage(PlayerData[playerid][pFaction], COLOR_RADIO, "RADIO: %s has impounded a %s for %s.", ReturnName(playerid, 0), ReturnVehicleModelName(CarData[vehicleid][carModel]), FormatNumber(price));
-//  	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
-
-// 	return 1;
-// }
-
-// YCMD:listcars(playerid, params[], help)
-// {
-// 	new
-// 	    Float:fX,
-// 	    Float:fY,
-// 	    Float:fZ,
-// 		userid,
-// 		count;
-
-// 	if (sscanf(params, "u", userid))
-// 	{
-// 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
-
-// 		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (Car_IsOwner(playerid, i)) {
-// 		    GetVehiclePos(CarData[i][carVehicle], fX, fY, fZ);
-
-// 		    SendClientMessageEx(playerid, x_white, "** ID: %d | Model: %s | Location: %s", CarData[i][carVehicle], ReturnVehicleModelName(CarData[i][carModel]), GetLocation(fX, fY, fZ));
-// 		    count++;
-// 		}
-// 		if (!count)
-// 		    SendClientMessage(playerid, x_white, "You don't own any vehicles.");
-
-// 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
-// 	}
-// 	else if (PlayerInfo[playerid][Staff] >= 3)
-// 	{
-// 		if (userid == INVALID_PLAYER_ID)
-// 	    	return SendErrorMessage(playerid, "You have specified an invalid player.");
-
-// 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
-//   		SendClientMessageEx(playerid, x_yellow, "Vehicles registered to %s (ID: %d):", ReturnName(userid, 0), userid);
-
-// 		for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (Car_IsOwner(userid, i)) {
-//   			GetVehiclePos(CarData[i][carVehicle], fX, fY, fZ);
-
-// 			SendClientMessageEx(playerid, x_white, "** ID: %d | Model: %s | Location: %s", CarData[i][carVehicle], ReturnVehicleModelName(CarData[i][carModel]), GetLocation(fX, fY, fZ));
-// 			count++;
-// 		}
-// 		if (!count)
-// 		    SendClientMessage(playerid, x_white, "That player doesn't own any vehicles.");
-
-// 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------");
-// 	}
-// 	return 1;
-// }
+ 		SendClientMessage(playerid, x_greey, "-----------------------------------------------------------"); 	}
+ 	return 1;
+ }
 
 // YCMD:editcar(playerid, params[], help)
 // {
@@ -1345,45 +893,44 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 // 	return 1;
 // }
 
-// YCMD:givecar(playerid, params[], help)
-// {
-// 	static
-// 		userid,
-// 	    model[32];
+YCMD:givecar(playerid, params[], help)
+{
+	static
+		userid,
+	    model[32];
 
-//     if (PlayerInfo[playerid][Staff] < 4)
-// 	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
+    if (PlayerInfo[playerid][Staff] < 4)
+	    return SendClientMessage(playerid,-1, "You don't have permission to use this command.");
 
-// 	if (sscanf(params, "us[32]", userid, model))
-// 	    return SendInfoMessage(playerid, "/givecar [playerid/name] [modelid/name]");
+	if (sscanf(params, "us[32]", userid, model))
+	    return SendClientMessage(playerid,-1, "/givecar [playerid/name] [modelid/name]");
 
-// 	if (Car_GetCount(userid) >= MAX_OWNABLE_CARS)
-// 	    return SendErrorMessage(playerid, "This player already owns the maximum amount of cars.");
+	if (Car_GetCount(userid) >= MAX_OWNABLE_CARS)
+	    return SendClientMessage(playerid,-1, "This player already owns the maximum amount of cars.");
 
-//     if ((model[0] = GetVehicleModelByName(model)) == 0)
-// 	    return SendErrorMessage(playerid, "Invalid model ID.");
+    if ((model[0] = GetVehicleModelByName(model)) == 0)
+	    return SendClientMessage(playerid,-1, "Invalid model ID.");
 
-// 	static
-// 	    Float:x,
-// 		Float:y,
-// 		Float:z,
-// 		Float:angle,
-// 		id = -1;
+	static
+	    Float:x,
+		Float:y,
+		Float:z,
+		Float:angle,
+		id = -1;
 
-//     GetPlayerPos(userid, x, y, z);
-// 	GetPlayerFacingAngle(userid, angle);
+    GetPlayerPos(userid, x, y, z);
+	GetPlayerFacingAngle(userid, angle);
 
-// 	id = Car_Create(PlayerData[userid][pID], model[0], x, y + 2, z + 1, angle, random(127), random(127), 0);
+	id = Car_Create(PlayerInfo[userid][SQLID], model[0], x, y + 2, z + 1, angle, random(127), random(127), 0);
 
-// 	if (id == -1)
-// 	    return SendErrorMessage(playerid, "The server has reached the limit for dynamic vehicles.");
+	if (id == -1)
+	    return SendClientMessage(playerid,-1, "The server has reached the limit for dynamic vehicles.");
 
-// 	SendInfoMessage(playerid, "You have created vehicle ID: %d for %s.", CarData[id][carVehicle], ReturnName(userid, 0));
-// 	return 1;
-// }
+	va_SendClientMessage(playerid,-1, "You have created vehicle ID: %d for %s.", CarData[id][carVehicle], ReturnPlayerName(userid));
+	return 1;
+}
 
 
-/*
 
 GetVehicleModelByName(const name[])
 {
@@ -1399,7 +946,6 @@ GetVehicleModelByName(const name[])
 	}
 	return 0;
 }
-*/
 Car_Create(ownerid, modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, type = 0)
 {
     for (new i = 0; i != MAX_DYNAMIC_CARS; i ++)

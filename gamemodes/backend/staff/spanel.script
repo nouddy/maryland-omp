@@ -89,21 +89,21 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nActor Banker\nBankomat",
+					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu\nActor Banker\nBankomat",
+					"Kucu\nActor Banker\nBankomat\nBiznis",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat",
+					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -246,11 +246,47 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 
 				Iter_Add(ATMs, idzz);
 			}
+			case 4:
+			{
+				Dialog_Show(playerid, "kreiraj_biznis", DIALOG_STYLE_INPUT,
+					"Kreiraj bankera",
+					"Upisite cenu za biznis i vrstu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
+					"Odaberi", "Izlaz");
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+Dialog:kreiraj_biznis(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
 
+	if(response)
+	{
+		new type,price,id;
+		if (sscanf(inputtext, "dd", type, price))
+	 	{
+	 		Dialog_Show(playerid, "kreiraj_biznis", DIALOG_STYLE_INPUT,
+				"Kreiraj bankera",
+				"Upisite tip biznisa i cenu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
+				"Odaberi", "Izlaz");
+
+	    	return 1;
+		}
+		if (type < 1 || type > 7)
+	    	return SendClientMessage(playerid,-1, "Tip biznisa moze biti od 1 do 7.");
+
+
+		id = Business_Create(playerid, type, price);
+
+		if (id == -1)
+		    return SendErrorMessage(playerid, "The server has reached the limit for businesses.");
+
+		SendClientMessage(playerid,x_server, "Napravili ste biznis.");
+	}
+	return (true);
+}
 Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
 {
 	if(!response)
@@ -373,11 +409,41 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 						"Nastavi", "Nazad"
 					);	
 			}
+			case 5:
+			{
+				Dialog_Show(playerid, "obrisi_biznis", DIALOG_STYLE_INPUT,
+						"Obrisite biznis",
+						"Unesite id biznisa kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+Dialog:obrisi_biznis(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
 
+	if(response)
+	{
+		new id;
+		if (sscanf(inputtext, "d", id))
+		    return 	Dialog_Show(playerid, "obrisi_biznis", DIALOG_STYLE_INPUT,
+						"Obrisite biznis",
+						"Unesite id biznisa kojeg zelite da obrisete.",
+						"Nastavi", "Nazad"
+					);
+
+		if ((id < 0 || id >= MAX_BUSINESS) || !BusinessData[id][bizExists])
+		    return SendClientMessage(playerid,-1, "Ovaj biznis ne postoji.");
+
+		Business_Delete(id);
+		va_SendClientMessage(playerid,x_server2, "Uspesno ste obrisali biznis id: %d.", id);
+	}
+	return (true);
+}
 Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
 {
 	if(!response)
