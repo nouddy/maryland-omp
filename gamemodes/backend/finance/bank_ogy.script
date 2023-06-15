@@ -429,7 +429,7 @@ Bank_ShowMenu(playerid)
     new string[256], using_atm = GetPVarInt(playerid, "usingATM");
     if(CurrentAccountID[playerid] == -1) {
         format(string, sizeof(string), "{%06x}Napravi Nalog\t{2ECC71}%s\nMoji Nalozi\t{F1C40F}%d\nPrijava na Nalog", (using_atm ? 0xE74C3CFF >>> 8 : 0xFFFFFFFF >>> 8), (using_atm ? ("") : formatInt(ACCOUNT_PRICE)), Bank_AccountCount(playerid));
-        Dialog_Show(playerid, DIALOG_BANK_MENU_NOLOGIN, DIALOG_STYLE_TABLIST, "{F1C40F}Banka: {FFFFFF}Home", string, "Odaberi", "Zatvori");
+        Dialog_Show(playerid, dialog_bank_nologin, DIALOG_STYLE_TABLIST, "{F1C40F}Banka: {FFFFFF}Home", string, "Odaberi", "Zatvori");
     }else{
         new balance = Bank_GetBalance(CurrentAccountID[playerid]), menu_title[64];
         format(menu_title, sizeof(menu_title), "{F1C40F}Banka: {FFFFFF}Home (Account ID: {F1C40F}%d{FFFFFF})", CurrentAccountID[playerid]);
@@ -1120,8 +1120,6 @@ CMD:banka(const playerid, params[])
 {
     if(!IsPlayerNearBanker(playerid)) return SendBankMessage(playerid, "Niste u blizini radnika banke.");
     SetPVarInt(playerid, "usingATM", 0);
-    //Bank_ShowMenu(playerid);
-
     if(!GledaLoginTD[playerid])
     {
         for(new i = 0; i < 46; i++)
@@ -1131,7 +1129,7 @@ CMD:banka(const playerid, params[])
         SelectTextDraw(playerid, x_ogycolor);
         GledaLoginTD[playerid] = true;  
     }
-    else if(GledaLoginTD[playerid])
+    if(GledaLoginTD[playerid])
     {
         for(new i = 0; i < 46; i++)
         {
@@ -1140,7 +1138,7 @@ CMD:banka(const playerid, params[])
         CancelSelectTextDraw(playerid);
         GledaLoginTD[playerid] = false;  
     }
-    else if(GledaBankaAcc[playerid])
+    if(GledaBankaAcc[playerid])
     {
         BuildBankAccountTDs(playerid, false);
     }
