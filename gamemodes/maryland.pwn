@@ -91,10 +91,6 @@ TO DO >
 #define 	x_ogycolor	 0xEB8C6CFF
 
 
-//* Bitno jako da bude medju define
-#include "backend/database/db-config.script" 
-#include "backend/assets/globalstuff.asset"
-
 //
 main()
 {
@@ -357,6 +353,11 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 */
 
 //- Includes List
+
+//* Bitno jako da bude medju prvima
+#include "backend/database/db-config.script" 
+#include "backend/assets/globalstuff.asset"
+
 
 //- Assets
 #include "backend/assets/proxdetect.asset" 						//* ProxDetector
