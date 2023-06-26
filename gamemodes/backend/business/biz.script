@@ -68,14 +68,14 @@ hook OnGameModeInit()
 {
     print("business/biz.script loaded");
 
-    mysql_tquery(SQL, "SELECT * FROM `businesses`", "BizLoad", "");
+    mysql_tquery(SQL, "SELECT * FROM `businesses`", "Business_Load", "");
 }
 
 forward Business_Load();
 public Business_Load()
 {
     if(!cache_num_rows())
-        return print("\n[State Factions]: 0 factions ucitano.\n");
+        return print("\n[Business]: 0 business ucitano.\n");
 
     static
         rows,
@@ -645,7 +645,7 @@ Business_IsOwner(playerid, bizid)
     if (PlayerInfo[playerid][SQLID] == -1)
         return 0;
 
-    if (BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] == 99999999 && PlayerData[playerid][pAdmin] > 0)
+    if (BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] == 99999999 && PlayerData[playerid][Staff] > 0)
         return 1;
 
     if ((BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] != 0) && BusinessData[bizid][bizOwner] == PlayerInfo[playerid][SQLID])

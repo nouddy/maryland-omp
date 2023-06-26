@@ -34,6 +34,8 @@ new OpstinaUlazIzlaz[2],
     SpawnUlazIzlaz[5],
     TehnomediaMarker[2],
     PDTest[1],
+    BizCenter[2],
+    hotel[2],
     BankaMarker[1];
 /*
       _   _                   _          
@@ -78,5 +80,11 @@ public CreateMarkers()
     BankaMarker[0] = CreateMarker(ICON_BANK,random(5),false,1689.8605,-1455.4658,13.5597-0.9, 0, 0);
     //
     PDTest[0] = CreateMarker(ICON_MOON,random(5),false,330.7832,-1509.9639,36.0391-0.9, 0, 0);
+    //
+    BizCenter[0] = CreateMarker(ICON_CITYHALL,random(5),false,1658.5809,-1343.2560,17.4960-0.9, 0, 0);
+    BizCenter[1] = CreateMarker(ICON_CITYHALL,random(5),false,1825.2643,-1286.4944,131.7544-0.9, 0, 0);
+    //
+    hotel[0] = CreateMarker(ICON_BED,random(5),false,1785.1909,-1296.4972,13.3967-0.9, 0, 0);
+    hotel[1] = CreateMarker(ICON_BED,random(5),false,1786.6508,-1300.3116,54.9062-0.9, 0, 0);
     return (true);
 }

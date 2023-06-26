@@ -471,6 +471,10 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/exterior/maryland-pd.map"					//* MLPD Mapa Ext
 #include "frontend/exterior/bolnica-ext.map"					//* Bolnica ext Mapa
 #include "frontend/exterior/hotel-ext.map"						//* Hotel Mapa
+#include "frontend/exterior/customs.map"						//* Customs Mapa
+#include "frontend/exterior/shopping-center.map"				//* Shopping Center Mapa
+#include "frontend/exterior/bizcent-ext.map"					//* Shopping Center Mapa
+#include "frontend/exterior/centar_park.map"					//* Center Park Mapa
 
 //- Interiors
 #include "frontend/interior/opstina-int.map"					//* Opstina int map
@@ -478,9 +482,10 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/interior/garaza.map"							//* Garaza mapa
 #include "frontend/interior/apartman.map"						//* Apartman map
 #include "frontend/interior/kanalizacija.map"					//* Kanalizacija map
-#include "frontend/interior/mafiaint.map"						//* Mafia int mapa muay
 #include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa
 #include "frontend/interior/login_map.map"						//* Login Soba Mapa
+#include "frontend/interior/bizcent-int.map"					//* Login Soba Mapa
+#include "frontend/interior/hotel-int.map"						//* Login Soba Mapa
 
 //-
 #include "frontend/end/do-not-look.end"
