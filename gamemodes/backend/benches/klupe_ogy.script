@@ -30,7 +30,7 @@ new bool:finished = true;
     /___\ \_/ /_\/_\/__)/_\ /__)
                                 
 */
-const MAX_KLUPA = 100; // u slucaju da bude vise, povecati ovo sranje
+const MAX_KLUPA = 99; // u slucaju da bude vise, povecati ovo sranje
 
 /*
      ____                        

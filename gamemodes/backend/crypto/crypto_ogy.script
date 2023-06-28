@@ -1700,7 +1700,7 @@ stock ResetPlayersCrypto(playerid)
 
 */
 
-task CryptoMessageTransactions[180000]()
+task CryptoMessageTransactions[300000]()
 {
     va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}U proteklih 3minuta obavljeno je "CRYPTO_HEX"%d{ffffff} tansakcija na trzistu.",transactions);
     va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}BTC: %d | USDT: %d | DOT: %d | XRP: %d | LTC: %d",transactionsBTC,transactionsUSDT, transactionsDOT, transactionsXRP, transactionsLTC);

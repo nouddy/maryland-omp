@@ -39,11 +39,11 @@ new MySQL:SQL;
 
 hook OnGameModeInit(){
 	//****************************************************************************//
-	#if defined server
-	new MySQLOpt:options = mysql_init_options();
-    mysql_set_option(options, SERVER_PORT, 3306);
-    SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB, options);
-	#endif
+	// #if defined server
+	// new MySQLOpt:options = mysql_init_options();
+    // mysql_set_option(options, SERVER_PORT, 3306);
+    // SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB, options);
+	// #endif
 
 	SQL = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DB);
 	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)

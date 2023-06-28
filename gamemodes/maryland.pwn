@@ -19,7 +19,7 @@
 
 #define YSI_YES_HEAP_MALLOC
 
-#define CGEN_MEMORY 60000
+#define CGEN_MEMORY 80000
 
 #include <a_samp>
 #include <a_mysql>
@@ -39,18 +39,16 @@
 #include <streamer>
 #include <sscanf2>
 #include <modelsizes>
-#define OD_METHOD 0
+#define OD_METHOD METHOD_BOX
 #include <optidraw>
 #include <easyDialog>
 #include <formatex>
 #include <distance>
 #include <zones>
-#include <discord-connector>
 #include <notify>
 #include <markerplus>
 #include <animated-textdraw>
 #include <DialogCenter>
-#include <marylanddc> 					//* Custom diskord komands za bota
 
 
 #define     c_server        "{8dc9f3}"
@@ -416,6 +414,10 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //-
 #include "backend/factions/end/do-not-look.end"
 
+//- Safe Zone
+#include "backend/safezone/safezone.script"
+
+
 //- Messages
 
 #include "backend/messages/chat.script"							//* Chat
@@ -423,11 +425,6 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "backend/messages/notifikacije.script"					//* Notifikacije
 //-
 #include "backend/messages/end/do-not-look.end"
-
-//- Discord
-#include "backend/discord/discconnect.script"					//* Discord Konektor
-//-
-#include "backend/discord/end/do-not-look.end"
 
 //- All NPCs, Actors
 #include "backend/npcs/actor.script"							//* Aktori bebo
