@@ -89,7 +89,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis",
+					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
@@ -103,7 +103,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis",
+					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -253,6 +253,10 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 					"Upisite cenu za biznis i vrstu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
 					"Odaberi", "Izlaz");
 			}
+			case 5:
+			{
+				Dialog_Show(playerid, "dialog_safezona", DIALOG_STYLE_INPUT, "Maryland - SafeZona Kreiraj:", "** Upisite zeljenu boju za vasu Safe Zonu.", "Dalje", "Izlaz");
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
@@ -281,9 +285,33 @@ Dialog:kreiraj_biznis(const playerid, response, listitem, string:inputtext[])
 		id = Business_Create(playerid, type, price);
 
 		if (id == -1)
-		    return SendErrorMessage(playerid, "The server has reached the limit for businesses.");
+		    return SendClientMessage(playerid, x_server, "The server has reached the limit for businesses.");
 
 		SendClientMessage(playerid,x_server, "Napravili ste biznis.");
+	}
+	return (true);
+}
+Dialog:dialog_safezona(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		new boja;
+		if(sscanf(inputtext,"x",boja))
+			return Dialog_Show(playerid, dialog_safezonekreiraj, DIALOG_STYLE_INPUT, "Maryland - SafeZona Kreiraj:", "** Upisite zeljenu boju za vasu Safe Zonu.", "Dalje", "Izlaz");
+
+		new id;
+		id = Iter_Free(SafeZone);
+		if(id == -1) 
+			return SendClientMessage(playerid, x_server, "Prekoracen je limit vaseg iteratora.");
+
+		SafeZonaKreiraID[playerid] = id;
+		SafeZonaKreira[playerid] = 1;
+
+		SafeZone[id][safeColor] = boja;
+
+		SendClientMessage(playerid, x_server, "Uspesno ste postavili boju za vasu safe zonu.");
+		SendClientMessage(playerid, x_server, "Odredi vasu prvu poziciju za safe zonu.");
 	}
 	return (true);
 }
@@ -416,6 +444,27 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 						"Unesite id biznisa kojeg zelite da obrisete.",
 						"Nastavi", "Nazad"
 					);
+			}
+			case 6:
+			{
+				new id = GetNearestSafe(playerid);
+				if(id == -1)
+					return SendClientMessage(playerid, x_server, "Niste u blizini safe zone.");
+
+				if(!Iter_Contains(SafeZone, id))
+					return SendClientMessage(playerid, x_server, "Ta safezona je vec obrisana.");
+
+			    new szQuery[128];
+			    format(szQuery, sizeof szQuery, "DELETE FROM `safezones` WHERE `safeSQLID`='%d'", id);
+			    mysql_tquery(SQL, szQuery);
+			    
+			    DestroyDynamicPickup(SafeZone[ id ][ safePickup ]);
+			    DestroyDynamic3DTextLabel(SafeZone[ id ][ safeLabel ]);
+			    Iter_Remove(SafeZone, id);
+				BuildSafeZoneTextDraws(playerid, false);
+				InSafeZone[playerid] = false;
+
+			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali safe zonu.");				
 			}
 		}
 	}

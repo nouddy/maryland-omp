@@ -20,7 +20,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 new bool:loaded = true;
-
+#define MAX_SAFEZONA 			(50)
 /*
      ___                 _      
     (  _)               ( )     
@@ -29,7 +29,9 @@ new bool:loaded = true;
     /___\ \_/ /_\/_\/__)/_\ /__)
                                 
 */
-const MAX_SZONA = 50; // u slucaju da bude vise, povecati ovo sranje
+new SafeZonaKreira[MAX_PLAYERS],
+	SafeZonaKreiraID[MAX_PLAYERS];
+
 
 /*
      ____                        
@@ -40,19 +42,24 @@ const MAX_SZONA = 50; // u slucaju da bude vise, povecati ovo sranje
 
 */
 
-enum szone
-{
-    szone_SQLID,
-    Float:szPosX,
-    Float:szPosY,
-    Float:szPosZ,
-    szSize,
-    szPickupID,
-    Text3D:szTextID
+enum S_Safe {
+	safeID,
+	Float:safeMinX,
+	Float:safeMinY,
+	Float:safeMaxX,
+	Float:safeMaxY,
+	Float:safeRadius,
+	safeColor,
+	safePickup,
+	Text3D:safeLabel,
+	Float:safePickupX,
+	Float:safePickupY,
+	Float:safePickupZ
 };
-new SafeZoneInfo[MAX_SZONA][szone];
-new Iterator:iter_Safezone<MAX_SZONA>;
-new bool:player_inSZ[MAX_PLAYERS];                  //! Da li se nalazi u safe zoni
+new SafeZone[MAX_SAFEZONA][S_Safe];
+new Iterator:SafeZone<MAX_SAFEZONA>;
+new Float:CreatingPos[MAX_PLAYERS][4];
+new bool:InSafeZone[MAX_PLAYERS];
 
 /*
      _  _            _        
@@ -65,22 +72,98 @@ new bool:player_inSZ[MAX_PLAYERS];                  //! Da li se nalazi u safe z
 
 hook OnGameModeInit()
 {
-    Iter_Init(iter_Safezone);
     if(loaded)
     {
         print("safezone/safezone.script loaded");  
     }
 
-    mysql_tquery(SQL, "SELECT * FROM `safe_zones`","LoadSafeZones");
+    mysql_pquery(SQL, "SELECT * FROM `safezones`", "SafeZonesLoad" );
     return 1;
 }
 
 hook OnPlayerConnect(playerid)
 {
-    player_inSZ[playerid] = false;
 
     return 1;
 }
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+	if(newkeys & KEY_FIRE)
+	{
+		if(SafeZonaKreira[playerid] == 1)
+		{
+			new Float:Pozicija[3];
+			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
+
+			CreatingPos[playerid][0] = Pozicija[0];
+			CreatingPos[playerid][1] = Pozicija[1];
+
+			SendClientMessage(playerid, x_server,"Sada odredjujes drugu stranu, idi u skroz diagonalnu stranu!");
+			SafeZonaKreira[playerid]++;
+		}
+		else if(SafeZonaKreira[playerid] == 2)
+		{
+			new Float:Pozicija[4];
+			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
+			GetPlayerFacingAngle(playerid, Pozicija[3]);
+
+			new id = SafeZonaKreiraID[ playerid ];
+			CreatingPos[playerid][2] = Pozicija[0];
+			CreatingPos[playerid][3] = Pozicija[1];
+
+			if( CreatingPos[ playerid ][ 0 ] > CreatingPos[ playerid ][ 2 ] )
+			{
+			    SafeZone[ id ][ safeMaxX ] = CreatingPos[ playerid ][ 0 ];
+				SafeZone[ id ][ safeMinX ] = CreatingPos[ playerid ][ 2 ];
+			}
+			else if( CreatingPos[ playerid ][ 2 ] > CreatingPos[ playerid ][ 0 ] )
+			{
+			    SafeZone[ id ][ safeMaxX ] = CreatingPos[ playerid ][ 2 ];
+				SafeZone[ id ][ safeMinX ] = CreatingPos[ playerid ][ 0 ];
+			}
+			if( CreatingPos[ playerid ][ 1 ] > CreatingPos[ playerid ][ 3 ] )
+			{
+			    SafeZone[ id ][ safeMaxY ] = CreatingPos[ playerid ][ 1 ];
+				SafeZone[ id ][ safeMinY ] = CreatingPos[ playerid ][ 3 ];
+			}
+			else if( CreatingPos[ playerid ][ 3 ] > CreatingPos[ playerid ][ 1 ] )
+			{
+			    SafeZone[ id ][ safeMaxY ] = CreatingPos[ playerid ][ 3 ];
+				SafeZone[ id ][ safeMinY ] = CreatingPos[ playerid ][ 1 ];
+			}
+			SafeZonaKreira[playerid]++;
+			SendClientMessage(playerid, x_server,"Sada postavljas poziciju labela za napravljenu safe zonu.");
+		}
+		else if(SafeZonaKreira[playerid] == 3)
+		{
+			new id = SafeZonaKreiraID[ playerid ];
+			new Float:Pozicija[3];
+			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
+			Iter_Add(SafeZone, id);
+			SafeZone[id][safeRadius] = 30.0;
+			SafeZone[id][safePickupX] = Pozicija[0];
+			SafeZone[id][safePickupY] = Pozicija[1];
+			SafeZone[id][safePickupZ] = Pozicija[2];
+			SafeZone[id][safeID] = CreateDynamicRectangle(SafeZone[id][safeMinX], SafeZone[id][safeMinY], SafeZone[id][safeMaxX], SafeZone[id][safeMaxY], -1, -1, -1);
+		    static q[850];
+			mysql_format(SQL, q, sizeof(q),
+			    "INSERT INTO `safezones` (`MinX`, `MinY`, `MaxX`, `MaxY`, `Radius`, `Color`, `PickupX`, `PickupY`, `PickupZ`) \
+				 VALUES('%f','%f','%f','%f','%f','%d','%f','%f','%f')", 
+				 SafeZone[id][safeMinX],SafeZone[id][safeMinY],SafeZone[id][safeMaxX],SafeZone[id][safeMaxY],SafeZone[id][safeRadius],SafeZone[id][safeColor],SafeZone[id][safePickupX],
+				 SafeZone[id][safePickupY], SafeZone[id][safePickupZ]);
+
+			mysql_pquery(SQL, q, "SafeZonaID", "i", id);
+		    safeZoneLabel(id);
+		    SaveSafeZone(id);
+		    SafeZonaKreira[playerid] = 0;
+		    SafeZonaKreiraID[playerid] = -1;
+		    SendClientMessage(playerid, x_server, "Uspesno si napravio safe zonu.");
+		}
+    }
+	return (true);
+}
+
 /*
      _                _      _   ___                 
     ( )              ( )    / ) /  _)                
@@ -89,31 +172,67 @@ hook OnPlayerConnect(playerid)
     /___\ \_/ /_^_\\___\ /_/    /___/ /_^_\ \_/  \(  
 
 */
-
-forward LoadSafeZones();
-public LoadSafeZones()
+forward SafeZonesLoad();
+public SafeZonesLoad()
 {
-    new sZone, id, string[128];
-    sZone = cache_num_rows();
-    if(sZone != 0)
-    {
-        for(new i = 0; i < sZone; i++)
-        {
-            cache_get_value_name_int(i, "szone_ID",id);
-            cache_get_value_name_float(i, "szPosX",SafeZoneInfo[ id ][ szPosX ]);
-            cache_get_value_name_float(i, "szPosY",SafeZoneInfo[ id ][ szPosY ]);
-            cache_get_value_name_float(i, "szPosZ",SafeZoneInfo[ id ][ szPosZ ]);
-            cache_get_value_name_int(i, "szSize",SafeZoneInfo[ id ][ szSize ]);
-
-            Iter_Add(iter_Safezone, id);
-        }
-        format(string, sizeof(string), "{FFFFFF}Safe Zone(ID: %d)\n{24D12F}%d Meters\n{DB8B35}Non-Kill",id,SafeZoneInfo[id][szSize]);
-        SafeZoneInfo[id][szTextID] = CreateDynamic3DTextLabel(string, -1, SafeZoneInfo[id][szPosX], SafeZoneInfo[id][szPosY], SafeZoneInfo[id][szPosZ]+0.5,10.0, .testlos = 1, .streamdistance = 10.0);
-        SafeZoneInfo[id][szPickupID] = CreatePickup(1254, 23, SafeZoneInfo[id][szPosX], SafeZoneInfo[id][szPosY], SafeZoneInfo[id][szPosZ]);
-    }
-    printf("safezone/safezone.script loaded(%d) safe zona", sZone);
-    return (true);
+   	new iRows, id;
+	cache_get_row_count(iRows);
+	for(new i = 0; i < iRows; i++)
+	{
+	    cache_get_value_name_int(i, "safeSQLID", id);
+	    cache_get_value_name_float(i, "MinX", SafeZone[id][safeMinX]);
+	    cache_get_value_name_float(i, "MinY", SafeZone[id][safeMinY]);
+	    cache_get_value_name_float(i, "MaxX", SafeZone[id][safeMaxX]);
+	    cache_get_value_name_float(i, "MaxY",SafeZone[id][safeMaxY]);
+	    cache_get_value_name_float(i, "Radius",SafeZone[id][safeRadius]);
+	    cache_get_value_name_int(i, "Color",SafeZone[id][safeColor]);
+	    cache_get_value_name_float(i, "PickupX",SafeZone[id][safePickupX]);
+	    cache_get_value_name_float(i, "PickupY",SafeZone[id][safePickupY]);
+	    cache_get_value_name_float(i, "PickupZ",SafeZone[id][safePickupZ]);
+		Iter_Add(SafeZone, 0);
+		Iter_Add(SafeZone, id);
+		safeZoneLabel(id);
+		SafeZone[ id ][ safeID ] = CreateDynamicRectangle(SafeZone[id][safeMinX], SafeZone[id][safeMinY], SafeZone[id][safeMaxX], SafeZone[id][safeMaxY], -1, -1, -1);
+	}
+	printf("Ucitavanje Safe Zona(%d)... Uspesno",iRows);
+	return 1;
 }
+stock SaveSafeZone( id )
+{
+    new query[1024];
+    format(query, sizeof(query),"`MinX`='%f',`MinY`='%f',`MaxX`='%f',`MaxY`='%f',`Radius`='%f',`Color`='%d',`PickupX`='%f',`PickupY`='%d',`PickupZ`='%f'",
+		SafeZone[id][safeMinX],
+		SafeZone[id][safeMinY],
+		SafeZone[id][safeMaxX],
+		SafeZone[id][safeMaxY],
+		SafeZone[id][safeRadius],
+		SafeZone[id][safeColor],
+		SafeZone[id][safePickupX],
+		SafeZone[id][safePickupY],
+		SafeZone[id][safePickupZ]
+	);
+	format(query, sizeof(query), "UPDATE `safezones` SET %s WHERE `safeSQLID`='%i'", query, id);
+	mysql_tquery(SQL, query);
+	return 1;
+}
+forward SafeZonaID(id);
+public SafeZonaID(id)
+{
+	SafeZone[id][safeID] = cache_insert_id();
+	return(true);
+}
+forward safeZoneLabel(id);
+public safeZoneLabel(id)
+{
+	DestroyDynamicPickup(SafeZone[id][safePickup]);
+	DestroyDynamic3DTextLabel(SafeZone[id][safeLabel]);
+	new string[150];
+	format( string, sizeof( string ), "   » {ffffff}SAFE ZONA{70D869} «   \n{ffffff}Radius {70D869} %.2f metara\n{ffffff}Zabranjeno je udaranje/pucanje/ubijanje igraca u {70D869}Safe Zoni.",SafeZone[id][safeRadius],id);
+	SafeZone[ id ][ safeLabel ] = CreateDynamic3DTextLabel( string, 0x70D869FF, SafeZone[ id ][ safePickupX ], SafeZone[ id ][ safePickupY ], SafeZone[ id ][ safePickupZ ], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, 0, 0 );
+	SafeZone[ id ][ safePickup ] = CreateDynamicPickup( 1240, 1, SafeZone[ id ][ safePickupX ], SafeZone[ id ][ safePickupY ], SafeZone[ id ][ safePickupZ ]);
+	return (true);
+}
+
 /*
      ____                _   _                
     (  __)              ( ) (_)               
@@ -121,54 +240,4 @@ public LoadSafeZones()
     ( __) ( U )( __ )/ /( _)( )( o )( __ )(_' 
     /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
 
-*/
-forward KreirajSZonu(id);
-public KreirajSZonu(id) {
-
-    static q[300];
-    mysql_format( SQL, q, sizeof( q ),
-
-        "INSERT INTO `safe_zones` ( szPosX, szPosY, szPosZ, szSize) \
-        VALUES( '%f', '%f', '%f', '%f' )",
-
-        SafeZoneInfo[id][szPosX],SafeZoneInfo[id][szPosY], SafeZoneInfo[id][szPosZ],SafeZoneInfo[id][szSize]);
-
-    mysql_pquery( SQL, q, "sZonaKreirana", "i", id );
-    return (true);
-}
-// >>
-forward sZonaKreirana(createID);
-public sZonaKreirana(createID)
-{
-    new string[128];
-    Iter_Add(iter_Safezone, createID);
-    SafeZoneInfo[ createID ][ szone_SQLID ] = cache_insert_id();
-    SafeZoneInfo[createID][szTextID] = CreateDynamic3DTextLabel(string, -1, SafeZoneInfo[createID][szPosX], SafeZoneInfo[createID][szPosY], SafeZoneInfo[createID][szPosZ]+0.5,10.0, .testlos = 1, .streamdistance = 10.0);
-    SafeZoneInfo[createID][szPickupID] = CreatePickup(1254, 23, SafeZoneInfo[createID][szPosX], SafeZoneInfo[createID][szPosY], SafeZoneInfo[createID][szPosZ]);
-    return 1;
-}
-forward NadjiNajblizuSZonu( playerid );
-public NadjiNajblizuSZonu(playerid) {
-
-    foreach(new i : iter_Safezone)
-    {
-        if(IsPlayerInRangeOfPoint( playerid, 1.0, SafeZoneInfo[ i ][ szPosX ], SafeZoneInfo[ i ][ szPosY ], SafeZoneInfo[ i ][ szPosZ ] ) ) return i;
-    }
-    return false;
-}
-
-
-
-
-/*
-CREATE TABLE `safe_zones` (
-  `szone_ID` int(11) NOT NULL,
-  `szPosX` float NOT NULL,
-  `szPosY` float NOT NULL,
-  `szPosZ` float NOT NULL,
-  `szSize` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE `safe_zones`
-  ADD PRIMARY KEY (`szone_ID`);
 */

@@ -43,10 +43,21 @@ ResetujVariable(playerid)
     PlayerFinance[playerid][pBankAccount] = 0;
     PlayerFinance[playerid][pBankMoney] = 0;
     PlayerFinance[playerid][pBankPin] = 0;
+    // Safe zone
+    InSafeZone[playerid] = false;
 
     for(new i = 0; i < 2; i++)
     {
         PlayerInfo[playerid][AttachedObject][i] = -1;
     }
 
+}
+
+GetNearestSafe(playerid)
+{
+    foreach(new i : SafeZone)
+	{
+        if( IsPlayerInDynamicArea(playerid, SafeZone[i][safeID])) { return i; }
+    }
+	return -1;
 }

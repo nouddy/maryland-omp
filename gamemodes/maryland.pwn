@@ -416,7 +416,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //- Safe Zone
 #include "backend/safezone/safezone.script"
-
+//-
+#include "backend/safezone/end/do-not-look.end"
 
 //- Messages
 
@@ -455,6 +456,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/textdraws/login.tde"							//* Login tdovi
 #include "frontend/textdraws/register.tde"						//* Register tdovi
 #include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
+#include "frontend/textdraws/safezone.tde"						//* Safe zone textdraw		
 
 //- Exteriors
 #include "frontend/exterior/starbucks.map"						//* Starbucks map 

@@ -64,6 +64,18 @@ public OnPlayerEnterDynamicArea(playerid, areaid)
             return 1;
         }
     }
+
+    // Safe zona
+
+	foreach(new s : SafeZone)
+	{
+		if(areaid == SafeZone[s][safeID]) 
+		{
+			BuildSafeZoneTextDraws(playerid, true);
+			InSafeZone[playerid] = true;
+		}
+	}
+
     return 1;
 }
 
@@ -81,6 +93,18 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
             return 1;
         }
     }
+
+    // Safe zona
+
+	foreach(new i : SafeZone)
+	{
+		if(areaid == SafeZone[i][safeID]) 
+		{
+			BuildSafeZoneTextDraws(playerid, false);
+			InSafeZone[playerid] = false;
+		}
+	}
+
     return 1;
 }
 public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)

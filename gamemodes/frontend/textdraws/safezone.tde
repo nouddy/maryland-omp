@@ -1,0 +1,33 @@
+/*
+	* Modules for Safe Zone TDs
+*/
+new PlayerText:SafeZone_PTD[MAX_PLAYERS];
+
+forward BuildSafeZoneTextDraws(playerid, bool:show);
+public BuildSafeZoneTextDraws(playerid, bool:show)
+{
+	if(show == true)
+	{
+		PlayerTextDrawHide( playerid, SafeZone_PTD[ playerid ] );
+		PlayerTextDrawDestroy( playerid, SafeZone_PTD[ playerid ] );
+		SafeZone_PTD[ playerid ] = PlayerText:INVALID_TEXT_DRAW;
+
+		SafeZone_PTD[playerid] = CreatePlayerTextDraw(playerid, 282.200134, 3.748139, "SAFE_ZONE");
+		PlayerTextDrawLetterSize(playerid, SafeZone_PTD[playerid], 0.250000, 0.994370);
+		PlayerTextDrawAlignment(playerid, SafeZone_PTD[playerid], 1);
+		PlayerTextDrawColor(playerid, SafeZone_PTD[playerid], 1893231014);
+		PlayerTextDrawSetShadow(playerid, SafeZone_PTD[playerid], 0);
+		PlayerTextDrawBackgroundColor(playerid, SafeZone_PTD[playerid], 255);
+		PlayerTextDrawFont(playerid, SafeZone_PTD[playerid], 1);
+		PlayerTextDrawSetProportional(playerid, SafeZone_PTD[playerid], 1);
+
+		PlayerTextDrawShow( playerid, SafeZone_PTD[ playerid ] );
+	}
+	else
+	{
+		PlayerTextDrawHide( playerid, SafeZone_PTD[ playerid ] );
+		PlayerTextDrawDestroy( playerid, SafeZone_PTD[ playerid ] );
+		SafeZone_PTD[ playerid ] = PlayerText:INVALID_TEXT_DRAW;
+	}
+	return (true);
+}
