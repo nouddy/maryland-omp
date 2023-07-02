@@ -42,7 +42,7 @@
 #include <distance>
 #include <zones>
 #include <notify>
-//#include <markerplus>
+#include <markerplus>
 #include <animated-textdraw>
 #include <DialogCenter>
 #include <crashdetect>
@@ -319,15 +319,15 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
 	return 1;
 }
-// public OnPlayerEnterMarker(playerid, markerid) {
+public OnPlayerEnterMarker(playerid, markerid) {
 
-// 	return 1;
-// }
+	return 1;
+}
 
-// public OnPlayerLeaveMarker(playerid, markerid) {
+public OnPlayerLeaveMarker(playerid, markerid) {
 
-// 	return 1;
-// }
+	return 1;
+}
 /*
 public OnPlayerEnterDynamicArea(playerid, areaid) 
 {
@@ -442,7 +442,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //- Assets Continue
 #include "backend/assets/labels.asset"							//* Labeli
-//#include "backend/assets/custom_markers.asset"					//* Markeri
+#include "backend/assets/custom_markers.asset"					//* Markeri
 
 //- Crossover > Koristi se kad je 31 characters hook truncated
 #include "backend/crossover/DynamicArea.csso"					//* Dynamic Area Crossover

@@ -18,45 +18,6 @@
 
 #define INVALID_MARKER_ID (-1)
 
-
-enum {
-    ICON_INVALID,
-    ICON_FACTORY,
-    ICON_CONSTRUCTION,
-    ICON_BANK,
-    ICON_HOUSE,
-    ICON_PRAIA,
-    ICON_ROAD,
-    ICON_CITY,
-    ICON_HOUSE_2,
-    ICON_AMBULANCE,
-    ICON_FIRE_TRUCK,
-    ICON_POLICE_CAR,
-    ICON_SHIP,
-    ICON_BUS,
-    ICON_CITYHALL,
-    ICON_KEYBOARD,
-    ICON_MOON,
-    ICON_MARTINI,
-    ICON_BED,
-    ICON_VEVERICA,
-    ICON_SKIJANJE,
-    ICON_LAN_MREZA,
-    ICON_INVALID_KOLICA,
-    ICON_GYM,
-    ICON_MARKET
-}
-
-static const ICON_LETTER[][5] = {
-    "NULL", "F", "A", "G", "H", "J", "K", "C", "B", "h", "f", "p", "o", "v", "&", "7", "à", "å", "ã", "ò", "‡", "Â", "é","†","ç"
-};
-
-static const ICON_FONT[][25] = {
-    "NULL", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
-    "Webdings", "Webdings", "Webdings", "Webdings", "Webdings", "Webdings",
-    "Webdings", "Webdings", "Wingdings", "Wingdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings","Webdings"
-};
-
 static const COLOR_ARRAY[] =
 {
     0x00000000, // bela nije ni za kurac  == default
@@ -72,7 +33,6 @@ static const COLOR_ARRAY[] =
 enum MarkerData {
 
     STREAMER_TAG_AREA:markerCalledArea,
-    markerIcon,
     markerColour,
     bool:markerCalledActive,
     Float:markerPosition[3],
@@ -84,7 +44,6 @@ enum MarkerData {
 enum PlayerMarkerData {
 
     markerObject[MAX_MARKERS],
-    markerObjectIcon[MAX_MARKERS],
     bool:markerVisible[MAX_MARKERS]
 }
 
@@ -112,15 +71,6 @@ static GetFreeMarkerID() {
     return INVALID_MARKER_ID;
 }
 
-static GetIconLetter(icon) {
-
-    return ICON_LETTER[icon];
-}
-
-static GetIconFont(icon) {
-
-    return ICON_FONT[icon];
-}
 static GetIconColor(icon) {
 
     return COLOR_ARRAY[icon];
@@ -156,22 +106,6 @@ static Player_CreateMarkers(playerID) {
             0, 19063, 
             "xmasorbs", "sphere", GetIconColor(markerData[i][markerColour])
         );
-
-        playerMarkerData[playerID][markerObjectIcon][i] = CreatePlayerObject(
-            playerID,
-            11737,
-            markerData[i][markerPosition][0], markerData[i][markerPosition][1], (markerData[i][markerPosition][2] + 1.5),
-            90.0, 0.0, 0.0,
-            markerData[i][markerDrawDistance]
-        );
-
-        SetPlayerObjectMaterialText(
-            playerID,
-            playerMarkerData[playerID][markerObjectIcon][i],
-            GetIconLetter(markerData[i][markerIcon]), 0, OBJECT_MATERIAL_SIZE_256x256,
-            GetIconFont(markerData[i][markerIcon]), 150, 1, 0xFFF8F8FF, 0x00000000, 1
-        );
-        playerMarkerData[playerID][markerVisible][i] = true;
     }
 }
 
@@ -179,45 +113,9 @@ static Player_DestroyMarkers(playerID) {
 
     for (new  i = 0; i < MAX_MARKERS; i++) {
 
-        if (playerMarkerData[playerID][markerObjectIcon][i] >= 0) {
-            DestroyPlayerObject(playerID, playerMarkerData[playerID][markerObjectIcon][i]);
-            playerMarkerData[playerID][markerObjectIcon][i] = INVALID_OBJECT_ID;
-            DestroyPlayerObject(playerID, playerMarkerData[playerID][markerObject][i]);
-            playerMarkerData[playerID][markerObject][i] = INVALID_OBJECT_ID;
-            playerMarkerData[playerID][markerVisible][i] = false;
-        }
-    }
-}
-
-static Player_SetIconFace(playerID) {
-
-    for (new i = 0; i < MAX_MARKERS; i++) {
-
-        if (!IsValidMarker(i))
-            continue;
-        
-        if (!playerMarkerData[playerID][markerVisible][i])
-            continue;
-
-        new Float:playerPosition[3];
-        GetPlayerPos(playerID, playerPosition[0], playerPosition[1], playerPosition[2]);
-
-        new Float:objectPosition[3];
-        GetPlayerObjectPos(
-            playerID,
-            playerMarkerData[playerID][markerObjectIcon][i],
-            objectPosition[0],
-            objectPosition[1],
-            objectPosition[2]
-        );
-
-        playerPosition[2] = atan2(playerPosition[1] - objectPosition[1], playerPosition[0] - objectPosition[0]) - 90.0;
-        
-        SetPlayerObjectRot(
-            playerID,
-            playerMarkerData[playerID][markerObjectIcon][i],
-            90.0, 0.0, playerPosition[2] + 180
-        );
+        DestroyPlayerObject(playerID, playerMarkerData[playerID][markerObject][i]);
+        playerMarkerData[playerID][markerObject][i] = INVALID_OBJECT_ID;
+        playerMarkerData[playerID][markerVisible][i] = false;
     }
 }
 
@@ -226,7 +124,7 @@ forward OnPlayerEnterMarker(playerid, markerid);
 forward OnPlayerLeaveMarker(playerid, markerid);
 
 
-stock CreateMarker(icon, color, calledActive, Float:x, Float:y, Float:z, worldID = -1, interiorID = -1, Float:drawDistance = 0.0) {
+stock CreateMarker(color, calledActive, Float:x, Float:y, Float:z, worldID = -1, interiorID = -1, Float:drawDistance = 0.0) {
 
     new markerid = GetFreeMarkerID();
     if (markerid == INVALID_MARKER_ID) {
@@ -235,7 +133,6 @@ stock CreateMarker(icon, color, calledActive, Float:x, Float:y, Float:z, worldID
 
     markerData[markerid][markerCalledArea] = CreateDynamicCylinder(x, y, (z - 0.1), (z + 10.0), 1.0, worldID, interiorID, -1);
 
-    markerData[markerid][markerIcon] = icon;
     markerData[markerid][markerColour] = color;
     markerData[markerid][markerCalledArea] = calledActive;
     markerData[markerid][markerPosition][0] = x;
@@ -247,24 +144,6 @@ stock CreateMarker(icon, color, calledActive, Float:x, Float:y, Float:z, worldID
 
     return markerid;
 }
-
-stock DestroyMarker(markerid) {
-
-    new markerDataVoid[MarkerData];
-    markerData[markerid] = markerDataVoid;
-
-    for (new i = GetPlayerPoolSize(); i >= 0; i--) {
-
-        if (!IsPlayerConnected(i))
-            continue;
-
-        if (playerMarkerData[i][markerObjectIcon][markerid] >= 0) {
-            DestroyPlayerObject(i, playerMarkerData[i][markerObjectIcon][markerid]);
-            playerMarkerData[i][markerObjectIcon][markerid] = INVALID_OBJECT_ID;
-        }
-    }
-}
-
 
 public OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
     
@@ -330,85 +209,6 @@ public OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 #define OnPlayerLeaveDynamicArea MPHook_OnPlayerLeaveDynamicArea
 #if defined MPHook_OnPlayerLeaveDynamicArea
     forward MPHook_OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid);
-#endif
-
-public OnPlayerUpdate(playerid) {
-    
-    if (!IsPlayerConnected(playerid))
-        return 0;
-
-    for (new i = 0; i < MAX_MARKERS; i++) {
-
-        if (!IsValidMarker(i))
-            continue;
-        
-        new Float:playerPosition[3];
-        GetPlayerPos(playerid, playerPosition[0], playerPosition[1], playerPosition[2]);
-
-        if (
-            playerPosition[0] > markerData[i][markerPosition][0] - 5.0 && playerPosition[1] > markerData[i][markerPosition][1] - 5.0 &&
-            playerPosition[0] < markerData[i][markerPosition][0] + 5.0 && playerPosition[1] < markerData[i][markerPosition][1] + 5.0
-        ) {
-
-            if (playerMarkerData[playerid][markerVisible][i]) {
-                SetPlayerObjectMaterialText(
-                    playerid,
-                    playerMarkerData[playerid][markerObjectIcon][i],
-                    GetIconLetter(markerData[i][markerIcon]), 0, OBJECT_MATERIAL_SIZE_256x256,
-                    GetIconFont(markerData[i][markerIcon]), 150, 1, 0x00000000, 0x00000000, 1
-                );
-
-                SetPlayerObjectPos(
-                    playerid,
-                    playerMarkerData[playerid][markerObjectIcon][i],
-                    markerData[i][markerPosition][0],
-                    markerData[i][markerPosition][1],
-                    ((markerData[i][markerPosition][2] + 1.5) * 2)
-                );
-
-                playerMarkerData[playerid][markerVisible][i] = false;
-            }
-        }
-        else {
-
-            if (!playerMarkerData[playerid][markerVisible][i]) {
-
-                SetPlayerObjectMaterialText(
-                    playerid,
-                    playerMarkerData[playerid][markerObjectIcon][i],
-                    GetIconLetter(markerData[i][markerIcon]), 0, OBJECT_MATERIAL_SIZE_256x256,
-                    GetIconFont(markerData[i][markerIcon]), 150, 1, 0xFFF8F8FF, 0x00000000, 1
-                );
-
-                SetPlayerObjectPos(
-                    playerid,
-                    playerMarkerData[playerid][markerObjectIcon][i],
-                    markerData[i][markerPosition][0],
-                    markerData[i][markerPosition][1],
-                    (markerData[i][markerPosition][2] + 1.5)
-                );
-
-                playerMarkerData[playerid][markerVisible][i] = true;
-            }
-        }
-        Player_SetIconFace(playerid);
-    }
-
-    #if defined MPHook_OnPlayerUpdate
-        return MPHook_OnPlayerUpdate(playerid);
-    #else
-        return 1;
-    #endif
-}
-#if defined _ALS_OnPlayerUpdate
-    #undef OnPlayerUpdate
-#else
-    #define _ALS_OnPlayerUpdate
-#endif
-
-#define OnPlayerUpdate MPHook_OnPlayerUpdate
-#if defined MPHook_OnPlayerUpdate
-    forward MPHook_OnPlayerUpdate(playerid);
 #endif
 
 public OnPlayerConnect(playerid) {
