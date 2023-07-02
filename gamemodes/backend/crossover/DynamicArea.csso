@@ -71,17 +71,24 @@ public OnPlayerEnterDynamicArea(playerid, areaid)
 	{
 		if(areaid == SafeZone[s][safeID]) 
 		{
-			BuildSafeZoneTextDraws(playerid, true);
+            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "SAFE");
 			InSafeZone[playerid] = true;
 		}
+	}
+
+    // Customs za kola
+	if(areaid == CustomsDoorsArea)
+	{
+        MoveObject(CustomsDoors, customsDoorOpenX, customsDoorOpenY, customsDoorOpenZ, 1.0, -0.499, 90.000, 0.000);
+		IspredCustomsa[playerid] = true;
 	}
 
     return 1;
 }
 
-public OnPlayerLeaveDynamicArea(playerid, areaid) 
+public OnPlayerLeaveDynamicArea(playerid, areaid)
 {
-    if (!IsPlayerInAnyDynamicArea(playerid)) 
+    if (!IsPlayerInAnyDynamicArea(playerid))
 	{
 		PlayerTextDrawSetString(playerid, Player_TDs[playerid][4], "Nepoznato");
     }
@@ -100,9 +107,17 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 	{
 		if(areaid == SafeZone[i][safeID]) 
 		{
-			BuildSafeZoneTextDraws(playerid, false);
+            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "UNSAFE");
 			InSafeZone[playerid] = false;
 		}
+	}
+
+    // Customs za kola
+
+	if(areaid == CustomsDoorsArea)
+	{
+        MoveObject(CustomsDoors, customsDoorX, customsDoorY, customsDoorZ,  1.0, 0.000, 0.000, 0.000);
+		IspredCustomsa[playerid] = false;
 	}
 
     return 1;

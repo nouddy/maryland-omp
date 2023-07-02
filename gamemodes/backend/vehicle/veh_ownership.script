@@ -523,7 +523,7 @@ Dialog:ReleaseCar(playerid, response, listitem, inputtext[])
 	        if (GetPlayerMoney(playerid) < CarData[carid][carImpoundPrice])
 	            return SendErrorMessage(playerid, "You can't afford to release this vehicle.");
 
-            GivePlayerMoney(playerid, -CarData[carid][carImpoundPrice]);
+            VosticGiveMoney(playerid, -CarData[carid][carImpoundPrice]);
 
             CarData[carid][carPos][0] = ImpoundData[id][impoundRelease][0];
             CarData[carid][carPos][1] = ImpoundData[id][impoundRelease][1];

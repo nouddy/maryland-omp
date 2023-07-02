@@ -368,7 +368,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "backend/vehicle/brzinomer.script"						//* Brzinomer
 #include "backend/vehicle/vehicle.script"						//* Vozila paljenje gasenje itd
 #include "backend/vehicle/veh_ownership.script"					//* Vehicle ownership
-//#include "backend/vehicle/servis.script"						//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
+#include "backend/vehicle/servis.script"						//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 //-
 #include "backend/vehicle/end/do-not-look.end"
 
@@ -456,7 +456,6 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/textdraws/login.tde"							//* Login tdovi
 #include "frontend/textdraws/register.tde"						//* Register tdovi
 #include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
-#include "frontend/textdraws/safezone.tde"						//* Safe zone textdraw		
 
 //- Exteriors
 #include "frontend/exterior/starbucks.map"						//* Starbucks map 
@@ -474,6 +473,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/exterior/shopping-center.map"				//* Shopping Center Mapa
 #include "frontend/exterior/bizcent-ext.map"					//* Shopping Center Mapa
 #include "frontend/exterior/centar_park.map"					//* Center Park Mapa
+#include "frontend/exterior/binance_ext.map"					//* Binance Exterior Mapa
 
 //- Interiors
 #include "frontend/interior/opstina-int.map"					//* Opstina int map

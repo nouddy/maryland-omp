@@ -58,11 +58,11 @@ YCMD:izvadilicnu(playerid, params[], help)
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
 
         PlayerDocuments[playerid][pNationalID] = 1;
-        GivePlayerMoney(playerid, -200);
+        VosticGiveMoney(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
         notification.Show(playerid, "OPSTINA", "Uspesno si izvadio licnu kartu!", "!", BOXCOLOR_GREEN);
 
-        SaveDocuments(playerid);SavePlayer(playerid);
+        SaveDocuments(playerid);
     }
     else notification.Show(playerid, "GRESKA", "Morate biti na salteru u opstini", "!", BOXCOLOR_RED);
 
@@ -78,11 +78,11 @@ YCMD:izvadipasos(playerid, params[], help)
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
 
         PlayerDocuments[playerid][pPassport] = 1;
-        GivePlayerMoney(playerid, -200);
+        VosticGiveMoney(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
         notification.Show(playerid, "OPSTINA", "Uspesno si izvadio pasos!", "!", BOXCOLOR_GREEN);
 
-        SaveDocuments(playerid);SavePlayer(playerid);
+        SaveDocuments(playerid);
     }
     else notification.Show(playerid, "GRESKA", "Morate biti na salteru u opstini", "!", BOXCOLOR_RED);
 

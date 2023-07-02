@@ -173,7 +173,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
             return Bank_ShowMenu(playerid);
         }
         
-        if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+        if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), ReturnPlayerName(playerid)))
         {
             SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
             return Bank_ShowMenu(playerid);
@@ -415,9 +415,9 @@ Bank_SaveLog(playerid, type, accid, toaccid, amount)
     
     switch(type)
     {
-        case TYPE_LOGIN, TYPE_PASSCHANGE: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Date=UNIX_TIMESTAMP()", accid, type, Player_GetName(playerid));
-        case TYPE_DEPOSIT, TYPE_WITHDRAW: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, type, Player_GetName(playerid), amount);
-        case TYPE_TRANSFER: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, ToAccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, toaccid, type, Player_GetName(playerid), amount);
+        case TYPE_LOGIN, TYPE_PASSCHANGE: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Date=UNIX_TIMESTAMP()", accid, type, ReturnPlayerName(playerid));
+        case TYPE_DEPOSIT, TYPE_WITHDRAW: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, type, ReturnPlayerName(playerid), amount);
+        case TYPE_TRANSFER: mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_logs SET AccountID=%d, ToAccountID=%d, Type=%d, Player='%e', Amount=%d, Date=UNIX_TIMESTAMP()", accid, toaccid, type, ReturnPlayerName(playerid), amount);
     }
     
     mysql_tquery(SQL, query);
@@ -465,17 +465,10 @@ Bank_ShowLogMenu(playerid)
     return 1;
 }
 
-Player_GetName(playerid)
-{
-    new name[MAX_PLAYER_NAME];
-    GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-    return name;
-}
-
 Bank_AccountCount(playerid)
 {
     new query[144], Cache: find_accounts;
-    mysql_format(SQL, query, sizeof(query), "SELECT null FROM bank_accounts WHERE Owner='%e' && Disabled=0", Player_GetName(playerid));
+    mysql_format(SQL, query, sizeof(query), "SELECT null FROM bank_accounts WHERE Owner='%e' && Disabled=0", ReturnPlayerName(playerid));
     find_accounts = mysql_query(SQL, query);
     
     new count = cache_num_rows();
@@ -509,7 +502,7 @@ Bank_GetOwner(accountid)
 Bank_ListAccounts(playerid)
 {
     new query[256], Cache: get_accounts;
-    mysql_format(SQL, query, sizeof(query), "SELECT ID, Balance, LastAccess, FROM_UNIXTIME(CreatedOn, '%%d/%%m/%%Y %%H:%%i:%%s') AS Created, FROM_UNIXTIME(LastAccess, '%%d/%%m/%%Y %%H:%%i:%%s') AS Last FROM bank_accounts WHERE Owner='%e' && Disabled=0 ORDER BY CreatedOn DESC", Player_GetName(playerid));
+    mysql_format(SQL, query, sizeof(query), "SELECT ID, Balance, LastAccess, FROM_UNIXTIME(CreatedOn, '%%d/%%m/%%Y %%H:%%i:%%s') AS Created, FROM_UNIXTIME(LastAccess, '%%d/%%m/%%Y %%H:%%i:%%s') AS Last FROM bank_accounts WHERE Owner='%e' && Disabled=0 ORDER BY CreatedOn DESC", ReturnPlayerName(playerid));
     get_accounts = mysql_query(SQL, query);
     new rows = cache_num_rows();
 
@@ -640,7 +633,7 @@ Bank_ShowLogs(playerid)
 forward OnBankAccountCreated(playerid, pass[]);
 public OnBankAccountCreated(playerid, pass[])
 {
-    GivePlayerMoney(playerid, -ACCOUNT_PRICE);
+    VosticGiveMoney(playerid, -ACCOUNT_PRICE);
     
     new id = cache_insert_id(), string[64];
     SendBankMessage(playerid, "Uspesno ste napravili vas bankovni racun!");
@@ -693,7 +686,7 @@ public OnBankAccountDeposit(playerid, amount)
         format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno depozitovano {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
         
-        GivePlayerMoney(playerid, -amount);
+        VosticGiveMoney(playerid, -amount);
         Bank_SaveLog(playerid, TYPE_DEPOSIT, CurrentAccountID[playerid], -1, amount);
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
@@ -711,7 +704,7 @@ public OnBankAccountWithdraw(playerid, amount)
         format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno podignuto {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
 
-        GivePlayerMoney(playerid, amount);
+        VosticGiveMoney(playerid, amount);
         Bank_SaveLog(playerid, TYPE_WITHDRAW, CurrentAccountID[playerid], -1, amount);
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
@@ -775,7 +768,7 @@ forward OnBankAccountDeleted(playerid, id, amount);
 public OnBankAccountDeleted(playerid, id, amount)
 {
     if(cache_affected_rows() > 0) {
-        GivePlayerMoney(playerid, amount);
+        VosticGiveMoney(playerid, amount);
         
         foreach(new i : Player)
         {
@@ -874,7 +867,7 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
                 return Bank_ShowMenu(playerid);
             }
             
-            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), ReturnPlayerName(playerid)))
             {
                 SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
                 return Bank_ShowMenu(playerid);
@@ -891,7 +884,7 @@ Dialog:dialog_banka_menu(const playerid, response, listitem, string:inputtext[])
                 return Bank_ShowMenu(playerid);
             }
             
-            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), Player_GetName(playerid)))
+            if(strcmp(Bank_GetOwner(CurrentAccountID[playerid]), ReturnPlayerName(playerid)))
             {
                 SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Samo vlasnik naloga moze ovo.");
                 return Bank_ShowMenu(playerid);
@@ -1032,7 +1025,7 @@ Dialog:dialog_bank_create(const playerid, response, listitem, string:inputtext[]
     #endif
 
     new query[144];
-    mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_accounts SET Owner='%e', Password=md5('%e'), CreatedOn=UNIX_TIMESTAMP()", Player_GetName(playerid), inputtext);
+    mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_accounts SET Owner='%e', Password=md5('%e'), CreatedOn=UNIX_TIMESTAMP()", ReturnPlayerName(playerid), inputtext);
     mysql_tquery(SQL, query, "OnBankAccountCreated", "is", playerid, inputtext);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

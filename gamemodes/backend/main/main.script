@@ -81,7 +81,7 @@ public SQL_AccountLoad(playerid)
 		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
 					"Registracija",
 					"%s, unesite Vasu zeljenu lozinku: ",
-					"Potvrdi", "Izlaz", GetName(playerid)
+					"Potvrdi", "Izlaz", ReturnPlayerName(playerid)
 				);		
 		*/
 	}
@@ -135,7 +135,7 @@ hook OnPlayerConnect(playerid)
 	ImaLoginTD[playerid] = false;
 
 	new query[120];
-	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'", GetName(playerid));
+	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountLoad", "i", playerid);
 
 	return 1;
@@ -217,7 +217,7 @@ timer Spawn_Player[100](playerid, type)
 
 			//
 			static q[ 120 ];
-			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'",ReturnDate(), GetName(playerid));
+			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'",ReturnDate(), ReturnPlayerName(playerid));
 			mysql_tquery(SQL, q);
 			//
 		}
@@ -256,7 +256,7 @@ Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 		return Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
 			"Registracija",
 			"%s, unesite Vasu zeljenu lozinku: ",
-			"Potvrdi", "Izlaz", GetName(playerid)
+			"Potvrdi", "Izlaz", ReturnPlayerName(playerid)
 		);
 
 	PlayerInfo[playerid][Password] = udb_hash(inputtext);
@@ -385,7 +385,7 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 					{ffffff}Imate 3 pokusaja da unesete tacnu lozinku i 60 sekundi.\n\
 					\n\
 					Uzivajte igrajuci na nasem serveru!\n\
-					",GetName(playerid),ip);
+					",ReturnPlayerName(playerid),ip);
 
 			
 			Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,
@@ -511,7 +511,7 @@ public LoginIgraca(playerid)
 			{ffffff}Imate 3 pokusaja da unesete tacnu lozinku i 60 sekundi.\n\
 			\n\
 			Uzivajte igrajuci na nasem serveru!\n\
-			",GetName(playerid),ip);
+			",ReturnPlayerName(playerid),ip);
 
 
 	Dialog_Show(playerid, "dialog_login", DIALOG_STYLE_PASSWORD,

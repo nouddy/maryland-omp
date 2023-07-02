@@ -45,6 +45,8 @@ ResetujVariable(playerid)
     PlayerFinance[playerid][pBankPin] = 0;
     // Safe zone
     InSafeZone[playerid] = false;
+    //Customs Vrata itd
+    IspredCustomsa[playerid] = false;
 
     for(new i = 0; i < 2; i++)
     {

@@ -85,7 +85,7 @@ formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
     }
     return s_szReturn;
 }
-//* Cuvanje naloga
+//* Cuvanje naloga na Registeru
 stock SavePlayer(playerid)
 {
     if(IgracUlogovan[playerid] == true)
@@ -106,6 +106,7 @@ stock SavePlayer(playerid)
 
     return true;
 }
+//* Save sve u vezi dokumenata
 stock SaveDocuments(playerid)
 {
     if(IgracUlogovan[playerid] == true)
@@ -124,7 +125,7 @@ stock SaveDocuments(playerid)
 
     return true;
 }
-
+//* Save sve u vezi elektronike
 stock SaveElectronic(playerid)
 {
     if(IgracUlogovan[playerid] == true)
@@ -140,7 +141,7 @@ stock SaveElectronic(playerid)
 
     return true;
 }
-
+//* Save sve u vezi finansija
 stock SaveFinance(playerid)
 {
     if(IgracUlogovan[playerid] == true)
@@ -157,7 +158,7 @@ stock SaveFinance(playerid)
     return true;
 }
 
-//
+//* Vraca datum
 ReturnDate()
 {
     static
@@ -170,4 +171,21 @@ ReturnDate()
     return date;
 }
 
-//
+//* Save Novca
+VosticGiveMoney(playerid, novac)
+{
+	PlayerInfo[playerid][Novac] += novac;
+	ResetPlayerMoney(playerid);
+	GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
+
+    if(IgracUlogovan[playerid] == true)
+    {
+        new query[500];
+		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Novac` = '%d' WHERE `ID` = '%d'",
+            PlayerInfo[playerid][Novac],
+			PlayerInfo[playerid][SQLID]);
+		mysql_tquery(SQL,query);        
+    }
+
+	return PlayerInfo[playerid][Novac];
+}

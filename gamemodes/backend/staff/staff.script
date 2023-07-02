@@ -86,12 +86,12 @@ YCMD:sduty(playerid, params[], help)
 		SetPlayerArmour( playerid, 99);
 		
 		StaffDuty[ playerid ] = true;
-		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", GetName(playerid));
+		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", ReturnPlayerName(playerid));
 	}
 	else if(StaffDuty[playerid] == true)
 	{
 	 	StaffDuty[playerid] = false;
-		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"vise nije na duznosti.", GetName(playerid));
+		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"vise nije na duznosti.", ReturnPlayerName(playerid));
 	}
     return true;
 }
@@ -112,7 +112,7 @@ YCMD:sc(playerid, const string: params[], help)
 
 	static tmp_str[128];
 
-	format(tmp_str, sizeof(tmp_str), "Staff \187; %s(%d): "c_white"%s", GetName(playerid), playerid, params);
+	format(tmp_str, sizeof(tmp_str), "Staff \187; %s(%d): "c_white"%s", ReturnPlayerName(playerid), playerid, params);
 
 	foreach (new i: Player)
 		if (PlayerInfo[i][Staff])
@@ -227,7 +227,7 @@ YCMD:cc(playerid, params[], help)
 	}
 
 	static fmt_string[120], sati, minuta, sekunda; gettime(sati, minuta, sekunda);
-	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", GetName(playerid));
+	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", ReturnPlayerName(playerid));
 	SendClientMessageToAll(-1, fmt_string);
 	SendClientMessageToAll(-1, ""c_white"••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" );
 	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" \187; "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
@@ -420,8 +420,8 @@ YCMD:setint(const playerid, params[], help)
  
 	SetPlayerInterior(id, int);
 
-	va_SendClientMessage(playerid, x_ogycolor, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",GetName(id),int);
-	va_SendClientMessage(id, x_ogycolor, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",GetName(playerid),int);
+	va_SendClientMessage(playerid, x_ogycolor, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",ReturnPlayerName(id),int);
+	va_SendClientMessage(id, x_ogycolor, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",ReturnPlayerName(playerid),int);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -436,8 +436,8 @@ YCMD:setvw(const playerid, params[], help)
  
 	SetPlayerVirtualWorld(id, vw);
 
-	va_SendClientMessage(playerid, x_ogycolor, "[SET-VW]: > {ffffff}Postavili ste igracu(%s) virtual world(%d)",GetName(id),vw);
-	va_SendClientMessage(id, x_ogycolor, "[SET-VW]: > {ffffff}%s vam je podesio virtual world(%d)",GetName(playerid),vw);
+	va_SendClientMessage(playerid, x_ogycolor, "[SET-VW]: > {ffffff}Postavili ste igracu(%s) virtual world(%d)",ReturnPlayerName(id),vw);
+	va_SendClientMessage(id, x_ogycolor, "[SET-VW]: > {ffffff}%s vam je podesio virtual world(%d)",ReturnPlayerName(playerid),vw);
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -445,7 +445,7 @@ YCMD:setstaff(playerid, const string: params[], help)
 {
 	if(help)
     {
-		notification.Show(playerid, "HELP", "0 - Skinut Admin | 1. Assistent | 2. Admin | 3. Manager | 4. High Command.", "+", BOXCOLOR_BLUE);
+		notification.Show(playerid, "HELP", "0 - Skinut Staff | 1. Assistent | 2. Staff | 3. Manager | 4. High Command.", "+", BOXCOLOR_BLUE);
         return 1;
     }
 
@@ -471,20 +471,20 @@ YCMD:setstaff(playerid, const string: params[], help)
 	{
 		static fmt_string[128];
 
-		format(fmt_string, sizeof(fmt_string), "%s Vas je izbacio iz staff-a.", GetName(playerid));
+		format(fmt_string, sizeof(fmt_string), "%s Vas je izbacio iz staff-a.", ReturnPlayerName(playerid));
 		notification.Show(targetid, "INFO", fmt_string, "+", BOXCOLOR_BLUE);
 
-		format(fmt_string, sizeof(fmt_string), "Izbacili ste %s iz staff-a.", GetName(targetid));
+		format(fmt_string, sizeof(fmt_string), "Izbacili ste %s iz staff-a.", ReturnPlayerName(targetid));
 		notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
 	}
 	else if(level < 0 || level > 4) return notification.Show(targetid, "INFO", "Koristi /help setstaff da vidis validne levele", "?", BOXCOLOR_BLUE);
 	{
 		static fmt_string[128];
 
-		format(fmt_string, sizeof(fmt_string), "%s Vas je ubacio u staff, nivo %i.", GetName(playerid), level);
+		format(fmt_string, sizeof(fmt_string), "%s Vas je ubacio u staff, nivo %i.", ReturnPlayerName(playerid), level);
 		notification.Show(targetid, "INFO", fmt_string, "+", BOXCOLOR_BLUE);
 
-		format(fmt_string, sizeof(fmt_string), "Ubacili ste %s u staff, nivo %i.", GetName(targetid), level);
+		format(fmt_string, sizeof(fmt_string), "Ubacili ste %s u staff, nivo %i.", ReturnPlayerName(targetid), level);
 		notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
 	}
 	SavePlayer(targetid);

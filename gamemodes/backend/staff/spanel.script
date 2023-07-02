@@ -461,7 +461,6 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 			    DestroyDynamicPickup(SafeZone[ id ][ safePickup ]);
 			    DestroyDynamic3DTextLabel(SafeZone[ id ][ safeLabel ]);
 			    Iter_Remove(SafeZone, id);
-				BuildSafeZoneTextDraws(playerid, false);
 				InSafeZone[playerid] = false;
 
 			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali safe zonu.");				

@@ -39,7 +39,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
 					"Registracija",
 					"%s, unesite Vasu zeljenu lozinku: ",
-					"Potvrdi", "Izlaz", GetName(playerid)
+					"Potvrdi", "Izlaz", ReturnPlayerName(playerid)
 				);		
 	}
 	else if(playertextid == Register_PTD[playerid][49]) // email
@@ -103,7 +103,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		new query[550];
 		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
 			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			GetName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
 
@@ -139,7 +139,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		Dialog_Show(playerid, "dialog_confirmreg", DIALOG_STYLE_MSGBOX,
 				"Odabir karaktera.",
 				"Postovani %s, posedujete dodatke\nObjekat1 > %s\nObjekat2 > %s\nDa li zelite da nastavite?",
-				"Nastavi", "Skini Objekat", GetName(playerid),PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
+				"Nastavi", "Skini Objekat", ReturnPlayerName(playerid),PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
 		);
 	}
 	return 1;

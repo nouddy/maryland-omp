@@ -1554,6 +1554,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][149], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][149], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][149], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][149], 300, 5);
 
         BinanceTD[playerid][150] = CreatePlayerTextDraw(playerid, 368.666595, 227.333312, "BUY");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][150], 0.138333, 0.753777);
@@ -1564,6 +1565,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][150], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][150], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][150], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][150], 300, 5);
 
         BinanceTD[playerid][151] = CreatePlayerTextDraw(playerid, 368.666595, 252.222259, "BUY");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][151], 0.138333, 0.753777);
@@ -1574,6 +1576,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][151], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][151], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][151], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][151], 300, 5);
 
         BinanceTD[playerid][152] = CreatePlayerTextDraw(playerid, 368.666595, 276.696350, "BUY");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][152], 0.138333, 0.753777);
@@ -1584,6 +1587,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][152], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][152], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][152], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][152], 300, 5);
 
         BinanceTD[playerid][153] = CreatePlayerTextDraw(playerid, 368.666595, 300.340850, "BUY");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][153], 0.138333, 0.753777);
@@ -1594,6 +1598,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][153], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][153], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][153], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][153], 300, 5);
 
         BinanceTD[playerid][154] = CreatePlayerTextDraw(playerid, 432.999938, 203.274078, "SELL");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][154], 0.138333, 0.753777);
@@ -1604,6 +1609,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][154], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][154], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][154], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][154], 300, 5);
 
         BinanceTD[playerid][155] = CreatePlayerTextDraw(playerid, 432.999938, 227.333297, "SELL");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][155], 0.138333, 0.753777);
@@ -1614,6 +1620,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][155], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][155], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][155], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][155], 300, 5);
 
         BinanceTD[playerid][156] = CreatePlayerTextDraw(playerid, 432.999938, 251.807388, "SELL");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][156], 0.138333, 0.753777);
@@ -1624,6 +1631,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][156], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][156], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][156], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][156], 300, 5);
 
         BinanceTD[playerid][157] = CreatePlayerTextDraw(playerid, 432.999938, 276.696258, "SELL");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][157], 0.138333, 0.753777);
@@ -1634,6 +1642,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][157], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][157], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][157], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][157], 300, 5);
 
         BinanceTD[playerid][158] = CreatePlayerTextDraw(playerid, 432.999938, 300.755554, "SELL");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][158], 0.138333, 0.753777);
@@ -1644,6 +1653,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][158], 2);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][158], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][158], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][158], 300, 5);
 
         BinanceTD[playerid][159] = CreatePlayerTextDraw(playerid, 319.000030, 328.548187, "FAQ");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][159], 0.183000, 1.064889);
@@ -1654,6 +1664,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][159], 1);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][159], 1);
         PlayerTextDrawSetSelectable(playerid, BinanceTD[playerid][159], true);
+        PlayerTextDrawTextSize(playerid, BinanceTD[playerid][159], 300, 5);
 
         for(new i = 0; i < 160; i++) { PlayerTextDrawShow(playerid, BinanceTD[playerid][i]); }
 
@@ -1670,6 +1681,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
             BinanceTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
         }
         GledaCryptoTextdraw[playerid] = false;
+        CancelSelectTextDraw(playerid);
     }
 }
 /*
@@ -1702,7 +1714,7 @@ stock ResetPlayersCrypto(playerid)
 
 task CryptoMessageTransactions[300000]()
 {
-    va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}U proteklih 3minuta obavljeno je "CRYPTO_HEX"%d{ffffff} tansakcija na trzistu.",transactions);
+    va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}U proteklih 5 minuta obavljeno je "CRYPTO_HEX"%d{ffffff} tansakcija na trzistu.",transactions);
     va_SendClientMessageToAll(CRYPTO_COLOR, "Crypto Transakcije: {ffffff}BTC: %d | USDT: %d | DOT: %d | XRP: %d | LTC: %d",transactionsBTC,transactionsUSDT, transactionsDOT, transactionsXRP, transactionsLTC);
 }
 

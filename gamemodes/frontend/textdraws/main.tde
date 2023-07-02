@@ -20,19 +20,19 @@ hook OnPlayerSpawn(playerid)
         TextDrawShowForPlayer(playerid, MarylandLogo[i]);
     }
 
-    for(new i=0; i< 33; i++)
+    for(new i=0; i< 40; i++)
     {
         TextDrawShowForPlayer(playerid, Global_TD[i]);
     }
 
     //
-    for(new i=0; i< 7; i++)
+    for(new i=0; i< 8; i++)
     {
         PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
     }
     //! Ime Igraca
     static pname[25];
-	format(pname, sizeof(pname), "%s", GetName(playerid));
+	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
 	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
     PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
@@ -724,6 +724,79 @@ stock CreateTextdraws() {
     TextDrawSetProportional(Global_TD[32], 0);
     TextDrawSetPreviewModel(Global_TD[32], 1317);
     TextDrawSetPreviewRot(Global_TD[32], -30.000000, 0.000000, 90.000000, 1.000000);
+
+    Global_TD[33] = TextDrawCreate(-36.666633, 424.529602, "LD_SPAC:white");
+    TextDrawTextSize(Global_TD[33], 83.000000, 16.190004);
+    TextDrawAlignment(Global_TD[33], 1);
+    TextDrawColor(Global_TD[33], 404232447);
+    TextDrawSetShadow(Global_TD[33], 0);
+    TextDrawBackgroundColor(Global_TD[33], 255);
+    TextDrawFont(Global_TD[33], 4);
+    TextDrawSetProportional(Global_TD[33], 0);
+
+    Global_TD[34] = TextDrawCreate(19.333324, 383.977874, "");
+    TextDrawTextSize(Global_TD[34], 61.000000, 90.000000);
+    TextDrawAlignment(Global_TD[34], 1);
+    TextDrawColor(Global_TD[34], -1916144641);
+    TextDrawSetShadow(Global_TD[34], 0);
+    TextDrawBackgroundColor(Global_TD[34], -256);
+    TextDrawFont(Global_TD[34], 5);
+    TextDrawSetProportional(Global_TD[34], 0);
+    TextDrawSetPreviewModel(Global_TD[34], 19177);
+    TextDrawSetPreviewRot(Global_TD[34], 0.000000, 180.000000, 0.000000, 1.000000);
+
+    Global_TD[35] = TextDrawCreate(15.333323, 391.444580, "");
+    TextDrawTextSize(Global_TD[35], 61.000000, 90.000000);
+    TextDrawAlignment(Global_TD[35], 1);
+    TextDrawColor(Global_TD[35], -1916144641);
+    TextDrawSetShadow(Global_TD[35], 0);
+    TextDrawBackgroundColor(Global_TD[35], -256);
+    TextDrawFont(Global_TD[35], 5);
+    TextDrawSetProportional(Global_TD[35], 0);
+    TextDrawSetPreviewModel(Global_TD[35], 19177);
+    TextDrawSetPreviewRot(Global_TD[35], 0.000000, 180.000000, 0.000000, 1.000000);
+
+    Global_TD[36] = TextDrawCreate(15.333321, 383.148315, "");
+    TextDrawTextSize(Global_TD[36], 61.000000, 90.000000);
+    TextDrawAlignment(Global_TD[36], 1);
+    TextDrawColor(Global_TD[36], -1916144641);
+    TextDrawSetShadow(Global_TD[36], 0);
+    TextDrawBackgroundColor(Global_TD[36], -256);
+    TextDrawFont(Global_TD[36], 5);
+    TextDrawSetProportional(Global_TD[36], 0);
+    TextDrawSetPreviewModel(Global_TD[36], 19177);
+    TextDrawSetPreviewRot(Global_TD[36], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    Global_TD[37] = TextDrawCreate(10.999989, 391.029785, "");
+    TextDrawTextSize(Global_TD[37], 61.000000, 90.000000);
+    TextDrawAlignment(Global_TD[37], 1);
+    TextDrawColor(Global_TD[37], -1916144641);
+    TextDrawSetShadow(Global_TD[37], 0);
+    TextDrawBackgroundColor(Global_TD[37], -256);
+    TextDrawFont(Global_TD[37], 5);
+    TextDrawSetProportional(Global_TD[37], 0);
+    TextDrawSetPreviewModel(Global_TD[37], 19177);
+    TextDrawSetPreviewRot(Global_TD[37], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    Global_TD[38] = TextDrawCreate(31.333381, 438.733428, "particle:lamp_shad_64");
+    TextDrawTextSize(Global_TD[38], 22.899997, -14.000000);
+    TextDrawAlignment(Global_TD[38], 1);
+    TextDrawColor(Global_TD[38], -1916144819);
+    TextDrawSetShadow(Global_TD[38], 0);
+    TextDrawBackgroundColor(Global_TD[38], 255);
+    TextDrawFont(Global_TD[38], 4);
+    TextDrawSetProportional(Global_TD[38], 0);
+
+    Global_TD[39] = TextDrawCreate(16.666646, 425.044433, "");
+    TextDrawTextSize(Global_TD[39], 6.000000, 7.000000);
+    TextDrawAlignment(Global_TD[39], 1);
+    TextDrawColor(Global_TD[39], -1);
+    TextDrawSetShadow(Global_TD[39], 0);
+    TextDrawBackgroundColor(Global_TD[39], -256);
+    TextDrawFont(Global_TD[39], 5);
+    TextDrawSetProportional(Global_TD[39], 0);
+    TextDrawSetPreviewModel(Global_TD[39], 1240);
+    TextDrawSetPreviewRot(Global_TD[39], 0.000000, 0.000000, 0.000000, 1.000000);
 }
 stock CreatePlayerTextDraws(playerid)
 {
@@ -791,6 +864,15 @@ stock CreatePlayerTextDraws(playerid)
     PlayerTextDrawBackgroundColor(playerid,Player_TDs[playerid][6], 255);
     PlayerTextDrawFont(playerid,Player_TDs[playerid][6], 2);
     PlayerTextDrawSetProportional(playerid,Player_TDs[playerid][6], 1);
+
+    Player_TDs[playerid][7] = CreatePlayerTextDraw(playerid, 19.000013, 432.251922, "UNSAFE");
+    PlayerTextDrawLetterSize(playerid, Player_TDs[playerid][7], 0.113664, 0.596148);
+    PlayerTextDrawAlignment(playerid, Player_TDs[playerid][7], 2);
+    PlayerTextDrawColor(playerid, Player_TDs[playerid][7], -1);
+    PlayerTextDrawSetShadow(playerid, Player_TDs[playerid][7], 0);
+    PlayerTextDrawBackgroundColor(playerid, Player_TDs[playerid][7], 255);
+    PlayerTextDrawFont(playerid, Player_TDs[playerid][7], 2);
+    PlayerTextDrawSetProportional(playerid, Player_TDs[playerid][7], 1);
 }
 
 task VremeDatum[1000]()

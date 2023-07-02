@@ -483,12 +483,11 @@ YCMD:kupikucu(playerid, params[], help)
 	if(HouseInfo[HouseID][hOwned]) return notification.Show(playerid, "GRESKA", "Moras biti kod kuce koja je na prodaju.", "!", BOXCOLOR_RED);
 	
 	new query[128], pName[MAX_PLAYER_NAME+1], housecost = HouseInfo[HouseID][hPrice];
-	GivePlayerMoney(playerid, -housecost);
+	VosticGiveMoney(playerid, -housecost);
 	SendPlayerInside(playerid, HouseID);
 	GetPlayerName(playerid, pName, sizeof(pName));
 	mysql_format(SQL, query, sizeof(query), "UPDATE `houses` SET Owner='%s', Owned=1 WHERE ID=%d",pName,HouseID);
 	mysql_tquery(SQL,query,"OnUpdateHouseOwner","iis",playerid, HouseID, pName);
-	SavePlayer(playerid);
 	return 1;
 }
 
@@ -506,7 +505,6 @@ YCMD:prodajdrzavi(playerid, params[], help)
 	mysql_format(SQL,query, sizeof(query), "UPDATE `houses` SET Owner='The State',Owned=0 WHERE ID = %d",HouseID);
 	mysql_tquery(SQL,query, "OnHouseLeft","ii",playerid, HouseID);
 
-	SavePlayer(playerid);
 	return 1;
 	
 }
@@ -531,8 +529,6 @@ YCMD:prodajkucu(playerid, params[], help)
 	mysql_format(SQL,query, sizeof(query), "UPDATE `houses` SET Owner='%s',Owned=1 WHERE ID = %d",pName,HouseID);
 	mysql_tquery(SQL,query, "OnHouseSold","iiii", playerid, targetid, HouseID, price);
 
-	SavePlayer(playerid);
-	SavePlayer(targetid);
 	return 1;
 }
 
@@ -917,8 +913,8 @@ Dialog: DIALOG_HOUSE_ACCEPT(const playerid, response, listitem, string: inputtex
 		GetPlayerName(targetid, pName, sizeof(pName));
 		format(str, sizeof(str), ""c_server"nekretnine \187; "c_white"Kupio si kucu od %s za $%d. Cestitamo!",pName,price);
 		SendClientMessage(playerid,0x0000EEAA, str);
-		GivePlayerMoney(targetid, price);
-		GivePlayerMoney(playerid, -price);
+		VosticGiveMoney(targetid, price);
+		VosticGiveMoney(playerid, -price);
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -934,7 +930,7 @@ Dialog: DIALOG_HOUSE_LEAVE(const playerid, response, listitem, string: inputtext
 	new Label[256], HouseCost = HouseInfo[HouseID][hPrice]/2;
 	format(Label, sizeof(Label), ""c_server"nekretnine \187; "c_white"Prodao si kucu drzavi za {FF9911}$%d.", HouseCost);
 	SendClientMessage(playerid, -1, Label);
-	GivePlayerMoney(playerid, HouseCost);
+	VosticGiveMoney(playerid, HouseCost);
 			
 	format(Label, sizeof(Label), ""c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Imovina na prodaju.\n"c_server"\187; "c_white"%s\n"c_server"\187; "c_white"Cena: $%d\n"c_server"\187; "c_white"Opis: %s\nKoristi /kupikucu da kupis..",HouseInfo[HouseID][hOwner],HouseInfo[HouseID][hAdd], HouseInfo[HouseID][hPrice], HouseInfo[HouseID][hDesc]);
 	UpdateDynamic3DTextLabelText(HouseInfo[HouseID][hLabel], x_server, Label);

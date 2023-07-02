@@ -101,12 +101,12 @@ Dialog: dialog_elektronik(const playerid, response, listitem, string: inputtext[
                 if(GetPlayerMoney(playerid) < 700) return SendClientMessage(playerid, x_red, "tehnomedia � "c_white"Nemate dovoljno novca!");
 
                 PlayerElectronic[playerid][eDronItem] = 1;
-                GivePlayerMoney(playerid, -700);
+                VosticGiveMoney(playerid, -700);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia � "c_white"Dobili ste dron (/dron)!");
 
-                SaveElectronic(playerid);SavePlayer(playerid);
+                SaveElectronic(playerid);
                 
                 return Y_HOOKS_CONTINUE_RETURN_1;
 			}
@@ -117,12 +117,12 @@ Dialog: dialog_elektronik(const playerid, response, listitem, string: inputtext[
 
                 PlayerElectronic[playerid][eBaterijaItem]++;
 
-                GivePlayerMoney(playerid, -150);
+                VosticGiveMoney(playerid, -150);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia � "c_white"Kupili ste baterije!");
 
-                SaveElectronic(playerid);SavePlayer(playerid);
+                SaveElectronic(playerid);
 
                 return Y_HOOKS_CONTINUE_RETURN_1;
 			}
@@ -133,12 +133,12 @@ Dialog: dialog_elektronik(const playerid, response, listitem, string: inputtext[
 
                 PlayerElectronic[playerid][eNavigacijaItem] = 1;
 
-                GivePlayerMoney(playerid, -300);
+                VosticGiveMoney(playerid, -300);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, 0, 0, 0, 0, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia � "c_white"Kupili ste navigaciju!");
 
-                SaveElectronic(playerid);SavePlayer(playerid);
+                SaveElectronic(playerid);
 
                 return Y_HOOKS_CONTINUE_RETURN_1;
 			}
