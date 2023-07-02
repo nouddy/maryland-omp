@@ -47,12 +47,9 @@ stock ProxDetector(playerid, Float:max_range, color, const string[], Float:max_r
 	color_b = float(color >> 8 & 0xFF);
 	range_with_ratio = max_range * max_ratio;
 
-#if defined foreach
 	foreach (new i : Player) {
-#else
-	for (new i = GetPlayerPoolSize(); i != -1; i--) {
-#endif
 		if (!IsPlayerStreamedIn(i, playerid)) {
+
 			continue;
 		}
 

@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 15, 2023 at 07:21 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: localhost
+-- Generation Time: Jul 02, 2023 at 03:45 PM
+-- Server version: 10.6.12-MariaDB-0ubuntu0.22.04.1
+-- PHP Version: 8.1.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,140 +18,80 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `maryland`
+-- Database: `s9_maryland`
 --
-CREATE DATABASE IF NOT EXISTS `maryland` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `maryland`;
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bankers`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `bankers`;
-CREATE TABLE IF NOT EXISTS `bankers` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bankers` (
+  `ID` int(11) NOT NULL,
   `Skin` smallint(3) NOT NULL,
   `PosX` float NOT NULL,
   `PosY` float NOT NULL,
   `PosZ` float NOT NULL,
-  `PosA` float NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `PosA` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `bankers`:
---
-
---
--- Truncate table before insert `bankers`
---
-
-TRUNCATE TABLE `bankers`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_accounts`
 --
--- Creation: Jun 06, 2023 at 01:10 PM
---
 
-DROP TABLE IF EXISTS `bank_accounts`;
-CREATE TABLE IF NOT EXISTS `bank_accounts` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bank_accounts` (
+  `ID` int(11) NOT NULL,
   `Owner` varchar(24) NOT NULL,
   `Password` varchar(32) NOT NULL,
   `Balance` int(11) NOT NULL,
   `CreatedOn` int(11) NOT NULL,
   `LastAccess` int(11) NOT NULL,
-  `Disabled` smallint(1) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `Disabled` smallint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `bank_accounts`:
---
-
---
--- Truncate table before insert `bank_accounts`
---
-
-TRUNCATE TABLE `bank_accounts`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_atms`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `bank_atms`;
-CREATE TABLE IF NOT EXISTS `bank_atms` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bank_atms` (
+  `ID` int(11) NOT NULL,
   `PosX` float NOT NULL,
   `PosY` float NOT NULL,
   `PosZ` float NOT NULL,
   `RotX` float NOT NULL,
   `RotY` float NOT NULL,
-  `RotZ` float NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `RotZ` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `bank_atms`:
---
-
---
--- Truncate table before insert `bank_atms`
---
-
-TRUNCATE TABLE `bank_atms`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bank_logs`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `bank_logs`;
-CREATE TABLE IF NOT EXISTS `bank_logs` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bank_logs` (
+  `ID` int(11) NOT NULL,
   `AccountID` int(11) NOT NULL,
   `ToAccountID` int(11) NOT NULL DEFAULT -1,
   `Type` smallint(1) NOT NULL,
   `Player` varchar(24) NOT NULL,
   `Amount` int(11) NOT NULL,
-  `Date` int(11) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `bank_logs_ibfk_1` (`AccountID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `Date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `bank_logs`:
---   `AccountID`
---       `bank_accounts` -> `ID`
---
-
---
--- Truncate table before insert `bank_logs`
---
-
-TRUNCATE TABLE `bank_logs`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `businesses`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `businesses`;
-CREATE TABLE IF NOT EXISTS `businesses` (
-  `bizID` int(12) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `businesses` (
+  `bizID` int(12) NOT NULL,
   `bizName` varchar(32) DEFAULT NULL,
   `bizOwner` int(12) DEFAULT 0,
   `bizType` int(12) DEFAULT 0,
@@ -198,30 +138,17 @@ CREATE TABLE IF NOT EXISTS `businesses` (
   `bizPrice18` int(12) DEFAULT 0,
   `bizPrice19` int(12) DEFAULT 0,
   `bizPrice20` int(12) DEFAULT 0,
-  `bizShipment` int(4) DEFAULT 0,
-  PRIMARY KEY (`bizID`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `bizShipment` int(4) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- RELATIONSHIPS FOR TABLE `businesses`:
---
-
---
--- Truncate table before insert `businesses`
---
-
-TRUNCATE TABLE `businesses`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `cars`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `cars`;
-CREATE TABLE IF NOT EXISTS `cars` (
-  `carID` int(12) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cars` (
+  `carID` int(12) NOT NULL,
   `carModel` int(12) DEFAULT 0,
   `carOwner` int(12) DEFAULT 0,
   `carPosX` float DEFAULT 0,
@@ -258,29 +185,23 @@ CREATE TABLE IF NOT EXISTS `cars` (
   `carWeapon5` int(12) DEFAULT 0,
   `carAmmo5` int(12) DEFAULT 0,
   `carImpoundPrice` int(12) DEFAULT 0,
-  `carFaction` int(12) DEFAULT 0,
-  PRIMARY KEY (`carID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `carFaction` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- RELATIONSHIPS FOR TABLE `cars`:
+-- Dumping data for table `cars`
 --
 
---
--- Truncate table before insert `cars`
---
+INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carPosZ`, `carPosR`, `carColor1`, `carColor2`, `carPaintjob`, `carLocked`, `carMod1`, `carMod2`, `carMod3`, `carMod4`, `carMod5`, `carMod6`, `carMod7`, `carMod8`, `carMod9`, `carMod10`, `carMod11`, `carMod12`, `carMod13`, `carMod14`, `carImpounded`, `carWeapon1`, `carAmmo1`, `carWeapon2`, `carAmmo2`, `carWeapon3`, `carAmmo3`, `carWeapon4`, `carAmmo4`, `carWeapon5`, `carAmmo5`, `carImpoundPrice`, `carFaction`) VALUES
+(1, 522, 0, 1554.64, -2322.25, 13.542, 163.885, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-TRUNCATE TABLE `cars`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `faction_police`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `faction_police`;
-CREATE TABLE IF NOT EXISTS `faction_police` (
+CREATE TABLE `faction_police` (
   `fPoliceID` int(11) NOT NULL,
   `fPoliceName` varchar(60) NOT NULL DEFAULT 'Police',
   `fPoliceShortName` varchar(30) NOT NULL DEFAULT 'PD',
@@ -306,31 +227,17 @@ CREATE TABLE IF NOT EXISTS `faction_police` (
   `fPoliceSkins1` int(11) NOT NULL,
   `fPoliceSkins2` int(11) NOT NULL,
   `fPoliceSkins3` int(11) NOT NULL,
-  `fPoliceSkins4` int(11) NOT NULL,
-  PRIMARY KEY (`fPoliceID`),
-  UNIQUE KEY `fPoliceBoss` (`fPoliceBoss`)
+  `fPoliceSkins4` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- RELATIONSHIPS FOR TABLE `faction_police`:
---
-
---
--- Truncate table before insert `faction_police`
---
-
-TRUNCATE TABLE `faction_police`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `houses`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `houses`;
-CREATE TABLE IF NOT EXISTS `houses` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `houses` (
+  `ID` int(11) NOT NULL,
   `Address` varchar(35) DEFAULT '0,Los Santos',
   `Description` varchar(128) DEFAULT 'House',
   `Owner` varchar(25) DEFAULT 'The State',
@@ -345,58 +252,40 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `InteriorX` float DEFAULT 0,
   `InteriorY` float DEFAULT 0,
   `InteriorZ` float DEFAULT 0,
-  `Custom_Interior` tinyint(1) DEFAULT 0,
-  PRIMARY KEY (`ID`)
+  `Custom_Interior` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `houses`:
---
-
---
--- Truncate table before insert `houses`
---
-
-TRUNCATE TABLE `houses`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `klupe`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `klupe`;
-CREATE TABLE IF NOT EXISTS `klupe` (
-  `seat_ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `klupe` (
+  `seat_ID` int(11) NOT NULL,
   `seat_x` float NOT NULL,
   `seat_y` float NOT NULL,
   `seat_z` float NOT NULL,
-  `seat_a` float NOT NULL,
-  PRIMARY KEY (`seat_ID`)
+  `seat_a` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- RELATIONSHIPS FOR TABLE `klupe`:
+-- Dumping data for table `klupe`
 --
 
---
--- Truncate table before insert `klupe`
---
+INSERT INTO `klupe` (`seat_ID`, `seat_x`, `seat_y`, `seat_z`, `seat_a`) VALUES
+(1, 1204.19, -907.003, 42.8876, 169.787),
+(3, 1468.92, -1748.95, 13.5669, 274.739),
+(4, 1925.46, -1200.3, 20.0235, 284.166);
 
-TRUNCATE TABLE `klupe`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `players`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
--- Last update: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `players`;
-CREATE TABLE IF NOT EXISTS `players` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `players` (
+  `ID` int(11) NOT NULL,
   `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
   `Password` int(11) NOT NULL,
   `Level` int(11) NOT NULL DEFAULT 1,
@@ -410,172 +299,341 @@ CREATE TABLE IF NOT EXISTS `players` (
   `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
   `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
   `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
-  `Objekat1` tinyint(4) NOT NULL DEFAULT -1,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Objekat1` tinyint(4) NOT NULL DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `players`:
---
-
---
--- Truncate table before insert `players`
---
-
-TRUNCATE TABLE `players`;
 --
 -- Dumping data for table `players`
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Vostic', 297206591, 1, 200250, 2, 21, 4, '14/06/2023 - 17:59', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
-(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1);
+(1, 'Vostic', 297206591, 1, 8550, 2, 21, 4, '02/07/2023 - 13:41', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
+(4, 'Andjelkovic', 464192652, 1, 0, 281, 22, 4, '02/07/2023 - 12:00', '26/06/2023 - 14:40', 'Srbija', 'Musko', 'andjelkovic@gmail.com', -1, -1),
+(5, 'Ogi', 336986984, 1, 0, 124, 31, 4, '02/07/2023 - 12:18', '26/06/2023 - 16:27', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
+(6, 'Blake_Owens', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 17:27', '29/06/2023 - 17:26', 'Srbija', 'Musko', '@gmail.com', 1, 1),
+(7, 'Ogishy', 225510090, 1, 2000, 250, 31, 0, '29/06/2023 - 18:22', '29/06/2023 - 18:17', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
+(8, 'Blake_Castiglione', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 18:38', '29/06/2023 - 18:36', 'Srbija', 'Musko', '@gmail.com', 1, -1),
+(9, 'bino', 141427310, 1, 0, 250, 21, 0, '29/06/2023 - 19:59', '29/06/2023 - 19:48', 'Bosna i Hercegovina', 'Musko', 'idegas@gmail.com', -1, -1),
+(10, 'Zlatan_Music', 299172650, 1, 1600, 250, 26, 0, '01/07/2023 - 08:32', '30/06/2023 - 23:38', 'Bosna i Hercegovina', 'Musko', 'zlajaavlija@gmail.com', -1, -1),
+(11, 'Bettino_Ricasoli', 190644874, 1, 2000, 250, 23, 0, '02/07/2023 - 07:23', '02/07/2023 - 07:23', 'Srbija', 'Musko', 'spaso@gmail.com', 1, -1),
+(12, 'Ronald_Trotero', 219415261, 1, 2000, 250, 30, 0, '02/07/2023 - 12:56', '02/07/2023 - 11:32', 'Bosna i Hercegovina', 'Musko', 'ronaldtrotero65@gmail.com', -1, -1),
+(13, 'adis_adis', 242615107, 1, 0, 250, 12, 0, '02/07/2023 - 12:22', '02/07/2023 - 12:22', 'Bosna i Hercegovina', 'Musko', 'adisadis@gmail.cm', -1, -1),
+(14, 'Ali_Hadzic', 68944173, 1, 2000, 250, 18, 0, '02/07/2023 - 12:25', '02/07/2023 - 12:24', 'Bosna i Hercegovina', 'Musko', 'dabdjab123@gmail.com', -1, -1),
+(15, 'daddyDOT', 96993690, 1, 2000, 250, 19, 0, '02/07/2023 - 12:53', '02/07/2023 - 12:51', 'Bosna i Hercegovina', 'Musko', 'daddy.active@aol.com', -1, -1);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `player_crypto`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
--- Last update: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `player_crypto`;
-CREATE TABLE IF NOT EXISTS `player_crypto` (
+CREATE TABLE `player_crypto` (
   `crypto_id` int(11) NOT NULL,
   `KolicinaBTC` float DEFAULT NULL,
   `KolicinaETH` float DEFAULT NULL,
   `KolicinaLTC` float DEFAULT NULL,
   `KolicinaUSDT` float DEFAULT NULL,
-  `KolicinaDOT` float DEFAULT NULL,
-  UNIQUE KEY `crypto_id` (`crypto_id`)
+  `KolicinaDOT` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `player_crypto`:
---
-
---
--- Truncate table before insert `player_crypto`
---
-
-TRUNCATE TABLE `player_crypto`;
 --
 -- Dumping data for table `player_crypto`
 --
 
 INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
 (1, 0, 0, 0, 0, 0),
-(3, 0, 0, 0, 0, 0);
+(3, 0, 0, 0, 0, 0),
+(4, 0, 0, 0, 0, 0),
+(5, 0, 0, 0, 0, 0),
+(6, 0, 0, 0, 0, 0),
+(7, 0, 0, 0, 0, 0),
+(8, 0, 0, 0, 0, 0),
+(9, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0),
+(11, 0, 0, 0, 0, 0),
+(12, 0, 0, 0, 0, 0),
+(15, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `player_documents`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
--- Last update: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `player_documents`;
-CREATE TABLE IF NOT EXISTS `player_documents` (
+CREATE TABLE `player_documents` (
   `player_id` int(11) NOT NULL,
   `NationalID` int(11) NOT NULL,
   `Passport` int(11) NOT NULL,
   `VoziloLicence` int(11) NOT NULL,
   `MotoLicence` int(11) NOT NULL,
   `BrodLicence` int(11) NOT NULL,
-  `OruzjeLicence` int(11) NOT NULL,
-  UNIQUE KEY `player_id` (`player_id`)
+  `OruzjeLicence` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `player_documents`:
---
-
---
--- Truncate table before insert `player_documents`
---
-
-TRUNCATE TABLE `player_documents`;
 --
 -- Dumping data for table `player_documents`
 --
 
 INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLicence`, `MotoLicence`, `BrodLicence`, `OruzjeLicence`) VALUES
 (1, 1, 1, 0, 0, 0, 0),
-(3, 1, 0, 0, 0, 0, 0);
+(3, 1, 0, 0, 0, 0, 0),
+(4, 0, 0, 0, 0, 0, 0),
+(5, 0, 0, 0, 0, 0, 0),
+(6, 0, 0, 0, 0, 0, 0),
+(7, 0, 0, 0, 0, 0, 0),
+(8, 0, 0, 0, 0, 0, 0),
+(9, 0, 0, 0, 0, 0, 0),
+(10, 1, 1, 0, 0, 0, 0),
+(11, 0, 0, 0, 0, 0, 0),
+(12, 0, 0, 0, 0, 0, 0),
+(15, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `player_electronic`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `player_electronic`;
-CREATE TABLE IF NOT EXISTS `player_electronic` (
+CREATE TABLE `player_electronic` (
   `player_id` int(11) NOT NULL,
   `Dron` tinyint(4) NOT NULL DEFAULT 0,
   `Baterije` int(11) NOT NULL DEFAULT 0,
-  `Navigacija` tinyint(4) NOT NULL DEFAULT 0,
-  UNIQUE KEY `player_id` (`player_id`)
+  `Navigacija` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- RELATIONSHIPS FOR TABLE `player_electronic`:
+-- Dumping data for table `player_electronic`
 --
 
---
--- Truncate table before insert `player_electronic`
---
+INSERT INTO `player_electronic` (`player_id`, `Dron`, `Baterije`, `Navigacija`) VALUES
+(1, 1, 0, 0),
+(4, 0, 0, 0),
+(5, 0, 0, 0),
+(6, 0, 0, 0),
+(7, 0, 0, 0),
+(8, 0, 0, 0),
+(9, 0, 0, 0),
+(10, 0, 0, 0),
+(11, 0, 0, 0),
+(12, 0, 0, 0),
+(15, 0, 0, 0);
 
-TRUNCATE TABLE `player_electronic`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `player_finance`
 --
--- Creation: Jun 15, 2023 at 05:19 PM
--- Last update: Jun 15, 2023 at 05:19 PM
---
 
-DROP TABLE IF EXISTS `player_finance`;
-CREATE TABLE IF NOT EXISTS `player_finance` (
+CREATE TABLE `player_finance` (
   `finance_id` int(11) NOT NULL,
   `BankAccount` tinyint(4) NOT NULL DEFAULT 0,
   `BankMoney` int(11) NOT NULL DEFAULT 0,
-  `BankPin` mediumint(9) NOT NULL DEFAULT 0,
-  UNIQUE KEY `finance_id` (`finance_id`)
+  `BankPin` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- RELATIONSHIPS FOR TABLE `player_finance`:
---
-
---
--- Truncate table before insert `player_finance`
---
-
-TRUNCATE TABLE `player_finance`;
 --
 -- Dumping data for table `player_finance`
 --
 
 INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin`) VALUES
 (1, 0, 0, 0),
-(3, 0, 0, 0);
+(4, 0, 0, 0),
+(5, 0, 0, 0),
+(6, 0, 0, 0),
+(7, 0, 0, 0),
+(8, 0, 0, 0),
+(9, 0, 0, 0),
+(10, 0, 0, 0),
+(11, 0, 0, 0),
+(12, 0, 0, 0),
+(15, 0, 0, 0);
+
+-- --------------------------------------------------------
 
 --
--- Constraints for dumped tables
+-- Table structure for table `safezones`
+--
+
+CREATE TABLE `safezones` (
+  `safeSQLID` int(11) NOT NULL,
+  `MinX` float NOT NULL DEFAULT 0,
+  `MinY` float NOT NULL DEFAULT 0,
+  `MaxX` float NOT NULL DEFAULT 0,
+  `MaxY` float NOT NULL DEFAULT 0,
+  `Radius` float NOT NULL DEFAULT 0,
+  `Color` int(11) NOT NULL DEFAULT 0,
+  `PickupX` float NOT NULL DEFAULT 0,
+  `PickupY` float NOT NULL DEFAULT 0,
+  `PickupZ` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `safezones`
+--
+
+INSERT INTO `safezones` (`safeSQLID`, `MinX`, `MinY`, `MaxX`, `MaxY`, `Radius`, `Color`, `PickupX`, `PickupY`, `PickupZ`) VALUES
+(4, 1437.3, -1723.03, 1522.43, -1600.28, 30, 10040234, 1479.35, -1659.08, 12.1709);
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Constraints for table `bank_logs`
+-- Indexes for table `bankers`
+--
+ALTER TABLE `bankers`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bank_accounts`
+--
+ALTER TABLE `bank_accounts`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bank_atms`
+--
+ALTER TABLE `bank_atms`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bank_logs`
 --
 ALTER TABLE `bank_logs`
-  ADD CONSTRAINT `bank_logs_ibfk_1` FOREIGN KEY (`AccountID`) REFERENCES `bank_accounts` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `bank_logs_ibfk_1` (`AccountID`);
+
+--
+-- Indexes for table `businesses`
+--
+ALTER TABLE `businesses`
+  ADD PRIMARY KEY (`bizID`);
+
+--
+-- Indexes for table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`carID`);
+
+--
+-- Indexes for table `faction_police`
+--
+ALTER TABLE `faction_police`
+  ADD PRIMARY KEY (`fPoliceID`),
+  ADD UNIQUE KEY `fPoliceBoss` (`fPoliceBoss`);
+
+--
+-- Indexes for table `houses`
+--
+ALTER TABLE `houses`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `klupe`
+--
+ALTER TABLE `klupe`
+  ADD PRIMARY KEY (`seat_ID`);
+
+--
+-- Indexes for table `players`
+--
+ALTER TABLE `players`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `player_crypto`
+--
+ALTER TABLE `player_crypto`
+  ADD UNIQUE KEY `crypto_id` (`crypto_id`);
+
+--
+-- Indexes for table `player_documents`
+--
+ALTER TABLE `player_documents`
+  ADD UNIQUE KEY `player_id` (`player_id`);
+
+--
+-- Indexes for table `player_electronic`
+--
+ALTER TABLE `player_electronic`
+  ADD UNIQUE KEY `player_id` (`player_id`);
+
+--
+-- Indexes for table `player_finance`
+--
+ALTER TABLE `player_finance`
+  ADD UNIQUE KEY `finance_id` (`finance_id`);
+
+--
+-- Indexes for table `safezones`
+--
+ALTER TABLE `safezones`
+  ADD PRIMARY KEY (`safeSQLID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bankers`
+--
+ALTER TABLE `bankers`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `bank_accounts`
+--
+ALTER TABLE `bank_accounts`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_atms`
+--
+ALTER TABLE `bank_atms`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `bank_logs`
+--
+ALTER TABLE `bank_logs`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `businesses`
+--
+ALTER TABLE `businesses`
+  MODIFY `bizID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `cars`
+--
+ALTER TABLE `cars`
+  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `houses`
+--
+ALTER TABLE `houses`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `klupe`
+--
+ALTER TABLE `klupe`
+  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `players`
+--
+ALTER TABLE `players`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `safezones`
+--
+ALTER TABLE `safezones`
+  MODIFY `safeSQLID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

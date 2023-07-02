@@ -26,8 +26,6 @@ new Text3D:cNametag[MAX_PLAYERS];
 hook OnGameModeInit()
 {
     print("messages/custom_tags.script loaded.");
-    // OnPlayerUpdate causes lag
-    SetTimer("UpdateNametag", 300000, true); // Trenutno nemam bolje resenje dok ne smislim (za sad proverava ime na 5 minuta)
     return 1;
 }
  
@@ -44,10 +42,10 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
 
-forward UpdateNametag();
-public UpdateNametag()
+
+task SyncName[60000]() // OnPlayerUpdate causes lag
 {
-    for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++)
+    for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++) // Trenutno nemam bolje resenje dok ne smislim (za sad proverava ime na 5 minuta)
     {
         if(IsPlayerConnected(i))
         {
@@ -56,5 +54,6 @@ public UpdateNametag()
             format(nametag, sizeof(nametag), "{%06x}%s {FFFFFF}(%i)", GetPlayerColor(i) >>> 8, playername, i);
             UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, nametag);
         }
-    }
+    }   
+    return 1;
 }

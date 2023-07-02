@@ -135,7 +135,7 @@ hook OnPlayerConnect(playerid)
 	ImaLoginTD[playerid] = false;
 
 	new query[120];
-	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'", ReturnPlayerName(playerid));
+	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountLoad", "i", playerid);
 
 	return 1;
@@ -217,7 +217,7 @@ timer Spawn_Player[100](playerid, type)
 
 			//
 			static q[ 120 ];
-			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'",ReturnDate(), ReturnPlayerName(playerid));
+			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
 			mysql_tquery(SQL, q);
 			//
 		}

@@ -25,10 +25,6 @@
 #include <a_mysql>
 #include <SKY>
 #include <weapon-config>
-#include <a_actor>
-#include <a_objects>
-#include <a_players>
-#include <a_vehicles>
 #include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>
 #include <ysilib\YSI_Coding\y_timers>
@@ -47,8 +43,9 @@
 #include <zones>
 #include <notify>
 #include <markerplus>
-#include <animated-textdraw>
+//#include <animated-textdraw>
 #include <DialogCenter>
+#include <crashdetect>
 
 
 #define     c_server        "{8dc9f3}"
@@ -99,6 +96,7 @@ main()
 
 public OnGameModeInit()
 {
+	mysql_log(ALL);
 	//!Streamer za ucitavanje mapa
 
 	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 550);
@@ -423,7 +421,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //- Messages
 
 #include "backend/messages/chat.script"							//* Chat
-#include "backend/messages/random_poruke.script"				//* Random poruke
+//#include "backend/messages/random_poruke.script"				//* Random poruke
 #include "backend/messages/notifikacije.script"					//* Notifikacije
 #include "backend/messages/custom_tags.script"					//* Custom tags iznad glave bez health bara i armora
 //-
