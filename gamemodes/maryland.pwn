@@ -42,8 +42,8 @@
 #include <distance>
 #include <zones>
 #include <notify>
-#include <markerplus>
-//#include <animated-textdraw>
+//#include <markerplus>
+#include <animated-textdraw>
 #include <DialogCenter>
 #include <crashdetect>
 
@@ -319,15 +319,15 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
 	return 1;
 }
-public OnPlayerEnterMarker(playerid, markerid) {
+// public OnPlayerEnterMarker(playerid, markerid) {
 
-	return 1;
-}
+// 	return 1;
+// }
 
-public OnPlayerLeaveMarker(playerid, markerid) {
+// public OnPlayerLeaveMarker(playerid, markerid) {
 
-	return 1;
-}
+// 	return 1;
+// }
 /*
 public OnPlayerEnterDynamicArea(playerid, areaid) 
 {
@@ -405,7 +405,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //- Factions
 
 //- State Factions
-#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+//#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
 //- Illegal Factions
 #include "backend/factions/illegal/bunker.script"				//* Bunker
@@ -421,7 +421,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //- Messages
 
 #include "backend/messages/chat.script"							//* Chat
-//#include "backend/messages/random_poruke.script"				//* Random poruke
+#include "backend/messages/random_poruke.script"				//* Random poruke
 #include "backend/messages/notifikacije.script"					//* Notifikacije
 #include "backend/messages/custom_tags.script"					//* Custom tags iznad glave bez health bara i armora
 //-
@@ -442,7 +442,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //- Assets Continue
 #include "backend/assets/labels.asset"							//* Labeli
-#include "backend/assets/custom_markers.asset"					//* Markeri
+//#include "backend/assets/custom_markers.asset"					//* Markeri
 
 //- Crossover > Koristi se kad je 31 characters hook truncated
 #include "backend/crossover/DynamicArea.csso"					//* Dynamic Area Crossover
