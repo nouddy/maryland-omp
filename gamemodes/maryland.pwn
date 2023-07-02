@@ -110,7 +110,8 @@ public OnGameModeInit()
 	DisableInteriorEnterExits();
 	ManualVehicleEngineAndLights();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
-	SetNameTagDrawDistance(20.0);
+	ShowNameTags(0);												//? Gasi Imena Health Bar i to iznad igraca
+	//SetNameTagDrawDistance(20.0);									//? Ovo se pali samo ako je show name tags na enable
 	LimitGlobalChatRadius(20.0);
 	AllowInteriorWeapons(1);
 	EnableVehicleFriendlyFire();
@@ -424,6 +425,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "backend/messages/chat.script"							//* Chat
 #include "backend/messages/random_poruke.script"				//* Random poruke
 #include "backend/messages/notifikacije.script"					//* Notifikacije
+#include "backend/messages/custom_tags.script"					//* Custom tags iznad glave bez health bara i armora
 //-
 #include "backend/messages/end/do-not-look.end"
 
