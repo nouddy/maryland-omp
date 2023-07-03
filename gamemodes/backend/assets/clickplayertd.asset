@@ -142,5 +142,9 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				"Nastavi", "Skini Objekat", ReturnPlayerName(playerid),PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
 		);
 	}
+	else if(playertextid == BinanceTD[playerid][159])
+	{
+		Dialog_Show(playerid, dialog_cryptofaq, DIALOG_STYLE_LIST, "Crypto Cesta pitanja:", "Kako ovaj system funkcionise?\nKako kupovati?\nKako prodavati?\nTest1\nTest2", "Dalje", "Izlaz");
+	}
 	return 1;
 }

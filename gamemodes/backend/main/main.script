@@ -460,6 +460,43 @@ Dialog:dialog_confirmreg(const playerid, response, listitem, string:inputtext[])
 	}
 	return (true);
 }
+
+Dialog:dialog_cryptofaq(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response)
+		return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+				cryptofaqDialog(playerid);
+			}
+			case 1:
+			{
+				print("test1");
+			}
+			case 2:
+			{
+				print("test1");
+			}
+			case 3:
+			{
+				print("test1");
+			}
+			case 4:
+			{
+				SendClientMessage(playerid, x_ogycolor, "Test2");
+			}
+			case 5:
+			{
+				SendClientMessage(playerid, x_ogycolor, "Test3");
+			}
+		}
+	}
+	return (true);
+}
 //
 stock UcitajIgracuObjekte( playerid ) {
 
