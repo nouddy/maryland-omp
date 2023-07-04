@@ -471,27 +471,19 @@ Dialog:dialog_cryptofaq(const playerid, response, listitem, string:inputtext[])
 		{
 			case 0:
 			{
-				cryptofaqDialog(playerid);
+				cryptofaqDialog(playerid, 1);
 			}
 			case 1:
 			{
-				print("test1");
+				cryptofaqDialog(playerid, 2);
 			}
 			case 2:
 			{
-				print("test1");
+				cryptofaqDialog(playerid, 3);
 			}
 			case 3:
 			{
-				print("test1");
-			}
-			case 4:
-			{
-				SendClientMessage(playerid, x_ogycolor, "Test2");
-			}
-			case 5:
-			{
-				SendClientMessage(playerid, x_ogycolor, "Test3");
+				cryptofaqDialog(playerid, 4);
 			}
 		}
 	}

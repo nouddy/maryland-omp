@@ -144,7 +144,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	}
 	else if(playertextid == BinanceTD[playerid][159])
 	{
-		Dialog_Show(playerid, dialog_cryptofaq, DIALOG_STYLE_LIST, "Crypto Cesta pitanja:", "Kako ovaj system funkcionise?\nKako kupovati?\nKako prodavati?\nTest1\nTest2", "Dalje", "Izlaz");
+		Dialog_Show(playerid, dialog_cryptofaq, DIALOG_STYLE_LIST, "Crypto Cesta pitanja:", "Kako ovaj system funkcionise?\nKako kupovati?\nKako prodavati?\nZasto bas ovo?", "Dalje", "Izlaz");
 	}
 	return 1;
 }

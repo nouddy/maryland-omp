@@ -735,9 +735,7 @@ public BuildCryptoTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, BinanceTD[playerid][58], 1);
         PlayerTextDrawSetProportional(playerid, BinanceTD[playerid][58], 1);
 
-        new btcprice[15];
-        format(btcprice, sizeof(btcprice),"%d$",CryptoPrices[BitcoinPrice]);
-        BinanceTD[playerid][59] = CreatePlayerTextDraw(playerid, 250.333557, 204.103698, btcprice);
+        BinanceTD[playerid][59] = CreatePlayerTextDraw(playerid, 250.333557, 204.103698, "29_000$");
         PlayerTextDrawLetterSize(playerid, BinanceTD[playerid][59], 0.162664, 0.654222);
         PlayerTextDrawAlignment(playerid, BinanceTD[playerid][59], 2);
         PlayerTextDrawColor(playerid, BinanceTD[playerid][59], -103663105);
@@ -1673,6 +1671,8 @@ public BuildCryptoTextDraws(playerid, bool:show)
         GledaCryptoTextdraw[playerid] = true;
 
         SelectTextDraw(playerid, CRYPTO_COLOR);
+
+        cryptoString(playerid);
     }
     else
     {
@@ -1695,6 +1695,105 @@ public BuildCryptoTextDraws(playerid, bool:show)
 
 */
 
+stock cryptoString(playerid)
+{
+    if(transactionsBTC >= 1)
+    {
+        new ogy = random(2);
+        if(ogy == 1)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][64], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][65], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][66], 16711935);
+        }
+        else if(ogy == 2)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][64], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][65], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][66], -16776961);
+        }
+    }
+    else if(transactionsUSDT >= 1)
+    {
+        new ogy = random(2);
+        if(ogy == 1)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][70], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][71], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][72], 16711935);
+        }
+        else if(ogy == 2)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][70], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][71], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][72], -16776961);
+        }
+    }
+    else if(transactionsDOT >= 1)
+    {
+        new ogy = random(2);
+        if(ogy == 1)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][73], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][74], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][75], 16711935);
+        }
+        else if(ogy == 2)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][73], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][74], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][75], -16776961);
+        }
+    }
+    else if(transactionsXRP >= 1)
+    {
+        new ogy = random(2);
+        if(ogy == 1)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][76], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][77], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][78], 16711935);
+        }
+        else if(ogy == 2)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][76], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][77], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][78], -16776961);
+        }
+    }
+    else if(transactionsLTC >= 1)
+    {
+        new ogy = random(2);
+        if(ogy == 1)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][67], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][68], 16711935);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][69], 16711935);
+        }
+        else if(ogy == 2)
+        {
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][67], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][68], -16776961);
+            PlayerTextDrawColor(playerid, BinanceTD[playerid][69], -16776961);
+        }
+    }
+
+    new btcprice[30],ltcprice[30],usdtprice[30],dotprice[30],xrpprice[30];
+
+    format(btcprice,sizeof(btcprice),"%d$",CryptoPrices[BitcoinPrice]);
+    format(ltcprice,sizeof(ltcprice),"%d$",CryptoPrices[LitecoinPrice]);
+    format(usdtprice,sizeof(usdtprice),"%d$",CryptoPrices[TetherUSPrice]);
+    format(dotprice,sizeof(dotprice),"%d$",CryptoPrices[PolkadotPrice]);
+    format(xrpprice,sizeof(xrpprice),"%d$",CryptoPrices[RipplePrice]);
+
+    PlayerTextDrawSetString(playerid, BinanceTD[playerid][59], btcprice);
+    PlayerTextDrawSetString(playerid, BinanceTD[playerid][60], ltcprice);
+    PlayerTextDrawSetString(playerid, BinanceTD[playerid][61], usdtprice);
+    PlayerTextDrawSetString(playerid, BinanceTD[playerid][62], dotprice);
+    PlayerTextDrawSetString(playerid, BinanceTD[playerid][63], xrpprice);
+
+    return (true);
+}
 stock ResetPlayersCrypto(playerid)
 {
     PlayerCrypto[playerid][countBTC] = 
@@ -1708,7 +1807,7 @@ stock ResetPlayersCrypto(playerid)
 
 stock GetcryptoPrice(crypto)
 {
-    new string[30];
+    new string[30] = "0";
 
     switch(crypto)
     {
@@ -1735,22 +1834,74 @@ stock GetcryptoPrice(crypto)
     }
     return string;
 }
-stock cryptofaqDialog(playerid)
+stock cryptofaqDialog(playerid, id)
 {
     new DialogCrypto[1500];
-    strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+    if(id == 1)
+    {
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
         
-    strcat( DialogCrypto, ""c_server"Funkcionalnost systema\n" );
-    strcat( DialogCrypto, ""c_white"- System funkcionise na osnovu crypto valuta koje 'vladaju svetom'\n");
-    strcat( DialogCrypto, ""c_white"- Crypto valute mozete prodavati/kupovati i time dodavati vecu mogucnost u rastu/padu cena istih\n");
+        strcat( DialogCrypto, ""c_server"Funkcionalnost systema\n" );
+        strcat( DialogCrypto, ""c_white"- System funkcionise na osnovu crypto valuta koje 'vladaju svetom'\n");
+        strcat( DialogCrypto, ""c_white"- Crypto valute mozete prodavati/kupovati i time dodavati vecu mogucnost u rastu/padu cena istih\n");
+        
+        strcat( DialogCrypto, ""c_white"- Sa svojim crypto valutama mozete kupovati svakakve stvari u nasem gradu i ostalim okruznim gradovima.\n");
+        strcat( DialogCrypto, ""c_white"- Komanda za system je: /crypto.\n");
+
+        strcat( DialogCrypto, ""c_server2"Za bilo koja opsirnija pitanja mozete kontaktirati admine '/report'.\n");
+
+        Dialog_Show( playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Crypto Pomoc", DialogCrypto, "Zatvori", "" );
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+    }
+    else if(id == 2)
+    {
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+        
+        strcat( DialogCrypto, ""c_server"Kako kupiti?\n" );
+        strcat( DialogCrypto, ""c_white"- System funkcionise na osnovu crypto valuta koje 'vladaju svetom'\n");
+        strcat( DialogCrypto, ""c_white"- Crypto valute mozete prodavati/kupovati i time dodavati vecu mogucnost u rastu/padu cena istih\n");
+        
+        strcat( DialogCrypto, ""c_white"- Sa svojim crypto valutama mozete kupovati svakakve stvari u nasem gradu i ostalim okruznim gradovima.\n");
+        strcat( DialogCrypto, ""c_white"- Komanda za system je: /crypto.\n");
+
+        strcat( DialogCrypto, ""c_server2"Za bilo koja opsirnija pitanja mozete kontaktirati admine '/report'.\n");
+
+        Dialog_Show( playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Crypto Pomoc", DialogCrypto, "Zatvori", "" );
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+    }
+    else if(id == 3)
+    {
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
     
-    strcat( DialogCrypto, ""c_white"- Sa svojim crypto valutama mozete kupovati svakakve stvari u nasem gradu i ostalim okruznim gradovima.\n");
-    strcat( DialogCrypto, ""c_white"- Komanda za system je: /crypto.\n");
+        strcat( DialogCrypto, ""c_server"Kako  prodati\n" );
+        strcat( DialogCrypto, ""c_white"- System funkcionise na osnovu crypto valuta koje 'vladaju svetom'\n");
+        strcat( DialogCrypto, ""c_white"- Crypto valute mozete prodavati/kupovati i time dodavati vecu mogucnost u rastu/padu cena istih\n");
+        
+        strcat( DialogCrypto, ""c_white"- Sa svojim crypto valutama mozete kupovati svakakve stvari u nasem gradu i ostalim okruznim gradovima.\n");
+        strcat( DialogCrypto, ""c_white"- Komanda za system je: /crypto.\n");
 
-    strcat( DialogCrypto, ""c_server2"Za bilo koja opsirnija pitanja mozete kontaktirati admine '/report'.\n");
+        strcat( DialogCrypto, ""c_server2"Za bilo koja opsirnija pitanja mozete kontaktirati admine '/report'.\n");
 
-    Dialog_Show( playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Crypto Pomoc", DialogCrypto, "Zatvori", "" );
-    strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+        Dialog_Show( playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Crypto Pomoc", DialogCrypto, "Zatvori", "" );
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+    }
+    else if(id == 4)
+    {
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+        
+        strcat( DialogCrypto, ""c_server"Cemu sluzi?\n" );
+        strcat( DialogCrypto, ""c_white"- System funkcionise na osnovu crypto valuta koje 'vladaju svetom'\n");
+        strcat( DialogCrypto, ""c_white"- Crypto valute mozete prodavati/kupovati i time dodavati vecu mogucnost u rastu/padu cena istih\n");
+        
+        strcat( DialogCrypto, ""c_white"- Sa svojim crypto valutama mozete kupovati svakakve stvari u nasem gradu i ostalim okruznim gradovima.\n");
+        strcat( DialogCrypto, ""c_white"- Komanda za system je: /crypto.\n");
+
+        strcat( DialogCrypto, ""c_server2"Za bilo koja opsirnija pitanja mozete kontaktirati admine '/report'.\n");
+
+        Dialog_Show( playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Crypto Pomoc", DialogCrypto, "Zatvori", "" );
+        strdel( DialogCrypto, 0, sizeof( DialogCrypto ));
+    }
+    return 1;
 }
 /*
       _____   _                                 
@@ -1788,11 +1939,11 @@ task CryptoChangePrice[60000]()
         new ogy = random(2);
         if(ogy == 1)
         {
-            CryptoPrices[TetherUSPrice] += CryptoPrices[TetherUSPrice]+random(4);
+            CryptoPrices[TetherUSPrice] += CryptoPrices[TetherUSPrice]+random(1);
         }
         else if(ogy == 2)
         {
-            CryptoPrices[TetherUSPrice] -= CryptoPrices[TetherUSPrice]-random(4);
+            CryptoPrices[TetherUSPrice] -= CryptoPrices[TetherUSPrice]-random(1);
         }
 
         va_SendClientMessageToAll(CRYPTO_COLOR, "Tether Obavestenje: {ffffff}USDT: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(3),transactionsUSDT);
@@ -1802,11 +1953,11 @@ task CryptoChangePrice[60000]()
         new ogy = random(2);
         if(ogy == 1)
         {
-            CryptoPrices[PolkadotPrice] += CryptoPrices[PolkadotPrice]+random(4);
+            CryptoPrices[PolkadotPrice] += CryptoPrices[PolkadotPrice]+random(1);
         }
         else if(ogy == 2)
         {
-            CryptoPrices[PolkadotPrice] -= CryptoPrices[PolkadotPrice]-random(4);
+            CryptoPrices[PolkadotPrice] -= CryptoPrices[PolkadotPrice]-random(1);
         }
 
         va_SendClientMessageToAll(CRYPTO_COLOR, "Polkadot Obavestenje: {ffffff}DOT: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(5),transactionsDOT);
@@ -1816,11 +1967,11 @@ task CryptoChangePrice[60000]()
         new ogy = random(2);
         if(ogy == 1)
         {
-            CryptoPrices[RipplePrice] += CryptoPrices[RipplePrice]+random(4);
+            CryptoPrices[RipplePrice] += CryptoPrices[RipplePrice]+random(1);
         }
         else if(ogy == 2)
         {
-            CryptoPrices[RipplePrice] -= CryptoPrices[RipplePrice]-random(4);
+            CryptoPrices[RipplePrice] -= CryptoPrices[RipplePrice]-random(1);
         }
 
         va_SendClientMessageToAll(CRYPTO_COLOR, "Ripple Obavestenje: {ffffff}XRP: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(2),transactionsXRP);
@@ -1865,4 +2016,13 @@ YCMD:crypto(const playerid, params[], help)
         BuildCryptoTextDraws(playerid, true);
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+YCMD:kurac(playerid,params[],help)
+{
+    new string[40];
+
+    format(string,sizeof(string),"%d",CryptoPrices[BitcoinPrice]);
+
+    printf("%f",floatstr(string));
+    return 1;
 }
