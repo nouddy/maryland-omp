@@ -151,6 +151,7 @@ YCMD:sveh(playerid, params[], help)
 		SetVehicleNumberPlate(vehicleid, "STAFF");
 		PutPlayerInVehicle(playerid, vehicleid, 0);
 		ChangeVehicleColor(vehicleid, 0, 0);
+		SetCameraBehindPlayer(playerid);
 		
 	    new engine, lights, alarm, doors, bonnet, boot, objective;
 	    GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
@@ -388,7 +389,7 @@ YCMD:xgoto(playerid, params[], help)
 
 	static fmt_string[100];
 
-	if (sscanf(params, "fff", x, y, z)) notification.Show(playerid, "KORISCENJE", "xgoto <X Float> <Y Float> <Z Float>", "+", BOXCOLOR_BLUE);
+	if (sscanf(params, "P<,>fff", x, y, z)) notification.Show(playerid, "KORISCENJE", "xgoto <X Float> <Y Float> <Z Float>", "+", BOXCOLOR_BLUE);
 	else
 	{
 		if(IsPlayerInAnyVehicle(playerid))

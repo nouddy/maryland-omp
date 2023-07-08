@@ -184,10 +184,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
-				Dialog_Show(playerid, "kreiraj_kucu", DIALOG_STYLE_INPUT,
-					"Kreiraj kucu",
-					"Unesi deskripciju i cenu kuce",
-					"Odaberi", "Izlaz");
+				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Insanity - Kucu Kreiraj:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila\n04\tDonatorska Kuca\n", "Dalje", "Izlaz");
 			}
 			case 1:
 			{
@@ -383,21 +380,30 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
-				new HouseID = GetNearbyHouse(playerid);
-				if(HouseID == MAX_HOUSES) return SendPlayerNotify(playerid, "Greska", "Moras biti na pickupu kuce", 1);
-				new Query[60];
-				mysql_format(SQL, Query, sizeof(Query), "DELETE FROM `houses` WHERE ID = %i",HouseID);
-				mysql_tquery(SQL, Query, "OnDeleteHouse","ii",playerid,HouseID);
+				new id = GetNearestHouse(playerid);
+				if(id == -1)
+					return SendErrorMessage(playerid, "Nema kuca u blizini.");
+
+				if(!Iter_Contains(Kuce, id))
+					return SendErrorMessage(playerid, "Ta kuca je vec obrisana.");
+
+				new szQuery[128];
+			    format(szQuery, sizeof szQuery, "UPDATE `player_property` SET `HouseID` ='-1' WHERE `HouseID` = '%d'", id);
+			    mysql_tquery(SQL, szQuery);
+
+				House_Delete(id);
+				Iter_Remove(Kuce, id);
+
+				SendClientMessage(playerid, x_server, "Uspesno ste obrisali kucu.");
 
 				return Y_HOOKS_CONTINUE_RETURN_1;
 			}
 			case 1:
 			{
-				if(PlayerInfo[playerid][Staff] < 4) return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
-				if(TotalHouses == 0) return SendPlayerNotify(playerid, "Info", "Vec ima 0 kuca u bazi", 2);
-				new Query[60];
-				mysql_format(SQL, Query, sizeof(Query), "DELETE FROM `houses`");
-				mysql_tquery(SQL, Query, "OnDeleteAllHouses","i",playerid);
+				SendClientMessage(playerid, x_server, "Trenutno Nema.");
+				// new Query[60];
+				// mysql_format(SQL, Query, sizeof(Query), "DELETE FROM `houses`");
+				// mysql_tquery(SQL, Query, "OnDeleteAllHouses","i",playerid);
 
 				return Y_HOOKS_CONTINUE_RETURN_1;	
 			}

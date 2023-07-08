@@ -384,6 +384,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 
 //- Property
 #include "backend/property/houses.script"						//* Imovina
+#include "backend/property/pproperty.script"					//* Player Property
 //-
 #include "backend/property/end/do-not-look.end"
 
@@ -474,17 +475,19 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/exterior/bizcent-ext.map"					//* Shopping Center Mapa
 #include "frontend/exterior/centar_park.map"					//* Center Park Mapa
 #include "frontend/exterior/binance_ext.map"					//* Binance Exterior Mapa
+#include "frontend/exterior/poligon-as.map"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
+#include "frontend/exterior/croswellas.map"						//* Auto Salon Croswell
+#include "frontend/exterior/birorada.map"						//* Biro Rada
 
 //- Interiors
-#include "frontend/interior/opstina-int.map"					//* Opstina int map
+#include "frontend/interior/opstina-int.map"					//* Opstina int map (vw > 5 | interior 5)
 #include "frontend/interior/flecca-bank.map"					//* Flecca bank map
-#include "frontend/interior/garaza.map"							//* Garaza mapa
-#include "frontend/interior/apartman.map"						//* Apartman map
-#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map
-#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa
+#include "frontend/interior/garaza.map"							//* Garaza mapa (vw > 2 | interior 2)
+#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map (vw > 3 | interior 3)
+#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa (vw > 6 | interior 6)
 #include "frontend/interior/login_map.map"						//* Login Soba Mapa
-#include "frontend/interior/bizcent-int.map"					//* Login Soba Mapa
-#include "frontend/interior/hotel-int.map"						//* Login Soba Mapa
+#include "frontend/interior/bizcent-int.map"					//* Biz centar interior (vw > 4 | interior 4)
+#include "frontend/interior/hotel-int.map"						//* Hotel interior (vw > 7 | interior 7)
 
 //-
 #include "frontend/end/do-not-look.end"

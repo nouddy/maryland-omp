@@ -450,7 +450,7 @@ Business_Create(playerid, type, price)
 
     if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
     {
-        for (new i = 0; i != MAX_HOUSES; i ++)
+        for (new i = 0; i != MAX_BUSINESS; i ++)
         {
             if (!BusinessData[i][bizExists])
             {
