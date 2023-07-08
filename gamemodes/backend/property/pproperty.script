@@ -47,7 +47,7 @@ public LoadPlayerProperty(playerid)
     }
 }
 
-YCMD:kupikucu(playerid, params[], help)
+YCMD:buyhouse(playerid, params[], help)
 {
 	new id = GetNearestHouse(playerid);
 
