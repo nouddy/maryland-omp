@@ -34,6 +34,7 @@ enum H_House
 	houseID,
 	bool:houseExists,
 	houseOwner,
+	houseAdd[50],
 	housePrice,
 	houseType,
 	Float:housePos[4],
@@ -84,7 +85,7 @@ Dialog:dialog_kreirajkucu(playerid, response, listitem, inputtext[])
 		HouseData[id][houseType] = listitem+1;
 		KreiraTypeID[playerid] = HouseData[id][houseType];
 
-		Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Insanity - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
+		Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Maryland - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
 	}
 	return (true);
 }
@@ -98,7 +99,7 @@ Dialog:dialog_kreirajkucucena(playerid, response, listitem, inputtext[])
 		new Float:Pozicija[4];
 		new kolicina;
 		if(sscanf(inputtext, "d", kolicina))
-			return Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Insanity - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
+			return Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Maryland - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
 
 		if(kolicina < 1 || kolicina > 50000000) 
 			return SendClientMessage(playerid, x_red, "Iznos cene ove kuce ne moze biti ispod 1 a iznad 50.000.000$"); 
@@ -228,6 +229,7 @@ public House_Load()
 		cache_get_value_name_int(i, "SQLID", id);
 		HouseData[id][houseExists] = true;
 	    cache_get_value_name_int(i, "OwnerID", HouseData[id][houseOwner]);
+		cache_get_value_name(i, "Address", HouseData[id][houseAdd], 50);
 	    cache_get_value_name_int(i, "Price", HouseData[id][housePrice]);
 	    cache_get_value_name_int(i, "Type", HouseData[id][houseType]);
 	    cache_get_value_name_float(i, "PosX", HouseData[id][housePos][0]);
@@ -257,8 +259,9 @@ House_Save(houseid)
 	new
 	    query[650];
 
-	format(query, sizeof(query), "UPDATE `houses` SET `OwnerID` = '%d', `Price` = '%d', `Type` = '%d', `PosX` = '%f', `PosY` = '%f', `PosZ` = '%f', `PosA` = '%f', `IntX` = '%f', `IntY` = '%f', `IntZ` = '%f', `IntA` = '%f', `InteriorID` = '%d', `ExteriorInt` = '%d', `ExteriorVw` = '%d', `Locked` = '%d', `InteriorVw` = '%d' WHERE `SQLID` = '%d'",
+	format(query, sizeof(query), "UPDATE `houses` SET `OwnerID` = '%d', `Address`, `Price` = '%d', `Type` = '%d', `PosX` = '%f', `PosY` = '%f', `PosZ` = '%f', `PosA` = '%f', `IntX` = '%f', `IntY` = '%f', `IntZ` = '%f', `IntA` = '%f', `InteriorID` = '%d', `ExteriorInt` = '%d', `ExteriorVw` = '%d', `Locked` = '%d', `InteriorVw` = '%d' WHERE `SQLID` = '%d'",
 	    HouseData[houseid][houseOwner],
+		HouseData[houseid][houseAdd],
 	    HouseData[houseid][housePrice],
 	    HouseData[houseid][houseType],
 	    HouseData[houseid][housePos][0],
@@ -340,12 +343,17 @@ House_Create(playerid, Float:Xx, Float:Yy, Float:Zz, Float:Angle, price, Type)
 
 			HouseData[i][houseLocked] = false;
 
+			new zone[28], add[50];
+			GetPlayer2DZone(playerid, zone, sizeof(zone));
+			format(add, sizeof(add), "%d, %s, Maryland",id, zone);
+			strmid(HouseData[i][houseAdd], add, 0, sizeof(add), 255);
+
 			House_Label(i);
 			static q[900];
 			mysql_format(SQL, q, sizeof(q),
-			    "INSERT INTO `houses` (`OwnerID`, `Price`, `Type`, `PosX`, `PosY`, `PosZ`, `PosA`, `IntX`, `IntY`, `IntZ`, `IntA`, `InteriorVw`, `InteriorID`, `ExteriorInt`, `ExteriorVw`, `Locked`) \
+			    "INSERT INTO `houses` (`OwnerID`, `Address`, `Price`, `Type`, `PosX`, `PosY`, `PosZ`, `PosA`, `IntX`, `IntY`, `IntZ`, `IntA`, `InteriorVw`, `InteriorID`, `ExteriorInt`, `ExteriorVw`, `Locked`) \
 				 VALUES('%d','%d','%d','%f','%f','%f','%f', '%f', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d')", 
-				 HouseData[i][houseOwner],HouseData[i][housePrice],HouseData[i][houseType],HouseData[i][housePos][0],HouseData[i][housePos][1],HouseData[i][housePos][2],HouseData[i][housePos][3],HouseData[i][housePosInt][0],HouseData[i][housePosInt][1],
+				 HouseData[i][houseOwner],add,HouseData[i][housePrice],HouseData[i][houseType],HouseData[i][housePos][0],HouseData[i][housePos][1],HouseData[i][housePos][2],HouseData[i][housePos][3],HouseData[i][housePosInt][0],HouseData[i][housePosInt][1],
 				 HouseData[i][housePosInt][2],HouseData[i][housePosInt][3],HouseData[i][houseInteriorVW],HouseData[i][houseInterior], HouseData[i][houseExterior],HouseData[i][houseExteriorVW],HouseData[i][houseLocked]);
 
 			mysql_pquery(SQL, q, "OnHouseCreated", "d", i);
@@ -384,13 +392,13 @@ public House_Label(id)
 
 		if(HouseData[id][houseOwner]) {
 			new string[200];
-			format( string, sizeof( string ), "   » {ffffff}KUCA[%d]{DC578C} «   \n{ffffff}Tip Kuce:{DC578C} %s\n{ffffff}Cena Kuce:{DC578C} %d$\n",id,getKucaType(HouseData[id][houseType]), HouseData[id][housePrice]);
+			format( string, sizeof( string ), "   » {ffffff}KUCA[%d]{DC578C} «   \n{ffffff}Adresa:{DC578C} %s\n{ffffff}Tip Kuce:{DC578C} %s",id, HouseData[id][houseAdd], getKucaType(HouseData[id][houseType]));
 			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, 0xDC578CFF, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
 		}
 		else
 		{			
 			new string[200];
-			format( string, sizeof( string ), "   » {ffffff}KUCA[%d]{DC578C} «   \n{ffffff}Tip Kuce:{DC578C} %s\n{ffffff}Cena Kuce:{DC578C} %d$\n{DC578C}'/kupikucu'",id,getKucaType(HouseData[id][houseType]), HouseData[id][housePrice]);
+			format( string, sizeof( string ), "   » {ffffff}KUCA[%d]{DC578C} «   \n{ffffff}Adresa:{DC578C} %s\n{ffffff}Tip Kuce:{DC578C} %s\n{ffffff}Cena Kuce:{DC578C} %d$\n{DC578C}'/kupikucu'",id, HouseData[id][houseAdd], getKucaType(HouseData[id][houseType]), HouseData[id][housePrice]);
 			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, 0xDC578CFF, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
 		}
 		HouseData[id][housePickup] = CreateDynamicPickup( 1273, 1, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2]);

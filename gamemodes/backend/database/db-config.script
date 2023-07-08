@@ -19,7 +19,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define local
+#define server
 
 #if defined server
 #define MYSQL_HOST		"db.wtf-company.wtf"

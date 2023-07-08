@@ -70,7 +70,7 @@ YCMD:kupikucu(playerid, params[], help)
 	House_Label(id);
 	House_Save(id);
 
-    VosticGiveMoney(playerid, HouseData[id][housePrice]);
+    VosticGiveMoney(playerid, -HouseData[id][housePrice]);
 
     va_SendClientMessage(playerid, x_server, "Uspesno ste kupili kucu za %s",FormatNumber(HouseData[id][housePrice]));
 	return (true);
