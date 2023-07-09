@@ -118,64 +118,6 @@ Dialog:dialog_kreirajkucucena(playerid, response, listitem, inputtext[])
 	return (true);
 }
 
-Dialog:dialog_kucaodabir(playerid, response, listitem, inputtext[])
-{
-	if(!response) return OdabraoKucu[playerid] = -1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0:
-			{
-				new id = OdabraoKucu[playerid];
-				if(inProperty[playerid] == -1)
-					return SendClientMessage(playerid, x_red, "Niste u kuci.");
-
-				new zakljucan[30];
-				if(HouseData[id][houseLocked] == false) zakljucan = "Opened"; else zakljucan = "Locked";
-				new string[200];
-				format(string,sizeof(string),"{65FEAF}Informacije o kuci\n\t"c_white"Vlasnik Kuce: %s\n\tID Kuce: %d\n\tStatus vrata: %s\n\t"c_white"Cena kuce: %s",ReturnPlayerName(playerid),id,zakljucan,FormatNumber(HouseData[id][housePrice]));
-				Dialog_Show(playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Informacije o kuci", string, "Nazad", "");
-				OdabraoKucu[playerid] = -1;
-			}
-			case 1:
-			{
-				new id = OdabraoKucu[playerid];
-
-				if(IsPlayerInRangeOfPoint(playerid, 2.0, HouseData[id][housePos][0],HouseData[id][housePos][1],HouseData[id][housePos][2]) || inProperty[playerid] == id)
-				{
-					if (!HouseData[id][houseLocked])
-					{
-						HouseData[id][houseLocked] = true;
-						House_Save(id);
-						House_Label(id);
-
-						SendClientMessage(playerid, x_server, "Uspesno ste zakljucali vasu kucu.");
-						PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
-						OdabraoKucu[playerid] = -1;
-					}
-					else
-					{
-						HouseData[id][houseLocked] = false;
-						House_Save(id);
-						House_Label(id);
-
-						SendClientMessage(playerid, x_server, "Uspesno ste otkljucali vasu kucu.");
-						PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
-						OdabraoKucu[playerid] = -1;
-					}
-				}
-
-			}
-			case 2 .. 4:
-			{
-				return SendClientMessage(playerid, x_red, "Trenutno nedostupno.");
-			}
-		}
-	}
-	return (true);
-}
-
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if( newkeys == KEY_SECONDARY_ATTACK )
@@ -400,9 +342,9 @@ public House_Label(id)
 			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, x_server, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
 		}
 		else
-		{			
+		{
 			new string[200];
-			format( string, sizeof( string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%d$ "c_white"«\n"c_white"'/buyhouse'",id, getKucaType(HouseData[id][houseType]), HouseData[id][houseAdd], HouseData[id][housePrice]);
+			format( string, sizeof( string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'",id, getKucaType(HouseData[id][houseType]), HouseData[id][houseAdd], FormatNumber(HouseData[id][housePrice]));
 			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, x_server, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
 		}
 		HouseData[id][housePickup] = CreateDynamicPickup( 1273, 1, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2]);

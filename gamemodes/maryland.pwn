@@ -81,7 +81,7 @@
 main()
 {
     print("-                                     -");
-	print(" Founder : Ogy & Lasee");
+	print(" Founder : Ogy");
 	print(" Version : 1.0 - Maryland");
 	print(" Developer : Vostic & Ogy_ ");
 	print(" Credits : daddyDOT, realnaith");
