@@ -146,5 +146,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		Dialog_Show(playerid, dialog_cryptofaq, DIALOG_STYLE_LIST, "Crypto Cesta pitanja:", "Kako ovaj system funkcionise?\nKako kupovati?\nKako prodavati?\nZasto bas ovo?", "Dalje", "Izlaz");
 	}
+	else if(playertextid == BinanceTD[playerid][149])
+	{
+		Dialog_Show(playerid, dialog_kupibtc, DIALOG_STYLE_INPUT, "Kupovina BTC", "Upisite kolicinu koju zelite da kupite:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+	}
+	else if(playertextid == BinanceTD[playerid][154])
+	{
+		Dialog_Show(playerid, dialog_prodajbtc, DIALOG_STYLE_INPUT, "Prodaja BTC", "Upisite kolicinu koju zelite da prodate:\n\n** CENA BITCOINA VARIRA PROVERITE PRE PRODAJE.", "Dalje", "Izlaz");
+	}
 	return 1;
 }

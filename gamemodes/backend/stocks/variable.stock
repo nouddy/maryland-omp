@@ -32,6 +32,7 @@ ResetujVariable(playerid)
     PlayerInfo[playerid][SQLID] = 0;
     PlayerInfo[playerid][Level] = 1;
     PlayerInfo[playerid][Staff] = 0;
+    PlayerInfo[playerid][pBiznisID] = -1;
     // Documents of player
     PlayerDocuments[playerid][pNationalID] = 0;
     PlayerDocuments[playerid][pPassport] = 0;

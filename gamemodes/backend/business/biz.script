@@ -231,12 +231,6 @@ Business_ProductMenu(playerid, bizid)
         }
         case 7:
         {
-            string[0] = 0;
-
-            for (new i = 0; i < sizeof(g_aFurnitureTypes); i ++) {
-                format(string, sizeof(string), "%s%s - %s\n", string, g_aFurnitureTypes[i], FormatNumber(BusinessData[bizid][bizPrices][i]));
-            }
-            Dialog_Show(playerid, EditProduct, DIALOG_STYLE_LIST, "Business: Modify Item", string, "Modify", "Cancel");
         }
     }
     return 1;
@@ -313,12 +307,6 @@ Business_PurchaseMenu(playerid, bizid)
         }
         case 7:
         {
-            string[0] = 0;
-
-            for (new i = 0; i < sizeof(g_aFurnitureTypes); i ++) {
-                format(string, sizeof(string), "%s%s - %s\n", string, g_aFurnitureTypes[i], FormatNumber(BusinessData[bizid][bizPrices][i]));
-            }
-            Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_LIST, BusinessData[bizid][bizName], string, "Purchase", "Cancel");
         }
     }
     return 1;
@@ -394,11 +382,11 @@ Business_Refresh(bizid)
             DestroyDynamicPickup(BusinessData[bizid][bizDeliverPickup]);
 
         static
-            string[128],
+            string[150],
             pickup;
 
         if (!BusinessData[bizid][bizOwner]) {
-            format(string, sizeof(string), "» Biznis("c_white"%d"c_server")\n» Cena biznisa: "c_white"%s\n"c_server"» Opis biznisa: "c_white"%s",bizid, FormatNumber(BusinessData[bizid][bizPrice]), BusinessData[bizid][bizName]);
+            format(string, sizeof(string), "» Biznis("c_white"%d"c_server")\n» Cena biznisa: "c_white"%s\n"c_server"» Opis biznisa: "c_white"%s\n"c_server"» Kupovina: "c_white"/kupibiznis",bizid, FormatNumber(BusinessData[bizid][bizPrice]), BusinessData[bizid][bizName]);
             BusinessData[bizid][bizText3D] = CreateDynamic3DTextLabel(string, x_server, BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, BusinessData[bizid][bizExteriorVW], BusinessData[bizid][bizExterior]);
         }
         else
@@ -412,13 +400,13 @@ Business_Refresh(bizid)
             BusinessData[bizid][bizText3D] = CreateDynamic3DTextLabel(string, (BusinessData[bizid][bizLocked]) ? (x_red) : (x_white), BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, BusinessData[bizid][bizExteriorVW], BusinessData[bizid][bizExterior]);
         }
         switch (BusinessData[bizid][bizType]) {
-            case 1: pickup = 1272;
-            case 2: pickup = 348;
-            case 3: pickup = 1275;
-            case 4: pickup = 19094;
-            case 5: pickup = 1274;
-            case 6: pickup = 1650;
-            case 7: pickup = 2096;
+            case 1: pickup = 19132;
+            case 2: pickup = 19132;
+            case 3: pickup = 19132;
+            case 4: pickup = 19132;
+            case 5: pickup = 19132;
+            case 6: pickup = 19132;
+            case 7: pickup = 19132;
         }
         if (BusinessData[bizid][bizType] == 6) {
             BusinessData[bizid][bizPickup] = CreateDynamicPickup(pickup, 23, BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2] + 0.3, BusinessData[bizid][bizExteriorVW], BusinessData[bizid][bizExterior]);
@@ -603,7 +591,7 @@ Business_Create(playerid, type, price)
                 BusinessData[i][bizExterior] = GetPlayerInterior(playerid);
                 BusinessData[i][bizExteriorVW] = GetPlayerVirtualWorld(playerid);
 
-                BusinessData[i][bizLocked] = true;
+                BusinessData[i][bizLocked] = false;
                 BusinessData[i][bizVault] = 0;
                 BusinessData[i][bizProducts] = 100;
                 BusinessData[i][bizShipment] = 0;
@@ -645,7 +633,7 @@ Business_IsOwner(playerid, bizid)
     if (PlayerInfo[playerid][SQLID] == -1)
         return 0;
 
-    if (BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] == 99999999 && PlayerData[playerid][Staff] > 0)
+    if (BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] == 99999999 && PlayerInfo[playerid][Staff] > 0)
         return 1;
 
     if ((BusinessData[bizid][bizExists] && BusinessData[bizid][bizOwner] != 0) && BusinessData[bizid][bizOwner] == PlayerInfo[playerid][SQLID])
@@ -653,6 +641,95 @@ Business_IsOwner(playerid, bizid)
 
     return 0;
 }
+Business_Inside(playerid)
+{
+    if (PlayerInfo[playerid][pBiznisID] != -1)
+    {
+        for (new i = 0; i != MAX_BUSINESS; i ++) if (BusinessData[i][bizExists] && BusinessData[i][bizID] == PlayerInfo[playerid][pBiznisID] && GetPlayerInterior(playerid) == BusinessData[i][bizInterior] && GetPlayerVirtualWorld(playerid) > 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+Business_Dialog(playerid)
+{
+    Dialog_Show(playerid, dialog_biznis, DIALOG_STYLE_LIST, "Biznis Opcije", "Informacije o biznisu\nOtkljucan/Zakljucaj biznis\nPromeni cenu produkata\nPromeni ime biznisa\nPromeni biznis poruku", "Dalje", "Izlaz");
+    return 1;
+}
+
+//===========================================================
+
+Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+    if(response)
+    {
+        switch(listitem)
+        {                
+            case 0:
+            {
+                new
+                    id = -1;
+
+                if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id)) {
+                    va_SendClientMessage(playerid, x_ogycolor,"ID: %d | Business: %s | Products: %d | Vault: %s", id, BusinessData[id][bizName], BusinessData[id][bizProducts], FormatNumber(BusinessData[id][bizVault]));
+                }
+                else SendClientMessage(playerid, x_ogycolor,"You are not in range of your business.");
+            }
+            case 1:
+            {
+                static
+                    id = -1;
+                if (!IsPlayerInAnyVehicle(playerid) && (id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1)
+                {
+                    if (Business_IsOwner(playerid, id))
+                    {
+                        if (!BusinessData[id][bizLocked])
+                        {
+                            BusinessData[id][bizLocked] = true;
+
+                            Business_Refresh(id);
+                            Business_Save(id);
+
+                            SendClientMessage(playerid, x_ogycolor, "> Zakljucali ste biznis.");
+                            PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+                        }
+                        else
+                        {
+                            BusinessData[id][bizLocked] = false;
+
+                            Business_Refresh(id);
+                            Business_Save(id);
+
+                            SendClientMessage(playerid, x_ogycolor, "> Otkljucali ste biznis.");
+                            PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+                        }
+                    }
+                }
+            }
+            case 2:
+            {
+                static
+                    id = -1;
+                if ((id = Business_Inside(playerid)) != -1 && Business_IsOwner(playerid, id)) {
+                    Business_ProductMenu(playerid, id);
+                }
+                else SendClientMessage(playerid, x_ogycolor,"Niste u enterijeru biznisa.");
+            }
+            case 3:
+            {
+
+            }
+            case 4:
+            {
+
+            }
+        }
+    }
+    return 1;
+}
+//===========================================================
 stock GetBusinessByID(sqlid)
 {
     for (new i = 0; i != MAX_BUSINESSES; i ++) if (BusinessData[i][bizExists] && BusinessData[i][bizID] == sqlid)
@@ -670,4 +747,61 @@ public OnBusinessCreated(bizid)
     Business_Save(bizid);
 
     return 1;
+}
+YCMD:kupibiznis(const playerid, params[], help)
+{
+    new id = Business_Nearest(playerid);
+
+    if(id == -1)
+        return SendClientMessage(playerid, x_red,"Pored vas nema ni jedan biznis.");
+
+    if (Business_GetCount(playerid) >= 1)
+        return SendClientMessage(playerid, x_red,"Vi mozete posedovati samo 1 biznis.");
+
+    if (BusinessData[id][bizOwner] != 0)
+        return SendClientMessage(playerid, x_red,"Ovaj biznis vec ima vlasnika.");
+
+    if (BusinessData[id][bizPrice] > PlayerInfo[playerid][Novac])
+        return SendClientMessage(playerid, x_red,"Nemate dovoljno novca.");
+
+    BusinessData[id][bizOwner] = GetPlayerSQLID(playerid);
+
+    Business_Refresh(id);
+    Business_Save(id);
+
+    VosticGiveMoney(playerid, -BusinessData[id][bizPrice]);
+    va_SendClientMessage(playerid, x_ogycolor,"You have purchased \"%s\" for %s!", BusinessData[id][bizName], FormatNumber(BusinessData[id][bizPrice]));
+
+    //ShowPlayerFooter(playerid, "You have ~g~purchased~w~ a business!");
+    return (true);
+}
+YCMD:kupi(const playerid, params[], help)
+{
+    new id = Business_Inside(playerid);
+    if(id == -1)
+        return SendClientMessage(playerid, x_red,"Niste unutar biznisa.");
+
+
+    if (BusinessData[id][bizLocked] != 0 || !BusinessData[id][bizOwner])
+            return SendErrorMessage(playerid, "This business is closed!");
+
+    if (BusinessData[id][bizType] == 5) {
+        SendClientMessage(playerid, x_red, "Ovde je za auto salon.");
+    } else {
+        Business_PurchaseMenu(playerid, id);
+    }
+
+    return (true);
+}
+YCMD:biznis(const playerid, params[], help)
+{
+    static
+        biznis = -1;
+
+    if ((biznis = Business_Inside(playerid)) != -1 && Business_IsOwner(playerid, biznis)) {
+        Business_Dialog(playerid);
+    }
+    else SendClientMessage(playerid, x_red,"Niste unutar svog biznisa.");
+
+    return (true);
 }

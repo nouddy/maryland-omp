@@ -55,7 +55,8 @@ enum PlayerInformation
 	Email[50],
 	Drzava[50],
 	Pol[10],
-	AttachedObject[2]
+	AttachedObject[2],
+	pBiznisID
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 

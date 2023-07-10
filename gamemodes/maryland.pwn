@@ -450,6 +450,11 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 //-
 #include "backend/crossover/end/do-not-look.end"
 
+//- Entrance > Koristi se za sve sto igrac uradi - Ulazi/Izlazi iz firmi biznisa, kuca itd
+#include "backend/entrance/ulazi-izlazi.entrance"					//* Ulazi
+//-
+#include "backend/entrance/end/do-not-look.end"
+
 //- Frontend
 
 //- Textdraws

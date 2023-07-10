@@ -2015,14 +2015,26 @@ YCMD:crypto(const playerid, params[], help)
     {
         BuildCryptoTextDraws(playerid, true);
     }
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-YCMD:kurac(playerid,params[],help)
-{
-    new string[40];
-
-    format(string,sizeof(string),"%d",CryptoPrices[BitcoinPrice]);
-
-    printf("%f",floatstr(string));
     return 1;
+}
+/*
+      ____    _           _                       
+     |  _ \  (_)   __ _  | |   ___     __ _   ___ 
+     | | | | | |  / _` | | |  / _ \   / _` | / __|
+     | |_| | | | | (_| | | | | (_) | | (_| | \__ \
+     |____/  |_|  \__,_| |_|  \___/   \__, | |___/
+                                      |___/       
+*/
+
+
+Dialog:dialog_kupibtc(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+
+    }
+    return (true);
 }
