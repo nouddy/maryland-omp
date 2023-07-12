@@ -15,6 +15,8 @@
  *
  *  @File           crypto_ogy.script
  *  @Module         crypto
+ * 
+ * CalculatorCryptoPlayer(id igraca kojem se racuna, kolicina za klk je kupio crypto, i id kripto valute(1 - btc, etc))
  */
 
 #include <ysilib\YSI_Coding\y_hooks>
@@ -128,20 +130,6 @@ hook OnPlayerConnect(playerid)
     return (true);
 }
 
-/*
-hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
-{
-    if(playertextid == BinanceTD[playerid][149])
-    {
-        print("btc");
-    }
-    else if(playertextid == BinanceTD[playerid][150])
-    {
-        print("ltc");
-    }
-    return 1;
-}
-*/
 /*
       _____                          _     _                       
      |  ___|  _   _   _ __     ___  | |_  (_)   ___    _ __    ___ 
@@ -1805,35 +1793,6 @@ stock ResetPlayersCrypto(playerid)
     GledaCryptoTextdraw[playerid] = false;
 }
 
-stock GetcryptoPrice(crypto)
-{
-    new string[30] = "0";
-
-    switch(crypto)
-    {
-        case 1: {
-
-            format(string,sizeof(string),"%d",CryptoPrices[BitcoinPrice]);
-        }
-        case 2:
-        {
-            format(string,sizeof(string),"%d",CryptoPrices[RipplePrice]);
-        }
-        case 3:
-        {
-            format(string,sizeof(string),"%d",CryptoPrices[TetherUSPrice]);
-        }
-        case 4:
-        {
-            format(string,sizeof(string),"%d",CryptoPrices[LitecoinPrice]);
-        }
-        case 5:
-        {
-            format(string,sizeof(string),"%d",CryptoPrices[PolkadotPrice]);
-        }
-    }
-    return string;
-}
 stock cryptofaqDialog(playerid, id)
 {
     new DialogCrypto[1500];
@@ -1903,6 +1862,102 @@ stock cryptofaqDialog(playerid, id)
     }
     return 1;
 }
+
+stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
+{
+    new Float:dobija;
+    switch(idcrypta)
+    {
+        case 1:
+        {
+            // btc
+
+            dobija = float(CryptoPrices[BitcoinPrice]);
+
+            printf("%.3f",kolicina / dobija);
+            PlayerCrypto[playerid][countBTC] += kolicina / dobija;
+
+            va_SendClientMessage(playerid, x_ogycolor, "%.3f",kolicina / dobija);
+
+            transactionsBTC++;
+            transactions++;
+        }
+        case 2:
+        {
+            // ltc
+            dobija = float(CryptoPrices[LitecoinPrice]);
+
+            printf("%.3f",kolicina / dobija);
+            PlayerCrypto[playerid][countLTC] += kolicina / dobija;
+
+            va_SendClientMessage(playerid, x_ogycolor, "%.3f",kolicina / dobija);
+
+            transactionsLTC++;
+            transactions++;
+        }
+        case 3:
+        {
+            // dot
+
+            dobija = float(CryptoPrices[PolkadotPrice]);
+
+            printf("%.3f",kolicina / dobija);
+            PlayerCrypto[playerid][countDOT] += kolicina / dobija;
+
+            va_SendClientMessage(playerid, x_ogycolor, "%.3f",kolicina / dobija);
+
+            transactionsDOT++;
+            transactions++;
+        }
+        case 4:
+        {
+            // ripple
+
+            dobija = float(CryptoPrices[RipplePrice]);
+
+            printf("%.3f",kolicina / dobija);
+            PlayerCrypto[playerid][countXRP] += kolicina / dobija;
+
+            va_SendClientMessage(playerid, x_ogycolor, "%.3f",kolicina / dobija);
+
+            transactionsXRP++;
+            transactions++;
+        }
+        case 5:
+        {
+            // usdt
+
+            dobija = float(CryptoPrices[TetherUSPrice]);
+
+            printf("%.3f",kolicina / dobija);
+            PlayerCrypto[playerid][countUSDT] += kolicina / dobija;
+
+            va_SendClientMessage(playerid, x_ogycolor, "%.3f",kolicina / dobija);
+
+            transactionsUSDT++;
+            transactions++;
+        }
+    }
+    SaveCryptoPlayer(playerid);
+    return (true);
+}
+
+stock CryptoLookupPlayer(const playerid)
+{
+    new string[350];
+    format(
+        string,
+        sizeof(string),
+        "{D6F481}Kolicina BTC:\t{ffffff}%f\n{D6F481}Kolicina LTC:\t{ffffff}%f\n{D6F481}Kolicina XRP\t{ffffff}%f\n{D6F481}Kolicina DOT\t{ffffff}%f\n{D6F481}Kolicina USDT\t{ffffff}%f\n\n\n\t{D6F481}Made by {121212}Ogy_",
+        PlayerCrypto[playerid][countBTC],
+        PlayerCrypto[playerid][countLTC],
+        PlayerCrypto[playerid][countXRP],
+        PlayerCrypto[playerid][countDOT],
+        PlayerCrypto[playerid][countUSDT]
+    );
+    Dialog_Show(playerid, dialog_none, DIALOG_STYLE_MSGBOX, "Vase kriptovalute", string, "Ok", "");
+    return (true);
+}
 /*
       _____   _                                 
      |_   _| (_)  _ __ ___     ___   _ __   ___ 
@@ -1931,8 +1986,11 @@ task CryptoChangePrice[60000]()
         {
             CryptoPrices[BitcoinPrice] -= CryptoPrices[BitcoinPrice]-random(4);
         }
+        new Float:BTCPricezz;
 
-        va_SendClientMessageToAll(CRYPTO_COLOR, "Bitcoin Obavestenje: {ffffff}BTC: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(1),transactionsBTC);
+        BTCPricezz = float(CryptoPrices[BitcoinPrice]);
+
+        va_SendClientMessageToAll(CRYPTO_COLOR, "Bitcoin Obavestenje: {ffffff}BTC: Trenutna cena: %.4f | Transkacija: %d",BTCPricezz,transactionsBTC);
     }
     else if(transactionsUSDT >= 1)
     {
@@ -1945,8 +2003,10 @@ task CryptoChangePrice[60000]()
         {
             CryptoPrices[TetherUSPrice] -= CryptoPrices[TetherUSPrice]-random(1);
         }
+        new Float:USDTPricezz;
 
-        va_SendClientMessageToAll(CRYPTO_COLOR, "Tether Obavestenje: {ffffff}USDT: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(3),transactionsUSDT);
+        USDTPricezz = float(CryptoPrices[TetherUSPrice]);
+        va_SendClientMessageToAll(CRYPTO_COLOR, "Tether Obavestenje: {ffffff}USDT: Trenutna cena: %.3f | Transkacija: %d",USDTPricezz,transactionsUSDT);
     }
     else if(transactionsDOT >= 1)
     {
@@ -1959,8 +2019,10 @@ task CryptoChangePrice[60000]()
         {
             CryptoPrices[PolkadotPrice] -= CryptoPrices[PolkadotPrice]-random(1);
         }
+        new Float:DOTPricezz;
 
-        va_SendClientMessageToAll(CRYPTO_COLOR, "Polkadot Obavestenje: {ffffff}DOT: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(5),transactionsDOT);
+        DOTPricezz = float(CryptoPrices[PolkadotPrice]);
+        va_SendClientMessageToAll(CRYPTO_COLOR, "Polkadot Obavestenje: {ffffff}DOT: Trenutna cena: %.3f | Transkacija: %d",DOTPricezz,transactionsDOT);
     }
     else if(transactionsXRP >= 1)
     {
@@ -1973,8 +2035,10 @@ task CryptoChangePrice[60000]()
         {
             CryptoPrices[RipplePrice] -= CryptoPrices[RipplePrice]-random(1);
         }
+        new Float:XRPPricezz;
 
-        va_SendClientMessageToAll(CRYPTO_COLOR, "Ripple Obavestenje: {ffffff}XRP: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(2),transactionsXRP);
+        XRPPricezz = float(CryptoPrices[RipplePrice]);
+        va_SendClientMessageToAll(CRYPTO_COLOR, "Ripple Obavestenje: {ffffff}XRP: Trenutna cena: %.3f | Transkacija: %d",XRPPricezz,transactionsXRP);
     }
     else if(transactionsLTC >= 1)
     {
@@ -1987,8 +2051,10 @@ task CryptoChangePrice[60000]()
         {
             CryptoPrices[LitecoinPrice] -= CryptoPrices[LitecoinPrice]-random(4);
         }
+        new Float:LTCPricezz;
 
-        va_SendClientMessageToAll(CRYPTO_COLOR, "Litecoin Obavestenje: {ffffff}LTC: Trenutna cena: %d | Transkacija: %d",GetcryptoPrice(4),transactionsLTC);
+        LTCPricezz = float(CryptoPrices[LitecoinPrice]);
+        va_SendClientMessageToAll(CRYPTO_COLOR, "Litecoin Obavestenje: {ffffff}LTC: Trenutna cena: %.3f | Transkacija: %d",LTCPricezz,transactionsLTC);
     }
     return 1;
 }
@@ -2017,6 +2083,16 @@ YCMD:crypto(const playerid, params[], help)
     }
     return 1;
 }
+YCMD:mojcrypto(const playerid, params[], help)
+{
+    if(help)
+    {
+        SendClientMessage(playerid, CRYPTO_COLOR, "[Crypto]: Ova komanda vam dozvoljava da pogledate svoje kriptovalute.");
+        return 1;
+    }
+    CryptoLookupPlayer(playerid);
+    return (true);
+}
 /*
       ____    _           _                       
      |  _ \  (_)   __ _  | |   ___     __ _   ___ 
@@ -2028,6 +2104,166 @@ YCMD:crypto(const playerid, params[], help)
 
 
 Dialog:dialog_kupibtc(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new kolicina;
+        if(sscanf(inputtext, "i", kolicina))
+            return Dialog_Show(playerid, dialog_kupibtc, DIALOG_STYLE_INPUT, "Kupovina BTC", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+
+
+        if(kolicina > GetPlayerMoney(playerid))
+            return SendClientMessage(playerid, CRYPTO_COLOR, "> Nemate toliko novca.");
+
+        if(kolicina < 1000 || kolicina > CryptoPrices[BitcoinPrice])
+            return va_SendClientMessage(playerid, CRYPTO_COLOR, "> Kolicina moze biti od 1000$ pa do %d$.",CryptoPrices[BitcoinPrice]);
+
+
+        CalculatorCryptoPlayer(playerid, kolicina, 1);
+    }
+    return (true);
+}
+Dialog:dialog_kupiltc(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new kolicina;
+        if(sscanf(inputtext, "i", kolicina))
+            return Dialog_Show(playerid, dialog_kupiltc, DIALOG_STYLE_INPUT, "Kupovina LTC", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+
+
+        if(kolicina > GetPlayerMoney(playerid))
+            return SendClientMessage(playerid, CRYPTO_COLOR, "> Nemate toliko novca.");
+
+        if(kolicina < 1000 || kolicina > CryptoPrices[LitecoinPrice])
+            return va_SendClientMessage(playerid, CRYPTO_COLOR, "> Kolicina moze biti od 1000$ pa do %d$.",CryptoPrices[LitecoinPrice]);
+        
+
+        CalculatorCryptoPlayer(playerid, kolicina, 2);
+    }
+    return (true);
+}
+Dialog:dialog_kupidot(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new kolicina;
+        if(sscanf(inputtext, "i", kolicina))
+            return Dialog_Show(playerid, dialog_kupidot, DIALOG_STYLE_INPUT, "Kupovina DOT", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+
+
+        if(kolicina > GetPlayerMoney(playerid))
+            return SendClientMessage(playerid, CRYPTO_COLOR, "> Nemate toliko novca.");
+
+        if(kolicina < 1000 || kolicina > CryptoPrices[PolkadotPrice])
+            return va_SendClientMessage(playerid, CRYPTO_COLOR, "> Kolicina moze biti od 1000$ pa do %d$.",CryptoPrices[PolkadotPrice]);
+        
+
+        CalculatorCryptoPlayer(playerid, kolicina, 3);
+    }
+    return (true);
+}
+Dialog:dialog_kupixrp(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new kolicina;
+        if(sscanf(inputtext, "i", kolicina))
+            return Dialog_Show(playerid, dialog_kupixrp, DIALOG_STYLE_INPUT, "Kupovina XRP", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+
+
+        if(kolicina > GetPlayerMoney(playerid))
+            return SendClientMessage(playerid, CRYPTO_COLOR, "> Nemate toliko novca.");
+
+        if(kolicina < 1000 || kolicina > CryptoPrices[RipplePrice])
+            return va_SendClientMessage(playerid, CRYPTO_COLOR, "> Kolicina moze biti od 1000$ pa do %d$.",CryptoPrices[RipplePrice]);
+        
+
+        CalculatorCryptoPlayer(playerid, kolicina, 4);
+    }
+    return (true);
+}
+Dialog:dialog_kupiusdt(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new kolicina;
+        if(sscanf(inputtext, "i", kolicina))
+            return Dialog_Show(playerid, dialog_kupiusdt, DIALOG_STYLE_INPUT, "Kupovina USDT", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+
+
+        if(kolicina > GetPlayerMoney(playerid))
+            return SendClientMessage(playerid, CRYPTO_COLOR, "> Nemate toliko novca.");
+
+        if(kolicina < 1000 || kolicina > CryptoPrices[TetherUSPrice])
+            return va_SendClientMessage(playerid, CRYPTO_COLOR, "> Kolicina moze biti od 1000$ pa do %d$.",CryptoPrices[TetherUSPrice]);
+        
+
+        CalculatorCryptoPlayer(playerid, kolicina, 5);
+    }
+    return (true);
+}
+
+Dialog:dialog_prodajbtc(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+
+    }
+    return (true);
+}
+Dialog:dialog_prodajusdt(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+
+    }
+    return (true);
+}
+Dialog:dialog_prodajxrp(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+
+    }
+    return (true);
+}
+Dialog:dialog_prodajltc(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+
+    }
+    return (true);
+}
+Dialog:dialog_prodajdot(const playerid, response, listitem, string:inputtext[])
 {
     if(!response)
         return 1;

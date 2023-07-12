@@ -653,7 +653,7 @@ Business_Inside(playerid)
 }
 Business_Dialog(playerid)
 {
-    Dialog_Show(playerid, dialog_biznis, DIALOG_STYLE_LIST, "Biznis Opcije", "Informacije o biznisu\nOtkljucan/Zakljucaj biznis\nPromeni cenu produkata\nPromeni ime biznisa\nPromeni biznis poruku", "Dalje", "Izlaz");
+    Dialog_Show(playerid, dialog_biznis, DIALOG_STYLE_LIST, "Biznis Opcije", "Informacije o biznisu\nOtkljucan/Zakljucaj biznis\nPromeni cenu produkata\nPromeni biznis poruku\nPromeni ime biznisa", "Dalje", "Izlaz");
     return 1;
 }
 
@@ -719,15 +719,87 @@ Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
             }
             case 3:
             {
+                new
+                    id = -1;
 
+                if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id))
+                {
+                    Dialog_Show(playerid, dialog_biznismsg, DIALOG_STYLE_INPUT, "Biznis Poruka:", "Upisite poruku koju zelite da igrac primi kada udjes u vas biznis\n** Upisite 'None' ukoliko zelite da ugasite ovo", "Dallje", "Izlaz");
+                }
             }
             case 4:
             {
+                new
+                    id = -1;
 
+                if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id))
+                {
+                    Dialog_Show(playerid, dialog_biznisname, DIALOG_STYLE_INPUT, "Biznis Ime:", "Upisite ime biznisa koje zelite da koristite.", "Dallje", "Izlaz");
+                }
             }
         }
     }
     return 1;
+}
+Dialog:dialog_biznisname(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+        return 1;
+
+    if(response)
+    {
+        new
+            id = -1;
+
+        if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id))
+        {
+            if (isnull(inputtext))
+                return Dialog_Show(playerid, dialog_biznisname, DIALOG_STYLE_INPUT, "Biznis Ime:", "Upisite ime biznisa koje zelite da koristite.", "Dallje", "Izlaz");
+
+            if (strlen(inputtext) > 32)
+                return Dialog_Show(playerid, dialog_biznisname, DIALOG_STYLE_INPUT, "Biznis Ime:", "Upisite ime biznisa koje zelite da koristite\n** NE MOZE VISE OD 32 KARAKTERA.", "Dallje", "Izlaz");
+
+            format(BusinessData[id][bizName], 32, inputtext);
+
+            Business_Refresh(id);
+            Business_Save(id);
+
+            va_SendClientMessage(playerid, x_ogycolor,"> Business name set to: \"%s\".", inputtext);
+        }
+    }
+    return (true);
+}
+Dialog:dialog_biznismsg(const playerid, response, listitem, string:inputtext[])
+{
+    if(!response)
+        return 1;
+    if(response)
+    {
+        new
+            id = -1;
+
+        if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id))
+        {
+            if (isnull(inputtext))
+                return Dialog_Show(playerid, dialog_biznismsg, DIALOG_STYLE_INPUT, "Biznis Poruka:", "Upisite poruku koju zelite da igrac primi kada udjes u vas biznis\n** Upisite 'None' ukoliko zelite da ugasite ovo", "Dallje", "Izlaz");
+
+            if (!strcmp(inputtext, "none", true))
+            {
+                BusinessData[id][bizMessage][0] = '\0';
+
+                Business_Save(id);
+                SendClientMessage(playerid, x_ogycolor,"> You have removed the business message.");
+            }
+            else
+            {
+                format(BusinessData[id][bizMessage], 128, inputtext);
+
+                Business_Save(id);
+                va_SendClientMessage(playerid, x_ogycolor,"> Business message set to: \"%s\".", inputtext);
+            }
+        }
+    }
+    return (true);
 }
 //===========================================================
 stock GetBusinessByID(sqlid)

@@ -173,6 +173,24 @@ stock SavePropForPlayer(playerid)
     return true;
 }
 
+
+stock SaveCryptoPlayer(playerid)
+{
+    if(IgracUlogovan[playerid] == true)
+    {
+        new query[500];
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `KolicinaBTC` = '%f',`KolicinaETH` = '%f',`KolicinaDOT` = '%f',`KolicinaUSDT` = '%f', `KolicinaLTC` = '%f' WHERE `crypto_id` = '%d'",
+            PlayerCrypto[playerid][countBTC],
+            PlayerCrypto[playerid][countXRP],
+            PlayerCrypto[playerid][countDOT],
+            PlayerCrypto[playerid][countUSDT],
+            PlayerCrypto[playerid][countLTC],
+            PlayerInfo[playerid][SQLID]);
+        mysql_tquery(SQL,query);        
+    }
+
+    return true;
+}
 //* Vraca datum
 ReturnDate()
 {

@@ -148,11 +148,27 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	}
 	else if(playertextid == BinanceTD[playerid][149])
 	{
-		Dialog_Show(playerid, dialog_kupibtc, DIALOG_STYLE_INPUT, "Kupovina BTC", "Upisite kolicinu koju zelite da kupite:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+		Dialog_Show(playerid, dialog_kupibtc, DIALOG_STYLE_INPUT, "Kupovina BTC", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
 	}
 	else if(playertextid == BinanceTD[playerid][154])
 	{
-		Dialog_Show(playerid, dialog_prodajbtc, DIALOG_STYLE_INPUT, "Prodaja BTC", "Upisite kolicinu koju zelite da prodate:\n\n** CENA BITCOINA VARIRA PROVERITE PRE PRODAJE.", "Dalje", "Izlaz");
+		Dialog_Show(playerid, dialog_prodajbtc, DIALOG_STYLE_INPUT, "Prodaja BTC", "Upisite za koliko novca zelite da prodate ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE PRODAJE.", "Dalje", "Izlaz");
+	}
+	else if(playertextid == BinanceTD[playerid][150])
+	{
+		Dialog_Show(playerid, dialog_kupiltc, DIALOG_STYLE_INPUT, "Kupovina LTC", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+	}
+	else if(playertextid == BinanceTD[playerid][151])
+	{
+		Dialog_Show(playerid, dialog_kupiusdt, DIALOG_STYLE_INPUT, "Kupovina USDT", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+	}
+	else if(playertextid == BinanceTD[playerid][152])
+	{
+		Dialog_Show(playerid, dialog_kupidot, DIALOG_STYLE_INPUT, "Kupovina DOT", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
+	}
+	else if(playertextid == BinanceTD[playerid][153])
+	{
+		Dialog_Show(playerid, dialog_kupixrp, DIALOG_STYLE_INPUT, "Kupovina XRP", "Upisite za koliko novca zelite da kupite ovu kriptovalutu:\n\n** CENA BITCOINA VARIRA PROVERITE PRE KUPOVINE.", "Dalje", "Izlaz");
 	}
 	return 1;
 }
