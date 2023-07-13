@@ -10,7 +10,8 @@
         "*.stock": "pawn",
         "*.csso": "pawn",
         "*.temp": "pawn",
-        "*.asset": "pawn"
+        "*.asset": "pawn",
+        "*entrance": "pawn"
     },
     "pawn.compilerPath": "D:\\Mods\\maryland\\compiler",
     "files.encoding": "windows1252",
