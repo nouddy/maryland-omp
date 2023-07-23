@@ -17,6 +17,14 @@
  *  @Module         main
  */
 
+ /*
+ * Kad se seti OGY imas sledeci zadatak.
+ ? Da fixas ulaz i izlaz iz kuca jer si s ovim script za entrance kuce pojebao.
+ ? Firme da zavrsis do kraja jer nisu zavrsene ne rade kako treba i da vratis ikonice za firme koje su bile.
+ ? Da zavrsis vehicle ownership salone i ono sto sam ti pricao da treba da zavrsis.
+ ? Bank system da dovrsis koji si ostavio na pola jer nemam predstavu sta si hteo da radis.
+ */
+
 #define YSI_YES_HEAP_MALLOC
 
 #define CGEN_MEMORY 80000

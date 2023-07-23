@@ -89,7 +89,7 @@ public UlaziIzlazi(playerid)
                 //SetPlayerTime( playerid, ServerInfo[ VremeInGame ], 0 );
                 inProperty[ playerid ] = -1;
 
-                entrance_finded = true;
+                entrance_finded = false;
                 break;
             }
         }
