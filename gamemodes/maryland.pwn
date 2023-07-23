@@ -483,6 +483,11 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/exterior/poligon-as.map"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
 #include "frontend/exterior/croswellas.map"						//* Auto Salon Croswell
 #include "frontend/exterior/birorada.map"						//* Biro Rada
+#include "frontend/exterior/zeleznicka-egypt.map"				//* Zeleznicka u Egypt (LV)
+#include "frontend/exterior/italy-granica.map"					//* Granica Maryland-Italy
+#include "frontend/exterior/ml-gym.map"							//* ML Gym Map
+#include "frontend/exterior/ls-ukrasi.map"						//* ML Ukrasi po gradu
+
 
 //- Interiors
 #include "frontend/interior/opstina-int.map"					//* Opstina int map (vw > 5 | interior 5)
@@ -493,6 +498,7 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 #include "frontend/interior/login_map.map"						//* Login Soba Mapa
 #include "frontend/interior/bizcent-int.map"					//* Biz centar interior (vw > 4 | interior 4)
 #include "frontend/interior/hotel-int.map"						//* Hotel interior (vw > 7 | interior 7)
+#include "frontend/interior/login-new.map"						//* Login interior (vw > 8 | interior 8)
 
 //-
 #include "frontend/end/do-not-look.end"

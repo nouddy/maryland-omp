@@ -31,7 +31,7 @@
 */
 
 new OpstinaUlazIzlaz[2],
-    SpawnUlazIzlaz[5],
+    SpawnUlazIzlaz[2],
     TehnomediaMarker[2],
     PDTest[1],
     BizCenter[2],
@@ -67,11 +67,8 @@ public CreateMarkers()
     OpstinaUlazIzlaz[0] = CreateMarker(random(5),true,1482.6442,-1805.5509,18.7957-1.0,0, 0);
 
     //
-    SpawnUlazIzlaz[0] = CreateMarker(random(5),false,1759.9806,-2346.4353,-28.6042-0.9, 6, 6);
-    SpawnUlazIzlaz[1] = CreateMarker(random(5),false,1739.5133,-2366.7729,-28.6042-0.9, 6, 6);
-    SpawnUlazIzlaz[2] = CreateMarker(random(5),false,1758.8719,-2387.7422,-28.6042-0.9,6, 6);
-    SpawnUlazIzlaz[3] = CreateMarker(random(5),false,1779.4951,-2367.4021,-28.6042-0.9,6, 6);
-    SpawnUlazIzlaz[4] = CreateMarker(random(5),false,1642.1968,-2335.4883,13.5469-0.9, 0, 0);
+    SpawnUlazIzlaz[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 6, 6);
+    SpawnUlazIzlaz[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 0, 0);
     //
     TehnomediaMarker[0] = CreateMarker(random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
     TehnomediaMarker[1] = CreateMarker(random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);
