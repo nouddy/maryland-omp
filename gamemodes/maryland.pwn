@@ -348,6 +348,16 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 }
 */
 
+//- rcon preinclude
+
+YCMD:restart(playerid, const string: params[], help)
+{
+	SendRconCommand("gmx");
+
+    return 1;
+}
+
+
 //- Includes List
 
 //* Bitno jako da bude medju prvima
