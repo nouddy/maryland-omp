@@ -525,6 +525,11 @@ YCMD:restart(playerid, const string: params[], help)
 // #include "backend/jobs/job_main.job"
 // #include "backend/jobs/transport_novca.job"
 
+
+//- XMAS
+#include "backend/xmas/xmas.script"
+#include "backend/xmas/snowballing.script"
+
 //-
 #include "backend/jobs/end/do-not-look.end"
 
