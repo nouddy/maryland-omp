@@ -44,12 +44,6 @@ ResetujVariable(playerid)
     PlayerFinance[playerid][pBankAccount] = 0;
     PlayerFinance[playerid][pBankMoney] = 0;
     PlayerFinance[playerid][pBankPin] = 0;
-    // Player Kuca
-    PlayerProperty[playerid][HouseID] =
-    KreiraKucaID[playerid] = -1;
-	KreiraTypeID[playerid] = -1;
-	inProperty[playerid] = -1;
-	OdabraoKucu[playerid] = -1;
     // Safe zone
     InSafeZone[playerid] = false;
     //Customs Vrata itd

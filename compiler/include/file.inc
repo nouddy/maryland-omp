@@ -100,6 +100,7 @@ native bool:fputchar(File: handle, value, bool: utf8 = true);
 /// <returns>If succeed, it returns the extended ASCII or UTF-8 value of the character at the current position in the file, otherwise EOF (end of file).</returns>
 native fgetchar(File: handle, value, bool: utf8 = true);
 
+
 /// <summary>Write data to a file in binary format, while ignoring line brakes and encoding.</summary>
 /// <param name="handle">The File handle to use, opened by fopen()</param>
 /// <param name="buffer">The data to write to the file</param>

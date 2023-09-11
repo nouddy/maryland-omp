@@ -17,6 +17,8 @@
  *  @Module         main
  */
 
+
+
  /*
  * Kad se seti OGY imas sledeci zadatak.
  ? Da fixas ulaz i izlaz iz kuca jer si s ovim script za entrance kuce pojebao.
@@ -51,6 +53,7 @@
 #include <animated-textdraw>
 #include <DialogCenter>
 #include <crashdetect>
+#include <marylandFix>
 
 
 #define     c_server        "{8dc9f3}"

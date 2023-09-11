@@ -57,6 +57,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             new Float:pPos[3];
             GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
+            snowball_inHand[playerid] = false;
+
             snowObject = CreateDynamicObject(3003, pPos[0], pPos[1], pPos[2], 0.0, 0.0, 0.0, -1,  -1, -1);
 
             MoveDynamicObject(snowObject, pPos[0]-4.0, pPos[1], pPos[2]+0.450, 2.0, -1000.0, -1000.0, -1000.0);

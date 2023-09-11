@@ -19,29 +19,46 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define local
-
-#if defined server
-#define MYSQL_HOST		"db.wtf-company.wtf"
-#define MYSQL_USER 		"u9_iVxOK913nN"
-#define MYSQL_PASS		"ySw4l1LYkxnCWB=PETh3T3.H"
-#define MYSQL_DB 		"s9_maryland"
-#endif
-
-#if defined local
-#define MYSQL_HOST		"localhost"
-#define MYSQL_USER 		"root"
-#define MYSQL_PASS		""
-#define MYSQL_DB 		"maryland"
-#endif
-
 new MySQL:SQL;
+new MYSQL_DB_ML[32];
+
+stock file_ReadValue(szParse[], const szValueName[], szDest[], iDestLen) { // brian!!1
+
+    new
+        iPos = strfind(szParse, "=", false),
+        iLength = strlen(szParse);
+        
+    while(iLength-- && szParse[iLength] <= ' ') {
+        szParse[iLength] = 0;
+    }
+
+    if(strcmp(szParse, szValueName, false, iPos) == 0) {
+        strmid(szDest, szParse, iPos + 1, iLength + 1, iDestLen);
+        return 1;
+    }
+    return 0;
+}
 
 hook OnGameModeInit(){
 
 	// ? Dodan mysql_connect_file ( SIGURNIJE );
 
-	SQL = mysql_connect_file("mysql.ini");
+	new File: fileHandle = fopen("mysql.cfg", io_read);
+	new fileString[128],
+		MYSQL_HOST[20], MYSQL_USER[20], MYSQL_PASS[32];
+
+	while(fread(fileHandle, fileString, sizeof(fileString))) 
+    {
+        if(file_ReadValue(fileString, "HOST", MYSQL_HOST, sizeof(MYSQL_HOST))) continue;
+        if(file_ReadValue(fileString, "USER", MYSQL_USER, sizeof(MYSQL_USER))) continue;
+        if(file_ReadValue(fileString, "PASS", MYSQL_PASS, sizeof(MYSQL_PASS))) continue;
+        if(file_ReadValue(fileString, "DB",   MYSQL_DB_ML,   sizeof(MYSQL_DB_ML))) continue;
+    }
+    fclose(fileHandle);
+
+
+	SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB_ML);
+
 	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)
 	{
 		print("MySQL \187; Niste se uspjeli konektovati na data bazu, gasim server.");

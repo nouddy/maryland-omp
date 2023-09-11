@@ -51,12 +51,10 @@ new house_ID[MAX_HOUSES],
 	   house_Pickup[MAX_HOUSES],
 
 	   Iterator:iHouse<MAX_HOUSES>,
-	   inProperty[MAX_PLAYERS],
 
 	   player_House[MAX_PLAYERS],
 
 	   house_Created[MAX_HOUSES];
-
 
 forward LoadPlayerProperty(playerid);
 public LoadPlayerProperty(playerid) {

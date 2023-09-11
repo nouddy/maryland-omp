@@ -428,7 +428,7 @@ Business_Refresh(bizid)
     return 1;
 }
 
-Business_Create(playerid, type, price)
+stock Business_Create(playerid, type, price)
 {
     static
         Float:x,
@@ -604,7 +604,7 @@ Business_Create(playerid, type, price)
     }
     return -1;
 }
-Business_Delete(bizid)
+stock Business_Delete(bizid)
 {
     if (bizid != -1 && BusinessData[bizid][bizExists])
     {
