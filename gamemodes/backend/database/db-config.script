@@ -38,14 +38,10 @@
 new MySQL:SQL;
 
 hook OnGameModeInit(){
-	//****************************************************************************//
-	// #if defined server
-	// new MySQLOpt:options = mysql_init_options();
-    // mysql_set_option(options, SERVER_PORT, 3306);
-    // SQL = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB, options);
-	// #endif
 
-	SQL = mysql_connect(MYSQL_HOST,MYSQL_USER,MYSQL_PASS,MYSQL_DB);
+	// ? Dodan mysql_connect_file ( SIGURNIJE );
+
+	SQL = mysql_connect_file("mysql.ini");
 	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)
 	{
 		print("MySQL \187; Niste se uspjeli konektovati na data bazu, gasim server.");

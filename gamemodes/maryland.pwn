@@ -42,9 +42,6 @@
 #include <ysilib\YSI_Coding\y_va>
 #include <streamer>
 #include <sscanf2>
-#include <modelsizes>
-#define OD_METHOD METHOD_BOX
-#include <optidraw>
 #include <easyDialog>
 #include <formatex>
 #include <distance>
@@ -72,20 +69,19 @@
 
 #define     x_server     0x8DC9F3FF
 #define     x_server2    0xC092DEFF
-#define     x_red        0xFF1100AA //error/important color
-#define     x_blue       0x0099CCAA //help color
+#define     x_red        0xFF1100AA 
+#define     x_blue       0x0099CCAA 
 #define     x_white      0xffffffAA
-#define     x_yellow     0xf2ff00AA //info color
+#define     x_yellow     0xf2ff00AA
 #define     x_green      0x009933AA
 #define     x_pink       0xff00bbAA
 #define     x_ltblue     0x00f2ffAA
 #define     x_orange     0xffa200AA
 #define     x_greey      0x787878AA
-#define     x_purple     0xC2A2DAAA // me/do chat
+#define     x_purple     0xC2A2DAAA 
 #define 	x_ogycolor	 0xEB8C6CFF
 
 
-//
 main()
 {
     print("-                                     -");
@@ -402,7 +398,7 @@ YCMD:restart(playerid, const string: params[], help)
 
 //- Property
 #include "backend/property/houses.script"						//* Imovina
-#include "backend/property/pproperty.script"					//* Player Property
+
 //-
 #include "backend/property/end/do-not-look.end"
 
@@ -468,8 +464,6 @@ YCMD:restart(playerid, const string: params[], help)
 //-
 #include "backend/crossover/end/do-not-look.end"
 
-//- Entrance > Koristi se za sve sto igrac uradi - Ulazi/Izlazi iz firmi biznisa, kuca itd
-#include "backend/entrance/ulazi-izlazi.entrance"					//* Ulazi
 //-
 #include "backend/entrance/end/do-not-look.end"
 
@@ -522,8 +516,7 @@ YCMD:restart(playerid, const string: params[], help)
 #include "frontend/end/do-not-look.end"
 
 //- Jobs
-// #include "backend/jobs/job_main.job"
-// #include "backend/jobs/transport_novca.job"
+#include "backend/jobs/job_main.job" //? Dinamicni poslovi - Credits : job-framework
 
 
 //- XMAS

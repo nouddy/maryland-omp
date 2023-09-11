@@ -1,79 +1,113 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Nodi
+ *  @Date           9th September 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           jobs.script
+ *  @Module         jobs
+ */
+
+
 #include <ysilib\YSI_Coding\y_hooks>
 
-new    player_Zaposljen[MAX_PLAYERS],
-       nosiuniformu[MAX_PLAYERS],
-       radiposao[MAX_PLAYERS];
 
-hook Account_Load(const playerid, const string: name[], const string: value[]);
-hook Account_Load(const playerid, const string: name[], const string: value[])
-{
-    INI_Int("Zaposljen", player_Zaposljen[playerid]);
+const MAX_JOBS = 10;
+const MAX_JOB_NAME_LEN = 32;
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
+const MAX_JOB_VEHICLES = 50;
 
-hook OnPlayerDisconnect(playerid, reason)
-{
-	new INI:File = INI_Open(Account_Path(playerid));
-    INI_SetTag(File,"data");
-    INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+static 
+    job_ID[MAX_JOBS],
+    job_Name[MAX_JOBS][MAX_JOB_NAME_LEN],
+    job_Salary[MAX_JOBS],
+    job_Uniform[MAX_JOBS],
 
-    INI_Close(File);
+    Float:job_UnifromPos[MAX_JOBS][3],
+    Float:job_Position[MAX_JOBS][3],
 
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
+    job_Interior[MAX_JOBS],
 
-hook OnGameModeInit()
-{
-    print("jobs/job_main.job loaded");
+    //*      VEHICLES 
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-//! timer za reset posla
-timer otkazigraca[180000](playerid)
-{
-    player_Zaposljen[playerid] = 0;
-
-    new INI:File = INI_Open(Account_Path(playerid));
-    INI_SetTag(File,"data");
-    INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
-
-    INI_Close(File);
-
-    SendClientMessage(playerid, x_blue, "montrey // "c_white"Prosla ti je zabrana rada, mozes se opet zaposliti!");
-
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-
-YCMD:dajotkaz(playerid, params[], help)
-{
-    if(help)
-    {
-        SendClientMessage(playerid, 0xFFFFFFAA, "HELP: /help <dajotkaz> da das otkaz.");
-        return 1;
-    }
-
-    if(IsPlayerInRangeOfPoint(playerid, 3.0, 1383.3511,1.4850,1000.9424))
-    {
-        if(player_Zaposljen[playerid] == 0) return SendClientMessage(playerid, x_red, "montrey // "c_white"Ti ne radis nigde zaposli se!");
-        if(player_Zaposljen[playerid] == 2) return SendClientMessage(playerid, x_red, "montrey // "c_white"Vec si dao otkaz i ispunjavas kaznu od 3h!");
-
-        player_Zaposljen[playerid] = 2;
-
-        SendClientMessage(playerid, x_blue, "montrey // "c_white"Dao si otkaz uspesno, imas zabranu rada 3h!");
+    job_VehicleID[MAX_JOB_VEHICLES],
+    job_VehicleModel[MAX_JOB_VEHICLES],
+    job_VehicleColor[MAX_JOB_VEHICLES][2],
     
-    	new INI:File = INI_Open(Account_Path(playerid));
-        INI_SetTag(File,"data");
-        INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+    Float:job_VehiclePosition[MAX_JOB_VEHICLES][4],
 
-        INI_Close(File);
+    job_Pickup[MAX_JOBS][2],
+    Text3D:job_Label[MAX_JOBS][2],
 
-        defer otkazigraca(playerid);
+    job_Created[MAX_JOBS];
+
+forward Job_LoadData();
+public Job_LoadData() {
+
+    new rows = cache_num_rows();
+    if(!rows) return print("[SQL]: Nije moguce ucitati tabelu `jobs`");
+
+    else {
+
+        for(new i = 0; i < rows; i++) {
+
+            cache_get_value_name_int(i, "ID", job_ID[i]);
+            cache_get_value_name(i, "Name", job_Name[i], MAX_JOB_NAME_LEN);
+            cache_get_value_name_int(i, "Salary", job_Salary[i]);
+            cache_get_value_name_int(i, "Uniform", job_Uniform[i]);
+            
+            cache_get_value_name_float(i, "UniformX", job_UnifromPos[i][0]);
+            cache_get_value_name_float(i, "UniformY", job_UnifromPos[i][1]);
+            cache_get_value_name_float(i, "UniformZ", job_UnifromPos[i][2]);
+
+            cache_get_value_name_float(i, "PositionX", job_Position[i][0]);
+            cache_get_value_name_float(i, "PositionY", job_Position[i][1]);
+            cache_get_value_name_float(i, "PositionZ", job_Position[i][2]);
+
+            cache_get_value_name_int(i, "Interior", job_Interior[i]);
+
+            new job_string[64], uniform_string[32];
+
+            format(job_string, sizeof job_string, ""c_server"Posao » "c_white"%s\n"c_server"Za uzimanje posla "c_white"» 'N'", job_Name[i]);
+
+            format(job_string, sizeof uniform_string, ""c_server"Uniforma » "c_white"%s\n"c_server"Za uzimanje uniforme "c_white"» 'N'", job_Name[i]);
+
+            job_Pickup[i][0] = CreatePickup(1210, 1, job_Position[i][0], job_Position[i][1], job_Position[i][2], 0);
+            job_Pickup[i][1] = CreatePickup(1275, 1, job_UnifromPos[i][0], job_UnifromPos[i][1], job_UnifromPos[i][2], job_Interior[i]);
+
+            job_Label[i][0] = Create3DTextLabel(job_string, -1, job_Position[i][0], job_Position[i][1], job_Position[i][2], 3.5, 0, 0);
+            job_Label[i][1] = Create3DTextLabel(uniform_string, -1, job_UnifromPos[i][0], job_UnifromPos[i][1], job_UnifromPos[i][2], 3.5, job_Interior[i], 0);
+
+            job_Created[i] = 1;
+        
+            CallLocalFunction("Job_OnLoaded", "d", i);
+        
+        }
     }
-    else SendClientMessage(playerid, x_red, "montrey // "c_white"Morate biti na salteru u opstini!");
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
+    return (true);
+}
 
+hook OnGameModeInit() {
+
+    mysql_tquery(SQL, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData");
+    mysql_tquery(SQL, "SELECT * FROM `jobs`", "Job_LoadData");
+    return (true);
+}
+
+forward Job_OnLoaded(id);
+public Job_OnLoaded(id) {
+
+
+
+    return (true); 
 }

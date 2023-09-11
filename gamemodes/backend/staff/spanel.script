@@ -184,7 +184,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
-				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Insanity - Kucu Kreiraj:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila\n04\tDonatorska Kuca\n", "Dalje", "Izlaz");
+				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Maryland - Kreiraj Kucu:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila", "Dalje", "Izlaz");
 			}
 			case 1:
 			{
@@ -222,7 +222,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			    ATMData[idzz][atmY] += (2.0 * floatcos(-ATMData[idzz][atmRZ], degrees));
 			    ATMData[idzz][atmZ] -= 0.3;
 			    
-				ATMData[idzz][atmObjID] = CreateDynamicObject(2942, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
+				ATMData[idzz][atmObjID] = Maryland_CreateDynamicObject(2942, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
 			    if(IsValidDynamicObject(ATMData[idzz][atmObjID]))
 			    {
 			        EditingATMID[playerid] = idzz;
@@ -257,36 +257,6 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-Dialog:kreiraj_biznis(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
-
-	if(response)
-	{
-		new type,price,id;
-		if (sscanf(inputtext, "dd", type, price))
-	 	{
-	 		Dialog_Show(playerid, "kreiraj_biznis", DIALOG_STYLE_INPUT,
-				"Kreiraj bankera",
-				"Upisite tip biznisa i cenu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
-				"Odaberi", "Izlaz");
-
-	    	return 1;
-		}
-		if (type < 1 || type > 7)
-	    	return SendClientMessage(playerid,-1, "Tip biznisa moze biti od 1 do 7.");
-
-
-		id = Business_Create(playerid, type, price);
-
-		if (id == -1)
-		    return SendClientMessage(playerid, x_server, "The server has reached the limit for businesses.");
-
-		SendClientMessage(playerid,x_server, "Napravili ste biznis.");
-	}
-	return (true);
 }
 Dialog:dialog_safezona(const playerid, response, listitem, string:inputtext[])
 {
@@ -381,22 +351,21 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 			case 0:
 			{
 				new id = GetNearestHouse(playerid);
-				if(id == -1)
-					return SendErrorMessage(playerid, "Nema kuca u blizini.");
 
-				if(!Iter_Contains(Kuce, id))
-					return SendErrorMessage(playerid, "Ta kuca je vec obrisana.");
+				if(!Iter_Contains(iHouse, id))
+					return SendClientMessage(playerid, 0xFF0000FF, "[Greska]: {ffffff}Taj ID kuce ne postoji.");
 
-				new szQuery[128];
-			    format(szQuery, sizeof szQuery, "UPDATE `player_property` SET `HouseID` ='-1' WHERE `HouseID` = '%d'", id);
-			    mysql_tquery(SQL, szQuery);
+				DestroyDynamicPickup(house_Pickup[id]);
+				DestroyDynamic3DTextLabel(house_Label[id]);
 
-				House_Delete(id);
-				Iter_Remove(Kuce, id);
+				new q[120];
 
-				SendClientMessage(playerid, x_server, "Uspesno ste obrisali kucu.");
+				mysql_format(SQL, q, sizeof q, "DELETE FROM `houses` WHERE `ID`= '%d'", id);
+				mysql_tquery(SQL, q);
 
-				return Y_HOOKS_CONTINUE_RETURN_1;
+				Iter_Remove(iHouse, id);
+
+				return 1;
 			}
 			case 1:
 			{
@@ -475,29 +444,7 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
-Dialog:obrisi_biznis(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
 
-	if(response)
-	{
-		new id;
-		if (sscanf(inputtext, "d", id))
-		    return 	Dialog_Show(playerid, "obrisi_biznis", DIALOG_STYLE_INPUT,
-						"Obrisite biznis",
-						"Unesite id biznisa kojeg zelite da obrisete.",
-						"Nastavi", "Nazad"
-					);
-
-		if ((id < 0 || id >= MAX_BUSINESS) || !BusinessData[id][bizExists])
-		    return SendClientMessage(playerid,-1, "Ovaj biznis ne postoji.");
-
-		Business_Delete(id);
-		va_SendClientMessage(playerid,x_server2, "Uspesno ste obrisali biznis id: %d.", id);
-	}
-	return (true);
-}
 Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
 {
 	if(!response)
@@ -564,4 +511,124 @@ Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
 		mysql_tquery(SQL, query);
 	}
 	return (true);
+}
+
+Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]) {
+
+	if(response) {
+
+		new id = GetFreeHouseID(), Float:pPos[3];
+		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+		switch(listitem) {
+
+			case 0: {
+
+
+				house_Price[id] = 50000;
+				house_Type[id] = 1;
+
+				house_Entrance[id][0] = pPos[0];
+				house_Entrance[id][1] = pPos[1];
+				house_Entrance[id][2] = pPos[2];
+
+				house_Exit[id][0] = 224.28; 
+				house_Exit[id][1] = 1289.19;
+				house_Exit[id][2] = 1082.14;
+
+				house_Int[id] = 1; 
+
+				house_Wardrobe[id][0] = 224.28; 
+				house_Wardrobe[id][1] = 1289.19;
+				house_Wardrobe[id][2] = 1082.14;
+
+				house_Fridge[id][0] = 224.28; 
+				house_Fridge[id][1] = 1289.19;
+				house_Fridge[id][2] = 1082.14;
+
+			}
+
+			case 1: {
+
+				house_Price[id] = 120000;
+				house_Type[id] = 2;
+
+				house_Entrance[id][0] = pPos[0];
+				house_Entrance[id][1] = pPos[1];
+				house_Entrance[id][2] = pPos[2];
+
+				house_Exit[id][0] = -285.25; 
+				house_Exit[id][1] = 1471.19;
+				house_Exit[id][2] = 1084.37;
+
+				house_Int[id] = 15; 
+
+				house_Wardrobe[id][0] = 224.28; 
+				house_Wardrobe[id][1] = 1289.19;
+				house_Wardrobe[id][2] = 1082.14;
+
+				house_Fridge[id][0] = 224.28; 
+				house_Fridge[id][1] = 1289.19;
+				house_Fridge[id][2] = 1082.14;
+
+			}
+		
+			case 2: {
+
+				house_Price[id] = 300000;
+				house_Type[id] = 3;
+
+				house_Entrance[id][0] = pPos[0];
+				house_Entrance[id][1] = pPos[1];
+				house_Entrance[id][2] = pPos[2];
+
+				house_Exit[id][0] = 2324.38; 
+				house_Exit[id][1] = -1148.48; 
+				house_Exit[id][2] = 1050.71;
+
+				house_Int[id] = 12; 
+
+				house_Wardrobe[id][0] = 224.28; 
+				house_Wardrobe[id][1] = 1289.19;
+				house_Wardrobe[id][2] = 1082.14;
+
+				house_Fridge[id][0] = 224.28; 
+				house_Fridge[id][1] = 1289.19;
+				house_Fridge[id][2] = 1082.14;
+
+			}
+		}
+
+		new zone[28], add[50];
+		GetPlayer2DZone(playerid, zone, sizeof(zone));
+		format(add, sizeof(add), "%s, Maryland", zone);
+		strmid(house_Adress[id], add, 0, sizeof(add), 255);
+
+		house_Owner[id] = 0;
+		house_Adress[id] = add;
+
+		house_Locked[id] = false;
+		house_Safe[id] = false;
+
+		house_Money[id] = 0;
+
+		house_Drugs[id][0] = 0;
+		house_Drugs[id][1] = 0;
+		house_Drugs[id][2] = 0;
+
+		house_ID[id] = id;
+
+		new query[560];
+
+		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`,`Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`,`FridgeX`, `FridgeY`, `FridgeZ`, `Int`) \
+		VALUES ('%d', '%d', '%d', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f', '%i', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%d')", 
+		house_Owner[id], house_Price[id], house_Type[id],
+		house_Adress[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
+		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2], house_Safe[id], house_Money[id], house_Drugs[id][0],
+        house_Drugs[id][1], house_Drugs[id][2], house_Wardrobe[id][0], house_Wardrobe[id][1], house_Wardrobe[id][2],
+		house_Fridge[id][0], house_Fridge[id][1], house_Fridge[id][2], house_Int[id]);
+		mysql_tquery(SQL, query, "House_Create", "dd", id, playerid);
+	}
+
+	return 1;
 }

@@ -8,7 +8,7 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Vostic & Ogy_
+ *  @Author         Vostic & Nodi
  *  @Date           24th May 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
@@ -22,370 +22,309 @@
 #include <ysilib\YSI_Coding\y_hooks>
 //======================================================
 
-#define MAX_DYNAMIC_HOUSES		(9999)
+const MAX_HOUSES = 300;
+const MAX_ADRESS_LEN = 50;
+const INVALID_HOUSE_ID = -1;
 
-new KreiraKucaID[MAX_PLAYERS],
-	inProperty[MAX_PLAYERS],
-	OdabraoKucu[MAX_PLAYERS],
-	KreiraTypeID[MAX_PLAYERS];
+new house_ID[MAX_HOUSES],
+	   house_Owner[MAX_HOUSES],
+	   house_Price[MAX_HOUSES],
+	   house_Type[MAX_HOUSES],
+	   house_Adress[MAX_HOUSES][MAX_ADRESS_LEN],
 
-enum H_House 
-{
-	houseID,
-	bool:houseExists,
-	houseOwner,
-	houseAdd[50],
-	housePrice,
-	houseType,
-	Float:housePos[4],
-	Float:housePosInt[4],
-	houseInterior,
-	houseInteriorVW,
-	houseExteriorVW,
-	houseExterior,
-	bool:houseLocked,
-	//
-	Text3D:houseLabel,
-	housePickup,
-	houseMapIcon
-};
-new HouseData[MAX_DYNAMIC_HOUSES][H_House];
-new Iterator:Kuce<MAX_DYNAMIC_HOUSES>;
+	   bool:house_Locked[MAX_HOUSES],
 
-enum player_property {
+	   Float:house_Entrance[MAX_HOUSES][3],
+	   Float:house_Exit[MAX_HOUSES][3],
 
-    HouseID
-}
-new PlayerProperty[MAX_PLAYERS][player_property];
+	   bool:house_Safe[MAX_HOUSES],
+
+	   house_Money[MAX_HOUSES],
+	   house_Drugs[MAX_HOUSES][3],
+	   
+	   Float:house_Wardrobe[MAX_HOUSES][3],
+	   Float:house_Fridge[MAX_HOUSES][3],
+
+	   house_Int[MAX_HOUSES],
+
+	   Text3D:house_Label[MAX_HOUSES],
+	   house_Pickup[MAX_HOUSES],
+
+	   Iterator:iHouse<MAX_HOUSES>,
+	   inProperty[MAX_PLAYERS],
+
+	   player_House[MAX_PLAYERS],
+
+	   house_Created[MAX_HOUSES];
 
 
-hook OnGameModeInit()
-{
-	mysql_pquery(SQL, "SELECT * FROM `houses`", "House_Load" );
-	return (true);
-}
+forward LoadPlayerProperty(playerid);
+public LoadPlayerProperty(playerid) {
 
-Dialog:dialog_kreirajkucu(playerid, response, listitem, inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		new id;
-		id = Iter_Free(Kuce);
-		if(id == -1)
-			return SendClientMessage(playerid, x_red, "Prekoracen je limit vaseg iteratora.");
+	new rows = cache_num_rows();
+	if(!rows) {
 
-		if(id == 0)
-		{
-			Iter_Add(Kuce, 0);	
-		}
-
-		KreiraKucaID[playerid] = id;
-
-		HouseData[id][houseType] = listitem+1;
-		KreiraTypeID[playerid] = HouseData[id][houseType];
-
-		Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Maryland - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
+		new query[420];
+		mysql_format(SQL, query, sizeof query, "INSERT INTO `player_property` (`player_id`, `HouseID`) \
+		 										VALUES ('%d', '-1')", PlayerInfo[playerid][SQLID]);
+		mysql_tquery(SQL, query);
+		printf("Za igraca SQLID (%d) je napravljena tabela `player_property`", PlayerInfo[playerid][SQLID]);
 	}
-	return (true);
-}
-Dialog:dialog_kreirajkucucena(playerid, response, listitem, inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		new id = KreiraKucaID[playerid];
-		new type = KreiraTypeID[playerid];
-		new Float:Pozicija[4];
-		new kolicina;
-		if(sscanf(inputtext, "d", kolicina))
-			return Dialog_Show(playerid, dialog_kreirajkucucena, DIALOG_STYLE_INPUT, "Maryland - Kucu Kreiraj:", "Upisite zeljenu cenu za kucu koju pravite.\n\n** CENA NE SME BITI ISPOD 1$ a iznad 50.000.000$", "Dalje", "Izlaz");
 
-		if(kolicina < 1 || kolicina > 50000000) 
-			return SendClientMessage(playerid, x_red, "Iznos cene ove kuce ne moze biti ispod 1 a iznad 50.000.000$"); 
+	else {
 
-		if(HouseData[id][houseType] < 3 && kolicina >= 5000000)
-			return SendClientMessage(playerid, x_red, "Kako mislis da stavis za Malu/Veliku kucu vecu cenu od 5.000.000$ ????");
-
-		HouseData[id][housePrice] = kolicina;
-		GetPlayerPos(playerid, Pozicija[0], Pozicija[1], Pozicija[2]);
-		GetPlayerFacingAngle(playerid, Pozicija[3]);
-
-		House_Create(playerid, Pozicija[0], Pozicija[1], Pozicija[2], Pozicija[3], kolicina, type);
-
-		SendClientMessage(playerid, x_server, "Uspesno ste kreirali kucu.");
+		cache_get_value_name_int(0, "HouseID", player_House[playerid]);
+		printf("House %d is loaded for player ? ", player_House[playerid], ReturnPlayerName(playerid));
 	}
-	return (true);
-}
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
-	return (true);
-}
-
-forward House_Load();
-public House_Load()
-{
-   	new iRows, id;
-	iRows = cache_num_rows();
-	for(new i = 0; i < iRows; i++)
-	{
-		cache_get_value_name_int(i, "SQLID", id);
-		HouseData[id][houseExists] = true;
-	    cache_get_value_name_int(i, "OwnerID", HouseData[id][houseOwner]);
-		cache_get_value_name(i, "Address", HouseData[id][houseAdd], 50);
-	    cache_get_value_name_int(i, "Price", HouseData[id][housePrice]);
-	    cache_get_value_name_int(i, "Type", HouseData[id][houseType]);
-	    cache_get_value_name_float(i, "PosX", HouseData[id][housePos][0]);
-	    cache_get_value_name_float(i, "PosY", HouseData[id][housePos][1]);
-	    cache_get_value_name_float(i, "PosZ", HouseData[id][housePos][2]);
-	    cache_get_value_name_float(i, "PosA", HouseData[id][housePos][3]);
-	    cache_get_value_name_float(i, "IntX", HouseData[id][housePosInt][0]);
-	    cache_get_value_name_float(i, "IntY", HouseData[id][housePosInt][1]);
-	    cache_get_value_name_float(i, "IntZ", HouseData[id][housePosInt][2]);
-	    cache_get_value_name_float(i, "IntA", HouseData[id][housePosInt][3]);
-	    cache_get_value_name_int(i, "InteriorID", HouseData[id][houseInterior]);
-	    cache_get_value_name_int(i, "InteriorVw", HouseData[id][houseInteriorVW]);
-	    cache_get_value_name_int(i, "ExteriorInt", HouseData[id][houseExterior]);
-	    cache_get_value_name_int(i, "ExteriorVw", HouseData[id][houseExteriorVW]);
-	    cache_get_value_name_bool(i, "Locked", HouseData[id][houseLocked]);
-	    
-	    Iter_Add(Kuce, 0);
-	    Iter_Add(Kuce, id);
-	    House_Label(id);
-	}
-	printf("Ucitavanje Kuca(%d)... Uspesno",iRows);
 	return 1;
 }
 
-House_Save(houseid)
-{
-	new
-	    query[650];
+forward House_LoadData();
+public House_LoadData() {
 
-	format(query, sizeof(query), "UPDATE `houses` SET `OwnerID` = '%d', `Price` = '%d', `Type` = '%d', `PosX` = '%f', `PosY` = '%f', `PosZ` = '%f', `PosA` = '%f', `IntX` = '%f', `IntY` = '%f', `IntZ` = '%f', `IntA` = '%f', `InteriorID` = '%d', `ExteriorInt` = '%d', `ExteriorVw` = '%d', `Locked` = '%d', `InteriorVw` = '%d' WHERE `SQLID` = '%d'",
-	    HouseData[houseid][houseOwner],
-	    HouseData[houseid][housePrice],
-	    HouseData[houseid][houseType],
-	    HouseData[houseid][housePos][0],
-	    HouseData[houseid][housePos][1],
-	    HouseData[houseid][housePos][2],
-	    HouseData[houseid][housePos][3],
-	    HouseData[houseid][housePosInt][0],
-	    HouseData[houseid][housePosInt][1],
-	    HouseData[houseid][housePosInt][2],
-	    HouseData[houseid][housePosInt][3],
-        HouseData[houseid][houseInterior],
-        HouseData[houseid][houseExterior],
-        HouseData[houseid][houseExteriorVW],
-        HouseData[houseid][houseLocked],
-        HouseData[houseid][houseInteriorVW],
-        houseid);
-	return mysql_tquery(SQL, query);
-}
-House_Inside(playerid)
-{
-    for (new i = 0; i != MAX_DYNAMIC_HOUSES; i ++) if (HouseData[i][houseExists] && HouseData[i][houseID] == PlayerProperty[playerid][HouseID] && GetPlayerInterior(playerid) == HouseData[i][houseInterior] && GetPlayerVirtualWorld(playerid) == HouseData[i][houseInteriorVW]) {
-        return i;
+	new rows = cache_num_rows();
+	if(!rows) return print("Could not load table `houses`...");
+	else {
+
+		for(new i = 0; i < rows; i++) {
+
+			cache_get_value_name_int(i, "ID", house_ID[i]);
+			cache_get_value_name_int(i, "PID", house_Owner[i]);
+			cache_get_value_name_int(i, "Price", house_Price[i]);
+			cache_get_value_name_int(i, "Type", house_Type[i]);
+
+			cache_get_value_name(i, "Adress", house_Adress[i], MAX_ADRESS_LEN);
+			cache_get_value_name_bool(i, "Locked", house_Locked[i]);
+
+			cache_get_value_name_float(i, "PosX", house_Entrance[i][0]);
+			cache_get_value_name_float(i, "PosY", house_Entrance[i][1]);
+			cache_get_value_name_float(i, "PosZ", house_Entrance[i][2]);
+
+			cache_get_value_name_float(i, "ExitX", house_Exit[i][0]);
+			cache_get_value_name_float(i, "ExitY", house_Exit[i][1]);
+			cache_get_value_name_float(i, "ExitZ", house_Exit[i][2]);
+
+			cache_get_value_name_bool(i, "Safe", house_Safe[i]);
+
+			cache_get_value_name_int(i, "Money", house_Money[i]);
+			cache_get_value_name_int(i, "Weed", house_Drugs[i][0]);
+			cache_get_value_name_int(i, "Cocaine", house_Drugs[i][1]);
+			cache_get_value_name_int(i, "Extazy", house_Drugs[i][2]);
+
+			cache_get_value_name_float(i, "WardX", house_Wardrobe[i][0]);
+			cache_get_value_name_float(i, "WardY", house_Wardrobe[i][1]);
+			cache_get_value_name_float(i, "WardZ", house_Wardrobe[i][2]);
+
+			cache_get_value_name_float(i, "FridgeX", house_Fridge[i][0]);
+			cache_get_value_name_float(i, "FridgeY", house_Fridge[i][1]);
+			cache_get_value_name_float(i, "FridgeZ", house_Fridge[i][2]);
+
+			cache_get_value_name_int(i, "Int", house_Int[i]);
+
+			new tmp_string[220];
+
+			new zakljucan1[30];
+        	if(house_Locked[i] == false) zakljucan1 = "Opened"; else zakljucan1 = "Locked";
+
+			if(house_Owner[i] < 1) {
+
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], FormatNumber(house_Price[i]));
+
+				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+				house_Pickup[i] = CreateDynamicPickup(19522, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
+			}
+
+			else {
+
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], zakljucan1);
+
+				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+				house_Pickup[i] = CreateDynamicPickup(1273, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
+
+			}
+
+			house_Created[i] = 1;
+
+			Iter_Add(iHouse, i);
+		}
+
+		printf("backend/property/houses.script loaded(%d) houses", rows);
 	}
-	return -1;
+
+	return 1;
 }
-House_Create(playerid, Float:Xx, Float:Yy, Float:Zz, Float:Angle, price, Type)
-{
-	for (new i = 1; i != MAX_DYNAMIC_HOUSES; i ++)
-	{
-    	if (!HouseData[i][houseExists])
-	    {
-	    	new id = KreiraKucaID[playerid];
-	        HouseData[i][houseExists] = true;
-    	    HouseData[i][houseOwner] = 0;
-        	HouseData[i][housePrice] = price;
 
-	        HouseData[i][housePos][0] = Xx;
-	        HouseData[i][housePos][1] = Yy;
-	        HouseData[i][housePos][2] = Zz;
-	        HouseData[i][housePos][3] = Angle;
-	        HouseData[i][houseType] = Type;
+forward House_Create(id, playerid);
+public House_Create(id, playerid) {
 
-	        if(HouseData[i][houseType] == 1) // mala
-	        {
-	        	HouseData[i][housePosInt][0] = 223.0732;
-	            HouseData[i][housePosInt][1] = 1288.3668;
-	            HouseData[i][housePosInt][2] = 1082.1406;
-	            HouseData[i][housePosInt][3] = 90.0000;
-	            HouseData[i][houseInterior] = 1;
-	        }
-	        else if(HouseData[i][houseType] == 2) // velika
-	        {
-	        	HouseData[i][housePosInt][0] = 2317.8977;
-	            HouseData[i][housePosInt][1] = -1025.7722;
-	            HouseData[i][housePosInt][2] = 1050.2109;
-	            HouseData[i][housePosInt][3] = 90.0000;	
-	          	HouseData[i][houseInterior] = 9;        	
-	        }
-	        else if(HouseData[i][houseType] == 3) // vila
-	        {
-	        	HouseData[i][housePosInt][0] = 140.2605;
-	            HouseData[i][housePosInt][1] = 1367.4221;
-	            HouseData[i][housePosInt][2] = 1083.8615;
-	            HouseData[i][housePosInt][3] = 90.0000;
-	            HouseData[i][houseInterior] = 5;   
-	        }
-	        else if(HouseData[i][houseType] == 4) // donatorska
-	        {
-	        	HouseData[i][housePosInt][0] = 2269.8772;
-	            HouseData[i][housePosInt][1] = -1210.3240;
-	            HouseData[i][housePosInt][2] = 1047.5625;
-	            HouseData[i][housePosInt][3] = 90.0000;
-	            HouseData[i][houseInterior] = 10; 
-	        }
+	house_ID[id] = cache_insert_id();
+	house_Created[id] = 1;
 
-			HouseData[i][houseInteriorVW] = id;
-			HouseData[i][houseExterior] = GetPlayerInterior(playerid);
-			HouseData[i][houseExteriorVW] = GetPlayerVirtualWorld(playerid);
+	new tmp_string[220];
 
-			HouseData[i][houseLocked] = false;
+	format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], FormatNumber(house_Price[id]));
 
-			new zone[28], add[50];
-			GetPlayer2DZone(playerid, zone, sizeof(zone));
-			format(add, sizeof(add), "%d, %s, Maryland",id, zone);
-			strmid(HouseData[i][houseAdd], add, 0, sizeof(add), 255);
+	house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+	house_Pickup[id] = CreateDynamicPickup(19522, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 
-			House_Label(i);
-			static q[900];
-			mysql_format(SQL, q, sizeof(q),
-			    "INSERT INTO `houses` (`OwnerID`, `Address`, `Price`, `Type`, `PosX`, `PosY`, `PosZ`, `PosA`, `IntX`, `IntY`, `IntZ`, `IntA`, `InteriorVw`, `InteriorID`, `ExteriorInt`, `ExteriorVw`, `Locked`) \
-				 VALUES('%d','%s','%d','%d','%f','%f','%f','%f', '%f', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d')", 
-				 HouseData[i][houseOwner],add,HouseData[i][housePrice],HouseData[i][houseType],HouseData[i][housePos][0],HouseData[i][housePos][1],HouseData[i][housePos][2],HouseData[i][housePos][3],HouseData[i][housePosInt][0],HouseData[i][housePosInt][1],
-				 HouseData[i][housePosInt][2],HouseData[i][housePosInt][3],HouseData[i][houseInteriorVW],HouseData[i][houseInterior], HouseData[i][houseExterior],HouseData[i][houseExteriorVW],HouseData[i][houseLocked]);
+	va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
+	Iter_Add(iHouse, id);
 
-			mysql_pquery(SQL, q, "OnHouseCreated", "d", i);
-			KreiraKucaID[playerid] = -1;
-			KreiraTypeID[playerid] = -1;
+	return 1;
+}
+
+stock GetNearestHouse(playerid) {
+
+	foreach(new i : iHouse) {
+
+		if(IsPlayerInRangeOfPoint(playerid, 3.0, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]))
 			return i;
-		}
+	}
+	return false;
+}
+
+stock GetFreeHouseID() {
+
+	for(new i = 0; i < MAX_HOUSES; i++) {
+
+		if(house_Created[i] == 0) return i;
+		break;
 	}
 	return -1;
 }
 
-forward OnHouseCreated(houseid);
-public OnHouseCreated(houseid)
-{
-	if (houseid == -1 || !HouseData[houseid][houseExists])
-	    return 0;
+stock House_UpdateLabel(id, const option) {
 
-	HouseData[houseid][houseID] = cache_insert_id();
-	House_Save(houseid);
-	Iter_Add(Kuce, houseid);
-	return 1;
-}
-forward House_Label(id);
-public House_Label(id)
-{
-	if (id != -1 && HouseData[id][houseExists])
-	{
-		if (IsValidDynamic3DTextLabel(HouseData[id][houseLabel]))
-		    DestroyDynamic3DTextLabel(HouseData[id][houseLabel]);
+	
+	new zakljucan1[30];
+	if(house_Locked[id] == false) zakljucan1 = "Opened"; else zakljucan1 = "Locked";
 
-		if (IsValidDynamicPickup(HouseData[id][housePickup]))
-		    DestroyDynamicPickup(HouseData[id][housePickup]);
+	new tmp_string[220];
 
-		if (IsValidDynamicMapIcon(HouseData[id][houseMapIcon]))
-		    DestroyDynamicMapIcon(HouseData[id][houseMapIcon]);
+	if(option == 1) {
 
-		new zakljucan1[30];
-		if(HouseData[id][houseLocked] == false) zakljucan1 = "Opened"; else zakljucan1 = "Locked";
+		if(IsValidDynamic3DTextLabel(house_Label[id])) {
 
-		if(HouseData[id][houseOwner]) {
-			new string[200];
-			format( string, sizeof( string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«",id, getKucaType(HouseData[id][houseType]), HouseData[id][houseAdd], zakljucan1);
-			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, x_server, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
+			format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
+
+			house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+			house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 		}
-		else
-		{
-			new string[200];
-			format( string, sizeof( string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'",id, getKucaType(HouseData[id][houseType]), HouseData[id][houseAdd], FormatNumber(HouseData[id][housePrice]));
-			HouseData[id][houseLabel] = CreateDynamic3DTextLabel( string, x_server, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
-		}
-		HouseData[id][housePickup] = CreateDynamicPickup( 1273, 1, HouseData[ id ][ housePos ][0], HouseData[ id ][ housePos ][1], HouseData[ id ][ housePos ][2]);
-        HouseData[id][houseMapIcon] = CreateDynamicMapIcon(HouseData[id][housePos][0], HouseData[id][housePos][1], HouseData[id][housePos][2], (HouseData[id][houseOwner] != 0) ? (32) : (31), 0, HouseData[id][houseExterior], HouseData[id][houseExteriorVW] );
 	}
-	return (true);
-}
-House_Delete(houseid)
-{
-	if (houseid != -1 && HouseData[houseid][houseExists])
+
+	else if(option == 2)
 	{
-	    new
-	        string[64];
 
-		format(string, sizeof(string), "DELETE FROM `houses` WHERE `SQLID` = '%d'", houseid);
-		mysql_tquery(SQL, string);
+		if(IsValidDynamic3DTextLabel(house_Label[id])) {
 
-        if (IsValidDynamic3DTextLabel(HouseData[houseid][houseLabel]))
-		    DestroyDynamic3DTextLabel(HouseData[houseid][houseLabel]);
+			format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
 
-		if (IsValidDynamicPickup(HouseData[houseid][housePickup]))
-		    DestroyDynamicPickup(HouseData[houseid][housePickup]);
-
-		if (IsValidDynamicMapIcon(HouseData[houseid][houseMapIcon]))
-		    DestroyDynamicMapIcon(HouseData[houseid][houseMapIcon]);
-
-	    HouseData[houseid][houseExists] = false;
-	    HouseData[houseid][houseOwner] = 0;
-	    HouseData[houseid][houseID] = 0;
+			house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+			house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
+		}
 	}
 	return 1;
 }
-House_GetCount(playerid)
+
+GetHouseType(id)
 {
-	new
-		count = 0;
-
-	for (new i = 0; i != MAX_DYNAMIC_HOUSES; i ++)
-	{
-		if (HouseData[i][houseExists] && House_IsOwner(playerid, i))
-   		{
-   		    count++;
-		}
-	}
-	return count;
-}
-House_IsOwner(playerid, houseid)
-{
-	if (!IgracUlogovan[playerid] || PlayerInfo[playerid][SQLID] == -1)
-	    return 0;
-
-    if ((HouseData[houseid][houseExists] && HouseData[houseid][houseOwner] != 0) && HouseData[houseid][houseOwner] == PlayerInfo[playerid][SQLID])
-		return 1;
-
-	return 0;
-}
-forward GetNearestHouse(playerid);
-public GetNearestHouse(playerid)
-{
-	new Float:p_Pos[3], Float:maxradius = 3.0, id = -1;
-	GetPlayerPos(playerid, p_Pos[0], p_Pos[1], p_Pos[2]);
-
-    foreach(new i : Kuce)
+    new typezz[30];
+    switch(id)
     {
-        if(VectorSize(p_Pos[0] - HouseData[i][housePos][0], p_Pos[1] - HouseData[i][housePos][1], p_Pos[2] - HouseData[i][housePos][2]) >= maxradius) continue;
-
-        id = i;
-        maxradius = VectorSize(p_Pos[0] - HouseData[i][housePos][0], p_Pos[1] - HouseData[i][housePos][1], p_Pos[2] - HouseData[i][housePos][2]);
+        case 1: typezz = "Small House";
+        case 2: typezz = "Big House";
+        case 3: typezz = "Villa";
     }
-    return id;
+    return typezz;
 }
 
-getKucaType(id)
-{
-	new typezz[30] = "Undefined";
-	switch(id)
-	{
-		case 1: typezz = "Small House";
-		case 2: typezz = "Big House";
-		case 3: typezz = "Villa";
-		case 4: typezz = "Donator House";
+hook OnGameModeInit() {
+
+	mysql_tquery(SQL, "SELECT * FROM `houses`", "House_LoadData");
+
+	print("backend/property/houses.script * loaded...");
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerLoaded(playerid) {
+
+	new query[120];
+	mysql_format(SQL, query, sizeof query, "SELECT * FROM `player_property` WHERE `player_id` = '%d'", PlayerInfo[playerid][SQLID]);
+	mysql_tquery(SQL, query, "LoadPlayerProperty", "d", playerid);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+// * SONDERLAND
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+
+	foreach(new i : iHouse) {
+
+		if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]) && GetPlayerVirtualWorld(playerid) == 0) {
+
+			if(!house_Locked[i]) {
+
+				SetPlayerPos(playerid, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]);
+				SetPlayerInterior(playerid, house_Int[i]);
+				SetPlayerVirtualWorld(playerid, house_ID[i]);
+
+				UcitajIgracuObjekte(playerid);
+			}
+
+			else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
+		}
+
+		else if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]) && GetPlayerVirtualWorld(playerid) != 0) {
+
+			SetPlayerPos(playerid, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]);
+			SetPlayerInterior(playerid, 0);
+			SetPlayerVirtualWorld(playerid, 0);
+
+			UcitajIgracuObjekte(playerid);
+		}
 	}
-	return typezz;
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:buyhouse(playerid, params[], help) {
+
+	new ID = GetNearestHouse(playerid);
+
+	if(ID == -1)
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se blizu kuce!");
+
+	if(house_Owner[ID] > 0)
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ova kuca je vec kupljena");
+
+	if(GetPlayerMoney(playerid) < house_Price[ID])
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Nemate dovoljno novca!");
+
+	if(player_House[playerid] != -1) 
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Vec posjedujete kucu!");
+
+	player_House[playerid] = ID;
+
+	house_Owner[ID] = PlayerInfo[playerid][SQLID];
+
+	house_Locked[ID] = false;
+
+	new query[200];
+
+	VosticGiveMoney(playerid, -house_Price[ID]);
+
+	SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kupili kucu!");
+
+	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `player_id` = '%d'", house_ID[ID], PlayerInfo[playerid][SQLID]);
+	mysql_tquery(SQL, query);
+
+	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `PID` = '%d' WHERE `ID` = '%d'", PlayerInfo[playerid][SQLID], house_ID[ID]);
+	mysql_tquery(SQL, query);
+
+	House_UpdateLabel(house_ID[ID], 1);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
