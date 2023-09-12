@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2023 at 09:13 AM
+-- Generation Time: Sep 12, 2023 at 01:55 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -29,6 +29,7 @@ USE `maryland`;
 -- Table structure for table `bankers`
 --
 
+DROP TABLE IF EXISTS `bankers`;
 CREATE TABLE IF NOT EXISTS `bankers` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Skin` smallint(3) NOT NULL,
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `bankers` (
 -- Table structure for table `bank_accounts`
 --
 
+DROP TABLE IF EXISTS `bank_accounts`;
 CREATE TABLE IF NOT EXISTS `bank_accounts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Owner` varchar(24) NOT NULL,
@@ -62,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `bank_accounts` (
 -- Table structure for table `bank_atms`
 --
 
+DROP TABLE IF EXISTS `bank_atms`;
 CREATE TABLE IF NOT EXISTS `bank_atms` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PosX` float NOT NULL,
@@ -79,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `bank_atms` (
 -- Table structure for table `bank_logs`
 --
 
+DROP TABLE IF EXISTS `bank_logs`;
 CREATE TABLE IF NOT EXISTS `bank_logs` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `AccountID` int(11) NOT NULL,
@@ -97,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `bank_logs` (
 -- Table structure for table `businesses`
 --
 
+DROP TABLE IF EXISTS `businesses`;
 CREATE TABLE IF NOT EXISTS `businesses` (
   `bizID` int(12) NOT NULL AUTO_INCREMENT,
   `bizName` varchar(32) DEFAULT NULL,
@@ -155,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `businesses` (
 -- Table structure for table `cars`
 --
 
+DROP TABLE IF EXISTS `cars`;
 CREATE TABLE IF NOT EXISTS `cars` (
   `carID` int(12) NOT NULL AUTO_INCREMENT,
   `carModel` int(12) DEFAULT 0,
@@ -210,6 +216,7 @@ INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carP
 -- Table structure for table `faction_police`
 --
 
+DROP TABLE IF EXISTS `faction_police`;
 CREATE TABLE IF NOT EXISTS `faction_police` (
   `fPoliceID` int(11) NOT NULL,
   `fPoliceName` varchar(60) NOT NULL DEFAULT 'Police',
@@ -247,6 +254,7 @@ CREATE TABLE IF NOT EXISTS `faction_police` (
 -- Table structure for table `houses`
 --
 
+DROP TABLE IF EXISTS `houses`;
 CREATE TABLE IF NOT EXISTS `houses` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PID` int(11) NOT NULL,
@@ -289,6 +297,7 @@ INSERT INTO `houses` (`ID`, `PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, 
 -- Table structure for table `klupe`
 --
 
+DROP TABLE IF EXISTS `klupe`;
 CREATE TABLE IF NOT EXISTS `klupe` (
   `seat_ID` int(11) NOT NULL AUTO_INCREMENT,
   `seat_x` float NOT NULL,
@@ -311,9 +320,35 @@ INSERT INTO `klupe` (`seat_ID`, `seat_x`, `seat_y`, `seat_z`, `seat_a`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `metros`
+--
+
+DROP TABLE IF EXISTS `metros`;
+CREATE TABLE IF NOT EXISTS `metros` (
+  `metroID` int(11) NOT NULL AUTO_INCREMENT,
+  `metroX` float NOT NULL,
+  `metroY` float NOT NULL,
+  `metroZ` float NOT NULL,
+  `metroRuta` int(11) NOT NULL DEFAULT 1,
+  `metroInt` int(11) NOT NULL DEFAULT 0,
+  `metroVw` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`metroID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `metros`
+--
+
+INSERT INTO `metros` (`metroID`, `metroX`, `metroY`, `metroZ`, `metroRuta`, `metroInt`, `metroVw`) VALUES
+(1, 1076.06, -1076.9, 27.3969, 2, 0, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `players`
 --
 
+DROP TABLE IF EXISTS `players`;
 CREATE TABLE IF NOT EXISTS `players` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
@@ -338,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `players` (
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Silent', 297206591, 1, 556600, 2, 21, 4, '12/09/2023 - 09:05', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
+(1, 'Silent', 297206591, 1, 556600, 2, 21, 4, '12/09/2023 - 13:49', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
 (3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
 (4, 'Andjelkovic', 464192652, 1, 0, 281, 22, 4, '12/07/2023 - 15:15', '26/06/2023 - 14:40', 'Srbija', 'Musko', 'andjelkovic@gmail.com', -1, -1),
 (5, 'Ogi', 336986984, 1, 0, 124, 31, 4, '11/07/2023 - 10:44', '26/06/2023 - 16:27', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
@@ -362,6 +397,7 @@ INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `
 -- Table structure for table `player_crypto`
 --
 
+DROP TABLE IF EXISTS `player_crypto`;
 CREATE TABLE IF NOT EXISTS `player_crypto` (
   `crypto_id` int(11) NOT NULL,
   `KolicinaBTC` float DEFAULT NULL,
@@ -397,6 +433,7 @@ INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `Kolicin
 -- Table structure for table `player_documents`
 --
 
+DROP TABLE IF EXISTS `player_documents`;
 CREATE TABLE IF NOT EXISTS `player_documents` (
   `player_id` int(11) NOT NULL,
   `NationalID` int(11) NOT NULL,
@@ -433,6 +470,7 @@ INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLi
 -- Table structure for table `player_electronic`
 --
 
+DROP TABLE IF EXISTS `player_electronic`;
 CREATE TABLE IF NOT EXISTS `player_electronic` (
   `player_id` int(11) NOT NULL,
   `Dron` tinyint(4) NOT NULL DEFAULT 0,
@@ -465,6 +503,7 @@ INSERT INTO `player_electronic` (`player_id`, `Dron`, `Baterije`, `Navigacija`) 
 -- Table structure for table `player_finance`
 --
 
+DROP TABLE IF EXISTS `player_finance`;
 CREATE TABLE IF NOT EXISTS `player_finance` (
   `finance_id` int(11) NOT NULL,
   `BankAccount` tinyint(4) NOT NULL DEFAULT 0,
@@ -497,6 +536,7 @@ INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin
 -- Table structure for table `player_property`
 --
 
+DROP TABLE IF EXISTS `player_property`;
 CREATE TABLE IF NOT EXISTS `player_property` (
   `player_id` int(11) NOT NULL,
   `HouseID` int(11) NOT NULL,
@@ -517,6 +557,7 @@ INSERT INTO `player_property` (`player_id`, `HouseID`) VALUES
 -- Table structure for table `safezones`
 --
 
+DROP TABLE IF EXISTS `safezones`;
 CREATE TABLE IF NOT EXISTS `safezones` (
   `safeSQLID` int(11) NOT NULL AUTO_INCREMENT,
   `MinX` float NOT NULL DEFAULT 0,
