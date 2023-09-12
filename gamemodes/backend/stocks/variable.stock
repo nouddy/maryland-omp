@@ -48,6 +48,8 @@ ResetujVariable(playerid)
     InSafeZone[playerid] = false;
     //Customs Vrata itd
     IspredCustomsa[playerid] = false;
+    // House Script
+    player_House[playerid] = -1;
 
     for(new i = 0; i < 2; i++)
     {

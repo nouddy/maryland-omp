@@ -60,22 +60,22 @@ forward LoadPlayerProperty(playerid);
 public LoadPlayerProperty(playerid) {
 
 	new rows = cache_num_rows();
-	if(!rows) {
-
-		new query[420];
-		mysql_format(SQL, query, sizeof query, "INSERT INTO `player_property` (`player_id`, `HouseID`) \
-		 										VALUES ('%d', '-1')", PlayerInfo[playerid][SQLID]);
-		mysql_tquery(SQL, query);
+	if(!rows) 
+    {
+    	new q[420];
+     	mysql_format(SQL, q, sizeof(q), 
+           "INSERT INTO `player_property` (player_id, HouseID) \ 
+            VALUES('%d', '-1')", PlayerInfo[playerid][SQLID]);
+        mysql_tquery(SQL, q);
 		printf("Za igraca SQLID (%d) je napravljena tabela `player_property`", PlayerInfo[playerid][SQLID]);
-	}
-
+    }
 	else {
 
 		cache_get_value_name_int(0, "HouseID", player_House[playerid]);
-		printf("House %d is loaded for player ? ", player_House[playerid], ReturnPlayerName(playerid));
+		printf("House %d is loaded for player  %s ? ", player_House[playerid], ReturnPlayerName(playerid));
 	}
 
-	return 1;
+	return (true);
 }
 
 forward House_LoadData();
@@ -150,7 +150,7 @@ public House_LoadData() {
 		printf("backend/property/houses.script loaded(%d) houses", rows);
 	}
 
-	return 1;
+	return (true);
 }
 
 forward House_Create(id, playerid);
@@ -169,7 +169,7 @@ public House_Create(id, playerid) {
 	va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
 	Iter_Add(iHouse, id);
 
-	return 1;
+	return (true);
 }
 
 stock GetNearestHouse(playerid) {
@@ -222,7 +222,7 @@ stock House_UpdateLabel(id, const option) {
 			house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 		}
 	}
-	return 1;
+	return (true);
 }
 
 GetHouseType(id)
@@ -249,8 +249,8 @@ hook OnGameModeInit() {
 hook OnPlayerLoaded(playerid) {
 
 	new query[120];
-	mysql_format(SQL, query, sizeof query, "SELECT * FROM `player_property` WHERE `player_id` = '%d'", PlayerInfo[playerid][SQLID]);
-	mysql_tquery(SQL, query, "LoadPlayerProperty", "d", playerid);
+	mysql_format(SQL, query, sizeof query, "SELECT * FROM player_property WHERE player_id = '%d'", PlayerInfo[playerid][SQLID]);
+	mysql_tquery(SQL, query, "LoadPlayerProperty", "i", playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }

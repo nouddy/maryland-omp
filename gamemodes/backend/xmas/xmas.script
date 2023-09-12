@@ -98,7 +98,7 @@ hook OnPlayerDisconnect(playerid, reason)
 forward UpdateSnow(playerid);
 public UpdateSnow(playerid)
 {
-	if(!snowOn{playerid}) return 0;
+	if(!snowOn[playerid]) return 0;
 	new Float:pPos[3];
 	GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 	for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
@@ -108,7 +108,7 @@ public UpdateSnow(playerid)
 
 YCMD:snow(playerid, params[], help)
 {
-	if(snowOn{playerid})
+	if(snowOn[playerid])
 	{
 	    DeleteSnow(playerid);
 	    SendClientMessage(playerid, -1, ""c_server"xmas » "c_white"Ugasio si sneg.");
@@ -163,12 +163,12 @@ stock GiveChristmasHat(playerid,number)
 
 Snow_OnDisconnect(playerid)
 {
-	if(snowOn{playerid})
+	if(snowOn[playerid])
 	{
 	    for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 			DestroyPlayerObject(playerid, snowObject[playerid][i]);
-		snowOn{playerid} = false;
-		KillTimer(updateTimer{playerid});
+		snowOn[playerid] = false;
+		KillTimer(updateTimer[playerid]);
 	}
 	return (true);
 }
@@ -200,22 +200,22 @@ PlayRandomXmasSong(playerid)
 
 CreateSnow(playerid)
 {
-	if(snowOn{playerid}) return 0;
+	if(snowOn[playerid]) return 0;
 	new Float:pPos[3];
 	GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 	for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 		snowObject[playerid][i] = CreatePlayerObject(playerid, 18864, pPos[0] + random(25), pPos[1] + random (25), pPos[2] - 5 + random(10), random(280), random(280), 0);
-	snowOn{playerid} = true;
-	updateTimer{playerid} = SetTimerEx("UpdateSnow", SNOW_UPDATE_INTERVAL, true, "i", playerid);
+	snowOn[playerid] = true;
+	updateTimer[playerid] = SetTimerEx("UpdateSnow", SNOW_UPDATE_INTERVAL, true, "i", playerid);
 	return (true);
 }
 
 DeleteSnow(playerid)
 {
-	if(!snowOn{playerid}) return 0;
+	if(!snowOn[playerid]) return 0;
 	for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 		DestroyPlayerObject(playerid, snowObject[playerid][i]);
-	KillTimer(updateTimer{playerid});
-	snowOn{playerid} = false;
+	KillTimer(updateTimer[playerid]);
+	snowOn[playerid] = false;
 	return (true);
 }
