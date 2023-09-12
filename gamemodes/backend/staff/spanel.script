@@ -679,13 +679,16 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 			}
 		}
 
+		/*
 		new zone[28], add[50];
 		GetPlayer2DZone(playerid, zone, sizeof(zone));
 		format(add, sizeof(add), "%s, Maryland", zone);
 		strmid(house_Adress[id], add, 0, sizeof(add), 255);
 
+		*/
+
 		house_Owner[id] = 0;
-		house_Adress[id] = add;
+		//house_Adress[id] = add;
 
 		house_Locked[id] = false;
 		house_Safe[id] = false;
@@ -700,10 +703,9 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 		new query[500];
 
-		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
-		VALUES ('%d', '%d', '%d', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
-		house_Owner[id], house_Price[id], house_Type[id],
-		house_Adress[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
+		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`,`Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
+		VALUES ('%d', '%d', '%d', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
+		house_Owner[id], house_Price[id], house_Type[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
 		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2]);
 		mysql_tquery(SQL, query, "House_Create", "i", id);
 
