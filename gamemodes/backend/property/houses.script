@@ -156,6 +156,7 @@ public House_LoadData() {
 forward House_Create(id);
 public House_Create(id) {
 
+	printf("%d kreated",id);
 	house_ID[id] = cache_insert_id();
 	house_Created[id] = 1;
 

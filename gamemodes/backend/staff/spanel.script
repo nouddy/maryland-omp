@@ -184,6 +184,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
+				print("dolazi do dialoga.");
 				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Maryland - Kreiraj Kucu:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila", "Dalje", "Izlaz");
 			}
 			case 1:
@@ -595,15 +596,19 @@ Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
 
 Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]) {
 
+	print("kreirajkucu dialog");
 	if(response) {
 
 		new id = GetFreeHouseID(), Float:pPos[3];
 		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
+		print("kreirajkucu dialog prosao");
 		switch(listitem) {
 
 			case 0: {
 
+
+				print("dialog_kreirajkucu case 0");
 
 				house_Price[id] = 50000;
 				house_Type[id] = 1;
@@ -630,6 +635,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 			case 1: {
 
+				print("dialog_kreirajkucu case 1");
 				house_Price[id] = 120000;
 				house_Type[id] = 2;
 
@@ -655,6 +661,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		
 			case 2: {
 
+				print("dialog_kreirajkucu case 2");
 				house_Price[id] = 300000;
 				house_Type[id] = 3;
 
@@ -679,16 +686,15 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 			}
 		}
 
-		/*
-		new zone[28], add[50];
+		print("dialog_kreirajkucu prosao case");
+		new zone[28], add[70];
 		GetPlayer2DZone(playerid, zone, sizeof(zone));
 		format(add, sizeof(add), "%s, Maryland", zone);
 		strmid(house_Adress[id], add, 0, sizeof(add), 255);
 
-		*/
 
 		house_Owner[id] = 0;
-		//house_Adress[id] = add;
+		house_Adress[id] = add;
 
 		house_Locked[id] = false;
 		house_Safe[id] = false;
@@ -699,15 +705,17 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_Drugs[id][1] = 0;
 		house_Drugs[id][2] = 0;
 
-		/*house_ID[id] = id;*/
+		house_ID[id] = id;
 
 		new query[500];
 
+		print("dolazi do kverija");
 		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`,`Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
 		VALUES ('%d', '%d', '%d', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
 		house_Owner[id], house_Price[id], house_Type[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
 		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2]);
-		mysql_tquery(SQL, query, "House_Create", "i", id);
+		mysql_pquery(SQL, query, "House_Create", "i", id);
+
 
 
 		va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
