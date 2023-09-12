@@ -599,7 +599,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 	print("kreirajkucu dialog");
 	if(response) {
 
-		new id = GetFreeHouseID(), Float:pPos[3];
+		new id = Iter_Free(iHouse), Float:pPos[3];
 		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
 		print("kreirajkucu dialog prosao");
