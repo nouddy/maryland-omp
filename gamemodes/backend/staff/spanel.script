@@ -695,6 +695,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		strmid(house_Adress[id], add, 0, sizeof(add), 255);
 
 
+		/*
 		house_Owner[id] = 0;
 		house_Adress[id] = add;
 
@@ -708,6 +709,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_Drugs[id][2] = 0;
 
 		house_ID[id] = id;
+		*/
 
 		new query[500];
 
