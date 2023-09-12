@@ -162,7 +162,7 @@ public House_Create(id) {
 
 stock GetNearestHouse(playerid) {
 
-	foreach(new i : iHouse) {
+	for(new i = 0; i < MAX_HOUSES; i++) {
 
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]))
 			return i;
