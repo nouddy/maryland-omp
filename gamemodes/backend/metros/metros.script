@@ -30,7 +30,9 @@
 */
 new Text3D:MetroLabel[MAX_METROS],
 	MetroPickup[MAX_METROS],
-	bool:ogy_finished = true;
+	bool:ogy_finished = true,
+	MetroStanica[MAX_PLAYERS],
+	MetroTimer[MAX_PLAYERS];
 /*
      ____                        
     (  __)                       
@@ -73,6 +75,12 @@ hook OnGameModeInit()
     mysql_pquery(SQL, "SELECT * FROM `metros`", "LoadMetros" );
 }
 
+hook OnPlayerConnect(playerid)
+{
+	MetroStanica[playerid] = 0;
+	KillTimer(MetroTimer[playerid]);
+	return 1;
+}
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
@@ -82,9 +90,86 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	    {
 	        if(IsPlayerInRangeOfPoint(playerid, 1.0, metroInfo[ idzz ][ MetroX ], metroInfo[ idzz ][ MetroY ], metroInfo[ idzz ][ MetroZ ]))
 	        {
-	        	printf("test");
+	        	switch(metroInfo[idzz][MetroRutaID])
+	        	{
+	        		case 1: Dialog_Show(playerid, "dialog_metrostanica1", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
+	        		case 2: Dialog_Show(playerid, "dialog_metrostanica2", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
+	        		case 3: Dialog_Show(playerid, "dialog_metrostanica3", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
+	        		case 4: Dialog_Show(playerid, "dialog_metrostanica4", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
+	        		case 5: Dialog_Show(playerid, "dialog_metrostanica5", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
+	        	}
 	        }
 	    }
+	}
+	return (true);
+}
+
+/*
+	* DIalogs
+*/
+
+Dialog:dialog_metrostanica1(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStanica[playerid] = 1;
+			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStanica[playerid] = 2;
+		}
+	}
+	return (true);
+}
+Dialog:dialog_metrostanica2(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStanica[playerid] = 1;
+			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStanica[playerid] = 2;
+		}
+	}
+	return (true);
+}
+Dialog:dialog_metrostanica3(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStanica[playerid] = 1;
+			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStanica[playerid] = 2;
+		}
+	}
+	return (true);
+}
+Dialog:dialog_metrostanica4(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStanica[playerid] = 1;
+			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStanica[playerid] = 2;
+		}
+	}
+	return (true);
+}
+Dialog:dialog_metrostanica5(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStanica[playerid] = 1;
+			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStanica[playerid] = 2;
+		}
 	}
 	return (true);
 }
@@ -119,7 +204,6 @@ public LoadMetros()
 	return (true);
 }
 
-
 forward SaveMetros(metro);
 public SaveMetros(metro)
 {
@@ -141,9 +225,7 @@ public SaveMetros(metro)
 forward CreateMetro(id);
 public CreateMetro(id)
 {
-
 	metroInfo[id][MetroSQLID] = cache_insert_id();
-
 	Iter_Add(Metros, id);
 	return (true);
 }
@@ -156,7 +238,58 @@ public CreateMetro(id)
 
 */
 
+forward MetroEnter(playerid, id);
+public MetroEnter(playerid, id)
+{
+	// id == 1 = 30sec
+	// id == 2 = 60sec
+	switch(id)
+	{
+		case 1:
+		{
+			MetroTimer[playerid] = SetTimerEx("MetroExit", 30*1000, false, "ii", playerid, MetroStanica[playerid]);
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Usli ste u metro stanicu, sacekajte dok metro dodje do lokacije.");
+		}
+		case 2:
+		{
 
+			MetroTimer[playerid] = SetTimerEx("MetroExit", 60*1000, false, "ii", playerid, MetroStanica[playerid]);
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Usli ste u metro stanicu, sacekajte dok metro dodje do lokacije.");
+		}
+	}
+	return (true);
+}
+
+forward MetroExit(playerid, id);
+public MetroExit(playerid, id)
+{
+
+	KillTimer(MetroTimer[playerid]);
+	switch(id)
+	{
+		case 1:
+		{
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta1.");
+		}
+		case 2:
+		{
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta2");
+		}
+		case 3:
+		{
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta3");
+		}	
+		case 4:
+		{
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta4");
+		}
+		case 5:
+		{
+			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta5");
+		}
+	}
+	return (true);
+}
 forward sql_createmetro(id);
 public sql_createmetro(id)
 {
@@ -205,6 +338,7 @@ public MetrosLabel(id)
 	format(stringic, sizeof(stringic),"   » {ffffff}METRO STANICA{23DEEB} «   \n\nStanica: %s",StanicaIzRute(id));
 	MetroLabel[id] = CreateDynamic3DTextLabel(stringic, 0x23DEEBFF, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ],10.0,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, 0, 0);
 
-	MetroPickup[id] = CreateDynamicPickup(19605, 1, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ]);
+	//MetroPickup[id] = CreateDynamicPickup(19605, 1, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ]);
+	CreateMarker(4,true,metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ]-1.0,0, 0);
 	return (true);
 }

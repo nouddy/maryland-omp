@@ -96,14 +96,14 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu\nActor Banker\nBankomat\nBiznis",
+					"Kucu\nActor Banker\nBankomat\nBiznis\nMetro Stanica",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona",
+					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -284,6 +284,8 @@ Dialog:dialog_odabirstanice(const playerid, response, listitem, string:inputtext
 		metroInfo[id][MetroRutaID] = idmetroa;
 
 		sql_createmetro(id);
+
+		MetrosLabel(id);
 		
 
 		printf("%f, %f, %f",metroInfo[id][MetroX], metroInfo[id][MetroY], metroInfo[id][MetroZ]);
@@ -369,11 +371,38 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 						"Nastavi", "Nazad"
 					);				
 			}
+			case 4:
+			{
+				new id = NearestMetro(playerid);
+
+
+				if(id == -1)
+					return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nema metroa u blizini");
+				Dialog_Show(playerid, "dialog_izmenistanicu", DIALOG_STYLE_LIST, "metro Stanica - izmena", "Ruta1\nRuta2\nRuta3\nRuta5\nRuta5\n", "Dalje", "Izlaz");
+			}
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+Dialog:dialog_izmenistanicu(const playerid, response, listitem, string:inputtext[])
+{
+	if(!response) return 1;
+	if(response)
+	{
+		new id = NearestMetro(playerid);
+		switch(listitem)
+		{
+			case 0: metroInfo[id][MetroRutaID] = 1;
+			case 1: metroInfo[id][MetroRutaID] = 2;
+			case 2: metroInfo[id][MetroRutaID] = 3;
+			case 3: metroInfo[id][MetroRutaID] = 4;
+			case 4: metroInfo[id][MetroRutaID] = 5;
+		}
+		va_SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Promenili ste rutu metroa id: %d",id);
+	}
+	return (true);
+}
 Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 {	
 	if(response)
@@ -471,6 +500,25 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 				InSafeZone[playerid] = false;
 
 			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali safe zonu.");				
+			}
+			case 7:
+			{
+				new id = NearestMetro(playerid);
+				if(id == -1)
+					return SendClientMessage(playerid, x_server, "Niste u blizini metroa.");
+
+				if(!Iter_Contains(Metros, id))
+					return SendClientMessage(playerid, x_server, "Taj metro je vec obrisana.");
+
+			    new szQuery[128];
+			    format(szQuery, sizeof szQuery, "DELETE FROM `metros` WHERE `metroID`='%d'", id);
+			    mysql_tquery(SQL, szQuery);
+			    
+			    DestroyDynamicPickup(MetroPickup[id]);
+			    DestroyDynamic3DTextLabel(MetroLabel[id]);
+			    Iter_Remove(Metros, id);
+
+			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali metro.");	
 			}
 		}
 	}
