@@ -711,13 +711,16 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_ID[id] = id;
 		*/
 		print("dolazi do kverija");
-		new query[500];
 
-		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`,`Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
-		VALUES ('%d', '%d', '%d', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
-		house_Owner[id], house_Price[id], house_Type[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
-		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2]);
-		mysql_pquery(SQL, query, "House_Create", "i", id);
+		static q[850];
+		mysql_format(SQL, q, sizeof(q),
+		    "INSERT INTO `houses` (`PID`, `Price`, `Type`) \
+			 VALUES('%d','%d','%d')", 
+		house_Owner[id],house_Price[id],house_Type[id]);
+
+		mysql_pquery(SQL, q, "House_Create", "i", id);
+
+		print("kveri prosao");
 	}
 
 	return 1;
