@@ -30,7 +30,7 @@ new house_ID[MAX_HOUSES],
 	   house_Owner[MAX_HOUSES],
 	   house_Price[MAX_HOUSES],
 	   house_Type[MAX_HOUSES],
-	   house_Adress[MAX_HOUSES][MAX_ADRESS_LEN],
+	   house_Adress[MAX_HOUSES][70],
 
 	   bool:house_Locked[MAX_HOUSES],
 
@@ -183,7 +183,7 @@ stock GetNearestHouse(playerid) {
 
 stock GetFreeHouseID() {
 
-	for(new i = 0; i < MAX_HOUSES; i++) {
+	foreach(new i : iHouse) {
 
 		if(house_Created[i] == 0) return i;
 		break;
