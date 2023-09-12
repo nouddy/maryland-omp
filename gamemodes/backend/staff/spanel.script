@@ -718,15 +718,9 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
         house_Drugs[id][1], house_Drugs[id][2], house_Wardrobe[id][0], house_Wardrobe[id][1], house_Wardrobe[id][2],
         house_Fridge[id][0], house_Fridge[id][1], house_Fridge[id][2], house_Int[id]);
         mysql_tquery(SQL, query, "House_Create", "i", id);
-		/*
-		static q[850];
-		mysql_format(SQL, q, sizeof(q),
-		    "INSERT INTO `houses` (`PID`, `Price`, `Type`) \
-			 VALUES('%d','%d','%d')", 
-		house_Owner[id],house_Price[id],house_Type[id]);
 
-		mysql_pquery(SQL, q, "House_Create", "i", id);
-		*/
+
+        House_UpdateLabel(id, 1);
 
 		print("kveri prosao");
 	}
