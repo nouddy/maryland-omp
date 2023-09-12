@@ -458,6 +458,13 @@ YCMD:restart(playerid, const string: params[], help)
 //-
 #include "backend/tehnomedia/end/do-not-look.end"
 
+
+//- Metros
+
+#include "backend/metros/metros.script"				//* Metro System
+
+#include "backend/metros/end/do-not-look.end"
+//-
 //- Assets Continue
 #include "backend/assets/labels.asset"							//* Labeli
 #include "backend/assets/custom_markers.asset"					//* Markeri
