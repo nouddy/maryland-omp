@@ -687,7 +687,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		}
 
 		print("dialog_kreirajkucu prosao case");
-		/*
 		new zone[28], add[70];
 		GetPlayer2DZone(playerid, zone, sizeof(zone));
 		format(add, sizeof(add), "%s, Maryland", zone);
@@ -706,8 +705,8 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_Drugs[id][1] = 0;
 		house_Drugs[id][2] = 0;
 
-		house_ID[id] = id;
-		*/
+
+		Iter_Add(iHouse, id);
 		print("dolazi do kverija");
 
 		static q[850];
