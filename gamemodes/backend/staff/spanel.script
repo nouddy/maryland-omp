@@ -707,7 +707,10 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2], house_Safe[id], house_Money[id], house_Drugs[id][0],
         house_Drugs[id][1], house_Drugs[id][2], house_Wardrobe[id][0], house_Wardrobe[id][1], house_Wardrobe[id][2],
 		house_Fridge[id][0], house_Fridge[id][1], house_Fridge[id][2], house_Int[id]);
-		mysql_tquery(SQL, query, "House_Create", "dd", id, playerid);
+		mysql_tquery(SQL, query, "House_Create", "i", id);
+
+
+		va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
 	}
 
 	return 1;

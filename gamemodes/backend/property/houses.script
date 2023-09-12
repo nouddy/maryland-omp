@@ -153,8 +153,8 @@ public House_LoadData() {
 	return (true);
 }
 
-forward House_Create(id, playerid);
-public House_Create(id, playerid) {
+forward House_Create(id);
+public House_Create(id) {
 
 	house_ID[id] = cache_insert_id();
 	house_Created[id] = 1;
@@ -166,7 +166,6 @@ public House_Create(id, playerid) {
 	house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 	house_Pickup[id] = CreateDynamicPickup(19522, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 
-	va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
 	Iter_Add(iHouse, id);
 
 	return (true);
@@ -194,7 +193,9 @@ stock GetFreeHouseID() {
 
 stock House_UpdateLabel(id, const option) {
 
-	
+
+	if(!IsValidDynamic3DTextLabel(house_Label[id]))
+		DestroyDynamic3DTextLabel(house_Label[id]);
 	new zakljucan1[30];
 	if(house_Locked[id] == false) zakljucan1 = "Opened"; else zakljucan1 = "Locked";
 
@@ -202,25 +203,18 @@ stock House_UpdateLabel(id, const option) {
 
 	if(option == 1) {
 
-		if(IsValidDynamic3DTextLabel(house_Label[id])) {
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
 
-			format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
-
-			house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
-			house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
-		}
+		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+		house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 	}
 
 	else if(option == 2)
 	{
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
 
-		if(IsValidDynamic3DTextLabel(house_Label[id])) {
-
-			format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
-
-			house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
-			house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
-		}
+		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
+		house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 	}
 	return (true);
 }
@@ -259,31 +253,35 @@ hook OnPlayerLoaded(playerid) {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
-	foreach(new i : iHouse) {
+	if(newkeys & KEY_SECONDARY_ATTACK)
+	{
+		foreach(new i : iHouse) {
 
-		if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]) && GetPlayerVirtualWorld(playerid) == 0) {
+			if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]) && GetPlayerVirtualWorld(playerid) == 0) {
 
-			if(!house_Locked[i]) {
+				if(!house_Locked[i]) {
 
-				SetPlayerPos(playerid, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]);
-				SetPlayerInterior(playerid, house_Int[i]);
-				SetPlayerVirtualWorld(playerid, house_ID[i]);
+					SetPlayerPos(playerid, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]);
+					SetPlayerInterior(playerid, house_Int[i]);
+					SetPlayerVirtualWorld(playerid, house_ID[i]);
+
+					UcitajIgracuObjekte(playerid);
+				}
+
+				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
+			}
+
+			else if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]) && GetPlayerVirtualWorld(playerid) != 0) {
+
+				SetPlayerPos(playerid, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]);
+				SetPlayerInterior(playerid, 0);
+				SetPlayerVirtualWorld(playerid, 0);
 
 				UcitajIgracuObjekte(playerid);
 			}
-
-			else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
-		}
-
-		else if(IsPlayerInRangeOfPoint(playerid, 3.5, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]) && GetPlayerVirtualWorld(playerid) != 0) {
-
-			SetPlayerPos(playerid, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]);
-			SetPlayerInterior(playerid, 0);
-			SetPlayerVirtualWorld(playerid, 0);
-
-			UcitajIgracuObjekte(playerid);
 		}
 	}
+
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
