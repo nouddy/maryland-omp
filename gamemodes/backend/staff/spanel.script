@@ -698,15 +698,13 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 		house_ID[id] = id;
 
-		new query[560];
+		new query[500];
 
-		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`,`Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`,`FridgeX`, `FridgeY`, `FridgeZ`, `Int`) \
-		VALUES ('%d', '%d', '%d', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f', '%i', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%d')", 
+		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
+		VALUES ('%d', '%d', '%d', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
 		house_Owner[id], house_Price[id], house_Type[id],
 		house_Adress[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
-		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2], house_Safe[id], house_Money[id], house_Drugs[id][0],
-        house_Drugs[id][1], house_Drugs[id][2], house_Wardrobe[id][0], house_Wardrobe[id][1], house_Wardrobe[id][2],
-		house_Fridge[id][0], house_Fridge[id][1], house_Fridge[id][2], house_Int[id]);
+		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2]);
 		mysql_tquery(SQL, query, "House_Create", "i", id);
 
 
