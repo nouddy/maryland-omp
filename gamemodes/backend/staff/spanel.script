@@ -603,7 +603,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
 		print("kreirajkucu dialog prosao");
-		/*
 		switch(listitem) {
 
 			case 0: {
@@ -686,7 +685,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 			}
 		}
-		*/
 
 		print("dialog_kreirajkucu prosao case");
 		/*
