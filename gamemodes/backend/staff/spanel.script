@@ -689,13 +689,13 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		*/
 
 		print("dialog_kreirajkucu prosao case");
+		/*
 		new zone[28], add[70];
 		GetPlayer2DZone(playerid, zone, sizeof(zone));
 		format(add, sizeof(add), "%s, Maryland", zone);
 		strmid(house_Adress[id], add, 0, sizeof(add), 255);
 
 
-		/*
 		house_Owner[id] = 0;
 		house_Adress[id] = add;
 
@@ -710,19 +710,14 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 		house_ID[id] = id;
 		*/
-
+		print("dolazi do kverija");
 		new query[500];
 
-		print("dolazi do kverija");
 		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`PID`, `Price`, `Type`,`Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`) \
 		VALUES ('%d', '%d', '%d', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
 		house_Owner[id], house_Price[id], house_Type[id], house_Locked[id], house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2],
 		house_Exit[id][0], house_Exit[id][1], house_Exit[id][2]);
 		mysql_pquery(SQL, query, "House_Create", "i", id);
-
-
-
-		va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali kucu "c_server"(%d)", id);
 	}
 
 	return 1;
