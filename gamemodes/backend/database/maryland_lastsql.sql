@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 11, 2023 at 05:19 PM
+-- Generation Time: Sep 12, 2023 at 09:13 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `maryland`
 --
+CREATE DATABASE IF NOT EXISTS `maryland` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `maryland`;
 
 -- --------------------------------------------------------
 
@@ -27,16 +29,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `bankers`
 --
 
--- ? Last Database : 9.11.2023
-
-CREATE TABLE `bankers` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bankers` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Skin` smallint(3) NOT NULL,
   `PosX` float NOT NULL,
   `PosY` float NOT NULL,
   `PosZ` float NOT NULL,
-  `PosA` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `PosA` float NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -44,14 +45,15 @@ CREATE TABLE `bankers` (
 -- Table structure for table `bank_accounts`
 --
 
-CREATE TABLE `bank_accounts` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bank_accounts` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Owner` varchar(24) NOT NULL,
   `Password` varchar(32) NOT NULL,
   `Balance` int(11) NOT NULL,
   `CreatedOn` int(11) NOT NULL,
   `LastAccess` int(11) NOT NULL,
-  `Disabled` smallint(1) NOT NULL
+  `Disabled` smallint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -60,15 +62,16 @@ CREATE TABLE `bank_accounts` (
 -- Table structure for table `bank_atms`
 --
 
-CREATE TABLE `bank_atms` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bank_atms` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PosX` float NOT NULL,
   `PosY` float NOT NULL,
   `PosZ` float NOT NULL,
   `RotX` float NOT NULL,
   `RotY` float NOT NULL,
-  `RotZ` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `RotZ` float NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -76,14 +79,16 @@ CREATE TABLE `bank_atms` (
 -- Table structure for table `bank_logs`
 --
 
-CREATE TABLE `bank_logs` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bank_logs` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `AccountID` int(11) NOT NULL,
   `ToAccountID` int(11) NOT NULL DEFAULT -1,
   `Type` smallint(1) NOT NULL,
   `Player` varchar(24) NOT NULL,
   `Amount` int(11) NOT NULL,
-  `Date` int(11) NOT NULL
+  `Date` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `bank_logs_ibfk_1` (`AccountID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -92,8 +97,8 @@ CREATE TABLE `bank_logs` (
 -- Table structure for table `businesses`
 --
 
-CREATE TABLE `businesses` (
-  `bizID` int(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `businesses` (
+  `bizID` int(12) NOT NULL AUTO_INCREMENT,
   `bizName` varchar(32) DEFAULT NULL,
   `bizOwner` int(12) DEFAULT 0,
   `bizType` int(12) DEFAULT 0,
@@ -140,8 +145,9 @@ CREATE TABLE `businesses` (
   `bizPrice18` int(12) DEFAULT 0,
   `bizPrice19` int(12) DEFAULT 0,
   `bizPrice20` int(12) DEFAULT 0,
-  `bizShipment` int(4) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `bizShipment` int(4) DEFAULT 0,
+  PRIMARY KEY (`bizID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -149,8 +155,8 @@ CREATE TABLE `businesses` (
 -- Table structure for table `cars`
 --
 
-CREATE TABLE `cars` (
-  `carID` int(12) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cars` (
+  `carID` int(12) NOT NULL AUTO_INCREMENT,
   `carModel` int(12) DEFAULT 0,
   `carOwner` int(12) DEFAULT 0,
   `carPosX` float DEFAULT 0,
@@ -187,8 +193,9 @@ CREATE TABLE `cars` (
   `carWeapon5` int(12) DEFAULT 0,
   `carAmmo5` int(12) DEFAULT 0,
   `carImpoundPrice` int(12) DEFAULT 0,
-  `carFaction` int(12) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `carFaction` int(12) DEFAULT 0,
+  PRIMARY KEY (`carID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `cars`
@@ -203,7 +210,7 @@ INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carP
 -- Table structure for table `faction_police`
 --
 
-CREATE TABLE `faction_police` (
+CREATE TABLE IF NOT EXISTS `faction_police` (
   `fPoliceID` int(11) NOT NULL,
   `fPoliceName` varchar(60) NOT NULL DEFAULT 'Police',
   `fPoliceShortName` varchar(30) NOT NULL DEFAULT 'PD',
@@ -229,7 +236,9 @@ CREATE TABLE `faction_police` (
   `fPoliceSkins1` int(11) NOT NULL,
   `fPoliceSkins2` int(11) NOT NULL,
   `fPoliceSkins3` int(11) NOT NULL,
-  `fPoliceSkins4` int(11) NOT NULL
+  `fPoliceSkins4` int(11) NOT NULL,
+  PRIMARY KEY (`fPoliceID`),
+  UNIQUE KEY `fPoliceBoss` (`fPoliceBoss`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -238,8 +247,8 @@ CREATE TABLE `faction_police` (
 -- Table structure for table `houses`
 --
 
-CREATE TABLE `houses` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `houses` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PID` int(11) NOT NULL,
   `Price` int(11) NOT NULL,
   `Type` int(11) NOT NULL,
@@ -262,15 +271,17 @@ CREATE TABLE `houses` (
   `FridgeX` float NOT NULL,
   `FridgeY` float NOT NULL,
   `FridgeZ` float NOT NULL,
-  `Int` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Int` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `PID` (`PID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `houses`
 --
 
 INSERT INTO `houses` (`ID`, `PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, `PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`, `Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`, `FridgeX`, `FridgeY`, `FridgeZ`, `Int`) VALUES
-(2, 0, 50000, 1, 'Market, Maryland', 0, 830.025, -1331.26, 13.3969, 224.28, 1289.19, 1082.14, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 1);
+(2, 1, 50000, 1, 'Market, Maryland', 0, 830.025, -1331.26, 13.3969, 224.28, 1289.19, 1082.14, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 1);
 
 -- --------------------------------------------------------
 
@@ -278,13 +289,14 @@ INSERT INTO `houses` (`ID`, `PID`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, 
 -- Table structure for table `klupe`
 --
 
-CREATE TABLE `klupe` (
-  `seat_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `klupe` (
+  `seat_ID` int(11) NOT NULL AUTO_INCREMENT,
   `seat_x` float NOT NULL,
   `seat_y` float NOT NULL,
   `seat_z` float NOT NULL,
-  `seat_a` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `seat_a` float NOT NULL,
+  PRIMARY KEY (`seat_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `klupe`
@@ -302,8 +314,8 @@ INSERT INTO `klupe` (`seat_ID`, `seat_x`, `seat_y`, `seat_z`, `seat_a`) VALUES
 -- Table structure for table `players`
 --
 
-CREATE TABLE `players` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `players` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
   `Password` int(11) NOT NULL,
   `Level` int(11) NOT NULL DEFAULT 1,
@@ -317,15 +329,16 @@ CREATE TABLE `players` (
   `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
   `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
   `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
-  `Objekat1` tinyint(4) NOT NULL DEFAULT -1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Objekat1` tinyint(4) NOT NULL DEFAULT -1,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `players`
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Vostic', 297206591, 1, 606600, 2, 21, 4, '11/07/2023 - 20:32', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
+(1, 'Silent', 297206591, 1, 556600, 2, 21, 4, '12/09/2023 - 09:05', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
 (3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
 (4, 'Andjelkovic', 464192652, 1, 0, 281, 22, 4, '12/07/2023 - 15:15', '26/06/2023 - 14:40', 'Srbija', 'Musko', 'andjelkovic@gmail.com', -1, -1),
 (5, 'Ogi', 336986984, 1, 0, 124, 31, 4, '11/07/2023 - 10:44', '26/06/2023 - 16:27', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
@@ -349,13 +362,14 @@ INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `
 -- Table structure for table `player_crypto`
 --
 
-CREATE TABLE `player_crypto` (
+CREATE TABLE IF NOT EXISTS `player_crypto` (
   `crypto_id` int(11) NOT NULL,
   `KolicinaBTC` float DEFAULT NULL,
   `KolicinaETH` float DEFAULT NULL,
   `KolicinaLTC` float DEFAULT NULL,
   `KolicinaUSDT` float DEFAULT NULL,
-  `KolicinaDOT` float DEFAULT NULL
+  `KolicinaDOT` float DEFAULT NULL,
+  UNIQUE KEY `crypto_id` (`crypto_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -383,14 +397,15 @@ INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `Kolicin
 -- Table structure for table `player_documents`
 --
 
-CREATE TABLE `player_documents` (
+CREATE TABLE IF NOT EXISTS `player_documents` (
   `player_id` int(11) NOT NULL,
   `NationalID` int(11) NOT NULL,
   `Passport` int(11) NOT NULL,
   `VoziloLicence` int(11) NOT NULL,
   `MotoLicence` int(11) NOT NULL,
   `BrodLicence` int(11) NOT NULL,
-  `OruzjeLicence` int(11) NOT NULL
+  `OruzjeLicence` int(11) NOT NULL,
+  UNIQUE KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -418,11 +433,12 @@ INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLi
 -- Table structure for table `player_electronic`
 --
 
-CREATE TABLE `player_electronic` (
+CREATE TABLE IF NOT EXISTS `player_electronic` (
   `player_id` int(11) NOT NULL,
   `Dron` tinyint(4) NOT NULL DEFAULT 0,
   `Baterije` int(11) NOT NULL DEFAULT 0,
-  `Navigacija` tinyint(4) NOT NULL DEFAULT 0
+  `Navigacija` tinyint(4) NOT NULL DEFAULT 0,
+  UNIQUE KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -449,11 +465,12 @@ INSERT INTO `player_electronic` (`player_id`, `Dron`, `Baterije`, `Navigacija`) 
 -- Table structure for table `player_finance`
 --
 
-CREATE TABLE `player_finance` (
+CREATE TABLE IF NOT EXISTS `player_finance` (
   `finance_id` int(11) NOT NULL,
   `BankAccount` tinyint(4) NOT NULL DEFAULT 0,
   `BankMoney` int(11) NOT NULL DEFAULT 0,
-  `BankPin` int(11) NOT NULL DEFAULT 0
+  `BankPin` int(11) NOT NULL DEFAULT 0,
+  UNIQUE KEY `finance_id` (`finance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -480,9 +497,10 @@ INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin
 -- Table structure for table `player_property`
 --
 
-CREATE TABLE `player_property` (
+CREATE TABLE IF NOT EXISTS `player_property` (
   `player_id` int(11) NOT NULL,
-  `HouseID` int(11) NOT NULL
+  `HouseID` int(11) NOT NULL,
+  UNIQUE KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -490,6 +508,7 @@ CREATE TABLE `player_property` (
 --
 
 INSERT INTO `player_property` (`player_id`, `HouseID`) VALUES
+(1, 2),
 (17, -1);
 
 -- --------------------------------------------------------
@@ -498,8 +517,8 @@ INSERT INTO `player_property` (`player_id`, `HouseID`) VALUES
 -- Table structure for table `safezones`
 --
 
-CREATE TABLE `safezones` (
-  `safeSQLID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `safezones` (
+  `safeSQLID` int(11) NOT NULL AUTO_INCREMENT,
   `MinX` float NOT NULL DEFAULT 0,
   `MinY` float NOT NULL DEFAULT 0,
   `MaxX` float NOT NULL DEFAULT 0,
@@ -508,8 +527,9 @@ CREATE TABLE `safezones` (
   `Color` int(11) NOT NULL DEFAULT 0,
   `PickupX` float NOT NULL DEFAULT 0,
   `PickupY` float NOT NULL DEFAULT 0,
-  `PickupZ` float NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `PickupZ` float NOT NULL DEFAULT 0,
+  PRIMARY KEY (`safeSQLID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `safezones`
@@ -517,174 +537,6 @@ CREATE TABLE `safezones` (
 
 INSERT INTO `safezones` (`safeSQLID`, `MinX`, `MinY`, `MaxX`, `MaxY`, `Radius`, `Color`, `PickupX`, `PickupY`, `PickupZ`) VALUES
 (4, 1437.3, -1723.03, 1522.43, -1600.28, 30, 10040234, 1479.35, -1659.08, 12.1709);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `bankers`
---
-ALTER TABLE `bankers`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `bank_accounts`
---
-ALTER TABLE `bank_accounts`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `bank_atms`
---
-ALTER TABLE `bank_atms`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `bank_logs`
---
-ALTER TABLE `bank_logs`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `bank_logs_ibfk_1` (`AccountID`);
-
---
--- Indexes for table `businesses`
---
-ALTER TABLE `businesses`
-  ADD PRIMARY KEY (`bizID`);
-
---
--- Indexes for table `cars`
---
-ALTER TABLE `cars`
-  ADD PRIMARY KEY (`carID`);
-
---
--- Indexes for table `faction_police`
---
-ALTER TABLE `faction_police`
-  ADD PRIMARY KEY (`fPoliceID`),
-  ADD UNIQUE KEY `fPoliceBoss` (`fPoliceBoss`);
-
---
--- Indexes for table `houses`
---
-ALTER TABLE `houses`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `PID` (`PID`);
-
---
--- Indexes for table `klupe`
---
-ALTER TABLE `klupe`
-  ADD PRIMARY KEY (`seat_ID`);
-
---
--- Indexes for table `players`
---
-ALTER TABLE `players`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `player_crypto`
---
-ALTER TABLE `player_crypto`
-  ADD UNIQUE KEY `crypto_id` (`crypto_id`);
-
---
--- Indexes for table `player_documents`
---
-ALTER TABLE `player_documents`
-  ADD UNIQUE KEY `player_id` (`player_id`);
-
---
--- Indexes for table `player_electronic`
---
-ALTER TABLE `player_electronic`
-  ADD UNIQUE KEY `player_id` (`player_id`);
-
---
--- Indexes for table `player_finance`
---
-ALTER TABLE `player_finance`
-  ADD UNIQUE KEY `finance_id` (`finance_id`);
-
---
--- Indexes for table `player_property`
---
-ALTER TABLE `player_property`
-  ADD UNIQUE KEY `player_id` (`player_id`),
-  ADD UNIQUE KEY `HouseID` (`HouseID`);
-
---
--- Indexes for table `safezones`
---
-ALTER TABLE `safezones`
-  ADD PRIMARY KEY (`safeSQLID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `bankers`
---
-ALTER TABLE `bankers`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `bank_accounts`
---
-ALTER TABLE `bank_accounts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `bank_atms`
---
-ALTER TABLE `bank_atms`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `bank_logs`
---
-ALTER TABLE `bank_logs`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `businesses`
---
-ALTER TABLE `businesses`
-  MODIFY `bizID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `cars`
---
-ALTER TABLE `cars`
-  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `houses`
---
-ALTER TABLE `houses`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `klupe`
---
-ALTER TABLE `klupe`
-  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `players`
---
-ALTER TABLE `players`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT for table `safezones`
---
-ALTER TABLE `safezones`
-  MODIFY `safeSQLID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
