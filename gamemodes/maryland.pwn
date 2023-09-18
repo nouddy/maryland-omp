@@ -357,135 +357,146 @@ YCMD:restart(playerid, const string: params[], help)
 }
 
 
-//- Includes List
+//-------------------------------------------------------------------------------------------------------- Includes List
 
 //* Bitno jako da bude medju prvima
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
 
 
-//- Assets
+//-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 						//* ProxDetector
 #include "backend/assets/anims.asset"							//* Anim preload
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/assets/end/do-not-look.end" 
 
-//- Main
+//-------------------------------------------------------------------------------------------------------- Main
 #include "backend/main/main.script"								//* Log/Reg
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/main/end/do-not-look.end"
 
-//- Documentation
+//-------------------------------------------------------------------------------------------------------- Documentation
 #include "backend/documentation/playerdocuments.script"			//* Dokumenta
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/documentation/end/do-not-look.end"
 
-//- Vehicle
+//-------------------------------------------------------------------------------------------------------- Vehicle
 #include "backend/vehicle/brzinomer.script"						//* Brzinomer
 #include "backend/vehicle/vehicle.script"						//* Vozila paljenje gasenje itd
 #include "backend/vehicle/veh_ownership.script"					//* Vehicle ownership
 #include "backend/vehicle/servis.script"						//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.end"
 
-//- Crypto
+//-------------------------------------------------------------------------------------------------------- Crypto
 #include "backend/crypto/crypto_ogy.script"						//* Crypto
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/crypto/end/do-not-look.end"
 
-//- Finances
+//-------------------------------------------------------------------------------------------------------- Finances
 #include "backend/finance/bank_old.script"						//* Bankarstvo
 #include "backend/finance/bank_ogy.script"						//* Bankarstvo
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.end"
 
-//- Property
+//-------------------------------------------------------------------------------------------------------- Property
 #include "backend/property/houses.script"						//* Imovina
 
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/property/end/do-not-look.end"
 
-//- Business
+//-------------------------------------------------------------------------------------------------------- Business
 #include "backend/business/biz.script"							//* Firme tek zapocete soo
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/business/end/do-not-look.end"
 
-//- Benches
+//-------------------------------------------------------------------------------------------------------- Benches
 #include "backend/benches/klupe_ogy.script"						//* Klupe
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/benches/end/do-not-look.end"
 
-//- Attachments
+//-------------------------------------------------------------------------------------------------------- Attachments
 #include "backend/attachments/attach.script"					//* Attach
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/attachments/end/do-not-look.end"
 
-//- Factions
+//-------------------------------------------------------------------------------------------------------- Factions Section
 
-//- State Factions
+//-------------------------------------------------------------------------------------------------------- State Factions
 //#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
-//- Illegal Factions
+//-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.script"				//* Bunker
 
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.end"
 
-//- Safe Zone
+//-------------------------------------------------------------------------------------------------------- Safe Zone
 #include "backend/safezone/safezone.script"
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/safezone/end/do-not-look.end"
 
-//- Messages
+//-------------------------------------------------------------------------------------------------------- Messages
 
 #include "backend/messages/chat.script"							//* Chat
 #include "backend/messages/random_poruke.script"				//* Random poruke
 #include "backend/messages/notifikacije.script"					//* Notifikacije
 #include "backend/messages/custom_tags.script"					//* Custom tags iznad glave bez health bara i armora
-//-
+
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/messages/end/do-not-look.end"
 
-//- All NPCs, Actors
+//-------------------------------------------------------------------------------------------------------- All NPCs, Actors
 #include "backend/npcs/actor.script"							//* Aktori bebo
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/npcs/end/do-not-look.end"
 
-//- Tehnomedia
+//-------------------------------------------------------------------------------------------------------- Tehnomedia
 #include "backend/tehnomedia/tehnomedia.script"					//* Tehnomedia prodavnica
 #include "backend/tehnomedia/drone.script"						//* Drone
 #include "backend/tehnomedia/navigation.script"					//* Navigacija
 #include "backend/tehnomedia/playerlocation.script"				//* Lokacija
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/tehnomedia/end/do-not-look.end"
 
 
-//- Metros
+//-------------------------------------------------------------------------------------------------------- Metros
 
 #include "backend/metros/metros.script"				//* Metro System
 
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/metros/end/do-not-look.end"
-//-
-//- Assets Continue
+
+//-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/labels.asset"							//* Labeli
 #include "backend/assets/custom_markers.asset"					//* Markeri
 
-//- Crossover > Koristi se kad je 31 characters hook truncated
+//-------------------------------------------------------------------------------------------------------- Crossover > Koristi se kad je 31 characters hook truncated
 #include "backend/crossover/DynamicArea.csso"					//* Dynamic Area Crossover
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/crossover/end/do-not-look.end"
 
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/entrance/end/do-not-look.end"
 
-//- Frontend
+//-------------------------------------------------------------------------------------------------------- Frontend
 
-//- Textdraws
+//-------------------------------------------------------------------------------------------------------- Textdraws
 #include "frontend/textdraws/main.tde"							//* Glavni tdovi
 #include "frontend/textdraws/login.tde"							//* Login tdovi
 #include "frontend/textdraws/register.tde"						//* Register tdovi
 #include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
 
-//- Exteriors
+//-------------------------------------------------------------------------------------------------------- Exteriors
 #include "frontend/exterior/starbucks.map"						//* Starbucks map 
 #include "frontend/exterior/opstina.map"						//* Opstina map
 #include "frontend/exterior/glavnaulica.map"					//* Glavna ulica map
@@ -505,13 +516,24 @@ YCMD:restart(playerid, const string: params[], help)
 #include "frontend/exterior/poligon-as.map"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
 #include "frontend/exterior/croswellas.map"						//* Auto Salon Croswell
 #include "frontend/exterior/birorada.map"						//* Biro Rada
-#include "frontend/exterior/zeleznicka-egypt.map"				//* Zeleznicka u Egypt (LV)
 #include "frontend/exterior/italy-granica.map"					//* Granica Maryland-Italy
 #include "frontend/exterior/ml-gym.map"							//* ML Gym Map
 #include "frontend/exterior/ls-ukrasi.map"						//* ML Ukrasi po gradu
+#include "frontend/exterior/ml-busvozac.map"					//* ML Bus Station
 
+//-------------------------------------------------------------------------------------------------------- Italy Exteriors
+#include "frontend/exterior/italy_zicara.map"					//* Zicara u Italy (SF)
 
-//- Interiors
+//-------------------------------------------------------------------------------------------------------- Egypt Exteriors
+
+#include "frontend/exterior/zeleznicka-egypt.map"				//* Zeleznicka u Egypt (LV)
+#include "frontend/exterior/egypt_centar.map"					//* Egypt Centar (PD - OPSTINA)
+#include "frontend/exterior/egypt_hotel.map"					//* Egypt Hotel
+#include "frontend/exterior/egypt_ulica.map"					//* Egypt Glavna Ulica
+#include "frontend/exterior/egypt_ukrasi.map"					//* Egypt Ukrasi
+#include "frontend/exterior/egypt_pumpa.map"					//* Egypt Pumpa
+
+//------------------------------------------------------------------------------------------------------------------- Interiors
 #include "frontend/interior/opstina-int.map"					//* Opstina int map (vw > 5 | interior 5)
 #include "frontend/interior/flecca-bank.map"					//* Flecca bank map
 #include "frontend/interior/garaza.map"							//* Garaza mapa (vw > 2 | interior 2)
@@ -520,34 +542,33 @@ YCMD:restart(playerid, const string: params[], help)
 #include "frontend/interior/login_map.map"						//* Login Soba Mapa
 #include "frontend/interior/bizcent-int.map"					//* Biz centar interior (vw > 4 | interior 4)
 #include "frontend/interior/hotel-int.map"						//* Hotel interior (vw > 7 | interior 7)
-#include "frontend/interior/login-new.map"						//* Login interior (vw > 8 | interior 8)
+#include "frontend/interior/login-new.map"						//* Login interior novi Ogy (vw > 8 | interior 8)
 
-//-
+//--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.end"
 
-//- Jobs
-#include "backend/jobs/job_main.job" //? Dinamicni poslovi - Credits : job-framework
+//-------------------------------------------------------------------------------------------------------- Jobs
+#include "backend/jobs/job_main.job" 							//* Dinamicni poslovi - Credits : job-framework
 
-
-//- XMAS
+//-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/xmas.script"
 #include "backend/xmas/snowballing.script"
 
-//-
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/jobs/end/do-not-look.end"
 
-//-Important for all systems
+//--------------------------------------------------------------------------------------------------------Important for all systems
 #include "backend/staff/staff.script"							//* Staff script
 #include "backend/staff/spanel.script"							//* Staff Panel Dynamic Stuff
 
-//- Stocks
+//-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"							//* Chat Stock
 #include "backend/stocks/db.stock"								//* Database Stock Cuvanja
 #include "backend/stocks/vehicle.stock"							//* Vehicle Stock Provere
 #include "backend/stocks/variable.stock"						//* Variable stock rest
 
-//- Assets Continue
+//-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/clickplayertd.asset"					//* OnPlayerClickPlayerTextdraw
 
-//- Temp
+//-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.end"
