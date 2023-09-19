@@ -36,9 +36,10 @@ hook OnPlayerText(playerid, text[])
         static string[256];
         format(string,sizeof(string), "%s kaze \187; %s",ReturnPlayerName(playerid), text);
         ProxDetector(playerid, Float:30.0, x_white, string);
-        return false;
+        return Y_HOOKS_BREAK_RETURN_0;
     }
-    return 1;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 YCMD:me(playerid, params[], help)

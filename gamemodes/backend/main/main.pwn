@@ -32,7 +32,7 @@ static LoginActor[MAX_PLAYERS];
 new bool:UcitavanjeObjekata[MAX_PLAYERS],
 	bool:ImaLoginTD[MAX_PLAYERS];
 
-new Text:Login_TD[93];
+new PlayerText:Login_TD[MAX_PLAYERS][85];
 
 enum
 {
@@ -96,6 +96,8 @@ public SQL_AccountLoad(playerid)
 		cache_get_value_name_int(0, "Godine", PlayerInfo[playerid][Godine]);
 		cache_get_value_name_int(0, "Staff", PlayerInfo[playerid][Staff]);
 
+		CreateLoginTextDraws(playerid);
+
 		LoginIgraca(playerid);	
 
 		CallLocalFunction("OnPlayerLoaded", "d", playerid);
@@ -121,8 +123,6 @@ public PlayerRegistered(playerid)
 hook OnGameModeInit()
 {
 	print("main/main.script loaded");
-
-	CreateLoginTextDraws();
 	
 	return 1;
 }
@@ -180,6 +180,43 @@ timer Spawn_Player[100](playerid, type)
 			IzborSkinaTextDraws(playerid, false);
 
 			SavePlayer(playerid);
+
+			for(new i=0; i< 30; i++)
+			{
+				TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+			}
+
+			for(new i=0; i< 40; i++)
+			{
+				TextDrawShowForPlayer(playerid, Global_TD[i]);
+			}
+
+			//
+			for(new i=0; i< 8; i++)
+			{
+				PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
+			}
+			//! Ime Igraca
+			static pname[25];
+			format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+			PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
+			PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+			// //! Banka Igraca
+			// static stringic[ 40 ];
+
+			// if(player_BankAccount[playerid] == 0) {
+			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
+			// }
+			// else {
+			//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
+			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
+			// }
+			// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
+
+			//!skin provera
+			PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
+			PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 		}
 
 		else if (type == e_SPAWN_TYPE_LOGIN)
@@ -187,10 +224,18 @@ timer Spawn_Player[100](playerid, type)
 			new rand = random( sizeof( RandomSpawnCords ) );
 			//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Maryland", "!", BOXCOLOR_GREEN);
 
+			SetPlayerVirtualWorld(playerid, 6);
+			SetPlayerInterior(playerid, 6);
+
+			printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
+			printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
+
 			SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
 			SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
 				RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 			);
+
+			printf("DEVLOG - POS : %f %f %f", RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ] );
 
 			if(ImaLoginTD[playerid])
 			{
@@ -198,8 +243,6 @@ timer Spawn_Player[100](playerid, type)
 				ImaLoginTD[playerid] = false;
 			}
 			UcitajIgracuObjekte(playerid);
-			SetPlayerVirtualWorld(playerid, 6);
-			SetPlayerInterior(playerid, 6);
 			SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
 			ResetPlayerMoney(playerid);
 			GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
@@ -220,6 +263,43 @@ timer Spawn_Player[100](playerid, type)
 			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
 			mysql_tquery(SQL, q);
 			//
+
+			for(new i=0; i< 30; i++)
+			{
+				TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+			}
+
+			for(new i=0; i< 40; i++)
+			{
+				TextDrawShowForPlayer(playerid, Global_TD[i]);
+			}
+
+			//
+			for(new i=0; i< 8; i++)
+			{
+				PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
+			}
+			//! Ime Igraca
+			static pname[25];
+			format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+			PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
+			PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+			// //! Banka Igraca
+			// static stringic[ 40 ];
+
+			// if(player_BankAccount[playerid] == 0) {
+			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
+			// }
+			// else {
+			//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
+			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
+			// }
+			// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
+
+			//!skin provera
+			PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
+			PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 		}
 	return (true);
 }

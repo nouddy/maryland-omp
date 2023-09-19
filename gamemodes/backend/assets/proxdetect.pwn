@@ -48,6 +48,9 @@ stock ProxDetector(playerid, Float:max_range, color, const string[], Float:max_r
 	range_with_ratio = max_range * max_ratio;
 
 	foreach (new i : Player) {
+
+		if(i == playerid) continue;
+
 		if (!IsPlayerStreamedIn(i, playerid)) {
 
 			continue;
@@ -67,5 +70,5 @@ stock ProxDetector(playerid, Float:max_range, color, const string[], Float:max_r
 	}
 
 	SendClientMessage(playerid, color, string);
-	return 1;
+	return (true);
 }

@@ -150,19 +150,12 @@ public OnPlayerDisconnect(playerid, reason)
 
 public OnPlayerRequestClass(playerid, classid)
 {
-	SetPlayerPos(playerid, 217.8511, -98.4865, 1005.2578);
-	SetPlayerFacingAngle(playerid, 113.8861);
-	SetPlayerInterior(playerid, 15);
-	SetPlayerCameraPos(playerid, 215.2182, -99.5546, 1006.4);
-	SetPlayerCameraLookAt(playerid, 217.8511, -98.4865, 1005.2578);
-	ApplyAnimation(playerid, "benchpress", "gym_bp_celebrate", 4.1, true, false, false, false, 0, SYNC_NONE);
 	return 1;
 }
 
 public OnPlayerSpawn(playerid)
 {
-	SetPlayerInterior(playerid, 0);
-	return 1;
+	return (true);
 }
 
 public OnPlayerDeath(playerid, killerid, reason)
@@ -199,12 +192,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 {
 	return 0;
 }
-
+/*
 public OnPlayerText(playerid, text[])
 {
-	return 1;
+	return (true);
 }
-
+*/
 public OnPlayerUpdate(playerid)
 {
 	return 1;

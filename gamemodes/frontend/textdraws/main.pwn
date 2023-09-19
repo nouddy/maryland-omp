@@ -15,6 +15,10 @@ hook OnGameModeInit()
 hook OnPlayerSpawn(playerid)
 {
     //! GlobalTD
+    /*
+  
+    ? Zbog umiranja igraca, svakog pozivanja "SpawnPlayer"(Kada izadje/udje u interier itd... premaknjeno u timer Spawn_Player);
+
     for(new i=0; i< 30; i++)
     {
         TextDrawShowForPlayer(playerid, MarylandLogo[i]);
@@ -51,6 +55,8 @@ hook OnPlayerSpawn(playerid)
 	//!skin provera
 	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
+
+    */
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
