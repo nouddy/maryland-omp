@@ -529,9 +529,9 @@ YCMD:restart(playerid, const string: params[], help)
 
 //-------------------------------------------------------------------------------------------------------- Vehicle
 #include "backend/vehicle/brzinomer.pwn"						//* Brzinomer
-#include "backend/vehicle/vehicle.pwn"						//* Vozila paljenje gasenje itd
+#include "backend/vehicle/vehicle.pwn"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/veh_ownership.pwn"					//* Vehicle ownership
-#include "backend/vehicle/servis.pwn"						//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
+#include "backend/vehicle/servis.pwn"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.pwn"
@@ -543,20 +543,20 @@ YCMD:restart(playerid, const string: params[], help)
 #include "backend/crypto/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Finances
-#include "backend/finance/bank_old.pwn"						//* Bankarstvo
-#include "backend/finance/bank_ogy.pwn"						//* Bankarstvo
+#include "backend/finance/bank_old.pwn"							//* Bankarstvo
+#include "backend/finance/bank_ogy.pwn"							//* Bankarstvo
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Property
-#include "backend/property/houses.pwn"						//* Imovina
+#include "backend/property/houses.pwn"							//* Imovina
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/property/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Business
-#include "backend/business/biz.pwn"							//* Firme tek zapocete soo
+#include "backend/business/biz.pwn"								//* Firme tek zapocete soo
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/business/end/do-not-look.pwn"
@@ -568,7 +568,7 @@ YCMD:restart(playerid, const string: params[], help)
 #include "backend/benches/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Attachments
-#include "backend/attachments/attach.pwn"					//* Attach
+#include "backend/attachments/attach.pwn"						//* Attach
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/attachments/end/do-not-look.pwn"
@@ -579,7 +579,7 @@ YCMD:restart(playerid, const string: params[], help)
 //#include "backend/factions/state/faction_police.pwn"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
-#include "backend/factions/illegal/bunker.pwn"				//* Bunker
+#include "backend/factions/illegal/bunker.pwn"					//* Bunker
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.pwn"
@@ -592,21 +592,21 @@ YCMD:restart(playerid, const string: params[], help)
 //-------------------------------------------------------------------------------------------------------- Messages
 
 #include "backend/messages/chat.pwn"							//* Chat
-#include "backend/messages/random_poruke.pwn"				//* Random poruke
+#include "backend/messages/random_poruke.pwn"					//* Random poruke
 #include "backend/messages/notifikacije.pwn"					//* Notifikacije
-#include "backend/messages/custom_tags.pwn"					//* Custom tags iznad glave bez health bara i armora
+#include "backend/messages/custom_tags.pwn"						//* Custom tags iznad glave bez health bara i armora
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/messages/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- All NPCs, Actors
-#include "backend/npcs/actor.pwn"							//* Aktori bebo
+#include "backend/npcs/actor.pwn"								//* Aktori bebo
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/npcs/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Tehnomedia
 #include "backend/tehnomedia/tehnomedia.pwn"					//* Tehnomedia prodavnica
-#include "backend/tehnomedia/drone.pwn"						//* Drone
+#include "backend/tehnomedia/drone.pwn"							//* Drone
 #include "backend/tehnomedia/navigation.pwn"					//* Navigacija
 #include "backend/tehnomedia/playerlocation.pwn"				//* Lokacija
 //-------------------------------------------------------------------------------------------------------- Temp
@@ -615,7 +615,7 @@ YCMD:restart(playerid, const string: params[], help)
 
 //-------------------------------------------------------------------------------------------------------- Metros
 
-#include "backend/metros/metros.pwn"				//* Metro System
+#include "backend/metros/metros.pwn"							//* Metro System
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/metros/end/do-not-look.pwn"
@@ -702,17 +702,17 @@ YCMD:restart(playerid, const string: params[], help)
 #include "backend/jobs/end/do-not-look.pwn"
 
 //--------------------------------------------------------------------------------------------------------Important for all systems
-#include "backend/staff/staff.pwn"							//* Staff script
-#include "backend/staff/spanel.pwn"							//* Staff Panel Dynamic Stuff
+#include "backend/staff/staff.pwn"								//* Staff script
+#include "backend/staff/spanel.pwn"								//* Staff Panel Dynamic Stuff
 
 //-------------------------------------------------------------------------------------------------------- Stocks
-#include "backend/stocks/chat.pwn"							//* Chat Stock
+#include "backend/stocks/chat.pwn"								//* Chat Stock
 #include "backend/stocks/db.pwn"								//* Database Stock Cuvanja
 #include "backend/stocks/vehicle.pwn"							//* Vehicle Stock Provere
-#include "backend/stocks/variable.pwn"						//* Variable stock rest
+#include "backend/stocks/variable.pwn"							//* Variable stock rest
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/clickplayertd.pwn"					//* OnPlayerClickPlayerTextdraw
+#include "backend/assets/clickplayertd.pwn"						//* OnPlayerClickPlayerTextdraw
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.pwn"
