@@ -82,10 +82,10 @@ Optional plugins:
  * <param name="linePattern[] = \"SOLID\"">How to draw the inside.</param>
  * <param name="fillPattern[] = \"SOLID\"">How to draw the border.</param>
  * <remarks>
- *  This function draws a rectangle between two given co-ordinates.  It can also
- *  draw a border around the rectangle OUTSIDE the specified area of the
- *  rectangle.  If you want the border within the area specified you need to use
- *  a smaller area.
+ *   This function draws a rectangle between two given co-ordinates.  It can also
+ *   draw a border around the rectangle OUTSIDE the specified area of the
+ *   rectangle.  If you want the border within the area specified you need to use
+ *   a smaller area.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -197,17 +197,17 @@ static stock _Bitmap_RectangleRecopy(n, BitArray:pattern<PATTERN_MASK_X>)
  * <param name="linePattern[] = \"SOLID\"">How to draw the inside.</param>
  * <param name="fillPattern[] = \"SOLID\"">How to draw the border.</param>
  * <remarks>
- *  This function draws a circle centered on the given co-ordinates with the
- *  given FLOAT radius, not an integer size because of diagonals. It can also
- *  draw a border around the circle OUTSIDE the specified area of the circle.
- *  If you want the border within the area specified you need to use a smaller
- *  area.
+ *   This function draws a circle centered on the given co-ordinates with the
+ *   given FLOAT radius, not an integer size because of diagonals. It can also
+ *   draw a border around the circle OUTSIDE the specified area of the circle.
+ *   If you want the border within the area specified you need to use a smaller
+ *   area.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bitmap_DrawCircle(Bitmap:ctx, const x, const y, const Float:radius, fillColour, lineColour = 0, const linePattern[] = "SOLID", const fillPattern[] = "SOLID")
 {
-	P:3("Bitmap_DrawCircle called: %d, %d, %d, %.2f, 0x%04x%04x, 0x%04x%04x, \"%s\", \"%s\"", _:ctx, x, y, radius, fillColour >>> 16, fillColour & 0xFFFF, lineColour >>> 16, lineColour & 0xFFFF, linePattern, fillPattern);
+	Debug_Print3("Bitmap_DrawCircle called: %d, %d, %d, %.2f, 0x%04x%04x, 0x%04x%04x, \"%s\", \"%s\"", _:ctx, x, y, radius, fillColour >>> 16, fillColour & 0xFFFF, lineColour >>> 16, lineColour & 0xFFFF, linePattern, fillPattern);
 	Bitmap_DrawRing(ctx, x, y, 0.0, radius, fillColour, fillPattern);
 }
 
@@ -220,16 +220,16 @@ stock Bitmap_DrawCircle(Bitmap:ctx, const x, const y, const Float:radius, fillCo
  * <param name="colour">The colour of the ring.</param>
  * <param name="pattern[] = \"SOLID\"">How to draw the inside.</param>
  * <remarks>
- *  This function draws a ring centered on the given co-ordinates with the
- *  given FLOAT radius, not an integer size because of diagonals.  This does not
- *  draw a border as it is used for borders, and a border on a ring is ambiguous
- *  - do you have it on the inside or not?  Better to let the user decide.
+ *   This function draws a ring centered on the given co-ordinates with the
+ *   given FLOAT radius, not an integer size because of diagonals.  This does not
+ *   draw a border as it is used for borders, and a border on a ring is ambiguous
+ *   - do you have it on the inside or not?  Better to let the user decide.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bitmap_DrawRing(Bitmap:ctx, x, y, Float:inner, Float:outer, colour, const pattern[] = "SOLID")
 {
-	P:3("Bitmap_DrawRing called: %d, %d, %d, %.2f, %.2f, 0x%04x%04x, \"%s\"", _:ctx, x, y, inner, outer, colour >>> 16, colour & 0xFFFF, pattern);
+	Debug_Print3("Bitmap_DrawRing called: %d, %d, %d, %.2f, %.2f, 0x%04x%04x, \"%s\"", _:ctx, x, y, inner, outer, colour >>> 16, colour & 0xFFFF, pattern);
 	new
 		rad = max(floatround(outer, floatround_ceil), 0);
 	if (rad == 0) return;
@@ -276,19 +276,19 @@ stock Bitmap_DrawRing(Bitmap:ctx, x, y, Float:inner, Float:outer, colour, const 
 		g = ((colour & 0x00FF0000) >>> 16),
 		b = ((colour & 0x0000FF00) >>>  8),
 		orig = 0;
-	P:5("Bitmap_DrawRing: minX = %d, minY = %d, width = %d, height = %d", minX, minY, width, Bitmap_Height(ctx));
+	Debug_Print5("Bitmap_DrawRing: minX = %d, minY = %d, width = %d, height = %d", minX, minY, width, Bitmap_Height(ctx));
 	for (y = minY; y != maxY; ++y, ++fY)
 	{
 		// "y" portion of the radius calculation.
 		fYY = fY * fY,
 		read = Bitmap_IndexInt(ctx, minX, width, y),
 		ya = y % YSI_gBitmapAlphaY;
-		P:6("Bitmap_DrawRing: 4: %.2f, %d, %d", fYY, read, ya);
+		Debug_Print6("Bitmap_DrawRing: 4: %.2f, %d, %d", fYY, read, ya);
 		fXX = fX;
 		for (x = minX; x != maxX; ++x, ++fXX, ++read)
 		{
 			pos = fXX * fXX + fYY;
-			P:7("Bitmap_DrawRing: 5: %.2f <= %.2f <= %.2f", outerMin, pos, outerMax);
+			Debug_Print7("Bitmap_DrawRing: 5: %.2f <= %.2f <= %.2f", outerMin, pos, outerMax);
 			// Slightly redundant check if "inner" is 0.0, but in that case will
 			// at least never fail!
 			if (pos >= innerMin)

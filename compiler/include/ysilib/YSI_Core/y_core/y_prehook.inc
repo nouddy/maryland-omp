@@ -1,4 +1,9 @@
-/*+
+#if defined _INC_y_prehook
+	#endinput
+#endif
+#define _INC_y_prehook
+
+/**
  * <library
  *   name="y_prehook"
  *   version="1.0"
@@ -92,6 +97,14 @@ Optional plugins:
 #define CHAIN_HOOK(%0) forward @CO_%0();public @CO_%0(){return CHAIN_ORDER()+1;}
 
 #define CHAIN_NEXT(%0) @CO_%0
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_prehook</library>
+ * <remarks>
+ *   Define all the states used by ALS prehooks.  Several of them only exist to
+ *   ensure that <c>&lt;&gt;</c> works.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 static stock _PreHook_IncludeStates() <_ALS : _ALS_x0, _ALS : _ALS_x1, _ALS : _ALS_x2, _ALS : _ALS_x3>
 {

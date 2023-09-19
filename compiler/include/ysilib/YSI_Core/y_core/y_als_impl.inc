@@ -1,4 +1,23 @@
-/*
+#if defined _INC_y_als
+	#endinput
+#endif
+#define _INC_y_als
+
+/**
+ * <library
+ *   name="y_als"
+ *   version="1.0"
+ *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
+ *   summary="Provides a number of macros for making ALS (Advanced Library System) callback hooking simpler."
+ * >
+ *   <summary pawndoc="true">
+ *     This library uses the enhanced <em>pawndoc.xsl</em> from
+ *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
+ *     This XSL has features such as library and markdown support, and will not
+ *     render this message when used.
+ *   </summary>
+ * </library>
+ *//** *//*
 Legal:
 	Version: MPL 1.1
 	
@@ -71,6 +90,11 @@ Optional plugins:
 	Me - sscanf2, fixes2, Whirlpool.
 */
 
+/// <p/>
+
+/**
+ * <library>y_als</library>
+ */
 enum ALS
 {
 	Bit:ALS_OnScriptInit,
@@ -157,6 +181,7 @@ enum ALS
 	#endif
 	Bit:ALS_OnPlayerSelectObject
 }
+static stock ALS:_@ALS() { return ALS; }
 
 #define ALS_DATA<>
 
@@ -164,6 +189,7 @@ enum ALS
 
 // ALS Callback.
 #define _ALS_C_INT<%0,%2>(%3) ALS_MAKE<..._On%0>(ALS_RS_%3);
+#define ALS_D_INT%8<%0,%2>(%3) On%0%8(ALS_DS_%3)
 #define ALS_C_INT<%0,%2>(%3) return _ALS_C_INT<%0,%2>(%3)
 #define ALS_DC_(%0)%1(%2) %1(S%0%2)
 // ALS Forward.
@@ -414,6 +440,21 @@ enum ALS
 #define ALS_RS_const%9: ALS_RS_%9:
 #define ALS_RS_%0\32; ALS_RS_
 
+#define ALS_DS_more:%0,         0,ALS_DS_
+#define ALS_DS_string:%0[],     __ARR,ALS_DS_
+#define ALS_DS_Float:%0,        0.0,ALS_DS_
+#define ALS_DS_tag:%3:%0,       %3:0,ALS_DS_
+#define ALS_DS_array:%0[%1],    __ARR,ALS_DS_
+#define ALS_DS_end:%0)          0)
+#define ALS_DS_none:)           )
+#define ALS_DS_end_string:%0[]) __ARR)
+#define ALS_DS_end_Float:%0)    0.0)
+#define ALS_DS_end_tag:%3:%0)   %3:0)
+#define ALS_DS_end_array:%0[%1]) __ARR)
+
+#define ALS_DS_const%9: ALS_DS_%9:
+#define ALS_DS_%0\32; ALS_DS_
+
 #define ALS_DO:%9<%0> ALS_DO_%0<%9>
 #define ALS_MAIN_RET_ ALS_MRET_
 #define ALS_main_:%0( ALS_DC_(C)ALS_MAIN_RET_(M) public %0(
@@ -423,4 +464,98 @@ enum ALS
 #define ALS_FORWARD<%0> ALS_DO:ALS_F_INT<%0>
 
 #define call%0On%1(%2) ALS_DO:ALS_G_INT<%1>(%2)
+
+// Convert to the `CALL@` syntax from `addressof()`.
+#define CALL@OnScriptInit%8() OnScriptInit%8()
+#define CALL@OnScriptExit%8() OnScriptExit%8()
+#define CALL@OnGameModeInit%8() OnGameModeInit%8()
+#define CALL@OnGameModeExit%8() OnGameModeExit%8()
+#define CALL@OnFilterScriptInit%8() OnFilterScriptInit%8()
+#define CALL@OnFilterScriptExit%8() OnFilterScriptExit%8()
+#define CALL@OnPlayerConnect%8() OnPlayerConnect%8(0)
+#define CALL@OnPlayerDisconnect%8() OnPlayerDisconnect%8(0,0)
+#define CALL@OnPlayerSpawn%8() OnPlayerSpawn%8(0)
+#define CALL@OnPlayerDeath%8() OnPlayerDeath%8(0,0,0)
+#define CALL@OnVehicleSpawn%8() OnVehicleSpawn%8(0)
+#define CALL@OnVehicleDeath%8() OnVehicleDeath%8(0,0)
+#define CALL@OnPlayerText%8() OnPlayerText%8(0,__ARR)
+#define CALL@OnPlayerCommandText%8() OnPlayerCommandText%8(0,__ARR)
+#define CALL@OnPlayerRequestClass%8() OnPlayerRequestClass%8(0,0)
+#define CALL@OnPlayerEnterVehicle%8() OnPlayerEnterVehicle%8(0,0,0)
+#define CALL@OnPlayerExitVehicle%8() OnPlayerExitVehicle%8(0,0)
+#define CALL@OnPlayerStateChange%8() OnPlayerStateChange%8(0,0,0)
+#define CALL@OnPlayerEnterCheckpoint%8() OnPlayerEnterCheckpoint%8(0)
+#define CALL@OnPlayerLeaveCheckpoint%8() OnPlayerLeaveCheckpoint%8(0)
+#define CALL@OnPlayerEnterRaceCheckpoint%8() OnPlayerEnterRaceCheckpoint%8(0)
+#define CALL@OnPlayerLeaveRaceCheckpoint%8() OnPlayerLeaveRaceCheckpoint%8(0)
+#define CALL@OnRconCommand%8() OnRconCommand%8(__ARR)
+#define CALL@OnPlayerRequestSpawn%8() OnPlayerRequestSpawn%8(0)
+#define CALL@OnObjectMoved%8() OnObjectMoved%8(0)
+#define CALL@OnPlayerObjectMoved%8() OnPlayerObjectMoved%8(0,0)
+#define CALL@OnPlayerPickUpPickup%8() OnPlayerPickUpPickup%8(0,0)
+#define CALL@OnVehicleMod%8() OnVehicleMod%8(0,0,0)
+#define CALL@OnEnterExitModShop%8() OnEnterExitModShop%8(0,0,0)
+#define CALL@OnVehiclePaintjob%8() OnVehiclePaintjob%8(0,0,0)
+#define CALL@OnVehicleRespray%8() OnVehicleRespray%8(0,0,0,0)
+#define CALL@OnVehicleDamageStatusUpdate%8() OnVehicleDamageStatusUpdate%8(0,0)
+#define CALL@OnPlayerSelectedMenuRow%8() OnPlayerSelectedMenuRow%8(0,0)
+#define CALL@OnPlayerExitedMenu%8() OnPlayerExitedMenu%8(0)
+#define CALL@OnPlayerInteriorChange%8() OnPlayerInteriorChange%8(0,0,0)
+#define CALL@OnPlayerKeyStateChange%8() OnPlayerKeyStateChange%8(0,0,0)
+#define CALL@OnRconLoginAttempt%8() OnRconLoginAttempt%8(__ARR,__ARR,0)
+#define CALL@OnPlayerUpdate%8() OnPlayerUpdate%8(0)
+#define CALL@OnPlayerStreamIn%8() OnPlayerStreamIn%8(0,0)
+#define CALL@OnPlayerStreamOut%8() OnPlayerStreamOut%8(0,0)
+#define CALL@OnVehicleStreamIn%8() OnVehicleStreamIn%8(0,0)
+#define CALL@OnVehicleStreamOut%8() OnVehicleStreamOut%8(0,0)
+#define CALL@OnDialogResponse%8() OnDialogResponse%8(0,0,0,0,__ARR)
+#define CALL@OnPlayerClickPlayer%8() OnPlayerClickPlayer%8(0,0,0)
+#define CALL@OnPlayerLogin%8() OnPlayerLogin%8(0,0)
+#define CALL@OnPlayerLogout%8() OnPlayerLogout%8(0,0)
+#if defined GetPlayerLastShotVectors // 0.3z RC4
+	#define CALL@OnPlayerGiveDamage%8() OnPlayerGiveDamage%8(0,0,0.0,0,0)
+	#define CALL@OnPlayerTakeDamage%8() OnPlayerTakeDamage%8(0,0,0.0,0,0)
+#else
+	#define CALL@OnPlayerGiveDamage%8() OnPlayerGiveDamage%8(0,0,0.0,0)
+	#define CALL@OnPlayerTakeDamage%8() OnPlayerTakeDamage%8(0,0,0.0,0)
+#endif
+#define CALL@OnPlayerClickMap%8() OnPlayerClickMap%8(0,0.0,0.0,0.0)
+#define CALL@OnPlayerCommandReceived%8() OnPlayerCommandReceived%8(0,__ARR)
+#define CALL@OnPlayerCommandPerformed%8() OnPlayerCommandPerformed%8(0,__ARR,0)
+#if defined GetServerTickRate // 0.3z RC5
+	#define CALL@OnUnoccupiedVehicleUpdate%8() OnUnoccupiedVehicleUpdate%8(0,0,0,0.0,0.0,0.0)
+#else
+	#define CALL@OnUnoccupiedVehicleUpdate%8() OnUnoccupiedVehicleUpdate%8(0,0,0)
+#endif
+// 0.3e
+#define CALL@OnPlayerClickTextDraw%8() OnPlayerClickTextDraw%8(0,Text:0)
+#define CALL@OnPlayerClickPlayerTextDraw%8() OnPlayerClickPlayerTextDraw%8(0,PlayerText:0)
+#define CALL@OnPlayerEditObject%8() OnPlayerEditObject%8(0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0)
+#define CALL@OnPlayerEditAttachedObject%8() OnPlayerEditAttachedObject%8(0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)
+#define CALL@OnPlayerSelectObject%8() OnPlayerSelectObject%8(0,0,0,0,0.0,0.0,0.0)
+// YSI
+#define CALL@OnPlayerEnterArea%8() OnPlayerEnterArea%8(0,0)
+#define CALL@OnPlayerLeaveArea%8() OnPlayerLeaveArea%8(0,0)
+#define CALL@OnPlayerFinishRace%8() OnPlayerFinishRace%8(0,0,0,0,0)
+#define CALL@OnPlayerExitRace%8() OnPlayerExitRace%8(0,0)
+#define CALL@OnRaceEnd%8() OnRaceEnd%8(0)
+// Streamer plugin.
+#define CALL@OnDynamicObjectMoved%8() OnDynamicObjectMoved%8(0)
+#define CALL@OnPlayerEditDynamicObject%8() OnPlayerEditDynamicObject%8(0,0,0,0.0,0.0,0.0,0.0,0.0,0.0)
+#define CALL@OnPlayerSelectDynamicObject%8() OnPlayerSelectDynamicObject%8(0,0,0,0.0,0.0,0.0)
+#define CALL@OnPlayerPickUpDynamicPickup%8() OnPlayerPickUpDynamicPickup%8(0,0)
+#define CALL@OnPlayerEnterDynamicCP%8() OnPlayerEnterDynamicCP%8(0,0)
+#define CALL@OnPlayerLeaveDynamicCP%8() OnPlayerLeaveDynamicCP%8(0,0)
+#define CALL@OnPlayerEnterDynamicRaceCP%8() OnPlayerEnterDynamicRaceCP%8(0,0)
+#define CALL@OnPlayerLeaveDynamicRaceCP%8() OnPlayerLeaveDynamicRaceCP%8(0,0)
+#define CALL@OnPlayerEnterDynamicArea%8() OnPlayerEnterDynamicArea%8(0,0)
+#define CALL@OnPlayerLeaveDynamicArea%8() OnPlayerLeaveDynamicArea%8(0,0)
+
+#define CALL@OnPlayerWeaponShot%8() OnPlayerWeaponShot%8(0,0,0,0,0.0,0.0,0.0)
+#define CALL@OnIncomingConnection%8() OnIncomingConnection%8(0,__ARR,0)
+#define CALL@OnTrailerUpdate%8() OnTrailerUpdate%8(0,0)
+#define CALL@OnVehicleSirenStateChange%8() OnVehicleSirenStateChange%8(0,0,0)
+#define CALL@OnPlayerGiveDamageActor%8() OnPlayerGiveDamageActor%8(0,0,0.0,0,0)
+#define CALL@OnActorStreamIn%8() OnActorStreamIn%8(0,0)
+#define CALL@OnActorStreamOut%8() OnActorStreamOut%8(0,0)
 

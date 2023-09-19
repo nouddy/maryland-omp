@@ -111,7 +111,7 @@ Optional plugins:
 
 stock _YSI_HAS_y_areas(_do_not_call_me_ever_, _like_never_)
 {
-	P:E("You called _YSI_HAS_y_areas!  Bad, don't do that!", _do_not_call_me_ever_, _like_never_);
+	Debug_Error("You called _YSI_HAS_y_areas!  Bad, don't do that!", _do_not_call_me_ever_, _like_never_);
 	assert(false);
 	return 0;
 }
@@ -333,7 +333,6 @@ static stock
 	YSI_g_sFreeCount = MAX_AREAS,
 	YSI_g_sAreas[MAX_AREAS][E_AREA],
 	YSI_g_sPlayerArea[MAX_PLAYERS][AREAS_MAX_OVERLAPS], // = {NO_AREA, ...},
-	YSI_g_sHasCallbacks,
 	YSI_g_sZones[AREAS_ZONE_ARRAY * AREAS_ZONE_ARRAY] = {AREA_NO_NEXT, ...},
 	// "Inner" zones.  -4000 <= x, y <= 4000; Z(x) != Z(y)
 	YSI_g_sZoneIN  = AREA_NO_NEXT, // -1
@@ -371,9 +370,9 @@ forward Area_Loop();
 
 /*-------------------------------------------------------------------------*//**
  * <remarks>
- *  Sets up required variables.  Note that this hooks "OnYSIInit",
- *  "OnGameModeInit" and "OnFilterScript".  This is because ALL scripts need to
- *  initialise some things, and only the master needs to initialise others.
+ *   Sets up required variables.  Note that this hooks "OnYSIInit",
+ *   "OnGameModeInit" and "OnFilterScript".  This is because ALL scripts need to
+ *   initialise some things, and only the master needs to initialise others.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -391,48 +390,41 @@ MASTER_HOOK__ OnYSIInit()
 	return 1;
 }
 
-HOOK__ OnScriptInit()
+MASTER_REHOOK__ OnYSIInit()
 {
-	new
-		buffer = 0;
-	YSI_g_sHasCallbacks = 0;
-	YSI_g_sHasCallbacks |= funcidx("OnPlayerEnterArea") == -1 ? 0 : 1;
-	YSI_g_sHasCallbacks |= funcidx("OnPlayerLeaveArea") == -1 ? 0 : 2;
-	YSI_g_sHasCallbacks |= AMX_GetPublicEntry(0, buffer, "@yH_PlayerEnterArea") ? 4 : 0;
-	YSI_g_sHasCallbacks |= AMX_GetPublicEntry(0, buffer, "@yH_PlayerLeaveArea") ? 8 : 0;
+	return 1;
 }
-
 
 /*-------------------------------------------------------------------------*//**
  * <returns>
- *  Number of unused area slots.
+ *   Number of unused area slots.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
-P:D(Area_GetEmptySlotCount());
+FUNC_PAWNDOC(Area_GetEmptySlotCount());
 #define Area_GetEmptySlotCount() \
 	(YSI_g_sFreeCount)
 
 /*-------------------------------------------------------------------------*//**
  * <param name="num">Number of slots to add.</param>
  * <remarks>
- *  Actually removes slots from the unused count.
+ *   Actually removes slots from the unused count.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Area_AddSlots(num));
+FUNC_PAWNDOC(Area_AddSlots(num));
 #define Area_AddSlots(%1) \
 	YSI_g_sFreeCount -= (%1)
 
 /*-------------------------------------------------------------------------*//**
  * <param name="area">Area to check validity of</param>
  * <remarks>
- *  An area slot could be used but still invalid if it's not the first slot in
- *  an area set.
+ *   An area slot could be used but still invalid if it's not the first slot in
+ *   an area set.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(bool:Area_IsActive(area));
+FUNC_PAWNDOC(bool:Area_IsActive(area));
 #define Area_IsActive(%1) \
 	((%1) >= 0 && (%1) < MAX_AREAS && (YSI_g_sAreas[(%1)][E_AREA_FLAGS] & e_AREA_FLAGS_ACTIVE))
 
@@ -485,18 +477,18 @@ GLOBAL__ void:Area_Debug(area)
 
 /*-------------------------------------------------------------------------*//**
  * <returns>
- *  Next available slot.
+ *   Next available slot.
  * </returns>
  * <remarks>
- *  Gets an empty slot, removes it from the unused list and returs a pointer.
+ *   Gets an empty slot, removes it from the unused list and returs a pointer.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Area_GetFreeSlot()
 {
-	P:4("Area_GetFreeSlot called");
+	Debug_Print4("Area_GetFreeSlot called");
 	if (YSI_g_sUnusedAreas == AREA_NO_NEXT) return NO_AREA;
-	P:7("Area_GetFreeSlot: 1");
+	Debug_Print7("Area_GetFreeSlot: 1");
 	new
 		old = YSI_g_sUnusedAreas;
 	YSI_g_sUnusedAreas = YSI_g_sAreas[old][E_AREA_UNUSED_NEXT];
@@ -507,7 +499,7 @@ static stock Area_GetFreeSlot()
 /*-------------------------------------------------------------------------*//**
  * <param name="area">Area to remove from the list.</param>
  * <remarks>
- *  You can only remove areas which are at the start of a list.
+ *   You can only remove areas which are at the start of a list.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -574,8 +566,8 @@ GLOBAL__ void:Area_Delete(area)
  * <param name="start">The first of the allocated areas being removed.</param>
  * <param name="end">The area in this zone after the last removed one.</param>
  * <remarks>
- *  Very tightly integrated with "Area_Delete", to the point where I could just
- *  make them one function if I wanted (but I won't).
+ *   Very tightly integrated with "Area_Delete", to the point where I could just
+ *   make them one function if I wanted (but I won't).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -624,11 +616,11 @@ static stock Area_DoRemove(zone, area, next)
  * <param name="x">Start of an area.</param>
  * <param name="y">Start of an area.</param>
  * <returns>
- *  All the zones this position overlaps.
+ *   All the zones this position overlaps.
  * </returns>
  * <remarks>
- *  The most zones you can be in at once is 9 - I_, I_S, I_E, I_SE, X_, X_S,
- *  X_E, X_SE, Z_ (or similar corners - NOT in O_ though).
+ *   The most zones you can be in at once is 9 - I_, I_S, I_E, I_SE, X_, X_S,
+ *   X_E, X_SE, Z_ (or similar corners - NOT in O_ though).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -698,10 +690,10 @@ static stock Area_GetZones(Float:x, Float:y)
  * <param name="area">The area to add to the determined zone.</param>
  * <param name="last">The last slot that makes up the current zone.</param>
  * <remarks>
- *  Finds the smallest zone that this area will fit in completely.  Note that
- *  due to a limitation in the code, any zones with a node touching the upper
- *  edge of a zone will spill in to the next zone too.  Only lower zone edges
- *  are inclusive.
+ *   Finds the smallest zone that this area will fit in completely.  Note that
+ *   due to a limitation in the code, any zones with a node touching the upper
+ *   edge of a zone will spill in to the next zone too.  Only lower zone edges
+ *   are inclusive.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -764,7 +756,7 @@ static stock Area_DetermineZone(Float:minx, Float:miny, Float:maxx, Float:maxy, 
 							(YSI_g_sAreas[last][E_AREA_FLAGS] & e_AREA_FLAGS_REST) |
 							(e_AREA_FLAGS:YSI_g_sZones[zy] & e_AREA_FLAGS_NEXT) |
 							(e_AREA_FLAGS:(zy << 18) & e_AREA_FLAGS_ZONE);
-						P:7("Area_DetermineZone: Added to North-Eastern square");
+						Debug_Print7("Area_DetermineZone: Added to North-Eastern square");
 						return YSI_g_sZones[zy] = area;
 					}
 					_AREAS_ZONES_I(NE);
@@ -1104,7 +1096,7 @@ GLOBAL__ void:Area_SetAllWorlds(area, bool:set)
  * <param name="type">Type of area.</param>
  * <param name="">Points.</param>
  * <remarks>
- *  Types:
+ *   Types:
  *      CUBE, Cube
  *      CUBOID, Cuboid
  *      BOX, Box
@@ -1116,7 +1108,7 @@ GLOBAL__ void:Area_SetAllWorlds(area, bool:set)
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Area_Add(type,Float:...));
+FUNC_PAWNDOC(Area_Add(type,Float:...));
 #define Area_Add(%0,%1) Area_Add%0(%1)
 #define Area_AddCUBE Area_AddCube
 #define Area_AddCUBOID Area_AddCuboid
@@ -1135,11 +1127,11 @@ P:D(Area_Add(type,Float:...));
  * <param name="maxy">Highest Y corner of box.</param>
  * <param name="maxz">Highest Z corner of box.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  *//*------------------------------------------------------------------------**/
 
-P:D(_AREA_MIN(&Float:minx,&Float:miny));
+FUNC_PAWNDOC(_AREA_MIN(&Float:minx,&Float:miny));
 #define _AREA_MIN(%0,%1) if (%1 < %0) %0 ^= %1, %1 ^= %0, %0 ^= %1
 
 FOREIGN__ Area_AddCuboid(Float:x0,Float:y0,Float:z0,Float:x1,Float:y1,Float:z1);
@@ -1203,7 +1195,7 @@ GLOBAL__ Area_AddCuboid(Float:x0,Float:y0,Float:z0,Float:x1,Float:y1,Float:z1)
  * <param name="maxx">Highest X corner of box.</param>
  * <param name="maxy">Highest Y corner of box.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -1260,11 +1252,11 @@ GLOBAL__ Area_AddBox(Float:minx, Float:miny, Float:maxx, Float:maxy)
  * <param name="height">Ceiling of circle.</param>
  * <param name="depth">Bottom of circle.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  * <remarks>
- *  Technically a cylinder, no lower bound (ceiling added cos there was a
- *  spare slot in the 4 float design which may as well have been used).
+ *   Technically a cylinder, no lower bound (ceiling added cos there was a
+ *   spare slot in the 4 float design which may as well have been used).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1281,11 +1273,11 @@ stock Area_AddCircle(Float:x, Float:y, Float:r, Float:height = FLOAT_INFINITY)
  * <param name="height">Ceiling of circle.</param>
  * <param name="depth">Bottom of circle.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  * <remarks>
- *  Technically a cylinder, no lower bound (ceiling added cos there was a
- *  spare slot in the 4 float design which may as well have been used).
+ *   Technically a cylinder, no lower bound (ceiling added cos there was a
+ *   spare slot in the 4 float design which may as well have been used).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1353,7 +1345,7 @@ GLOBAL__ Area_AddOval(Float:x,Float:y,Float:rx,Float:ry,Float:h,Float:d)
  * <param name="z">Z position of sphere.</param>
  * <param name="r">Radius of sphere.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -1370,7 +1362,7 @@ stock Area_AddSphere(Float:x, Float:y, Float:z, Float:r)
  * <param name="ry">Y radius of ovoid.</param>
  * <param name="rz">Z radius of ovoid.</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -1441,17 +1433,17 @@ GLOBAL__ Area_AddOvoid(Float:x,Float:y,Float:z,Float:rx,Float:ry,Float:rz)
 /*-------------------------------------------------------------------------*//**
  * <param name="">X/Ys of points</param>
  * <returns>
- *  Area slot or NO_AREA
+ *   Area slot or NO_AREA
  * </returns>
  * <remarks>
- *  Creates an irregular shape to detect players in.  This is a 2d area made
- *  up of a load of XY points.  If an odd number of parameters is passed the
- *  extra one is assumed to be a ceiling so you can ignore interiors or planes.
+ *   Creates an irregular shape to detect players in.  This is a 2d area made
+ *   up of a load of XY points.  If an odd number of parameters is passed the
+ *   extra one is assumed to be a ceiling so you can ignore interiors or planes.
  *
- *  The height parameter goes first as it's easiest to check.
+ *   The height parameter goes first as it's easiest to check.
  *
- *  This is one of a few functions still written using the master system at a
- *  low level (the other obvious one is "Class_Add").
+ *   This is one of a few functions still written using the master system at a
+ *   low level (the other obvious one is "Class_Add").
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1738,11 +1730,17 @@ MASTER_HOOK__ OnPlayerConnect(playerid)
 	return 1;
 }
 
+MASTER_REHOOK__ OnPlayerConnect(playerid)
+{
+	#pragma unused playerid
+	return 1;
+}
+
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">The player to check for.</param>
  * <remarks>
- *  Main processing for the system.  Takes one player and checks if they're in
- *  some sort of range of somewhere.
+ *   Main processing for the system.  Takes one player and checks if they're in
+ *   some sort of range of somewhere.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1798,7 +1796,7 @@ MASTER_HOOK__ OnPlayerConnect(playerid)
 			idx = 0;
 		// Get all the zones for this player.
 		GetPlayerPos(playerid, sX, sY, sZ);
-		P:7("Areas_OnPlayerUpdate: pos = %f %f %f", sX, sY, sZ);
+		Debug_Print7("Areas_OnPlayerUpdate: pos = %f %f %f", sX, sY, sZ);
 		#if AREA_WORLDS > 0
 			sW = GetPlayerVirtualWorld(playerid);
 		#endif
@@ -1822,7 +1820,7 @@ MASTER_HOOK__ OnPlayerConnect(playerid)
 		sZones = Area_GetZones(sX, sY);
 		for (idx = 0; ; )
 		{
-			P:7("Areas_OnPlayerUpdate: zone = %d", sZones[idx]);
+			Debug_Print7("Areas_OnPlayerUpdate: zone = %d", sZones[idx]);
 			switch (sZones[idx++])
 			{
 				case e_AREA_ZONE_I_N:
@@ -1955,9 +1953,9 @@ MASTER_HOOK__ OnPlayerConnect(playerid)
  * <param name="y">Y position to check.</param>
  * <param name="z">Z position to check.</param>
  * <remarks>
- *  Checks if the given position is in the give area.  All parameters are passed
- *  to avoid calling functions over and over and over again.  If the return is
- *  not true, "area" is updated to the next one in the chain.
+ *   Checks if the given position is in the give area.  All parameters are passed
+ *   to avoid calling functions over and over and over again.  If the return is
+ *   not true, "area" is updated to the next one in the chain.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1976,7 +1974,7 @@ static stock Area_CheckArea(playerid, world, area, Float:x, Float:y, Float:z, &n
 	}
 	if ((flags & e_AREA_FLAGS_ACTIVE))
 	{
-		P:7("Area_CheckArea: %d %d %d %f %f %f = %d", playerid, world, area, Float:x, Float:y, Float:z, _:(flags & e_AREA_FLAGS_TYPE) >>> 28);
+		Debug_Print7("Area_CheckArea: %d %d %d %f %f %f = %d", playerid, world, area, Float:x, Float:y, Float:z, _:(flags & e_AREA_FLAGS_TYPE) >>> 28);
 		switch (flags & e_AREA_FLAGS_TYPE)
 		{
 			case e_AREA_FLAGS_CIRCLE:
@@ -2023,7 +2021,7 @@ static stock Area_CheckArea(playerid, world, area, Float:x, Float:y, Float:z, &n
 				}
 			}
 		}
-		P:7("Area_CheckArea: MAYBE");
+		Debug_Print7("Area_CheckArea: MAYBE");
 		if (PA_Get(YSI_g_sAreas[area][E_AREA_PLAYERS], playerid))
 		{
 			#if AREA_WORLDS > 0
@@ -2046,7 +2044,7 @@ static stock Area_CheckArea(playerid, world, area, Float:x, Float:y, Float:z, &n
  * <param name="z">Z position to check.</param>
  * <param name="bounds">Data for the area position.</param>
  * <remarks>
- *  Checks if a point is in a given circle.
+ *   Checks if a point is in a given circle.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2063,7 +2061,7 @@ static stock Area_IsInCircle(Float:x, Float:y, Float:z, const Float:bounds[])
  * <param name="z">Z position to check.</param>
  * <param name="bounds">Data for the area position.</param>
  * <remarks>
- *  Checks if a point is in a given sphere.
+ *   Checks if a point is in a given sphere.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2081,7 +2079,7 @@ static stock Area_IsInCircle(Float:x, Float:y, Float:z, const Float:bounds[])
  * <param name="z">Z position to check.</param>
  * <param name="bounds">Data for the area position.</param>
  * <remarks>
- *  Checks if a point is in a given ovoid.
+ *   Checks if a point is in a given ovoid.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2099,22 +2097,22 @@ static stock Area_IsInOvoid(Float:x, Float:y, Float:z, const Float:bounds[])
  * <param name="z">Z position to check.</param>
  * <param name="header">Pointer to the start of the polygon data in the array.</param>
  * <remarks>
- *  Based on IsPlayerInAreaEx by koolk in the useful functions topic.  The
- *  passed pointer is the pointer to the first set of co-ordinates in a one-
- *  way not looping linked list of points in the polygod as the data may be
- *  spread throughout the areas array.  This is as otherwise there may be
- *  enough free spaces but not in one block.
+ *   Based on IsPlayerInAreaEx by koolk in the useful functions topic.  The
+ *   passed pointer is the pointer to the first set of co-ordinates in a one-
+ *   way not looping linked list of points in the polygod as the data may be
+ *   spread throughout the areas array.  This is as otherwise there may be
+ *   enough free spaces but not in one block.
  *
- *  The code first checks if there is a height component as it's the easiest
- *  to check thus may save a load of pointless processing.  If this passes it
- *  then does the main loop.  This loops till there are no points left to do
- *  (monitored by decreasing count).  When 2 points (four pieces of data) have
- *  been checked the poiner for the data is moved on to the next group and the
- *  checking continues.
+ *   The code first checks if there is a height component as it's the easiest
+ *   to check thus may save a load of pointless processing.  If this passes it
+ *   then does the main loop.  This loops till there are no points left to do
+ *   (monitored by decreasing count).  When 2 points (four pieces of data) have
+ *   been checked the poiner for the data is moved on to the next group and the
+ *   checking continues.
  *
- *  For simplicity's sake (and thus speed's sake) the lower pointes from the
- *  last check are saved amd used as the upper points for the next check to
- *  avoid loads of repeated array accesses and saving the last array position.
+ *   For simplicity's sake (and thus speed's sake) the lower pointes from the
+ *   last check are saved amd used as the upper points for the next check to
+ *   avoid loads of repeated array accesses and saving the last array position.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2125,8 +2123,8 @@ stock Area_IsInPoly(Float:x, Float:y, Float:z, header)
 	new
 		Float:bx = x - YSI_g_sAreas[header][E_AREA_POLY_BOUND_X],
 		Float:by = y - YSI_g_sAreas[header][E_AREA_POLY_BOUND_Y];
-	P:7("Area_IsInPoly: %f %f %f %d", x, y, z, header);
-	P:7("Area_IsInPoly: %f %f %f %d", YSI_g_sAreas[header][E_AREA_POLY_BOUND_H], (bx * bx + by * by),YSI_g_sAreas[header][E_AREA_POLY_BOUND_R], (z <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_H] && (bx * bx + by * by) <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_R]));
+	Debug_Print7("Area_IsInPoly: %f %f %f %d", x, y, z, header);
+	Debug_Print7("Area_IsInPoly: %f %f %f %d", YSI_g_sAreas[header][E_AREA_POLY_BOUND_H], (bx * bx + by * by),YSI_g_sAreas[header][E_AREA_POLY_BOUND_R], (z <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_H] && (bx * bx + by * by) <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_R]));
 	if (!(z <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_H] && (bx * bx + by * by) <= YSI_g_sAreas[header][E_AREA_POLY_BOUND_R]))
 	{
 		return 0;
@@ -2134,7 +2132,7 @@ stock Area_IsInPoly(Float:x, Float:y, Float:z, header)
 	// Within the bounding cylinder, do the more complex checks.
 	new
 		count = YSI_g_sAreas[header][E_AREA_POLY_COUNT];
-	P:7("Area_IsInPoly: In the bounds: %d %d", count, CHILD_AREA_SLOTS);
+	Debug_Print7("Area_IsInPoly: In the bounds: %d %d", count, CHILD_AREA_SLOTS);
 	if (count <= CHILD_AREA_SLOTS)
 	{
 		// Only uses one single child slot.
@@ -2153,16 +2151,16 @@ stock Area_IsInPoly(Float:x, Float:y, Float:z, header)
 			x1 = YSI_g_sAreas[header][E_AREA_CHILD_ELEMS][done++];
 			y1 = YSI_g_sAreas[header][E_AREA_CHILD_ELEMS][done++];
 			// Crosses this line.
-			//P:7("Area_IsInPoly: %f %f %f", y0, y, y1);
+			//Debug_Print7("Area_IsInPoly: %f %f %f", y0, y, y1);
 			if (((y0 <= y <= y1) || (y1 <= y <= y0)) && ((x0 + ((y - y0) * (x1 - x0) / (y1 - y0))) <= x)) ++lines;
-			//P:7("Area_IsInPoly: %d %d %d %d %d", (y0 <= y <= y1), (y1 <= y <= y0), (y0 <= y <= y1) || (y1 <= y <= y0), (x0 + ((y - y0) * (x1 - x0) / (y1 - y0))) <= x, lines);
+			//Debug_Print7("Area_IsInPoly: %d %d %d %d %d", (y0 <= y <= y1), (y1 <= y <= y0), (y0 <= y <= y1) || (y1 <= y <= y0), (x0 + ((y - y0) * (x1 - x0) / (y1 - y0))) <= x, lines);
 			x0 = x1;
 			y0 = y1;
 		}
-		//P:7("Area_IsInPoly: %f %f %f", y0, y, fy);
+		//Debug_Print7("Area_IsInPoly: %f %f %f", y0, y, fy);
 		if (((y0 <=y <= fy) || (fy <= y <= y0)) && (x0 + ((y - y0) * (fx - x0) / (fy - y0))) <= x) ++lines;
-		//P:7("Area_IsInPoly: %d %d %d %d %d", (y0 <= y <= fy), (fy <= y <= y0), (y0 <= y <= fy) || (fy <= y <= y0), (x0 + ((y - y0) * (fx - x0) / (fy - y0))) <= x, lines);
-		//P:7("Area_IsInPoly: Return %d", lines);
+		//Debug_Print7("Area_IsInPoly: %d %d %d %d %d", (y0 <= y <= fy), (fy <= y <= y0), (y0 <= y <= fy) || (fy <= y <= y0), (x0 + ((y - y0) * (fx - x0) / (fy - y0))) <= x, lines);
+		//Debug_Print7("Area_IsInPoly: Return %d", lines);
 		return IsOdd(lines);
 	}
 	else
@@ -2210,9 +2208,9 @@ stock Area_IsInPoly(Float:x, Float:y, Float:z, header)
  * <param name="lower">The lower corner of the cube.</param>
  * <param name="upper">The upper corner of the cube.</param>
  * <remarks>
- *  Checks if a point is in a given cube.  This is another multi slot shape
- *  but is much simpler than the poly as it's always 2 slots so we can easilly
- *  get the data in one lump.
+ *   Checks if a point is in a given cube.  This is another multi slot shape
+ *   but is much simpler than the poly as it's always 2 slots so we can easilly
+ *   get the data in one lump.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2226,10 +2224,10 @@ static stock Area_IsInCube(Float:x, Float:y, Float:z, const Float:bounds[])
  * <param name="y">Y position to check.</param>
  * <param name="bounds">Data for the area position.</param>
  * <remarks>
- *  Checks if a point is in a given box.  There is no height check with this
- *  one as any one area slot has 4 points which for this are upper and lower
- *  x and y, adding a height check would make it require 2 slots and basically
- *  make it a cube check.
+ *   Checks if a point is in a given box.  There is no height check with this
+ *   one as any one area slot has 4 points which for this are upper and lower
+ *   x and y, adding a height check would make it require 2 slots and basically
+ *   make it a cube check.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2241,15 +2239,20 @@ static stock Area_IsInCube(Float:x, Float:y, Float:z, const Float:bounds[])
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to get area of.</param>
  * <returns>
- *  The area a player is in or -1.
+ *   The area a player is in or -1.
  * </returns>
  * <remarks>
- *  Deprecated.
+ *   Deprecated.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 //foreign Area_GetPlayerArea(playerid);
 
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 #pragma deprecated Use Area_GetPlayerAreas
 stock Area_GetPlayerArea(playerid)
 {
@@ -2259,14 +2262,16 @@ stock Area_GetPlayerArea(playerid)
 	}
 	return NO_AREA;
 }
-
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
 
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to set areas of.</param>
  * <param name="idx">Which slot to set.</param>
  * <param name="area">The area to store in that slot.</param>
  * <remarks>
- *  Sets a player as in a slot.
+ *   Sets a player as in a slot.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2296,18 +2301,18 @@ static stock
 
 /*-------------------------------------------------------------------------*//**
  * <summary>
- *  _Area_GetPlayerAreas
- *  Area_GetPlayerAreas
+ *   _Area_GetPlayerAreas
+ *   Area_GetPlayerAreas
  * </summary>
  * <param name="playerid">Player to get areas of.</param>
  * <param name="idx">Which area to get.</param>
  * <returns>
- *  The area a player is in or -1.
+ *   The area a player is in or -1.
  * </returns>
  * <remarks>
- *  Replaces Area_GetPlayerArea for multiple areas.  Includes an internal
- *  version for tighter loops within this code to use once it is known that a
- *  player exists, and without using the global function system.
+ *   Replaces Area_GetPlayerArea for multiple areas.  Includes an internal
+ *   version for tighter loops within this code to use once it is known that a
+ *   player exists, and without using the global function system.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2368,7 +2373,7 @@ GLOBAL__ void:Area_SetPlayer(area, playerid, bool:set)
  * <param name="area">Area to get for.</param>
  * <param name="playerid">Player to get for.</param>
  * <remarks>
- *  Can the player USE this area (not are they in it)?
+ *   Can the player USE this area (not are they in it)?
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2446,7 +2451,7 @@ GLOBAL__ void:Area_SetAllPlayers(area, bool:set)
 /*-------------------------------------------------------------------------*//**
  * <param name="area">Area to check.</param>
  * <returns>
- *  Is the passed area valid and active.
+ *   Is the passed area valid and active.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -2460,11 +2465,11 @@ GLOBAL__ bool:Area_IsValid(area)
 /*-------------------------------------------------------------------------*//**
  * <param name="area">Area to check.</param>
  * <returns>
- *  Is the passed area valid and empty.
+ *   Is the passed area valid and empty.
  * </returns>
  * <remarks>
- *  Currently very slow as it has to loop through multiple players!  I may add
- *  an entry counter to zones to make this O(1) instead of O(nm).
+ *   Currently very slow as it has to loop through multiple players!  I may add
+ *   an entry counter to zones to make this O(1) instead of O(nm).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2499,11 +2504,11 @@ GLOBAL__ bool:Area_IsEmpty(area)
  * <param name="area">Area to set for.</param>
  * <param name="callback">Callback to use.</param>
  * <remarks>
- *  Adds a y_inline style callback (publics included) to an area to be called
- *  when a player enters it.  This is NOT a remote function and instead records
- *  the data locally to call functions in the correct script (or they'll just
- *  end up crashing as you will be jumping to an arbitrary address in a script
- *  that doesn't have sensible code at that address.
+ *   Adds a y_inline style callback (publics included) to an area to be called
+ *   when a player enters it.  This is NOT a remote function and instead records
+ *   the data locally to call functions in the correct script (or they'll just
+ *   end up crashing as you will be jumping to an arbitrary address in a script
+ *   that doesn't have sensible code at that address.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 

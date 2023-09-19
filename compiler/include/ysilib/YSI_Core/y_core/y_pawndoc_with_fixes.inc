@@ -1,18 +1,4 @@
-/*+
- * <library
- *   name="y_pawndoc"
- *   version="0.2"
- *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
- *   summary="Fix pawndoc comments."
- * >
- *   <summary pawndoc="true">
- *     This library uses the enhanced <em>pawndoc.xsl</em> from
- *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
- *     This XSL has features such as library and markdown support, and will not
- *     render this message when used.
- *   </summary>
- * </library>
- *//** *//*
+/*
 Legal:
 	Version: MPL 1.1
 	
@@ -91,7 +77,7 @@ Optional plugins:
 		This variable only exists to re-show other variables.  It ends a tiny
 		comment in the output XML started by fixes.inc with the immediately
 		preceeding variable (which should be called
-		<c>ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZY</c>) so that we can document several
+		<c>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzy</c>) so that we can document several
 		seemingly "internal" variables that are actually for end-user use
 		(<c>_0</c> - <c>_9</c>).  We then re-start the block comment to have it
 		ended again later by the original fixes.inc end variable
@@ -99,7 +85,7 @@ Optional plugins:
 		fixes.inc function of the same name as this variable is in a different
 		scope, and so fixes.inc also needed to use a different name for its
 		hiding variable since all its variables are in the same scope.
-		<p />
+		<p/>
 		Note that the actual hiding itself is done by an XML comment started
 		earlier and ended here.
 	</remarks>
@@ -107,5 +93,5 @@ Optional plugins:
 	-->
 */
 
-static stock ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ;
+static stock Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
 

@@ -1,9 +1,13 @@
+#if defined _INC_y_functional
+	#endinput
+#endif
+
 /**
  * <library
  *   name="y_functional"
  *   version="1.0"
  *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
- *   summary="Lambda functions and functional program functions - <c>map</c>, <c>fold</c>, etc."
+ *   summary="Lambda functions and functional program functions - `map`, `fold`, etc."
  * >
  *   <summary pawndoc="true">
  *     This library uses the enhanced <em>pawndoc.xsl</em> from

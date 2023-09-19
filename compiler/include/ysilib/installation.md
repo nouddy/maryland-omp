@@ -10,18 +10,16 @@ sampctl package install pawn-lang/YSI-Includes@5.x
 
 ## Without *sampctl*
 
-Download the latest version of the library and its dependencies from the following links:
+Download the latest version of the library and its dependencies from:
 
+https://github.com/pawn-lang/YSI-Includes/releases/download/nightly/YSI-Includes-nightly.zip
 
-
-Extract the *YSI* zip to `pawno/includes/`, the *amx_assembly* zip to `pawno/includes/amx`, the
-*md-sort* zip to `pawno/includes/md-sort`, the *indirection* zip to `pawno/includes/indirection`,
-and the *code-parse* zip to `pawno/includes/code-parse`.
+And extract the contents of the contained *YSI-Includes* directory to `pawno/includes/`.
 
 ## Compile-Time Options
 
-YSI shows a lot of information when it starts up.  You can disable a lot of this with the following
-defines:
+YSI shows a lot of information when it starts up, and does some things that aren't necessary in
+every script.  You can disable a lot of these with the following defines:
 
 ```pawn
 // Don't display the message about caching the code (with `YSI_YES_MODE_CACHE`).
@@ -33,13 +31,9 @@ defines:
 // Don't check if this is the latest version of YSI.
 #define YSI_NO_VERSION_CHECK
 
+// If there are no filterscripts also using YSI.
+#define YSI_NO_MASTER
 
 #include <YSI_Group\y_library>
 ```
-
-## Caching
-
-If the mode is too slow to start you can *cache* it.  This pre-optimises a lot of the mode, then
-saves the result to `scriptfiles/YSI_CACHE.amx`.  This allows you to do the slow startup once, then
-deploy the fast version to your server.
 

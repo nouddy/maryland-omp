@@ -1,0 +1,494 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           staff.script
+ *  @Module         staff
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+static  
+	bool:StaffDuty[MAX_PLAYERS];
+
+new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
+
+hook OnGameModeInit()
+{
+	print("staff/staff.script loaded");
+
+	return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+	stfveh[playerid] = INVALID_VEHICLE_ID;
+
+	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	DestroyVehicle(stfveh[playerid]);
+
+	stfveh[playerid] = INVALID_PLAYER_ID;
+	StaffDuty[playerid] = false;
+
+	return 1;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+	DestroyVehicle(stfveh[playerid]);
+
+	stfveh[playerid] = INVALID_PLAYER_ID;
+
+	return 1;
+}
+
+
+hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
+{
+	if(PlayerInfo[playerid][Staff] >= 1)
+	{
+		SetPlayerPosFindZ(playerid, fX, fY, fZ);
+		SetPlayerInterior(playerid, 0);
+		SetPlayerVirtualWorld(playerid, 0);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:sduty(playerid, params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "Help", "Komanda koja vam omogucava da budete na Staff Duznosti.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if(!PlayerInfo[playerid][Staff])
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	if(StaffDuty[playerid] == false)
+ 	{
+		SetPlayerHealth( playerid, 100);
+		SetPlayerArmour( playerid, 99);
+		
+		StaffDuty[ playerid ] = true;
+		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", ReturnPlayerName(playerid));
+	}
+	else if(StaffDuty[playerid] == true)
+	{
+	 	StaffDuty[playerid] = false;
+		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"vise nije na duznosti.", ReturnPlayerName(playerid));
+	}
+    return true;
+}
+
+YCMD:sc(playerid, const string: params[], help)
+{
+	if(help)
+    {
+        notification.Show(playerid, "Help", "Komanda koja vam omogucava da pisete u Staff Chat.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	if (isnull(params))
+		return SendPlayerNotify(playerid, "Koriscenje", "/sc [text]", 2);
+
+	static tmp_str[128];
+
+	format(tmp_str, sizeof(tmp_str), "Staff \187; %s(%d): "c_white"%s", ReturnPlayerName(playerid), playerid, params);
+
+	foreach (new i: Player)
+		if (PlayerInfo[i][Staff])
+			SendClientMessage(i, x_purple, tmp_str);
+	
+    return 1;
+}
+
+YCMD:sveh(playerid, params[], help)
+{
+	if(help)
+    {
+        notification.Show(playerid, "Help", "Komanda koja vam kreira Staff vozilo.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
+	if (stfveh[playerid] == INVALID_VEHICLE_ID) 
+	{
+		if (isnull(params))
+		return SendPlayerNotify(playerid, "Greska", "Null parametri", 1);
+
+		new modelid = strval(params);
+
+		if (400 > modelid > 611)
+			return SendPlayerNotify(playerid, "Greska", "Invalid model vozila 400 - 611", 1);
+
+		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z, 0.0, 1, 0, -1);
+
+		SetVehicleNumberPlate(vehicleid, "STAFF");
+		PutPlayerInVehicle(playerid, vehicleid, 0);
+		ChangeVehicleColours(vehicleid, 0, 0);
+		SetCameraBehindPlayer(playerid);
+		
+	    new bool:engine, bool:lights, bool:alarm, bool:doors, bool:bonnet, bool:boot, bool:objective;
+	    GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
+
+	    if (IsVehicleBicycle(GetVehicleModel(vehicleid)))
+	    {
+	        SetVehicleParamsEx(vehicleid, true, false, false, doors, bonnet, boot, objective);
+	    }
+	    else
+	    {
+	        SetVehicleParamsEx(vehicleid, false, false, false, doors, bonnet, boot, objective);
+	    }
+		SendPlayerNotify(playerid, "Uspesno", "Stvorili ste staff vozilo.", 3);
+	}
+	else 
+	{
+		DestroyVehicle(stfveh[playerid]);
+		stfveh[playerid] = INVALID_PLAYER_ID;
+		notification.Show(playerid, "USPESNO", "Unistili ste vozilo, da ga stvorite kucajte '/veh [Model ID]'.", "!", BOXCOLOR_GREEN);
+	}
+	
+    return 1;
+}
+
+YCMD:goto(playerid, params[],help)
+{
+	if(help)
+    {
+        notification.Show(playerid, "Help", "Komanda koja vam dozvoljava port do odredjenog igraca.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new giveplayerid, giveplayer[MAX_PLAYER_NAME];
+
+	new Float:plx,Float:ply,Float:plz;
+
+	GetPlayerName(giveplayerid, giveplayer, sizeof(giveplayer));
+
+	if(!sscanf(params, "u", giveplayerid))
+	{	
+		GetPlayerPos(giveplayerid, plx, ply, plz);
+			
+		if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+		{
+			new tmpcar = GetPlayerVehicleID(playerid);
+			SetVehiclePos(tmpcar, plx, ply+4, plz);
+		}
+		else
+		{
+			SetPlayerPos(playerid,plx,ply+2, plz);
+		}
+		SetPlayerInterior(playerid, GetPlayerInterior(giveplayerid));
+	}
+    return 1;
+}
+
+YCMD:cc(playerid, params[], help)
+{
+	if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja cisti chat igracima", "?", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	for(new cc; cc < 110; cc++)
+	{
+		SendClientMessageToAll(-1, "");
+	}
+
+	static fmt_string[120], sati, minuta, sekunda; gettime(sati, minuta, sekunda);
+	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", ReturnPlayerName(playerid));
+	SendClientMessageToAll(-1, fmt_string);
+	SendClientMessageToAll(-1, ""c_white"������������������������������������������������������������������������������" );
+	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" \187; "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
+	SendClientMessageToAll(-1, fmt_string );
+	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" \187; "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");
+
+    return 1;
+}
+
+YCMD:fv(playerid, params[], help)
+{
+	if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja Vam popravlja vozilo", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new vehicleid = GetPlayerVehicleID(playerid);
+
+	if(!IsPlayerInAnyVehicle(playerid)) return notification.Show(playerid, "GRESKA", "Niste u vozilu", "!", BOXCOLOR_RED);
+
+	RepairVehicle(vehicleid);
+
+	SetVehicleHealth(vehicleid, 999.0);
+
+	return 1;
+}
+YCMD:gethere(playerid, const params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda da dovucete igraca do sebe", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new targetid = INVALID_PLAYER_ID;
+
+	if(sscanf(params, "u", targetid)) return notification.Show(playerid, "KORISCENJE", "/gethere [id]", "?", BOXCOLOR_BLUE);
+
+	if(targetid == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Taj id nije na serveru", "!", BOXCOLOR_RED);
+
+	new Float:x, Float:y, Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
+	SetPlayerPos(targetid, x+1, y, z+1);
+
+	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
+
+	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+
+	new name[MAX_PLAYER_NAME];
+	GetPlayerName(targetid, name, sizeof(name));
+
+	static fmt_string[60];
+
+	format(fmt_string, sizeof(fmt_string),"Teleportovali ste igraca %s do sebe.", name);
+	notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
+
+	GetPlayerName(playerid, name, sizeof(name));
+
+	format(fmt_string, sizeof(fmt_string), "Staff %s vas je teleportovao do sebe.", name);
+	notification.Show(targetid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+YCMD:nitro(playerid, params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda koja vam daje nitro", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	AddVehicleComponent(GetPlayerVehicleID(playerid), 1010);
+
+	notification.Show(playerid, "USPESNO", "Ugradili ste nitro u vase vozilo.", "!", BOXCOLOR_GREEN);
+
+	return 1;
+}
+YCMD:jetpack(playerid, params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda koja vam daje jetpack", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
+
+	notification.Show(playerid, "USPESNO", "Uzeli ste jetpack.", "!", BOXCOLOR_GREEN);
+
+	return 1;
+}
+
+YCMD:setskin(playerid, const string: params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda koja vam omogucava da postavite odredjeni skin od 1 do 311.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	static
+		targetid,
+		skinid;
+
+	if (sscanf(params, "ri", targetid, skinid))
+		return notification.Show(playerid, "KORISCENJE", "/setskin [targetid] [skinid]", "+", BOXCOLOR_BLUE);
+
+	if (!(1 <= skinid <= 311))
+		return notification.Show(playerid, "GRESKA", "Pogresan ID skina", "!", BOXCOLOR_RED);
+
+	if (GetPlayerSkin(targetid) == skinid)
+		return notification.Show(playerid, "GRESKA", "Taj igrac vec ima taj skin.", "!", BOXCOLOR_RED);
+
+	SetPlayerSkin(targetid, skinid);
+
+	PlayerInfo[targetid][Skin] = skinid;
+
+	SavePlayer(targetid);
+
+	PlayerTextDrawHide(targetid, Player_TDs[targetid][0]);
+	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][0], PlayerInfo[targetid][Skin]);
+    PlayerTextDrawShow(targetid, Player_TDs[targetid][0]);
+
+    return 1;
+}
+
+YCMD:xgoto(playerid, params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda koja vam omogucava teleport na odredjene koordinate.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new Float:x, Float:y, Float:z;
+
+	static fmt_string[100];
+
+	if (sscanf(params, "P<,>fff", x, y, z)) notification.Show(playerid, "KORISCENJE", "xgoto <X Float> <Y Float> <Z Float>", "+", BOXCOLOR_BLUE);
+	else
+	{
+		if(IsPlayerInAnyVehicle(playerid))
+		{
+		    SetVehiclePos(GetPlayerVehicleID(playerid), x,y,z);
+		}
+		else
+		{
+		    SetPlayerPos(playerid, x, y, z);
+		}
+		format(fmt_string, sizeof(fmt_string), "Postavili ste koordinate na %f, %f, %f", x, y, z);
+		notification.Show(playerid, "USPESNO", fmt_string, "+", BOXCOLOR_GREEN);
+	}
+ 	return 1;
+}
+
+YCMD:setint(const playerid, params[], help)
+{
+	if(help)
+    {
+        SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}Postavka igracevog interijera.");
+        return 1;
+    }
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new id,int;
+	if(sscanf(params, "ii", id, int)) return SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}/setint id igraca id interior");
+ 
+	SetPlayerInterior(id, int);
+
+	va_SendClientMessage(playerid, x_ogyColour, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",ReturnPlayerName(id),int);
+	va_SendClientMessage(id, x_ogyColour, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",ReturnPlayerName(playerid),int);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:setvw(const playerid, params[], help)
+{
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+	
+	new id,vw;
+	if(sscanf(params, "ii", id, vw)) return SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}/setvw id igraca id interior");
+ 
+	SetPlayerVirtualWorld(id, vw);
+
+	va_SendClientMessage(playerid, x_ogyColour, "[SET-VW]: > {ffffff}Postavili ste igracu(%s) virtual world(%d)",ReturnPlayerName(id),vw);
+	va_SendClientMessage(id, x_ogyColour, "[SET-VW]: > {ffffff}%s vam je podesio virtual world(%d)",ReturnPlayerName(playerid),vw);
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:setstaff(playerid, const string: params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "0 - Skinut Staff | 1. Assistent | 2. Staff | 3. Manager | 4. High Command.", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if(!IsPlayerAdmin(playerid))
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	static
+		targetid,
+		level;
+
+	if (sscanf(params, "ri", targetid, level))
+		return notification.Show(playerid, "KORISCENJE", "/setstaff [targetid] [0/4]", "+", BOXCOLOR_BLUE);
+
+	if (!level && !PlayerInfo[targetid][Staff])
+		return notification.Show(playerid, "GRESKA", "Taj igrac nije u staff-u", "!", BOXCOLOR_RED);
+
+	if (level == PlayerInfo[targetid][Staff])
+		return notification.Show(playerid, "GRESKA", "Taj igrac je vec staff", "!", BOXCOLOR_RED);
+
+	PlayerInfo[targetid][Staff] = level;
+	
+	if (!level)
+	{
+		static fmt_string[128];
+
+		format(fmt_string, sizeof(fmt_string), "%s Vas je izbacio iz staff-a.", ReturnPlayerName(playerid));
+		notification.Show(targetid, "INFO", fmt_string, "+", BOXCOLOR_BLUE);
+
+		format(fmt_string, sizeof(fmt_string), "Izbacili ste %s iz staff-a.", ReturnPlayerName(targetid));
+		notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
+	}
+	else if(level < 0 || level > 4) return notification.Show(targetid, "INFO", "Koristi /help setstaff da vidis validne levele", "?", BOXCOLOR_BLUE);
+	{
+		static fmt_string[128];
+
+		format(fmt_string, sizeof(fmt_string), "%s Vas je ubacio u staff, nivo %i.", ReturnPlayerName(playerid), level);
+		notification.Show(targetid, "INFO", fmt_string, "+", BOXCOLOR_BLUE);
+
+		format(fmt_string, sizeof(fmt_string), "Ubacili ste %s u staff, nivo %i.", ReturnPlayerName(targetid), level);
+		notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
+	}
+	SavePlayer(targetid);
+	
+    return 1;
+}

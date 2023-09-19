@@ -1,18 +1,4 @@
-/**
- * <library
- *   name="y_hooks"
- *   version="2.0"
- *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
- *   summary="Automatically hooks any callbacks with a very simple syntax."
- * >
- *   <summary pawndoc="true">
- *     This library uses the enhanced <em>pawndoc.xsl</em> from
- *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
- *     This XSL has features such as library and markdown support, and will not
- *     render this message when used.
- *   </summary>
- * </library>
- *//** *//*
+/*
 Legal:
 	Version: MPL 1.1
 	
@@ -107,8 +93,28 @@ Optional plugins:
 #if defined _Y_UNIQUE_INCLUDED
 	#undef _Y_UNIQUE_INCLUDED
 #else
-	#error Did you use `YSI/y_hooks` instead of `YSI\y_hooks`?
+	#error Did you use `YSI_Coding/y_hooks` instead of `YSI_Coding\y_hooks`?
 #endif
+
+#if defined _INC_y_hooks
+	#endinput
+#endif
+
+/**
+ * <library
+ *   name="y_hooks"
+ *   version="2.0"
+ *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
+ *   summary="Automatically hooks any callbacks with a very simple syntax."
+ * >
+ *   <summary pawndoc="true">
+ *     This library uses the enhanced <em>pawndoc.xsl</em> from
+ *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
+ *     This XSL has features such as library and markdown support, and will not
+ *     render this message when used.
+ *   </summary>
+ * </library>
+ *//** */
 
 #if !defined _INC_y_hooks
 	#tryinclude "y_hooks\y_hooks_entry"

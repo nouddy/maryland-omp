@@ -1,7 +1,6 @@
 #if defined _INC_y_classgroups
 	#endinput
 #endif
-#define _INC_y_classgroups
 
 /*+
  * <library
@@ -92,7 +91,7 @@ Optional plugins:
 
 stock Class_ResolveGroups(class, Group:forgroup, bool:cp) <YSI_has_groups:y>
 {
-	P:2("Class_ResolveGroups<y>: call Resolve %d %d %d", class, _:forgroup, cp);
+	Debug_Print2("Class_ResolveGroups<y>: call Resolve %d %d %d", class, _:forgroup, cp);
 	if (cp)
 	{
 		// Here "class" means "playerid".
@@ -100,7 +99,7 @@ stock Class_ResolveGroups(class, Group:forgroup, bool:cp) <YSI_has_groups:y>
 	}
 	else
 	{
-		P:7("Class_ResolveGroups<y>: Enable this class: %d For: %d", class, _:forgroup);
+		Debug_Print7("Class_ResolveGroups<y>: Enable this class: %d For: %d", class, _:forgroup);
 		// Only enable this class for one group.
 		//Group_UpdateAllClass(class, false);
 		//Group_SetClass(forgroup, class, true);

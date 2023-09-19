@@ -292,16 +292,16 @@ enum e_HASH_TYPE:
  * <param name="str">The string to hash.</param>
  * <param name="sensitive">Wether the hash is case sensitive or not.</param>
  * <returns>
- *  The reverse Bernstein hash of the string.
+ *   The reverse Bernstein hash of the string.
  * </returns>
  * <remarks>
- *  Based on Bernstein hash, but backwards to match the macros.  The only
- *  characters which can be used in the compile time version of this code are:
- *  a-z, A-Z, 0-9, _ and space.
+ *   Based on Bernstein hash, but backwards to match the macros.  The only
+ *   characters which can be used in the compile time version of this code are:
+ *   a-z, A-Z, 0-9, _ and space.
  *
  * native Hash(str[]);
  *
- *  NOW FORWARD AGAIN.
+ *   NOW FORWARD AGAIN.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -320,7 +320,7 @@ stock YHash(const str[], bool:sensitive = true, e_HASH_TYPE:type = hash_bernstei
 			return 5381;
 		}
 	}
-	P:3("YHash called: \"%s\", %i, %i, %i, %i", str, _:sensitive, _:type, len, pack);
+	Debug_Print3("YHash called: \"%s\", %i, %i, %i, %i", str, _:sensitive, _:type, len, pack);
 	len = min(len, strlen(str));
 	new
 		i = 0;

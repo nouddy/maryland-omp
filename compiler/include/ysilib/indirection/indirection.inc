@@ -39,8 +39,8 @@
  *     Indirection is a system for calling function pointers in a generic and
  *     type-safe way.  Instead of <c>CallLocalFunction</c>, <c>Call</c>,
  *     <c>defer</c>, <c>Callback_Call</c>, or any other method, this gives one
- *     common interface which can be extended by library authors; utilising tags
- *     for compile-time parameters.
+ *     common interface which can be extended by library authors; utilising
+ *     tags for compile-time parameters.
  *   </remarks>
  * </library>
  */
@@ -128,6 +128,10 @@
 	#define GLOBAL_TAG_TYPES {_,Bit,Text,Group,File,Float,Text3D}
 #endif
 
+#if !defined INDIRECTION_META_DATA_SIZE
+	#define INDIRECTION_META_DATA_SIZE (8)
+#endif
+
 enum E_INDIRECTION
 {
 	E_INDIRECTION_ALWAYS_NULL, // So we can tell this is not a string.
@@ -135,14 +139,36 @@ enum E_INDIRECTION
 	E_INDIRECTION_CLAIM,       // Called by `Indirect_Claim`.
 	E_INDIRECTION_RELEASE,     // Called by `Indirect_Release`.
 	E_INDIRECTION_METADATA,    // Only used by end-users.
+	E_INDIRECTION_TAG,         // Save the encoded parameters tag of this callback.
+	E_INDIRECTION_OWNER,       // Attach the function to players etc.
+	E_INDIRECTION_NEXT         // Next pointer in a generic list of callbacks.
 }
 
 stock
+	INDIRECTION_META[INDIRECTION_META_DATA_SIZE],
+	INDIRECTION_COUNT = 0,
 	INDIRECTION_DATA = 0,
 	INDIRECTION_TAG = 0;
 
+// Constant offsets for assembly.
+const
+	E_INDIRECTION_ALWAYS_NULL__ = _:E_INDIRECTION_ALWAYS_NULL * cellbytes,
+	E_INDIRECTION_HANDER__      = _:E_INDIRECTION_HANDER * cellbytes,
+	E_INDIRECTION_CLAIM__       = _:E_INDIRECTION_CLAIM * cellbytes,
+	E_INDIRECTION_RELEASE__     = _:E_INDIRECTION_RELEASE * cellbytes,
+	E_INDIRECTION_METADATA__    = _:E_INDIRECTION_METADATA * cellbytes,
+	E_INDIRECTION_TAG__         = _:E_INDIRECTION_TAG * cellbytes,
+	E_INDIRECTION_OWNER__       = _:E_INDIRECTION_OWNER * cellbytes,
+	E_INDIRECTION_NEXT__        = _:E_INDIRECTION_NEXT * cellbytes,
+	E_INDIRECTION__             = _:E_INDIRECTION * cellbytes;
+
+stock const
+	INDIRECTION_NAUGHT = 0;
+
 static stock
-	gsCodSize = 0; // The size of `COD`.
+	gsCodSize = 0, // The size of `COD`.
+	gsKnownOwnedCallbacks = 0,
+	gsFakeE_INDIRECTION[E_INDIRECTION];
 
 #if !defined YSI_MAX_STRING
 	#define YSI_MAX_STRING (144)
@@ -193,6 +219,29 @@ static stock
 	#endif
 #endif
 
+#if defined __PawnBuild
+	// Because I somewhat scuppered myself!
+	#if __PawnBuild == 0
+		#define INDIRECTION_FUNC_INC__
+		#undef __PawnBuild
+	#endif
+#else
+	#define INDIRECTION_FUNC_INC__
+#endif
+#if defined INDIRECTION_FUNC_INC__
+	forward __Indirect_FuncInc__();
+	
+	public __Indirect_FuncInc__()
+	{
+		memcpy
+			("", "", 0, 0, 0);
+		funcidx
+			("");
+	}
+
+	#undef INDIRECTION_FUNC_INC__
+#endif
+
 TAGOF(Float);
 TAGOF(File);
 
@@ -231,35 +280,81 @@ SPECIFIER(s);
 // It would save the stack manipulation though (not convinced it would be less
 // code though with the generation of multiple function calls).
 #define @ str_new_static
-#define str_new_static.%0(%1) (Indirect_Call(_:%0,_:(tagof(%0)),%1))
-#define Indirect_Call(_:%9&%0,_:(tagof(%9)),%2) Indirect_Call(_:TAGOF_ADDRESSOF:addressof(%0),_:0,%2)
-#define TAGOF_ADDRESSOF:addressof(%0<%2>),_:0, addressof(%0<%2>),_:tagof(F@_@%2:),
+
+// V2 design, with meta-data on `@`.  Can now do:
+//   
+//   @.var(params)
+//   @.&func<iis>(params)
+//   @.&func(params)
+//   @.func[meta](params)
+//   
+#define str_new_static.%0(%1) (Indirect_Call__(_:(INDIRECTION_DATA=_:%0,INDIRECTION_TAG=tagof(%0),Indirect_Meta()),%1))
+
+/// <library>indirection</library>
+native Indirect_Memcpy(dest[], source, index = 0, numbytes, maxlength = sizeof (dest)) = memcpy;
+
+/// <library>indirection</library>
+stock Indirect_Meta(GLOBAL_TAG_TYPES:...)
+{
+	// Offset to the first parameter.
+	const cells0 = 3 * cellbytes;
+	const cells1 = 2 * cellbytes;
+	new addr;
+	#emit ADDR.pri     cells0
+	#emit STOR.S.pri   addr
+	#emit LOAD.S.pri   cells1
+	#emit STOR.pri     INDIRECTION_COUNT
+	Indirect_Memcpy(INDIRECTION_META, addr, 0, INDIRECTION_COUNT, INDIRECTION_META_DATA_SIZE);
+	return (INDIRECTION_COUNT /= cellbytes);
+}
+
+// Look for `&` for variable dereferencing.
+#define INDIRECTION_DATA=_:%9&%0,INDIRECTION_TAG=tagof(%9), INDIRECTION_DATA=_:INDIR2_:addressof(%0),INDIRECTION_TAG=prototypeof(%0),
+
+// Now we know this is an indirection call, are there any meta-data params?
+#define Indirect_Call__(_:(INDIRECTION_DATA=_:%0[%2]%6,INDIRECTION_TAG=tagof(%4),Indirect_Meta()),%3) Indirect_Call__(_:(INDIRECTION_DATA=_:%0%6,INDIRECTION_TAG=tagof(%4),Indirect_Meta(%2)),%3)
+
+// Look for `<>` generic tag types.
+#define INDIR2_:addressof(%0<%4>),INDIRECTION_TAG=prototypeof(%9), addressof(%0<%4>),F@_@%4:INDIRECTION_TAG=F@_@%4:tagof(F@_@%4:),
+
+// The `ALS_DO` callback syntax is `CALLBACK<name, specifier>(params)`
+#define Indirect_DoCallback<%0,%4>(%9) O@A@("On"#%0),F@_@%4:INDIRECTION_TAG=F@_@%4:tagof(F@_@%4:),
+
+// Simplify the complex ALS syntax.
+//#define Indirect_ALS<%0><%1> %1<,%0>()
+// Example:
+//
+//   #define ALS_DO_PlayerConnect Indirect_ALSTag<i>
+//
+
 // Can now do:
 //   
 //   @.var(params)
-//   @&func<iis>(params)
-//   @.&func(params)
+//   @.&func<iis>(params)
+//   @.func[meta](params)
+//   @.OnPlayerConnect(params)
 //   
 
-#if !defined __PawnBuild
-	forward __Indirect_FuncInc__();
-	
-	public __Indirect_FuncInc__()
-	{
-		memcpy
-			("", "", 0, 0, 0);
-		funcidx
-			("");
-	}
-#endif
+/// <library>indirection</library>
+forward Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...);
+
+// Old API.
+#define Indirect_Call(%0,%1) (Indirect_Call__(_:INDIR1_:(INDIRECTION_DATA=(%0),INDIRECTION_TAG=(%1),Indirect_Meta())))
+#define INDIR1_:(INDIRECTION_DATA=(%0),INDIRECTION_TAG=(%1,%2),Indirect_Meta())) (INDIRECTION_DATA=(%0),INDIRECTION_TAG=(%1),Indirect_Meta()),%2)
+
+#define Indirect_Meta() INDIRECTION_NAUGHT
 
 /// <library>indirection</library>
-stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
+stock Indirect_Call__(meta, GLOBAL_TAG_TYPES:...)
 {
+	const cells0 = 4 * cellbytes;
+	const cells1 = -1 * cellbytes;
+	const cells3 = 1 * cellbytes;
+	const cells4 = 2 * cellbytes;
 	static
 		addr = 0;
-	#pragma unused tag
-	if (!func)
+	#pragma unused meta
+	if (!INDIRECTION_DATA)
 	{
 		return 0;
 	}
@@ -269,7 +364,7 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 	// 
 	// Get the previous frame.  This undoes the effects of our `PROC` so the
 	// called function must have a proper `PROC`.
-	#emit ADDR.pri     20
+	#emit ADDR.pri     cells0
 	#emit STOR.pri     addr
 	#emit POP.pri
 	#emit SCTRL        5
@@ -278,14 +373,11 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 	// Get the parameter count.
 	#emit POP.pri
 	// Reduce the parameter count.
-	#emit ADD.C        0xFFFFFFF8
-	// Store the return address.
-	#emit SWAP.alt
-	#emit STOR.alt     INDIRECTION_DATA
-	#emit POP.alt
+	#emit ADD.C        cells1
 	// Store the new parameter count.
 	#emit SWAP.pri
-	#emit STOR.pri     INDIRECTION_TAG
+	#emit STOR.pri     INDIRECTION_COUNT
+	// Store the return address.
 	#emit PUSH.alt
 	// Check the pointer type.  If it is in the `COD` area, jump straight to it
 	// with the tag for parameter types (if it isn't 0).  Otherwise, use the
@@ -302,7 +394,7 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 		if (!INDIRECTION_DATA)
 		{
 			// Get the function at `func - COD + 4`.
-			#emit CONST.pri    4
+			#emit CONST.pri    E_INDIRECTION_HANDER__
 			#emit ADD
 			#emit LOAD.I
 			// Call it, passing `func` as a proper pointer, NOT skipping `PROC`.
@@ -314,9 +406,9 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 		// `INDIRECTION_DATA` is now a pointer to a string of a function name.
 		// Resolve it via index lookup.
 		#emit PUSH.alt
-		#emit PUSH.C       4
+		#emit PUSH.C       cells3
 		#emit SYSREQ.C     funcidx
-		#emit STACK        8
+		#emit STACK        cells4
 		#emit STOR.pri     INDIRECTION_DATA
 		if (INDIRECTION_DATA == -1)
 		{
@@ -348,7 +440,7 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 			case '\0', 'x':
 				break;
 			}
-			addr += 4;
+			addr += cellbytes;
 		}
 	}
 	{}
@@ -364,14 +456,21 @@ stock Indirect_Call(func, tag, GLOBAL_TAG_TYPES:...)
 /// </remarks>
 stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 {
+	const cells0 = 2 * cellbytes;
+	const cells1 = 3 * cellbytes;
+	const cells2 = 5 * cellbytes;
+	const cells3 = -2 * cellbytes;
+	const cells4 = 1 * cellbytes;
+	const cells5 = 1 * cellbytes;
+	const cells6 = 2 * cellbytes;
 	static
 		addr = 0;
 	#pragma unused tag
 	if (!func)
 	{
 		// Get the offset to the secret return parameter.
-		#emit LOAD.S.pri   8
-		#emit ADDR.alt     12
+		#emit LOAD.S.pri   cells0
+		#emit ADDR.alt     cells1
 		#emit ADD
 		#emit LOAD.I
 		#emit MOVE.alt
@@ -382,7 +481,7 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 		return ret;
 	}
 	{}
-	#emit ADDR.pri     20
+	#emit ADDR.pri     cells2
 	#emit STOR.pri     addr
 	#emit POP.pri
 	#emit SCTRL        5
@@ -391,7 +490,7 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 	// Get the parameter count.
 	#emit POP.pri
 	// Reduce the parameter count.
-	#emit ADD.C        0xFFFFFFF8
+	#emit ADD.C        cells3
 	// Store the return address.
 	#emit SWAP.alt
 	#emit STOR.alt     INDIRECTION_DATA
@@ -415,7 +514,7 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 		if (!INDIRECTION_DATA)
 		{
 			// Get the function at `func - COD + 4`.
-			#emit CONST.pri    4
+			#emit CONST.pri    cells4
 			#emit ADD
 			#emit LOAD.I
 			// Call it, passing `func` as a proper pointer, NOT skipping `PROC`.
@@ -427,9 +526,9 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 		// `INDIRECTION_DATA` is now a pointer to a string of a function name.
 		// Resolve it via index lookup.
 		#emit PUSH.alt
-		#emit PUSH.C       4
+		#emit PUSH.C       cells5
 		#emit SYSREQ.C     funcidx
-		#emit STACK        8
+		#emit STACK        cells6
 		#emit STOR.pri     INDIRECTION_DATA
 		if (INDIRECTION_DATA == -1)
 		{
@@ -461,7 +560,7 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 			case '\0', 'x':
 				break;
 			}
-			addr += 4;
+			addr += cellbytes;
 		}
 	}
 	{}
@@ -481,6 +580,11 @@ stock string:Indirect_Callstring(func, tag, GLOBAL_TAG_TYPES:...)
 /// </remarks>
 stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 {
+	const cells0 = 5 * cellbytes;
+	const cells1 = -2 * cellbytes;
+	const cells2 = 1 * cellbytes;
+	const cells3 = 1 * cellbytes;
+	const cells4 = 2 * cellbytes;
 	static
 		addr = 0;
 	#pragma unused tag
@@ -489,7 +593,7 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 		return;
 	}
 	{}
-	#emit ADDR.pri     20
+	#emit ADDR.pri     cells0
 	#emit STOR.pri     addr
 	#emit POP.pri
 	#emit SCTRL        5
@@ -498,7 +602,7 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 	// Get the parameter count.
 	#emit POP.pri
 	// Reduce the parameter count.
-	#emit ADD.C        0xFFFFFFF8
+	#emit ADD.C        cells1
 	// Store the return address.
 	#emit SWAP.alt
 	#emit STOR.alt     INDIRECTION_DATA
@@ -522,7 +626,7 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 		if (!INDIRECTION_DATA)
 		{
 			// Get the function at `func - COD + 4`.
-			#emit CONST.pri    4
+			#emit CONST.pri    cells2
 			#emit ADD
 			#emit LOAD.I
 			// Call it, passing `func` as a proper pointer, NOT skipping `PROC`.
@@ -534,9 +638,9 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 		// `INDIRECTION_DATA` is now a pointer to a string of a function name.
 		// Resolve it via index lookup.
 		#emit PUSH.alt
-		#emit PUSH.C       4
+		#emit PUSH.C       cells3
 		#emit SYSREQ.C     funcidx
-		#emit STACK        8
+		#emit STACK        cells4
 		#emit STOR.pri     INDIRECTION_DATA
 		if (INDIRECTION_DATA == -1)
 		{
@@ -568,7 +672,7 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 			case '\0', 'x':
 				break;
 			}
-			addr += 4;
+			addr += cellbytes;
 		}
 	}
 	{}
@@ -581,6 +685,17 @@ stock void:Indirect_Callvoid(func, tag, GLOBAL_TAG_TYPES:...)
 /// <library>indirection</library>
 stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 {
+	#if cellbits == 32
+		const cells0 = 2;
+	#elseif cellbits == 64
+		const cells0 = 3;
+	#else
+		#error Unsupported `cellbits`.
+	#endif
+	const cells1 = 5 * cellbytes;
+	const cells2 = 6 * cellbytes;
+	const cells4 = 1 * cellbytes;
+	const cells5 = 2 * cellbytes;
 	static
 		ret = 0,
 		src = 0;
@@ -605,7 +720,7 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 	#emit STOR.alt     src
 	// Get the size.
 	#emit POP.alt
-	#emit SHL.C.alt    2
+	#emit SHL.C.alt    cells0
 //	#emit STOR.alt     cnt
 	// We cannot just adjust the stack size while the other parameters are still
 	// on it, since the new stack might be smaller than the old one, and dealing
@@ -620,10 +735,10 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 	#emit PUSH         src
 	#emit STOR.pri     src
 	#emit PUSH.pri
-	#emit PUSH.C       20
+	#emit PUSH.C       cells1
 	#emit SYSREQ.C     memcpy
 	#emit MOVE.pri
-	#emit STACK        24
+	#emit STACK        cells2
 	#emit PUSH.pri
 	#emit PUSH         ret
 	// 
@@ -644,7 +759,7 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 			#emit STOR.alt     INDIRECTION_DATA
 			// Get the function at `func - COD + 4`.
 			#emit LOAD.pri     INDIRECTION_DATA
-			#emit ADD.C        4
+			#emit ADD.C        E_INDIRECTION_HANDER__
 			#emit LOAD.I
 			// Call it, passing `func` as a proper pointer, NOT skipping `PROC`.
 			#emit SCTRL        6
@@ -654,9 +769,9 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 		// `INDIRECTION_DATA` is now a pointer to a string of a function name.
 		// Resolve it via index lookup.
 		#emit PUSH.alt
-		#emit PUSH.C       4
+		#emit PUSH.C       cells4
 		#emit SYSREQ.C     funcidx
-		#emit STACK        8
+		#emit STACK        cells5
 		#emit STOR.pri     INDIRECTION_DATA
 		if (INDIRECTION_DATA == -1)
 		{
@@ -689,7 +804,7 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 			case '\0', 'x':
 				break;
 			}
-			src += 4;
+			src += cellbytes;
 		}
 	}
 	{}
@@ -701,9 +816,223 @@ stock Indirect_Array(func, tag, const params[], size = sizeof (params))
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
+ * <param name="func">The function pointer with attached Nextdata.</param>
+ * <remarks>
+ *   Gets extra data from the pointer.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_GetNext_(func)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return 0;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		// Get the function at `func - COD + 16`.
+		#emit CONST.pri    E_INDIRECTION_NEXT__
+		#emit ADD
+		#emit LOAD.I
+		#emit RETN
+	}
+	return 0;
+}
+#define Indirect_GetNext(%0) Indirect_GetNext_(_:%0)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer to attach Nextdata to.</param>
+ * <param name="data">The Nextdata.</param>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_SetNext_(func, data)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return false;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		// Get the function at `func - COD + 16`.
+		#emit CONST.pri    E_INDIRECTION_NEXT__
+		#emit ADD
+		#emit LOAD.S.alt   data
+		#emit XCHG
+		#emit STOR.I
+		return true;
+	}
+	return false;
+}
+#define Indirect_SetNext(%0,%1) Indirect_SetNext_(_:(%0),%1)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer with a tag.</param>
+ * <remarks>
+ *   Gets the tag of the pointer.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_GetTag_(func)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return 0;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		// Get the function at `func - COD + 16`.
+		#emit CONST.pri    E_INDIRECTION_TAG__
+		#emit ADD
+		#emit LOAD.I
+		#emit RETN
+	}
+	return 0;
+}
+#define Indirect_GetTag(%0) Indirect_GetTag_(_:%0)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer to attach a tag to.</param>
+ * <param name="tag">The tag.</param>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_SetTag_(func, tag)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return false;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		// Get the function at `func - COD + 16`.
+		#emit CONST.pri    E_INDIRECTION_TAG__
+		#emit ADD
+		#emit LOAD.S.alt   tag
+		#emit XCHG
+		#emit STOR.I
+		return true;
+	}
+	return false;
+}
+#define Indirect_SetTag(%0,%1) Indirect_SetTag_(_:(%0),%1)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer with an owner.</param>
+ * <remarks>
+ *   Gets the owner of the pointer.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_GetOwner_(func)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return 0;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		// Get the function at `func - COD + 16`.
+		#emit CONST.pri    E_INDIRECTION_OWNER__
+		#emit ADD
+		#emit LOAD.I
+		#emit CONST.alt    cellmax
+		#emit AND
+		#emit RETN
+	}
+	return 0;
+}
+#define Indirect_GetOwner(%0) Indirect_GetOwner_(_:%0)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer to attach an owner to.</param>
+ * <param name="data">The owner.</param>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_SetOwner_(func, owner)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Probably a string.
+			return false;
+		}
+		{}
+		#emit STOR.S.alt   func
+		// Store the owner.
+		WriteAmxMemory(func + E_INDIRECTION_OWNER__, owner | cellmin);
+		return true;
+	}
+	return false;
+}
+#define Indirect_SetOwner(%0,%1) Indirect_SetOwner_(_:(%0),%1)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
  * <param name="func">The function pointer with attached metadata.</param>
  * <remarks>
- *  Gets extra data from the pointer.
+ *   Gets extra data from the pointer.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -726,7 +1055,7 @@ stock Indirect_GetMeta_(func)
 		{}
 		// I'm relying on `alt` not changing here...
 		// Get the function at `func - COD + 16`.
-		#emit CONST.pri    16
+		#emit CONST.pri    E_INDIRECTION_METADATA__
 		#emit ADD
 		#emit LOAD.I
 		#emit RETN
@@ -755,30 +1084,32 @@ stock Indirect_SetMeta_(func, data)
 		if (func)
 		{
 			// Probably a string.
-			return;
+			return false;
 		}
 		{}
 		// I'm relying on `alt` not changing here...
 		// Get the function at `func - COD + 16`.
-		#emit CONST.pri    16
+		#emit CONST.pri    E_INDIRECTION_METADATA__
 		#emit ADD
 		#emit LOAD.S.alt   data
 		#emit XCHG
 		#emit STOR.I
+		return true;
 	}
+	return false;
 }
-#define Indirect_SetMeta(%0) Indirect_SetMeta_(_:%0)
+#define Indirect_SetMeta(%0,%1) Indirect_SetMeta_(_:(%0),%1)
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
  * <param name="func">The function pointer you want to use later.</param>
  * <remarks>
- *  If a function pointer is used within one function, that is not a problem.
- *  However, if you want to store the function pointer for use later, you must
- *  first "claim" it, so that any associated data is not cleared when the
- *  parent function ends (i.e. the function that called your function).  After
- *  use it must be released, and the number of claims must match the number of
- *  releases.
+ *   If a function pointer is used within one function, that is not a problem.
+ *   However, if you want to store the function pointer for use later, you must
+ *   first "claim" it, so that any associated data is not cleared when the
+ *   parent function ends (i.e. the function that called your function).  After
+ *   use it must be released, and the number of claims must match the number of
+ *   releases.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -793,22 +1124,40 @@ stock Indirect_Claim_(func)
 		#emit MOVE.alt
 		#emit LOAD.I
 		#emit STOR.S.pri   func
-		//#emit JZER.rel     4
-		//#emit RETN
 		if (func)
 		{
 			// Probably a string.
 			return;
 		}
 		{}
-		// I'm relying on `alt` not changing here...
-		#emit STOR.S.alt   func
-		#emit POP.pri
-		#emit SCTRL        5
-		// Get the function at `func - COD + 8`.
-		#emit CONST.pri    8
+		// I'm relying on `alt` not changing here...  A LOT!
+		#emit CONST.pri    E_INDIRECTION_CLAIM__
 		#emit ADD
 		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (!func)
+		{
+			// Already claimed.
+			return;
+		}
+		{}
+		// Save the pointer to pass on.
+		#emit STOR.S.alt   func
+		// Clean up owner lists.
+		new next = ReadAmxMemory(func + E_INDIRECTION_OWNER__);
+		if (next)
+		{
+			WriteAmxMemory(func + E_INDIRECTION_NEXT__, gsKnownOwnedCallbacks);
+			gsKnownOwnedCallbacks = func + E_INDIRECTION_NEXT__;
+		}
+		next = ReadAmxMemory(func + E_INDIRECTION_CLAIM__);
+		#pragma unused next // It is used, secretly in assembly...
+		WriteAmxMemory(func + E_INDIRECTION_CLAIM__, 0);
+		// `next` is at the top of the stack with the code pointer.
+		#emit POP.pri
+		#emit SWAP.pri
+		#emit SCTRL        5
+		#emit POP.pri
 		#emit SCTRL        6
 	}
 }
@@ -816,14 +1165,65 @@ stock Indirect_Claim_(func)
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
+ * <remarks>
+ *   Null function that does nothing for when an owner is gone.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+static stock Indirect_Stub(...)
+{
+	return 0;
+}
+
+#define CALL@Indirect_Stub%8() Indirect_Stub()
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
  * <param name="func">The function pointer you had previously stored.</param>
  * <remarks>
- *  If a function pointer is used within one function, that is not a problem.
- *  However, if you want to store the function pointer for use later, you must
- *  first "claim" it, so that any associated data is not cleared when the
- *  parent function ends (i.e. the function that called your function).  After
- *  use it must be released, and the number of claims must match the number of
- *  releases.
+ *   Disables all callbacks belonging to this person.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_Disconnect(owner)
+{
+	// Special "owned" flag.
+	owner |= cellmin;
+	new
+		next = ref(gsKnownOwnedCallbacks),
+		cur = ReadAmxMemory(next);
+	while (cur)
+	{
+		if (ReadAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__)) == owner)
+		{
+			new tmp = _:addressof (Indirect_Stub);
+			// Disable the handler.
+			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_HANDER__), tmp);
+			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__), 0);
+			// Remove from the list.
+			tmp = ReadAmxMemory(cur);
+			WriteAmxMemory(next, tmp);
+			WriteAmxMemory(cur, 0);
+			cur = tmp;
+		}
+		else
+		{
+			next = cur;
+			cur = ReadAmxMemory(next);
+		}
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer you had previously stored.</param>
+ * <remarks>
+ *   If a function pointer is used within one function, that is not a problem.
+ *   However, if you want to store the function pointer for use later, you must
+ *   first "claim" it, so that any associated data is not cleared when the
+ *   parent function ends (i.e. the function that called your function).  After
+ *   use it must be released, and the number of claims must match the number of
+ *   releases.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -838,23 +1238,53 @@ stock Indirect_Release_(func)
 		#emit MOVE.alt
 		#emit LOAD.I
 		#emit STOR.S.pri   func
-		//#emit JZER.rel     4
-		//#emit RETN
 		if (func)
 		{
 			// Probably a string.
 			return;
 		}
 		{}
-		// I'm relying on `alt` not changing here.  I wouldn't need to if I
-		// could use jumps in assembly.
-		#emit STOR.S.alt   func
-		#emit POP.pri
-		#emit SCTRL        5
-		// Get the function at `func - COD + 12`.
-		#emit CONST.pri    12
+		// I'm relying on `alt` not changing here...  A LOT!
+		#emit CONST.pri    E_INDIRECTION_RELEASE__
 		#emit ADD
 		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (!func)
+		{
+			// Already claimed.
+			return;
+		}
+		{}
+		// Save the pointer to pass on.
+		#emit STOR.S.alt   func
+		// Clean up owner lists.
+		new next = ReadAmxMemory(func + E_INDIRECTION_OWNER__);
+		if (next)
+		{
+			next = ref(gsKnownOwnedCallbacks);
+			new cur = ReadAmxMemory(next);
+			while (cur)
+			{
+				if (cur == func + E_INDIRECTION_NEXT__)
+				{
+					cur = ReadAmxMemory(cur);
+					WriteAmxMemory(next, cur);
+					WriteAmxMemory(func + E_INDIRECTION_NEXT__, 0);
+					WriteAmxMemory(func + E_INDIRECTION_OWNER__, 0);
+					break;
+				}
+				next = cur;
+				cur = ReadAmxMemory(next);
+			}
+		}
+		next = ReadAmxMemory(func + E_INDIRECTION_RELEASE__);
+		#pragma unused next // It is used, secretly in assembly...
+		WriteAmxMemory(func + E_INDIRECTION_RELEASE__, 0);
+		// `next` is at the top of the stack with the code pointer.
+		#emit POP.pri
+		#emit SWAP.pri
+		#emit SCTRL        5
+		#emit POP.pri
 		#emit SCTRL        6
 	}
 }
@@ -866,8 +1296,8 @@ stock Indirect_Release_(func)
  * </param>
  * <param name="dest">Where to store the name.</param>
  * <remarks>
- *  Functions are tagged with a special tag containing their specifiers.  Get
- *  the string value of that tag from the AMX header.
+ *   Functions are tagged with a special tag containing their specifiers.  Get
+ *   the string value of that tag from the AMX header.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -885,15 +1315,17 @@ stock Indirect_Tag(id, dest[32])
  * <library>indirection</library>
  * <param name="">The array to convert to an offset pointer.</param>
  * <remarks>
- *  Strings and arrays are passed relative to `COD` not `DAT` so they can be
- *  distinguished from normal function pointers.  This function does the offset.
+ *   Strings and arrays are passed relative to `COD` not `DAT` so they can be
+ *   distinguished from normal function pointers.  This function does the
+ *   offset.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Indirect_Ref_(...)
 {
+	const cells0 = 3 * cellbytes;
 	assert(numargs() == 1);
-	#emit LOAD.S.pri       12
+	#emit LOAD.S.pri       cells0
 	#emit LOAD.alt         gsCodSize
 	#emit ADD
 	#emit RETN
@@ -905,16 +1337,18 @@ stock Indirect_Ref_(...)
  * <library>indirection</library>
  * <param name="">The array to convert to an offset pointer.</param>
  * <remarks>
- *  Strings and arrays are passed relative to `COD` not `DAT` so they can be
- *  distinguished from normal function pointers.  This function does the offset.
+ *   Strings and arrays are passed relative to `COD` not `DAT` so they can be
+ *   distinguished from normal function pointers.  This function does the
+ *   offset.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Indirect_Ptr_(ptr)
 {
+	const cells0 = 3 * cellbytes;
 	#pragma unused ptr
 	assert(numargs() == 1);
-	#emit LOAD.S.pri       12
+	#emit LOAD.S.pri       cells0
 	#emit LOAD.alt         gsCodSize
 	#emit ADD
 	#emit RETN
@@ -926,15 +1360,17 @@ stock Indirect_Ptr_(ptr)
  * <library>indirection</library>
  * <param name="">The array to convert to an offset pointer.</param>
  * <remarks>
- *  Strings and arrays are passed relative to `COD` not `DAT` so they can be
- *  distinguished from normal function pointers.  This function does the offset.
+ *   Strings and arrays are passed relative to `COD` not `DAT` so they can be
+ *   distinguished from normal function pointers.  This function does the
+ *   offset.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Indirect_DeRef_(...)
 {
+	const cells0 = 3 * cellbytes;
 	assert(numargs() == 1);
-	#emit LOAD.S.pri       12
+	#emit LOAD.S.pri       cells0
 	#emit LOAD.alt         gsCodSize
 	#emit SUB
 	#emit RETN
@@ -946,16 +1382,15 @@ stock Indirect_DeRef_(...)
  * <library>indirection</library>
  * <param name="">The array to convert to an offset pointer.</param>
  * <remarks>
- *  Strings and arrays are passed relative to `COD` not `DAT` so they can be
- *  distinguished from normal function pointers.  This function does the offset.
+ *   Strings and arrays are passed relative to `COD` not `DAT` so they can be
+ *   distinguished from normal function pointers.  This function does the
+ *   offset.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Indirect_DePtr_(ptr)
 {
-	#pragma unused ptr
-	assert(numargs() == 1);
-	#emit LOAD.S.pri       12
+	#emit LOAD.S.pri       ptr
 	#emit LOAD.alt         gsCodSize
 	#emit SUB
 	#emit RETN
@@ -970,7 +1405,7 @@ stock Indirect_DePtr_(ptr)
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
  * <remarks>
- *  A generic public wrapper for calling inline functions.
+ *   A generic public wrapper for calling inline functions.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -987,7 +1422,123 @@ public Indirect_FromCallback(Func:cb<>, bool:release)
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
  * <remarks>
- *  Get the size of the COD AMX segment.
+ *   Get integer metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_GetMetaInt(index, &ret)
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		index = INDIRECTION_META[index];
+		#emit LREF.S.pri   index
+		#emit SREF.S.pri   ret
+		return true;
+	}
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Get float metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_GetMetaFloat(index, &Float:ret)
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		index = INDIRECTION_META[index];
+		#emit LREF.S.pri   index
+		#emit SREF.S.pri   ret
+		return true;
+	}
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Get boolean metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_GetMetaBool(index, &bool:ret)
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		index = INDIRECTION_META[index];
+		#emit LREF.S.pri   index
+		#emit SREF.S.pri   ret
+		return true;
+	}
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Get ref metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_GetMetaRef(index, &ret)
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		index = INDIRECTION_META[index];
+		#emit LOAD.S.pri   index
+		#emit SREF.S.pri   ret
+		return true;
+	}
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Set ref metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_SetMetaRef(index, val)
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		index = INDIRECTION_META[index];
+		#emit LOAD.S.pri   val
+		#emit SREF.S.pri   index
+		return true;
+	}
+	return false;
+}
+
+/// <library>indirection</library>
+native Indirect_Strcat(dest[], const source, maxlength = sizeof (dest)) = dest;
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Get ref metadata.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_GetMetaString(index, dest[], size = sizeof (dest))
+{
+	if (INDIRECTION_COUNT > index)
+	{
+		dest[0] = '\0',
+		Indirect_Strcat(dest, INDIRECTION_META[index], size);
+		return true;
+	}
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <remarks>
+ *   Get the size of the COD AMX segment.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 

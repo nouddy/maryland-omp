@@ -1,0 +1,59 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic
+ *  @Date           02th July 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           custom_tags.script
+ *  @Module         messages
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+ 
+#define CT_DISTANCE 25.0 // Nametag render distance
+ 
+new Text3D:cNametag[MAX_PLAYERS];
+ 
+hook OnGameModeInit()
+{
+    print("messages/custom_tags.script loaded.");
+    return 1;
+}
+ 
+hook OnPlayerConnect(playerid)
+{
+    cNametag[playerid] = CreateDynamic3DTextLabel("Loading nametag...", 0xFFFFFFFF, 0.0, 0.0, 0.1, CT_DISTANCE, .attachedplayer = playerid, .testlos = 1);
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    if(IsValidDynamic3DTextLabel(cNametag[playerid]))
+              DestroyDynamic3DTextLabel(cNametag[playerid]);
+    return 1;
+}
+
+
+task SyncName[60000]() // OnPlayerUpdate causes lag
+{
+    foreach (new i : Player) // Trenutno nemam bolje resenje dok ne smislim (za sad proverava ime na 5 minuta)
+    {
+        if(IsPlayerConnected(i))
+        {
+            new nametag[128], playername[MAX_PLAYER_NAME];
+            GetPlayerName(i, playername, sizeof(playername));
+            format(nametag, sizeof(nametag), "{%06x}%s {FFFFFF}(%i)", GetPlayerColor(i) >>> 8, playername, i);
+            UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, nametag);
+        }
+    }   
+    return 1;
+}

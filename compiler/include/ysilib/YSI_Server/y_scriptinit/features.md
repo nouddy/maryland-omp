@@ -131,6 +131,57 @@ Tags are also checked:
 FINAL__ Float:gMaxPlayers = GetMaxPlayers(); // Tag mismatch warning.
 ```
 
+## `final`
+
+Keyword-like macro for `FINAL__`.
+
+```pawn
+#include <a_samp>
+#include <YSI_Server\y_scriptinit>
+
+final gMaxPlayers = GetMaxPlayers();
+
+main()
+{
+	// Set correctly.
+	printf("%d", gMaxPlayers);
+
+	// Compile-time error
+	gMaxPlayers = 44;
+}
+```
+
+## `YSI_KEYWORD_final`
+
+When defined enables the `final` keyword:
+
+```pawn
+#define YSI_COMPATIBILITY_MODE
+#define YSI_KEYWORD_final
+
+#include <a_samp>
+#include <YSI_Server\y_scriptinit>
+
+final gMaxPlayers = GetMaxPlayers();
+```
+
+See [YSI_COMPATIBILITY_MODE](../../YSI_COMPATIBILITY_MODE.md) for more information.
+
+## `YSI_NO_KEYWORD_final`
+
+When defined disables the `final` keyword:
+
+```pawn
+#define YSI_NO_KEYWORD_final
+
+#include <a_samp>
+#include <YSI_Server\y_scriptinit>
+
+final gMaxPlayers = GetMaxPlayers(); // Error.
+```
+
+See [YSI_COMPATIBILITY_MODE](../../YSI_COMPATIBILITY_MODE.md) for more information.
+
 ## `OnScriptExit`
 
 Called when this script ends, regardless of the type.
@@ -149,4 +200,34 @@ hook OnScriptExit()
 	printf("================================");
 }
 ```
+
+## Init Order
+
+Due to the multiple different `Init` functions there now are, the order between initialisation functions has got sadly very complicated.  For the most part this doesn't matter, if you only stick to one.  The issue comes when combining them.  The full order is as follows:
+
+* `OnCodeInit()`  This is the very first initialisation, and is used to actually generate new code.  Many special features like `hook` or `foreach` will probably not work in this callback, because the code hasn't been compiled fully yet.
+* `OnYSIInit()`  A completely internal callback, used by YSI only.
+* `OnJITCompile()`  If you're using the JIT plugin, this callback comes next, and can also be used to set up code.
+* `PREINIT__`  Any functions declared with `PREEXIT__`.
+* `OnScriptInit()`  The standard initialisation callback.  After all code initialisation is complete, and the same for all script types.
+* `POSTINIT__`  Any functions declared with `POSTEXIT__`.
+* `OnFilterScriptInit()`  If the script is loaded as a filterscript.
+* `OnGameModeInit()`  Any time a gamemode starts.  May be called multiple times in a filterscript.
+* `main()`  Called only in the gamemode.
+
+You can also declare functions with `@init`:
+
+* `@init(init_code) A() {}`  Called as part of `OnCodeInit`.
+* `@init() B() {}`                    Called as part of `OnScriptInit`.
+* `@init(init_script) C() {}`         Also called as part of `OnScriptInit`.
+* `@init(.order = init_mode) D() {}`  Called as part of `OnGameModeInit`
+* `@init(init_mode) E() {}`           Called as part of `OnFilterScriptInit`
+* `@init(.order = init_main) F() {}`  Called as part of `main`
+
+To make things even more complicated, there are of course hook orders to consider.  All hooks within each category are called in the order they are included in, unless explicitly overwritten:
+
+* Pre-hooks.  See the y_hooks documentation for exactly how to declare these.  They don't rely on y_hooks, but ensure these functions are called first.
+* y_hooks.  `hook`, `@hook`, `HOOK__`, etc.  The order within hooks can be controlled by `@###` suffixes on the function names.
+* ALS.  The old style of hooks.
+* `public`.  Finally the main function in the script.
 

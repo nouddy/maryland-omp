@@ -101,8 +101,8 @@ static stock User_SecureCallbackMemory()
  * <param name="playerid">Player who is logging in.</param>
  * <param name="password">Password they entered.</param>
  * <remarks>
- *  Stores a HASHED version of the password, as a first input, for later
- *  confirmation.
+ *   Stores a HASHED version of the password, as a first input, for later
+ *   confirmation.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -126,7 +126,7 @@ hook OnPlayerDisconnect(playerid, reason)
  * <param name="playerid">Player.</param>
  * <param name="error">What went wrong during processing.</param>
  * <remarks>
- *  Signal the main error callback, then reset all the player's parameters.
+ *   Signal the main error callback, then reset all the player's parameters.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -145,8 +145,8 @@ static User_Error(playerid, e_USER_ERROR:error)
  * <param name="playerid">Player who is logging in.</param>
  * <param name="password">Password they entered.</param>
  * <remarks>
- *  Stores a HASHED version of the password, as a first input, for later
- *  confirmation.
+ *   Stores a HASHED version of the password, as a first input, for later
+ *   confirmation.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -175,8 +175,8 @@ public User_OnFirstRegistration(playerid)
  * <param name="playerid">Player who is logging in.</param>
  * <param name="password">Password they entered.</param>
  * <remarks>
- *  Stores a HASHED version of the password, as a first input, for later
- *  confirmation.
+ *   Stores a HASHED version of the password, as a first input, for later
+ *   confirmation.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -189,8 +189,8 @@ public User_OnSecondRegistration(playerid, bool:success)
  * <param name="playerid">Player who is logging in.</param>
  * <param name="password">Password they entered.</param>
  * <remarks>
- *  Stores a HASHED version of the password, as a first input, for later
- *  confirmation.
+ *   Stores a HASHED version of the password, as a first input, for later
+ *   confirmation.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -220,7 +220,7 @@ User_RegisterPassword(playerid, string:password[])
 				// End the string.
 				password[end] = '\0';
 				// Got the start and the end.
-				YSI_SHA256Hash_BAD_DONT_USE(password[start], Y_USERS_FIRST_PASS_SALT, YSI_g_sSHA256FirstPhase);
+				YSI_SHA256Hash_BAD_DONT_USE__(password[start], Y_USERS_FIRST_PASS_SALT, YSI_g_sSHA256FirstPhase);
 				// Now do the full hash on the SHA256 hash of the original password.
 				YSI_g_sRegistrationState[playerid] = e_USER_REGISTRATION_STATE_P1;
 				BCrypt_Hash(playerid, "User_OnFirstRegistration", YSI_g_sSHA256FirstPhase, 12);
@@ -247,7 +247,7 @@ User_RegisterPassword_end:
  * <param name="playerid">Player who is logging in.</param>
  * <param name="password">Password they entered.</param>
  * <remarks>
- *  Double-checks the entered password.
+ *   Double-checks the entered password.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -287,7 +287,7 @@ stock User_ConfirmPassword(playerid, string:password[])
 				// End the string.
 				password[end] = '\0';
 				// Got the start and the end.
-				YSI_SHA256Hash_BAD_DONT_USE(password[start], Y_USERS_FIRST_PASS_SALT, YSI_g_sSHA256FirstPhase);
+				YSI_SHA256Hash_BAD_DONT_USE__(password[start], Y_USERS_FIRST_PASS_SALT, YSI_g_sSHA256FirstPhase);
 				// Verify the passwords match.
 				YSI_g_sRegistrationState[playerid] = e_USER_REGISTRATION_STATE_P3;
 				BCrypt_Check(playerid, "User_OnSecondRegistration", YSI_g_sSHA256FirstPhase, YSI_g_sUserPassword[playerid]);
@@ -309,7 +309,7 @@ User_ConfirmPassword_end:
  * <param name="playerid">Player who is logging in.</param>
  * <param name="email">Email they entered.</param>
  * <remarks>
- *  Stores the e-mail the player is registering with.
+ *   Stores the e-mail the player is registering with.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -347,7 +347,7 @@ bool:User_RegisterEmail(playerid, string:email[])
  * <param name="playerid">Player who is logging in.</param>
  * <param name="email">Email they entered.</param>
  * <remarks>
- *  Double-checks the entered e-mail.
+ *   Double-checks the entered e-mail.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -379,7 +379,7 @@ stock bool:User_ConfirmEmail(playerid, string:email[])
 			}
 			// Defer the call, so it looks like a callback in the same way as
 			// confirming a password.  Check the length first.
-			YSI_SetTimerEx("OnConfirmEmail", 0, false, "ii", playerid, len == end - start && strcmp(YSI_g_sUserEmail[playerid], email[start], false, len) == 0);
+			YSI_SetTimerEx__("OnConfirmEmail", 0, false, "ii", playerid, len == end - start && strcmp(YSI_g_sUserEmail[playerid], email[start], false, len) == 0);
 			return true;
 		}
 	}
@@ -391,9 +391,9 @@ stock bool:User_ConfirmEmail(playerid, string:email[])
  * <param name="password">Password they entered.</param>
  * <param name="f">Show the failed to login message?</param>
  * <remarks>
- *  Tries to log in a player - hashes and checks their password and if it's
- *  right calls the core login code.  It doesn't matter WHICH script does this
- *  as they ALL get called and ALL track the login status of a player.
+ *   Tries to log in a player - hashes and checks their password and if it's
+ *   right calls the core login code.  It doesn't matter WHICH script does this
+ *   as they ALL get called and ALL track the login status of a player.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -406,7 +406,7 @@ stock Player_TryLogin(playerid, string:password[])
  * <param name="other">A player name already in the group.</param>
  * <param name="password">The password of the group.</param>
  * <remarks>
- *  Links a player with an existing player such that they share all stats.
+ *   Links a player with an existing player such that they share all stats.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -417,7 +417,7 @@ stock Player_TryGroup(playerid, string:other[], string:password[])
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to check.</param>
  * <remarks>
- *  Get this player's YID (unique ID).
+ *   Get this player's YID (unique ID).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -433,7 +433,7 @@ stock Player_ChangePassword(playerid, string:password[])
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to check.</param>
  * <remarks>
- *  Is this player logged in?
+ *   Is this player logged in?
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -450,7 +450,7 @@ stock Player_ForceGroup(playerid, string:other[])
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player who is logging in.</param>
  * <remarks>
- *  Like "Player_TryLogin" but doesn't take a password so always works.
+ *   Like "Player_TryLogin" but doesn't take a password so always works.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 

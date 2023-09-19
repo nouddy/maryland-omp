@@ -114,7 +114,7 @@ static stock const
  * <param name="wlen">The length of the destination.</param>
  * <param name="delimiter">What character is between the parts.</param>
  * <remarks>
- *  Takes a punycode string and converts it to unicode.
+ *   Takes a punycode string and converts it to unicode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -190,7 +190,7 @@ stock Puny_DecodeHash(string:dst[], const string:src[], &hash, wlen = sizeof (ds
  * <param name="wlen">The length of the destination.</param>
  * <param name="delimiter">What character to place between the parts.</param>
  * <remarks>
- *  Takes a unicode string and converts it to punycode.
+ *   Takes a unicode string and converts it to punycode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -265,11 +265,11 @@ stock Puny_Encode(string:dst[], const string:src[], wlen = sizeof (dst), const d
  * <param name="wlen">The length of the destination.</param>
  * <param name="delimiter">What character to place between the parts.</param>
  * <returns>
- *  The length of string read.
+ *   The length of string read.
  * </returns>
  * <remarks>
- *  Takes a unicode string and converts it to punycode, while at the same time
- *  generating a Bernstein hash of the string.  CASE INSENSITIVE.
+ *   Takes a unicode string and converts it to punycode, while at the same time
+ *   generating a Bernstein hash of the string.  CASE INSENSITIVE.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -365,11 +365,11 @@ stock Puny_EncodeHash(string:dst[], const string:src[], &hash, wlen = sizeof (ds
 /*-------------------------------------------------------------------------*//**
  * <param name="num">The single number to encode.</param>
  * <remarks>
- *  Convert a single digit to base 36.
+ *   Convert a single digit to base 36.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(_Puny_Basic(num));
+FUNC_PAWNDOC(_Puny_Basic(num));
 #define _Puny_Basic(%0) (((%0) > 25) ? ((%0) + ('0' - 25)) : ((%0) + 'a'))
 
 /*-------------------------------------------------------------------------*//**
@@ -379,8 +379,8 @@ P:D(_Puny_Basic(num));
  * <param name="wlen">Size of the array.</param>
  * <param name="hash">Hashed string.</param>
  * <remarks>
- *  This is part of how the punycode algorithm encodes numbers as very clever
- *  strings, but honestly I don't fully understand it!
+ *   This is part of how the punycode algorithm encodes numbers as very clever
+ *   strings, but honestly I don't fully understand it!
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -418,8 +418,8 @@ static stock Puny_EncodeVarHash(bias, delta, dst[], wlen, &hash)
  * <param name="dst">Array to write to.</param>
  * <param name="wlen">Size of the array.</param>
  * <remarks>
- *  This is part of how the punycode algorithm encodes numbers as very clever
- *  strings, but honestly I don't fully understand it!
+ *   This is part of how the punycode algorithm encodes numbers as very clever
+ *   strings, but honestly I don't fully understand it!
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -451,8 +451,8 @@ static stock Puny_EncodeVar(bias, delta, dst[], wlen)
  * <param name="length">Written string size.</param>
  * <param name="firstTime">Have special characters already been written?</param>
  * <remarks>
- *  This is part of how the punycode algorithm encodes numbers as very clever
- *  strings, but honestly I don't fully understand it!
+ *   This is part of how the punycode algorithm encodes numbers as very clever
+ *   strings, but honestly I don't fully understand it!
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -474,23 +474,26 @@ static stock Puny_Adapt(delta, length, bool:firstTime)
 
 /*-------------------------------------------------------------------------*//**
  * <param name="index">The HTTP reference index.</param>
- * <param name="type">How the request should be sent.</param>
+ * <param name="method">How the request should be sent.</param>
  * <param name="url">The (internationalised) URL address.</param>
  * <param name="data">The GET/POST data.</param>
  * <param name="callback">Which function to return the data to.</param>
  * <remarks>
- *  Hooks the "HTTP" function.
+ *   Hooks the "HTTP" function.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #if defined PUNY_HTTP_HOOK
-	stock Puny_HTTP(index, type, const url[], const data[], const callback[])
+	#if !defined HTTP_METHOD
+		#define HTTP_METHOD: _:
+	#endif
+	stock Puny_HTTP(index, HTTP_METHOD:method, const url[], const data[], const callback[])
 	{
 		static
 			sPart[64], // Maximum legal domain part length.
 			sEncoded[256]; // Maximum legal hostname length.
 		new
-			idx = strfind(url, !"://");
+			idx = strfind(url, __COMPILER_PACK"://");
 		// Skip any prefix.
 		if (idx != -1) idx += 2;
 		// Add the protocol.
@@ -499,12 +502,12 @@ static stock Puny_Adapt(delta, length, bool:firstTime)
 		// Encode all parts.
 		new
 			prev = idx + 1,
-			end = strfind(url, !"/", false, prev);
+			end = strfind(url, __COMPILER_PACK"/", false, prev);
 		if (end == -1) end = strlen(url); // Nothing after the main domain.
 		do
 		{
 			// Find the size of one part.
-			idx = strfind(url, !".", false, prev);
+			idx = strfind(url, __COMPILER_PACK".", false, prev);
 			// Only encode the domain part.
 			if (!(-1 < idx < end)) idx = end;
 			static
@@ -520,15 +523,15 @@ static stock Puny_Adapt(delta, length, bool:firstTime)
 				case 1:
 				{
 					// The hyphen at the start is the only one - no latin chars.
-					if (sPart[0] == '-' && strfind(sPart, !"-", false, 1) == -1) format(sEncoded, sizeof (sEncoded), "%sxn-%s%c", sEncoded, sPart, ch);
+					if (sPart[0] == '-' && strfind(sPart, __COMPILER_PACK"-", false, 1) == -1) format(sEncoded, sizeof (sEncoded), "%sxn-%s%c", sEncoded, sPart, ch);
 					else format(sEncoded, sizeof (sEncoded), "%sxn--%s%c", sEncoded, sPart, ch);
 					#if defined _DEBUG
 						#if _DEBUG >= 1
 							static
 								sDecoded[64];
 							Puny_Decode(sDecoded, sPart);
-							P:5("Puny_HTTP Original: \"%s\", Encoded: \"%s\", Decoded: \"%s\"", url[prev], sPart, sDecoded);
-							if (strcmp(url[prev], sDecoded)) P:E("Puny_Decode did not match Puny_Encode");
+							Debug_Print5("Puny_HTTP Original: \"%s\", Encoded: \"%s\", Decoded: \"%s\"", url[prev], sPart, sDecoded);
+							if (strcmp(url[prev], sDecoded)) Debug_Error("Puny_Decode did not match Puny_Encode");
 						#endif
 					#endif
 				}
@@ -543,17 +546,17 @@ static stock Puny_Adapt(delta, length, bool:firstTime)
 		// Add the remainder of the domain.
 		if (url[end]) strcat(sEncoded, url[end + 1]);
 		#if defined _DEBUG
-			P:2("Puny_HTTP Domain: \"%s\" -> \"%s\"", url, sEncoded);
+			Debug_Print2("Puny_HTTP Domain: \"%s\" -> \"%s\"", url, sEncoded);
 		#endif
 		// Call the original "HTTP".
-		return YSI_HTTP(index, type, sEncoded, data, callback);
+		return YSI_HTTP__(index, method, sEncoded, data, callback);
 	}
 	
 	#if defined _ALS_HTTP
 		#undef HTTP
 	#else
 		
-		native BAD_HTTP(index, type, url[], data[], callback[]) = HTTP;
+		native BAD_HTTP(index, HTTP_METHOD:method, url[], data[], callback[]) = HTTP;
 		
 		#define _ALS_HTTP
 	#endif

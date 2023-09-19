@@ -92,18 +92,18 @@ Optional plugins:
 
 static stock
 	YSI_g_sTimers[MAX_PLAYERS],
-	bool:YSI_g_sIsAndroid[MAX_PLAYERS] = bool:-1;
+	bool:YSI_g_sIsAndroid[MAX_PLAYERS] = {bool:-1, ...};
 
 forward OnAndroidCheck(playerid, bool:isDisgustingThiefToBeBanned);
 
 stock bool:IsPCPlayer(playerid)
 {
-	return YSI_g_sIsAndroid[playerid] == false;
+	return IsPlayerConnected(playerid) && YSI_g_sIsAndroid[playerid] == false;
 }
 
 stock bool:IsAndroidPlayer(playerid)
 {
-	return YSI_g_sIsAndroid[playerid] == true;
+	return IsPlayerConnected(playerid) && YSI_g_sIsAndroid[playerid] == true;
 }
 
 public OnClientCheckResponse(playerid, actionid, memaddr, retndata)
@@ -143,14 +143,16 @@ public OnAndroidTimer(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+#if defined Android_OnPlayerDisconnect
+	Android_OnPlayerDisconnect(playerid, reason);
+#endif
+
 	if (YSI_g_sTimers[playerid])
 	{
 		KillTimer(YSI_g_sTimers[playerid]);
 		YSI_g_sTimers[playerid] = 0;
 	}
-#if defined Android_OnPlayerDisconnect
-	Android_OnPlayerDisconnect(playerid, reason);
-#endif
+	YSI_g_sIsAndroid[playerid] = bool:-1;
 	return 1;
 }
 
@@ -158,8 +160,8 @@ public OnPlayerConnect(playerid)
 {
 	if (!Script_IsFilterscript())
 	{
-		YSI_SendClientCheck(playerid, 0x48, 0, 0, 2);
-		YSI_g_sTimers[playerid] = YSI_SetTimerEx("OnAndroidTimer", 10000, true, "i", playerid);
+		YSI_SendClientCheck__(playerid, 0x48, 0, 0, 2);
+		YSI_g_sTimers[playerid] = YSI_SetTimerEx__("OnAndroidTimer", 10000, false, "i", playerid);
 	}
 #if defined Android_OnPlayerConnect
 	Android_OnPlayerConnect(playerid);
@@ -172,7 +174,7 @@ public OnPlayerConnect(playerid)
 	{
 		if (Script_IsGameMode())
 		{
-			y_rconfix_Load();
+			Server_LoadRconFix();
 		}
 		#if defined Android_OnYSIInit
 			Android_OnYSIInit();

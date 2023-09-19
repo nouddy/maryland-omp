@@ -1,8 +1,13 @@
+#if defined _INC_y_bitmap
+	#endinput
+#endif
+
 /**
  * <library
  *   name="y_bitmap"
  *   version="0.1"
  *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
+ *   summary="Read and write bitmap images."
  * >
  *   <summary pawndoc="true">
  *     This library uses the enhanced <em>pawndoc.xsl</em> from

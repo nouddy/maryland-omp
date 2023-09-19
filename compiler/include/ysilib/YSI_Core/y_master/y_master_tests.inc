@@ -38,7 +38,7 @@ YSIM_CLIENT_GLOBAL  stock y_master_test_4(&a, &e, const b[], c, const string:d[]
 
 YSIM_STUB_FOREIGN stock y_master_test_5(&a, &e, const b[], c = sizeof (b), const string:d[] = "hmm");
 
-TEST__ y_master_IntReturn()
+@test(.group = "y_master") y_master_IntReturn()
 {
 	new b1[4], b2[70];
 	new a = 6, e = 11;
@@ -260,14 +260,31 @@ static stock
 
 HOOK__ OnMasterSystemInit(id)
 {
+	#pragma unused id
 	YSI_g_sTestVar = 6;
 }
 
-TEST__ y_master_Init()
+@test(.group = "y_master") y_master_Init()
 {
 	ASSERT_EQ(YSI_g_sTestVar, 6);
 	ASSERT_NZ(Master_ID());
 	ASSERT_EQ(_YCM_g@6, _E_YCM@y);
 	ASSERT_SAME(#_YCM, "@6");
+}
+
+@test(.group = "y_master") y_master_Space()
+{
+	new
+		idx = 0,
+		count = 0,
+		buffer;
+	while ((idx = AMX_GetPublicEntryPrefix(idx, buffer, _A<@yM_>)))
+	{
+		++count;
+	}
+	buffer = AMX_GetLibraryStringSpace() + AMX_GetNativeStringSpace();
+	Debug_PrintQ(count);
+	Debug_PrintQ(buffer);
+	ASSERT_GE(count, buffer);
 }
 

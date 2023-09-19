@@ -87,81 +87,122 @@ Optional plugins:
 */
 
 // Temp definition for documentation.  Will be corrected at the end of the file.
-#define Iterator:%1<%2> Iterator:%1[]
+#define Iterator:%1<%2>%3)= Iterator:%1[%2]%3)=
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="expr"><code>var : Iterator</code></param>
  * <remarks>
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-//P:D(foreach(expr));
+//FUNC_PAWNDOC(foreach(expr));
 #define FOREACH__(%0) for(new Y_FOREACH_SECOND|||Y_FOREACH_THIRD|||%0|||)
 #if YSI_KEYWORD(foreach)
 	#define foreach FOREACH__
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="params">The iterator function's parameters.</param>
  * <remarks>
- *  Used to declare a special iterator function.  Examples:
+ *   Used to declare a special iterator function.  Examples:
  *
- *  <code>
- * iterfunc stock OnlyZero(cur)                                                    <br />
- * {                                                                               <br /><indent />
- *  if (cur == -1)                                                              <br /><indent /><indent />
- *      return 0;                                                               <br /><indent />
- *  return -1;                                                                  <br />
- * }                                                                               <br />
- *  </code>
+ *   <code>
+ * iterfunc stock OnlyZero(cur)                                                 <br />
+ * {                                                                            <br /><indent />
+ *     if (cur == -1)                                                           <br /><indent /><indent />
+ *         return 0;                                                            <br /><indent />
+ *     return -1;                                                               <br />
+ * }                                                                            <br />
+ *   </code>
  *
- *  <code>
- * iterfunc stock AlsoOnlyZero[cellmin](cur)                                       <br />
- * {                                                                               <br /><indent />
- *  if (cur == cellmin)                                                         <br /><indent /><indent />
- *      return 0;                                                               <br /><indent />
- *  return cellmin;                                                             <br />
- * }                                                                               <br />
- *  </code>
+ *   <code>
+ * iterfunc stock AlsoOnlyZero[cellmin](cur)                                    <br />
+ * {                                                                            <br /><indent />
+ *     if (cur == cellmin)                                                      <br /><indent /><indent />
+ *         return 0;                                                            <br /><indent />
+ *     return cellmin;                                                          <br />
+ * }                                                                            <br />
+ *   </code>
  *
- *  <code>
- * iterfunc stock OneToTen[cellmin](cur)                                           <br />
- * {                                                                               <br /><indent />
- *  if (cur == cellmin)                                                         <br /><indent /><indent />
- *      return 1;                                                               <br /><indent />
- *  if (cur == 10)                                                              <br /><indent /><indent />
- *      return cellmin;                                                         <br /><indent />
- *  return cur + 1;                                                             <br />
- * }                                                                               <br />
- *  </code>
+ *   <code>
+ * iterfunc stock OneToTen[cellmin](cur)                                        <br />
+ * {                                                                            <br /><indent />
+ *     if (cur == cellmin)                                                      <br /><indent /><indent />
+ *         return 1;                                                            <br /><indent />
+ *     if (cur == 10)                                                           <br /><indent /><indent />
+ *         return cellmin;                                                      <br /><indent />
+ *     return cur + 1;                                                          <br />
+ * }                                                                            <br />
+ *   </code>
  *
- *  <code>
- * iterfunc stock OneToN(cur, n)                                                   <br />
- * {                                                                               <br /><indent />
- *  if (n &lt; 1)                                                               <br /><indent /><indent />
- *      return -1;                                                              <br /><indent />
- *  if (cur == -1)                                                              <br /><indent /><indent />
- *      return 1;                                                               <br /><indent />
- *  if (cur == n)                                                               <br /><indent /><indent />
- *      return -1;                                                              <br /><indent />
- *  return cur + 1;                                                             <br />
- * }                                                                               <br />
- *  </code>
+ *   <code>
+ * iterfunc stock OneToN(cur, n)                                                <br />
+ * {                                                                            <br /><indent />
+ *     if (n &lt; 1)                                                            <br /><indent /><indent />
+ *         return -1;                                                           <br /><indent />
+ *     if (cur == -1)                                                           <br /><indent /><indent />
+ *         return 1;                                                            <br /><indent />
+ *     if (cur == n)                                                            <br /><indent /><indent />
+ *         return -1;                                                           <br /><indent />
+ *     return cur + 1;                                                          <br />
+ * }                                                                            <br />
+ *   </code>
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(iterfunc(params));
+// Special iterator function declaration.
+FUNC_PAWNDOC(iterfunc(params));
 #define iterfunc%0(%1) F@y:%0(%1)
 
+// @iterfunc
+#define @iterfunc(%2)%0(%1) Y_FOREACH_STOCK(F@Y:F@Z:)(%2,)stock const F@z:Iterator@%0=F@z:0,iterstart@%0=(-1);Iter_Func@%0(%1)F@a$
+
+// Detect an annotation parameter.
+#define F@Y:%8$(.%3,%7)%0=%1,%5=(%6) F@T%3:F@Y:%8$(%7)%0=%1,%5=(%6)
+
+// End annotations.
+#define F@Z:%8$(%9)%0=%1,%5=(%6) %8$%0=%1,%5=(%6)
+
+// Resolve the parameters.
+#define F@T%0\32; F@T
+#define F@Tstart=%6:%8$(%7)%0=%1,%5=(%9) %8$(%7)%0=%1,%5=(%6)
+// Insert the value in to the tag.  Skip the last `e` because it is the end of
+// both `true` and `false`, and gives a very hard end to the symbole name - it
+// can't have a space in it.  Also drop other parameters like `.start`.
+#define F@Tyield=%6e: F@T%6yield:
+#define F@Ttruyield:F@Y:%8$(%7)%0=%1,%5=(%6);Iter_Func@%2(%4) %8$(%7)Iter_Yield@%2(%4);%0=%1,%5=(-1);Iter_Func@%2(_:__cur,%4){return Iter_Yield@%2(%4);}Iter_Yield@%2(%4)
+#define F@Tfalsyield: // Ignore this.
+
+// Some call variations.  `-d` seemed to make no difference:
+//
+// -O0:
+//
+//     call .Func
+//     stor.s.pri fffffffc
+//     const.alt ffffffff
+//     neq
+//     jzer 1
+//
+// -O1/-O2:
+//
+//     call .Func
+//     stor.s.pri fffffffc
+//     const.alt ffffffff
+//     jeq 1
+//
+
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Iterator to run backwards.</param>
  * <remarks>
- *  Run an iterator backwards.
+ *   Run an iterator backwards.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iterator@Reverse(Iterator:iter<>));
+FUNC_PAWNDOC(Iterator@Reverse(Iterator:iter<>));
 #define Iterator@Reverse%9;_:(%1=%9(%0)%9)%9; F@o)+_:F@p:F@q:$%1,%0$
 
 /*
@@ -178,21 +219,22 @@ P:D(Iterator@Reverse(Iterator:iter<>));
 */
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator array to initialise.</param>
  * <remarks>
- *  Wrapper for Iter_Init_Internal.  When <c>__COMPILER_NESTED_ELLIPSIS</c> is
- *  set, this isn't needed because multi-dimensional iterators can be
- *  initialised with the new <c>{{0, 1, ...), ...}</c> feature.  In that case
- *  <c>I@ = 0</c> is called as a <c>void</c> function that does nothing but ends
- *  in a semi-colon (<c>I@</c> is used a lot in YSI as a <c>do nothing</c>
- *  enabler).
+ *   Wrapper for Iter_Init_Internal.  When <c>__COMPILER_NESTED_ELLIPSIS</c> is
+ *   set, this isn't needed because multi-dimensional iterators can be
+ *   initialised with the new <c>{{0, 1, ...), ...}</c> feature.  In that case
+ *   <c>I@ = 0</c> is called as a <c>void</c> function that does nothing but ends
+ *   in a semi-colon (<c>I@</c> is used a lot in YSI as a <c>do nothing</c>
+ *   enabler).
  *
  * <code>native Iter_Init(IteratorArray:Name[]&lt;&gt;);</code>
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Init(Iterator:iter[]<>));
+FUNC_PAWNDOC(Iter_Init(Iterator:iter[]<>));
 #if __COMPILER_NESTED_ELLIPSIS
 	#define Iter_Init(%0) (I@=0)
 #else
@@ -200,16 +242,17 @@ P:D(Iter_Init(Iterator:iter[]<>));
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator array to initialise.</param>
  * <remarks>
- *  Wrapper for Iter_Init_Internal.  ALWAYS resets the array.
+ *   Wrapper for Iter_Init_Internal.  ALWAYS resets the array.
  *
  * <code>native Iter_InitAndClear(IteratorArray:Name[]&lt;&gt;);</code>
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_InitAndClear(Iterator:iter[]<>));
+FUNC_PAWNDOC(Iter_InitAndClear(Iterator:iter[]<>));
 #if __COMPILER_NESTED_ELLIPSIS
 	#define Iter_InitAndClear(%0) Iter_Init_Internal(F@r(Iterator@%0),F@r(Iterator@%0)[0],F@s(Iterator@%0),F@s(Iterator@%0[]),F@s(Iter_Single@%0[]))
 #else
@@ -217,135 +260,160 @@ P:D(Iter_InitAndClear(Iterator:iter[]<>));
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to add the data to.</param>
  * <param name="value">Value to add to the iterator.</param>
  * <remarks>
- *  Wrapper for Iter_AddInternal.
+ *   Wrapper for Iter_AddInternal.
  *
  * native Iter_Add(Iterator:Name&lt;&gt;, value);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Add(Iterator:iter<>, value));
+FUNC_PAWNDOC(Iter_Add(Iterator:iter<>, value));
 #define Iter_Add _ITER<Iter_Add_Internal>
 #define Iter_Add_InternalA(%0,%1,%9)    Iter_Add_InternalC(%0,_:%1,F@s(%1)-1,Iter_Tag(%1,%9))
 #define Iter_Add_InternalB(%0,%2,%1,%9) Iter_Add_InternalD(%0[%2],_:%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to remove data from.</param>
  * <param name="value">Data to remove.</param>
  * <remarks>
- *  Wrapper for Iter_RemoveInternal.
+ *   Wrapper for Iter_RemoveInternal.
  *
  * native Iter_Remove(Iterator:Name&lt;&gt;, value);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Remove(Iterator:iter<>, value));
+FUNC_PAWNDOC(Iter_Remove(Iterator:iter<>, value));
 #define Iter_Remove _ITER<Iter_Remove_Internal>
 #define Iter_Remove_InternalA(%0,%1,%9)    Iter_Remove_InternalC(%0,_:%1,F@s(%1)-1,Iter_Tag(%1,%9))
 #define Iter_Remove_InternalB(%0,%2,%1,%9) Iter_Remove_InternalD(%0[%2],_:%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the first free slot in.</param>
  * <remarks>
- *  Wrapper for Iter_Free_Internal.  Returns a slot NOT in the current
- *  iterator.
+ *   Wrapper for Iter_Free_Internal.  Returns a slot NOT in the current
+ *   iterator.
  *
  * native Iter_Free(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Free(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Free(Iterator:iter<>));
 #define Iter_Free _ITER<Iter_Free_Internal>
 #define Iter_Free_InternalA(%0,%1)    Iter_Free_Internal(_:%1,F@s(%1)-F@s(%0))
 #define Iter_Free_InternalB(%0,%2,%1) Iter_Free_Internal(_:%1,F@s(%1)-F@s(%0))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the multi-iterator to get the first free slot in.</param>
  * <remarks>
- *  Wrapper for Iter_FreeMulti_Internal.  Returns a slot NOT in the current
- *  multi-iterator.
+ *   Wrapper for Iter_FreeMulti_Internal.  Returns a slot NOT in the current
+ *   multi-iterator.
  *
  * native Iter_FreeMulti(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_FreeMulti(Iterator:iter<,>, ));
+FUNC_PAWNDOC(Iter_FreeMulti(Iterator:iter<,>, ));
 #define Iter_FreeMulti _ITER<Iter_FreeMulti_Internal>
 #define Iter_FreeMulti_InternalA(%0,%1)    Iter_FreeMulti_Internal(_:%1,F@s(%1),F@s(%1)-F@s(%0))
 #define Iter_FreeMulti_InternalB(%0,%2,%1) Iter_FreeMulti_Internal(_:%1,F@s(%1),F@s(%1)-F@s(%0))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to check membership of.</param>
  * <param name="value">Value to check.</param>
  * <remarks>
- *  Checks if the given value is in the given iterator.
+ *   Checks if the given value is in the given iterator.
  *
  * native Iter_Contains(Iterator:Name&lt;&gt;, value);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(bool:Iter_Contains(Iterator:iter<>, value));
-#define Iter_Contains(%0) (bool:_ITER<Iter_Contains_Internal>(%0))
+FUNC_PAWNDOC(bool:Iter_Contains(Iterator:iter<>, value));
+#define Iter_Contains _BOOL_ITER<Iter_Contains_Internal>
 #define Iter_Contains_InternalA(%0,%1,%9)     Iter_Contains_InternalC(_:%1,F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 #define Iter_Contains_InternalB(%0,%2,%1,%9)  Iter_Contains_InternalD(%0[%2],_:%1,F@s(%1)-F@s(%0),-%2+F@s(%1)-1,Iter_Tag(%1,%9))
 #define Iter_Contains_InternalD(%0,%1,%2,-+%8,%3) Iter_Contains_InternalC(%1,%2,%3)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to check membership of.</param>
+ * <param name="value">Value to check.</param>
+ * <remarks>
+ *   Checks if the given value is NOT in the given iterator.
+ *
+ * native Iter_Excludes(Iterator:Name&lt;&gt;, value);
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(bool:Iter_Excludes(Iterator:iter<>, value));
+#define Iter_Excludes _BOOL_ITER<Iter_Excludes_Internal>
+#define Iter_Excludes_InternalA(%0,%1,%9)     (!Iter_Contains_InternalC(_:%1,F@s(%1)-F@s(%0),Iter_Tag(%1,%9)))
+#define Iter_Excludes_InternalB(%0,%2,%1,%9)  (!Iter_Contains_InternalD(%0[%2],_:%1,F@s(%1)-F@s(%0),-%2+F@s(%1)-1,Iter_Tag(%1,%9)))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to check membership of.</param>
  * <param name="value">Value to check.</param>
  * <returns>
- *  Index in which the value is contained in the multi-iterator.
+ *   Index in which the value is contained in the multi-iterator.
  * </returns>
  * <remarks>
- *  Checks if the given value is in the given iterator, and if it is return which index it is contained.
+ *   Checks if the given value is in the given iterator, and if it is return which index it is contained.
  *
  * native Iter_GetMulti(Iterator:Name&lt;&gt;, value);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_GetMulti(Iterator:iter<,>, value));
+FUNC_PAWNDOC(Iter_GetMulti(Iterator:iter<,>, value));
 #define Iter_GetMulti _ITER<Iter_GetMulti_Internal>
 #define Iter_GetMulti_InternalA(%0,%1,%9)    Iter_GetMulti_Internal(_:%1,F@s(%1),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 #define Iter_GetMulti_InternalB(%0,%2,%1,%9) Iter_GetMulti_Internal(_:%1,F@s(%1),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to remove data from.</param>
  * <param name="value">Data to remove.</param>
  * <param name="next">Container for the pointer to the next element.</param>
  * <remarks>
- *  Wrapper for Iter_SafeRemoveInternal.  Common use:
+ *   Wrapper for Iter_SafeRemoveInternal.  Common use:
  *
- *  Iter_SafeRemove(iter, i, i);
+ *   Iter_SafeRemove(iter, i, i);
  *
  * native Iter_SafeRemove(Iterator:Name&lt;&gt;, value, &amp;next);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_SafeRemove(Iterator:iter<>, value, &next));
+FUNC_PAWNDOC(Iter_SafeRemove(Iterator:iter<>, value, &next));
 #define Iter_SafeRemove _ITER<Iter_SafeRemove_Internal>
-#define Iter_SafeRemove_InternalA(%0,%1,%9)    Iter_SafeRemove_InternalC(%0,_:%1,F@s(%1)-1,Iter_Tag(%1,%9))
-#define Iter_SafeRemove_InternalB(%0,%2,%1,%9) Iter_SafeRemove_InternalD(%0[%2],_:%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
+#define Iter_SafeRemove_InternalA(%0,%1,%9)    Iter_SafeRemove_1(%0,_:%1,F@s(%1)-1,Iter_Tag(%1,%9))
+#define Iter_SafeRemove_InternalB(%0,%2,%1,%9) Iter_SafeRemove_2(%0[%2],_:%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to add a random slot to.</param>
  * <remarks>
- *  Wrapper for Iter_RandomAddInternal.
+ *   Wrapper for Iter_RandomAddInternal.
  *
  * native Iter_RandomAdd(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_RandomAdd(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_RandomAdd(Iterator:iter<>));
 #define Iter_RandomAdd _ITER<Iter_RandomAdd_Internal>
 #define Iter_RandomAdd_InternalA(%0,%1)    Iter_RandomAdd_InternalC(%0,(_:%1),F@s(%1)-1)
 #define Iter_RandomAdd_InternalB(%0,%2,%1) Iter_RandomAdd_InternalD(%0,(_:%1),F@s(%1)-F@s(%0),F@s(%0),F@s(%1)-1-(%2),%2)
@@ -353,16 +421,17 @@ P:D(Iter_RandomAdd(Iterator:iter<>));
 #define Iter_RandomAdd_InternalD(%0,(_:%1,%2),F@s(%9)%3,F@s(%9)%4) Iter_RandomAdd_InternalD(%0,(_:%1),F@s(%1)%3,F@s(%1)%4,%2)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to remove a random slot from.</param>
  * <remarks>
- *  Wrapper for Iter_RandomRemoveInternal.
+ *   Wrapper for Iter_RandomRemoveInternal.
  *
  * native Iter_RandomRemove(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_RandomRemove(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_RandomRemove(Iterator:iter<>));
 #define Iter_RandomRemove _ITER<Iter_RandomRemove_Internal>
 #define Iter_RandomRemove_InternalA(%0,%1)    Iter_RandomRemove_InternalC(%0,(_:%1),F@s(%1)-1)
 #define Iter_RandomRemove_InternalB(%0,%2,%1) Iter_RandomRemove_InternalD(%0[%2],(_:%1),F@s(%1)-F@s(%0),F@s(%1)-1-(%2))
@@ -370,16 +439,17 @@ P:D(Iter_RandomRemove(Iterator:iter<>));
 #define Iter_RandomRemove_InternalD(%0,(_:%1,%2),F@s(%9)%3,F@s(%9)%4) Iter_RandomRemove_InternalD(%0,(_:%1),F@s(%1)%3,F@s(%1)%4,%2)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get a random unused slot for.</param>
  * <remarks>
- *  Wrapper for Iter_RandomFree_Internal.
+ *   Wrapper for Iter_RandomFree_Internal.
  *
  * native Iter_RandomFree(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_RandomFree(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_RandomFree(Iterator:iter<>));
 #define Iter_RandomFree _ITER<Iter_RandomFree_Internal>
 #define Iter_RandomFree_InternalA(%0,%1)    Iter_RandomFree_InternalC(%0,(_:%1),F@s(%1)-1)
 #define Iter_RandomFree_InternalB(%0,%2,%1) Iter_RandomFree_InternalD(%0,(_:%1),F@s(%1)-F@s(%0),F@s(%0))
@@ -387,85 +457,168 @@ P:D(Iter_RandomFree(Iterator:iter<>));
 #define Iter_RandomFree_InternalD(%0,(_:%1,%2),F@s(%9)%3,%4) Iter_RandomFree_InternalD(%0,(_:%1),F@s(%1)%3,%4,%2)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get a random slot from.</param>
  * <remarks>
- *  Wrapper for Iter_RandomInternal.
+ *   Wrapper for Iter_RandomInternal.
  *
  * native Iter_Random(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Random(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Random(Iterator:iter<>));
 #define Iter_Random _ITER<Iter_Random_Internal>
 #define Iter_Random_InternalA(%0,%1)    Iter_Random_Internal(%0,(_:%1),F@s(%1)-1)
 #define Iter_Random_InternalB(%0,%2,%1) Iter_Random_Internal(%0[%2],(_:%1),F@s(%1)-1-(%2))
 #define Iter_Random_Internal(%0,(_:%1,%2),F@s(%9)%3) Iter_Random_Internal(%0,(_:%1),F@s(%1)%3,%2)
 
 /*-------------------------------------------------------------------------*//**
- * <param name="iter">Name of the iterator to get a random slot from.</param>
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to get the number of elements in.</param>
  * <remarks>
- *  Returns the number of items in this iterator.
+ *   Returns the number of items in this iterator.
  *
  * native Iter_Count(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Count(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Count(Iterator:iter<>));
 #define Iter_Count _ITER<Iter_Count_Internal>
 #define Iter_Count_InternalA(%0,%1)    (%0)
-#define Iter_Count_InternalB(%0,%2,%1) (%0[%2])
+#define Iter_Count_InternalB(%0,%2,%1) (_:F@E:(%0 F@a$[%2]))
+#define F@E:(%0$[]) Iter_Count_InternalC(%0$)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to get the number of unused elements in.</param>
+ * <remarks>
+ *   Returns the number of unused items in this iterator.
+ *
+ * native Iter_Available(Iterator:Name&lt;&gt;);
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(Iter_Available(Iterator:iter<>));
+#define Iter_Available _ITER<Iter_Available_Internal>
+#define Iter_Available_InternalA(%0,%1)    (F@s(%1)-1-(%0))
+#define Iter_Available_InternalB(%0,%2,%1) (F@s(%1)-F@s(%0)-Iter_Count_InternalC(%0))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to empty.</param>
  * <remarks>
- *  Wrapper for Iter_Clear_Internal.
+ *   Wrapper for Iter_Clear_Internal.
  *
- *  Although it doesn't fit my normal strict spacing, the end of "B" is correct,
- *  namely: "_:F@s(%0),%2)".  This uses the "_:%0,)" macro to consume
- *  a trailing comma when nothing is given in "%2", so I can't have a leading
- *  space sadly.
+ *   Although it doesn't fit my normal strict spacing, the end of "B" is correct,
+ *   namely: "_:F@s(%0),%2)".  This uses the "_:%0,)" macro to consume
+ *   a trailing comma when nothing is given in "%2", so I can't have a leading
+ *   space sadly.
  *
- *  "- 2" in place of the normal "- 1" is CORRECT!
+ *   "- 2" in place of the normal "- 1" is CORRECT!
  *
  * native Iter_Clear(IteratorArray:Name[]&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Clear(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Clear(Iterator:iter<>));
 #define Iter_Clear _ITER<Iter_Clear_Internal>
 #define Iter_Clear_InternalA(%0,%1)           Iter_Clear_InternalC(_:%1,F@s(%1),F@s(%0),%0)
 #define Iter_Clear_InternalB(%0,%2,%1)        Iter_Clear_InternalD(_:%1,F@s(%1),F@s(%0),F@s(%1)-F@s(%0),%0,%2)
 #define Iter_Clear_InternalD(%0,%1,%2,%3,%4,) Iter_Clear_InternalC(%0,%1,%2,%4)
 
 /*-------------------------------------------------------------------------*//**
- * <param name="iter">Name of the iterator to test emptiness of.</param>
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to test the emptiness of.</param>
  * <remarks>
+ *   For multi-iterators <c>Iter_IsEmpty(a&lt;&gt;)</c> and <c>Iter_IsEmpty(a&lt;5&gt;)</c>
+ *   are different.  The first returns <c>true</c> when all values are unused
+ *   by any slot.  The second returns <c>true</c> when that slot alone has no
+ *   values, even if every single value is used by other slots.
  *
  * native Iter_IsEmpty(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_IsEmpty(Iterator:iter<>));
-#define Iter_IsEmpty _ITER<Iter_IsEmpty_Internal>
+FUNC_PAWNDOC(Iter_IsEmpty(Iterator:iter<>));
+#define Iter_IsEmpty _BOOL_ITER<Iter_IsEmpty_Internal>
 #define Iter_IsEmpty_InternalA(%0,%1)    ((%0) == 0)
-#define Iter_IsEmpty_InternalB(%0,%2,%1) ((%0[%2]) == 0)
+#define Iter_IsEmpty_InternalB(%0,%2,%1) (Iter_Count_InternalB(%0,%2,%1) == 0)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to test the non-emptiness of.</param>
+ * <remarks>
+ *   For multi-iterators <c>Iter_NonEmpty(a&lt;&gt;)</c> and <c>Iter_NonEmpty(a&lt;5&gt;)</c>
+ *   are different.  The first returns <c>true</c> when any value is used, in
+ *   any slot.  The second returns <c>true</c> when that slot alone has any
+ *   values.
+ *
+ * native Iter_NonEmpty(Iterator:Name&lt;&gt;);
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(Iter_NonEmpty(Iterator:iter<>));
+#define Iter_NonEmpty _BOOL_ITER<Iter_NonEmpty_Internal>
+#define Iter_NonEmpty_InternalA(%0,%1)    ((%0) != 0)
+#define Iter_NonEmpty_InternalB(%0,%2,%1) (Iter_Count_InternalB(%0,%2,%1) != 0)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to test the fullness of.</param>
+ * <remarks>
+ *   For multi-iterators <c>Iter_IsFull(a&lt;&gt;)</c> and <c>Iter_IsFull(a&lt;5&gt;)</c>
+ *   are different.  The first returns <c>true</c> when all values are used, in
+ *   any slot.  The second returns <c>true</c> when that slot alone has all
+ *   values.
+ *
+ * native Iter_IsFull(Iterator:Name&lt;&gt;);
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(Iter_IsFull(Iterator:iter<>));
+#define Iter_IsFull _BOOL_ITER<Iter_IsFull_Internal>
+#define Iter_IsFull_InternalA(%0,%1)    ((%0) == (F@s(%1)-1))
+#define Iter_IsFull_InternalB(%0,%2,%1) (Iter_Count_InternalB(%0,%2,%1) == (F@s(%1)-F@s(%0)))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to test the non-fullness of.</param>
+ * <remarks>
+ *   For multi-iterators <c>Iter_NonFull(a&lt;&gt;)</c> and <c>Iter_NonFull(a&lt;5&gt;)</c>
+ *   are different.  The first returns <c>true</c> when not all values are used
+ *   anywhere.  The second returns <c>true</c> when that slot alone is missing
+ *   some values, even if those values are in other slots.
+ *
+ * native Iter_NonFull(Iterator:Name&lt;&gt;);
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(Iter_NonFull(Iterator:iter<>));
+#define Iter_NonFull _BOOL_ITER<Iter_NonFull_Internal>
+#define Iter_NonFull_InternalA(%0,%1)    ((%0) != (F@s(%1)-1))
+#define Iter_NonFull_InternalB(%0,%2,%1) (Iter_Count_InternalB(%0,%2,%1) != (F@s(%1)-F@s(%0)))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the first free slot in.</param>
  * <remarks>
- *  Finds an empty slot in an iterator, adds that slot to the iterator, and
- *  returns the now added slot.
+ *   Finds an empty slot in an iterator, adds that slot to the iterator, and
+ *   returns the now added slot.
  *
  * native Iter_Alloc(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Alloc(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Alloc(Iterator:iter<>));
 #define Iter_Alloc _ITER<Iter_Alloc_Internal>
 #define Iter_Alloc_InternalA(%0,%1)    Iter_Alloc_InternalC(%0,_:%1,F@s(%1)-1)
 #define Iter_Alloc_InternalB(%0,%2,%1) Iter_Alloc_InternalD(%0[%2],_:%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0))
@@ -484,178 +637,207 @@ P:D(Iter_Alloc(Iterator:iter<>));
 */
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to empty.</param>
  * <remarks>
- *  Uses a static array copy to blank the iterator instead of a loop.
+ *   Uses a static array copy to blank the iterator instead of a loop.
  *
- *  BROKEN!
+ *   BROKEN!
  *
  * native Iter_FastClear(IteratorArray:Name[]&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_FastClear(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_FastClear(Iterator:iter<>));
 #define Iter_FastClear _ITER<Iter_FastClear_Internal>
 #define Iter_FastClear_InternalA(%0,%1);    {static YSII_Xg@Clear[F@s(%1)]={0,1,...};%1=YSII_Xg@Clear;%0=0;}
 #define Iter_FastClear_InternalB(%0,%2,%1); {static YSII_Xg@Clear[F@s(%1)]={0,1,...},YSII_Yg@Clear[F@s(%0)]={0,0,...};%1=YSII_Xg@Clear;%0=YSII_Yg@Clear;}
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the start of.</param>
  * <remarks>
- *  Gets a point BEFORE the start of the iterator (the theoretical beginning).
+ *   Gets a point BEFORE the start of the iterator (the theoretical beginning).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Begin(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Begin(Iterator:iter<>));
 #define Iter_Begin _ITER<Iter_Begin_Internal>
 #define Iter_Begin_InternalA(%0,%1)    (F@s(%1)-F@s(%0))
 #define Iter_Begin_InternalB(%0,%2,%1) (F@s(%1)-1-(%2))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the end of.</param>
  * <remarks>
- *  Gets a point AFTER the end of the iterator (think "MAX_PLAYERS").
+ *   Gets a point AFTER the end of the iterator (think "MAX_PLAYERS").
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_End(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_End(Iterator:iter<>));
 #define Iter_End _ITER<Iter_End_Internal>
 #define Iter_End_InternalA(%0,%1)    (F@s(%1)-F@s(%0))
 #define Iter_End_InternalB(%0,%2,%1) (F@s(%1)-1-(%2))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the first valid element in.</param>
  * <remarks>
- *  Gets the first element in an iterator.
+ *   Gets the first element in an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_First(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_First(Iterator:iter<>));
 #define Iter_First _ITER<Iter_First_Internal>
 #define Iter_First_InternalA(%0,%1)    (_:%1[(F@s(%1)-F@s(%0))])
 #define Iter_First_InternalB(%0,%2,%1) (_:%1[(F@s(%1)-1-(%2))])
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to</param>
  * <remarks>
- *  Gets the last element in an iterator.  Works by getting the previous item
- *  from the one BEFORE the first element (i.e. the one before the sentinel).
+ *   Gets the last element in an iterator.  Works by getting the previous item
+ *   from the one BEFORE the first element (i.e. the one before the sentinel).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Last(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Last(Iterator:iter<>));
 #define Iter_Last _ITER<Iter_Last_Internal>
-#define Iter_Last_InternalA(%0,%1)    ((_:%1[Iter_End_InternalA(%0,%1)-1])-1)
+#define Iter_Last_InternalA(%0,%1)    (Iter_Prev_InternalA(%0,%1,Iter_End_InternalA(%0,%1)))
 #define Iter_Last_InternalB(%0,%2,%1) (Iter_Prev_InternalB(%0,%2,%1,Iter_End_InternalB(%0,%2,%1)))
 
 /*-------------------------------------------------------------------------*//**
- * <param name="iter">Name of the iterator to get the next element in.</param>
- * <param name="cur">The current element.</param>
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to</param>
  * <remarks>
- *  Gets the element in an iterator after the current one.
+ *   Print information about an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Next(Iterator:iter<>, cur));
+FUNC_PAWNDOC(Iter_Debug(Iterator:iter<>));
+#define Iter_Debug(%0) _ITER<Iter_Debug_Internal>(%0,_:_ITER_NO_ANGLES:#%0)
+#define Iter_Debug_InternalA(%0,%1,%9)    (Iter_Debug_InternalC(%9,%1,F@s(%1)-1,%0))
+#define Iter_Debug_InternalB(%0,%2,%1,%9) (Iter_Debug_InternalD(%9,%1,F@s(%1)-F@s(%0),%0,F@s(%0)))
+
+#define _ITER_NO_ANGLES:#%0<>, #%0,
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iter">Name of the iterator to get the next element in.</param>
+ * <param name="cur">The current element.</param>
+ * <remarks>
+ *   Gets the element in an iterator after the current one.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(Iter_Next(Iterator:iter<>, cur));
 #define Iter_Next _ITER<Iter_Next_Internal>
 #define Iter_Next_InternalA(%0,%1,%9)    (_:%1[Iter_Tag(%1,%9)])
 #define Iter_Next_InternalB(%0,%2,%1,%9) (_:%1[Iter_Tag(%1,%9)])
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the previous element in.</param>
  * <param name="cur">The current element.</param>
  * <remarks>
- *  Gets the element in an iterator before the current one.  Slow.
+ *   Gets the element in an iterator before the current one.  Slow.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Prev(Iterator:iter<>, cur));
+FUNC_PAWNDOC(Iter_Prev(Iterator:iter<>, cur));
 #define Iter_Prev _ITER<Iter_Prev_Internal>
-#define Iter_Prev_InternalA(%0,%1,%9)    (((_:%1[(Iter_Tag(%1,%9)-1)%F@s(%1)])-1)%F@s(%1))
-#define Iter_Prev_InternalB(%0,%2,%1,%9) Iter_Prev_Internal(%1,F@s(%1)-F@s(%0),F@s(%1),Iter_Tag(%1,%9))
+#define Iter_Prev_InternalA(%0,%1,%9)    Iter_Prev_InternalD(_:%1,F@s(%1),Iter_Tag(%1,%9))
+#define Iter_Prev_InternalB(%0,%2,%1,%9) Iter_Prev_InternalC(_:%1,F@s(%1)-F@s(%0),F@s(%1),Iter_Tag(%1,%9))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the true array of.</param>
  * <remarks>
- *  Accesses the internal array of an iterator.
+ *   Accesses the internal array of an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_TrueArray(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_TrueArray(Iterator:iter<>));
 #define Iter_TrueArray(%1) F@r(_:Iterator@%1)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the true count of.</param>
  * <remarks>
- *  Accesses the internal count of an iterator.
+ *   Accesses the internal count of an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_TrueCount(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_TrueCount(Iterator:iter<>));
 #define Iter_TrueCount(%1) F@r(Iter_Single@%1)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Multi iterator to get the true count of.</param>
  * <remarks>
- *  Accesses the internal count of a multi-iterator.
+ *   Accesses the internal count of a multi-iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_TrueMulti(Iterator:iter<,>));
+FUNC_PAWNDOC(Iter_TrueMulti(Iterator:iter<,>));
 #define Iter_TrueMulti(%1) F@r(Iter_Multi@%1)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the true size of.</param>
  * <remarks>
- *  Accesses the internal size of an iterator.
+ *   Accesses the internal size of an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_TrueSize(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_TrueSize(Iterator:iter<>));
 #define Iter_TrueSize _ITER<Iter_TrueSize_Internal>
 #define Iter_TrueSize_InternalA(%0,%1)    (F@s(%1))
 #define Iter_TrueSize_InternalB(%0,%2,%1) (F@s(%1))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the true starts of.</param>
  * <remarks>
- *  Accesses the number of starts in a multi-iterator.
+ *   Accesses the number of starts in a multi-iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Starts(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Starts(Iterator:iter<>));
 #define Iter_Starts _ITER<Iter_Starts_Internal>
 #define Iter_Starts_InternalA(%0,%1)    (F@s(%0))
 #define Iter_Starts_InternalB(%0,%2,%1) (F@s(%0))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get the size of.</param>
  * <remarks>
- *  Accesses the size of an iterator.
+ *   Accesses the size of an iterator.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Size(Iterator:iter<>));
+FUNC_PAWNDOC(Iter_Size(Iterator:iter<>));
 #define Iter_Size _ITER<Iter_Size_Internal>
 #define Iter_Size_InternalA(%0,%1)    (F@s(%1)-F@s(%0))
 #define Iter_Size_InternalB(%0,%2,%1) (F@s(%1)-F@s(%0))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to get a slot in by index.</param>
  * <param name="index">Index.</param>
  * <param name="wrap">Keep going around until a value is found?</param>
  * <remarks>
- *  Wrapper for Iter_Index_Internal.  Returns the Nth value in the iterator
- *  (requires looping due to the way iterators are stored and optimised for
- *  loops not direct access).
+ *   Wrapper for Iter_Index_Internal.  Returns the Nth value in the iterator
+ *   (requires looping due to the way iterators are stored and optimised for
+ *   loops not direct access).
  *
  * native Iter_Index(Iterator:Name&lt;&gt;);
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Iter_Index(Iterator:iter<>, index, bool:wrap = false));
+FUNC_PAWNDOC(Iter_Index(Iterator:iter<>, index, bool:wrap = false));
 #define Iter_Index _ITER<Iter_Index_Internal>
 #define Iter_Index_InternalA(%0,%1,%9)    Iter_Index_Internal(%0,%1,F@s(%1)-1,F@s(%1)-1,Iter_Tag(%1,%9))
 #define Iter_Index_InternalB(%0,%2,%1,%9) Iter_Index_Internal(%0[%2],%1,F@s(%1)-1-(%2),F@s(%1)-F@s(%0),Iter_Tag(%1,%9))
@@ -674,12 +856,13 @@ P:D(Iter_Index(Iterator:iter<>, index, bool:wrap = false));
 */
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <param name="iter">Name of the iterator to deal with safely.</param>
  * <param name="index">Index.</param>
  * <remarks>
- *  Call functions that modify an iterator safely from inside a loop:
+ *   Call functions that modify an iterator safely from inside a loop:
  *
- *  <code>
+ *   <code>
  *      DestroyVehicle(vehicleid)
  *      {
  *          Iter_Remove(Vehicle, vehicleid);
@@ -692,7 +875,7 @@ P:D(Iter_Index(Iterator:iter<>, index, bool:wrap = false));
  *              DestroyVehicle(vehicleid);
  *          }
  *      }
- *  </code>
+ *   </code>
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
@@ -700,7 +883,7 @@ P:D(Iter_Index(Iterator:iter<>, index, bool:wrap = false));
 #define _IterN@%0\32; _IterN@
 #define _IterL@%0\32; _IterL@
 
-P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
+FUNC_PAWNDOC(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define ITER_SAFE_REMOVE(%0,%1) for (new _IterN@%0=Iter_Prev(%0,%1),_IterL@%0=1;_IterL@%0;%1=Iter_Next(%0,_IterN@%0)==%1?%1:_IterN@%0,--_IterL@%0)
 
 // Remove trailing spaces.  This looks really unsafe because of the "%0\32;"
@@ -709,6 +892,7 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define iterstart@%0\32;%1$ iterstart@%0%1$
 #define Iterator@%0\32;%1$ Iterator@%0%1$
 #define Iter_Func@%0\32;%1$ Iter_Func@%0%1$
+#define Iter_Yield@%0\32;%1$ Iter_Yield@%0%1$
 #define Iter_Single@%0\32;%1$ Iter_Single@%0%1$
 #define Iter_Multi@%0\32;%1$ Iter_Multi@%0%1$
 #define Iter_Init@%0\32;%1$ Iter_Init@%0%1$
@@ -724,6 +908,14 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 //#define Iter_Func@global%0(%2) global Iter_Func@%0(%2)
 #define Iter_Func@public public Iter_Func@
 #define Iter_Func@forward forward Iter_Func@
+
+#define Iter_Yield@stock stock Iter_Yield@
+#define Iter_Yield@static static Iter_Yield@
+// Must do this manually I think.
+//#define Iter_Yield@foreign%0(%2) foreign Iter_Yield@%0(%2)
+//#define Iter_Yield@global%0(%2) global Iter_Yield@%0(%2)
+#define Iter_Yield@public public Iter_Yield@
+#define Iter_Yield@forward forward Iter_Yield@
 
 // Drop modifiers - the only place these can appear is under `iterfunc` with the
 // dummy variable, which we don't want to modify more than we already have.
@@ -757,6 +949,27 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define Iter_Func@Timer:        ITER_TAG_FUNC(Timer)
 #define Iter_Func@File:         ITER_TAG_FUNC(File)
 #define Iter_Func@Float:        ITER_TAG_FUNC(Float)
+
+#define ITER_TAG_YIELD(%0)%1(%2) %0:Iter_Yield@%1(%2)
+
+// Many tag types that may come up as iterator function return types.
+#define Iter_Yield@_:            ITER_TAG_YIELD(_)
+#define Iter_Yield@bool:         ITER_TAG_YIELD(bool)
+#define Iter_Yield@PlayerText3D: ITER_TAG_YIELD(PlayerText3D)
+#define Iter_Yield@Text3D:       ITER_TAG_YIELD(Text3D)
+#define Iter_Yield@DB:           ITER_TAG_YIELD(DB)
+#define Iter_Yield@DBResult:     ITER_TAG_YIELD(DBResult)
+#define Iter_Yield@Language:     ITER_TAG_YIELD(Language)
+#define Iter_Yield@Bit:          ITER_TAG_YIELD(Bit)
+#define Iter_Yield@Text:         ITER_TAG_YIELD(Text)
+#define Iter_Yield@Menu:         ITER_TAG_YIELD(Menu)
+#define Iter_Yield@Style:        ITER_TAG_YIELD(Style)
+#define Iter_Yield@XML:          ITER_TAG_YIELD(XML)
+#define Iter_Yield@Bintree:      ITER_TAG_YIELD(Bintree)
+#define Iter_Yield@Group:        ITER_TAG_YIELD(Group)
+#define Iter_Yield@Timer:        ITER_TAG_YIELD(Timer)
+#define Iter_Yield@File:         ITER_TAG_YIELD(File)
+#define Iter_Yield@Float:        ITER_TAG_YIELD(Float)
 
 #define ITER_TAG(%0)%1={%2,%3,...}%4: using_deprecated_itertag_syntax,%0:Iterator@%1={%0:0,%0:1,...}F@a$,Iter_Single@
 
@@ -829,6 +1042,7 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 
 // y_iterate parser.  Takes an array input, and splits up all the components.
 #define _ITER<%5>(%1) (_:F@i:F@j:$%5(%1))
+#define _BOOL_ITER<%5>(%1) (bool:F@i:F@j:$%5(%1))
 
 // Separate "<>"s.  Parameters to the resulting macro/function:
 //  
@@ -840,10 +1054,22 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define F@j:%7$%5(%0)       %5A(F@g(Iter_Single@%0,),F@h:Iterator@%0)
 #define F@i:%7$%5(%0<%2>%1) %5B(F@h:Iter_Multi@%0,%2,F@h:Iterator@%0%1)
 
-#define _Y_ITER_DO_FOREACH(%1,%0) (_:F@n:F@A:F@m:F@a$%1,%0$
+#define _Y_ITER_DO_FOREACH(%1,%0,%8) (_:F@Q:F@R:F@n:F@A:F@m:F@a$%1,%0,%8$
+
+// `..` range syntax.  Allows implicit `0`:
+//
+//   foreach (new i : 0..10)
+//   foreach (new i : ..10)
+//
+const F@Q = cellbits - 1;
+#define F@Q:%9$%1,%4..%5,%8$ (%4-1+1));_:(%1)!=(%5);(%1)+=((((%5)-(%4-1+1))>>F@Q)|1)
+
+// `foreach (new i : array[])`
+#define F@R:%9$%1,%4[],%8$ %4[0]),_F@R%1=0;_F@R%1!=F@s(%4);%1=%4[(++_F@R%1)%F@s(%4)]
+#define _F@R%0\32; _F@R
 
 // Multi-iterator.
-#define F@n:%9$%1,%0<%2>$ F@s(Iterator@%0)-1-(%2));_:(%1=Iterator@%0 F@a$[_:%1])<(F@s(Iterator@%0)-F@s(Iter_Multi@%0));
+#define F@n:%9$%1,%0<%2>%8,%8$ F@s(Iterator@%0)-1-(%2));_:(%1=Iterator@%0 F@a$[_:%1]&%8cellmax)<(F@s(Iterator@%0)-F@s(Iter_Multi@%0));
 
 // Special iterator.
 #define iterstart(%1)%9;_:(%9=Iter%9@%0$[_:%2]%9; F@o))-1+(_:%1));_:(%1)!=_:F@u:F@l:(%2=Iter_Func@%0$(_:%2));
@@ -851,7 +1077,7 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 
 // Special iterators without extra defines.  Default to -1 start value.  The
 // many extra brackets are needed to ensure that other macros match.
-#define F@A:%9$%1,%0(%2)%8$ F@s(Iterator@%0)-1+_:((F@h:iterstart@%0))+_:F@x:F@h:Iterator@%0);_:(%1=Iter_Func@%0(%2)F@a$[_:%1])!=(F@s(Iterator@%0)-1+_:F@h:Iterator@%0+iterstart@%0);
+#define F@A:%9$%1,%0(%2)%8,%8$ F@s(Iterator@%0)-1+_:((F@h:iterstart@%0))+_:F@x:F@h:Iterator@%0);_:(%1=Iter_Func@%0(%2)F@a$[_:%1])!=(F@s(Iterator@%0)-1+_:F@h:Iterator@%0+iterstart@%0);
 #define F@x:%6);_:(%1=%9@%0(%2)%9[%4])!=%3; %6);_:(%1=Iter_Func@%0(%4,%2)%9)!=%3;
 
 #define F@o))-1+(%5,%6));_:(%9)!=_:%9(%1=%2$(_:%1)); F@o))-1+(%5)),itrst:Iter_State@%1=itrst:(%6);_:(%5)!=_:F@u:F@l:(%1=%2$(_:Iter_State@%1,_:%1));
@@ -861,19 +1087,18 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define F@l:(%0[%2]%8$(%1)%9) (%0(%1,%2)%8$%9)
 
 // Normal iterator.
-#define F@m:%9$%1,%0$ F@s(Iterator@%0)-1);_:(%1=Iterator@%0 F@a$[_:%1])!=(F@s(Iterator@%0)-1);
+#define F@m:%9$%1,%0,%8$ F@s(Iterator@%0)-1);_:(%1=Iterator@%0 F@a$[_:%1]&%8cellmax)!=(F@s(Iterator@%0)-1);
 
 // Reverse multi-iterator.
 #define F@p:%9$%1,%0<%2>$ F@s(Iterator@%0)-2-(%2)));_:(%1=Iter_Prev_InternalB(Iter_Multi@%0,,Iterator@%0,%1))<(F@s(Iterator@%0)-F@s(Iter_Multi@%0));
 
 // Reverse normal iterator (uses a custom `Iter_Prev_InternalA` with tag check).
-//#define F@q:%9$%1,%0$ F@s(Iterator@%0)-2));_:(%1=(_:(%1=Iterator@%0[(_:(%1)-1)%F@s(Iterator@%0)])-1)%F@s(Iterator@%0))!=(F@s(Iterator@%0)-1);
 #define F@q:%9$%1,%0$ F@s(Iterator@%0)-2));_:(%1=Iter_Prev_InternalA(,Iterator@%0,%1))!=(F@s(Iterator@%0)-1);
 
 // Special iterator function declaration.
-#define F@y:%0(%1) Y_FOREACH_SQ:Iter_Func@%0[]$(%1);Y_FOREACH_STOCK stock const F@z:Iterator@%0=F@z:0,iterstart@%0=-1;Iter_Func@%0(%1)F@a$
+#define F@y:%0(%1) Y_FOREACH_SQ:Iter_Func@%0[]$(%1);Y_FOREACH_STOCK(F@w:) stock const F@z:Iterator@%0=F@z:0,iterstart@%0=-1;Iter_Func@%0(%1)F@a$
 
-#define Y_FOREACH_STOCK __:F@w:$
+#define Y_FOREACH_STOCK(%0) u@(u[_:%0u@$
 
 // Get rid of ALL square brackets after the first function name.
 #define Y_FOREACH_SQ:%0[%1$ %0
@@ -890,13 +1115,12 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define __foreach_u@_1
 // Can't `#undef` this because it declares a `forward` with the same name.
 #define u@$ 1]);
-#define __:%0$ u@(u[_:%0 u@$
 
 // Consume spaces in the iterator state variables.
 #define Iter_State@%0\32;%1) Iter_State@%0%1)
 
 /*-------------------------------------------------------------------------*//**
- *  The workings of these macros are very extensively documented at:
+ *   The workings of these macros are very extensively documented at:
  *
  *      <a href="http://forum.sa-mp.com/showpost.php?p=2823668" />
 	
@@ -915,38 +1139,53 @@ P:D(ITER_SAFE_REMOVE(Iterator:iter<>, &index));
 #define Y_FOREACH_FOURTH|||%1=Y_FOREACH_FIFTH|||%9|||%2||| new Y_FOREACH_SIXTH;%1|||Y_FOREACH_SEVENTH|||%2|||
 
 // This is called when there are tags on the "new" declaration (%9 = "new ").
-#define Y_FOREACH_SEVENTH|||%9Y_FOREACH_SIXTH;%0|||%1|||%2||| new %0:%1=%0:_Y_ITER_DO_FOREACH(%1,%2)
+#define Y_FOREACH_SEVENTH|||%9Y_FOREACH_SIXTH;%0|||%1|||%2||| new %0:%1=%0:_Y_ITER_DO_FOREACH(%1,%2,%0:)
 
 // This is called when there aren't.
-#define Y_FOREACH_SIXTH;%1|||Y_FOREACH_SEVENTH|||%2||| %1=_Y_ITER_DO_FOREACH(%1,%2)
+#define Y_FOREACH_SIXTH;%1|||Y_FOREACH_SEVENTH|||%2||| %1=_Y_ITER_DO_FOREACH(%1,%2,_no_itertag:)
 
 // This is called if "%1" didn't have "new" at the start.
-#define Y_FOREACH_FIFTH|||Y_FOREACH_FOURTH|||%1:%2||| _Y_ITER_DO_FOREACH(%1,%2)
+#define Y_FOREACH_FIFTH|||Y_FOREACH_FOURTH|||%1:%2||| _Y_ITER_DO_FOREACH(%1,%2,_no_itertag:)
 
 // This is the old version, but DON'T add "new" because that already exists from
 // the failed "new" macro call above.
-#define Y_FOREACH_SECOND|||Y_FOREACH_THIRD|||%2,%1||| using_deprecated_foreach_syntax,%1=_Y_ITER_DO_FOREACH(%1,%2)++using_deprecated_foreach_syntax
+//#define Y_FOREACH_SECOND|||Y_FOREACH_THIRD|||%2,%1||| using_deprecated_foreach_syntax,%1=_Y_ITER_DO_FOREACH(%1,%2,_no_itertag:)++using_deprecated_foreach_syntax
 
 stock const
-	// This variable is re-declared when you do "foreach (Player, i)" or similar
-	// so that a warning is generated.  The warning will read:
-	//   
-	//   local variable "using_deprecated_foreach_syntax" shadows a variable at a preceding level
-	//   
-	// This is the best I could do to warn about the old syntax.  That code
-	// should now be "foreach (new i : Player)".  It may become an error later.
-	bool:using_deprecated_foreach_syntax = false,
+	/*
+	 * <library>y_iterate</library>
+	 * <remarks>
+	 *   This variable is re-declared when you do <c>foreach (Player, i)</c> or
+	 *   similar so that a warning is generated.  The warning will read:
+	 *    
+	 *   <code>
+	 *    local variable "using_deprecated_foreach_syntax" shadows a variable at a preceding level
+	 *   </code>
+	 *    
+	 *   This is the best I could do to warn about the old syntax.  That code
+	 *   should now be <c>foreach (new i : Player)</c>.  It may become an error
+	 *   later.
+	 * </remarks>
+	 */
+	//bool:using_deprecated_foreach_syntax = false,
+	/**
+	 * <library>y_iterate</library>
+	 */
 	bool:using_deprecated_itertag_syntax = false,
+	/**
+	 * <library>y_iterate</library>
+	 */
 	F@o = 1;
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <remarks>
- *  Creates a new iterator start/array pair.
+ *   Creates a new iterator start/array pair.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #undef Iterator
-P:D(Iterator:Iterator(name));
+FUNC_PAWNDOC(Iterator:Iterator(name));
 #define _no_itertag:Iterator@%1$[_:F@c:F@d:((%3:%2)+1)]%9$ %3:Iterator@%1$[_:F@c:F@d:((%2)+1)]={%3:0,%3:1,...}F@a$
 #define ITERATOR__%1<%2> _no_itertag:Iterator@%1 F@a$[_:F@c:F@d:((%2)+1)]={_no_itertag:0,_no_itertag:1,...}F@a$,Iter_Single@%1 F@a$F@a$
 
@@ -959,8 +1198,9 @@ P:D(Iterator:Iterator(name));
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <remarks>
- *  An iterator with an associated array of information.
+ *   An iterator with an associated array of information.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -970,36 +1210,16 @@ P:D(Iterator:Iterator(name));
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <remarks>
- *  Suppress warnings when <c>_:</c> is used (correctly) instead of
- *  <c>_no_itertag:</c>.
+ *   Suppress warnings when <c>_:</c> is used (correctly) instead of
+ *   <c>_no_itertag:</c>.  This function is never called, it only exists to
+ *   check tags in <c>Iter_Add</c> et. al, while guarded by <c>FALSE ?</c>.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 stock operator*(_no_itertag:a, b)
 {
 	#pragma unused a, b
 	return 0;
-}
-
-/*-------------------------------------------------------------------------*//**
- * <remarks>
- *  Suppress warnings when <c>_:</c> is used (correctly) instead of
- *  <c>_no_itertag:</c>.
- * </remarks>
- *//*------------------------------------------------------------------------**/
-stock operator=(_no_itertag:a)
-{
-	return a;
-}
-
-/*-------------------------------------------------------------------------*//**
- * <remarks>
- *  Suppress warnings when <c>_:</c> is used (correctly) instead of
- *  <c>_no_itertag:</c>.
- * </remarks>
- *//*------------------------------------------------------------------------**/
-stock _no_itertag:operator=(a)
-{
-	return _no_itertag:a;
 }
 

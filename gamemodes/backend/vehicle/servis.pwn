@@ -1,0 +1,113 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           servis.script
+ *  @Module         vehicle
+ */
+
+//======================================================== Montrey Customs System ==============================================================//
+#include <ysilib\YSI_Coding\y_hooks>
+
+new CustomsDoorsArea, CustomsDoors;
+new bool:IspredCustomsa[MAX_PLAYERS];
+
+const
+	doorsModel = 17951,
+	Float:customsDoorX = 1127.616088,
+	Float:customsDoorY = -1207.029052,
+	Float:customsDoorZ = 18.782821,
+	Float:customsDoorSize = 12.0,
+	Float:customsDoorOpenX = 1125.876,
+	Float:customsDoorOpenY = -1207.069,
+	Float:customsDoorOpenZ = 20.593;
+
+hook OnGameModeInit()
+{
+	print("vehicle/servis.script loaded");
+
+	CustomsDoorsArea = CreateDynamicCircle(customsDoorX, customsDoorY, customsDoorSize, -1, -1, -1, 0);
+	CustomsDoors = CreateObject(doorsModel, customsDoorX, customsDoorY, customsDoorZ, 0.000000, 0.000000, 0.000000, 300.00); // GarazaUlaz
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerSpawn(playerid)
+{
+    SetPlayerMapIcon(playerid, 2, customsDoorX, customsDoorY, customsDoorZ, 27, 0, MAPICON_GLOBAL); // Ikonica na mapi
+	return 1;
+}
+
+forward service(playerid);
+public service(playerid)
+{
+    TogglePlayerControllable(playerid, true);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:fixengine(playerid, params[], help)
+{
+	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1088.2130,-1224.8868,18.3765)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
+	if(GetPlayerMoney(playerid) < 400) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
+
+	SetTimerEx("service", 4000, false, "i", playerid);
+    TogglePlayerControllable(playerid, false);
+    SetVehicleHealth(GetPlayerVehicleID(playerid), 1000);
+    VosticGiveMoney(playerid, -400);
+    //ApplyActorAnimation(mehanicar1, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
+	notification.Show(playerid, "SERVIS", "Uspesno ste popravili motor vozila!", "!", BOXCOLOR_GREEN);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:fullrepair(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1088.2130,-1224.8868,18.3765)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
+	if(GetPlayerMoney(playerid) < 800) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
+
+	SetTimerEx("service", 4000, false, "i", playerid);
+    TogglePlayerControllable(playerid, false);
+    RepairVehicle(GetPlayerVehicleID(playerid));
+    VosticGiveMoney(playerid, -800);
+    //ApplyActorAnimation(mehanicar2, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
+    notification.Show(playerid, "SERVIS", "Uspesno ste popravili vozilo!", "!", BOXCOLOR_GREEN);
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:probnetablice(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
+	if(GetPlayerMoney(playerid) < 800) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
+
+    notification.Show(playerid, "SERVIS", "Ova funkcija jos nije dodata", "!", BOXCOLOR_RED);
+
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:tehnickipregled(playerid, params[], help)
+{
+
+	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
+	if(GetPlayerMoney(playerid) < 800) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
+
+    notification.Show(playerid, "SERVIS", "Ova funkcija jos nije dodata", "!", BOXCOLOR_RED);
+
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}

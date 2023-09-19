@@ -1,0 +1,315 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+//? Napraviti system sanitarne i dodati u provere
+
+#define OBJECT_NOSI                 								           1
+
+static  
+	player_Skin[MAX_PLAYERS];
+
+static radnikubanci[MAX_PLAYERS],
+       drzitorbubankar[MAX_PLAYERS],
+       pokupionovac[MAX_PLAYERS];
+
+static BankarPosaoCP[MAX_PLAYERS];
+
+
+new bankarkombi[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
+
+hook Account_Load(const playerid, const string: name[], const string: value[]);
+hook Account_Load(const playerid, const string: name[], const string: value[])
+{
+	INI_Int("Skin", player_Skin[playerid]);
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeInit()
+{
+    print("jobs/transport_novca.job loaded");
+
+    //! Aktori 
+	aktorbankar1 = CreateActor(71, -1980.0436,427.9458,24.7925,3.5129);
+	ApplyActorAnimation(aktorbankar1, "DEALER", "DEALER_IDLE", 4.1, 1, 0, 0, 0, 0);
+
+	aktorbankar2 = CreateActor(71, 2551.8596,2003.8356,10.8152,358.8557);
+	ApplyActorAnimation(aktorbankar2, "DEALER", "DEALER_IDLE", 4.1, 1, 0, 0, 0, 0);
+
+    aktorsecurity = CreateActor(71, 1810.9744,-1307.5830,120.2654,91.3369);
+    ApplyActorAnimation(aktorsecurity, "DEALER", "DEALER_IDLE", 4.1, 1, 0, 0, 0, 0);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+	bankarkombi[playerid] = INVALID_VEHICLE_ID;
+    pokupionovac[playerid] = 0;
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	DestroyVehicle(bankarkombi[playerid]);
+
+    drzitorbubankar[playerid] = false;
+    pokupionovac[playerid] = 0;
+    nosiuniformu[playerid] = false;
+    radiposao[playerid] = false;
+
+
+	bankarkombi[playerid] = INVALID_PLAYER_ID;
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+    if(radiposao[playerid])
+    {
+        DestroyVehicle(bankarkombi[playerid]);
+	    bankarkombi[playerid] = INVALID_PLAYER_ID;
+    }
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerStateChange(playerid, newstate, oldstate)
+{
+    new vehicleid = GetPlayerVehicleID(playerid);
+    if(newstate == PLAYER_STATE_DRIVER && GetVehicleModel(vehicleid) == 428 && radnikubanci[playerid] && nosiuniformu[playerid] && !radiposao[playerid])
+    {			
+        Dialog_Show(playerid, "zapocnibankara", DIALOG_STYLE_LIST,
+			""c_green"job // "c_white"Bankar Posao",
+			"Da\nNe",
+			"Odaberi", "Izlaz"
+		); 
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+
+}
+
+timer ostavinovac[5000](playerid)
+{
+    pokupionovac[playerid]++;
+    DisablePlayerCheckpoint(playerid);
+    SendClientMessage(playerid, x_green, "job // Ostavio si novac idi do glavne filijale da ostavis i tamo!");
+    ClearAnimations(playerid);
+    TogglePlayerControllable(playerid, true);
+    SetPlayerCheckpoint(playerid, 1810.9744,-1307.5830,120.2654, 2.0);
+    BankarPosaoCP[playerid] = 4;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerEnterCheckpoint(playerid)
+{
+    switch(BankarPosaoCP[playerid])
+    {
+		case 1: //!prvi aktor
+		{
+			DisablePlayerCheckpoint(playerid);
+            SendClientMessage(playerid, x_green, "job // Stigao si do prve lokacije uzmi novac i ubaci ga u kombi!");
+		}
+		case 2: //! drugi aktor
+		{
+			DisablePlayerCheckpoint(playerid);
+            SendClientMessage(playerid, x_green, "job // Stigao si do druge lokacije uzmi novac i ubaci ga u kombi!");
+		}
+		case 3: //! fleca banka
+		{
+            ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.1, 1, 1, 1, 0, 0, SYNC_ALL);
+            SendClientMessage(playerid, x_green, "job // Trenutno ostavljas novac sacekaj!");
+            defer ostavinovac(playerid);
+		}
+		case 4: //! fleca banka
+		{
+			DisablePlayerCheckpoint(playerid);
+            SendClientMessage(playerid, x_green, "job // Stigao si do obezbedjenja stisni 'Y' da im ostavis novac!");
+		}
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//? Komande za sve
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+    if(newkeys & KEY_YES)
+    {
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 1811.8564,-1308.6644,22.2110)) //zaposli se bankar
+        { 
+            if(player_Zaposljen[playerid] == 1) return SendClientMessage(playerid, x_red, "montrey // "c_white"Vec si zaposljen!");
+            if(player_Zaposljen[playerid] == 2) return SendClientMessage(playerid, x_red, "montrey // "c_white"Skoro si dao otkaz, ne mozes trenutno!");
+
+			Dialog_Show(playerid, "dialog_zaposlibankara", DIALOG_STYLE_LIST,
+				""c_green"job // "c_white"Da li zelis da zapocnes s poslom?",
+				"Da\nNe",
+				"Odaberi", "Izlaz"
+			);            
+        }
+
+        //? Oprema bankar
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 1817.5474,-1311.2484,22.2156)) //oprema
+        { 
+            if(!radnikubanci[playerid]) return  SendClientMessage(playerid, x_red, "montrey // "c_white"Nisi zaposljen kao bankar!");
+            if(!nosiuniformu[playerid])
+            {
+                nosiuniformu[playerid] = true;
+                SetPlayerSkin(playerid, 304);
+
+                new vehicleid = bankarkombi[playerid] = CreateVehicle(428, 1811.7285, -1311.3718, 13.7742, 0.0, 1, 0, -1);
+                SetVehicleNumberPlate(vehicleid, "BANKAR");
+
+                SendClientMessage(playerid, x_green, "job // "c_white"Obukao si opremu idi do kombija i zapocni s poslom!");
+                SendClientMessage(playerid, x_green, "job // "c_white"Da skines opremu pritisni opet 'Y' !");
+            }
+            else if(nosiuniformu[playerid])
+            {
+                nosiuniformu[playerid] = false;
+                SetPlayerSkin(playerid, player_Skin[playerid]);
+
+                DestroyVehicle(bankarkombi[playerid]);
+		        bankarkombi[playerid] = INVALID_PLAYER_ID;
+
+                SendClientMessage(playerid, x_green, "job // "c_white"Uspesno si skinuo opremu i vratio vozilo!");
+            }
+        }
+
+        //! Kupljenje novca tokom posla
+
+        //?prvi aktor
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, -1980.0436,427.9458,24.7925)) //zaposli se bankar
+        { 
+            if(!radnikubanci[playerid] && !nosiuniformu[playerid] && !radiposao[playerid]) return SendClientMessage(playerid, x_red, "montrey // "c_white"Nisi zaposlen kao bankar!");
+            if(pokupionovac[playerid] == 1) return SendClientMessage(playerid, x_red, "montrey // "c_white"Vec si pokupio novac ovde idi na sledecu lokaciju.");
+            
+            pokupionovac[playerid]++;
+            drzitorbubankar[playerid] = true;
+
+            SetPlayerAttachedObject(playerid, OBJECT_NOSI, 1550, 6, 0.048513, 0.018571, 0.028653, 314.764404, 226.953979, 222.510803, 1.000000, 1.000000, 1.000000 );
+            SendClientMessage(playerid, x_green, "job // "c_white"Uzeo si torbu odnesi je do vozila i ubaci je (/ubacinovac)!");
+        }
+        //? drugi aktor
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 2551.8596,2003.8356,10.8152)) //zaposli se bankar
+        { 
+            if(!radnikubanci[playerid] && !nosiuniformu[playerid] && !radiposao[playerid]) return SendClientMessage(playerid, x_red, "montrey // "c_white"Nisi zaposlen kao bankar!");
+            if(pokupionovac[playerid] == 2) return SendClientMessage(playerid, x_red, "montrey // "c_white"Vec si pokupio novac ovde idi na sledecu lokaciju.");
+            if(pokupionovac[playerid] == 0) return SendClientMessage(playerid, x_red, "montrey // "c_white"Ovo nije redovna ruta za novac idi na prvu lokaciju.");
+            
+            pokupionovac[playerid]++;
+            drzitorbubankar[playerid] = true;
+
+            SetPlayerAttachedObject(playerid, OBJECT_NOSI, 1550, 6, 0.048513, 0.018571, 0.028653, 314.764404, 226.953979, 222.510803, 1.000000, 1.000000, 1.000000 );
+            SendClientMessage(playerid, x_green, "job // "c_white"Uzeo si torbu odnesi je do vozila i ubaci je (/ubacinovac)!");
+        }
+
+        //! kraj posla
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 1810.9744,-1307.5830,120.2654)) //kraj posla
+        {
+            if(!radnikubanci[playerid] && !nosiuniformu[playerid] && !radiposao[playerid]) return SendClientMessage(playerid, x_red, "montrey // "c_white"Nisi zaposlen kao bankar!");
+            if(pokupionovac[playerid] != 3) return SendClientMessage(playerid, x_red, "montrey // "c_white"Sta si doneo? Idi po novac bre.");
+
+            DestroyVehicle(bankarkombi[playerid]);
+            radiposao[playerid] = false;
+            pokupionovac[playerid] = 0;
+
+            GivePlayerMoney(playerid, 10000);
+
+            new INI:File = INI_Open(Account_Path(playerid));
+            INI_SetTag( File, "data" );
+
+            INI_WriteInt(File, "Money", GetPlayerMoney(playerid));
+
+            INI_Close( File );
+
+            SendClientMessage(playerid, x_green, "job // "c_white"Zavrsio si s poslom i dobio 10000$!");
+        }
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: dialog_zaposlibankara(const playerid, response, listitem, string: inputtext[])
+{	
+    if(!response) return Y_HOOKS_CONTINUE_RETURN_1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+                player_Zaposljen[playerid] = 1;
+                radnikubanci[playerid] = true;
+                SendClientMessage(playerid, x_green, "job // "c_white"Dobili ste posao, idite po opremu i zapocnite s poslom!");
+
+                new INI:File = INI_Open(Account_Path(playerid));
+                INI_SetTag(File,"data");
+                INI_WriteInt(File, "Zaposljen", player_Zaposljen[playerid]);
+                
+                INI_Close(File);
+			}
+			case 1:
+			{
+                SendClientMessage(playerid, x_green, "job // "c_white"Zao nam je sto vam se posao ne svidja, navratite kad budete zeleli posao!");
+                return Y_HOOKS_CONTINUE_RETURN_1;
+			}
+		}
+	}
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//!
+Dialog: zapocnibankara(const playerid, response, listitem, string: inputtext[])
+{	
+    if(!response) return Y_HOOKS_CONTINUE_RETURN_1;
+	if(response)
+	{
+		switch(listitem)
+		{
+			case 0:
+			{
+                radiposao[playerid] = true;
+                SetPlayerCheckpoint(playerid, -1979.3588,427.4063,24.7000, 2.0);
+                BankarPosaoCP[playerid] = 1;
+                SendClientMessage(playerid, x_green, "job // "c_white"Zapoceo si posao, prati markere!");
+			}
+			case 1:
+			{
+                RemovePlayerFromVehicle(playerid);
+                SendClientMessage(playerid, x_green, "job // "c_white"Prestani da se zezas, dobices otkaz!");
+                return Y_HOOKS_CONTINUE_RETURN_1;
+			}
+		}
+	}
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+//! Ubaci pare u kombi
+CMD:ubacinovac(playerid, params[])
+{
+    if(drzitorbubankar[playerid] && pokupionovac[playerid] == 1)
+    {
+        TogglePlayerControllable(playerid, true);
+	    ClearAnimations(playerid);
+	    RemovePlayerAttachedObject(playerid, OBJECT_NOSI);
+        drzitorbubankar[playerid] = false;
+        SendClientMessage(playerid, x_green, "job // Ubacio si torbu, udji u kombi i idi do druge lokacije!");
+        SetPlayerCheckpoint(playerid, 2551.8596,2003.8356,10.8152, 2.0);
+        BankarPosaoCP[playerid] = 2;
+    }
+    else if(drzitorbubankar[playerid] && pokupionovac[playerid] == 2)
+    {
+        TogglePlayerControllable(playerid, true);
+	    ClearAnimations(playerid);
+	    RemovePlayerAttachedObject(playerid, OBJECT_NOSI);
+        drzitorbubankar[playerid] = false;
+        SendClientMessage(playerid, x_green, "job // Ubacio si torbu, udji u kombi i idi do flecca banke da odneses novac!");
+        SetPlayerCheckpoint(playerid, 1677.4624,-1459.9597,13.5538, 2.0);
+        BankarPosaoCP[playerid] = 3;
+    }
+    else return SendClientMessage(playerid, x_red, "Nisi u blizini kombija za banku!");
+
+    return 1;
+}

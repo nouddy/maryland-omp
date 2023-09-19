@@ -1,23 +1,4 @@
-/*                                                                                              *
- *                                                                                             *
- *     _____ ______ ______   ____  ______ _      ______          __  ______ ____  _____        *
- *    / ____|  ____|  ____| |  _ \|  ____| |    / __ \ \        / / |  ____/ __ \|  __ \       *
- *   | (___ | |__  | |__    | |_) | |__  | |   | |  | \ \  /\  / /  | |__ | |  | | |__) |      *
- *    \___ \|  __| |  __|   |  _ <|  __| | |   | |  | |\ \/  \/ /   |  __|| |  | |  _  /       *
- *    ____) | |____| |____  | |_) | |____| |___| |__| | \  /\  /    | |   | |__| | | \ \       *
- *   |_____/|______|______| |____/|______|______\____/   \/  \/     |_|    \____/|_|  \_\      *
- *                                                                                             *
- *    _____   ____   _____ _    _ __  __ ______ _   _ _______    _______ _____ ____  _   _     *
- *   |  __ \ / __ \ / ____| |  | |  \/  |  ____| \ | |__   __|/\|__   __|_   _/ __ \| \ | |    *
- *   | |  | | |  | | |    | |  | | \  / | |__  |  \| |  | |  /  \  | |    | || |  | |  \| |    *
- *   | |  | | |  | | |    | |  | | |\/| |  __| | . ` |  | | / /\ \ | |    | || |  | | . ` |    *
- *   | |__| | |__| | |____| |__| | |  | | |____| |\  |  | |/ ____ \| |   _| || |__| | |\  |    *
- *   |_____/ \____/ \_____|\____/|_|  |_|______|_| \_|  |_/_/    \_\_|  |_____\____/|_| \_|    *
- *                                                                                             *
- *   This is required for technical reasons - to place it after `#endinput` to not generate    *
- *                   multiple copies of it in XML when compiling with `-r`.                    *
- *                                                                                             *
-*//*
+/*
 Legal:
 	Version: MPL 1.1
 	
@@ -94,7 +75,7 @@ Optional plugins:
 
 #if !defined _INC_y_master
 	#include "..\y_utils"
-	#include "..\y_core\y_codeparse"
+	#include "..\..\YSI_Server\y_thirdpartyinclude\y_codeparse"
 
 	CHAIN_HOOK(Master)
 	#undef CHAIN_ORDER
@@ -104,9 +85,7 @@ Optional plugins:
 		#include "..\y_core\y_rconfix"
 	#endif
 	#include "y_master_once"
-	#if !defined YSI_NO_MASTER
-		#include "y_distribute"
-	#endif
+	#include "y_distribute"
 #endif
 
 // ALWAYS!  The compiler defines this automatically, don't use it as this is
@@ -125,11 +104,17 @@ Optional plugins:
 	#include "y_master__pop_master"
 	
 	// Useful debug information (isn't compiled, but shows up with "-l").
-	P:C(static stock const _POPPED_MASTER = MASTER;);
+	Debug_CodeX{static stock const _POPPED_MASTER = MASTER;}
+#endif
+
+#if !defined MASTER
+	#error Invalid MASTER ID.
+	#endinput
 #endif
 
 #if MASTER < 0 || MASTER >= MAX_MASTERS
 	#error Invalid MASTER ID.
+	#endinput
 #endif
 
 #if defined _INC_y_master
@@ -158,6 +143,46 @@ Optional plugins:
 	#endinput
 #endif
 #define _INC_y_master
+
+/**
+ * <library
+ *   name="y_master"
+ *   version="0.2"
+ *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
+ * >
+ *   <summary pawndoc="true">
+ *     This library uses the enhanced <em>pawndoc.xsl</em> from
+ *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
+ *     This XSL has features such as library and markdown support, and will not
+ *     render this message when used.
+ *   </summary>
+ *   <remarks>
+ *     <p>
+ *     Handles distribution of control of code segments across all running scripts
+ *     with YSI to avoid conflicts of checkpoint streamers etc and allow features
+ *     like "/commands" displaying all commands on the server.
+ *     </p>
+ *     
+ *     <p>
+ *     Now fully autonomous - to use the master system simply define which one you
+ *     want and include the script:
+ *     
+ *     <code>
+ *       #define MASTER 14 <br />
+ *       #include "Master"
+ *     </code>
+ *     
+ *     That will make the current script attempt to make itself the main master -
+ *     you don't need ANY other code for initialisation anywhere (which took a
+ *     while to figure out)...
+ *     </p>
+ *     
+ *     <p>
+ *     This is now over 2000 lines of repetitive and complex macros!
+ *     </p>
+ *   </remarks>
+ * </library>
+ *//** */
 
 // Only include this lot once.
 #if defined YSI_TESTS

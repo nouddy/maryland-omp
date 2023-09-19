@@ -84,20 +84,14 @@ Optional plugins:
 #define PA_TYPE_ID                      (-3)
 #define PA_TYPE_PA                      (-4)
 
-#if defined _YSI_SPECIAL_DEBUG
-	#define PS_IS_PLAYER_CONNECTED(%0) (%0 != INVALID_PLAYER_ID)
-#else
-	#define PS_IS_PLAYER_CONNECTED IsPlayerConnected
-#endif
-
 // Redefined later on.  This is just for internal use.
 #define PlayerArray:%0<%1> Bit:%0[%1]
 
-#define PA_INIT:%1, Bit:PA_TYPE_PA,Bit:(-1*_:%1),Bit:(-1*_:%1),
+//#define PA_INIT:%1, Bit:PA_TYPE_PA,Bit:(-1*_:%1),Bit:(-1*_:%1),
 
 stock PA_Init(Bit:a[], bool:init = false, s = bits<MAX_PLAYERS>)
 {
-	P:3("PA_Init called: %i, %i, %i", _:a, _:init, s);
+	Debug_Print3("PA_Init called: %i, %i, %i", _:a, _:init, s);
 	//--s;
 	new
 		Bit:m = init ? (Bit:-1) : (Bit:0);
@@ -110,13 +104,13 @@ stock PA_Init(Bit:a[], bool:init = false, s = bits<MAX_PLAYERS>)
 
 #define PA_FastInit(%0) %0[0]=Bit:PA_TYPE_PA
 
-#define PA_GetBit(%1,%2) (%1[((%2)>>>CELLSHIFT)+1]>>>Bit:((%2)&cellbits-1)&Bit:1)
+#define PA_GetBit(%1,%2) (%1[((%2)>>>__COMPILER_BIT_SHIFT)+1]>>>Bit:((%2)&__COMPILER_BIT_MASK)&Bit:1)
 
 #define PA_Get(%1,%2) bool:PA_GetBit(%1,_:%2)
 
-#define PA_Let(%1,%2) (%1[((%2)>>>CELLSHIFT)+1]|=Bit:(1<<((%2)&cellbits-1)))
+#define PA_Let(%1,%2) (%1[((%2)>>>__COMPILER_BIT_SHIFT)+1]|=Bit:(1<<((%2)&__COMPILER_BIT_MASK)))
 
-#define PA_Vet(%1,%2) (%1[((%2)>>>CELLSHIFT)+1]&=Bit:~(1<<((%2)&cellbits-1)))
+#define PA_Vet(%1,%2) (%1[((%2)>>>__COMPILER_BIT_SHIFT)+1]&=Bit:~(1<<((%2)&__COMPILER_BIT_MASK)))
 
 #define PA_GetCount(%1) Bit_GetCount(%1[1],bits<MAX_PLAYERS>)
 
@@ -126,7 +120,7 @@ stock PA_Init(Bit:a[], bool:init = false, s = bits<MAX_PLAYERS>)
 //#define PA_Set(%0,%1,%2) ((%2)?Bit_Let(%0,(%1)):Bit_Vet(%0,(%1)))
 stock PA_Set(PlayerArray:d<>, slot, bool:set)
 {
-	P:3("PA_Set called: %s, %i, %i", Bit_Display(Bit:d[1]), slot, _:set);
+	Debug_Print3("PA_Set called: %s, %i, %i", Bit_Display(Bit:d[1]), slot, _:set);
 	if (set)
 	{
 		PA_Let(d, slot);
@@ -141,7 +135,7 @@ stock PA_Set(PlayerArray:d<>, slot, bool:set)
 
 stock Iter_Func@PA(start, const PlayerArray:data<>)
 {
-	P:3("YSI_gAPAFunc called: %s, %i", Bit_Display(Bit:data[1]), start);
+	Debug_Print3("YSI_gAPAFunc called: %s, %i", Bit_Display(Bit:data[1]), start);
 	++start;
 	YSI_gAPAFunc_loop:
 	new
@@ -154,7 +148,7 @@ stock Iter_Func@PA(start, const PlayerArray:data<>)
 		// I'd like to replace this with code which doesn't call
 		// IsPlayerConnected and doesn't use "goto", but it avoids massive tail
 		// recursion (well, it is tail recursion which I've inlined).
-		if (PS_IS_PLAYER_CONNECTED(ret))
+		if (Iter_Contains(Player, ret))
 		{
 			return ret;
 		}
@@ -172,7 +166,7 @@ stock Iter_Func@PA(start, const PlayerArray:data<>)
 		{
 			new
 				ret = ((i - 1) * cellbits) + Cell_GetLowestBit(cur);
-			if (PS_IS_PLAYER_CONNECTED(ret))
+			if (Iter_Contains(Player, ret))
 			{
 				return ret;
 			}
@@ -192,5 +186,5 @@ stock Iter_Func@PA(start, const PlayerArray:data<>)
 
 #undef PlayerArray
 
-#define PlayerArray:%0<%1> Bit:%0[bits<%1>+1]//={Bit:-1}
+#define PlayerArray:%0<%1> Bit:%0[bits<%1>+1]//={Bit:PA_TYPE_PA,Bit:0,Bit:0,...}//={Bit:-1}
 

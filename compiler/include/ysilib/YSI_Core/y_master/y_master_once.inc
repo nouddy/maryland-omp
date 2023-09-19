@@ -71,6 +71,8 @@ Optional plugins:
 	Me - sscanf2, fixes2, Whirlpool.
 */
 
+/// <p/>
+
 #define Master_ID() (@_)
 
 // These parts should only be defined once ever.  This code is not dependent on
@@ -90,8 +92,6 @@ Optional plugins:
 
 #define _@MAKE_YCM<%0...%1> MAKE_YCM<_@%0...%1>
 #define @@MAKE_YCM<%0...%1> MAKE_YCM<@@%0...%1>
-
-#define @yM_%0\32; @yM_
 
 //#define Master_State(%0); {  }
 
@@ -170,17 +170,19 @@ Optional plugins:
 // The global is just the function implementation - doesn't need extra code.
 #define YSIM_SERVER_GLOBAL%0(%1)   %0(%1)
 #define YSIM_SERVER_HOOK%0(%1)     HOOK__%0(%1)
+#define YSIM_SERVER_REHK%0(%1)     static stock _@%0(%1)
 #define YSIM_SERVER_TASK%0[%3](%1) task%0[%3](%1)
 #define YSIM_SERVER_PTSK%0[%3](%1) ptask%0[%3](%1)
 #define YSIM_SERVER_FUNC%0(%1)<%9> forward%0(%1);public%0(%1)
 #define YSIM_SERVER_GRUP%0(%1)     _GROUP_MAKE_NAME<HOOK__%0...>(%1)
-#define YSIM_SERVER_YCMD%0(%1)     _YCMD_4:@yC_%0(a,b[],c);_YCMD_4:@yC_%0(a,b[],c)U@(8,YSIM_RETURN,@_yC%0(a,b,c));@_yC%0(%1);@_yC%0(%1)
-#define YSIM_SERVER_ZERO%0(%1)     _YCMD_4:@yC_%0(a,b[],c,i);_YCMD_4:@yC_%0(a,b[],c,i)i==@_&&U@(8,YSIM_RETURN,@_yC%0(a,b,c));@_yC%0(%1);@_yC%0(%1)
+#define YSIM_SERVER_YCMD%0(%1)     _YCMD_4:_F<@yC_>%0(a,b[],c);_YCMD_4:_F<@yC_>%0(a,b[],c)U@(8,YSIM_RETURN,_F<@_yC>%0(a,b,c));_F<@_yC>%0(%1);_F<@_yC>%0(%1)
+#define YSIM_SERVER_ZERO%0(%1)     _YCMD_4:_F<@yC_>%0(a,b[],c,i);_YCMD_4:_F<@yC_>%0(a,b[],c,i)i==@_&&U@(8,YSIM_RETURN,_F<@_yC>%0(a,b,c));_F<@_yC>%0(%1);_F<@_yC>%0(%1)
 
 #define YSIM_CLIENT_FOREIGN%0(%1)  %0(%1);YSIM_PARSER(YSIM_UF)%0(%1)
 // Hide the local implementations.
 #define YSIM_CLIENT_GLOBAL%0(%1)   YSIM_PARSER(YSIM_UG)%0(%1)
-#define YSIM_CLIENT_HOOK%0(%1)     static stock _@%0(%1)
+#define YSIM_CLIENT_HOOK%0(%1)     static stock _@%0(%1) <y_master_unused:y_master_unused_a>
+#define YSIM_CLIENT_REHK%0(%1)     static stock _@%0(%1) <y_master_unused:y_master_unused_b>
 #define YSIM_CLIENT_TASK%0[%3](%1) YSIM_PARSER(YSIM_UG)%0(%1)
 #define YSIM_CLIENT_PTSK%0[%3](%1) YSIM_PARSER(YSIM_UG)%0(%1)
 #define YSIM_CLIENT_FUNC%0(%1)<%9> static stock %0(%1)
@@ -190,13 +192,14 @@ Optional plugins:
 
 #define YSIM_CLOUD_FOREIGN%0(%1)   %0(%1);YSIM_PARSER(YSIM_DF)%0(%1)
 #define YSIM_CLOUD_GLOBAL%0(%1)    YSIM_PARSER(YSIM_DG)%0(%1)
-#define YSIM_CLOUD_HOOK%0(%1)      HOOK__%0(%1)<>return 0;HOOK__%0(%1)<_YCM:y>
+#define YSIM_CLOUD_HOOK%0(%1)      HOOK__%0(%1)<_YCM:y>
+#define YSIM_CLOUD_REHK%0(%1)      REHOOK__%0(%1)<>
 #define YSIM_CLOUD_TASK%0[%3](%1)  task%0[%3](%1)<>{}public%0(%1)<_YCM:y>
 #define YSIM_CLOUD_PTSK%0[%3](%1)  ptask%0[%3](%1)<>{}public%0(%1)<_YCM:y>
 #define YSIM_CLOUD_FUNC%0(%1)<%9>  %0(%1);public%0(%1)<>{}public%0(%1)<%9>
-#define YSIM_CLOUD_GRUP%0(%1)      _GROUP_MAKE_NAME<HOOK__%0...>(%1)<>{}_GROUP_MAKE_NAME<HOOK__%0...>(%1)<_YCM:y>
-#define YSIM_CLOUD_YCMD%0(%1)      _YCMD_4:@yC_%0(a,b[],c);_YCMD_4:@yC_%0(a,b[],c)<>{}_YCMD_4:@yC_%0(a,b[],c)<_YCM:y>U@(8,YSIM_RETURN,@_yC%0(a,b,c));@_yC%0(%1);@_yC%0(%1)
-#define YSIM_CLOUD_ZERO%0(%1)      _YCMD_4:@yC_%0(a,b[],c,i);_YCMD_4:@yC_%0(a,b[],c,i)i==@_&&U@(8,YSIM_RETURN,@_yC%0(a,b,c));@_yC%0(%1);@_yC%0(%1)
+#define YSIM_CLOUD_GRUP%0(%1)      _GROUP_MAKE_NAME<HOOK__%0...>(%1)<>{}_GROUP_MAKE_NAME<REHOOK__%0...>(%1)<_YCM:y>
+#define YSIM_CLOUD_YCMD%0(%1)      _YCMD_4:_F<@yC_>%0(a,b[],c);_YCMD_4:_F<@yC_>%0(a,b[],c)<>{}_YCMD_4:_F<@yC_>%0(a,b[],c)<_YCM:y>U@(8,YSIM_RETURN,_F<@_yC>%0(a,b,c));_F<@_yC>%0(%1);_F<@_yC>%0(%1)
+#define YSIM_CLOUD_ZERO%0(%1)      _YCMD_4:_F<@yC_>%0(a,b[],c,i);_YCMD_4:_F<@yC_>%0(a,b[],c,i)i==@_&&U@(8,YSIM_RETURN,_F<@_yC>%0(a,b,c));_F<@_yC>%0(%1);_F<@_yC>%0(%1)
 
 // A stub foreign is the same as a client foreign - define it as existing, but
 // not here.
@@ -205,6 +208,7 @@ Optional plugins:
 // parsing though to give the RIGHT error...
 #define YSIM_STUB_GLOBAL%0(%1)     YSIM_PARSER(YSIM_TG)%0(%1)
 #define YSIM_STUB_HOOK%0(%1)       YSIM_PARSER(YSIM_TG)%0(%1)
+#define YSIM_STUB_REHK%0(%1)       static stock _@%0(%1)
 #define YSIM_STUB_TASK%0[%3](%1)   YSIM_PARSER(YSIM_TG)%0(%1)
 #define YSIM_STUB_PTSK%0[%3](%1)   YSIM_PARSER(YSIM_TG)%0(%1)
 #define YSIM_STUB_FUNC%0(%1)<%9>   YSIM_PARSER(YSIM_TG)%0(%1)
@@ -217,12 +221,13 @@ Optional plugins:
 #define YSIM_NONE_FOREIGN%0(%1)    %0(%1)
 #define YSIM_NONE_GLOBAL%0(%1)     %0(%1)
 #define YSIM_NONE_HOOK%0(%1)       HOOK__%0(%1)
+#define YSIM_NONE_REHK%0(%1)       static stock _@%0(%1)
 #define YSIM_NONE_TASK%0[%3](%1)   task%0[%3](%1)
 #define YSIM_NONE_PTSK%0[%3](%1)   ptask%0[%3](%1)
 #define YSIM_NONE_FUNC%0(%1)<%9>   forward%0(%1);public%0(%1)
 #define YSIM_NONE_GRUP%0(%1)       _GROUP_MAKE_NAME<HOOK__%0...>(%1)
-#define YSIM_NONE_YCMD%0(%1)       @yC_%0(%1);@yC_%0(%1)
-#define YSIM_NONE_ZERO%0(%1)       @yC_%0(%1);@yC_%0(%1)
+#define YSIM_NONE_YCMD%0(%1)       _YCMD_5:_F<@yC_>%0(%1);_YCMD_5:_F<@yC_>%0(%1)
+#define YSIM_NONE_ZERO%0(%1)       _YCMD_5:_F<@yC_>%0(%1);_YCMD_5:_F<@yC_>%0(%1)
 
 // Now the compilation parts.
 #define YSIM_NUM(%0,%1,%2)%8$%4#%5(%7)(%0)(%9)            %8$%4#%5i(%7,%2)(%0,_:%2)(%9,%1%2)
@@ -338,26 +343,26 @@ Optional plugins:
 #define YSIM_UG_NUL_VOD YSIM_UG_END
 #define YSIM_UG_NUL_TAG YSIM_UG_END_TAG
 
-#define YSIM_DF_END(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)        %8$@@%9(%2);@@%9(%2)return L@(%9(%7)%0);@yM_%9()
-#define YSIM_DF_END_STR(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)    %8$@@%9(%2);@@%9(%2)return T@(%9(%7)%0);@yM_%9()
-#define YSIM_DF_END_VOD(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)    %8$@@%9(%2);@@%9(%2){%9(%7);return L@(0%0);}@yM_%9()
-#define YSIM_DF_END_TAG(%5,%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0) %8$@@%9(%2);@@%9(%2)return L@(%9(%7)%0);@yM_%9()
-#define YSIM_DF_NUL(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)          %8$@@%9();@@%9()return L@(%9()%0);@yM_%9()
-#define YSIM_DF_NUL_STR(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$@@%9();@@%9()return T@(%9()%0);@yM_%9()
-#define YSIM_DF_NUL_VOD(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$@@%9();@@%9(){%9();return L@(0%0);}@yM_%9()
-#define YSIM_DF_NUL_TAG(%5,%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)   %8$@@%9();@@%9()return L@(%9()%0);@yM_%9()
+#define YSIM_DF_END(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)        %8$@@%9(%2);@@%9(%2)<>return 1
+#define YSIM_DF_END_STR(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)    %8$@@%9(%2);@@%9(%2)<>return 1
+#define YSIM_DF_END_VOD(%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0)    %8$@@%9(%2);@@%9(%2)<>return 1
+#define YSIM_DF_END_TAG(%5,%9)%8$%4(%1)%3(,%7)(%2)(,%2)(%0) %8$@@%9(%2);@@%9(%2)<>return 1
+#define YSIM_DF_NUL(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)          %8$@@%9();@@%9()<>return 1
+#define YSIM_DF_NUL_STR(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$@@%9();@@%9()<>return 1
+#define YSIM_DF_NUL_VOD(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$@@%9();@@%9()<>return 1
+#define YSIM_DF_NUL_TAG(%5,%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)   %8$@@%9();@@%9()<>return 1
 
-#define YSIM_DG_END(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)       %8$%4%9(%1)<>return F@(),D@(#@@%9,%3,%5);@yM_%9()return _MASTER;%9(%1)<_YCM:y>
-#define YSIM_DG_END_STR(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)   %8$%4%9(%1)<>return F@(),K@(#@@%9,%3,%5);@yM_%9()return _MASTER;%9(%1)<_YCM:y>
-#define YSIM_DG_END_VOD(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)   %8$%4%9(%1)<>F@(),D@(#@@%9,%3,%5);@yM_%9()return _MASTER;%9(%1)<_YCM:y>
-#define YSIM_DG_NUL(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)          %8$%4%9()<>return F@(),D@(#@@%9,%3);@yM_%9()return _MASTER;%9()<_YCM:y>
-#define YSIM_DG_NUL_STR(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$%4%9()<>return F@(),K@(#@@%9,%3);@yM_%9()return _MASTER;%9()<_YCM:y>
-#define YSIM_DG_NUL_VOD(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$%4%9()<>F@(),D@(#@@%9,%3);@yM_%9()return _MASTER;%9()<_YCM:y>
-#define YSIM_DG_NUL_TAG(%5,%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)   %8$%4%5%9()<>return F@(),%5D@(#@@%9,%3);@yM_%9()return _MASTER;%5%9()<_YCM:y>
+#define YSIM_DG_END(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)       %8$%4%9(%1)<>return F@(),D@(#@@%9,%3,%5);@@%9(%2)<_YCM:y>return L@(%9(%7)%0);%9(%1)<_YCM:y>
+#define YSIM_DG_END_STR(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)   %8$%4%9(%1)<>return F@(),K@(#@@%9,%3,%5);@@%9(%2)<_YCM:y>return T@(%9(%7)%0);%9(%1)<_YCM:y>
+#define YSIM_DG_END_VOD(%9)%8$%4(%1)%3(,%7)(,%5)(,%2)(%0)   %8$%4%9(%1)<>F@(),D@(#@@%9,%3,%5);@@%9(%2)<_YCM:y>{%9(%7);return L@(0%0);}%9(%1)<_YCM:y>
+#define YSIM_DG_NUL(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)          %8$%4%9()<>return F@(),D@(#@@%9,%3);@@%9()<_YCM:y>return L@(%9()%0);%9()<_YCM:y>
+#define YSIM_DG_NUL_STR(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$%4%9()<>return F@(),K@(#@@%9,%3);@@%9()<_YCM:y>return T@(%9()%0);%9()<_YCM:y>
+#define YSIM_DG_NUL_VOD(%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)      %8$%4%9()<>F@(),D@(#@@%9,%3);@@%9()<_YCM:y>{%9();return L@(0%0);}%9()<_YCM:y>
+#define YSIM_DG_NUL_TAG(%5,%9)%8$%4(%1)%3(%7)(%2)(%2)(%0)   %8$%4%5%9()<>return F@(),%5D@(#@@%9,%3);@@%9()<_YCM:y>return L@(%9()%0);%5%9()<_YCM:y>
 
 // This just had too many replacement parts!  I had to split it in two.
 #define YSIM_DG_END_TAG(%5,%9)%8$                           %8$YSIM_DG_END_TWO(%5,%9)
-#define YSIM_DG_END_TWO(%5,%9)%4(%1)%3(,%7)(,%8)(,%2)(%0)   %4%5%9(%1)<>return F@(),%5D@(#@@%9,%3,%8);@yM_%9()return _MASTER;%5%9(%1)<_YCM:y>
+#define YSIM_DG_END_TWO(%5,%9)%4(%1)%3(,%7)(,%8)(,%2)(%0)   %4%5%9(%1)<>return F@(),%5D@(#@@%9,%3,%8);@@%9(%2)<_YCM:y>return L@(%9(%7)%0);%5%9(%1)<_YCM:y>
 
 // These pieces of code give undefined errors if you try and use `global` with
 // `YSIM_IS_STUB`.
@@ -433,7 +438,20 @@ enum _E_YCM
 static stock const
 	YSI_FIXES_gscSingleProperty[] = "FIXES_gscSingleProperty";
 
-#if !defined FIXES_ID
+/*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
+ * <remarks>
+ *   Copy of a fixes.inc function, for when fixes.inc doesn't exist in this
+ *   script.  y_master and fixes.inc both share the concept of a script ID, so
+ *   must work together to assign them.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+#if defined FIXES_ID
+	static stock _@_FIXES_DetermineID()
+	{
+	}
+#else
 	forward _FIXES_DetermineID();
 
 	public _FIXES_DetermineID()
@@ -446,44 +464,39 @@ static stock const
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
  * <returns>
- *  OnYSIInit
+ *   OnYSIInit
  * </returns>
  * <remarks>
- *  Constructor.  Gets the script a master ID.  Now ALWAYS gets an ID, even if
- *  the master system is disabled - doing otherwise is just too complicated.
+ *   Constructor.  Gets the script a master ID.  Now ALWAYS gets an ID, even if
+ *   the master system is disabled - doing otherwise is just too complicated.
  * </remarks>
  * <transition keep="true" target="_ALS : _ALS_go" />
  *//*------------------------------------------------------------------------**/
 
 public OnYSIInit()
 {
-	P:1("Master_OnYSIInit");
+	Debug_Print1("Master_OnYSIInit");
 	state _ALS : _ALS_go;
 	#if !defined YSI_NO_MASTER
-		getproperty(8, YSI_EMPTY, YSIM_STRING + 1, YSI_g_sModuleName);
+		getproperty(8, YSI_EMPTY, YSIM_STRING + 1, YSI_g_sModuleName),
 		deleteproperty(8, YSI_EMPTY, YSIM_STRING + 1);
-		// This will fix `OnRconCommand` for the gamemode, so we can use the `module` commands.  It
-		// also takes up a filterscript slot, a fact we can abuse to get swap space while reloading
-		// modules (thus, even if you have the maximum modules loaded, you can still reload one).
-		#if _YSI_SAFE_STARTUP
-			y_rconfix_Load();
-		#endif
 	#endif
 	// Properties get lost between script changes so we need to force a rebuild.
-	@_ = 0;
-	setproperty(8, YSIM_MASTER, 0);
-	CallRemoteFunction("Master_Reassert", YSI_EMPTY);
+	@_ = 0,
+	setproperty(8, YSIM_MASTER, 0),
+	CallRemoteFunction("Master_Reassert", YSI_EMPTY),
 	// For fixes.inc.  If it exists we just override its result.
-	@_ = -1;
-	setproperty(5, YSI_FIXES_gscSingleProperty, 0);
+	@_ = -1,
+	setproperty(5, YSI_FIXES_gscSingleProperty, 0),
 	CallRemoteFunction("_FIXES_DetermineID", YSI_EMPTY);
 	new
 		masters = getproperty(8, YSIM_MASTER) | getproperty(5, YSI_FIXES_gscSingleProperty);
 	@_ = Cell_GetLowestEmpty(masters);
-	P:I("YSI Script ID: %d", @_);
+	Debug_Info("YSI Script ID: %d", @_);
 	setproperty(8, YSIM_MASTER, masters | Master_ID());
-	C:1(if (!Master_ID()) P:E("MasterID not assigned"););
+	Debug_Code1{if (!Master_ID()) Debug_Error("MasterID not assigned");}
 	#if !defined YSI_NO_MASTER
 		if (Master_ID() && YSI_g_sModuleName[0])
 		{
@@ -494,6 +507,14 @@ public OnYSIInit()
 	// use the master system.
 	CallLocalFunction("OnMasterSystemInit", "i", Master_ID());
 	Master_OnYSIInit();
+	#if !defined YSI_NO_MASTER
+		// This will fix `OnRconCommand` for the gamemode, so we can use the `module` commands.  It
+		// also takes up a filterscript slot, a fact we can abuse to get swap space while reloading
+		// modules (thus, even if you have the maximum modules loaded, you can still reload one).
+		#if _YSI_SAFE_STARTUP
+			Server_LoadRconFix();
+		#endif
+	#endif
 	return 1;
 }
 
@@ -510,17 +531,18 @@ forward OnMasterSystemInit(id);
 forward Master_OnCloseModules();
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
  * <returns>
- *  OnScriptExit
+ *   OnScriptExit
  * </returns>
  * <remarks>
- *  Destructor.
+ *   Destructor.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 public OnScriptExit()
 {
-	P:1("MasterOnce_OnScriptExit called");
+	Debug_Print1("MasterOnce_OnScriptExit called");
 	#if !defined YSI_NO_MASTER
 		if (YSI_g_sModuleName[0])
 		{
@@ -546,7 +568,7 @@ public OnScriptExit()
 			func[1] = (YSI_g_sMasterData[i] >> 8) & 0xFF,
 			func[2] = YSI_g_sMasterData[i] >> 16,
 			CallLocalFunction(func, YSI_EMPTY);
-			P:5("Master_OnScriptExit: %d %d %s", i, YSI_g_sMasterCount, func);
+			Debug_Print5("Master_OnScriptExit: %d %d %s", i, YSI_g_sMasterCount, func);
 			// The properties currently clear instantly, but that may not always be the case.
 		}
 	#endif
@@ -590,18 +612,19 @@ CHAIN_FORWARD:Master_OnScriptExit() = 0;
 forward OnMasterSystemClose(id);
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
  * <returns>
- *  Master_OnCloseModules
+ *   Master_OnCloseModules
  * </returns>
  * <remarks>
- *  Destructor.
+ *   Destructor.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #if !defined YSI_NO_MASTER
 	public Master_OnCloseModules()
 	{
-		P:1("Master_OnCloseModules called");
+		Debug_Print1("Master_OnCloseModules called");
 		if (YSI_g_sModuleName[0])
 		{
 			// This is a module, and thus purely loaded for the sake of gamemodes.  Shut it down.
@@ -618,7 +641,7 @@ forward OnMasterSystemClose(id);
 				func[1] = (YSI_g_sMasterData[i] >> 8) & 0xFF,
 				func[2] = YSI_g_sMasterData[i] >> 16,
 				CallLocalFunction(func, YSI_EMPTY);
-				P:5("Master_OnScriptExit: %d %d %s", i, YSI_g_sMasterCount, func);
+				Debug_Print5("Master_OnScriptExit: %d %d %s", i, YSI_g_sMasterCount, func);
 				// The properties currently clear instantly, but that may not always be the case.
 			}
 			if (prev)
@@ -638,7 +661,7 @@ forward OnMasterSystemClose(id);
 	{
 		if (existproperty(10, module))
 		{
-			P:E("Module \"%s\" already loaded.", module);
+			Debug_Error("Module \"%s\" already loaded.", module);
 		}
 		else
 		{
@@ -649,12 +672,12 @@ forward OnMasterSystemClose(id);
 			SendRconCommand(Q@);
 			if (masters == getproperty(8, YSIM_MASTER))
 			{
-				P:F("Could not load module \"%s\"", module);
+				Debug_Fatal("Could not load module \"%s\"", module);
 				return false;
 			}
 			else
 			{
-				P:0("Module \"%s\" loaded", module);
+				Debug_Print0("Module \"%s\" loaded", module);
 			}
 			deleteproperty(8, YSI_EMPTY, YSIM_STRING + 1);
 		}
@@ -670,12 +693,12 @@ forward OnMasterSystemClose(id);
 	{
 		if (!Master_IsModuleLoaded(module))
 		{
-			P:W("Module \"%s\" not loaded.", module);
+			Debug_Warning("Module \"%s\" not loaded.", module);
 		}
 		#if _YSI_SAFE_STARTUP
 			// Free up a temporary filterscript slot for the swapping.  Handily,
 			// we have one spare.
-			y_rconfix_Unload();
+			Server_UnloadRconFix();
 		#endif
 		// We can't just use the default `reloads` command, because that will clear memory before
 		// the reload, thus we'll loose data.  Instead, we use a hack to load the FS twice at once!
@@ -693,9 +716,9 @@ forward OnMasterSystemClose(id);
 			SendRconCommand(Q@);
 			if (masters == getproperty(8, YSIM_MASTER))
 			{
-				P:F("Could not reload module \"%s\"", module);
+				Debug_Fatal("Could not reload module \"%s\"", module);
 				#if _YSI_SAFE_STARTUP
-					y_rconfix_Load();
+					Server_LoadRconFix();
 				#endif
 				return false;
 			}
@@ -704,7 +727,7 @@ forward OnMasterSystemClose(id);
 				format(Q@, sizeof (Q@), "unloadfs ./%s%s", YSI_g_scModulePath, module);
 				SendRconCommand(Q@);
 				CallRemoteFunction("Master_Reassert", YSI_EMPTY);
-				P:0("Module \"%s\" (re)loaded.", module);
+				Debug_Print0("Module \"%s\" (re)loaded.", module);
 			}
 		}
 		else
@@ -713,7 +736,7 @@ forward OnMasterSystemClose(id);
 			format(Q@, sizeof (Q@), "unloadfs %s%s", YSI_g_scModulePath, module);
 			SendRconCommand(Q@);
 			CallRemoteFunction("Master_Reassert", YSI_EMPTY);
-			P:0("Module \"%s\" (re)loaded.", module);
+			Debug_Print0("Module \"%s\" (re)loaded.", module);
 		}
 		return true;
 	}
@@ -731,34 +754,35 @@ forward OnMasterSystemClose(id);
 			CallRemoteFunction("Master_Reassert", YSI_EMPTY);
 			if (masters == getproperty(8, YSIM_MASTER))
 			{
-				P:F("Could not unload module \"%s\"", module);
+				Debug_Fatal("Could not unload module \"%s\"", module);
 				return false;
 			}
 			else
 			{
-				P:0("Module \"%s\" unloaded.", module);
+				Debug_Print0("Module \"%s\" unloaded.", module);
 				return true;
 			}
 		}
 		else
 		{
-			P:E("Module \"%s\" not loaded.", module);
+			Debug_Error("Module \"%s\" not loaded.", module);
 			return false;
 		}
 	}
 
 	/*-------------------------------------------------------------------------*//**
+	 * <library>y_master</library>
 	 * <returns>
-	 *  OnRconCommand
+	 *   OnRconCommand
 	 * </returns>
 	 * <remarks>
-	 *  Destructor.
+	 *   Destructor.
 	 * </remarks>
 	 *//*------------------------------------------------------------------------**/
 
 	public OnRconCommand(cmd[])
 	{
-		P:1("MasterOnce_OnRconCommand called");
+		Debug_Print1("MasterOnce_OnRconCommand called");
 		if (!Script_IsFilterscript())
 		{
 			if (!strcmp(cmd, "loadmodule ", true, 11))
@@ -769,7 +793,7 @@ forward OnMasterSystemClose(id);
 				}
 				else
 				{
-					P:F("No module specified for \"loadmodule\"");
+					Debug_Fatal("No module specified for \"loadmodule\"");
 				}
 				return 1;
 			}
@@ -781,7 +805,7 @@ forward OnMasterSystemClose(id);
 				}
 				else
 				{
-					P:F("No module specified for \"unloadmodule\"");
+					Debug_Fatal("No module specified for \"unloadmodule\"");
 				}
 				return 1;
 			}
@@ -793,7 +817,7 @@ forward OnMasterSystemClose(id);
 				}
 				else
 				{
-					P:F("No module specified for \"reloadmodule\"");
+					Debug_Fatal("No module specified for \"reloadmodule\"");
 				}
 				return 1;
 			}
@@ -811,8 +835,9 @@ forward OnMasterSystemClose(id);
 #endif
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
  * <remarks>
- *  Rebuilds the collection of master data whenever a script is restarted.
+ *   Rebuilds the collection of master data whenever a script is restarted.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -850,9 +875,18 @@ public Master_Reassert()
 	#endinput
 #endif
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
+ * <param name="library">The name of the library to stop being master for.</param>
+ * <remarks>
+ *   We were in control of this library.  Stop being, and remove the library from
+ *   the internal list of libraries we are master of.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock _Master_Relinquish(const library[])
 {
-	P:4("_Master_Relinquish called: %s %d", library, YSI_g_sMasterCount);
+	Debug_Print4("_Master_Relinquish called: %s %d", library, YSI_g_sMasterCount);
 	switch (YSI_g_sMasterCount)
 	{
 		case 0: return;
@@ -877,169 +911,55 @@ stock _Master_Relinquish(const library[])
 	}
 }
 
-static stock _Master_Rename(const name[])
-{
-	P:3("_Master_Rename called: \"%s\"", name);
-	// Set the name of the function at `index` back to what it should be.
-	new
-		entry;
-	if (AMX_GetPublicEntry(0, entry, name, true))
-	{
-		P:5("_Master_Rename: found %d", entry);
-		new
-			len = strlen(name);
-		// These function names are stored in C order, not packed string order.
-		// The strings are ASCII so we don't need to worry about any overflows.
-		// It is possible that this will result in an invalid function name, but
-		// we don't care about that because the function isn't to be called
-		// anyway.
-		entry += 4;
-		#emit LREF.S.pri entry
-		#emit LOAD.alt   AMX_BASE_ADDRESS
-		#emit ADD
-		#emit LOAD.S.alt len
-		#emit ADD
-		#emit ADD.C      0xFFFFFFFF
-		#emit STOR.S.pri entry
-		// Use an unaligned read/write here.
-		#emit LREF.S.pri entry
-		#emit DEC.pri
-		#emit SREF.S.pri entry
-	}
-}
+/// <p/>
 
-static stock _Master_Unname(const name[])
-{
-	P:3("_Master_Unname called: \"%s\"", name);
-	// Rename the public function to exactly the same thing with the last letter
-	// increased by one.  This ensures that it can't be called, but keeps its
-	// position in the binary tree (so that we don't need to sort the public
-	// functions table again).
-	new
-		entry,
-		idx = AMX_GetPublicEntry(0, entry, name, true);
-	if (idx)
-	{
-		new
-			len = strlen(name);
-		// This check isn't needed if this is the very last function.
-		if (idx < (AMX_HEADER_NATIVES - AMX_HEADER_PUBLICS) / 8)
-		{
-			// Load the NEXT string entry for comparison.
-			new
-				addr = entry + 12;
-			#emit LREF.S.pri addr
-			#emit LOAD.alt   AMX_BASE_ADDRESS
-			#emit ADD
-			#emit STOR.S.pri addr
-			new str[FUNCTION_LENGTH];
-			AMX_ReadString(addr, str);
-			P:5("_Master_Unname: Comparing \"%s\" and \"%s\" to %d", name, Unpack(str), len);
-			// Check if the strings are identical.
-			if (strlen(str) == len)
-			{
-				_YSI_ConstMod(name[len - 1], name[len - 1] + 1);
-				idx = strcmp(name, str);
-				_YSI_ConstMod(name[len - 1], name[len - 1] - 1);
-				if (!idx)
-				{
-					// The two adjacent functions are identical.  You might
-					// think this isn't a problem if the next function is also
-					// about to be renamed but it is, because this will then
-					// take the place of the next function and be called instead
-					// of it, when neither should be called.
-					strunpack(str, str);
-					P:F("_Master_Unname: Function \"%s\" is adjacent to \"%s\"; cannot hide it.", name, str);
-					return;
-				}
-			}
-		}
-		// These function names are stored in C order, not packed string order.
-		// The strings are ASCII so we don't need to worry about any overflows.
-		// It is possible that this will result in an invalid function name, but
-		// we don't care about that because the function isn't to be called
-		// anyway
-		entry += 4;
-		#emit LREF.S.pri entry
-		#emit LOAD.alt   AMX_BASE_ADDRESS
-		#emit ADD
-		#emit LOAD.S.alt len
-		#emit ADD
-		#emit ADD.C      0xFFFFFFFF
-		#emit STOR.S.pri entry
-		// Use an unaligned read/write here.
-		#emit LREF.S.pri entry
-		#emit INC.pri
-		#emit SREF.S.pri entry
-	}
-	P:C(else P:E("_Master_Unname: Could not function \"%s\"", name););
-}
-
-stock _Master_UnnameAll(master)
-{
-	// Loop over all `@yM_` functions and hide those with an ID of `master`.
-	new
-		idx = 0,
-		buffer[FUNCTION_LENGTH];
-	while ((idx = AMX_GetPublicNamePrefix(idx, buffer, _A<@yM_>)))
-	{
-		// Call the function and test the return value.
-		if (CallLocalFunction(buffer, YSI_EMPTY) == master)
-		{
-			buffer[0] = 0x40404040, // '@@@@',
-			strunpack(buffer, buffer),
-			_Master_Unname(buffer[2]);
-		}
-	}
-}
-
-stock _Master_RenameAll(master)
-{
-	// Loop over all `@yM_` functions and reveal those with an ID of `master`.
-	new
-		idx = 0,
-		buffer[FUNCTION_LENGTH];
-	while ((idx = AMX_GetPublicNamePrefix(idx, buffer, _A<@yM_>)))
-	{
-		// Call the function and test the return value.
-		if (CallLocalFunction(buffer, YSI_EMPTY) == master)
-		{
-			buffer[0] = 0x40404040, // '@@@@',
-			strunpack(buffer, buffer);
-			P:6("_Master_RenameAll: Renaming to \"%s\"", buffer);
-			++buffer[strlen(buffer) - 1];
-			P:6("_Master_RenameAll: Renaming from \"%s\"", buffer);
-			_Master_Rename(buffer[2]);
-		}
-	}
-}
-
+/**
+ * <library>y_master</library>
+ * <summary>The result of trying to become master.</summary>
+ */
 enum e_YSIM_GET_TYPE
 {
 	e_YSIM_GET_TYPE_NO_CONTEST,
 	e_YSIM_GET_TYPE_STOLE,
 	e_YSIM_GET_TYPE_NOT_GOT,
 }
+static stock e_YSIM_GET_TYPE:_@e_YSIM_GET_TYPE() { return e_YSIM_GET_TYPE; }
 
-/*-------------------------------------------------------------------------*//**
- * <param name="library">The name of the library to try become master for.</param>
- *//*------------------------------------------------------------------------**/
-
+/**
+ * <library>y_master</library>
+ * <summary>An interned commoly used format string.</summary>
+ */
 static stock const
 	YSI_g_scYSIM_VERSION[] = "YSIM_VERSION%s";
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_master</library>
+ * <param name="library">The name of the library to try become master for.</param>
+ * <param name="force">Become master even if another library already is.</param>
+ * <returns>
+ *   <c>e_YSIM_GET_TYPE_NO_CONTEST</c> - There was no master, so we now are.
+ *   <c>e_YSIM_GET_TYPE_STOLE</c> - There was another master, but we took it.
+ *   <c>e_YSIM_GET_TYPE_NOT_GOT</c> - There is another master already.
+ * </returns>
+ * <remarks>
+ *   Attempts to get control of the current master ID.  Checks to see if any
+ *   other scripts are already in control of this ID and this set of functions,
+ *   then either steals it or backs off.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock e_YSIM_GET_TYPE:_Master_Get(const library[], bool:force = false)
 {
-	P:2("_Master_Get called");
+	Debug_Print2("_Master_Get called");
 	new
 		e_YSIM_GET_TYPE:ret = e_YSIM_GET_TYPE_NO_CONTEST;
 	new
 		master = getproperty(9, library);
-	P:3("E_YSIM_GET_TYPE:_Master_Get called: \"%s\", %i, %d", library, _:force, master);
+	Debug_Print3("E_YSIM_GET_TYPE:_Master_Get called: \"%s\", %i, %d", library, _:force, master);
 	if (master)
 	{
-		P:4("_Master_Get: Prop exists: %d %d", master, Master_ID());
-		P:4("_Master_Get: Prop set");
+		Debug_Print4("_Master_Get: Prop exists: %d %d", master, Master_ID());
+		Debug_Print4("_Master_Get: Prop set");
 		if (master == Master_ID())
 		{
 			// Nothing has changed.
@@ -1075,18 +995,18 @@ stock e_YSIM_GET_TYPE:_Master_Get(const library[], bool:force = false)
 			return e_YSIM_GET_TYPE_NOT_GOT;
 		}
 	}
-	P:4("_Master_Get: Get master.");
+	Debug_Print4("_Master_Get: Get master.");
 	setproperty(9, library, Master_ID());
-	P:4("_Master_Get: Set master.");
+	Debug_Print4("_Master_Get: Set master.");
 	// Add this library to the list.  The list is designed to only deal with
 	// two or three character master names now!
 	if (YSI_g_sMasterCount < MAX_MASTERS)
 	{
-		P:4("_Master_Get: Set master string %s = %d", library, library[0] | (library[1] << 8) | (library[2] << 16));
+		Debug_Print4("_Master_Get: Set master string %s = %d", library, library[0] | (library[1] << 8) | (library[2] << 16));
 		YSI_g_sMasterData[YSI_g_sMasterCount++] = library[0] | (library[1] << 8) | (library[2] << 16);
-		P:4("_Master_Get: Set master string.");
+		Debug_Print4("_Master_Get: Set master string.");
 	}
-	P:C(else P:E("Too many master scripts"););
+	Debug_CodeX{else Debug_Error("Too many master scripts");}
 	return ret;
 }
 

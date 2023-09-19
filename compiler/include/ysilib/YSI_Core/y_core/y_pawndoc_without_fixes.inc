@@ -1,18 +1,4 @@
-/*+
- * <library
- *   name="y_pawndoc"
- *   version="0.2"
- *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
- *   summary="Fix pawndoc comments."
- * >
- *   <summary pawndoc="true">
- *     This library uses the enhanced <em>pawndoc.xsl</em> from
- *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
- *     This XSL has features such as library and markdown support, and will not
- *     render this message when used.
- *   </summary>
- * </library>
- *//** *//*
+/*
 Legal:
 	Version: MPL 1.1
 	
@@ -173,11 +159,11 @@ _FIXES_FUNC_PAWNDOC(CONST_PAWNDOC(const symbol[] = 0));
  * attached to it.  This seems to be the best way to prevent the documentation
  * from appearing in XML (<c>-r</c>) output - even conditional compilation
  * doesn't work on comments.  Used internally as <c>YSI_HIDE_PAWNDOC</c>.
- * <p />
+ * <p/>
  * The input should have some unique name, so when using it within an ifdef
  * block, don't use the same name as the tested symbol, because the the
  * replacement in question will be applied to the hidden variable as well.
- * <p />
+ * <p/>
  * This should also be a globally unique symbol name, because this only works
  * with `<c>const</c>`, not `<c>static const</c>`.
  * </remarks>
@@ -235,15 +221,15 @@ _FIXES_FUNC_PAWNDOC(ENUM_PAWNDOC(const symbol[]));
 		generated documentation always.  This is the best way to hide them.  You
 		still see one function (this one), but at least the documentation for
 		this one function can explain why it exists.
-		<p />
-		This is <c>ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ</c> and starts the internal
+		<p/>
+		This is <c>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</c> and starts the internal
 		functions block.  This is the last possible name before the first
 		character is <c>_</c> when the functions are sorted lexicographically
-		(alphabetically).  There's also <c>ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZY</c>
+		(alphabetically).  There's also <c>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzy</c>
 		that starts the variables block; they could have the same name if they
 		were not declared in the same scope, but they might not always be
 		separately defined.
-		<p />
+		<p/>
 		Note that the actual hiding itself is done by an XML comment started
 		here and ended later.
 	</remarks>
@@ -251,7 +237,7 @@ _FIXES_FUNC_PAWNDOC(ENUM_PAWNDOC(const symbol[]));
 	<!--
 */
 
-static stock ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ() {}
+static stock Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz() {}
 
 /**
 	<hidden />
@@ -262,9 +248,9 @@ static stock ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ() {}
 		common pattern used throughout YSI (and most of programming).
 		Unfortunately these weirdly named internal functions appear in the
 		generated documentation always.  This is the best way to hide them.  You
-		still see one function (<c>ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ</c>), but at
+		still see one function (<c>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</c>), but at
 		least the documentation for that can explain why it exists.
-		<p />
+		<p/>
 		This is <c>_zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</c> and ends the internal
 		functions block.  This is the last possible name before the first
 		character is no longer <c>_</c> when the functions are sorted
@@ -272,7 +258,7 @@ static stock ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ() {}
 		<c>_zzzzzzzzzzzzzzzzzzzzzzzzzzzzzy</c> that ends the variables block;
 		they could have the same name if they were not declared in the same
 		scope, but they might not always be separately defined.
-		<p />
+		<p/>
 		Note that the actual hiding itself is done by an XML comment started
 		earlier and ended here.
 	</remarks>
@@ -293,7 +279,7 @@ static stock _zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz() {}
 		generated documentation always.  This is the best way to hide them.  You
 		still see some internal variables (<c>_0</c> - <c>_9</c>), but those
 		have a legitimate reason to be documented externally.
-		<p />
+		<p/>
 		This is <c>_zzzzzzzzzzzzzzzzzzzzzzzzzzzzzy</c> and ends the internal
 		variables block.  This is the last possible name before the first
 		character is no longer <c>_</c>, except for one, when the functions are
@@ -301,7 +287,7 @@ static stock _zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz() {}
 		<c>_zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</c> that ends the functions block;
 		they could have the same name if they were not declared in the same
 		scope, but they might not always be separately defined.
-		<p />
+		<p/>
 		Note that the actual hiding itself is done by an XML comment started
 		earlier and ended here.
 	</remarks>

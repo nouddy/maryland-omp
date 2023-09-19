@@ -106,10 +106,9 @@ Optional plugins:
 */
 
 #include "..\..\YSI_Core\y_utils"
-#include "..\..\YSI_Coding\y_va"
 
 // "y_iterate" is always higher than "foreach".
-#define _Y_ITERATE_LOCAL_VERSION        43
+#define _Y_ITERATE_LOCAL_VERSION        45
 
 #if __Pawn != 0x030A
 	#define NO_CUSTOM_WARNINGS
@@ -120,66 +119,117 @@ Optional plugins:
 	#define _inc_y_iterate
 #endif
 
-// Extra macro so that those paranoid about accidentally including YSI can
-// ensure it never happens.
 #if defined NEVER_Y_ITERATE
-	// Set `FOREACH_VERSION` as equal to whatever the version of the stand-alone
-	// include is.
-	#define FOREACH_VERSION _FOREACH_LOCAL_VERSION
-	#undef _inc_y_iterate
-	#undef _Y_ITERATE_LOCAL_VERSION
-	#if defined _FOREACH_INC_TEST
-		// This is `foreach` testing our version - nothing more need doing.
-		#endinput
-	#endif
-	// Otherwise, include `foreach`.  Don't use `#tryinclude`, since they want
-	// a version of `foreach` and it would be an error to not give them one.
-	#define _FOREACH_NO_TEST
-	#include <foreach>
-	#endinput
+	#error `NEVER_Y_ITERATE` is stupid.
 #endif
 
-// Foreach is testing us.
 #if defined _FOREACH_INC_TEST
-	#if !defined _Y_ITERATE_FOUND
-		// Set up so that you can use `FOREACH_VERSION` even if the older
-		// stand-alone version doesn't support it.
-		#define FOREACH_VERSION _FOREACH_LOCAL_VERSION
-		#define _FOREACH_CUR_VERSION _Y_ITERATE_LOCAL_VERSION
-	#endif
-	#endinput
+	// Foreach is testing us.
+	#error Old <foreach.inc> found - delete it.
 #endif
 
 #if !defined _FOREACH_NO_TEST
 	#define _FOREACH_INC_TEST
-	// Ignore the broken stand-alone version.
-	#define _foreach_included
 	#tryinclude <foreach>
 	#undef _FOREACH_INC_TEST
 	// <foreach> exists - test which is newer.
 	#if defined _FOREACH_LOCAL_VERSION
-		#if _FOREACH_LOCAL_VERSION > _Y_ITERATE_LOCAL_VERSION
-			// Foreach is newer.
-			#if defined _inc_foreach
-				#undef _inc_foreach
-			#endif
-			#define _FOREACH_NO_TEST
-			// Actually include the code.
-			#include <foreach>
-			// Mark the include as found and exit.
-			#define FOREACH_VERSION _FOREACH_LOCAL_VERSION
-			#define _FOREACH_INC_TEST
-			#define _Y_ITERATE_FOUND
-			#endinput
-		#endif
+		#error Old <foreach.inc> found - delete it.
 	#elseif defined foreach && __COMPILER_1ST_PASS
-		// I made this a warning on compilers that supported them, but that's a
-		// silly idea!
-		#error The old <foreach> include is no longer compatible with YSI.
+		#error Old <foreach.inc> found - delete it.
 	#endif
 #endif
 
 #define _INC_y_iterate
+
+/**
+ * <library
+ *   name="y_iterate"
+ *   version="0.4"
+ *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
+ * >
+ *   <summary pawndoc="true">
+ *     This library uses the enhanced <em>pawndoc.xsl</em> from
+ *     <a href="https://github.com/pawn-lang/pawndoc">pawn-lang/pawndoc</a>.
+ *     This XSL has features such as library and markdown support, and will not
+ *     render this message when used.
+ *   </summary>
+ *   <remarks>
+ *    <p>
+ *    Provides efficient looping through sparse data sets, such as connected
+ *    players.  Significantly improved from the original version to be a generic
+ *    loop system, rather then purely a player loop system.  When used for
+ *    players this has constant time O(n) for number of connected players (n),
+ *    unlike standard player loops which are O(MAX_PLAYERS), regardless of the
+ *    actual number of connected players.  Even when n is MAX_PLAYERS this is
+ *    still faster.
+ *    </p>
+ *   
+ *    <p>
+ *    For extensive documentation on writing and using iterators, see
+ *    <a href="http://forum.sa-mp.com/showthread.php?t=481877">this topic</a>
+ *    </p>
+ *   </remarks>
+ *   <section>
+ *     Examples
+ *   </section>
+ *   
+ *   
+ *   
+ *   
+ *   <subsection>Basic Iterators</subsection>
+ *   
+ *     <p>
+ *     Basic iterators are simply collections of numbers - little more than an array.
+ *     A number is either in the array, or not in the array, <em>y_iterate</em> loops
+ *     through only the <em>in</em> numbers.</p>
+ *     
+ *     <p><em>Players</em><br /><br />
+ *     
+ *     This code will loop through every player connected to the server.
+ *     
+ *     <code>
+ *     foreach (new i : Player)																				<br />
+ *     {																				<br /><indent />
+ *      printf("player %d is connected", i);																				<br />
+ *     }
+ *     </code>
+ *     </p>
+ *     
+ *     <p><em>Vehicles</em><br /><br />
+ *     
+ *     This code will loop through all the created vehicles on the server (including
+ *     those made in other running scripts).
+ *     
+ *     <code>
+ *     foreach (new vid : Vehicle)																				<br />
+ *     {																				<br /><indent />
+ *      printf("vehicleid %d has been created", vid);																				<br />
+ *     }
+ *     </code>
+ *     </p>
+ *     
+ *     <p><em>Create An Iterator</em><br /><br />
+ *     
+ *     To create your own iterator, first declare it, then add things to it, then loop
+ *     over it:
+ *     
+ *     <code>
+ *     new																				<br /><indent />
+ *      Iterator:MyIter&lt;100&gt;; // First declare it (this has room for 100 items numbered 0-99).																				<br />
+ *     // Then add things to it.																				<br />
+ *     Iter_Add(MyIter, 0);  // Fine.																				<br />
+ *     Iter_Add(MyIter, 55); // Fine.																				<br />
+ *     Iter_Add(MyIter, 100); // Will fail.																				<br />
+ *     // Then loop over it.																				<br />
+ *     foreach (new i : MyIter)																				<br />
+ *     {																				<br /><indent />
+ *      printf("%d", i); // Will print "0" then "55".																				<br />
+ *     }
+ *     </code>
+ *     </p>
+ * </library>
+ *//** */
 
 // Set `FOREACH_VERSION` as this file's version.
 #if defined FOREACH_VERSION
@@ -198,12 +248,6 @@ Optional plugins:
 
 #if !defined _samp_included
 	#error "Please include a_samp or a_npc before foreach"
-#endif
-
-#if defined _YSI_SPECIAL_DEBUG
-	#define PS_IS_PLAYER_CONNECTED(%0) (%0 != INVALID_PLAYER_ID)
-#else
-	#define PS_IS_PLAYER_CONNECTED IsPlayerConnected
 #endif
 
 #define INVALID_ITERATOR_SLOT (cellmin)
@@ -317,22 +361,19 @@ Optional plugins:
 	#endif
 #endif
 
-#if !defined BOTSYNC_IS_BOT
-	forward Iter_OPDCInternal(playerid);
-#endif
-
 #include "y_foreach_macros"
 
+#if _FOREACH_VEHICLES
+	#include "..\..\YSI_Game\y_vehicledata\y_vehicledata_entry"
+#endif
+
 #include "y_foreach_impl"
-#include "..\..\YSI_Coding\y_hooks"
 #include "y_foreach_yield"
 
-#if _FOREACH_CHARACTERS || _FOREACH_VEHICLES || _FOREACH_ACTORS
-	#include "..\..\YSI_Coding\y_hooks"
-#endif
-#if _FOREACH_VEHICLES || _FOREACH_ACTORS
-	#include "..\..\YSI_Coding\y_remote"
-#endif
+CHAIN_HOOK(Iter)
+#undef CHAIN_ORDER
+#define CHAIN_ORDER CHAIN_NEXT(Iter)
+
 #include "y_foreach_iterators"
 
 #if defined YSI_TESTS

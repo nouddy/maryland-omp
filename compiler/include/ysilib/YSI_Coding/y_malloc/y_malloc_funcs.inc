@@ -74,18 +74,18 @@ Optional plugins:
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">Allocation unit to get the size of.</param>
  * <returns>
- *  The size.
+ *   The size.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
-P:D(Malloc_GetSlotSize(Alloc:slot));
+FUNC_PAWNDOC(Malloc_GetSlotSize(Alloc:slot));
 #define Malloc_GetSlotSize(%1) \
 	(YSI_gMallocMemory[_:(%1) - 1])
 
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">Allocation unit to get the size of.</param>
  * <returns>
- *  The size.
+ *   The size.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -98,9 +98,8 @@ P:D(Malloc_GetSlotSize(Alloc:slot));
 
 #else
 
-	P:D(Malloc_SlotSize(Alloc:slot));
-	#define Malloc_SlotSize(%1) \
-		Malloc_GetSlotSize(%1)
+	FUNC_PAWNDOC(Malloc_SlotSize(Alloc:slot));
+	#define Malloc_SlotSize Malloc_GetSlotSize
 
 #endif
 
@@ -108,10 +107,11 @@ P:D(Malloc_GetSlotSize(Alloc:slot));
  * <param name="string">The string to store.</param>
  * <param name="pack">Whether or not the string will be packed.</param>
  * <returns>
- *  0 on fail or a data handle on sucess.
+ *   0 on fail or a data handle on sucess.
  * </returns>
  * <remarks>
- *  Allocates a new piece of memory with enough space to store the given string.
+ *   Allocates a new piece of memory with enough space to store the given
+ *   string.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -134,7 +134,7 @@ stock Alloc:Malloc_NewS(const string[], bool:pack = false) {
  * <param name="size">The size to set it to.</param>
  *//*------------------------------------------------------------------------**/
 
-P:D(Malloc_SetSlotSize(slot,size));
+FUNC_PAWNDOC(Malloc_SetSlotSize(slot,size));
 #define Malloc_SetSlotSize(%1,%2) \
 	YSI_gMallocMemory[_:(%1) - 1] = (%2)
 
@@ -142,14 +142,14 @@ P:D(Malloc_SetSlotSize(slot,size));
  * <param name="slot">The allocation unit to get data from.</param>
  * <param name="index">The location in the unit to get.</param>
  * <returns>
- *  The data
+ *   The data
  * </returns>
  * <remarks>
- *  Basically like <symbolref name="Malloc_Get" /> but used internally.
+ *   Basically like <symbolref name="Malloc_Get" /> but used internally.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Malloc_GetData(Alloc:slot,index));
+FUNC_PAWNDOC(Malloc_GetData(Alloc:slot,index));
 #define Malloc_GetData(%1,%2) \
 	(YSI_gMallocMemory[_:((%1)+Alloc:(%2))])
 
@@ -159,7 +159,7 @@ P:D(Malloc_GetData(Alloc:slot,index));
  * <param name="value">The value to save.</param>
  *//*------------------------------------------------------------------------**/
 
-P:D(Malloc_SetData(Alloc:slot,index,value));
+FUNC_PAWNDOC(Malloc_SetData(Alloc:slot,index,value));
 #define Malloc_SetData(%1,%2,%3) \
 	YSI_gMallocMemory[_:((%1)+Alloc:(%2))]=(%3)
 
@@ -167,33 +167,31 @@ P:D(Malloc_SetData(Alloc:slot,index,value));
  * <param name="slot">The allocation unit to get data from.</param>
  * <param name="index">The location in the unit to get.</param>
  * <returns>
- *  The data
+ *   The data
  * </returns>
  * <remarks>
- *  Shorthand for <symbolref name="Malloc_Get" />.
+ *   Shorthand for <symbolref name="Malloc_Get" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(mget(Alloc:slot, index));
+FUNC_PAWNDOC(mget(Alloc:slot, index));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mget(%1) \
-		Malloc_Get(%1)
+	#define mget Malloc_Get
 #endif
 
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">The allocation unit to get float data from.</param>
  * <param name="index">The location in the unit to get.</param>
  * <returns>
- *  The data
+ *   The data
  * </returns>
  * <remarks>
- *  Shorthand for <symbolref name="Malloc_GetFloat" />.
+ *   Shorthand for <symbolref name="Malloc_GetFloat" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
-P:D(mgetf(Alloc:slot, index));
+FUNC_PAWNDOC(mgetf(Alloc:slot, index));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mgetf(%1) \
-		Malloc_GetFloat(%1)
+	#define mgetf Malloc_GetFloat
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -201,14 +199,13 @@ P:D(mgetf(Alloc:slot, index));
  * <param name="index">Where in the unit to set.</param>
  * <param name="value">The value to save.</param>
  * <remarks>
- *  Shorthand for <symbolref name="Malloc_Set" />.
+ *   Shorthand for <symbolref name="Malloc_Set" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(mset(Alloc:slot, index, value));
+FUNC_PAWNDOC(mset(Alloc:slot, index, value));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mset(%1) \
-		Malloc_Set(%1)
+	#define mset Malloc_Set
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -216,14 +213,13 @@ P:D(mset(Alloc:slot, index, value));
  * <param name="index">Where in the unit to set.</param>
  * <param name="value">The float value to save.</param>
  * <remarks>
- *  Shorthand for <symbolref name="Malloc_SetFloat" />.
+ *   Shorthand for <symbolref name="Malloc_SetFloat" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(msetf(Alloc:slot, index, value));
+FUNC_PAWNDOC(msetf(Alloc:slot, index, value));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define msetf(%1) \
-		Malloc_SetFloat(%1)
+	#define msetf Malloc_SetFloat
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -233,18 +229,17 @@ P:D(msetf(Alloc:slot, index, value));
  * <param name="index">Index in the unit.</param>
  * <param name="pack">Return the string packed?</param>
  * <returns>
- *  The data
+ *   The data
  * </returns>
  * <remarks>
- *  Displays errors in secure mode.  Gets a string.
- *  Shorthand for <symbolref name="Malloc_GetS" />.
+ *   Displays errors in secure mode.  Gets a string.
+ *   Shorthand for <symbolref name="Malloc_GetS" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(mgets(target[], length, Alloc:array, const index, const bool:pack = false));
+FUNC_PAWNDOC(mgets(target[], length, Alloc:array, const index, const bool:pack = false));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mgets(%1) \
-		Malloc_GetS(%1)
+	#define mgets Malloc_GetS
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -253,18 +248,17 @@ P:D(mgets(target[], length, Alloc:array, const index, const bool:pack = false));
  * <param name="array">Data unit to put information in.</param>
  * <param name="index">Index in the unit.</param>
  * <returns>
- *  The data
+ *   The data
  * </returns>
  * <remarks>
- *  Displays errors in secure mode.  Gets an array.
- *  Shorthand for <symbolref name="Malloc_GetA" />.
+ *   Displays errors in secure mode.  Gets an array.
+ *   Shorthand for <symbolref name="Malloc_GetA" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(mgeta(target[], length, Alloc:array, index));
+FUNC_PAWNDOC(mgeta(target[], length, Alloc:array, index));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mgeta(%1) \
-		Malloc_GetA(%1)
+	#define mgeta Malloc_GetA
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -273,15 +267,14 @@ P:D(mgeta(target[], length, Alloc:array, index));
  * <param name="str">String to insert</param>
  * <param name="pack">Should the string be packed in?</param>
  * <remarks>
- *  Displays errors in secure mode.  Inserts a string.
- *  Shorthand for <symbolref name="Malloc_SetS" />.
+ *   Displays errors in secure mode.  Inserts a string.
+ *   Shorthand for <symbolref name="Malloc_SetS" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(msets(Alloc:array, const index, const str[], const bool:pack = false));
+FUNC_PAWNDOC(msets(Alloc:array, const index, const str[], const bool:pack = false));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define msets(%1) \
-		Malloc_SetS(%1)
+	#define msets Malloc_SetS
 #endif
 
 /*-------------------------------------------------------------------------*//**
@@ -290,25 +283,24 @@ P:D(msets(Alloc:array, const index, const str[], const bool:pack = false));
  * <param name="str">Array to insert.</param>
  * <param name="len">Length of the array.</param>
  * <remarks>
- *  Displays errors in secure mode.  Inserts an array.
- *  Shorthand for <symbolref name="Malloc_SetA" />.
+ *   Displays errors in secure mode.  Inserts an array.
+ *   Shorthand for <symbolref name="Malloc_SetA" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(mseta(Alloc:array, index, const str[], len));
+FUNC_PAWNDOC(mseta(Alloc:array, index, const str[], len));
 #if !defined YSI_MALLOC_NO_SHORT
-	#define mseta(%1) \
-		Malloc_SetA(%1)
+	#define mseta Malloc_SetA
 #endif
 
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">The unit to get the one after of.</param>
  * <remarks>
- *  Gets the next free block of memory after the current one.
+ *   Gets the next free block of memory after the current one.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Malloc_NextSlot(slot));
+FUNC_PAWNDOC(Malloc_NextSlot(slot));
 #define Malloc_NextSlot(%1) \
 	(YSI_gMallocMemory[(%1)])
 
@@ -316,10 +308,10 @@ P:D(Malloc_NextSlot(slot));
  * <param name="array">Data unit to get information from.</param>
  * <param name="index">Index in the unit.</param>
  * <returns>
- *  Data.
+ *   Data.
  * </returns>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -331,15 +323,14 @@ P:D(Malloc_NextSlot(slot));
 		{
 			return Malloc_GetData(_:array, index);
 		}
-		P:C(else P:E("Array read index out of bounds: %d[%d]", _:array, index););
+		Debug_CodeX{else Debug_Error("Array read index out of bounds: %d[%d]", _:array, index);}
 		return 0;
 	}
 
 #else
 
-	P:D(Malloc_Get(Alloc:array, index));
-	#define Malloc_Get(%1,%2) \
-		Malloc_GetData(%1, %2)
+	FUNC_PAWNDOC(Malloc_Get(Alloc:array, index));
+	#define Malloc_Get Malloc_GetData
 
 #endif
 
@@ -348,7 +339,7 @@ P:D(Malloc_NextSlot(slot));
  * <param name="index">Index in the unit.</param>
  * <param name="value">Value to insert</param>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -360,15 +351,14 @@ P:D(Malloc_NextSlot(slot));
 		{
 			return Malloc_SetData(_:array, index, value);
 		}
-		P:C(else P:E("Array write index out of bounds: %d[%d]", _:array, index););
+		Debug_CodeX{else Debug_Error("Array write index out of bounds: %d[%d]", _:array, index);}
 		return 0;
 	}
 
 #else
 
-	P:D(Malloc_Set(Alloc:array,index,value));
-	#define Malloc_Set(%1,%2,%3) \
-		Malloc_SetData(%1, %2, %3)
+	FUNC_PAWNDOC(Malloc_Set(Alloc:array,index,value));
+	#define Malloc_Set Malloc_SetData
 
 #endif
 
@@ -377,22 +367,21 @@ P:D(Malloc_NextSlot(slot));
  * <param name="index">Index in the unit.</param>
  * <param name="value">Float value to insert</param>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #if defined YSI_MALLOC_SECURE
 
 	Float:Malloc_GetFloat(Alloc:array, index) {
-		P:3("Malloc_GetFloat: array = %d, index = %d.", _:array, index);
+		Debug_Print3("Malloc_GetFloat: array = %d, index = %d.", _:array, index);
 		return Float:Malloc_Get(_:array, index);
 	}
     
 #else 
 
-	P:D(Float:Malloc_GetFloat(Alloc:array, index));
-	#define Malloc_GetFloat(%1,%2) \
-		Float:Malloc_Get(%1,%2)
+	FUNC_PAWNDOC(Float:Malloc_GetFloat(Alloc:array, index));
+	#define Malloc_GetFloat Float:Malloc_Get
 
 #endif
 
@@ -402,7 +391,7 @@ P:D(Malloc_NextSlot(slot));
  * <param name="index">Index in the unit.</param>
  * <param name="value">Float value to insert</param>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -410,16 +399,15 @@ P:D(Malloc_NextSlot(slot));
 #if defined YSI_MALLOC_SECURE
 
 	Malloc_SetFloat(Alloc:array, index, Float:value) {
-		P:3("Malloc_SetFloat called: %d, %d, %f", _:array, index, _:value);
+		Debug_Print3("Malloc_SetFloat called: %d, %d, %f", _:array, index, _:value);
         Malloc_Set(_:array, index, _:value);
         return 1;
 	}
 
 #else 
 
-	P:D(Malloc_SetFloat(Alloc:array, index, Float:value));
-	#define Malloc_SetFloat(%1,%2,%3) \
-		Malloc_Set(%1,%2,%3)
+	FUNC_PAWNDOC(Malloc_SetFloat(Alloc:array, index, Float:value));
+	#define Malloc_SetFloat Malloc_Set
 
 #endif
 
@@ -430,13 +418,13 @@ P:D(Malloc_NextSlot(slot));
  * <param name="index">Index in the unit.</param>
  * <param name="pack">Return the string packed?</param>
  * <remarks>
- *  Displays errors in secure mode.  Gets a string.
+ *   Displays errors in secure mode.  Gets a string.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_GetS(target[], length = sizeof (target), Alloc:array, const index, const bool:pack = false)
 {
-	P:3("Malloc_GetS: array = %d, index = %d.", _:array, index);
+	Debug_Print3("Malloc_GetS: array = %d, index = %d.", _:array, index);
 	if (0 <= index < Malloc_GetSlotSize(_:array))
 	{
 		if (pack)
@@ -457,18 +445,18 @@ stock Malloc_GetS(target[], length = sizeof (target), Alloc:array, const index, 
  * <param name="str">String to insert</param>
  * <param name="pack">Should the string be packed in?</param>
  * <remarks>
- *  Displays errors in secure mode.  Inserts a string.
+ *   Displays errors in secure mode.  Inserts a string.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_SetS(Alloc:array, const index, const str[], const bool:pack = false)
 {
-	P:3("Malloc_SetS called: %d, %d, %s", _:array, index, str);
+	Debug_Print3("Malloc_SetS called: %d, %d, %s", _:array, index, str);
 	new
 		len = strlen(str) + 1;
 	if (0 <= index && index + len <= Malloc_GetSlotSize(_:array))
 	{
-		P:5("Malloc_SetS: In check.");
+		Debug_Print5("Malloc_SetS: In check.");
 		if (pack)
 		{
 			strpack(Malloc_GetData(array, index), str, cellmax);
@@ -483,7 +471,7 @@ stock Malloc_SetS(Alloc:array, const index, const str[], const bool:pack = false
 	else
 	{
 		#if defined YSI_MALLOC_SECURE
-			P:E("String copy failed (%s)", str);
+			Debug_Error("String copy failed (%s)", str);
 		#endif
 		return 0;
 	}
@@ -494,31 +482,31 @@ stock Malloc_SetS(Alloc:array, const index, const str[], const bool:pack = false
  * <param name="index">Index in the unit.</param>
  * <param name="arg">Offset in the stack of the string to store.</param>
  * <remarks>
- *  Inserts a string by stack offset for use in vararg functions.
+ *   Inserts a string by stack offset for use in vararg functions.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_SetVAS(Alloc:array, index, arg)
 {
-	P:3("Malloc_SetVAS called: %d, %d, %d", _:array, index, arg);
+	Debug_Print3("Malloc_SetVAS called: %d, %d, %d", _:array, index, arg);
 	new
 		len = 0;
 	#emit LOAD.S.pri arg
-	#emit SMUL.C     4
+	#emit SHL.C.pri  __cell_shift
 	#emit LOAD.S.alt 0
 	#emit ADD
-	#emit ADD.C      12
+	#emit ADD.C      __3_cells
 	#emit LOAD.I
 	// For later reuse.
 	#emit STOR.S.pri arg
 	#emit PUSH.pri
-	#emit PUSH.C     4
+	#emit PUSH.C     __1_cell
 	#emit SYSREQ.C   strlen
-	#emit STACK      8
+	#emit STACK      __2_cell
 	#emit STOR.S.pri len
 	if (index >= 0 && index + (++len) <= Malloc_GetSlotSize(_:array))
 	{
-		P:5("Malloc_SetVAS: In check.");
+		Debug_Print5("Malloc_SetVAS: In check.");
 		index += _:array;
 		YSI_gMallocMemory[index] = 0;
 		// Blank and copy the string.
@@ -539,13 +527,13 @@ stock Malloc_SetVAS(Alloc:array, index, arg)
 		#emit CONST.pri  0
 		#emit STOR.I
 		#emit PUSH.alt
-		#emit PUSH.C     12
+		#emit PUSH.C     __3_cells
 		#emit SYSREQ.C   strcat
-		#emit STACK      16
+		#emit STACK      __4_cells
 		//strcat(YSI_gMallocMemory[index], str, cellmax);
 	}
 	#if defined YSI_MALLOC_SECURE
-		P:C(else P:E("String copy failed (%s)", str););
+		Debug_CodeX{else Debug_Error("String copy failed (%s)", str);}
 	#endif
 }
 
@@ -555,21 +543,21 @@ stock Malloc_SetVAS(Alloc:array, index, arg)
  * <param name="array">Data unit to put information in.</param>
  * <param name="index">Index in the unit.</param>
  * <remarks>
- *  Displays errors in secure mode.  Gets an array.
+ *   Displays errors in secure mode.  Gets an array.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_GetA(dest[], length, Alloc:array, index)
 {
-	P:3("Malloc_GetA called: array = %d, index = %d, length = %d.", _:array, index, length);
+	Debug_Print3("Malloc_GetA called: array = %d, index = %d, length = %d.", _:array, index, length);
 	if (index >= 0)
 	{
 		new
 			size = Malloc_GetSlotSize(_:array);
-		P:5("Malloc_GetA: size = %d, %d.", size, size - index);
-		memcpy(dest, YSI_gMallocMemory[index + _:array], 0, min(size - index, length) * 4, length);
+		Debug_Print5("Malloc_GetA: size = %d, %d.", size, size - index);
+		memcpy(dest, YSI_gMallocMemory[index + _:array], 0, min(size - index, length) * cellbytes, length);
 		#if defined YSI_MALLOC_SECURE
-			P:C(if(length > size)P:E("Out of buffer space."););
+			Debug_Code1{if(length > size)Debug_Error("Out of buffer space.");}
 		#endif
 		return 1;
 	}
@@ -582,21 +570,21 @@ stock Malloc_GetA(dest[], length, Alloc:array, index)
  * <param name="source">Array to insert.</param>
  * <param name="length">Length of the array.</param>
  * <remarks>
- *  Displays errors in secure mode.  Inserts an array.
+ *   Displays errors in secure mode.  Inserts an array.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_SetA(Alloc:array, index, const source[], length)
 {
-	P:3("Malloc_SetA: array = %d, index = %d.", _:array, index);
+	Debug_Print3("Malloc_SetA: array = %d, index = %d.", _:array, index);
 	if (index >= 0)
 	{
 		new
 			size = Malloc_GetSlotSize(_:array);
-		P:5("Malloc_SetA: size = %d.", size);
-		memcpy(YSI_gMallocMemory[index + _:array], source, 0, min(size - index, length) * 4, size - index);
+		Debug_Print5("Malloc_SetA: size = %d.", size);
+		memcpy(YSI_gMallocMemory[index + _:array], source, 0, min(size - index, length) * cellbytes, size - index);
 		#if defined YSI_MALLOC_SECURE
-			P:C(if(length > size - index)P:E("Out of buffer space."););
+			Debug_Code1{if(length > size - index)Debug_Error("Out of buffer space.");}
 		#endif
 	}
 }
@@ -606,42 +594,42 @@ stock Malloc_SetA(Alloc:array, index, const source[], length)
  * <param name="index">Index in the unit.</param>
  * <param name="arg">Offset in the stack of the array to store.</param>
  * <remarks>
- *  Inserts an array by stack offset for use in vararg functions.
+ *   Inserts an array by stack offset for use in vararg functions.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Malloc_SetVAA(Alloc:array, index, arg)
 {
-	P:3("Malloc_SetVAA called: %d, %d, %d", _:array, index, arg);
+	Debug_Print3("Malloc_SetVAA called: %d, %d, %d", _:array, index, arg);
 	new
 		len = 0;
 	#emit LOAD.S.pri arg
 	#emit ADD.C      1
-	#emit SMUL.C     4
+	#emit SHL.C.pri  __cell_shift
 	#emit LOAD.S.alt 0
 	#emit ADD
-	#emit ADD.C      12
+	#emit ADD.C      __3_cells
 	#emit LOAD.I
 	#emit LOAD.I
 	// For later reuse.
 	#emit STOR.S.pri len
 	if (index >= 0 && index + len <= Malloc_GetSlotSize(_:array))
 	{
-		P:5("Malloc_SetVAA In check.");
+		Debug_Print5("Malloc_SetVAA In check.");
 		index += _:array;
 		// Skip the code above the second time now (store the true source
 		// address in "arg" the first time).
 		#emit LOAD.S.pri len
 		#emit PUSH.pri
-		#emit SMUL.C     4
+		#emit SHL.C.pri  __cell_shift
 		#emit PUSH.pri
 		#emit PUSH.C     0
 		// Source.
 		#emit LOAD.S.pri arg
-		#emit SMUL.C     4
+		#emit SHL.C.pri  __cell_shift
 		#emit LOAD.S.alt 0
 		#emit ADD
-		#emit ADD.C      12
+		#emit ADD.C      __3_cells
 		#emit LOAD.I
 		#emit PUSH.pri
 		// Destination.
@@ -653,22 +641,22 @@ stock Malloc_SetVAA(Alloc:array, index, arg)
 		#emit STOR.I
 		#emit PUSH.alt
 		// GO!
-		#emit PUSH.C     20
+		#emit PUSH.C     __5_cells
 		#emit SYSREQ.C   memcpy
-		#emit STACK      24
+		#emit STACK      __6_cells
 	}
 	#if defined YSI_MALLOC_SECURE
-		P:C(else P:E("Array copy out of memory."););
+		Debug_CodeX{else Debug_Error("Array copy out of memory.");}
 	#endif
 }
 
 /*-------------------------------------------------------------------------*//**
  * <param name="size">Size of memory to allocate.</param>
  * <returns>
- *  0 on fail or a data handle on sucess.
+ *   0 on fail or a data handle on sucess.
  * </returns>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -678,25 +666,24 @@ stock Malloc_SetVAA(Alloc:array, index, arg)
 	{
 		new
 			Alloc:slot = Malloc_Allocate(size, false);
-		P:C(if(!slot)P:E("Allocation failed (%d)", size););
+		Debug_Code1{if(!slot)Debug_Error("Allocation failed (%d)", size);}
 		return slot;
 	}
 
 #else
 
-	P:D(Alloc:malloc(size));
-	#define malloc(%1) \
-		Malloc_Allocate(%1)
+	FUNC_PAWNDOC(Alloc:malloc(size));
+	#define malloc Malloc_Allocate
 
 #endif
 
 /*-------------------------------------------------------------------------*//**
  * <param name="size">Size of memory to allocate.</param>
  * <returns>
- *  0 on fail or a data handle on sucess.
+ *   0 on fail or a data handle on sucess.
  * </returns>
  * <remarks>
- *  Displays errors in secure mode.  Blanks allocated mmeory.
+ *   Displays errors in secure mode.  Blanks allocated mmeory.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -714,7 +701,7 @@ stock Alloc:calloc(size)
 	//	}
 	//}
 	//#if defined YSI_MALLOC_SECURE
-	P:C(if(!slot)P:E("Allocation failed (%d)", size););
+	Debug_Code1{if(!slot)Debug_Error("Allocation failed (%d)", size);}
 	//#endif
 	return slot;
 }
@@ -722,7 +709,7 @@ stock Alloc:calloc(size)
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">Slot of memory to free up.</param>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -732,7 +719,7 @@ stock Alloc:calloc(size)
 	{
 		if (!slot || !Malloc_GetSlotSize(_:slot))
 		{
-			P:1("Free failed (%d)", _:slot);
+			Debug_Print1("Free failed (%d)", _:slot);
 			return 0;
 		}
 		return Malloc_Free(slot);
@@ -740,9 +727,8 @@ stock Alloc:calloc(size)
 
 #else
 
-	P:D(free(Alloc:slot));
-	#define free(%1) \
-		Malloc_Free(%1)
+	FUNC_PAWNDOC(free(Alloc:slot));
+	#define free Malloc_Free
 
 #endif
 
@@ -751,7 +737,7 @@ stock Alloc:calloc(size)
  * <param name="size">New size of the memory.</param>
  * <param name="clear">Should we erase the memory first?</param>
  * <remarks>
- *  Displays errors in secure mode.
+ *   Displays errors in secure mode.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -759,14 +745,14 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 {
 	if (!size || !slot || !Malloc_GetSlotSize(_:slot))
 	{
-		P:1("Realloc failed (%d)", _:slot);
+		Debug_Print1("Realloc failed (%d)", _:slot);
 		return NO_ALLOC;
 	}
 	new
 		Alloc:ret = Malloc_Allocate(size, clear);
 	if (!ret)
 	{
-		P:1("Realloc failed (%d)", _:slot);
+		Debug_Print1("Realloc failed (%d)", _:slot);
 		return NO_ALLOC;
 	}
 	memcpy(YSI_gMallocMemory[_:ret], YSI_gMallocMemory[_:slot], 0, Malloc_GetSlotSize(slot) * cellbytes, size);
@@ -778,18 +764,18 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
  * <param name="size">Ammount of memory to allocate IN CELLS.</param>
  * <param name="cleat">Blank the memory?</param>
  * <returns>
- *  Memory identifier.
+ *   Memory identifier.
  * </returns>
  * <remarks>
- *  The size check should never fail, if there's only 1 cell
- *  extra somewhere just sneak it onto the end of an array,
- *  if the user does proper bounds checking it shouldn't
- *  matter.
+ *   The size check should never fail, if there's only 1 cell
+ *   extra somewhere just sneak it onto the end of an array,
+ *   if the user does proper bounds checking it shouldn't
+ *   matter.
  *
- *  Implementation code for <symbolref name="malloc" />.
+ *   Implementation code for <symbolref name="malloc" />.
  *
- *  This code will find an area in memory with sufficient
- *  space to store the given data and 
+ *   This code will find an area in memory with sufficient
+ *   space to store the given data and 
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -798,7 +784,7 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 #endif
 		stock Alloc:Malloc_Allocate(size, const bool:clear = false)
 		{
-			P:2("Malloc_Allocate called: %d, %d, %d, %d", size, YSI_g_sUnusedStart, YSI_g_sHeapStart, Malloc_GetSlotSize(YSI_g_sUnusedStart));
+			Debug_Print2("Malloc_Allocate called: %d, %d, %d, %d", size, YSI_g_sUnusedStart, YSI_g_sHeapStart, Malloc_GetSlotSize(YSI_g_sUnusedStart));
 			// We allocate `size + 1` cells - the extra cell comes before the
 			// returned allocation, and is used to store the size of the
 			// allocation (for when we are freeing data).  To make allocations
@@ -816,14 +802,14 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 				// I think this is always generated, because `#emit` is not
 				// affected by `#if`.  The print isn't though, and it is just
 				// two extra instructions - not a huge burden!
-				#emit LCTRL         2
+				#emit LCTRL         __hea
 				#emit STOR.S.alt    cs
 				printf("Malloc_Allocate: heap = %d", cs);
 			#endif
 			while (slot)
 			{
 				cs = Malloc_GetSlotSize(slot);
-				P:7("Malloc_Allocate: slot %d %d", slot, cs);
+				Debug_Print7("Malloc_Allocate: slot %d %d", slot, cs);
 				if (!cs)
 				{
 					return NO_ALLOC;
@@ -835,7 +821,7 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 				p = slot;
 				slot = Malloc_NextSlot(slot);
 			}
-			P:7("Malloc_Allocate: found: %d", slot, cs);
+			Debug_Print7("Malloc_Allocate: found: %d", slot, cs);
 			if (slot)
 			{
 				nextSlot = Malloc_NextSlot(slot);
@@ -879,7 +865,7 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 /*-------------------------------------------------------------------------*//**
  * <param name="slot">Memory allocation unit to release</param>
  * <remarks>
- *  Implementation code for <symbolref name="free" />.
+ *   Implementation code for <symbolref name="free" />.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -889,12 +875,12 @@ stock Alloc:realloc(Alloc:slot, size, const bool:clear = false)
 		stock Malloc_Free(Alloc:slot)
 		{
 			if (slot == NO_ALLOC) return 0;
-			P:4("Malloc_Free called: %d", _:slot);
+			Debug_Print4("Malloc_Free called: %d", _:slot);
 			new
 				size = Malloc_GetSlotSize(_:slot),
 				p = YSI_g_sUnusedStart,
 				l = YSI_g_sHeapStart; // Was "0", now an offset to the heap.
-			P:5("Malloc_Free: size = %d", size);
+			Debug_Print5("Malloc_Free: size = %d", size);
 			if (p)
 			{
 				while (p && p < _:slot)
@@ -984,7 +970,7 @@ stock Alloc:Malloc_Reconcile(ResolvedAlloc:addr)
 	#emit CONST.alt     YSI_gMallocMemory
 	#emit LOAD.S.pri    addr
 	#emit SUB
-	#emit SHR.C.pri     2
+	#emit SHR.C.pri     __cell_shift
 	#emit RETN
 	return Alloc:0;
 }

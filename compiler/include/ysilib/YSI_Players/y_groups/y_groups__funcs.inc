@@ -138,12 +138,12 @@ static stock
 //	#define GGLOBAL__%0...%1(%2) static stock _GROUP_MAKE_NAME<%0...%1>(%2)
 //	#define GPUBLIC__%0(%2) _GROUP_MAKE_FUNC<@@>:_GROUP_MAKE_NAME<%0...>(%2);_GROUP_MAKE_NAME<%0...>(%2);static stock _GROUP_MAKE_NAME<%0...>(%2)
 //	#define GCHAIN__%0(%2) _GROUP_MAKE_FUNC<@@>:_GROUP_MAKE_NAME<%0...>(%2);_GROUP_MAKE_NAME<%0...>(%2);static stock _GROUP_MAKE_NAME<%0...>(%2)
-//	#define _GROUP_SET_PLAYER(%0) P:E(#_GROUP_MAKE_NAME<..._SetPlayer> " called without y_groups")
+//	#define _GROUP_SET_PLAYER(%0) Debug_Error(#_GROUP_MAKE_NAME<..._SetPlayer> " called without y_groups")
 //#else
 //	#define GGLOBAL__%0...%1(%2) static stock _GROUP_MAKE_NAME<%0...%1>(%2)
 //	#define GPUBLIC__%0(%2) static stock _GROUP_MAKE_NAME<%0...>(%2)
 //	#define GCHAIN__%0(%2) static stock _GROUP_MAKE_NAME<%0...>(%2)
-//	#define _GROUP_SET_PLAYER(%0) P:E(#_GROUP_MAKE_NAME<..._SetPlayer> " called without y_groups")
+//	#define _GROUP_SET_PLAYER(%0) Debug_Error(#_GROUP_MAKE_NAME<..._SetPlayer> " called without y_groups")
 //#endif
 
 //#if YSI_KEYWORD(gforeign)
@@ -162,20 +162,20 @@ static stock
 /*-------------------------------------------------------------------------*//**
  * <param name="x">The element that was added (maybe).</param>
  * <remarks>
- *  This is called when a new element is created, and as such it is NOT chained
- *  to other parts of the groups system because each part handles one type of
- *  element.  Loop through all players and set up the element for them if they
- *  are in a group that this is also in by default.
+ *   This is called when a new element is created, and as such it is NOT chained
+ *   to other parts of the groups system because each part handles one type of
+ *   element.  Loop through all players and set up the element for them if they
+ *   are in a group that this is also in by default.
  *
- *  If x is "_GROUP_MAKE_LIMIT" then this is the test used in OnPlayerConnect in
- *  various libraries to see if the groups system exists, and if not locally
- *  initialise the player instead of leaving it up to this system.
+ *   If x is "_GROUP_MAKE_LIMIT" then this is the test used in OnPlayerConnect in
+ *   various libraries to see if the groups system exists, and if not locally
+ *   initialise the player instead of leaving it up to this system.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock _GROUP_MAKE_NAME<..._InitialiseFromGroups>(_GROUP_MAKE_TAG:x = _GROUP_MAKE_TAG:_GROUP_MAKE_LIMIT)
 {
-	P:4(#_GROUP_MAKE_NAME<..._InitialiseFromGroups> " called: %i", x);
+	Debug_Print4(#_GROUP_MAKE_NAME<..._InitialiseFromGroups> " called: %i", x);
 	// A new item has been added to the system - update all players according to
 	// the default settings for a group.
 	if (x != _GROUP_MAKE_TAG:_GROUP_MAKE_LIMIT)
@@ -212,8 +212,8 @@ stock _GROUP_MAKE_NAME<..._InitialiseFromGroups>(_GROUP_MAKE_TAG:x = _GROUP_MAKE
  * <param name="el">Element to set.</param>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  If "s" is true, then one element is added to the current group.  False it is
- *  removed.
+ *   If "s" is true, then one element is added to the current group.  False it is
+ *   removed.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -221,7 +221,7 @@ GFOREIGN__ Group_Set...(Group:g,_GROUP_MAKE_TAG:el,E_GROUP_SET:s);
 
 GGLOBAL__ Group_Set...(Group:g,_GROUP_MAKE_TAG:el,E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Set...> " called: %i, %i, %i", _:g, _:el, _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Set...> " called: %i, %i, %i", _:g, _:el, _:s);
 	// Set wether a group can use this item.
 	if (0 <= _:el < _GROUP_MAKE_LIMIT && g <= GROUP_GLOBAL)
 	{
@@ -231,7 +231,7 @@ GGLOBAL__ Group_Set...(Group:g,_GROUP_MAKE_TAG:el,E_GROUP_SET:s)
 			slot = Bit_Slot(g),
 			Bit:mask = Bit_Mask(g),
 			Bit:neg = ~mask;
-		P:5(#_GROUP_MAKE_NAME<Group_Set...> ": %i, %i", _:slot, _:mask);
+		Debug_Print5(#_GROUP_MAKE_NAME<Group_Set...> ": %i, %i", _:slot, _:mask);
 		YSI_gTempAllowed_ = YSI_g_sElementAllowed[_:el];
 		YSI_gTempDenied_ = YSI_g_sElementDenied[_:el];
 		if (s == E_GROUP_SET:ALLOW)
@@ -288,7 +288,7 @@ GGLOBAL__ Group_Set...(Group:g,_GROUP_MAKE_TAG:el,E_GROUP_SET:s)
  * <param name="g">Group to get from.</param>
  * <param name="el">Element to get.</param>
  * <returns>
- *  bool: Does the group have the element explicitly allowed?
+ *   bool: Does the group have the element explicitly allowed?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -296,7 +296,7 @@ GFOREIGN__ bool:Group_...Allowed(Group:g,_GROUP_MAKE_TAG:el);
 
 GGLOBAL__ bool:Group_...Allowed(Group:g,_GROUP_MAKE_TAG:el)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
 	return (0 <= _:el < _GROUP_MAKE_LIMIT && g <= GROUP_GLOBAL && !Bit_Get(YSI_g_sElementDenied[_:el], _:GROUP_TEMP_FIX(g)) && Bit_Get(YSI_g_sElementAllowed[_:el], _:GROUP_TEMP_FIX(g)));
 }
 
@@ -305,7 +305,7 @@ GGLOBAL__ bool:Group_...Allowed(Group:g,_GROUP_MAKE_TAG:el)
  * <param name="g">Group to get from.</param>
  * <param name="el">Element to get.</param>
  * <returns>
- *  bool: Does the group have the element explicitly denied?
+ *   bool: Does the group have the element explicitly denied?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -313,9 +313,15 @@ GFOREIGN__ bool:Group_...Denied(Group:g,_GROUP_MAKE_TAG:el);
 
 GGLOBAL__ bool:Group_...Denied(Group:g,_GROUP_MAKE_TAG:el)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
 	return (0 <= _:el < _GROUP_MAKE_LIMIT && g <= GROUP_GLOBAL && Bit_Get(YSI_g_sElementDenied[_:el], _:GROUP_TEMP_FIX(g)));
 }
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `Group_...Allowed` or `Group_...Denied`.
 stock E_GROUP_SET:_GROUP_MAKE_NAME<Group_Get...>(Group:g,_GROUP_MAKE_TAG:el)
@@ -323,21 +329,25 @@ stock E_GROUP_SET:_GROUP_MAKE_NAME<Group_Get...>(Group:g,_GROUP_MAKE_TAG:el)
 	// This returns truthy for both allowed and denied.  The function is
 	// deprecated, so this is probably OK, because only people with legacy code
 	// (thus not using denials) will be calling this function.
-	P:2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Get...> " called: %i, %i", _:g, _:el);
 	return
 		_GROUP_MAKE_NAME<Group_...Denied>(g, el) ? E_GROUP_SET:DENY :
 		_GROUP_MAKE_NAME<Group_...Allowed>(g, el) ? E_GROUP_SET:ALLOW :
 		E_GROUP_SET:UNDEF;
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <summary>Group_Set...Default</summary>
  * <param name="g">Group to set for.</param>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  If "s" is true, then all elements are added to this group (i.e. the default
- *  is set to true and all previous settings are wiped out).  If it is false
- *  then all elements are removed and a full update is done.
+ *   If "s" is true, then all elements are added to this group (i.e. the default
+ *   is set to true and all previous settings are wiped out).  If it is false
+ *   then all elements are removed and a full update is done.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -345,7 +355,7 @@ GFOREIGN__ Group_Set...Default(Group:g,E_GROUP_SET:s);
 
 GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Set...Default> " called: %i, %i", _:g, _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Set...Default> " called: %i, %i", _:g, _:s);
 	if (g <= GROUP_GLOBAL)
 	{
 		// There is now NO validity check for reasons of distruibution.
@@ -354,7 +364,7 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 			slot = Bit_Slot(g),
 			Bit:mask = Bit_Mask(g),
 			Bit:inv = ~mask,
-			Iterator:GP<MAX_PLAYERS>;
+			ITERATOR__ GP<MAX_PLAYERS>;
 		FOREACH__ (new playerid : Player)
 		{
 			// Do this check here so it is only done once per player.  This is a
@@ -369,7 +379,7 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 		}
 		if (s == E_GROUP_SET:ALLOW)
 		{
-			P:5(#_GROUP_MAKE_NAME<Group_Set...Default> ": ALLOW");
+			Debug_Print5(#_GROUP_MAKE_NAME<Group_Set...Default> ": ALLOW");
 			YSI_g_sDefaultAllowed[slot] |= mask;
 			YSI_g_sDefaultDenied[slot] &= inv;
 			for (new el = 0; el <= YSI_g_sMaxEncountered; ++el)
@@ -377,7 +387,7 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 				// Check if this group already has this element.
 				YSI_gTempAllowed_ = YSI_g_sElementAllowed[el];
 				YSI_gTempDenied_ = YSI_g_sElementDenied[el];
-				P:7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_gTempAllowed_[slot] & mask, YSI_gTempDenied_[slot] & mask);
+				Debug_Print7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_gTempAllowed_[slot] & mask, YSI_gTempDenied_[slot] & mask);
 				if ((YSI_gTempAllowed_[slot] & mask) && !(YSI_gTempDenied_[slot] & mask))
 				{
 					// Could already be seen, thus no change.
@@ -396,13 +406,13 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 		}
 		else if (s == E_GROUP_SET:DENY)
 		{
-			P:5(#_GROUP_MAKE_NAME<Group_Set...Default> ": DENY");
+			Debug_Print5(#_GROUP_MAKE_NAME<Group_Set...Default> ": DENY");
 			YSI_g_sDefaultAllowed[slot] &= inv;
 			YSI_g_sDefaultDenied[slot] |= mask;
 			for (new el = 0; el <= YSI_g_sMaxEncountered; ++el)
 			{
 				YSI_gTempDenied_ = YSI_g_sElementDenied[el];
-				P:7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_g_sElementAllowed[el][slot] & mask, YSI_gTempDenied_[slot] & mask);
+				Debug_Print7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_g_sElementAllowed[el][slot] & mask, YSI_gTempDenied_[slot] & mask);
 				if (YSI_gTempDenied_[slot] & mask)
 				{
 					// Already denied.  Doesn't matter what the old `Allowed`
@@ -427,14 +437,14 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
 		}
 		else
 		{
-			P:5(#_GROUP_MAKE_NAME<Group_Set...Default> ": UNDEF");
+			Debug_Print5(#_GROUP_MAKE_NAME<Group_Set...Default> ": UNDEF");
 			YSI_g_sDefaultAllowed[slot] &= inv;
 			YSI_g_sDefaultDenied[slot] &= inv;
 			for (new el = 0; el <= YSI_g_sMaxEncountered; ++el)
 			{
 				YSI_gTempAllowed_ = YSI_g_sElementAllowed[el];
 				YSI_gTempDenied_ = YSI_g_sElementDenied[el];
-				P:7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_gTempAllowed_[slot] & mask, YSI_gTempDenied_[slot] & mask);
+				Debug_Print7(#_GROUP_MAKE_NAME<Group_Set...Default> ": element %d %d %d", _:el, YSI_gTempAllowed_[slot] & mask, YSI_gTempDenied_[slot] & mask);
 				if (!(YSI_gTempAllowed_[slot] & mask) && !(YSI_gTempDenied_[slot] & mask))
 				{
 					// Nothing has changed.
@@ -461,8 +471,8 @@ GGLOBAL__ Group_Set...Default(Group:g,E_GROUP_SET:s)
  * <param name="g">Group to set for.</param>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  Similar to "Group_Set...Default", but doesn't reset all existing elements,
- *  just sets the permissions for any future items.
+ *   Similar to "Group_Set...Default", but doesn't reset all existing elements,
+ *   just sets the permissions for any future items.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -470,7 +480,7 @@ GFOREIGN__ Group_Set...New(Group:g,E_GROUP_SET:s);
 
 GGLOBAL__ Group_Set...New(Group:g,E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Set...New> " called: %i, %i", _:g, _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Set...New> " called: %i, %i", _:g, _:s);
 	if (g <= GROUP_GLOBAL)
 	{
 		GROUP_FIX(g);
@@ -500,8 +510,8 @@ GGLOBAL__ Group_Set...New(Group:g,E_GROUP_SET:s)
  * <param name="g">Group to add this to.</param>
  * <param name="el">Element to add.</param>
  * <remarks>
- *  Add this element to ONLY this group and remove it from any others it might
- *  already be in.  This is basically a simplified version of "GROUP_ADD".
+ *   Add this element to ONLY this group and remove it from any others it might
+ *   already be in.  This is basically a simplified version of "GROUP_ADD".
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -531,7 +541,7 @@ GGLOBAL__ Group_Exclusive...(Group:g, _GROUP_MAKE_TAG:el)
  * <summary>Iter_Func@Group_...</summary>
  * <param name="g">Group to iterate over.</param>
  * <remarks>
- *  Iterate over all the items in this group.
+ *   Iterate over all the items in this group.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -539,7 +549,7 @@ GFOREIGN__ Iter_Func@Group_...(start, Group:g);
 
 GGLOBAL__ Iter_Func@Group_...(start, Group:g)
 {
-	P:3("Iter_Func@Group_... called: %i, %i", start, _:g);
+	Debug_Print3("Iter_Func@Group_... called: %i, %i", start, _:g);
 	if (g <= GROUP_GLOBAL)
 	{
 		GROUP_FIX(g);
@@ -557,7 +567,8 @@ GGLOBAL__ Iter_Func@Group_...(start, Group:g)
 	return -1;
 }
 
-const
+// `foreach` takes the size of these variables, so they must remain `stock`
+stock const
 	F@z:_GROUP_MAKE_NAME<Iterator@Group_...> = F@z:0,
 	_GROUP_MAKE_NAME<iterstart@Group_...> = -1;
 
@@ -579,8 +590,8 @@ const
  * <param name="el">Element to set.</param>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  If "s" is true, then one element is added to the global group.  False it is
- *  removed.
+ *   If "s" is true, then one element is added to the global group.  False it is
+ *   removed.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -588,7 +599,7 @@ GFOREIGN__ Group_SetGlobal...(_GROUP_MAKE_TAG:el,E_GROUP_SET:s);
 
 GGLOBAL__ Group_SetGlobal...(_GROUP_MAKE_TAG:el,E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_SetGlobal...> " called: %i, %i", _:el, _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_SetGlobal...> " called: %i, %i", _:el, _:s);
 	return _GROUP_MAKE_NAME<Group_Set...>(GROUP_GLOBAL, el, s);
 }
 
@@ -597,13 +608,13 @@ GGLOBAL__ Group_SetGlobal...(_GROUP_MAKE_TAG:el,E_GROUP_SET:s)
  * <param name="g">Group to get from.</param>
  * <param name="el">Element to get.</param>
  * <returns>
- *  bool: Does the group have the element explicitly allowed?
+ *   bool: Does the group have the element explicitly allowed?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
 stock bool:_GROUP_MAKE_NAME<Group_Global...Allowed>(_GROUP_MAKE_TAG:el)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Global...Allowed> " called: %i", _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Global...Allowed> " called: %i", _:el);
 	return _GROUP_MAKE_NAME<Group_...Allowed>(GROUP_GLOBAL, el);
 }
 
@@ -612,13 +623,13 @@ stock bool:_GROUP_MAKE_NAME<Group_Global...Allowed>(_GROUP_MAKE_TAG:el)
  * <param name="g">Group to get from.</param>
  * <param name="el">Element to get.</param>
  * <returns>
- *  bool: Does the group have the element explicitly denied?
+ *   bool: Does the group have the element explicitly denied?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
 stock bool:_GROUP_MAKE_NAME<Group_Global...Denied>(_GROUP_MAKE_TAG:el)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_Global...Denied> " called: %i", _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_Global...Denied> " called: %i", _:el);
 	return _GROUP_MAKE_NAME<Group_...Denied>(GROUP_GLOBAL, el);
 }
 
@@ -626,9 +637,15 @@ stock bool:_GROUP_MAKE_NAME<Group_Global...Denied>(_GROUP_MAKE_TAG:el)
  * <summary>Group_GetGlobal...</summary>
  * <param name="el">Element to get.</param>
  * <returns>
- *  bool: Does the global group have the element?
+ *   bool: Does the global group have the element?
  * </returns>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `Group_Global...Allowed` or `Group_Global...Denied`.
 stock E_GROUP_SET:_GROUP_MAKE_NAME<Group_GetGlobal...>(_GROUP_MAKE_TAG:el)
@@ -636,20 +653,24 @@ stock E_GROUP_SET:_GROUP_MAKE_NAME<Group_GetGlobal...>(_GROUP_MAKE_TAG:el)
 	// This returns truthy for both allowed and denied.  The function is
 	// deprecated, so this is probably OK, because only people with legacy code
 	// (thus not using denials) will be calling this function.
-	P:2(#_GROUP_MAKE_NAME<Group_GetGlobal...> " called: %i", _:el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_GetGlobal...> " called: %i", _:el);
 	return
 		_GROUP_MAKE_NAME<Group_...Denied>(GROUP_GLOBAL, el) ? E_GROUP_SET:DENY :
 		_GROUP_MAKE_NAME<Group_...Allowed>(GROUP_GLOBAL, el) ? E_GROUP_SET:ALLOW :
 		E_GROUP_SET:UNDEF;
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <summary>Group_SetGlobal...Default</summary>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  If "s" is true, then all elements are added to the global group (i.e. the
- *  default is set to true and all previous settings are wiped out).  If it is
- *  false then all elements are removed and a full update is done.
+ *   If "s" is true, then all elements are added to the global group (i.e. the
+ *   default is set to true and all previous settings are wiped out).  If it is
+ *   false then all elements are removed and a full update is done.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -657,7 +678,7 @@ GFOREIGN__ Group_SetGlobal...Default(E_GROUP_SET:s);
 
 GGLOBAL__ Group_SetGlobal...Default(E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_SetGlobal...Default> " called: %i", _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_SetGlobal...Default> " called: %i", _:s);
 	return _GROUP_MAKE_NAME<Group_Set...Default>(GROUP_GLOBAL, s);
 }
 
@@ -665,7 +686,7 @@ GGLOBAL__ Group_SetGlobal...Default(E_GROUP_SET:s)
  * <summary>Group_SetGlobal...New</summary>
  * <param name="s">Set or unset?</param>
  * <remarks>
- *  All elements created FROM THIS POINT ON will have this default setting.
+ *   All elements created FROM THIS POINT ON will have this default setting.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -673,7 +694,7 @@ GFOREIGN__ Group_SetGlobal...New(E_GROUP_SET:s);
 
 GGLOBAL__ Group_SetGlobal...New(E_GROUP_SET:s)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_SetGlobal...New> " called: %i", _:s);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_SetGlobal...New> " called: %i", _:s);
 	return _GROUP_MAKE_NAME<Group_Set...New>(GROUP_GLOBAL, s);
 }
 
@@ -681,8 +702,8 @@ GGLOBAL__ Group_SetGlobal...New(E_GROUP_SET:s)
  * <summary>Group_GlobalExclusive...</summary>
  * <param name="el">Element to add.</param>
  * <remarks>
- *  Add this element to ONLY the global group and remove it from any others it
- *  might already be in.
+ *   Add this element to ONLY the global group and remove it from any others it
+ *   might already be in.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -690,14 +711,14 @@ GFOREIGN__ Group_GlobalExclusive...(_GROUP_MAKE_TAG:el);
 
 GGLOBAL__ Group_GlobalExclusive...(_GROUP_MAKE_TAG:el)
 {
-	P:2(#_GROUP_MAKE_NAME<Group_GlobalExclusive...> " called: %i", el);
+	Debug_Print2(#_GROUP_MAKE_NAME<Group_GlobalExclusive...> " called: %i", el);
 	return _GROUP_MAKE_NAME<Group_Exclusive...>(GROUP_GLOBAL, el);
 }
 
 /*-------------------------------------------------------------------------*//**
  * <summary>Iter_Func@Group_...</summary>
  * <remarks>
- *  Iterate over all the items in this group.
+ *   Iterate over all the items in this group.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -705,7 +726,7 @@ GFOREIGN__ Iter_Func@Group_Global...(start);
 
 GGLOBAL__ Iter_Func@Group_Global...(start)
 {
-	P:3("Iter_Func@Group_Global... called: %i", start);
+	Debug_Print3("Iter_Func@Group_Global... called: %i", start);
 	new
 		Bit:mask = Bit_Mask(_:_MAX_GROUPS),
 		slot = Bit_Slot(_:_MAX_GROUPS);
@@ -810,18 +831,18 @@ MASTER_FUNC__ MAKE_YCM<HANDOFF_SOURCE...Group>()<_YCM:p>
  * <param name="currentDenied">(d) The new denied groups.</param>
  * <param name="reference">(r) What to compare changes to.</param>
  * <remarks>
- *  I did have a good reason for calling this "FU", but I forgot it!  Anyway,
- *  the state of some groups has changed - either a player's groups or an
- *  elements groups have changed.  If the player could previously see the
- *  element but now can't, hide it.  If the player previously couldn't see it
- *  but now can, show it.  If there is no change do nothing.  The old version of
- *  this library would just re-show the element even if they could already see
- *  it, but this was a bad design as it could incur large overheads in other
- *  libraries when they had to do IO to enable or disable something for a
- *  player.
+ *   I did have a good reason for calling this "FU", but I forgot it!  Anyway,
+ *   the state of some groups has changed - either a player's groups or an
+ *   elements groups have changed.  If the player could previously see the
+ *   element but now can't, hide it.  If the player previously couldn't see it
+ *   but now can, show it.  If there is no change do nothing.  The old version of
+ *   this library would just re-show the element even if they could already see
+ *   it, but this was a bad design as it could incur large overheads in other
+ *   libraries when they had to do IO to enable or disable something for a
+ *   player.
  *
- *  The change can be in either the player's groups or the element's groups,
- *  either way this code will work regardless.
+ *   The change can be in either the player's groups or the element's groups,
+ *   either way this code will work regardless.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -853,18 +874,18 @@ static stock Group_FullPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 		_GROUPS_CHECK_ANY(d,r)
 		{
 			// Still denied.
-			P:7("Group_FullPlayerUpdate: %d %d denied, still are", playerid, el);
+			Debug_Print7("Group_FullPlayerUpdate: %d %d denied, still are", playerid, el);
 			return;
 		}
 		// They were previously denied, but now they aren't.  Does that mean
 		// then can now see it?
 		_GROUPS_CHECK_ANY(c,r)
 		{
-			P:7("Group_FullPlayerUpdate: %d %d denied, now can", playerid, el);
+			Debug_Print7("Group_FullPlayerUpdate: %d %d denied, now can", playerid, el);
 			_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, true);
 			return;
 		}
-		P:7("Group_FullPlayerUpdate: %d %d denied, now not", playerid, el);
+		Debug_Print7("Group_FullPlayerUpdate: %d %d denied, now not", playerid, el);
 		return;
 	}
 	// Were not previously denied.  Are they now?
@@ -873,11 +894,11 @@ static stock Group_FullPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 		_GROUPS_CHECK_ANY(p,r)
 		{
 			// Now denied.
-			P:7("Group_FullPlayerUpdate: %d %d allowed, now cant't", playerid, el);
+			Debug_Print7("Group_FullPlayerUpdate: %d %d allowed, now cant't", playerid, el);
 			_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, false);
 			return;
 		}
-		P:7("Group_FullPlayerUpdate: %d %d allowed, now aren't", playerid, el);
+		Debug_Print7("Group_FullPlayerUpdate: %d %d allowed, now aren't", playerid, el);
 		return;
 	}
 	// No denies in force.  Check normal allows.
@@ -889,18 +910,18 @@ static stock Group_FullPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 		_GROUPS_CHECK_ANY(c,r)
 		{
 			// Still can.
-			P:7("Group_FullPlayerUpdate: %d %d could, still can", playerid, el);
+			Debug_Print7("Group_FullPlayerUpdate: %d %d could, still can", playerid, el);
 			return;
 		}
 		// Now can't.
-		P:7("Group_FullPlayerUpdate: %d %d could, now can't", playerid, el);
+		Debug_Print7("Group_FullPlayerUpdate: %d %d could, now can't", playerid, el);
 		_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, false);
 		return;
 	}
 	// Couldn't see it before.
 	_GROUPS_CHECK_ANY(c,r)
 	{
-		P:7("Group_FullPlayerUpdate: %d %d now can", playerid, el);
+		Debug_Print7("Group_FullPlayerUpdate: %d %d now can", playerid, el);
 		// They have whatever this thing is.  Note that this may be called
 		// MULTIPLE times for an element, without anything actually changing.
 		// I.e. this could be set to "true" repeatedly while never being set
@@ -909,7 +930,7 @@ static stock Group_FullPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 		// We use "return" here because "_GROUPS_CHECK_ANY" MAY be a loop.
 		return;
 	}
-	P:7("Group_FullPlayerUpdate: %d %d can't", playerid, el);
+	Debug_Print7("Group_FullPlayerUpdate: %d %d can't", playerid, el);
 }
 
 /*
@@ -930,24 +951,24 @@ static stock Group_FullPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
  * <param name="na">Next add function variable as returned by y_amx.</param>
  * <param name="nu">Next update function variable as returned by y_amx.</param>
  * <remarks>
- *  This function is called when the group system first starts up to initialise
- *  the global group and all the various function pointers.  The way the
- *  "GCHAIN__" macro works means that the fact that "ni" etc are references is
- *  irrelevant; however, it does make the code LOOK much nicer and like
- *  assigning to the variables does have some wider meaning.
+ *   This function is called when the group system first starts up to initialise
+ *   the global group and all the various function pointers.  The way the
+ *   "GCHAIN__" macro works means that the fact that "ni" etc are references is
+ *   irrelevant; however, it does make the code LOOK much nicer and like
+ *   assigning to the variables does have some wider meaning.
  *
- *  If this is called with "ni = -1", it is special code to temporarily set or
- *  restore the defaults for use with the "GROUP_ADD" macro.  So basically, it
- *  is poor design giving two distinct uses to a single function.
+ *   If this is called with "ni = -1", it is special code to temporarily set or
+ *   restore the defaults for use with the "GROUP_ADD" macro.  So basically, it
+ *   is poor design giving two distinct uses to a single function.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 GCHAIN__ _yGI(&ni, &na, &nu)
 {
-	P:2(#_GROUP_MAKE_NAME<_yGI...> " called: %i, %i, %i", ni, na, nu);
+	Debug_Print2(#_GROUP_MAKE_NAME<_yGI...> " called: %i, %i, %i", ni, na, nu);
 	if (ni == -1)
 	{
-		P:4(#_GROUP_MAKE_NAME<_yGI...> " INIT");
+		Debug_Print4(#_GROUP_MAKE_NAME<_yGI...> " INIT");
 		static
 			BitArray:sAllowed<_MAX_GROUPS_G>,
 			BitArray:sDenied<_MAX_GROUPS_G>;
@@ -974,7 +995,7 @@ GCHAIN__ _yGI(&ni, &na, &nu)
 	}
 	else
 	{
-		P:4(#_GROUP_MAKE_NAME<_yGI...> " SETUP");
+		Debug_Print4(#_GROUP_MAKE_NAME<_yGI...> " SETUP");
 		// Enable the default group.  If I'm right, this way is actually better than
 		// using variables as in most cases because "_MAX_GROUPS" is a constant so
 		// all the other maths will be constant.
@@ -994,16 +1015,16 @@ GCHAIN__ _yGI(&ni, &na, &nu)
 /*-------------------------------------------------------------------------*//**
  * <param name="group">The group that was just created.</param>
  * <remarks>
- *  The given group was just created, loop over all elements and make sure they
- *  are NOT in this group - only the global group has a "default default" of
- *  true.  We don't need to update any players with this as no-one will ever be
- *  in a brand new group.
+ *   The given group was just created, loop over all elements and make sure they
+ *   are NOT in this group - only the global group has a "default default" of
+ *   true.  We don't need to update any players with this as no-one will ever be
+ *   in a brand new group.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 GCHAIN__ _yGA(&group)
 {
-	P:4(#_GROUP_MAKE_NAME<_yGA...> " called: %i", _:group);
+	Debug_Print4(#_GROUP_MAKE_NAME<_yGA...> " called: %i", _:group);
 	// Adding a new group is now a lot harder than it was before, but on the
 	// other hand, adding and using elements is vastly simpler so that's OK.
 	new
@@ -1026,16 +1047,16 @@ GCHAIN__ _yGA(&group)
  * <param name="p">Their previous groups.</param>
  * <param name="c">Their new groups.</param>
  * <remarks>
- *  The player "pid" just joined or left a group (or groups - can do multiple).
- *  Update their visibility accordingly.  This function is ONLY called if there
- *  is a CHANGE - earlier functions confirm that they weren't already in (or
- *  not) this group(s) before the call.
+ *   The player "pid" just joined or left a group (or groups - can do multiple).
+ *   Update their visibility accordingly.  This function is ONLY called if there
+ *   is a CHANGE - earlier functions confirm that they weren't already in (or
+ *   not) this group(s) before the call.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 GCHAIN__ _yGU(&pid, Bit:p[], Bit:c[])
 {
-	P:4(#_GROUP_MAKE_NAME<_yGU...> " called: %i, %s, %s", pid, Bit_Display(p, bits<_MAX_GROUPS_G>), Bit_Display(c, bits<_MAX_GROUPS_G>));
+	Debug_Print4(#_GROUP_MAKE_NAME<_yGU...> " called: %i, %s, %s", pid, Bit_Display(p, bits<_MAX_GROUPS_G>), Bit_Display(c, bits<_MAX_GROUPS_G>));
 	// This code loops over every "thing" controlled by this script.  For every
 	// one it checks to see if the player can or can't see something that they
 	// previously could or couldn't see.  If their ability to see it has
@@ -1053,20 +1074,20 @@ static stock Group_PartPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 	// c = Current
 	// a = Allowed
 	// d = Denied
-	P:4("Group_PartPlayerUpdate called: %d %d\n    %s\n    %s\n    %s\n    %s", playerid, el, Bit_Display(p, bits<_MAX_GROUPS_G>), Bit_Display(c, bits<_MAX_GROUPS_G>), Bit_Display(a, bits<_MAX_GROUPS_G>), Bit_Display(d, bits<_MAX_GROUPS_G>));
+	Debug_Print4("Group_PartPlayerUpdate called: %d %d\n    %s\n    %s\n    %s\n    %s", playerid, el, Bit_Display(p, bits<_MAX_GROUPS_G>), Bit_Display(c, bits<_MAX_GROUPS_G>), Bit_Display(a, bits<_MAX_GROUPS_G>), Bit_Display(d, bits<_MAX_GROUPS_G>));
 	_GROUPS_CHECK_ANY(p,d)
 	{
-		P:6("Group_PartPlayerUpdate: Previously Denied.");
+		Debug_Print6("Group_PartPlayerUpdate: Previously Denied.");
 		// Any previous denials.
 		_GROUPS_CHECK_ANY(c,d)
 		{
-			P:6("Group_PartPlayerUpdate: Currently Denied.");
+			Debug_Print6("Group_PartPlayerUpdate: Currently Denied.");
 			// No change there.
 			return;
 		}
 		_GROUPS_CHECK_ANY(c,a)
 		{
-			P:6("Group_PartPlayerUpdate: Currently Allowed.");
+			Debug_Print6("Group_PartPlayerUpdate: Currently Allowed.");
 			// Now allowed.
 			_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, true);
 			return;
@@ -1075,38 +1096,38 @@ static stock Group_PartPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 	}
 	_GROUPS_CHECK_ANY(c,d)
 	{
-		P:6("Group_PartPlayerUpdate: Currently Denied.");
+		Debug_Print6("Group_PartPlayerUpdate: Currently Denied.");
 		_GROUPS_CHECK_ANY(p,a)
 		{
-			P:6("Group_PartPlayerUpdate: Previously Allowed.");
+			Debug_Print6("Group_PartPlayerUpdate: Previously Allowed.");
 			// Previously allowed, now denied.
 			_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, false);
 			return;
 		}
-		P:6("Group_PartPlayerUpdate: Previously Nothing.");
+		Debug_Print6("Group_PartPlayerUpdate: Previously Nothing.");
 		return;
 	}
 	_GROUPS_CHECK_ANY(p,a)
 	{
-		P:6("Group_PartPlayerUpdate: Previously Allowed.");
+		Debug_Print6("Group_PartPlayerUpdate: Previously Allowed.");
 		_GROUPS_CHECK_ANY(c,a)
 		{
-			P:6("Group_PartPlayerUpdate: Currently Allowed.");
+			Debug_Print6("Group_PartPlayerUpdate: Currently Allowed.");
 			return;
 		}
-		P:6("Group_PartPlayerUpdate: Currently Nothing.");
+		Debug_Print6("Group_PartPlayerUpdate: Currently Nothing.");
 		// Were allowed, now aren't.
 		_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, false);
 		return;
 	}
 	_GROUPS_CHECK_ANY(c,a)
 	{
-		P:6("Group_PartPlayerUpdate: Currently Allowed.");
+		Debug_Print6("Group_PartPlayerUpdate: Currently Allowed.");
 		// Currently allowed.
 		_GROUP_MAKE_NAME<..._SetPlayer>(_GROUP_MAKE_TAG:el, playerid, true);
 		return;
 	}
-	P:6("Group_PartPlayerUpdate: Currently Nothing.");
+	Debug_Print6("Group_PartPlayerUpdate: Currently Nothing.");
 }
 
 /*
@@ -1126,8 +1147,8 @@ static stock Group_PartPlayerUpdate(playerid, el, const Bit:p[], const Bit:c[], 
 
 /*-------------------------------------------------------------------------*//**
  * <remarks>
- *  Calls all functions to correctly include them in the AMX when required.
- *  Also all variables as it turns out they were a problem too.
+ *   Calls all functions to correctly include them in the AMX when required.
+ *   Also all variables as it turns out they were a problem too.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 

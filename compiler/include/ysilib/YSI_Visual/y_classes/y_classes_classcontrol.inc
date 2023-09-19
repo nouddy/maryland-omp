@@ -93,7 +93,7 @@ static stock
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to check.</param>
  * <returns>
- *  Is this player currently in the class selection screen?
+ *   Is this player currently in the class selection screen?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -107,7 +107,7 @@ GLOBAL__ bool:Player_InSelection(playerid)
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to check.</param>
  * <returns>
- *  Has this player ever spawned?
+ *   Has this player ever spawned?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -121,13 +121,13 @@ GLOBAL__ bool:Player_HasSpawned(playerid)
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player to check.</param>
  * <returns>
- *  Is this player spawned now?
+ *   Is this player spawned now?
  * </returns>
  * <remarks>
- *  Returns true if they are not in class selection, and if they have ever
- *  spawned.  It could be that both "Player_IsSpawned" and "Player_InSelection"
- *  return "false" - if they haven't even reached the class selection screen yet
- *  (mainly happens in "OnPlayerConnect").
+ *   Returns true if they are not in class selection, and if they have ever
+ *   spawned.  It could be that both "Player_IsSpawned" and "Player_InSelection"
+ *   return "false" - if they haven't even reached the class selection screen yet
+ *   (mainly happens in "OnPlayerConnect").
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -141,7 +141,7 @@ GLOBAL__ bool:Player_IsSpawned(playerid)
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player who joined the server.</param>
  * <remarks>
- *  Reset all the data on this player's current classes.
+ *   Reset all the data on this player's current classes.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -151,11 +151,17 @@ MASTER_HOOK__ OnPlayerConnect(playerid)
 	return 1;
 }
 
+MASTER_REHOOK__ OnPlayerConnect(playerid)
+{
+	#pragma unused playerid
+	return 1;
+}
+
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player who requested a class.</param>
  * <param name="class">Class they requested.</param>
  * <remarks>
- *  Not the first call of this function by y_classes.
+ *   Not the first call of this function by y_classes.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -223,16 +229,22 @@ MASTER_HOOK__ OnPlayerRequestClass(playerid, classid)
 	return -2;
 }
 
+MASTER_REHOOK__ OnPlayerRequestClass(playerid, classid)
+{
+	#pragma unused playerid, classid
+	return 1;
+}
+
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player who spawned.</param>
  * <remarks>
- *  Sets a player's position based on skin.
+ *   Sets a player's position based on skin.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 MASTER_HOOK__ OnPlayerSpawn(playerid)
 {
-	P:2("Class_OnPlayerSpawn called: %d", playerid);
+	Debug_Print2("Class_OnPlayerSpawn called: %d", playerid);
 	if (YSI_g_sPlayerFlags[playerid] & e_SPAWN_FLAGS_HELD) return -1;
 	if (!(YSI_g_sPlayerFlags[playerid] & e_SPAWN_FLAGS_RESELECT))
 	{
@@ -243,16 +255,22 @@ MASTER_HOOK__ OnPlayerSpawn(playerid)
 	return 1;
 }
 
+MASTER_REHOOK__ OnPlayerSpawn(playerid)
+{
+	#pragma unused playerid
+	return 1;
+}
+
 // forward _Class_SpawnPlayer1(playerid);
 
 // public _Class_SpawnPlayer1(playerid)
 // {
-	// P:1("_Class_SpawnPlayer1 called: %d", playerid);
+	// Debug_Print1("_Class_SpawnPlayer1 called: %d", playerid);
 	// //SpawnPlayer(playerid);
 	// YSI_g_sPlayerFlags[playerid] |= (e_SPAWN_FLAGS_IGNORE_ONCE);
 	// TogglePlayerSpectating(playerid, false);
 	// //SpawnPlayer(playerid);
-	// //YSI_g_sTimer[playerid] = YSI_SetTimerEx("_Class_SpawnPlayer3", 20, false, "i", playerid);
+	// //YSI_g_sTimer[playerid] = YSI_SetTimerEx__("_Class_SpawnPlayer3", 20, false, "i", playerid);
 	// //Class_TK(playerid);
 // }
 
@@ -260,7 +278,7 @@ MASTER_HOOK__ OnPlayerSpawn(playerid)
 
 // public _Class_SpawnPlayer2(playerid)
 // {
-	// P:1("_Class_SpawnPlayer2 called: %d", playerid);
+	// Debug_Print1("_Class_SpawnPlayer2 called: %d", playerid);
 	// //SpawnPlayer(playerid);
 	// //YSI_g_sPlayerFlags[playerid] |= (e_SPAWN_FLAGS_IGNORE_ONCE);
 	// TogglePlayerSpectating(playerid, false);
@@ -271,7 +289,7 @@ MASTER_HOOK__ OnPlayerSpawn(playerid)
 
 // public _Class_SpawnPlayer3(playerid)
 // {
-	// P:1("_Class_SpawnPlayer3 called: %d", playerid);
+	// Debug_Print1("_Class_SpawnPlayer3 called: %d", playerid);
 	// SpawnPlayer(playerid);
 	// //Class_TK(playerid);
 	// //YSI_g_sPlayerFlags[playerid] |= (e_SPAWN_FLAGS_IGNORE_ONCE);
@@ -283,16 +301,16 @@ MASTER_HOOK__ OnPlayerSpawn(playerid)
 
 // public _Class_SpawnPlayer4(playerid)
 // {
-	// P:1("_Class_SpawnPlayer4 called: %d", playerid);
+	// Debug_Print1("_Class_SpawnPlayer4 called: %d", playerid);
 	// //SpawnPlayer(playerid);
 	// Class_Spectate(playerid);
 	// if (YSI_g_sPlayerFlags[playerid] & (e_SPAWN_FLAGS_ENABLED))
 	// {
-		// YSI_g_sTimer[playerid] = YSI_SetTimerEx("_Class_SpawnPlayer1", 10, false, "i", playerid);
+		// YSI_g_sTimer[playerid] = YSI_SetTimerEx__("_Class_SpawnPlayer1", 10, false, "i", playerid);
 	// }
 	// else
 	// {
-		// YSI_g_sTimer[playerid] = YSI_SetTimerEx("_Class_SpawnPlayer2", 10, false, "i", playerid);
+		// YSI_g_sTimer[playerid] = YSI_SetTimerEx__("_Class_SpawnPlayer2", 10, false, "i", playerid);
 	// }
 	// //Class_TK(playerid);
 	// //YSI_g_sPlayerFlags[playerid] |= (e_SPAWN_FLAGS_IGNORE_ONCE);
@@ -304,22 +322,22 @@ MASTER_HOOK__ OnPlayerSpawn(playerid)
 
 // public _Class_Return(playerid)
 // {
-	// P:1("_Class_Return called: %d", playerid);
+	// Debug_Print1("_Class_Return called: %d", playerid);
 	// Class_ReturnToSelection(playerid);
 	// //Class_TK(playerid);
-	// //YSI_g_sTimer[playerid] = YSI_SetTimerEx("_Class_NotSpawned", 500, false, "i", playerid);
+	// //YSI_g_sTimer[playerid] = YSI_SetTimerEx__("_Class_NotSpawned", 500, false, "i", playerid);
 // }
 
 // forward _Class_NotSpawned(playerid);
 
 // public _Class_NotSpawned(playerid)
 // {
-	// P:1("_Class_NotSpawned called: %d", playerid);
+	// Debug_Print1("_Class_NotSpawned called: %d", playerid);
 	// // Called if they don't connect properly.
 	// Class_DisableSelection(playerid);
 	// //SetPlayerCameraPos(playerid, 1958.3783, 1343.1572, 15.3746);
 	// //SetPlayerCameraLookAt(playerid, 1958.3783, 1343.1572, 15.3746);
-	// YSI_SetTimerEx("_Class_Return", 10, false, "i", playerid);
+	// YSI_SetTimerEx__("_Class_Return", 10, false, "i", playerid);
 	// YSI_g_sPlayerFlags[playerid] |= (e_SPAWN_FLAGS_RETURNED | e_SPAWN_FLAGS_INSTANT);
 // }
 

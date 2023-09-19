@@ -438,7 +438,7 @@ native TogglePlayerAllDynamicAreas(playerid, toggle, const exceptions[] = { -1 }
 // Callbacks
 
 forward OnDynamicObjectMoved(STREAMER_TAG_OBJECT:objectid);
-forward OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
+forward OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, EDIT_RESPONSE:response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
 forward OnPlayerSelectDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, modelid, Float:x, Float:y, Float:z);
 forward OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float:x, Float:y, Float:z);
 forward OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid);

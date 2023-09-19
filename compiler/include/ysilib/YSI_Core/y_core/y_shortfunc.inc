@@ -1,4 +1,9 @@
-/*+
+#if defined _INC_y_shortfunc
+	#endinput
+#endif
+#define _INC_y_shortfunc
+
+/**
  * <library
  *   name="y_shortfunc"
  *   version="0.2"
@@ -11,14 +16,6 @@
  *     This XSL has features such as library and markdown support, and will not
  *     render this message when used.
  *   </summary>
- *   <section>
- *     Natives
- *   </section><ul>
- *     <symbol name="W@">Renaming of <symbolref name="__CallRemoteFunction" /> for size reasons.</symbol>
- *     <symbol name="V@">Renaming of <symbolref name="getproperty" /> for size reasons.</symbol>
- *     <symbol name="S@">Renaming of <symbolref name="setproperty" /> for size reasons.</symbol>
- *     <symbol name="R@">Renaming of <symbolref name="__CallLocalFunction" /> for size reasons.</symbol>
- *   </ul>
  * </library>
  *//** *//*
 Legal:
@@ -131,22 +128,56 @@ Optional plugins:
 // 
 
 static stock
-	YSI_g_sPropVarArg[3] = YSIM_VARARG,
+	/**
+	 * <library>y_shortfunc</library>
+	 */
+	YSI_g_sPropVarArg[3] = __COMPILER_UNPACK YSIM_VARARG,
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sCallData = 0;
 
 static stock const
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sPropCaller[] = YSIM_CALLER,
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sPropReturn[] = YSIM_RETURN,
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sPropEmpty[] = "",
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sYSIM_STRING = YSIM_STRING,
+	/**
+	 * <library>y_shortfunc</library>
+	 */
 	YSI_g_sYSI_MAX_STRING = YSI_MAX_STRING;
 
-// CallRemoteFunction wrapper that handles references and string returns.
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <returns>
+ *   A number, the result of a named function call.
+ * </returns>
+ * <remarks>
+ *   <c>CallRemoteFunction</c> wrapper that handles references and string
+ *   returns.  Once the call is complete it loops through the specifier string to
+ *   look for any <c>v</c>s and gets their return values from specially named
+ *   properties (<c>"V" + idx</c> in group 8).  Can also call in the current
+ *   script instead of a remote script.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 {
-	P:5("K@ called: %s, %s", function, fmat);
+	Debug_Print5("K@ called: %s, %s", function, fmat);
 
-	#pragma unused function, fmat
+	#pragma unused function
 	// New implementation of "CallRemoteFunction".  Wraps the old function
 	// efficiently (using assembly stack manipulation tricks, better even than
 	// the ones in "y_va" since we have more control over exactly how this is
@@ -157,17 +188,17 @@ stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 	
 	// Swap the last two parameters - one is the hidden return value, the other
 	// is the hidden master ID pointer.
-	#emit LOAD.S.pri   8
-	#emit ADDR.alt     12
+	#emit LOAD.S.pri   __args_offset
+	#emit ADDR.alt     __param0_offset
 	#emit ADD
 	#emit PUSH.pri
-	#emit ADD.C        4
+	#emit ADD.C        __1_cell
 	#emit PUSH.pri
-	#emit LREF.S.pri   0xFFFFFFFC
-	#emit LREF.S.alt   0xFFFFFFF8
-	#emit SREF.S.pri   0xFFFFFFF8
-	#emit SREF.S.alt   0xFFFFFFFC
-	#emit STACK        8
+	#emit LREF.S.pri   __local0_offset
+	#emit LREF.S.alt   __local1_offset
+	#emit SREF.S.pri   __local1_offset
+	#emit SREF.S.alt   __local0_offset
+	#emit STACK        __2_cells
 	
 	// Push the current master ID on to the master stack.  Returns the old
 	// master ID stored in the property, which we can shove on to the heap to
@@ -175,39 +206,39 @@ stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 	#emit PUSH.C       Q@
 	#emit PUSH         @_
 	#emit PUSH.C       YSI_g_sPropCaller
-	#emit PUSH.C       8
-	#emit PUSH.C       16
+	#emit PUSH.C       8          // Property group, not in cells.
+	#emit PUSH.C       __4_cells
 	#emit SYSREQ.C     setproperty
 	
 	// Back up the frame header information and the return value.  "MOVS" copies
 	// from "pri" to "alt".
-	#emit STOR.S.pri   0xFFFFFFF8 // -8
-	#emit HEAP         28
-	#emit LCTRL        4
-	#emit MOVS         28
+	#emit STOR.S.pri   __local1_offset
+	#emit HEAP         __7_cells
+	#emit LCTRL        __stk
+	#emit MOVS         __7_cells
 	
 	// Call "CallRemoteFunction".
 	if (YSI_g_sCallData)
 	{
-		#emit STACK        28
+		#emit STACK        __7_cells
 		#emit SYSREQ.C     CallRemoteFunction
 		#emit STOR.pri     YSI_g_sCallData
 	}
 	else
 	{
-		#emit STACK        28
+		#emit STACK        __7_cells
 		#emit SYSREQ.C     CallLocalFunction
 		#emit STOR.pri     YSI_g_sCallData
 	}
 	{}
 	
 	// Restore the stack.
-	#emit STACK        0xFFFFFFE4 // -28
+	#emit STACK        __m7_cells
 	#emit STACK        0          // Load new stack pointer in to "alt".
-	#emit LCTRL        2
-	#emit ADD.C        0xFFFFFFE4
-	#emit MOVS         28
-	#emit HEAP         0xFFFFFFE4
+	#emit LCTRL        __hea
+	#emit ADD.C        __m7_cells
+	#emit MOVS         __7_cells
+	#emit HEAP         __m7_cells
 	
 	// Restore the master caller.  Already pushed the parameters earlier, before
 	// backing them up on the heap (saved extra work now sorting out which saved
@@ -219,42 +250,54 @@ stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 		// Get the return value.  Already have most of the parameters pushed,
 		// just modify one of them (the name).
 		#emit CONST.pri    YSI_g_sPropEmpty
-		#emit STOR.S.pri   0xFFFFFFF4 // -12
+		#emit STOR.S.pri   __local2_offset
 		#emit LOAD.pri     YSI_g_sYSIM_STRING
-		#emit STOR.S.pri   0xFFFFFFF8 // -8
+		#emit STOR.S.pri   __local1_offset
 		#emit SYSREQ.C     getproperty
 		
 		// Unpack the return to the previous function's return string.
 		#emit PUSH         YSI_g_sYSI_MAX_STRING
 		#emit PUSH.C       Q@
-		#emit LOAD.S.pri   0
+		#emit LOAD.S.pri   __frame_offset
 		#emit MOVE.alt
-		#emit ADD.C        8
+		#emit ADD.C        __2_cells
 		#emit LOAD.I
-		#emit ADD.C        12
+		#emit ADD.C        __3_cells
 		#emit ADD
 		#emit LOAD.I
 		#emit PUSH.pri
-		#emit PUSH.C       12
+		#emit PUSH.C       __3_cells
 		#emit SYSREQ.C     strunpack
 		
 		// Get all the varargs (without using our corrupted stack).
 		static i = 0, j = 0, ch = 0;
-		for (i = j = 0; (ch = fmat[i]); ++i) if (ch == 'd')
+		if (YSI_IsLocalVarPackedString__(fmat))
 		{
-			YSI_g_sPropVarArg[1] = '@' + ++j;
-			P:7("K@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
-			setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			for (i = j = 0; (ch = fmat{i}); ++i) if (ch == 'd')
+			{
+				YSI_g_sPropVarArg[1] = '@' + ++j;
+				Debug_Print7("K@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
+				setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			}
+		}
+		else
+		{
+			for (i = j = 0; (ch = fmat[i]); ++i) if (ch == 'd')
+			{
+				YSI_g_sPropVarArg[1] = '@' + ++j;
+				Debug_Print7("K@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
+				setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			}
 		}
 	}
 	else
 	{
 		// NULL the return.
-		#emit LOAD.S.pri   0
+		#emit LOAD.S.pri   __frame_offset
 		#emit MOVE.alt
-		#emit ADD.C        8
+		#emit ADD.C        __2_cells
 		#emit LOAD.I
-		#emit ADD.C        12
+		#emit ADD.C        __3_cells
 		#emit ADD
 		#emit LOAD.I
 		#emit MOVE.alt
@@ -265,12 +308,12 @@ stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 	
 	// Return from two functions at once, while unpopping all our data.  By
 	// doing this we know out string return fix/optimisation will apply.
-	#emit LOAD.S.pri   0
-	#emit SCTRL        5
-	#emit LOAD.S.alt   0xFFFFFFFC
-	#emit SCTRL        4
+	#emit LOAD.S.pri   __frame_offset
+	#emit SCTRL        __frm
+	#emit LOAD.S.alt   __local0_offset
+	#emit SCTRL        __stk
 	#emit MOVE.pri
-	#emit SCTRL        2
+	#emit SCTRL        __hea
 	#emit ZERO.pri
 	#emit RETN
 	
@@ -285,12 +328,26 @@ stock K@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 	return Q@;
 }
 
-// CallRemoteFunction wrapper that handles references and regular returns.
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <returns>
+ *   A string, the result of a named function call.
+ * </returns>
+ * <remarks>
+ *   <c>CallRemoteFunction</c> wrapper that handles references and string
+ *   returns.  Once the call is complete it loops through the specifier string to
+ *   look for any <c>v</c>s and gets their return values from specially named
+ *   properties (<c>"V" + idx</c> in group 8).  Can also call in the current
+ *   script instead of a remote script.  Also uses properties to enable returning
+ *   remote strings.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock D@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 {
-	P:5("D@ called: %s, %s", function, fmat);
+	Debug_Print5("D@ called: %s, %s", function, fmat);
 
-	#pragma unused function, fmat
+	#pragma unused function
 	// New implementation of "CallRemoteFunction".  Wraps the old function
 	// efficiently (using assembly stack manipulation tricks, better even than
 	// the ones in "y_va" since we have more control over exactly how this is
@@ -305,39 +362,39 @@ stock D@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 	#emit PUSH.C       YSI_g_sPropEmpty
 	#emit PUSH         @_
 	#emit PUSH.C       YSI_g_sPropCaller
-	#emit PUSH.C       8
-	#emit PUSH.C       16
+	#emit PUSH.C       8 // Property group, not in cells.
+	#emit PUSH.C       __4_cells
 	#emit SYSREQ.C     setproperty
 	
 	// Back up the frame header information and the return value.  "MOVS" copies
 	// from "pri" to "alt".
-	#emit STOR.S.pri   0xFFFFFFF8 // -8
-	#emit HEAP         28
-	#emit LCTRL        4
-	#emit MOVS         28
+	#emit STOR.S.pri   __local1_offset
+	#emit HEAP         __7_cells
+	#emit LCTRL        __stk
+	#emit MOVS         __7_cells
 	
 	// Call "CallRemoteFunction".
 	if (YSI_g_sCallData)
 	{
-		#emit STACK        28
+		#emit STACK        __7_cells
 		#emit SYSREQ.C     CallRemoteFunction
 		#emit STOR.pri     YSI_g_sCallData
 	}
 	else
 	{
-		#emit STACK        28
+		#emit STACK        __7_cells
 		#emit SYSREQ.C     CallLocalFunction
 		#emit STOR.pri     YSI_g_sCallData
 	}
 	{}
 	
 	// Restore the stack.
-	#emit STACK        0xFFFFFFE4 // -28
+	#emit STACK        __m7_cells
 	#emit STACK        0          // Load new stack pointer in to "alt".
-	#emit LCTRL        2
-	#emit ADD.C        0xFFFFFFE4
-	#emit MOVS         28
-	#emit HEAP         0xFFFFFFE4
+	#emit LCTRL        __hea
+	#emit ADD.C        __m7_cells
+	#emit MOVS         __7_cells
+	#emit HEAP         __m7_cells
 	
 	// Restore the master caller.  Already pushed the parameters earlier, before
 	// backing them up on the heap (saved extra work now sorting out which saved
@@ -349,27 +406,39 @@ stock D@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 		// Get the return value.  Already have most of the parameters pushed,
 		// just modify one of them (the name).
 		#emit CONST.pri    YSI_g_sPropReturn
-		#emit STOR.S.pri   0xFFFFFFF4 // -12
+		#emit STOR.S.pri   __local2_offset
 		#emit SYSREQ.C     getproperty
 		#emit STOR.pri     YSI_g_sCallData
 		
 		// Get all the varargs (without using our corrupted stack).
 		static i = 0, j = 0, ch = 0;
-		for (i = j = 0; (ch = fmat[i]); ++i) if (ch == 'd')
+		if (YSI_IsLocalVarPackedString__(fmat))
 		{
-			YSI_g_sPropVarArg[1] = '@' + ++j;
-			P:7("D@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
-			setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			for (i = j = 0; (ch = fmat{i}); ++i) if (ch == 'd')
+			{
+				YSI_g_sPropVarArg[1] = '@' + ++j;
+				Debug_Print7("D@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
+				setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			}
+		}
+		else
+		{
+			for (i = j = 0; (ch = fmat[i]); ++i) if (ch == 'd')
+			{
+				YSI_g_sPropVarArg[1] = '@' + ++j;
+				Debug_Print7("D@: Write back: %d %d %d %s %d", i, j, ch, YSI_g_sPropVarArg, getproperty(8, YSI_g_sPropVarArg));
+				setarg(i + 2, 0, getproperty(8, YSI_g_sPropVarArg));
+			}
 		}
 	}
 	{}
 	
-	#emit LOAD.S.pri   0
-	#emit SCTRL        5
-	#emit LOAD.S.alt   0xFFFFFFFC
-	#emit SCTRL        4
+	#emit LOAD.S.pri   __frame_offset
+	#emit SCTRL        __frm
+	#emit LOAD.S.alt   __local0_offset
+	#emit SCTRL        __stk
 	#emit MOVE.pri
-	#emit SCTRL        2
+	#emit SCTRL        __hea
 	#emit LOAD.pri     YSI_g_sCallData
 	#emit RETN
 	
@@ -379,9 +448,17 @@ stock D@(const function[], const fmat[], GLOBAL_TAG_TYPES:...)
 #define @@%0\32; @@
 #define _@%0\32; _@
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   A precursor to <c>D@</c> and <c>E@</c> that does some stack and heap
+ *   manipulation before they are called.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock F@(calltype = 1, master = -1, heapptr = 0)
 {
-	P:5("F@ called: %d, %d, %d", calltype, master, heapptr);
+	Debug_Print5("F@ called: %d, %d, %d", calltype, master, heapptr);
 	// First copy the calltype to a global, so it can be read from the functions
 	// that actually call `CallLocalFunction` (0) and `CallRemoteFunction` (1).
 	YSI_g_sCallData = calltype;
@@ -394,51 +471,87 @@ stock F@(calltype = 1, master = -1, heapptr = 0)
 	// This function stores the heap size before certain calls so that we can
 	// revert afterwards.  It puts the size on the stack, then lies about the
 	// stack size for the return, so that the value stays on.
-	#emit LCTRL        2
+	#emit LCTRL        __hea
 	#emit STOR.S.pri   heapptr
-	#emit ZERO.S       8
+	#emit ZERO.S       __args_offset
 	#emit RETN
 	return 0;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   Used in remote function wrappers to put reference parameter retusn in to the
+ *   specially named properties (<c>"V" + idx</c> in group 8) for their return.
+ *   Also put the true return number in to a property, because remote call order
+ *   can't be relied on.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock L@(GLOBAL_TAG_TYPES:ret, GLOBAL_TAG_TYPES:...)
 {
-	P:5("L@ called: %d", ret);
+	Debug_Print5("L@ called: %d", ret);
 	// Return possibly multiple values remotely.
 	setproperty(8, YSI_g_sPropReturn, ret);
 	for (new i = 1, j = numargs(); i != j; ++i)
 	{
-		P:7("L@: loop %d = %d", i, getarg(i));
+		Debug_Print7("L@: loop %d = %d", i, getarg(i));
 		YSI_g_sPropVarArg[1] = '@' + i,
 		setproperty(8, YSI_g_sPropVarArg, getarg(i));
 	}
 	return 1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   Used in remote function wrappers to put reference parameter retusn in to the
+ *   specially named properties (<c>"V" + idx</c> in group 8) for their return.
+ *   Also put the true return string in to a property, because remote call order
+ *   can't be relied on, and can't return strings even if it could.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock T@(const string:ret[YSI_MAX_STRING], GLOBAL_TAG_TYPES:...)
 {
-	P:5("T@ called: %s", ret);
+	Debug_Print5("T@ called: %s", ret);
 	// Return possibly multiple values remotely.
 	setproperty(8, YSI_g_sPropEmpty, YSIM_STRING, ret);
 	for (new i = 1, j = numargs(); i != j; ++i)
 	{
-		P:7("T@: loop %d = %d", i, getarg(i));
+		Debug_Print7("T@: loop %d = %d", i, getarg(i));
 		YSI_g_sPropVarArg[1] = '@' + i,
 		setproperty(8, YSI_g_sPropVarArg, getarg(i));
 	}
 	return 1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   Put the true remote call return number in to a property, because remote call
+ *   order can't be relied on.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock X@(GLOBAL_TAG_TYPES:n)
 {
 	// THIS MUST REMAIN FOREVER!  Detected by fixes.inc.
-	P:4("X@ called: %i", n);
+	Debug_Print4("X@ called: %i", n);
 	setproperty(8, YSI_g_sPropReturn, n);
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   Just a dead-end for spare parameters.  Implementation of
+ *   <c>__pragma("unused", x);</c>, which disables the warning for a unused
+ *   variable, by using it!
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 stock H@(GLOBAL_TAG_TYPES:...)
 {
-	// Just a dead-end for spare parameters.
 	return 0;
 }
 
@@ -452,6 +565,15 @@ stock H@(GLOBAL_TAG_TYPES:...)
 
 // Correctly stringise "On" callbacks without ALS interferring.
 #define B@:#On%0) "On"#%0)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_shortfunc</library>
+ * <remarks>
+ *   Just a dead-end for spare parameters.  Implementation of
+ *   <c>__pragma("unused", x);</c>, which disables the warning for a unused
+ *   variable, by using it!  Returns a string, in case that's useful in macros.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 stock G@(GLOBAL_TAG_TYPES:...)
 {

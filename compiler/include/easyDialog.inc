@@ -33,7 +33,7 @@ stock Dialog_Close(const playerid)
 	return ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", "");
 }
 
-stock Dialog_Open(const playerid, const function[], style, const caption[], const info[], const button1[], const button2[] = "", va_args<>)
+stock Dialog_Open(const playerid, const function[], DIALOG_STYLE:style, const caption[], const info[], const button1[], const button2[] = "", va_args<>)
 {
 	static fmt_string[4096]; // UwU
 

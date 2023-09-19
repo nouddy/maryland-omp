@@ -1,3 +1,7 @@
+#if defined _INC_y_vehicledata
+	#endinput
+#endif
+
 /**
  * <library
  *   name="y_vehicledata"
@@ -31,6 +35,7 @@
  *     <symbol name="YSI_gVehicleFlags">Data on vehicles.</symbol>
  *     <symbol name="YSI_gVehicleNames">Names of vehicles.</symbol>
  *     <symbol name="YSI_gVehicleTopSpeed">Top speed of vehicles.</symbol>
+ *     <symbol name="YSI_gVehicleSeats">Seats count of vehicles.</symbol>
  *   </ul>
  * </library>
  *//** *//*

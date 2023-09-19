@@ -1,8 +1,0 @@
-LIBRARY	"SKY"
-
-EXPORTS
-	Supports
-	Load
-	Unload
-	AmxLoad
-	AmxUnload

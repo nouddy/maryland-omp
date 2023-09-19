@@ -121,7 +121,7 @@ new
 
 stock SetMaxConnections(max = -1, e_FLOOD_ACTION:action = e_FLOOD_ACTION_BLOCK)
 {
-	P:3("SetMaxConnections called: %i, %i", max, _:action);
+	Debug_Print3("SetMaxConnections called: %i, %i", max, _:action);
 	YSI_g_sMaxConnections = max;
 	YSI_g_sConnectionAction = action;
 }
@@ -151,8 +151,8 @@ stock e_FLOOD_ACTION:Flooding_GetConnectionAction()
 /*-------------------------------------------------------------------------*//**
  * <param name="ip32">32-bit representation of the IP to unban.</param>
  * <remarks>
- *  Timers, by default, are not good with strings, so we can't pass the IP to
- *  unban in dot notation.  Fortunately, this is easilly solved.
+ *   Timers, by default, are not good with strings, so we can't pass the IP to
+ *   unban in dot notation.  Fortunately, this is easilly solved.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -170,11 +170,11 @@ public Flooding_UnbanIP(ip32)
  * <param name="playerid">Player who joined.</param>
  * <param name="ip">Their IP address as a string.</param>
  * <remarks>
- *  Checks for too many connections from the same IP address and acts
- *  accordingly.
+ *   Checks for too many connections from the same IP address and acts
+ *   accordingly.
  *
- *  Could be edited to only loop through players once but I'm not sure the
- *  extra code required would be faster anyway, definately not easier.
+ *   Could be edited to only loop through players once but I'm not sure the
+ *   extra code required would be faster anyway, definately not easier.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -197,7 +197,7 @@ static Flooding_CheckIP(playerid, ip[])
 		}
 		if (Iter_Count(FloodingPlayer) > YSI_g_sMaxConnections)
 		{
-			P:I("Max Connections exceeded");
+			Debug_Info("Max Connections exceeded");
 			switch (YSI_g_sConnectionAction)
 			{
 				case e_FLOOD_ACTION_BLOCK:
@@ -235,7 +235,7 @@ static Flooding_CheckIP(playerid, ip[])
 						cmd[22] = "banip ";
 					strcat(cmd, ip);
 					SendRconCommand(cmd);
-					YSI_SetTimerEx("Flooding_UnbanIP", 10000, false, "i", ip32);
+					YSI_SetTimerEx__("Flooding_UnbanIP", 10000, false, "i", ip32);
 				}
 				case e_FLOOD_ACTION_OTHER:
 				{
@@ -260,8 +260,8 @@ static Flooding_CheckIP(playerid, ip[])
  * <param name="ip">Their IP address as a string.</param>
  * <param name="port">Their port.</param>
  * <remarks>
- *  Called before much of the player structure is set up to check incoming
- *  connections.
+ *   Called before much of the player structure is set up to check incoming
+ *   connections.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -274,7 +274,7 @@ HOOK__ OnIncomingConnection(playerid, ip_address[], port)
 /*-------------------------------------------------------------------------*//**
  * <param name="playerid">Player who joined.</param>
  * <remarks>
- *  Called when a player is connected, for checking on older versions.
+ *   Called when a player is connected, for checking on older versions.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 

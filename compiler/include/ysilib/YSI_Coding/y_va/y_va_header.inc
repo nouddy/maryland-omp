@@ -93,7 +93,7 @@ Optional plugins:
 
 #define ___ YVA2_DummyPush()
 // For optional parameter skips.
-#define YVA2_DummyPush()(%1) YVA2_DummyPush((%1) * 4)
+#define YVA2_DummyPush()(%1) YVA2_DummyPush((%1)*cellbytes)
 
 // Shortcuts.
 #define ___0 ___(0)
@@ -110,6 +110,12 @@ Optional plugins:
 #define va_args<%0> GLOBAL_TAG_TYPES:...
 #define va_start<%0> ___(%0)
 
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
+
 // Detect Slice's va_formatex function, which now doesn't need to exist.  This
 // is my first ever use of `#pragma deprecated`!  Actually quite happy about
 // that - it's one of the few language features I've never used in earnest, so
@@ -117,10 +123,14 @@ Optional plugins:
 #pragma deprecated Use formatex instead
 forward va_formatex(output[], size = sizeof(output), const fmat[], va_:STATIC_ARGS);
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 // Backwards compatability.
-native va_printf            (const format[], GLOBAL_TAG_TYPES:...)                                        = printf;
-native va_CallRemoteFunction(const function[], const format[], GLOBAL_TAG_TYPES:...)                      = CallRemoteFunction;
-native va_CallLocalFunction (const function[], const format[], GLOBAL_TAG_TYPES:...)                      = CallLocalFunction;
-native va_SetTimerEx        (const function[], interval, repeating, const format[], GLOBAL_TAG_TYPES:...) = SetTimerEx;
-native va_format            (output[], len, const format[], GLOBAL_TAG_TYPES:...)                         = format;
+native va_printf            (const format[], GLOBAL_TAG_TYPES:...)                                             = printf;
+native va_CallRemoteFunction(const function[], const format[], GLOBAL_TAG_TYPES:...)                           = CallRemoteFunction;
+native va_CallLocalFunction (const function[], const format[], GLOBAL_TAG_TYPES:...)                           = CallLocalFunction;
+native va_SetTimerEx        (const function[], interval, bool:repeating, const format[], GLOBAL_TAG_TYPES:...) = SetTimerEx;
+native va_format            (output[], len, const format[], GLOBAL_TAG_TYPES:...)                              = format;
 

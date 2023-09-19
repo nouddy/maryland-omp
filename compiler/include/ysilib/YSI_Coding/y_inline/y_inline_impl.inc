@@ -146,14 +146,18 @@ Optional plugins:
 #define INLINE_RETURN__%0; {Callback_Return_(_:(%0));continue;}
 #define callback: F@_@:
 
-#define _F<%0> (#%0)
-
 stock
+	YSI_g_sCodSize,
 	InlineRet:YSI_gInlineRet = InlineRet:0;
 
 stock Callback_Return_(value)
 {
 	return value;
+}
+
+stock Callback_Blank_(...)
+{
+	return 0;
 }
 
 __COMPILER_STATIC_ENUM e_INLINE_FLAG (<<= 1)
@@ -170,33 +174,42 @@ __COMPILER_STATIC_ENUM e_INLINE_FLAG (<<= 1)
 	// it sets the flags to exactly `0`.
 }
 
+#define MAX_PUBLIC_CALL_SPECIFIERS (32)
+
 __COMPILER_STATIC_ENUM E_INLINE_CALL
 {
-	/*  0 */ E_INLINE_CALL_NULL,
-	/*  1 */ E_INLINE_CALL_HANDLER,
-	/*  2 */ E_INLINE_CALL_CLAIM,
-	/*  3 */ E_INLINE_CALL_RELEASE,
-	/*  4 */ E_INLINE_CALL_METADATA,
-	/*  5 */ E_INLINE_CALL_TIMER, // To release unneeded inlines.
-	/*  6 */ E_INLINE_CALL_FLAGS,
-	/*  7 */ E_INLINE_CALL_SIZE,
-	/*  8 */ E_INLINE_CALL_SOURCE,
-	/*  9 */ E_INLINE_CALL_FUNCTION,
-	/* 10 */ ResolvedAlloc:E_INLINE_CALL_PARAMS // At least the frame header.
+	/*  0 */ E_INLINE_INDIRECTION__[E_INDIRECTION],
+	/*  7 */ E_INLINE_CALL_TIMER, // To release unneeded inlines.
+	/*  8 */ E_INLINE_CALL_FLAGS,
+	/*  9 */ E_INLINE_CALL_SIZE,
+	/* 10 */ E_INLINE_CALL_SOURCE,
+	/* 11 */ E_INLINE_CALL_FUNCTION,
+	/* 12 */ ResolvedAlloc:E_INLINE_CALL_PARAMS // At least the frame header.
 }
 
 __COMPILER_STATIC_ENUM E_PUBLIC_CALL
 {
-	/*  0 */ E_PUBLIC_CALL_NULL,
-	/*  1 */ E_PUBLIC_CALL_HANDLER,
-	/*  2 */ E_PUBLIC_CALL_CLAIM,
-	/*  3 */ E_PUBLIC_CALL_RELEASE,
-	/*  4 */ E_PUBLIC_CALL_METADATA,
-	/*  5 */ E_PUBLIC_CALL_TIMER, // To release unneeded remotes.
-	/*  6 */ E_PUBLIC_CALL_FLAGS,
-	/*  7 */ E_PUBLIC_CALL_SPECIFIER[32],
-	/* 39 */ E_PUBLIC_CALL_FUNCTION[FUNCTION_LENGTH]
+	/*  0 */ E_PUBLIC_INDIRECTION__[E_INDIRECTION],
+	/*  7 */ E_PUBLIC_CALL_TIMER, // To release unneeded remotes.
+	/*  8 */ E_PUBLIC_CALL_FLAGS,
+	/*  9 */ E_PUBLIC_CALL_SPECIFIER[MAX_PUBLIC_CALL_SPECIFIERS],
+	/* 41 */ E_PUBLIC_CALL_FUNCTION[FUNCTION_LENGTH]
 }
+
+// Constant offsets for assembly.
+const
+	E_INLINE_CALL__           = _:E_INLINE_CALL * cellbytes,
+	E_INLINE_CALL_TIMER__     = _:E_INLINE_CALL_TIMER * cellbytes,
+	E_INLINE_CALL_FLAGS__     = _:E_INLINE_CALL_FLAGS * cellbytes,
+	E_INLINE_CALL_SIZE__      = _:E_INLINE_CALL_SIZE * cellbytes,
+	E_INLINE_CALL_SOURCE__    = _:E_INLINE_CALL_SOURCE * cellbytes,
+	E_INLINE_CALL_FUNCTION__  = _:E_INLINE_CALL_FUNCTION * cellbytes,
+	E_INLINE_CALL_PARAMS__    = _:E_INLINE_CALL_PARAMS * cellbytes,
+	E_PUBLIC_CALL__           = _:E_PUBLIC_CALL * cellbytes,
+	E_PUBLIC_CALL_TIMER__     = _:E_PUBLIC_CALL_TIMER * cellbytes,
+	E_PUBLIC_CALL_FLAGS__     = _:E_PUBLIC_CALL_FLAGS * cellbytes,
+	E_PUBLIC_CALL_SPECIFIER__ = _:E_PUBLIC_CALL_SPECIFIER * cellbytes,
+	E_PUBLIC_CALL_FUNCTION__  = _:E_PUBLIC_CALL_FUNCTION * cellbytes;
 
 #if 0
 
@@ -257,19 +270,69 @@ forward Callback_Release_(ResolvedAlloc:a);
 forward Inline_MaybeFree_(Alloc:slot);
 forward Inline_MaybeConst_(ResolvedAlloc:slot);
 
-#define CALL@I@F I@F()
-#define CALL@I@L I@L()
-#define CALL@I@K I@K(0)
-#define CALL@I@T I@T(__ARR)
+#define CALL@I@F%8() I@F%8()
+#define CALL@I@L%8() I@L%8()
+#define CALL@I@K%8() I@K%8(0)
+#define CALL@I@T%8() I@T%8(__ARR)
 
-#define CALL@Inline_UI_ Inline_UI_(__REF)
+#define CALL@Inline_UI_%8() Inline_UI_%8(__REF,0)
 
-#define CALL@Callback_Return_ Callback_Return_(0)
+#define CALL@Callback_Return_%8() Callback_Return_%8(0)
+
+// Never had to fake an operator call for `addressof` before.
+#define CALL@Inline_operatorMul%8() ((@Ik:0)*%8(0))
+#define CALL@Inline_EBC__%8() Inline_EBC__%8(0,0)
+
+stock Inline_EBC__(owner, tag)
+{
+	// 8 bits for the tag (max 256), 23 for the ID (max 4,194,303 * 2), 1 for an
+  // indirection.inc internal flag.
+	return (owner | (tag & 0x3FF << 23));
+}
+
+stock operator*(@Ik:func, ebc)
+{
+	// This operator crashes the compiler if we try to call another function
+	// from inside it.  Why?  No clue, but as a result I've had to completely
+	// inline the code in here.  It is not a good situation!  This is very
+	// internal `indirection` implementation details, which should not be
+	// exposed here, but there's not really another choice - just calling any
+	// other function, even a local empty one, causes the crash.
+	new tmp = _:func;
+	if (tmp >= YSI_g_sCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   tmp
+		#emit LOAD.alt     YSI_g_sCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   tmp
+		if (tmp)
+		{
+			// Probably a string.
+			return _:func;
+		}
+		{}
+		#emit STOR.S.alt   tmp
+		// Store the owner.
+		tmp += E_INDIRECTION_OWNER__;
+		ebc |= cellmin;
+		#emit LOAD.S.pri   ebc
+		#emit SREF.S.pri   tmp
+	}
+	return _:func;
+}
+
+static stock const
+	YSI_gscSpecifier_i[] = "i",
+	YSI_gscInline_MaybeFree[] = "Inline_MaybeFree_";
 
 static stock
 	YSI_g_sFakeE_INLINE_CALL[E_INLINE_CALL];
-	
-#define CALL@Callback_Claim_ Callback_Claim_(YSI_g_sFakeE_INLINE_CALL)
+
+#define CALL@Callback_Claim_%8() Callback_Claim_%8(YSI_g_sFakeE_INLINE_CALL)
+#define P@YSI_g_sFakeE_INLINE_CALL0 P@__ARR0
 
 #define MAX_INLINE_PARAMETERS (32)
 
@@ -323,14 +386,14 @@ stock operator~(I@T:inlines[], size)
 	// using information gathered here.
 	#pragma unused inlines
 	// Get the return address.
-	#emit LOAD.S.alt       4
+	#emit LOAD.S.alt       __return_offset
 	// Read the code before the return.
-	#emit LCTRL            0
+	#emit LCTRL            __cod
 	#emit ADD
 	#emit MOVE.alt
-	#emit LCTRL            1
+	#emit LCTRL            __dat
 	#emit SUB.alt
-	#emit ADD.C            0xFFFFFFFC
+	#emit ADD.C            __m1_cell
 	#emit STOR.S.pri       size
 	#emit LREF.S.pri       size
 	#emit STOR.S.pri       size
@@ -362,16 +425,16 @@ public Inline_MaybeConst_(ResolvedAlloc:slot)
 {
 	// If this function is called, the given inline has been claimed, but has
 	// left the current scope, so can't have its closure written back to.
-	KillTimer(AMX_Read(_:slot + _:E_INLINE_CALL_TIMER * cellbytes));
-	AMX_Write(_:slot + _:E_INLINE_CALL_TIMER * cellbytes, 0);
+	KillTimer(AMX_Read(_:slot + E_INLINE_CALL_TIMER__));
+	AMX_Write(_:slot + E_INLINE_CALL_TIMER__, 0);
 }
 
 static stock Inline_FoundStart(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundStart called");
+	Debug_Print4("Inline_FoundStart called");
 	if (data[E_INLINE_DATA_STATE] != 0)
 		return 0;
-	P:5("Inline_FoundStart OK");
+	Debug_Print5("Inline_FoundStart OK");
 	data[E_INLINE_DATA_LOCALS] = CodeScanGetMatchStack(scanner);
 	data[E_INLINE_DATA_START] = CodeScanGetMatchAddress(scanner);
 	data[E_INLINE_DATA_NAME] = CodeScanGetMatchHole(scanner, 0);
@@ -382,10 +445,10 @@ static stock Inline_FoundStart(const scanner[CodeScanner], data[E_INLINE_DATA] =
 
 static stock Inline_FoundMid(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundMid called");
+	Debug_Print4("Inline_FoundMid called");
 	if (data[E_INLINE_DATA_STATE] != 1)
 		return 0;
-	P:5("Inline_FoundMid OK");
+	Debug_Print5("Inline_FoundMid OK");
 	data[E_INLINE_DATA_STACK] = CodeScanGetMatchStack(scanner);
 	data[E_INLINE_DATA_STATE] = 2;
 	data[E_INLINE_DATA_CLEANUP] = CodeScanGetMatchHole(scanner, 0);
@@ -395,7 +458,7 @@ static stock Inline_FoundMid(const scanner[CodeScanner], data[E_INLINE_DATA] = "
 static stock Inline_FoundDescriptor(size, data[E_INLINE_DATA])
 {
 	if (data[E_INLINE_DATA_PARAMETER_COUNT] == MAX_INLINE_PARAMETERS)
-		P:F("y_inline: Max inline parameter count exceeded (%d).", MAX_INLINE_PARAMETERS);
+		Debug_Fatal("y_inline: Max inline parameter count exceeded (%d).", MAX_INLINE_PARAMETERS);
 	else switch (size)
 	{
 		case INLINE_DESCRIPTOR_VAR:
@@ -414,7 +477,7 @@ static stock Inline_FoundDescriptor(size, data[E_INLINE_DATA])
 		}
 		default:
 		{
-			data[E_INLINE_DATA_PARAMETERS][data[E_INLINE_DATA_PARAMETER_COUNT]++] = size << __COMPILER_CELL_SHIFT;
+			data[E_INLINE_DATA_PARAMETERS][data[E_INLINE_DATA_PARAMETER_COUNT]++] = size << __cell_shift;
 			data[E_INLINE_DATA_STATE] |= 8;
 		}
 	}
@@ -422,54 +485,54 @@ static stock Inline_FoundDescriptor(size, data[E_INLINE_DATA])
 
 static stock Inline_FoundConst(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundConst called");
+	Debug_Print4("Inline_FoundConst called");
 	if (data[E_INLINE_DATA_STATE] != 2)
 		return 0;
-	P:5("Inline_FoundConst OK");
+	Debug_Print5("Inline_FoundConst OK");
 	data[E_INLINE_DATA_STATE] = 3 + CodeScanGetMatchHole(scanner, 0);
 	return 0;
 }
 
 static stock Inline_FoundConst2(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundConst2 called");
+	Debug_Print4("Inline_FoundConst2 called");
 	#pragma unused scanner
 	// Can't use size to determine this match as two pieces of code are the same
 	// size in the same place, but mean very different things.
 	if (data[E_INLINE_DATA_STATE] != 2)
 		return 0;
-	P:5("Inline_FoundConst2 OK");
+	Debug_Print5("Inline_FoundConst2 OK");
 	data[E_INLINE_DATA_STATE] = 3;
 	return 0;
 }
 
 static stock Inline_FoundVar(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundVar called");
+	Debug_Print4("Inline_FoundVar called");
 	#pragma unused scanner
 	if (data[E_INLINE_DATA_STATE] < 3)
 		return 0;
-	P:5("Inline_FoundVar OK");
+	Debug_Print5("Inline_FoundVar OK");
 	Inline_FoundDescriptor(0, data);
 	return 0;
 }
 
 static stock Inline_FoundRef(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundRef called");
+	Debug_Print4("Inline_FoundRef called");
 	if (data[E_INLINE_DATA_STATE] < 3)
 		return 0;
-	P:5("Inline_FoundRef OK");
+	Debug_Print5("Inline_FoundRef OK");
 	Inline_FoundDescriptor(CodeScanGetMatchHole(scanner, 0), data);
 	return 0;
 }
 
 static stock Inline_FoundEnd(const scanner[CodeScanner], data[E_INLINE_DATA] = "")
 {
-	P:4("Inline_FoundEnd called");
+	Debug_Print4("Inline_FoundEnd called");
 	if (data[E_INLINE_DATA_STATE] < 3)
 		return 0;
-	P:5("Inline_FoundEnd OK");
+	Debug_Print5("Inline_FoundEnd OK");
 	data[E_INLINE_DATA_USER] = CodeScanGetMatchAddress(scanner) + CodeScanGetMatchLength(scanner);
 	// Do the actual codegen here.
 	Inline_DoCodeGen(scanner, data);
@@ -482,13 +545,13 @@ static stock Inline_FoundEnd(const scanner[CodeScanner], data[E_INLINE_DATA] = "
 static stock Inline_StoreData(const data[E_INLINE_DATA])
 {
 	// `data[E_INLINE_DATA_NAME]` stores the address of a string with the inline
-	// function's name, followed by extra space for storing: a pointer to the
+	// function's name, preceeded by extra space for storing: a pointer to the
 	// name, a pointer to the function, a pointer to the next inline in the
 	// linked list of names, and something else?
 	new
 		header = data[E_INLINE_DATA_NAME];
 	// Add a pointer to the function itself (after `JUMP`).
-	AMX_Write(header, data[E_INLINE_DATA_START] + 10 * cellbytes);
+	AMX_Write(header, data[E_INLINE_DATA_START] + __10_cells);
 	// Store the local stack size at this point.
 	AMX_Write(header + cellbytes, data[E_INLINE_DATA_LOCALS]);
 	// Store the tag data.  TODO: Put this in the compiler with
@@ -509,7 +572,7 @@ static stock Inline_StoreData(const data[E_INLINE_DATA])
 			tag[cur + 4] = 'a';
 		}
 	}
-	AMX_Write(header + 2 * cellbytes, GetTagIDFromName(tag));
+	AMX_Write(header + __2_cells, GetTagIDFromName(tag));
 }
 
 static stock Inline_FoundUsingInline(const scanner[CodeScanner])
@@ -517,21 +580,61 @@ static stock Inline_FoundUsingInline(const scanner[CodeScanner])
 	// Found a call to `using inline`.  Change it from (the equivalent of)
 	// `(a = Inline_UI_(a), a)` to `Inline_UI_(a)`.  First, check that the two
 	// holes are the same.  If they're not, this isn't what we want to optimise.
+	new
+		ctx[AsmContext];
+#if __COMPILER_O2
+	new
+		count = CodeScanGetHoleCount(scanner);
+	if (CodeScanGetMatchHole(scanner, count - 2) != CodeScanGetMatchHole(scanner, count - 1))
+		return 0;
+	if (count == 2)
+#else
 	if (CodeScanGetMatchHole(scanner, 0) != CodeScanGetMatchHole(scanner, 1))
 		return 0;
+#endif
+	{
+		switch (CodeScanGetMatchLength(scanner))
+		{
+			case __8_cells:
+			{
+				CodeScanGetMatchAsm(scanner, ctx, __6_cells);
+				@emit PUSH.pri
+				@emit NOP
+			}
+			case __10_cells:
+			{
+				CodeScanGetMatchAsm(scanner, ctx, __7_cells);
+				@emit NOP
+				@emit NOP
+			}
+		}
+	}
+#if __COMPILER_O2
+	else
+	{
+		CodeScanGetMatchAsm(scanner, ctx, (4 + count) * cellbytes);
+		@emit PUSH.pri
+		@emit NOP
+	}
+#endif
+	return 0;
+}
+
+static stock Inline_FoundEBC(const scanner[CodeScanner])
+{
 	new
 		ctx[AsmContext];
 	switch (CodeScanGetMatchLength(scanner))
 	{
-		case 8 * cellbytes:
+		case __11_cells:
 		{
-			CodeScanGetMatchAsm(scanner, ctx, 6 * cellbytes);
+			CodeScanGetMatchAsm(scanner, ctx, __9_cells);
 			@emit PUSH.pri
 			@emit NOP
 		}
-		case 10 * cellbytes:
+		case __12_cells:
 		{
-			CodeScanGetMatchAsm(scanner, ctx, 7 * cellbytes);
+			CodeScanGetMatchAsm(scanner, ctx, __9_cells);
 			@emit NOP
 			@emit NOP
 		}
@@ -603,260 +706,300 @@ CHAIN_FORWARD:Inline_OnRuntimeError(code, &bool:suppress) = 1;
 #endif
 #define OnRuntimeError(%0) CHAIN_PUBLIC:Inline_OnRuntimeError(%0)
 
-#define CALL@Callback_CallHandler_ Callback_CallHandler_()
+#define CALL@Callback_CallHandler_%8() Callback_CallHandler_%8()
 
 public OnCodeInit()
 {
-	P:2("Inline_OnCodeInit called");
-	YSI_g_sJumpOffset = GetAmxBaseAddress() + AMX_HEADER_COD - AMX_BASE_ADDRESS;
-	YSI_g_sCallbackCallAddress = addressof(Callback_CallHandler_) + YSI_g_sJumpOffset;
-	if (FALSE)
 	{
-		// Ensure this function is included.  It causes HUGE issues when not.
-		new tmp[2];
-		strunpack(tmp, tmp);
+			Debug_Print2("Inline_OnCodeInit called");
+			YSI_g_sJumpOffset = GetAmxBaseAddress() + AMX_HEADER_COD - AMX_BASE_ADDRESS;
+			YSI_g_sCallbackCallAddress = addressof(Callback_CallHandler_) + YSI_g_sJumpOffset;
+			if (FALSE)
+			{
+				// Ensure this function is included.  It causes HUGE issues when not.
+				new tmp[2];
+				strunpack(tmp, tmp);
+			}
+			if (!YSI_g_sCodSize)
+			{
+				AddressofResolve();
+				new
+					amxhdr[AMX_HDR];
+				GetAmxHeader(amxhdr);
+				YSI_g_sCodSize = amxhdr[AMX_HDR_DAT] - amxhdr[AMX_HDR_COD];
+			}
+			
+			new scanner[CodeScanner];
+			CodeScanInit(scanner);
+			
+			// Allocate the inline scanning data on the stack, instead of globally.
+			new data[E_INLINE_DATA];
+			
+			// Optimised.
+			new csm1a[CodeScanMatcher];
+			CodeScanMatcherInit(csm1a, &Inline_FoundStart);
+			CodeScanMatcherData(csm1a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm1a,
+				OP(STACK,              -__1_cell)
+				OP(CONST_PRI,          ???)
+				OP(INVERT)
+				OP(INVERT)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &I@T)
+				OP(STOR_S_PRI,         ???)
+				OP(STACK,              -__1_cell)
+				OP(LOAD_S_PRI,         ???)
+				OP(STOR_S_PRI,         ???)
+			);
+			CodeScanAddMatcher(scanner, csm1a);
+			
+			// Unoptimised.
+			new csm1b[CodeScanMatcher];
+			CodeScanMatcherInit(csm1b, &Inline_FoundStart);
+			CodeScanMatcherData(csm1b, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm1b,
+				OP(STACK,              -__1_cell)
+				OP(CONST_PRI,          ???)
+				OP(INVERT)
+				OP(INVERT)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &I@T)
+				OP(STOR_S_PRI,         ???)
+				OP(STACK,              -__1_cell)
+				OP(LOAD_S_PRI,         ???)
+				OP(STOR_S_PRI,         ???)
+			);
+			CodeScanAddMatcher(scanner, csm1b);
+			
+			// Mid point.
+			new csm2a[CodeScanMatcher];
+			CodeScanMatcherInit(csm2a, &Inline_FoundMid);
+			CodeScanMatcherData(csm2a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm2a,
+				OP(PUSH_C,             0)
+				OP(CALL,               &I@F)
+				OP(JZER,               ???)
+			);
+			CodeScanAddMatcher(scanner, csm2a);
+			
+			// Normal parameter.
+			//   
+			//   ZERO.pri
+			//   HEAP 4
+			//   STOR.I
+			//   PUSH.alt
+			//   
+			new csm3a[CodeScanMatcher];
+			CodeScanMatcherInit(csm3a, &Inline_FoundVar);
+			CodeScanMatcherData(csm3a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm3a,
+				OP(ZERO_PRI)
+				OP(HEAP,               __1_cell)
+				OP(STOR_I)
+				OP(PUSH_ALT)
+			);
+			CodeScanAddMatcher(scanner, csm3a);
+			
+			new csm3b[CodeScanMatcher];
+			CodeScanMatcherInit(csm3b, &Inline_FoundVar);
+			CodeScanMatcherData(csm3b, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm3b,
+				OP(ZERO_PRI)
+				OP(HEAP,               __1_cell)
+				OP(STOR_I)
+				OP(MOVE_PRI)
+				OP(PUSH_PRI)
+			);
+			CodeScanAddMatcher(scanner, csm3b);
+			
+			// Reference parameter.
+			//   
+			//   CONST.pri ffffffff
+			//   HEAP 4
+			//   STOR.I
+			//   PUSH.alt
+			//   
+			// Array (with size in CELLS).
+			//   
+			//   CONST.pri a
+			//   HEAP 4
+			//   STOR.I
+			//   PUSH.alt
+			//   
+			// String
+			//   
+			//   CONST.pri 80000000
+			//   HEAP 4
+			//   STOR.I
+			//   PUSH.alt
+			//   
+			new csm4a[CodeScanMatcher];
+			CodeScanMatcherInit(csm4a, &Inline_FoundRef);
+			CodeScanMatcherData(csm4a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm4a,
+				OP(CONST_PRI,          ???)
+				OP(HEAP,               __1_cell)
+				OP(STOR_I)
+				OP(PUSH_ALT)
+			);
+			CodeScanAddMatcher(scanner, csm4a);
+			
+			new csm4b[CodeScanMatcher];
+			CodeScanMatcherInit(csm4b, &Inline_FoundRef);
+			CodeScanMatcherData(csm4b, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm4b,
+				OP(CONST_PRI,          ???)
+				OP(HEAP,               __1_cell)
+				OP(STOR_I)
+				OP(MOVE_PRI)
+				OP(PUSH_PRI)
+			);
+			CodeScanAddMatcher(scanner, csm4b);
+			
+			// End
+			new csm5a[CodeScanMatcher];
+			CodeScanMatcherInit(csm5a, &Inline_FoundEnd);
+			CodeScanMatcherData(csm5a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm5a,
+				OP(CALL,               &I@L)
+				OP(HEAP,               ???)
+				OP(JZER,               ???)
+			);
+			CodeScanAddMatcher(scanner, csm5a);
+			
+			// Constness
+			new csm6a[CodeScanMatcher];
+			CodeScanMatcherInit(csm6a, &Inline_FoundConst);
+			CodeScanMatcherData(csm6a, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm6a,
+				OP(PUSH_C,             ???)
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &I@K)
+			);
+			CodeScanAddMatcher(scanner, csm6a);
+			
+			new csm6b[CodeScanMatcher];
+			CodeScanMatcherInit(csm6b, &Inline_FoundConst);
+			CodeScanMatcherData(csm6b, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm6b,
+				OP(CONST_PRI,          ???)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &I@K)
+			);
+			CodeScanAddMatcher(scanner, csm6b);
+			
+			new csm6c[CodeScanMatcher];
+			CodeScanMatcherInit(csm6c, &Inline_FoundConst2);
+			CodeScanMatcherData(csm6c, AMX_Ref(data[E_INLINE_DATA:0]));
+			CodeScanMatcherPattern(csm6c,
+				OP(ZERO_PRI)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &I@K)
+			);
+			CodeScanAddMatcher(scanner, csm6c);
+			
+			// Replace code that was `(Inline_UI_(x), x)` with just
+			// `Inline_UI_()`.
+			new csm7a[CodeScanMatcher];
+			CodeScanMatcherInit(csm7a, &Inline_FoundUsingInline);
+			CodeScanMatcherPattern(csm7a,
+				OP(ADDR_PRI,           ???)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __2_cells)
+				OP(CALL,               &Inline_UI_)
+				OP(LOAD_S_PRI,         ???)
+				OP(PUSH_PRI)
+			);
+			CodeScanAddMatcher(scanner, csm7a);
+			
+			new csm7b[CodeScanMatcher];
+			CodeScanMatcherInit(csm7b, &Inline_FoundUsingInline);
+			CodeScanMatcherPattern(csm7b,
+				OP(PUSH_ADR,           ???)
+				OP(PUSH_C,             __2_cells)
+				OP(CALL,               &Inline_UI_)
+				OP(PUSH_S,             ???)
+			);
+			CodeScanAddMatcher(scanner, csm7b);
+			
+			new csm10a[CodeScanMatcher];
+			CodeScanMatcherInit(csm10a, &Inline_FoundEBC);
+			CodeScanMatcherPattern(csm10a,
+				OP(CALL,               &Inline_EBC__)
+				OP(POP_ALT)
+				OP(PUSH_PRI)
+				OP(PUSH_ALT)
+				OP(PUSH_C,             8)
+				OP(CALL,               &Inline_operatorMul)
+				OP(PUSH_S,             ???)
+			);
+			CodeScanAddMatcher(scanner, csm10a);
+
+			new csm10b[CodeScanMatcher];
+			CodeScanMatcherInit(csm10b, &Inline_FoundEBC);
+			CodeScanMatcherPattern(csm10b,
+				OP(CALL,               &Inline_EBC__)
+				OP(POP_ALT)
+				OP(PUSH_PRI)
+				OP(PUSH_ALT)
+				OP(PUSH_C,             8)
+				OP(CALL,               &Inline_operatorMul)
+				OP(LOAD_S_PRI,         ???)
+				OP(PUSH_PRI)
+			);
+			CodeScanAddMatcher(scanner, csm10b);
+
+			// Destructors.
+			{
+				// We can't directly get the address of a destructor.  Instead,
+				// we need to create a local that will be destroyed and read the
+				// call from that.  Use `[2]` so it doesn't match the scanner
+				// later.
+				new I@T:search[2] = {};
+				// THIS BLOCK IS NOT POINTLESS!  IT CALLS A REQUIRED DESTRUCTOR.
+			}
+			// Now we have the destructor address, replace all calls to it.
+			// I've never seen this using `PUSH.adr` instead of `ADDR.pri`/
+			// `PUSH.pri`, even on optimising builds.  `YSI_g_sInlineLinkedList`
+			// currently holds the address of the `I@T:` destructor.  We used
+			// that as a temporary to return the function address from the
+			// (seemingly) pointless block directly above because `addressof`
+			// and `&` don't work for operators (I don't know a generic solution
+			// to this problem, but it has only ever come up once and I could
+			// get a non-portable solution in that one instance).
+			new csm8a[CodeScanMatcher];
+			CodeScanMatcherInit(csm8a, &Inline_FoundDestructor);
+			CodeScanMatcherPattern(csm8a,
+				OP(PUSH_C,             1)
+				OP(ADDR_PRI,           ???)
+				OP(PUSH_PRI)
+				OP(PUSH_C,             __2_cells)
+				OP(CALL,               YSI_g_sInlineLinkedList)
+			);
+			CodeScanAddMatcher(scanner, csm8a);
+			
+			// Detect `@return` and make it a real return.
+			new csm9a[CodeScanMatcher];
+			CodeScanMatcherInit(csm9a, &Inline_Found@return);
+			CodeScanMatcherPattern(csm9a,
+				OP(PUSH_C,             __1_cell)
+				OP(CALL,               &Callback_Return_)
+			);
+			CodeScanAddMatcher(scanner, csm9a);
+			
+			// Reset the linked list whose variable we borrowed as a temporary.
+			YSI_g_sInlineLinkedList = 0;
+			
+			// Run all the scanners in parallel.
+			// TODO: Try and determine rough types for parent function
+			// parameters, using Opcodes like LREF, SREF, and IDXADDR (IDXARRAY?
+			// Can't remember off the top of my head).
+			CodeScanRunFast(scanner, &I@T);
 	}
-	
-	new scanner[CodeScanner];
-	CodeScanInit(scanner);
-	
-	// Allocate the inline scanning data on the stack, instead of globally.
-	new data[E_INLINE_DATA];
-	
-	// Optimised.
-	new csm1a[CodeScanMatcher];
-	CodeScanMatcherInit(csm1a, &Inline_FoundStart);
-	CodeScanMatcherData(csm1a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm1a,
-		OP(STACK,              -4)
-		OP(CONST_PRI,          ???)
-		OP(INVERT)
-		OP(INVERT)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             4)
-		OP(CALL,               &I@T)
-		OP(STOR_S_PRI,         ???)
-		OP(STACK,              -4)
-		OP(LOAD_S_PRI,         ???)
-		OP(STOR_S_PRI,         ???)
-	);
-	CodeScanAddMatcher(scanner, csm1a);
-	
-	// Unoptimised.
-	new csm1b[CodeScanMatcher];
-	CodeScanMatcherInit(csm1b, &Inline_FoundStart);
-	CodeScanMatcherData(csm1b, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm1b,
-		OP(STACK,              -4)
-		OP(CONST_PRI,          ???)
-		OP(INVERT)
-		OP(INVERT)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             4)
-		OP(CALL,               &I@T)
-		OP(STOR_S_PRI,         ???)
-		OP(STACK,              -4)
-		OP(LOAD_S_PRI,         ???)
-		OP(STOR_S_PRI,         ???)
-	);
-	CodeScanAddMatcher(scanner, csm1b);
-	
-	// Mid point.
-	new csm2a[CodeScanMatcher];
-	CodeScanMatcherInit(csm2a, &Inline_FoundMid);
-	CodeScanMatcherData(csm2a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm2a,
-		OP(PUSH_C,             0)
-		OP(CALL,               &I@F)
-		OP(JZER,               ???)
-	);
-	CodeScanAddMatcher(scanner, csm2a);
-	
-	// Normal parameter.
-	//   
-	//   ZERO.pri
-	//   HEAP 4
-	//   STOR.I
-	//   PUSH.alt
-	//   
-	new csm3a[CodeScanMatcher];
-	CodeScanMatcherInit(csm3a, &Inline_FoundVar);
-	CodeScanMatcherData(csm3a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm3a,
-		OP(ZERO_PRI)
-		OP(HEAP,               4)
-		OP(STOR_I)
-		OP(PUSH_ALT)
-	);
-	CodeScanAddMatcher(scanner, csm3a);
-	
-	new csm3b[CodeScanMatcher];
-	CodeScanMatcherInit(csm3b, &Inline_FoundVar);
-	CodeScanMatcherData(csm3b, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm3b,
-		OP(ZERO_PRI)
-		OP(HEAP,               4)
-		OP(STOR_I)
-		OP(MOVE_PRI)
-		OP(PUSH_PRI)
-	);
-	CodeScanAddMatcher(scanner, csm3b);
-	
-	// Reference parameter.
-	//   
-	//   CONST.pri ffffffff
-	//   HEAP 4
-	//   STOR.I
-	//   PUSH.alt
-	//   
-	// Array (with size in CELLS).
-	//   
-	//   CONST.pri a
-	//   HEAP 4
-	//   STOR.I
-	//   PUSH.alt
-	//   
-	// String
-	//   
-	//   CONST.pri 80000000
-	//   HEAP 4
-	//   STOR.I
-	//   PUSH.alt
-	//   
-	new csm4a[CodeScanMatcher];
-	CodeScanMatcherInit(csm4a, &Inline_FoundRef);
-	CodeScanMatcherData(csm4a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm4a,
-		OP(CONST_PRI,          ???)
-		OP(HEAP,               4)
-		OP(STOR_I)
-		OP(PUSH_ALT)
-	);
-	CodeScanAddMatcher(scanner, csm4a);
-	
-	new csm4b[CodeScanMatcher];
-	CodeScanMatcherInit(csm4b, &Inline_FoundRef);
-	CodeScanMatcherData(csm4b, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm4b,
-		OP(CONST_PRI,          ???)
-		OP(HEAP,               4)
-		OP(STOR_I)
-		OP(MOVE_PRI)
-		OP(PUSH_PRI)
-	);
-	CodeScanAddMatcher(scanner, csm4b);
-	
-	// End
-	new csm5a[CodeScanMatcher];
-	CodeScanMatcherInit(csm5a, &Inline_FoundEnd);
-	CodeScanMatcherData(csm5a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm5a,
-		OP(CALL,               &I@L)
-		OP(HEAP,               ???)
-		OP(JZER,               ???)
-	);
-	CodeScanAddMatcher(scanner, csm5a);
-	
-	// Constness
-	new csm6a[CodeScanMatcher];
-	CodeScanMatcherInit(csm6a, &Inline_FoundConst);
-	CodeScanMatcherData(csm6a, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm6a,
-		OP(PUSH_C,             ???)
-		OP(PUSH_C,             4)
-		OP(CALL,               &I@K)
-	);
-	CodeScanAddMatcher(scanner, csm6a);
-	
-	new csm6b[CodeScanMatcher];
-	CodeScanMatcherInit(csm6b, &Inline_FoundConst);
-	CodeScanMatcherData(csm6b, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm6b,
-		OP(CONST_PRI,          ???)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             4)
-		OP(CALL,               &I@K)
-	);
-	CodeScanAddMatcher(scanner, csm6b);
-	
-	new csm6c[CodeScanMatcher];
-	CodeScanMatcherInit(csm6c, &Inline_FoundConst2);
-	CodeScanMatcherData(csm6c, AMX_Ref(data[E_INLINE_DATA:0]));
-	CodeScanMatcherPattern(csm6c,
-		OP(ZERO_PRI)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             4)
-		OP(CALL,               &I@K)
-	);
-	CodeScanAddMatcher(scanner, csm6c);
-	
-	// Replace code that was `(Inline_UI_(x), x)` with just `Inline_UI_()`.
-	new csm7a[CodeScanMatcher];
-	CodeScanMatcherInit(csm7a, &Inline_FoundUsingInline);
-	CodeScanMatcherPattern(csm7a,
-		OP(ADDR_PRI,           ???)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             4)
-		OP(CALL,               &Inline_UI_)
-		OP(LOAD_S_PRI,         ???)
-		OP(PUSH_PRI)
-	);
-	CodeScanAddMatcher(scanner, csm7a);
-	
-	new csm7b[CodeScanMatcher];
-	CodeScanMatcherInit(csm7b, &Inline_FoundUsingInline);
-	CodeScanMatcherPattern(csm7b,
-		OP(PUSH_ADR,           ???)
-		OP(PUSH_C,             4)
-		OP(CALL,               &Inline_UI_)
-		OP(PUSH_S,             ???)
-	);
-	CodeScanAddMatcher(scanner, csm7b);
-	
-	// Destructors.
-	{
-		// We can't directly get the address of a destructor.  Instead, we need
-		// to create a local that will be destroyed and read the call from that.
-		// Use `[2]` so it doesn't match the scanner later.
-		new I@T:search[2] = {};
-		// THIS BLOCK IS NOT POINTLESS!  IT CALLS A REQUIRED DESTRUCTOR.
-	}
-	// Now we have the destructor address, replace all calls to it.  I've never
-	// seen this using `PUSH.adr` instead of `ADDR.pri`/`PUSH.pri`, even on
-	// optimising builds.  `YSI_g_sInlineLinkedList` currently holds the address
-	// of the `I@T:` destructor.  We used that as a temporary to return the
-	// function address from the (seemingly) pointless block directly above
-	// because `addressof` and `&` don't work for operators (I don't know a
-	// generic solution to this problem, but it has only ever come up once and I
-	// could get a non-portable solution in that one instance).
-	new csm8a[CodeScanMatcher];
-	CodeScanMatcherInit(csm8a, &Inline_FoundDestructor);
-	CodeScanMatcherPattern(csm8a,
-		OP(PUSH_C,             1)
-		OP(ADDR_PRI,           ???)
-		OP(PUSH_PRI)
-		OP(PUSH_C,             8)
-		OP(CALL,               YSI_g_sInlineLinkedList)
-	);
-	CodeScanAddMatcher(scanner, csm8a);
-	
-	// Detect `@return` and make it a real return.
-	new csm9a[CodeScanMatcher];
-	CodeScanMatcherInit(csm9a, &Inline_Found@return);
-	CodeScanMatcherPattern(csm9a,
-		OP(PUSH_C,             4)
-		OP(CALL,               &Callback_Return_)
-	);
-	CodeScanAddMatcher(scanner, csm9a);
-	
-	// Reset the linked list whose variable we borrowed as a temporary.
-	YSI_g_sInlineLinkedList = 0;
-	
-	// Run all the scanners in parallel.
-	// TODO: Try and determine rough types for parent function parameters, using
-	// Opcodes like LREF, SREF, and IDXADDR (IDXARRAY?  Can't remember off the
-	// top of my head).
-	CodeScanRunFast(scanner, &I@T);
 	
 	#if defined Inline_OnCodeInit
 		Inline_OnCodeInit();
@@ -931,8 +1074,8 @@ Note:
 // 
 //   +0 - Inline function start pointer.
 //   +1 - Stack size.
-#define INLINE_END(%9)%8$(,%0)%1(%3)%4# %8$#...#%9),F@_@%4:%9=F@_@%4:_@%9;for(new %0;I@F();)while(I@L(%3I@K(%1)))
-#define INLINE_NUL(%9)%8$()%1()%4# %8$#...#%9),F@_@%4:%9=F@_@%4:_@%9;for(;I@F();)while(I@L(I@K(%1)))
+#define INLINE_END(%9)%8$(,%0)%1(%3)%4# %8$__COMPILER_UNPACK#...#%9),F@_@%4:%9=F@_@%4:_@%9;for(new %0;I@F();)while(I@L(%3I@K(%1)))
+#define INLINE_NUL(%9)%8$()%1()%4# %8$__COMPILER_UNPACK#...#%9),F@_@%4:%9=F@_@%4:_@%9;for(;I@F();)while(I@L(I@K(%1)))
 
 #define I@O$
 
@@ -940,39 +1083,65 @@ Note:
 #define INLINE_const(%9)%8$(%0)%1(%2) %8$(%0)1(%2)
 #define _@const%0\32; _@
 
-#define USING_INLINE__ (@Ik:@Il:Inline_UI_(),)
-#define USING__%0\32; (@Ip:@Iq:@Iw:@Iv:@Io:@Iu:@Ia:@Ik:@Il:@Im:Callback_Find_(,I@),F@_@:I@)
-#define USING_PUBLIC__ (@Ik:@Il:Inline_UP_(),)
-#define USING_CALLBACK__ (@Ik:@Il:Inline_UP_(),)
-#define USING_FUNCTION__ (@Ik:@Il:Inline_US_(),)
-#define USING_STOCK__ (@Ik:@Il:Inline_US_(),)
-#define USING_RESOLVED__ (@Ik:@Il:0,)
-#define USING_ASYNC__ (@Ik:@Il:Inline_UA_(),)
+#define USING_INLINE__ (@Ix:@Ik:@Il:Inline_UI_(),)
+#define USING__%0\32; (@Ip:@Iq:@Iw:@Iv:@Io:@Iu:@Ia:@Ix:@Ik:@Il:@Im:Callback_Find_(,I@),F@_@:I@)
+#define USING_PUBLIC__ (@Ix:@Ik:@Il:Inline_UP_(),)
+#define USING_CALLBACK__ (@Ix:@Ik:@Il:Inline_UP_(),)
+#define USING_FUNCTION__ (@Ix:@Ik:@Il:Inline_US_(),)
+#define USING_STOCK__ (@Ix:@Ik:@Il:Inline_US_(),)
+#define USING_RESOLVED__ (@Ix:@Ik:@Il:0,)
+#define USING_ASYNC__ (@Ix:@Ik:@Il:Inline_UA_(),)
 
 // Old `using`.
 #if YSI_KEYWORD(callback_tag)
-	#define callback_tag: (@Ik:@Il:@Im:Callback_Find_(,I@),F@_@:I@)
+	#define callback_tag: (@Ix:@Ik:@Il:@Im:Callback_Find_(,I@),F@_@:I@)
 #endif
 #if YSI_KEYWORD(using)
 	#define using USING__
 #endif
 
 // Parameter type for passing callbacks about.
-#define @Ip:%0)inline @Ik:@Il:Inline_UI_(),)
-#define @Iq:%0)callback @Ik:@Il:Inline_UP_(),)
-#define @Iw:%0)function @Ik:@Il:Inline_US_(),)
-#define @Iv:%0)stock @Ik:@Il:Inline_US_(),)
-#define @Io:%0)public @Ik:@Il:Inline_UP_(),)
-#define @Iu:%0)resolved @Ik:@Il:0,)
-#define @Ia:%0)async @Ik:@Il:Inline_UA_(),)
+#define @Ip:%0)inline @Ix:@Ik:@Il:Inline_UI_(),)
+#define @Iq:%0)callback @Ix:@Ik:@Il:Inline_UP_(),)
+#define @Iw:%0)function @Ix:@Ik:@Il:Inline_US_(),)
+#define @Iv:%0)stock @Ix:@Ik:@Il:Inline_US_(),)
+#define @Io:%0)public @Ix:@Ik:@Il:Inline_UP_(),)
+#define @Iu:%0)resolved @Ix:@Ik:@Il:0,)
+#define @Ia:%0)async @Ix:@Ik:@Il:Inline_UA_(),)
+
+// This is the implementation of y_ebc, converting a call like:
+//
+//   SetTimerInline(EBC(playerid, using inline Code), 1000, false);
+//
+// To:
+//
+//   SetTimerInline(using inline Code$(EBC(playerid)), 1000, false);
+//
+// Then to:
+//
+//   SetTimerInline(using inline Code * (EBC(playerid)), 1000, false);
+//
+// This seems a little indirect, and it is, but that's because of how `using`
+// also compiles, so the true final result is:
+//
+//   SetTimerInline((Inline_UI_(Code) * (EBC(playerid)), Code), 1000, false);
+//
+// So that tags are preserved.
+#define @Ix:%0,%1$(%2) %0*(%2),%1
+
+forward EBC(GLOBAL_TAG_TYPES:owner, F@_@:func, tag = tagof (owner));
+#define EBC(%0,%1) EBC PP_DEFER(%0,F@_@:@I0:(%1))
+#define @I0:(%0,%1)) (%0),%1)
 
 // Detect a `using` parameter that is not the last parameter.  Actually handles
 // nested calls quite nicely - `X(Y(using inline Z), 5)` should be detected as a
 // final parameter, but this detects it instead and gives
 // `X(Y(Inline_UI_(Z)), 5)`, which is still correct.  This only falls down on
 // code like `X(Y(using inline Z) - 10, 5)`, which currently becomes
-// `X(Y(Inline_UI_(Z - 10)), 5)`
-#define @Ik:@Il:%0)%1, %0%1),
+// `X(Y(Inline_UI_(Z - 10)), 5)`.  Keeps the `@Ik:` tag because it is used later
+// with `*` to detect EBC usage but the match is not recursive because the
+// following `@Il:` is removed.
+#define @Ik:@Il:%0)%1, @Ik:%0%1),
 
 // Detect a `using` parameter that is the last parameter.
 #define @Il:%0)%1) %0%1))
@@ -983,7 +1152,7 @@ Note:
 // Normally `F@_@` doesn't consume spaces because it is a valid tag on its own.
 // However, in this case we know that extra specifiers after the tag prefix
 // exist so we can check fairly safely.
-#define @It:%0),F@_@%9\32;%1:%2$) @It:%0),F@_@%9%1:%2$)
+#define @It:%0,%3),F@_@%9\32;%1:%2$) @It:%0,%3),F@_@%9%1:%2$)
 
 // Detect a callback that starts with "On".  These are often redefined and we
 // want to keep the original.
@@ -993,9 +1162,9 @@ Note:
 #define @In:%0(%1)%3),%2$) %0%3),%2$),.bExtra=true,.extra=%1)
 
 // Move the callback parameter inside the brackets.
-#define Inline_US_(),%0) I@,addressof(%0))
-#define Inline_UI_(),%0) Inline_UI_(_:%0),%0)
-#define Inline_UP_(),%0) Inline_UP_(_:@Ir:@Is:@In:#%0),F@_@:I@ I@O$)
+#define Inline_US_()%8,%0) I@%8,addressof(%0))
+#define Inline_UI_()%8,%0) Inline_UI_(_:%0,tagof(%0))%8,%0)
+#define Inline_UP_()%8,%0) Inline_UP_(_:@Ir:@Is:@In:#%0)%8,F@_@:I@ I@O$)
 #define @Im:Callback_Find_(,I@),F@_@:I@%0) Callback_Find_(#%0,I@),F@_@:I@)
 
 stock I@F()
@@ -1018,10 +1187,10 @@ stock I@K(n)
  * <param name="func">Public function to get.</param>
  * <param name="spec">The structure of the function's parameters.</param>
  * <returns>
- *  A pointer to the function.
+ *   A pointer to the function.
  * </returns>
  * <remarks>
- *  Accepts the following parameter specifiers:
+ *   Accepts the following parameter specifiers:
  *
  *      i - Integer (also x/c/d/h)
  *      f - Float (also g)
@@ -1033,19 +1202,33 @@ stock I@K(n)
  *//*------------------------------------------------------------------------**/
 
 #define Function: F@_@:
-stock Function:GetRemoteFunction(const func[], const spec[])
+stock Function:GetRemoteFunction(const func[], const spec[], tag = 0)
 {
 	new
 		Alloc:closure = malloc(_:E_PUBLIC_CALL);
 	if (!closure)
+	{
 		return Function:0;
-	mset(closure, _:E_PUBLIC_CALL_NULL, 0);
-	mset(closure, _:E_PUBLIC_CALL_HANDLER, _:addressof (Callback_RemoteHandler_<x>));
-	mset(closure, _:E_PUBLIC_CALL_CLAIM, _:addressof (Callback_Claim_));
-	mset(closure, _:E_PUBLIC_CALL_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
-	mset(closure, _:E_PUBLIC_CALL_TIMER, YSI_SetTimerEx("Inline_MaybeFree_", 0, false, "i", _:closure));
+	}
+	mset(closure, _:E_INDIRECTION_ALWAYS_NULL, 0);
+	mset(closure, _:E_INDIRECTION_HANDER, _:addressof (Callback_RemoteHandler_<x>));
+	mset(closure, _:E_INDIRECTION_CLAIM, _:addressof (Callback_Claim_));
+	mset(closure, _:E_INDIRECTION_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
+	mset(closure, _:E_PUBLIC_CALL_TIMER, YSI_SetTimerEx__(YSI_gscInline_MaybeFree, 0, false, YSI_gscSpecifier_i, _:closure));
 	mset(closure, _:E_PUBLIC_CALL_FLAGS, e_INLINE_FLAG_PUBLIC);
-	mset(closure, _:E_PUBLIC_CALL_METADATA, 0);
+	mset(closure, _:E_INDIRECTION_METADATA, 0);
+	if (tag)
+	{
+		mset(closure, _:E_INDIRECTION_TAG, tag);
+	}
+	else
+	{
+		new
+			tn[FUNCTION_LENGTH] = "F@_@";
+		strcat(tn, spec);
+		mset(closure, _:E_INDIRECTION_TAG, GetTagIDFromName(tn));
+	}
+	mset(closure, _:E_INDIRECTION_OWNER, 0);
 	msets(closure, _:E_PUBLIC_CALL_SPECIFIER, spec);
 	msets(closure, _:E_PUBLIC_CALL_FUNCTION, func);
 	return Function:Indirect_Ptr(Malloc_Resolve(closure));
@@ -1056,10 +1239,10 @@ stock Function:GetRemoteFunction(const func[], const spec[])
  * <param name="func">Public function to get.</param>
  * <param name="spec">The structure of the function's parameters.</param>
  * <returns>
- *  A pointer to the function.
+ *   A pointer to the function.
  * </returns>
  * <remarks>
- *  Accepts the following parameter specifiers:
+ *   Accepts the following parameter specifiers:
  *
  *      i - Integer (also x/c/d/h)
  *      f - Float (also g)
@@ -1070,28 +1253,44 @@ stock Function:GetRemoteFunction(const func[], const spec[])
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-stock Function:GetLocalFunction(const func[], const spec[])
+stock Function:GetLocalFunction(const func[], const spec[], tag = 0)
 {
-	P:4("GetLocalFunction called: %s, %s", func, spec);
+	Debug_Print4("GetLocalFunction called: %s, %s", func, spec);
 	if (funcidx(func) == -1)
+	{
 		return Function:0;
-	P:6("GetLocalFunction: 0");
+	}
+	Debug_Print6("GetLocalFunction: 0");
 	new
 		Alloc:closure = malloc(_:E_PUBLIC_CALL);
 	if (!closure)
+	{
 		return Function:0;
-	P:6("GetLocalFunction: 1");
-	mset(closure, _:E_PUBLIC_CALL_NULL, 0);
-	mset(closure, _:E_PUBLIC_CALL_HANDLER, _:addressof (Callback_LocalHandler_<x>));
-	mset(closure, _:E_PUBLIC_CALL_CLAIM, _:addressof (Callback_Claim_));
-	mset(closure, _:E_PUBLIC_CALL_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
-	mset(closure, _:E_PUBLIC_CALL_TIMER, YSI_SetTimerEx("Inline_MaybeFree_", 0, false, "i", _:closure));
+	}
+	Debug_Print6("GetLocalFunction: 1");
+	mset(closure, _:E_INDIRECTION_ALWAYS_NULL, 0);
+	mset(closure, _:E_INDIRECTION_HANDER, _:addressof (Callback_LocalHandler_<x>));
+	mset(closure, _:E_INDIRECTION_CLAIM, _:addressof (Callback_Claim_));
+	mset(closure, _:E_INDIRECTION_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
+	mset(closure, _:E_PUBLIC_CALL_TIMER, YSI_SetTimerEx__(YSI_gscInline_MaybeFree, 0, false, YSI_gscSpecifier_i, _:closure));
 	mset(closure, _:E_PUBLIC_CALL_FLAGS, e_INLINE_FLAG_PUBLIC);
-	mset(closure, _:E_PUBLIC_CALL_METADATA, 0);
+	mset(closure, _:E_INDIRECTION_METADATA, 0);
+	if (tag)
+	{
+		mset(closure, _:E_INDIRECTION_TAG, tag);
+	}
+	else
+	{
+		new
+			tn[FUNCTION_LENGTH] = "F@_@";
+		strcat(tn, spec);
+		mset(closure, _:E_INDIRECTION_TAG, GetTagIDFromName(tn));
+	}
+	mset(closure, _:E_INDIRECTION_OWNER, 0);
 	msets(closure, _:E_PUBLIC_CALL_SPECIFIER, spec);
 	msets(closure, _:E_PUBLIC_CALL_FUNCTION, func);
-	new tmp[32];
-	mgets(tmp, 32, closure, _:E_PUBLIC_CALL_SPECIFIER);
+	new tmp[MAX_PUBLIC_CALL_SPECIFIERS];
+	mgets(tmp, MAX_PUBLIC_CALL_SPECIFIERS, closure, _:E_PUBLIC_CALL_SPECIFIER);
 	return Function:Indirect_Ptr(Malloc_Resolve(closure));
 }
 #define GetLocalFunction(&%0<%1>) (F@_@%1:GetLocalFunction(#%0, #%1))
@@ -1100,9 +1299,15 @@ stock Function:GetLocalFunction(const func[], const spec[])
  * <param name="func">Function pointer to call.</param>
  * <param name="">The function's parameters.</param>
  * <remarks>
- *  Call the function in the given pointer with the given parameters.
+ *   Call the function in the given pointer with the given parameters.
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `@.func(params);`.
 stock CallStoredFunction(Function:func, GLOBAL_TAG_TYPES:...)
@@ -1110,14 +1315,18 @@ stock CallStoredFunction(Function:func, GLOBAL_TAG_TYPES:...)
 	return Indirect_Call(_:func, 0, ___(1));
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <param name="string1">First string as a pointer.</param>
  * <param name="string2">Second string as a string.</param>
  * <param name="ignorecase">Do a case-insensitive search.</param>
  * <param name="length">Length of string to compare over.</param>
  * <remarks>
- *  Just <c>strcmp</c>, but pretending the first parameter is a value not an
- *  array so that we can trick the compiler in to accepting a pointer.
+ *   Just <c>strcmp</c>, but pretending the first parameter is a value not an
+ *   array so that we can trick the compiler in to accepting a pointer.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1126,7 +1335,8 @@ native Inline_Strcmp(const string1, const string2[], bool:ignorecase=false, leng
 /*-------------------------------------------------------------------------*//**
  * <param name="frm">Frame to get the parameters from.</param>
  * <remarks>
- *  Deals with y_hooks parameter count mangling.  Stolen from <c>Hooks_NumArgs</c>.
+ *   Deals with y_hooks parameter count mangling.  Stolen from
+ *   <c>Hooks_NumArgs</c>.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1134,7 +1344,7 @@ static stock Inline_NumArgs(frm)
 {
 	#emit LOAD.S.alt          frm
 Inline_NumArgs_load:
-	#emit CONST.pri           8
+	#emit CONST.pri           __args_offset
 	#emit ADD
 	#emit LOAD.I
 	#emit ZERO.alt
@@ -1150,8 +1360,8 @@ Inline_NumArgs_load:
 /*-------------------------------------------------------------------------*//**
  * <param name="name">Inline to find by name.</param>
  * <remarks>
- *  Traverses up the stack to find an in-scope inline with the same name AND
- *  SIGNATURE.
+ *   Traverses up the stack to find an in-scope inline with the same name AND
+ *   SIGNATURE.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1165,32 +1375,34 @@ static stock Callback_InlineByName(const name[], tag)
 		new
 			ret = AMX_Read(ptr);
 		// Compare the tags.
-		if (tag == 0 || tag == AMX_Read(ret + 2 * cellbytes))
+		if (tag == 0 || tag == AMX_Read(ret + __2_cells))
 		{
 			// Compare the names.
-			if (!Inline_Strcmp(ret + 3 * cellbytes, name))
+			if (!Inline_Strcmp(ret + __3_cells, name))
 			{
 				new
 					frm = ptr + AMX_Read(ret + cellbytes),
 					args = Inline_NumArgs(frm),
-					size = frm - ptr + 12 + args,
-					Alloc:closure = malloc((size >>> __COMPILER_CELL_SHIFT) + (_:E_INLINE_CALL - 1));
+					size = frm - ptr + __3_cells + args,
+					Alloc:closure = malloc((size >>> __cell_shift) + (_:E_INLINE_CALL - 1));
 				if (!closure)
 					return 0;
-				mset(closure, _:E_INLINE_CALL_NULL, 0);
-				mset(closure, _:E_INLINE_CALL_HANDLER, _:addressof (Callback_CallHandler_<x>));
-				mset(closure, _:E_INLINE_CALL_CLAIM, _:addressof (Callback_Claim_));
-				mset(closure, _:E_INLINE_CALL_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
-				mset(closure, _:E_INLINE_CALL_TIMER, YSI_SetTimerEx("Inline_MaybeFree_", 0, false, "i", _:closure));
+				mset(closure, _:E_INDIRECTION_ALWAYS_NULL, 0);
+				mset(closure, _:E_INDIRECTION_HANDER, _:addressof (Callback_CallHandler_<x>));
+				mset(closure, _:E_INDIRECTION_CLAIM, _:addressof (Callback_Claim_));
+				mset(closure, _:E_INDIRECTION_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
+				mset(closure, _:E_INLINE_CALL_TIMER, YSI_SetTimerEx__(YSI_gscInline_MaybeFree, 0, false, YSI_gscSpecifier_i, _:closure));
 				mset(closure, _:E_INLINE_CALL_FLAGS, e_INLINE_FLAG_CONST);
-				mset(closure, _:E_INLINE_CALL_METADATA, 0);
+				mset(closure, _:E_INDIRECTION_METADATA, 0);
+				mset(closure, _:E_INDIRECTION_TAG, tag);
+				mset(closure, _:E_INDIRECTION_OWNER, 0);
 				mset(closure, _:E_INLINE_CALL_SIZE, size);
 				mset(closure, _:E_INLINE_CALL_SOURCE, ptr);
 				mset(closure, _:E_INLINE_CALL_FUNCTION, AMX_Read(ret));
 				new
 					ResolvedAlloc:ra = Malloc_Resolve(closure);
-				RawMemCpy(_:ra + _:E_INLINE_CALL_PARAMS * cellbytes, ptr, size);
-				AMX_Write(_:ra + (_:E_INLINE_CALL_PARAMS + 2) * cellbytes + frm - ptr, args);
+				RawMemCpy(_:ra + E_INLINE_CALL_PARAMS__, ptr, size);
+				AMX_Write(_:ra + (E_INLINE_CALL_PARAMS__ + __2_cells) + frm - ptr, args);
 				return Indirect_Ptr(ra);
 			}
 		}
@@ -1206,24 +1418,24 @@ static stock Callback_InlineByName(const name[], tag)
  * <param name="remote">Is this function called on one or all scripts?</param>
  * <param name="tag">The tag of the return value for type reasons.</param>
  * <remarks>
- *  Replacement for <c>Callback_Get</c>.  Just returns a pointer, and no longer
- *  relies on strict control of where is called from.
+ *   Replacement for <c>Callback_Get</c>.  Just returns a pointer, and no longer
+ *   relies on strict control of where is called from.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock bool:Callback_Find_(const name[], &dest, bool:remote = false, tag = 0)
 {
-	P:4("Callback_Find_ 0");
+	Debug_Print4("Callback_Find_ 0");
 	// Remote calls must always be publics.  Indirection handles publics
 	// natively.  However, it doesn't handle it amazingly since it needs to
 	// handle it very generically.
 	if (remote)
 	{
-		P:6("Callback_Find_ 1");
+		Debug_Print6("Callback_Find_ 1");
 		new
 			tagname[FUNCTION_LENGTH];
 		GetTagNameFromID(tag, tagname);
-		return !!(dest = _:GetRemoteFunction(name, tagname[4]));
+		return !!(dest = _:GetRemoteFunction(name, tagname[4], tag));
 	}
 	if (funcidx(name) == -1)
 	{
@@ -1231,11 +1443,11 @@ stock bool:Callback_Find_(const name[], &dest, bool:remote = false, tag = 0)
 		// this name.
 		return !!(dest = Callback_InlineByName(name, tag));
 	}
-	P:6("Callback_Find_ 3");
+	Debug_Print6("Callback_Find_ 3");
 	new
 		tagname[FUNCTION_LENGTH];
 	GetTagNameFromID(tag, tagname);
-	return !!(dest = _:GetLocalFunction(name, tagname[4]));
+	return !!(dest = _:GetLocalFunction(name, tagname[4], tag));
 }
 
 #define Callback_Find(%0,%1) Callback_Find_(%0,_:%1,.tag=tagof(%1))
@@ -1246,11 +1458,17 @@ stock bool:Callback_Find_(const name[], &dest, bool:remote = false, tag = 0)
 /*-------------------------------------------------------------------------*//**
  * <param name="func">Info on the function to be called.</param>
  * <remarks>
- *  Takes an inline function handler and parameters, and either calls the
- *  public function while passing through the parameters, or just jumps to the
- *  carefully crafted inline function code.
+ *   Takes an inline function handler and parameters, and either calls the
+ *   public function while passing through the parameters, or just jumps to the
+ *   carefully crafted inline function code.
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `@.func(params);`.
 stock Callback_Call(const func[E_CALLBACK_DATA], GLOBAL_TAG_TYPES:...)
@@ -1258,21 +1476,31 @@ stock Callback_Call(const func[E_CALLBACK_DATA], GLOBAL_TAG_TYPES:...)
 	return Indirect_Call(func[E_CALLBACK_DATA_ALLOC], 0, ___(1));
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <param name="func">Info on the function to be called.</param>
  * <param name="params">Array of data pointers.</param>
  * <param name="num">Size of the array.</param>
  * <remarks>
- *  This is very similar to Callback_Call, but takes an array of ADDRESSES
- *  instead of normal parameters.  This is designed to help support some
- *  experimental OO code I was working on...
+ *   This is very similar to Callback_Call, but takes an array of ADDRESSES
+ *   instead of normal parameters.  This is designed to help support some
+ *   experimental OO code I was working on...
  *
- *  If the target is a public function, the parameters are resolved and passed
- *  normally.  If the target is an inline function we are optimised for the
- *  common case, so move the data on to the stack (currently done value-by-value
- *  not all at once) and call "Callback_Call".
+ *   If the target is a public function, the parameters are resolved and passed
+ *   normally.  If the target is an inline function we are optimised for the
+ *   common case, so move the data on to the stack (currently done
+ *   value-by-value not all at once) and call "Callback_Call".
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `Indirect_Array(_:func, tagof (func), params);`.
 stock Callback_Array(const func[E_CALLBACK_DATA], const params[], num = sizeof (params))
@@ -1280,26 +1508,46 @@ stock Callback_Array(const func[E_CALLBACK_DATA], const params[], num = sizeof (
 	return Indirect_Array(func[E_CALLBACK_DATA_ALLOC], 0, params, num);
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
+
 #pragma deprecated No longer required.
 stock Inline_Reset(callback[E_CALLBACK_DATA])
 {
 	return (callback[E_CALLBACK_DATA_ALLOC] = 0);
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 native Callback_Strcat_(dest, const src[], len) = strcat;
 
 /*-------------------------------------------------------------------------*//**
  * <remarks>
- *  Looks up the callback by name.  If the name has the correct data embedded
- *  within it that's great and we use that directly.  Otherwise this function
- *  loops backwards over the callbacks currently in scope (mostly) to the start
- *  of the parent function.  If a match is still not found this looks for a
- *  public function of the same name.  If that isn't found either it gives up.
+ *   Looks up the callback by name.  If the name has the correct data embedded
+ *   within it that's great and we use that directly.  Otherwise this function
+ *   loops backwards over the callbacks currently in scope (mostly) to the start
+ *   of the parent function.  If a match is still not found this looks for a
+ *   public function of the same name.  If that isn't found either it gives up.
  *
- *  The new "remote" parameter returns instantly with a remote public function
- *  stub, and no stored data.
+ *   The new "remote" parameter returns instantly with a remote public function
+ *   stub, and no stored data.
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Remove or use `Indirect_Claim(func);`.
 #if __COMPILER_BUG_317
@@ -1327,7 +1575,7 @@ native Callback_Strcat_(dest, const src[], len) = strcat;
 			if (numArgs == 4 + __COMPILER_BUG_317)
 				remote = bool:getarg(3 + __COMPILER_BUG_317);
 		}
-		P:2("Callback_Get called: %d %s %s", numArgs, name, expect);
+		Debug_Print2("Callback_Get called: %d %s %s", numArgs, name, expect);
 		// Check that the assumption made here is valid.  I can't imagine a
 		// case, given the number of libraries in use here, where it couldn't
 		// be!  We check this since any inline data pointer will point in to the
@@ -1336,14 +1584,14 @@ native Callback_Strcat_(dest, const src[], len) = strcat;
 		// different to in the indirection include which knows to resolve the
 		// pointer before checking this, unlike here were we don't know the
 		// type.
-		assert(AMX_HEADER_DAT - AMX_HEADER_COD > 128);
+		assert(AMX_HEADER_DAT - AMX_HEADER_COD > E_PUBLIC_CALL_SPECIFIER__);
 		ret = getarg(0 + __COMPILER_BUG_317);
 		if (ret == 0)
 			return false;
 		if (!(0 < ret < 128))
 		{
 			// Resolved inline.
-			P:3("Callback_Get: Found resolved callback: %08x", ret);
+			Debug_Print3("Callback_Get: Found resolved callback: %08x", ret);
 			setarg(1 + __COMPILER_BUG_317, 0, ret);
 			// Direct function pointer.
 			Indirect_Claim(ret);
@@ -1351,18 +1599,17 @@ native Callback_Strcat_(dest, const src[], len) = strcat;
 			if (ret < 0 || AMX_Read(ret))
 				return true;
 			// Check the format, since we might have a new one to use here.
-			numArgs = AMX_Read(ret + _:E_PUBLIC_CALL_HANDLER * cellbytes);
+			numArgs = AMX_Read(ret + E_INDIRECTION_HANDER__);
 			if (numArgs == _:addressof (Callback_LocalHandler_<x>) || numArgs == _:addressof (Callback_RemoteHandler_<x>))
 			{
-				if (expect[4] && AMX_Read(ret + _:E_PUBLIC_CALL_SPECIFIER * cellbytes) == '\0')
+				if (expect[4] && AMX_Read(ret + _:E_PUBLIC_CALL_SPECIFIER__) == '\0')
 				{
 					// Given an explicit specifier here, not before.
-					Callback_Strcat_(ret + _:E_PUBLIC_CALL_SPECIFIER * cellbytes, expect[4], 32);
+					Callback_Strcat_(ret + _:E_PUBLIC_CALL_SPECIFIER__, expect[4], MAX_PUBLIC_CALL_SPECIFIERS);
 				}
 			}
 			return true;
 		}
-		getstringarg(name, 0 + __COMPILER_BUG_317);
 		// Wrap the new string-find API.
 		if (Callback_Find_(name, ret, remote, GetTagIDFromName(expect)))
 		{
@@ -1379,12 +1626,22 @@ native Callback_Strcat_(dest, const src[], len) = strcat;
 	}
 #endif
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <param name="input">Callback to release.</param>
  * <remarks>
- *  Releases all the data associated with a given callback (closure storage).
+ *   Releases all the data associated with a given callback (closure storage).
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Remove or use `Indirect_Release(func);`.
 stock Callback_Release(const input[E_CALLBACK_DATA])
@@ -1393,22 +1650,28 @@ stock Callback_Release(const input[E_CALLBACK_DATA])
 	return 0;
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 static stock Callback_Claim_(func[E_INLINE_CALL])
 {
 	KillTimer(func[E_INLINE_CALL_TIMER]);
-	func[E_INLINE_CALL_TIMER] = YSI_SetTimerEx("Inline_MaybeConst_", 0, false, "i", AMX_Ref(func[E_INLINE_CALL_NULL]));
+	func[E_INLINE_CALL_TIMER] = YSI_SetTimerEx__("Inline_MaybeConst_", 0, false, YSI_gscSpecifier_i, AMX_Ref(func[E_INLINE_CALL:E_INDIRECTION_ALWAYS_NULL]));
 }
 
 /*-------------------------------------------------------------------------*//**
  * <param name="">The parameters passed to this function via <see>@</see>.</param>
  * <remarks>
- *  When you call an inline function using <c>@.name</c>, the underlying
- *  <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
- *  The code here copies the function closure then jumps to the start of the
- *  inline code.  Once that is completed, the inline jumps back to midway
- *  through this function to store the closure back again (if required).
+ *   When you call an inline function using <c>@.name</c>, the underlying
+ *   <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
+ *   The code here copies the function closure then jumps to the start of the
+ *   inline code.  Once that is completed, the inline jumps back to midway
+ *   through this function to store the closure back again (if required).
  * </remarks>
  *//*------------------------------------------------------------------------**/
+
+const E_INLINE_CALL_diff = (_:E_INLINE_CALL_FLAGS - _:E_INLINE_CALL_PARAMS) * cellbytes;
 
 static Callback_CallHandler_(...)
 {
@@ -1416,29 +1679,29 @@ static Callback_CallHandler_(...)
 	// Get the size, and update `INDIRECTION_DATA` to point to the data.
 	#emit LOAD.alt         INDIRECTION_DATA    // 2
 	#emit MOVE.pri                             // 3
-	#emit ADD.C            40                  // 5, E_INLINE_CALL_PARAMS * cellbytes
+	#emit ADD.C            E_INLINE_CALL_PARAMS__ // 5, E_INLINE_CALL_PARAMS * cellbytes
 	#emit PUSH.pri                             // 6
-	#emit CONST.pri        7                   // 8, E_INLINE_CALL_SIZE
+	#emit CONST.pri        E_INLINE_CALL_SIZE  // 8, E_INLINE_CALL_SIZE
 	#emit LIDX                                 // 9
 	#emit PUSH.pri                             // 10
 	#emit STACK            0                   // 12
 	#emit SUB.alt                              // 13
-	#emit SCTRL            4                   // 15
+	#emit SCTRL            __stk               // 15
 	// Grow the stack.
 	// Call memcpy (put the native's parameters on the stack beyond `dest`).
-	#emit PUSH.S           0xFFFFFFF8          // 17
-	#emit PUSH.S           0xFFFFFFF8          // 19
+	#emit PUSH.S           __local1_offset     // 17
+	#emit PUSH.S           __local1_offset     // 19
 	#emit PUSH.C           0                   // 21
-	#emit PUSH.S           0xFFFFFFFC          // 23
+	#emit PUSH.S           __local0_offset     // 23
 	#emit PUSH.pri                             // 24
-	#emit PUSH.C           20                  // 26
+	#emit PUSH.C           __5_cells           // 26
 	#emit SYSREQ.C         memcpy              // 28
-	#emit STACK            24                  // 30
+	#emit STACK            __6_cells           // 30
 	// "jump" in to the code.
-	#emit LOAD.S.pri       0xFFFFFFFC          // 32
-	#emit ADD.C            0xFFFFFFFC          // 34
+	#emit LOAD.S.pri       __local0_offset     // 32
+	#emit ADD.C            __m1_cell           // 34
 	#emit LOAD.I                               // 35
-	#emit SCTRL            6                   // 37
+	#emit SCTRL            __cip               // 37
 	
 //Callback_Call_restore_stack:
 	// The stack hasn't been restored yet, and we need it.
@@ -1446,27 +1709,27 @@ static Callback_CallHandler_(...)
 	#emit NOP                                  // 39
 	// Padding to account for debug builds.
 	// If the code decides to jump back to here, save the stack out again.
-	#emit LCTRL            4                   // 41
-	#emit PUSH.S           0xFFFFFFF8          // 43
-	#emit PUSH.S           0xFFFFFFF8          // 45
+	#emit LCTRL            __stk               // 41
+	#emit PUSH.S           __local1_offset     // 43
+	#emit PUSH.S           __local1_offset     // 45
 	#emit PUSH.C           0                   // 47
 	#emit PUSH.pri                             // 48
-	#emit PUSH.S           0xFFFFFFFC          // 50
-	#emit PUSH.C           20                  // 52
+	#emit PUSH.S           __local0_offset     // 50
+	#emit PUSH.C           __5_cells           // 52
 	#emit SYSREQ.C         memcpy              // 54
 	
 	// At this point, we've written the closure back to the structure.
 	// Indicate to the original user that this is the case by clearing
 	// `e_INLINE_FLAG_CONST` from the flags (actually clears all the flags,
 	// since `e_INLINE_FLAG_PUBLIC` isn't set here either).
-	#emit LOAD.S.pri       0xFFFFFFFC          // 56
-	#emit ADD.C            0xFFFFFFF0          // 58 , E_INLINE_CALL_FLAGS - E_INLINE_CALL_PARAMS
+	#emit LOAD.S.pri       __local0_offset     // 56
+	#emit ADD.C            E_INLINE_CALL_diff  // 58, (E_INLINE_CALL_FLAGS - E_INLINE_CALL_PARAMS) * cellbytes
 	#emit MOVE.alt                             // 59
 	#emit ZERO.pri                             // 60
 	#emit STOR.I                               // 61
-	
-	#emit LCTRL            5                   // 63
-	#emit SCTRL            4                   // 65
+
+	#emit LCTRL            __frm               // 63
+	#emit SCTRL            __stk               // 65
 	#emit LOAD.pri         I@                  // 67
 	#emit RETN                                 // 68
 	__pragma("naked");
@@ -1475,47 +1738,49 @@ static Callback_CallHandler_(...)
 /*-------------------------------------------------------------------------*//**
  * <param name="">The parameters passed to this function via <see>@</see>.</param>
  * <remarks>
- *  When you call a remote function using <c>@.name</c>, the underlying
- *  <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
- *  The code here simply wraps <c>CallRemoteFunction</c>, passing the specifier
- *  and function name stored in <c>INDIRECTION_DATA</c>, which is  assumed to be
- *  a pointer to <c>enum E_PUBLIC_CALL</c>.
+ *   When you call a remote function using <c>@.name</c>, the underlying
+ *   <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
+ *   The code here simply wraps <c>CallRemoteFunction</c>, passing the specifier
+ *   and function name stored in <c>INDIRECTION_DATA</c>, which is  assumed to
+ *   be a pointer to <c>enum E_PUBLIC_CALL</c>.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Callback_RemoteHandler_(...)
 {
-	#emit LOAD.S.alt       8
-	#emit LCTRL            4
+	const E_PUBLIC_CALL_specifier = MAX_PUBLIC_CALL_SPECIFIERS * cellbytes;
+	
+	#emit LOAD.S.alt       __args_offset
+	#emit LCTRL            __stk
 	#emit SUB
-	#emit SCTRL            4
+	#emit SCTRL            __stk
 	
 	// Call `memcpy` to make a new copy of the parameters for
 	// `CallRemoteFunction`.
 	#emit PUSH.alt
 	#emit PUSH.alt
 	#emit PUSH.C           0
-	#emit PUSH.adr         12
+	#emit PUSH.adr         __param0_offset
 	#emit PUSH.pri
-	#emit PUSH.C           20
+	#emit PUSH.C           __5_cells
 	#emit SYSREQ.C         memcpy
-	#emit STACK 24
+	#emit STACK            __6_cells
 	
 	// Push the specifier and function name.
 	#emit LOAD.pri         INDIRECTION_DATA
-	#emit ADD.C            28  // E_PUBLIC_CALL_SPECIFIER * cellbytes
+	#emit ADD.C            E_PUBLIC_CALL_SPECIFIER__  // E_PUBLIC_CALL_SPECIFIER * cellbytes
 	#emit PUSH.pri
-	#emit ADD.C            128 // (E_PUBLIC_CALL_FUNCTION - E_PUBLIC_CALL_SPECIFIER) * cellbytes
+	#emit ADD.C            E_PUBLIC_CALL_specifier // (E_PUBLIC_CALL_FUNCTION - E_PUBLIC_CALL_SPECIFIER) * cellbytes
 	#emit PUSH.pri
-	#emit LOAD.S.pri       8
-	#emit ADD.C            8
+	#emit LOAD.S.pri       __args_offset
+	#emit ADD.C            __2_cells
 	#emit PUSH.pri
 	#emit SYSREQ.C         CallRemoteFunction
 	
 	// Store the return, then do the return.
 	#emit MOVE.alt
-	#emit LCTRL            5
-	#emit SCTRL            4
+	#emit LCTRL            __frm
+	#emit SCTRL            __stk
 	#emit MOVE.pri
 	#emit RETN
 	__pragma("naked");
@@ -1524,46 +1789,48 @@ static stock Callback_RemoteHandler_(...)
 /*-------------------------------------------------------------------------*//**
  * <param name="">The parameters passed to this function via <see>@</see>.</param>
  * <remarks>
- *  When you call a local function using <c>@.name</c>, the underlying
- *  <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
- *  The code here simply wraps <c>CallLocalFunction</c>, passing the specifier
- *  and function name stored in <c>INDIRECTION_DATA</c>.
+ *   When you call a local function using <c>@.name</c>, the underlying
+ *   <c>Indirect_Call</c> function jumps to a handler.  This is that handler.
+ *   The code here simply wraps <c>CallLocalFunction</c>, passing the specifier
+ *   and function name stored in <c>INDIRECTION_DATA</c>.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Callback_LocalHandler_(...)
 {
-	#emit LOAD.S.alt       8
-	#emit LCTRL            4
+	const E_PUBLIC_CALL_specifier = MAX_PUBLIC_CALL_SPECIFIERS * cellbytes;
+	
+	#emit LOAD.S.alt       __args_offset
+	#emit LCTRL            __stk
 	#emit SUB
-	#emit SCTRL            4
+	#emit SCTRL            __stk
 	
 	// Call `memcpy` to make a new copy of the parameters for
 	// `CallLocalFunction`.
 	#emit PUSH.alt
 	#emit PUSH.alt
 	#emit PUSH.C           0
-	#emit PUSH.adr         12
+	#emit PUSH.adr         __param0_offset
 	#emit PUSH.pri
-	#emit PUSH.C           20
+	#emit PUSH.C           __5_cells
 	#emit SYSREQ.C         memcpy
-	#emit STACK 24
+	#emit STACK            __6_cells
 	
 	// Push the specifier and function name.
 	#emit LOAD.pri         INDIRECTION_DATA
-	#emit ADD.C            28  // E_PUBLIC_CALL_SPECIFIER * cellbytes
+	#emit ADD.C            E_PUBLIC_CALL_SPECIFIER__  // E_PUBLIC_CALL_SPECIFIER * cellbytes
 	#emit PUSH.pri
-	#emit ADD.C            128 // (E_PUBLIC_CALL_FUNCTION - E_PUBLIC_CALL_SPECIFIER) * cellbytes
+	#emit ADD.C            E_PUBLIC_CALL_specifier // (E_PUBLIC_CALL_FUNCTION - E_PUBLIC_CALL_SPECIFIER) * cellbytes
 	#emit PUSH.pri
-	#emit LOAD.S.pri       8
-	#emit ADD.C            8
+	#emit LOAD.S.pri       __args_offset
+	#emit ADD.C            __2_cells
 	#emit PUSH.pri
 	#emit SYSREQ.C         CallLocalFunction
 	
 	// Store the return, then do the return.
 	#emit MOVE.alt
-	#emit LCTRL            5
-	#emit SCTRL            4
+	#emit LCTRL            __frm
+	#emit SCTRL            __stk
 	#emit MOVE.pri
 	#emit RETN
 	__pragma("naked");
@@ -1574,22 +1841,22 @@ static stock Callback_LocalHandler_(...)
  * <param name="parameters">Information on the fake parameter types.</param>
  * <param name="count">How many parameters there are.</param>
  * <remarks>
- *  Generates the code which copies the parameters from <c>Callback_Call</c> in
- *  to the local stack.  All those parameters are passed by reference, since the
- *  function is a varargs function.  Since an inline function's "input"
- *  parameters are just regular variables on the stack, they all need resolving,
- *  which is what this code does.  Regular variables are dereferenced, and
- *  arryas and strings are fully copied over.
+ *   Generates the code which copies the parameters from <c>Callback_Call</c> in
+ *   to the local stack.  All those parameters are passed by reference, since
+ *   the function is a varargs function.  Since an inline function's "input"
+ *   parameters are just regular variables on the stack, they all need
+ *   resolving, which is what this code does.  Regular variables are
+ *   dereferenced, and arryas and strings are fully copied over.
  *
- *  Technically this doesn't ACTUALLY do the copy, but generates the code for
- *  the copy.
+ *   Technically this doesn't ACTUALLY do the copy, but generates the code for
+ *   the copy.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Inline_GenerateLocalsCopy(ctx[AsmContext], const parameters[], count)
 {
 	new
-		input = 12;
+		input = __param0_offset;
 	for (new i = 0; i != count; ++i)
 	{
 		switch (parameters[i])
@@ -1606,9 +1873,9 @@ static stock Inline_GenerateLocalsCopy(ctx[AsmContext], const parameters[], coun
 			@emit PUSH.C           YSI_MAX_INLINE_STRING
 			@emit PUSH.S           input
 			@emit PUSH.alt
-			@emit PUSH.C           12
-			@emit SYSREQ           "strunpack"
-			@emit STACK            16
+			@emit PUSH.C           __3_cells
+			@emit SYSREQ.C         nativeidxof(YSI_StrUnpack__<aai>)
+			@emit STACK            __4_cells
 		}
 		default:
 		{
@@ -1629,12 +1896,12 @@ static stock Inline_GenerateLocalsCopy(ctx[AsmContext], const parameters[], coun
  * <param name="parameters">Information on the fake parameter types.</param>
  * <param name="count">How many parameters there are.</param>
  * <remarks>
- *  When the inline function ends, any parameters that were defined as being
- *  passed by reference are copied back.  This is because true locals are never
- *  by reference, so we fake it.  There is one bug with this method - aliased
- *  variables won't work correctly:
+ *   When the inline function ends, any parameters that were defined as being
+ *   passed by reference are copied back.  This is because true locals are never
+ *   by reference, so we fake it.  There is one bug with this method - aliased
+ *   variables won't work correctly:
  *
- *  <c>
+ *   <c>
  *      inline Func(&amp;a, &amp;b)
  *      {
  *  	    ++a; 
@@ -1643,19 +1910,19 @@ static stock Inline_GenerateLocalsCopy(ctx[AsmContext], const parameters[], coun
  *      
  *      new a = 10;
  *      Callback_Call(using inline Func, a, a);
- *  </c>
+ *   </c>
  *
- *  That will print <c>10</c> while the same code with a normal function will
- *  print <c>11</c> thanks to <c>a</c> and <c>b</c> being aliased.  Maybe I
- *  should add a <c>restrict</c> keyword, but even then I don't know how to
- *  solve unrestricted variables (at best I can warn for them).  And this is not
- *  a totally unheard of situation.  I have at least seen this for getting only
- *  a player's height:
+ *   That will print <c>10</c> while the same code with a normal function will
+ *   print <c>11</c> thanks to <c>a</c> and <c>b</c> being aliased.  Maybe I
+ *   should add a <c>restrict</c> keyword, but even then I don't know how to
+ *   solve unrestricted variables (at best I can warn for them).  And this is
+ *   not a totally unheard of situation.  I have at least seen this for getting
+ *   only a player's height:
  *
- *  <c>
+ *   <c>
  *      new z;
  *      GetPlayerPos(playerid, z, z, z);
- *  </c>
+ *   </c>
  *
  * </remarks>
  *//*------------------------------------------------------------------------**/
@@ -1676,7 +1943,7 @@ static stock Inline_GenerateLocalsStore(ctx[AsmContext], const parameters[], cou
 				@emit STACK            accumulate
 			accumulate = 0;
 			@emit POP.alt
-			@emit SREF.S.alt       (count << __COMPILER_CELL_SHIFT) + 12
+			@emit SREF.S.alt       (count << __cell_shift) + __param0_offset
 		}
 		case 0:
 			accumulate += cellbytes;
@@ -1697,14 +1964,14 @@ static stock Inline_GeneratePreamble(ctx[AsmContext], locals)
 	@emit Inline_Start:
 	// Set the local frame.
 	@emit STACK            0
-	@emit LCTRL            5
+	@emit LCTRL            __frm
 	@emit XCHG
-	@emit ADD.C            locals + 4
-	@emit SCTRL            5
+	@emit ADD.C            locals + __1_cell
+	@emit SCTRL            __frm
 	@emit STOR.S.alt       0
 	// Get the return address.
 	@emit POP.pri
-	@emit STOR.S.pri       4
+	@emit STOR.S.pri       __return_offset
 }
 
 static stock Inline_GeneratePostamble(ctx[AsmContext], const parameters[], const count, bool:isConst, locals, inlineParams)
@@ -1738,18 +2005,18 @@ static stock Inline_GeneratePostamble(ctx[AsmContext], const parameters[], const
 			// However, that was brittle (it has already been changed in the
 			// official distribution), and was inaccurate if there were extra
 			// locals declared in the inline.
-			@emit LOAD.S.pri       0xFFFFFFF8
+			@emit LOAD.S.pri       __local1_offset
 			@emit STACK            0
 			@emit ADD.C            locals - inlineParams
 			@emit SUB.alt
-			@emit SCTRL            4
+			@emit SCTRL            __stk
 			// We will remove everything from the stack later, as well as the
 			// two values on the stack for `memcpy` restoration.
-			@emit CONST.pri        8
+			@emit CONST.pri        __2_cells
 			@emit ADD
 			Inline_GenerateLocalsStore(ctx, parameters, count);
 			// Restore the return value.
-			@emit SCTRL            4
+			@emit SCTRL            __stk
 			@emit LOAD.pri         AMX_Ref(I@)
 			@emit RETN
 		}
@@ -1757,7 +2024,7 @@ static stock Inline_GeneratePostamble(ctx[AsmContext], const parameters[], const
 		{
 			// If we are here, we are in the context of `Callback_Call`, with no
 			// locals on the stack.
-			@emit STACK            8
+			@emit STACK            __2_cells
 			@emit RETN
 		}
 	}
@@ -1766,11 +2033,11 @@ static stock Inline_GeneratePostamble(ctx[AsmContext], const parameters[], const
 		@emit STOR.pri         AMX_Ref(I@)
 		if (needStore)
 		{
-			@emit LOAD.S.alt       0xFFFFFFF8
-			@emit LCTRL            4
+			@emit LOAD.S.alt       __local1_offset
+			@emit LCTRL            __stk
 			@emit ADD.C            inlineParams - locals
 			@emit SUB
-			@emit SCTRL            4
+			@emit SCTRL            __stk
 			new
 				accumulate = Inline_GenerateLocalsStore(ctx, parameters, count);
 			if (accumulate)
@@ -1784,13 +2051,13 @@ static stock Inline_GeneratePostamble(ctx[AsmContext], const parameters[], const
 			// but not including them.  This will set us up the bomb (sorry,
 			// couldn't resist).  This will set us up nicely for the jump in to
 			// `Callback_CallHandler` for copying the stack back out again.
-			@emit LOAD.S.alt       0xFFFFFFF8
-			@emit LCTRL            4
+			@emit LOAD.S.alt       __local1_offset
+			@emit LCTRL            __stk
 			@emit SUB
-			@emit SCTRL            4
+			@emit SCTRL            __stk
 		}
 		// Jump to `Callback_Call_restore_stack:` to perform common cleanup.
-		@emit JUMP             YSI_g_sCallbackCallAddress + 39 * cellbytes
+		@emit JUMP             YSI_g_sCallbackCallAddress + (39 * cellbytes)
 	}
 }
 
@@ -1800,14 +2067,14 @@ static stock Inline_DoRetnGen(ctx[AsmContext], const scanner[CodeScanner], const
 	// invalid address (in the middle of an OpCode we just wrote out).
 	new
 		startaddr = data[E_INLINE_DATA_USER],
-		endaddrDAT = CodeScanGetMatchHole(scanner, 1) - 8,
+		endaddrDAT = CodeScanGetMatchHole(scanner, 1) - __2_cells,
 		endaddrCOD = endaddrDAT + YSI_g_sJumpOffset,
 		nop = _:RelocateOpcode(OP_NOP),
 		dctx[DisasmContext];
 	// Using the local decompiler, go through the code and remove any jumps to
 	// outside of [startaddr, endaddrDAT].  Convert them all to `RETN; NOP`.
 	CodeScanGetMatchDisasm(scanner, dctx, CodeScanGetMatchLength(scanner));
-	dctx[DisasmContext_end_ip] = endaddrDAT + AMX_HEADER_COD + 16;
+	dctx[DisasmContext_end_ip] = endaddrDAT + AMX_HEADER_COD + __4_cells;
 	while (DisasmNext(dctx) != DISASM_DONE)
 	{
 		// Is this a jump?  The only jumps that can get out of this constraint
@@ -1816,7 +2083,7 @@ static stock Inline_DoRetnGen(ctx[AsmContext], const scanner[CodeScanner], const
 		// `break`, `continue`, or `goto`.
 		if (DisasmGetOpcode(dctx) == OP_JUMP && !(startaddr <= DisasmGetOperandReloc(dctx) < endaddrDAT))
 		{
-			AMX_Write(DisasmGetCurIp(dctx) + 4, endaddrCOD);
+			AMX_Write(DisasmGetCurIp(dctx) + __1_cell, endaddrCOD);
 		}
 	}
 	// Save this end address for when we detect inline function destructor calls.  This way we don't
@@ -1840,61 +2107,62 @@ static stock Inline_DoRetnGen(ctx[AsmContext], const scanner[CodeScanner], const
 		while (DisasmNext(dctx) != DISASM_DONE && DisasmGetOpcode(dctx) != OP_STACK)
 		{
 			AMX_Write(endaddrDAT, _:DisasmGetOpcode(dctx));
-			endaddrDAT += 4;
+			endaddrDAT += __1_cell;
 			for (startaddr = 0; startaddr < DisasmGetNumOperands(dctx); ++startaddr)
 			{
 				AMX_Write(endaddrDAT, _:DisasmGetOperand(dctx, startaddr));
-				endaddrDAT += 4;
+				endaddrDAT += __1_cell;
 			}
 			startaddr = 0;
 		}
-		@emit JUMP             endaddrDAT - AMX_HEADER_COD + YSI_g_sJumpOffset + 24
+		@emit JUMP             endaddrDAT - AMX_HEADER_COD + YSI_g_sJumpOffset + __6_cells
 		AMX_Write(endaddrDAT     , _:RelocateOpcode(OP_STACK));
-		AMX_Write(endaddrDAT + 4 , data[E_INLINE_DATA_STACK]);
-		AMX_Write(endaddrDAT + 8 , _:RelocateOpcode(OP_ZERO_PRI));
-		AMX_Write(endaddrDAT + 12, _:RelocateOpcode(OP_RETN));
+		AMX_Write(endaddrDAT + __1_cell , data[E_INLINE_DATA_STACK]);
+		AMX_Write(endaddrDAT + __2_cells, _:RelocateOpcode(OP_ZERO_PRI));
+		AMX_Write(endaddrDAT + __3_cells, _:RelocateOpcode(OP_RETN));
 		if (!startaddr)
 		{
 			// The write extended beyond the limit of where codescan was up to.  Adjust the stack
 			// back down again by the size of the closure data (i.e. the data outside the current
 			// inline).  This is AFTER the return, since we don't actually want the code to run,
 			// just correct codescan's view of the world.
-			AMX_Write(DisasmGetCurIp(dctx) + 4, -data[E_INLINE_DATA_LOCALS]);
+			AMX_Write(DisasmGetCurIp(dctx) + __1_cell, -data[E_INLINE_DATA_LOCALS]);
 		}
 	}
 	else if (data[E_INLINE_DATA_STACK])
 	{
 		// No parameters, but some stack.
-		@emit JUMP             endaddrCOD + 16
+		@emit JUMP             endaddrCOD + __4_cells
 		AMX_Write(endaddrDAT     , _:RelocateOpcode(OP_STACK));
-		AMX_Write(endaddrDAT + 4 , data[E_INLINE_DATA_STACK]);
-		AMX_Write(endaddrDAT + 8 , _:RelocateOpcode(OP_ZERO_PRI));
-		AMX_Write(endaddrDAT + 12, _:RelocateOpcode(OP_RETN));
+		AMX_Write(endaddrDAT + __1_cell , data[E_INLINE_DATA_STACK]);
+		AMX_Write(endaddrDAT + __2_cells, _:RelocateOpcode(OP_ZERO_PRI));
+		AMX_Write(endaddrDAT + __3_cells, _:RelocateOpcode(OP_RETN));
 	}
 	else
 	{
 		// No cleanup, no stack correction, no need to satisfy codescan.
-		@emit JUMP             endaddrCOD + 16
+		@emit JUMP             endaddrCOD + __4_cells
 		AMX_Write(endaddrDAT     , _:RelocateOpcode(OP_ZERO_PRI));
-		AMX_Write(endaddrDAT + 4 , _:RelocateOpcode(OP_RETN));
-		AMX_Write(endaddrDAT + 8 , nop);
-		AMX_Write(endaddrDAT + 12, nop);
+		AMX_Write(endaddrDAT + __1_cell , _:RelocateOpcode(OP_RETN));
+		AMX_Write(endaddrDAT + __2_cells, nop);
+		AMX_Write(endaddrDAT + __3_cells, nop);
 	}
 }
 
-#define CALL@Inline_OnAsmError Inline_OnAsmError("", ASM_ERROR_NONE)
+#define CALL@Inline_OnAsmError%8() Inline_OnAsmError%8("", AsmError:0)
+#define P@AsmError: P@
 
 static stock Inline_OnAsmError(const ctx[AsmContext], AsmError:error)
 {
 	switch (numargs() == 1 ? AsmGetError(ctx) : error)
 	{
-	case ASM_ERROR_OPCODE:          P:E("ASM_ERROR_OPCODE in Inline_Main.");
-	case ASM_ERROR_OPERAND:         P:E("ASM_ERROR_OPERAND in Inline_Main.");
-	case ASM_ERROR_SPACE:           P:E("ASM_ERROR_SPACE in Inline_Main.");
-	case ASM_ERROR_LABEL_OVERFLOW:  P:E("ASM_ERROR_LABEL_OVERFLOW in Inline_Main.");
-	case ASM_ERROR_LABEL_DUPLICATE: P:E("ASM_ERROR_LABEL_DUPLICATE in Inline_Main.");
+	case ASM_ERROR_OPCODE:          Debug_Error("ASM_ERROR_OPCODE in Inline_Main.");
+	case ASM_ERROR_OPERAND:         Debug_Error("ASM_ERROR_OPERAND in Inline_Main.");
+	case ASM_ERROR_SPACE:           Debug_Error("ASM_ERROR_SPACE in Inline_Main.");
+	case ASM_ERROR_LABEL_OVERFLOW:  Debug_Error("ASM_ERROR_LABEL_OVERFLOW in Inline_Main.");
+	case ASM_ERROR_LABEL_DUPLICATE: Debug_Error("ASM_ERROR_LABEL_DUPLICATE in Inline_Main.");
 	case ASM_ERROR_NONE: return;
-	default: P:E("Unknown error in Inline_Main.");
+	default: Debug_Error("Unknown error in Inline_Main.");
 	}
 	// TODO: Abort codegen.
 }
@@ -1914,7 +2182,7 @@ static stock Inline_DoCodeGen(const scanner[CodeScanner], const data[E_INLINE_DA
 
 public Callback_Release_(ResolvedAlloc:a)
 {
-	KillTimer(AMX_Read(_:a + _:E_INLINE_CALL_TIMER * cellbytes));
+	KillTimer(AMX_Read(_:a + E_INLINE_CALL_TIMER__));
 	free(Malloc_Reconcile(a));
 }
 
@@ -1936,7 +2204,7 @@ static stock Inline_Ref(const &ptr)
 	#pragma warning push
 	#pragma warning disable 238
 #endif
-stock Inline_UI_(const &header)
+stock Inline_UI_(const &header, tag)
 {
 	// We use `&header` instead of `return` so that we can keep the tags
 	// correct.  This also passes an address that we know is the bottom of the
@@ -1951,58 +2219,61 @@ stock Inline_UI_(const &header)
 	// We can't use `AMX_Ref()` here because passing a `const &` to a `...` function
 	// gets the address of a heap temporary, instead of the original.  Even
 	// `const ...` doesn't solve this.
-	P:3("Inline_UI_ called: %d", header);
+	Debug_Print3("Inline_UI_ called: %d", header);
 	new
 		ptr = Inline_Ref(header),
 		frm = AMX_Read(header + cellbytes),
 		args = Inline_NumArgs(ptr + frm),
-		size = frm + 12 + args,
+		size = frm + __3_cells + args,
 		// The size of the allocation makes very little difference, so even if
 		// it isn't needed, we allocate extra memory here for the closure
 		// storage.  The other option would be allocating it separately later
 		// when we determine it is needed, but that would be no faster in the
 		// common case, and slower in the uncommon case, so just do it together.
-		Alloc:closure = malloc((size >>> __COMPILER_CELL_SHIFT) + (_:E_INLINE_CALL - 1));
-	P:5("Inline_UI_: %d %d %d %d %d", ptr, frm, size, _:closure, AMX_Read(header));
+		Alloc:closure = malloc((size >>> __cell_shift) + (_:E_INLINE_CALL - 1));
+	Debug_Print5("Inline_UI_: %d %d %d %d %d", ptr, frm, size, _:closure, AMX_Read(header));
 	if (!closure)
 		return 0;
-	mset(closure, _:E_INLINE_CALL_NULL, 0);
-	mset(closure, _:E_INLINE_CALL_HANDLER, _:addressof (Callback_CallHandler_<x>));
-	mset(closure, _:E_INLINE_CALL_CLAIM, _:addressof (Callback_Claim_));
-	mset(closure, _:E_INLINE_CALL_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
-	mset(closure, _:E_INLINE_CALL_TIMER, YSI_SetTimerEx("Inline_MaybeFree_", 0, false, "i", _:closure));
+	mset(closure, _:E_INDIRECTION_ALWAYS_NULL, 0);
+	mset(closure, _:E_INDIRECTION_HANDER, _:addressof (Callback_CallHandler_<x>));
+	mset(closure, _:E_INDIRECTION_CLAIM, _:addressof (Callback_Claim_));
+	mset(closure, _:E_INDIRECTION_RELEASE, _:addressof (Callback_Release_<tResolvedAlloc:>));    
+	mset(closure, _:E_INLINE_CALL_TIMER, YSI_SetTimerEx__(YSI_gscInline_MaybeFree, 0, false, YSI_gscSpecifier_i, _:closure));
 	mset(closure, _:E_INLINE_CALL_FLAGS, e_INLINE_FLAG_CONST);
-	mset(closure, _:E_INLINE_CALL_METADATA, 0);
+	mset(closure, _:E_INDIRECTION_METADATA, 0);
+	mset(closure, _:E_INDIRECTION_TAG, tag);
+	mset(closure, _:E_INDIRECTION_OWNER, 0);
 	mset(closure, _:E_INLINE_CALL_SIZE, size);
 	mset(closure, _:E_INLINE_CALL_SOURCE, ptr);
 	mset(closure, _:E_INLINE_CALL_FUNCTION, AMX_Read(header));
 	new
 		ResolvedAlloc:ra = Malloc_Resolve(closure);
-	RawMemCpy(_:ra + _:E_INLINE_CALL_PARAMS * cellbytes, ptr, size);
-	AMX_Write(_:ra + (_:E_INLINE_CALL_PARAMS + 2) * cellbytes + frm, args);
+	RawMemCpy(_:ra + E_INLINE_CALL_PARAMS__, ptr, size);
+	AMX_Write(_:ra + (E_INLINE_CALL_PARAMS__ + __2_cells) + frm, args);
+	Debug_Print5("Inline_UI_: ptr = %08x, addr = %08x, data = %08x", Indirect_Ptr(ra), ra, closure);
 	return Indirect_Ptr(ra);
 }
 #if __COMPILER_CONST_REF
 	#pragma warning pop
 #endif
 
-stock Inline_UP_(const func[], const spec[] = "")
+stock Inline_UP_(const func[], const spec[] = "", tag = 0)
 {
 	// Convert a function name to a pointer.
-	I@ = _:GetLocalFunction(func, spec);
+	I@ = _:GetLocalFunction(func, spec, tag);
 }
 
 /*-------------------------------------------------------------------------*//**
  * <param name="">Info on the restoration function.</param>
  * <remarks>
- *  Makes variables referenced, instead of valued.  When used after
- *  "Callback_Call" the values of any variables in the enclosing function that
- *  were modified in the inline function will be propgated so that their new
- *  values are seen by the original parent function (rather than that function
- *  still seeing the original values prior to the inline function modifying
- *  them).  Note that this does no checks at all at the minute - if you call an
- *  inline function whose parent is not currently on the stack, this will
- *  probably fail catastrophically!
+ *   Makes variables referenced, instead of valued.  When used after
+ *   "Callback_Call" the values of any variables in the enclosing function that
+ *   were modified in the inline function will be propgated so that their new
+ *   values are seen by the original parent function (rather than that function
+ *   still seeing the original values prior to the inline function modifying
+ *   them).  Note that this does no checks at all at the minute - if you call an
+ *   inline function whose parent is not currently on the stack, this will
+ *   probably fail catastrophically!
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -2018,18 +2289,18 @@ stock Callback_Restore_(...)
 	if (closure < 0 || AMX_Read(closure))
 		return true;
 	// Called via a timer, or is const, or wasn't actually called, or is a public.
-	if (AMX_Read(closure + _:E_INLINE_CALL_FLAGS * cellbytes) || !AMX_Read(closure + _:E_INLINE_CALL_TIMER * cellbytes))
+	if (AMX_Read(closure + E_INLINE_CALL_FLAGS__) || !AMX_Read(closure + E_INLINE_CALL_TIMER__))
 	{
 		return 0;
 	}
 	new
-		ptr = AMX_Read(closure + _:E_INLINE_CALL_SOURCE * cellbytes),
+		ptr = AMX_Read(closure + E_INLINE_CALL_SOURCE__),
 		frm = AMX_Read(ptr) + cellbytes;
 	frm = ptr + AMX_Read(frm);
 	new
 		ret = GetFrameReturn(frm),
 		pfr = GetFramePreviousFrame(frm);
-	RawMemCpy(ptr, closure + _:E_INLINE_CALL_PARAMS * cellbytes, AMX_Read(closure + _:E_INLINE_CALL_SIZE * cellbytes)),
+	RawMemCpy(ptr, closure + E_INLINE_CALL_PARAMS__, AMX_Read(closure + E_INLINE_CALL_SIZE__)),
 	SetFrameReturn(frm, ret),
 	SetFramePreviousFrame(frm, pfr);
 	return 0;
@@ -2039,23 +2310,89 @@ stock Callback_Restore_(...)
 stock Inline_Debug(ptr)
 {
 	// Get back to normal memory.
-	new Alloc:data = Malloc_Reconcile(ResolvedAlloc:Indirect_DePtr(ptr));
-	printf("ptr:                    %d", _:ptr);
-	printf("resolved:               %d", _:Indirect_DePtr(ptr));
+	new
+		Alloc:data = Alloc:Malloc_Reconcile(ResolvedAlloc:Indirect_DePtr(ptr)),
+		type = mget(data, E_INDIRECTION_ALWAYS_NULL),
+		tmp[32];
+	Debug_Print5("Inline_Debug_: ptr = %08x, addr = %08x, data = %08x, type = %d", ptr, Indirect_DePtr(ptr), data, type);
+	// If `ALWAYS_NULL` isn't null, this isn't an indirection handler.
+	if ('\0' < type <= '~')
+	{
+		printf("Type: String");
+		mgets(tmp, 32, data, 0);
+		printf("    %s", tmp);
+		return;
+	}
+	if (type != 0)
+	{
+		printf("Type: Ptr");
+		printf("    %08x", type);
+		return;
+	}
+	type = mget(data, E_INDIRECTION_HANDER);
+	if (type == _:addressof (Callback_RemoteHandler_<x>))
+	{
+		printf("Type: Remote");
+	}
+	else if (type == _:addressof (Callback_LocalHandler_<x>))
+	{
+		printf("Type: Local");
+	}
+	else if (type == _:addressof (Callback_CallHandler_<x>))
+	{
+		printf("Type: Indirect");
+	}
+	else if (type == _:addressof (Callback_Blank_<x>))
+	{
+		// 
+		printf("Type: Disabled");
+	}
+	else
+	{
+		printf("Type: Unknown");
+	}
+	// Normal callback handler.
+	/*{
+		AddressofResolve();
+		new
+			amxhdr[AMX_HDR];
+		GetAmxHeader(amxhdr);
+		new
+			s = _:ptr - amxhdr[AMX_HDR_DAT] + amxhdr[AMX_HDR_COD];
+		printf("    sub:                       %d", s);
+		printf("    null:                      %d", AMX_Read(s));
+	}*/
+	printf("    ptr:                       %d", _:ptr);
+	printf("    resolved:                  %d", _:Indirect_DePtr(ptr));
 	#emit CONST.alt     YSI_gMallocMemory
 	#emit STOR.S.alt    ptr
-	printf("memory:                 %d", _:ptr);
-	printf("slot:                   %d", _:data);
-	printf("E_INLINE_CALL_NULL:     %d", mget(data, E_INLINE_CALL_NULL));
-	printf("E_INLINE_CALL_HANDLER:  %d", mget(data, E_INLINE_CALL_HANDLER));
-	printf("E_INLINE_CALL_CLAIM:    %d", mget(data, E_INLINE_CALL_CLAIM));
-	printf("E_INLINE_CALL_RELEASE:  %d", mget(data, E_INLINE_CALL_RELEASE));
-	printf("E_INLINE_CALL_METADATA: %d", mget(data, E_INLINE_CALL_METADATA));
-	printf("E_INLINE_CALL_TIMER:    %d", mget(data, E_INLINE_CALL_TIMER));
-	printf("E_INLINE_CALL_FLAGS:    %d", mget(data, E_INLINE_CALL_FLAGS));
-	printf("E_INLINE_CALL_SIZE:     %d", mget(data, E_INLINE_CALL_SIZE));
-	printf("E_INLINE_CALL_SOURCE:   %d", mget(data, E_INLINE_CALL_SOURCE));
-	printf("E_INLINE_CALL_FUNCTION: %d", mget(data, E_INLINE_CALL_FUNCTION));
-	printf("E_INLINE_CALL_PARAMS:   %d", _:Malloc_Reconcile(ResolvedAlloc:mget(data, E_INLINE_CALL_FUNCTION)));
+	printf("    memory:                    %d", _:ptr);
+	printf("    slot:                      %d", _:data);
+	printf("    E_INDIRECTION_ALWAYS_NULL: 0"); // Must be `0` to get this far.
+	printf("    E_INDIRECTION_HANDER:      %d", type);
+	printf("    E_INDIRECTION_CLAIM:       %d", mget(data, E_INDIRECTION_CLAIM));
+	printf("    E_INDIRECTION_RELEASE:     %d", mget(data, E_INDIRECTION_RELEASE));
+	printf("    E_INDIRECTION_METADATA:    %d", mget(data, E_INDIRECTION_METADATA));
+	printf("    E_INDIRECTION_TAG:         %d", mget(data, E_INDIRECTION_TAG));
+	printf("    E_INDIRECTION_OWNER:       %d", mget(data, E_INDIRECTION_OWNER));
+	printf("    E_INDIRECTION_NEXT:        %d", mget(data, E_INDIRECTION_NEXT));
+	if (type == _:addressof (Callback_RemoteHandler_<x>) || type == _:addressof (Callback_LocalHandler_<x>))
+	{
+		printf("    E_PUBLIC_CALL_TIMER:       %d", mget(data, E_PUBLIC_CALL_TIMER));
+		printf("    E_PUBLIC_CALL_FLAGS:       %d", mget(data, E_PUBLIC_CALL_FLAGS));
+		mgets(tmp, MAX_PUBLIC_CALL_SPECIFIERS, data, _:E_PUBLIC_CALL_SPECIFIER);
+		printf("    E_PUBLIC_CALL_SIZE:        %s", tmp);
+		mgets(tmp, FUNCTION_LENGTH, data, _:E_PUBLIC_CALL_FUNCTION);
+		printf("    E_PUBLIC_CALL_FUNCTION:    %s", tmp);
+	}
+	else if (type == _:addressof (Callback_CallHandler_<x>))
+	{
+		printf("    E_INLINE_CALL_TIMER:       %d", mget(data, E_INLINE_CALL_TIMER));
+		printf("    E_INLINE_CALL_FLAGS:       %d", mget(data, E_INLINE_CALL_FLAGS));
+		printf("    E_INLINE_CALL_SIZE:        %d", mget(data, E_INLINE_CALL_SIZE));
+		printf("    E_INLINE_CALL_SOURCE:      %d", mget(data, E_INLINE_CALL_SOURCE));
+		printf("    E_INLINE_CALL_FUNCTION:    %d", mget(data, E_INLINE_CALL_FUNCTION));
+		printf("    E_INLINE_CALL_PARAMS:      %d", _:Malloc_Reconcile(ResolvedAlloc:mget(data, E_INLINE_CALL_FUNCTION)));
+	}
 }
 

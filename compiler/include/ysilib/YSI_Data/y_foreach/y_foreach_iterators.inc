@@ -91,21 +91,22 @@ Optional plugins:
 #if _FOREACH_PLAYERS
 	new
 		#if _FOREACH_STREAMED
-			Iterator:StreamedPlayer[MAX_PLAYERS]<MAX_PLAYERS>,
+			ITERATOR__ StreamedPlayer[MAX_PLAYERS]<MAX_PLAYERS>,
 		#endif
-		Iterator:Player<MAX_PLAYERS>;
+		ITERATOR__ RconAdmin<MAX_PLAYERS>,
+		ITERATOR__ Player<MAX_PLAYERS>;
 #endif
 
 #if _FOREACH_BOTS
 	new
 		#if _FOREACH_STREAMED
-			Iterator:StreamedBot[MAX_PLAYERS]<MAX_PLAYERS>,
+			ITERATOR__ StreamedBot[MAX_PLAYERS]<MAX_PLAYERS>,
 		#endif
-		Iterator:Bot<MAX_PLAYERS>,
+		ITERATOR__ Bot<MAX_PLAYERS>,
 		#if _FOREACH_STREAMED
-			Iterator:StreamedCharacter[MAX_PLAYERS]<MAX_PLAYERS>,
+			ITERATOR__ StreamedCharacter[MAX_PLAYERS]<MAX_PLAYERS>,
 		#endif
-		Iterator:Character<MAX_PLAYERS>;
+		ITERATOR__ Character<MAX_PLAYERS>;
 	
 	#define Iter_Single@NPC Iter_Single@Bot
 	#define Iterator@NPC Iterator@Bot
@@ -114,24 +115,56 @@ Optional plugins:
 #if _FOREACH_ACTORS
 	new
 		#if _FOREACH_LOCALS
-			Iterator:LocalActor<MAX_ACTORS>,
+			ITERATOR__ LocalActor<MAX_ACTORS>,
 		#endif
 		#if _FOREACH_STREAMED
-			Iterator:StreamedActor[MAX_PLAYERS]<MAX_ACTORS>,
+			ITERATOR__ StreamedActor[MAX_PLAYERS]<MAX_ACTORS>,
 		#endif
-		Iterator:Actor<MAX_ACTORS>;
+		ITERATOR__ Actor<MAX_ACTORS>;
 #endif
 
 #if _FOREACH_VEHICLES
 	new
 		#if _FOREACH_LOCALS
-			Iterator:LocalVehicle<MAX_VEHICLES>,
+			ITERATOR__ LocalVehicle<MAX_VEHICLES>,
 		#endif
 		#if _FOREACH_STREAMED
-			Iterator:StreamedVehicle[MAX_PLAYERS]<MAX_VEHICLES>,
+			ITERATOR__ StreamedVehicle[MAX_PLAYERS]<MAX_VEHICLES>,
 		#endif
-		Iterator:Vehicle<MAX_VEHICLES>;
+		ITERATOR__ Vehicle<MAX_VEHICLES>;
+
+	static
+		ITERATOR__ PlayersFromVehicles<MAX_PLAYERS>;
 #endif
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="min">The start value.</param>
+ * <param name="max">The end value.</param>
+ * <param name="step">How many values to increase by each time.</param>
+ * <remarks>
+ *   Pretty much used to replicate a normal loop with <c>foreach</c>.  This:
+ * 
+ *   <code>
+ *      for (new i = 10; i != 100; i += 2) <br />
+ *      {                                  <br />
+ *      }
+ *   </code>
+ * 
+ *   Becomes:
+ * 
+ *   <code>
+ *      foreach (new i : Range(10, 100, 2)) <br />
+ *      {                                   <br />
+ *      }
+ *   </code>
+ * 
+ *   The increment value is optional, and defaults to <c>1</c>.  If you want a
+ *   <c>step</c> of <c>1</c> and a <c>min</c> of <c>0</c>, consider using
+ *   <c>N(max)</c> instead, which is specifically optimised for that scenario.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 iterfunc stock Range[cellmin](cur, min, max, step = 1)
 {
@@ -140,22 +173,58 @@ iterfunc stock Range[cellmin](cur, min, max, step = 1)
 	return (min <= cur < max || max < cur <= min) ? cur : cellmin;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="n">The target number.</param>
+ * <remarks>
+ *   Loop until the given target is reached.
+ *    
+ *   <code>  
+ *    foreach (new i : N(6))  <br />
+ *    {                       <br /><indent />
+ *        // 0, 1, 2, 3, 4, 5 <br />
+ *    }
+ *   </code>  
+ *    
+ *   This is equivalent to:
+ * 
+ *   <code>
+ *      for (new i = 0; i != 6; ++i) <br />
+ *      {                            <br />
+ *      }
+ *   </code>
+ *
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock N(cur, n)
 {
 	if (++cur == n) return -1;
 	return cur;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iterstate">Internal state of the iterator.</param>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="base">The number to get the powers of.</param>
+ * <remarks>
+ *   Returns all the powers of the given number that can be stored in a PAWN
+ *   cell.
+ *    
+ *   <code>  
+ *    foreach (new i : Powers(3))       <br />
+ *    {                                 <br /><indent />
+ *        // 3^0, 3^1, 3^2, 3^3, etc... <br />
+ *    }
+ *   </code>  
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock Powers(&iterstate, cur, base)
 {
-	// Returns all the powers of the given number that can be stored in a PAWN
-	// cell.
-	//   
-	//   foreach (new i : Powers(3))
-	//   {
-	//       // 3^0, 3^1, 3^2, 3^3, etc...
-	//   }
-	//   
 	if (cur)
 	{
 		return
@@ -167,24 +236,41 @@ iterfunc stock Powers(&iterstate, cur, base)
 
 #define iterstart@Powers iterstate(0, 0)
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iterstate">Internal state of the iterator.</param>
+ * <param name="cur">The current iterator step.</param>
+ * <remarks>
+ *   Returns every number in the Fibonacci sequence that can be stored in a
+ *   PAWN cell.
+ *    
+ *   <code>  
+ *    foreach (new i : Fib())         <br />
+ *    {                               <br /><indent />
+ *        // 0, 1, 1, 2, 3, 5, etc... <br />
+ *    }
+ *   </code>  
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock Fib(&iterstate, cur)
 {
-	// Returns every number in the Fibaonacci sequence that can be stored in a
-	// PAWN cell.
-	//   
-	//   foreach (new i : Fib())
-	//   {
-	//   }
-	//   
 	switch (cur)
 	{
-	case -1:
-		return 0;
-	case 1836311903:
-		// End point (statically calculated largest Fibaonacci number that can
-		// be stored in a signed 32-bit integer.  Does make this not totally
-		// portable, because it can't be used in the 64-bit version quickly.
-		return -1;
+		case -1:
+			return 0;
+	#if cellbits == 32
+		case 1836311903:
+			// End point (statically calculated largest Fibonacci number that
+			// can be stored in a signed 32-bit integer).
+			return -1;
+	#elseif cellbits == 64
+		case 7540113804746346429:
+			return -1;
+	#else
+		#error Unsupported `cellbits`.
+	#endif
 	}
 	// Based on the "+--" swap method (like "^^^"), but without the last one.
 	return (iterstate = iterstate + cur) - cur;
@@ -192,36 +278,44 @@ iterfunc stock Fib(&iterstate, cur)
 
 #define iterstart@Fib iterstate(-1, 1)
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="iterstate">Internal state of the iterator.</param>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="count">How many random numbers to generate.</param>
+ * <param name="min">Lowest possible number (inclusive).</param>
+ * <param name="max">Highest possible number (exclusive).</param>
+ * <remarks>
+ *   Return a given count of random numbers:
+ *    
+ *   <code>
+ *    foreach (new i : Random(5)) <br />
+ *    {                           <br /><indent />
+ *        // 5 random numbers.    <br />
+ *    }
+ *   </code>
+ *    
+ *   <code>
+ *    foreach (new i : Random(12, 10))                              <br />
+ *    {                                                             <br /><indent />
+ *        // 12 random numbers between 0 and 10 (0 to 9 inclusive). <br />
+ *    }
+ *   </code>
+ *    
+ *   <code>
+ *    foreach (new i : Random(100, -10, 10))                             <br />
+ *    {                                                                  <br /><indent />
+ *        // 100 random numbers between -10 and 10 (-10 to 9 inclusive). <br />
+ *    }
+ *   </code>
+ *    
+ *   If only <c>min</c> is given, not <c>max</c>, it is used as the max instead
+ *   and the minimum is <c>0</c>.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock Random(&iterstate, cur, count, min = cellmax, max = 0)
 {
-	// Return a given count of random numbers:
-	//   
-	//   foreach (new i : Random(5))
-	//   {
-	//       // 5 random numbers.
-	//   }
-	//   
-	//   foreach (new i : Random(12, 10))
-	//   {
-	//       // 12 random numbers between 0 and 10 (0 to 9 inclusive).
-	//   }
-	//   
-	//   foreach (new i : Random(100, -10, 10))
-	//   {
-	//       // 100 random numbers between -10 and 10 (-10 to 9 inclusive).
-	//   }
-	//   
-	// Note that this function has internal state, so you cannot call this in a
-	// nested manner.  This will probably fail:
-	//   
-	//   foreach (new i : Random(10, 70))
-	//   {
-	//       foreach (new j : Random(10, 80))
-	//       {
-	//           // Will NOT get 100 randoms 0 to 80, plus 10 randoms 0 to 70.
-	//       }
-	//   }
-	//   
 	if (cur == cellmin)
 	{
 		iterstate = 0;
@@ -242,15 +336,26 @@ iterfunc stock Random(&iterstate, cur, count, min = cellmax, max = 0)
 
 #define iterstart@Random iterstate(cellmin, 0)
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="arr">Teh array to search through.</param>
+ * <param name="size">The size of the array.</param>
+ * <remarks>
+ *   Loop over all the indexes of this array that are zero.
+ *    
+ *   <code>
+ *    new array[] = { ... };        <br />
+ *    foreach (new i : Null(array)) <br />
+ *    {                             <br />
+ *    }
+ *   </code>
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock Null(cur, const arr[], size = sizeof (arr))
 {
-	// Loop over all the indexes of this array that are zero.
-	//   
-	//   new array[] = { ... };
-	//   foreach (new i : Null(array))
-	//   {
-	//   }
-	//   
 	while (++cur < size)
 	{
 		if (!arr[cur])
@@ -261,15 +366,26 @@ iterfunc stock Null(cur, const arr[], size = sizeof (arr))
 	return -1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="arr">Teh array to search through.</param>
+ * <param name="size">The size of the array.</param>
+ * <remarks>
+ *   Loop over all the indexes of this array that are not zero.
+ *    
+ *   <code>
+ *    new array[] = { ... };           <br />
+ *    foreach (new i : NonNull(array)) <br />
+ *    {                                <br />
+ *    }
+ *   </code>
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock NonNull(cur, const arr[], size = sizeof (arr))
 {
-	// Loop over all the indexes of this array that are not zero.
-	//   
-	//   new array[] = { ... };
-	//   foreach (new i : NonNull(array))
-	//   {
-	//   }
-	//   
 	while (++cur < size)
 	{
 		if (arr[cur])
@@ -280,17 +396,48 @@ iterfunc stock NonNull(cur, const arr[], size = sizeof (arr))
 	return -1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="val">The number to search the array for.</param>
+ * <param name="arr">Teh array to search through.</param>
+ * <param name="size">The size of the array.</param>
+ * <remarks>
+ *   Loop over all the indexes of this array until one equals the given value.
+ *    
+ *   <code>
+ *    new array[] = { ... };            <br />
+ *    foreach (new i : Until(5, array)) <br />
+ *    {                                 <br />
+ *    }
+ *   </code>
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 iterfunc stock Until(cur, val, const arr[], size = sizeof (arr))
 {
-	// Loop over all the indexes of this array until one equals the given value:
-	//   
-	//   new array[] = { ... };
-	//   foreach (new i : Until(5, array))
-	//   {
-	//   }
-	//   
 	return (++cur >= size || arr[cur] == val) ? -1 : cur;
 }
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="cur">The current iterator step.</param>
+ * <param name="val">The number to search the array for.</param>
+ * <param name="arr">Teh array to search through.</param>
+ * <param name="size">The size of the array.</param>
+ * <remarks>
+ *   Loop over all the indexes of this array which contain the given value.
+ *    
+ *   <code>
+ *    new array[] = { ... };             <br />
+ *    foreach (new i : Filter(5, array)) <br />
+ *    {                                  <br />
+ *    }
+ *   </code>
+ *    
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 iterfunc stock Filter(cur, val, const arr[], size = sizeof (arr))
 {
@@ -304,6 +451,18 @@ iterfunc stock Filter(cur, val, const arr[], size = sizeof (arr))
 	return -1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="array">The internal iterator data.</param>
+ * <param name="size">The internal iterator size.</param>
+ * <param name="value">The current iterator step.</param>
+ * <remarks>
+ *   Loop over all values NOT in any iterator.  Similar to repeatedly calling
+ *   <c>Iter_Free</c>, though that will return the same value twice if called
+ *   twice in a row.  Instead, this function will loop through the missing ones.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 #define Iter_Func@None(%0,%1) _ITER<Iter_None_Internal>(%1,%0)
 #define Iterator@None iterstart(-1)
 #define Iter_None_InternalA(%0,%1,%9) Iter_None_Internal(%1,F@s(%1)-1,%9)
@@ -311,9 +470,6 @@ iterfunc stock Filter(cur, val, const arr[], size = sizeof (arr))
 
 stock Iter_None_Internal(const array[], size, value)
 {
-	// Loop over all values NOT in any iterator.  Similar to repeatedly calling
-	// "Iter_Free", though that will return the same value twice if called twice
-	// in a row.  Instead, this function will loop through the missing ones.
 	while (++value < size)
 	{
 		if (array[value] <= value)
@@ -324,6 +480,19 @@ stock Iter_None_Internal(const array[], size, value)
 	return -1;
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
+ * <param name="array">The internal iterator data.</param>
+ * <param name="size">The internal iterator size.</param>
+ * <param name="value">The current iterator step.</param>
+ * <remarks>
+ *   Loop over all values in any iterator.  This is different to looping over the
+ *   iterator normally for multi-dimensional iterators, since it will return all
+ *   values in ANY iterator in their numerical order.  For single dimensional
+ *   iterators it is exactly the same, just a little slower.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 #define Iter_Func@All(%0,%1) _ITER<Iter_All_Internal>(%1,%0)
 #define Iterator@All iterstart(-1)
 #define Iter_All_InternalA(%0,%1,%9) Iter_All_Internal(%1,F@s(%1)-1,%9)
@@ -331,10 +500,6 @@ stock Iter_None_Internal(const array[], size, value)
 
 stock Iter_All_Internal(const array[], size, value)
 {
-	// Loop over all values in any iterator.  This is different to looping over
-	// the iterator normally for multi-dimensional iterators, since it will
-	// return all values in ANY iterator in their numerical order.  For single-
-	// dimensional iterators it is exactly the same, just a little slower.
 	while (++value < size)
 	{
 		if (array[value] > value)
@@ -359,14 +524,15 @@ stock Iter_All_Internal(const array[], size, value)
 */
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_iterate</library>
  * <remarks>
- *  Sets up all existing iterators.  Does nothing for "XXLocal" ones, since they
- *  are by definition empty when a script starts.
+ *   Sets up all existing iterators.  Does nothing for "XXLocal" ones, since they
+ *   are by definition empty when a script starts.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #if _FOREACH_CHARACTERS || _FOREACH_VEHICLES || _FOREACH_ACTORS
-	HOOK__ OnYSIInit()
+	public OnYSIInit()
 	{
 		#if _FOREACH_VEHICLES
 			Iter_Clear(Vehicle);
@@ -423,6 +589,7 @@ stock Iter_All_Internal(const array[], size, value)
 			#endif
 			#if _FOREACH_PLAYERS
 				Iter_Clear(Player);
+				Iter_Clear(RconAdmin);
 				#if _FOREACH_STREAMED
 					Iter_InitAndClear(StreamedPlayer);
 				#endif
@@ -452,6 +619,10 @@ stock Iter_All_Internal(const array[], size, value)
 						{
 					#if _FOREACH_PLAYERS
 							Iter_Add(Player, i);
+							if (IsPlayerAdmin(i))
+							{
+								Iter_Add(RconAdmin, i);
+							}
 							#if _FOREACH_STREAMED
 								for (new j = 0; j != MAX_PLAYERS; ++j)
 								{
@@ -469,8 +640,15 @@ stock Iter_All_Internal(const array[], size, value)
 				}
 			}
 		#endif
-		return 1;
+		return Iter_OnYSIInit();
 	}
+
+	#if defined _ALS_OnYSIInit
+		#undef OnYSIInit
+	#endif
+	#define _ALS_OnYSIInit
+	#define OnYSIInit(%0) CHAIN_PUBLIC:Iter_OnYSIInit(%0)
+	CHAIN_FORWARD:Iter_OnYSIInit() = 1;
 #endif
 
 /*
@@ -488,24 +666,25 @@ stock Iter_All_Internal(const array[], size, value)
 
 */
 
-/*-------------------------------------------------------------------------*//**
- * <param name="playerid">Player who joined.</param>
- * <remarks>
- *  Adds a player to the loop data.  Now sorts the list too.  Note that I found
- *  the most bizzare bug ever (I *think* it may be a compiler but, but it
- *  requires further investigation), basically it seems that multiple variables
- *  were being treated as the same variable (namely @YSII_EgotS and
- *  @YSII_CgharacterS were the same and @YSII_EgotC and @YSII_CgharacterC were the
- *  same).  Adding print statements which reference these variables seem to fix
- *  the problem, and I've tried to make sure that the values will never actually
- *  get printed.
- * </remarks>
- *//*------------------------------------------------------------------------**/
-
 #if _FOREACH_CHARACTERS
-	HOOK__ OnPlayerConnect(playerid)
+	/*-------------------------------------------------------------------------*//**
+	 * <library>y_iterate</library>
+	 * <param name="playerid">Player who joined.</param>
+	 * <remarks>
+	 *   Adds a player to the loop data.  Now sorts the list too.  Note that I found
+	 *   the most bizzare bug ever (I *think* it may be a compiler but, but it
+	 *   requires further investigation), basically it seems that multiple variables
+	 *   were being treated as the same variable (namely @YSII_EgotS and
+	 *   @YSII_CgharacterS were the same and @YSII_EgotC and @YSII_CgharacterC were the
+	 *   same).  Adding print statements which reference these variables seem to fix
+	 *   the problem, and I've tried to make sure that the values will never actually
+	 *   get printed.
+	 * </remarks>
+	 *//*------------------------------------------------------------------------**/
+
+	public OnPlayerConnect(playerid)
 	{
-		P:1("Iter_OnPlayerConnect called: %d, %d", playerid, IsPlayerNPC(playerid));
+		Debug_Print1("Iter_OnPlayerConnect called: %d, %d", playerid, IsPlayerNPC(playerid));
 		#if _FOREACH_BOTS
 			Iter_Add(Character, playerid);
 			if (IsPlayerNPC(playerid))
@@ -519,42 +698,78 @@ stock Iter_All_Internal(const array[], size, value)
 				Iter_Add(Player, playerid);
 		#endif
 			}
-		P:2("Iter_OnPlayerConnect end");
-		return 1;
+		Debug_Print2("Iter_OnPlayerConnect end");
+		return Iter_OnPlayerConnect(playerid);
 	}
-	
-	/*---------------------------------------------------------------------*//**
-	 *
-	 * <param name="playerid">Player who left.</param>
+
+	#if defined _ALS_OnPlayerConnect
+		#undef OnPlayerConnect
+	#endif
+	#define _ALS_OnPlayerConnect
+	#define OnPlayerConnect(%0) CHAIN_PUBLIC:Iter_OnPlayerConnect(%0)
+	CHAIN_FORWARD:Iter_OnPlayerConnect(playerid) = 1;
+
+	/*-------------------------------------------------------------------------*//**
+	 * <library>y_iterate</library>
+	 * <param name="playerid">Player who joined.</param>
 	 * <remarks>
-	 *  Removes a player from the loop data.  No longer uses "hook" to ENSURE
-	 *  that this is always last.  Previously I think that the order of
-	 *  evaluation in y_hooks meant that this got called before the user
-	 *  "OnPlayerDisconnect".
+	 *   Adds a player to the loop data.  Now sorts the list too.  Note that I found
+	 *   the most bizzare bug ever (I *think* it may be a compiler but, but it
+	 *   requires further investigation), basically it seems that multiple variables
+	 *   were being treated as the same variable (namely @YSII_EgotS and
+	 *   @YSII_CgharacterS were the same and @YSII_EgotC and @YSII_CgharacterC were the
+	 *   same).  Adding print statements which reference these variables seem to fix
+	 *   the problem, and I've tried to make sure that the values will never actually
+	 *   get printed.
 	 * </remarks>
-	 *//*--------------------------------------------------------------------**/
-	
-	HOOK__ OnPlayerDisconnect(playerid, reason)
-	{
-		YSI_SetTimerEx("Iter_OPDCInternal", 0, false, "i", playerid);
-		return 1;
-	}
-	
-	/*---------------------------------------------------------------------*//**
-	 *
-	 * <param name="playerid">Player who left.</param>
-	 * <remarks>
-	 *  Called AFTER "OnPlayerDisconnect" so that using "Kick" inside a
-	 *  "foreach" loop doesn't crash the server due to an OOB error.
-	 * </remarks>
-	 *//*--------------------------------------------------------------------**/
-	
-	public Iter_OPDCInternal(playerid)
-	{
-		if (IsPlayerConnected(playerid))
+	 *//*------------------------------------------------------------------------**/
+
+	#if _FOREACH_PLAYERS
+		public OnRconLoginAttempt(ip[], password[], success)
 		{
-			return;
+			Debug_Print1("Iter_OnRconLoginAttempt called: %s, %s, %d", ip, password, success);
+			if (success)
+			{
+				// Rebuild the iterator.
+				FOREACH__ (new i : Player)
+				{
+					if (IsPlayerAdmin(i))
+					{
+						// Add all admins.  It doesn't matter if they're already
+						// added, since `Iter_Add` has internal checks for that.
+						Iter_Add(RconAdmin, i);
+					}
+				}
+			}
+			Debug_Print2("Iter_OnRconLoginAttempt end");
+			return Iter_OnRconLoginAttempt(ip, password, success);
 		}
+		
+		#if defined _ALS_OnRconLoginAttempt
+			#undef OnRconLoginAttempt
+		#endif
+		#define _ALS_OnRconLoginAttempt
+		#define OnRconLoginAttempt(%0) CHAIN_PUBLIC:Iter_OnRconLoginAttempt(%0)
+		CHAIN_FORWARD:Iter_OnRconLoginAttempt(ip[], password[], success) = 1;
+	#endif
+	
+	/*---------------------------------------------------------------------*//**
+	 * <library>y_iterate</library>
+	 * <param name="playerid">Player who left.</param>
+	 * <remarks>
+	 *   Removes a player from the loop data.  No longer uses "hook" to ENSURE
+	 *   that this is always last.  Previously I think that the order of
+	 *   evaluation in y_hooks meant that this got called before the user
+	 *   "OnPlayerDisconnect".
+	 * </remarks>
+	 *//*--------------------------------------------------------------------**/
+	
+	public OnPlayerDisconnect(playerid, reason)
+	{
+			new ret = Iter_OnPlayerDisconnect(playerid, reason);
+		#if _FOREACH_VEHICLES 
+			Iter_Remove(PlayersFromVehicles, playerid);
+		#endif
 		#if _FOREACH_BOTS
 			Iter_Remove(Character, playerid);
 			if (IsPlayerNPC(playerid))
@@ -566,14 +781,32 @@ stock Iter_All_Internal(const array[], size, value)
 			{
 		#if _FOREACH_PLAYERS
 				Iter_Remove(Player, playerid);
+				Iter_Remove(RconAdmin, playerid);
 		#endif
 			}
+			return ret;
 	}
 
+	#if defined _ALS_OnPlayerDisconnect
+		#undef OnPlayerDisconnect
+	#endif
+	#define _ALS_OnPlayerDisconnect
+	#define OnPlayerDisconnect(%0) CHAIN_PUBLIC:Iter_OnPlayerDisconnect(%0)
+	CHAIN_FORWARD:Iter_OnPlayerDisconnect(playerid, reason) = 1;
+	
 	#if _FOREACH_STREAMED
-		HOOK__ OnPlayerStreamIn(playerid, forplayerid)
+		/*---------------------------------------------------------------------*//**
+		 * <library>y_iterate</library>
+		 * <param name="playerid">Player who entered streaming range.</param>
+		 * <param name="forplayerid">The viewing player.</param>
+		 * <remarks>
+		 *   Update the internal list of which players <c>forplayerid</c> can see.
+		 * </remarks>
+		 *//*--------------------------------------------------------------------**/
+		
+		public OnPlayerStreamIn(playerid, forplayerid)
 		{
-			P:1("Iter_OnPlayerStreamIn called: %d, %d", playerid, forplayerid);
+			Debug_Print1("Iter_OnPlayerStreamIn called: %d, %d", playerid, forplayerid);
 			#if _FOREACH_BOTS
 				Iter_Add(StreamedCharacter[forplayerid], playerid);
 				if (IsPlayerNPC(playerid))
@@ -587,13 +820,30 @@ stock Iter_All_Internal(const array[], size, value)
 					Iter_Add(StreamedPlayer[forplayerid], playerid);
 			#endif
 				}
-			P:2("Iter_OnPlayerStreamIn end");
-			return 1;
+			Debug_Print2("Iter_OnPlayerStreamIn end");
+			return Iter_OnPlayerStreamIn(playerid, forplayerid);
 		}
 
-		HOOK__ OnPlayerStreamOut(playerid, forplayerid)
+		#if defined _ALS_OnPlayerStreamIn
+			#undef OnPlayerStreamIn
+		#endif
+		#define _ALS_OnPlayerStreamIn
+		#define OnPlayerStreamIn(%0) CHAIN_PUBLIC:Iter_OnPlayerStreamIn(%0)
+		CHAIN_FORWARD:Iter_OnPlayerStreamIn(playerid, forplayerid) = 1;
+
+		/*---------------------------------------------------------------------*//**
+		 * <library>y_iterate</library>
+		 * <param name="playerid">Player who left streaming range.</param>
+		 * <param name="forplayerid">The viewing player.</param>
+		 * <remarks>
+		 *   Update the internal list of which players <c>forplayerid</c> can see.
+		 * </remarks>
+		 *//*--------------------------------------------------------------------**/
+		
+		public OnPlayerStreamOut(playerid, forplayerid)
 		{
-			P:1("Iter_OnPlayerStreamOut called: %d, %d", playerid, forplayerid);
+			Debug_Print1("Iter_OnPlayerStreamOut called: %d, %d", playerid, forplayerid);
+			new ret = Iter_OnPlayerStreamOut(playerid, forplayerid);
 			#if _FOREACH_BOTS
 				Iter_Remove(StreamedCharacter[forplayerid], playerid);
 				if (IsPlayerNPC(playerid))
@@ -607,11 +857,32 @@ stock Iter_All_Internal(const array[], size, value)
 					Iter_Remove(StreamedPlayer[forplayerid], playerid);
 			#endif
 				}
-			P:2("Iter_OnPlayerStreamOut end");
-			return 1;
+			Debug_Print2("Iter_OnPlayerStreamOut end");
+			return ret;
 		}
+
+		#if defined _ALS_OnPlayerStreamOut
+			#undef OnPlayerStreamOut
+		#endif
+		#define _ALS_OnPlayerStreamOut
+		#define OnPlayerStreamOut(%0) CHAIN_PUBLIC:Iter_OnPlayerStreamOut(%0)
+		CHAIN_FORWARD:Iter_OnPlayerStreamOut(playerid, forplayerid) = 1;
 	#endif
 #endif
+
+static stock const
+	/**
+	 * <library>y_iterate</library>
+	 */
+	YSI_gsIter_VehicleDo[] = "Iter_VehicleDo",
+	/**
+	 * <library>y_iterate</library>
+	 */
+	YSI_gsIter_ActorDo[] = "Iter_ActorDo",
+	/**
+	 * <library>y_iterate</library>
+	 */
+	YSI_gsii[] = "ii";
 
 /*
 
@@ -627,7 +898,9 @@ stock Iter_All_Internal(const array[], size, value)
 */
 
 #if _FOREACH_ACTORS
-	remotefunc stock void:Iter_ActorDo(bool:add, actorid)
+	forward void:Iter_ActorDo(bool:add, actorid);
+
+	public void:Iter_ActorDo(bool:add, actorid)
 	{
 		// Because there may be multiple scripts running, we need to tell all of
 		// them when an actor is created or destroyed.
@@ -641,7 +914,7 @@ stock Iter_All_Internal(const array[], size, value)
 	{
 		new
 			ret = CreateActor(modelid, X, Y, Z, Rotation);
-		broadcastfunc Iter_ActorDo(true, ret);
+		CallRemoteFunction(YSI_gsIter_ActorDo, YSI_gsii, true, ret);
 		#if _FOREACH_LOCALS
 			Iter_Add(LocalActor, ret);
 		#endif
@@ -657,7 +930,7 @@ stock Iter_All_Internal(const array[], size, value)
 	
 	stock Iter_DestroyActor(actorid)
 	{
-		broadcastfunc Iter_ActorDo(false, actorid);
+		CallRemoteFunction(YSI_gsIter_ActorDo, YSI_gsii, false, actorid);
 		#if _FOREACH_LOCALS
 			Iter_Remove(LocalActor, actorid);
 		#endif
@@ -672,21 +945,36 @@ stock Iter_All_Internal(const array[], size, value)
 	#define DestroyActor Iter_DestroyActor
 
 	#if _FOREACH_STREAMED
-		HOOK__ OnActorStreamIn(actorid, forplayerid)
+		public OnActorStreamIn(actorid, forplayerid)
 		{
-			P:1("Iter_OnActorStreamIn called: %d, %d", actorid, forplayerid);
+			Debug_Print1("Iter_OnActorStreamIn called: %d, %d", actorid, forplayerid);
 			Iter_Add(StreamedActor[forplayerid], actorid);
-			P:2("Iter_OnActorStreamIn end");
-			return 1;
+			Debug_Print2("Iter_OnActorStreamIn end");
+			return Iter_OnActorStreamIn(actorid, forplayerid);
 		}
 
-		HOOK__ OnActorStreamOut(actorid, forplayerid)
+		#if defined _ALS_OnActorStreamIn
+			#undef OnActorStreamIn
+		#endif
+		#define _ALS_OnActorStreamIn
+		#define OnActorStreamIn(%0) CHAIN_PUBLIC:Iter_OnActorStreamIn(%0)
+		CHAIN_FORWARD:Iter_OnActorStreamIn(actorid, forplayerid) = 1;
+
+		public OnActorStreamOut(actorid, forplayerid)
 		{
-			P:1("Iter_OnActorStreamOut called: %d, %d", actorid, forplayerid);
+			new ret = Iter_OnActorStreamOut(actorid, forplayerid);
+			Debug_Print1("Iter_OnActorStreamOut called: %d, %d", actorid, forplayerid);
 			Iter_Remove(StreamedActor[forplayerid], actorid);
-			P:2("Iter_OnActorStreamOut end");
-			return 1;
+			Debug_Print2("Iter_OnActorStreamOut end");
+			return ret;
 		}
+
+		#if defined _ALS_OnActorStreamOut
+			#undef OnActorStreamOut
+		#endif
+		#define _ALS_OnActorStreamOut
+		#define OnActorStreamOut(%0) CHAIN_PUBLIC:Iter_OnActorStreamOut(%0)
+		CHAIN_FORWARD:Iter_OnActorStreamOut(actorid, forplayerid) = 1;
 	#endif
 #endif
 
@@ -710,14 +998,20 @@ stock Iter_All_Internal(const array[], size, value)
 #endif
 
 #if _FOREACH_VEHICLES
-	remotefunc stock void:Iter_VehicleDo(bool:add, vehicleid)
+	forward void:Iter_VehicleDo(bool:add, vehicleid);
+	
+	public void:Iter_VehicleDo(bool:add, vehicleid)
 	{
 		// Because there may be multiple scripts running, we need to tell all of
 		// them when a vehicle is created or destroyed.
 		if (add)
+		{
 			Iter_Add(Vehicle, vehicleid);
+		}
 		else
+		{
 			Iter_Remove(Vehicle, vehicleid);
+		}
 	}
 	
 	stock Iter_CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, respawn_delay, YSI_ADD_SIREN_TAG:addSiren = false)
@@ -732,7 +1026,7 @@ stock Iter_All_Internal(const array[], size, value)
 		#endif
 		if (ret)
 		{
-			broadcastfunc Iter_VehicleDo(true, ret);
+			CallRemoteFunction(YSI_gsIter_VehicleDo, YSI_gsii, true, ret);
 			#if _FOREACH_LOCALS
 				Iter_Add(LocalVehicle, ret);
 			#endif
@@ -753,7 +1047,7 @@ stock Iter_All_Internal(const array[], size, value)
 			ret = AddStaticVehicle(modelid, spawn_x, spawn_y, spawn_z, angle, color1, color2);
 		if (ret)
 		{
-			broadcastfunc Iter_VehicleDo(true, ret);
+			CallRemoteFunction(YSI_gsIter_VehicleDo, YSI_gsii, true, ret);
 			#if _FOREACH_LOCALS
 				Iter_Add(LocalVehicle, ret);
 			#endif
@@ -780,7 +1074,7 @@ stock Iter_All_Internal(const array[], size, value)
 		#endif
 		if (ret)
 		{
-			broadcastfunc Iter_VehicleDo(true, ret);
+			CallRemoteFunction(YSI_gsIter_VehicleDo, YSI_gsii, true, ret);
 			#if _FOREACH_LOCALS
 				Iter_Add(LocalVehicle, ret);
 			#endif
@@ -797,7 +1091,7 @@ stock Iter_All_Internal(const array[], size, value)
 	
 	stock Iter_DestroyVehicle(vehicleid)
 	{
-		broadcastfunc Iter_VehicleDo(false, vehicleid);
+		CallRemoteFunction(YSI_gsIter_VehicleDo, YSI_gsii, false, vehicleid);
 		#if _FOREACH_LOCALS
 			Iter_Remove(LocalVehicle, vehicleid);
 		#endif
@@ -812,46 +1106,168 @@ stock Iter_All_Internal(const array[], size, value)
 	#define DestroyVehicle Iter_DestroyVehicle
 
 	#if _FOREACH_STREAMED
-		HOOK__ OnVehicleStreamIn(vehicleid, forplayerid)
+		public OnVehicleStreamIn(vehicleid, forplayerid)
 		{
-			P:1("Iter_OnVehicleStreamIn called: %d, %d", vehicleid, forplayerid);
+			Debug_Print1("Iter_OnVehicleStreamIn called: %d, %d", vehicleid, forplayerid);
 			Iter_Add(StreamedVehicle[forplayerid], vehicleid);
-			P:2("Iter_OnVehicleStreamIn end");
-			return 1;
+			Debug_Print2("Iter_OnVehicleStreamIn end");
+			return Iter_OnVehicleStreamIn(vehicleid, forplayerid);
 		}
 
-		HOOK__ OnVehicleStreamOut(vehicleid, forplayerid)
+		#if defined _ALS_OnVehicleStreamIn
+			#undef OnVehicleStreamIn
+		#endif
+		#define _ALS_OnVehicleStreamIn
+		#define OnVehicleStreamIn(%0) CHAIN_PUBLIC:Iter_OnVehicleStreamIn(%0)
+		CHAIN_FORWARD:Iter_OnVehicleStreamIn(vehicleid, forplayerid) = 1;
+
+		public OnVehicleStreamOut(vehicleid, forplayerid)
 		{
-			P:1("Iter_OnVehicleStreamOut called: %d, %d", vehicleid, forplayerid);
+			new ret = Iter_OnVehicleStreamOut(vehicleid, forplayerid);
+			Debug_Print1("Iter_OnVehicleStreamOut called: %d, %d", vehicleid, forplayerid);
 			Iter_Remove(StreamedVehicle[forplayerid], vehicleid);
-			P:2("Iter_OnVehicleStreamOut end");
-			return 1;
+			Debug_Print2("Iter_OnVehicleStreamOut end");
+			return ret;
 		}
-	#endif
-#endif
 
-iterfunc stock VehicleOccupant(vehicleid, bool:exclude_driver = false)
-{
-	FOREACH__ (new i : Player)
+		#if defined _ALS_OnVehicleStreamOut
+			#undef OnVehicleStreamOut
+		#endif
+		#define _ALS_OnVehicleStreamOut
+		#define OnVehicleStreamOut(%0) CHAIN_PUBLIC:Iter_OnVehicleStreamOut(%0)
+		CHAIN_FORWARD:Iter_OnVehicleStreamOut(vehicleid, forplayerid) = 1;
+	#endif
+
+	#if !defined PLAYER_STATE
+		#define PLAYER_STATE: _:
+	#endif
+	public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 	{
-		if (GetPlayerVehicleID(i) == vehicleid)
+		new ret = Iter_OnPlayerStateChange(playerid, newstate, oldstate);
+
+		if (newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
 		{
-			if (exclude_driver && GetPlayerVehicleSeat(i) == 0)
+			Iter_Add(PlayersFromVehicles, playerid);
+		}
+		else if (oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER) 
+		{
+			Iter_Remove(PlayersFromVehicles, playerid);
+		}
+		return ret;
+	}
+
+	#if defined _ALS_OnPlayerStateChange
+		#undef OnPlayerStateChange
+	#endif
+	#define _ALS_OnPlayerStateChange
+	#define OnPlayerStateChange(%0,%1,%2) CHAIN_PUBLIC:Iter_OnPlayerStateChange(%0, %1, %2)
+	CHAIN_FORWARD:Iter_OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate) = 1;
+	
+	iterfunc stock VehicleOccupant(vehicleid = INVALID_VEHICLE_ID, bool:includeDriver = true, bool:includePassenger = true)
+	{
+		if (includeDriver && includePassenger)
+		{
+			if (vehicleid == INVALID_VEHICLE_ID)
 			{
-				continue;
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					YIELD__ return i;
+				}
 			}
 			else
 			{
-				YIELD__ return i;
+				new
+					vehicleSeatsOccupied, 
+					vehicleModelSeats = Vehicle_Seats(vehicleid);
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					if (GetPlayerVehicleID(i) == vehicleid)
+					{
+						YIELD__ return i;
+						if (++vehicleSeatsOccupied == vehicleModelSeats) 
+						{
+							return;
+						}
+					}
+				}
 			}
 		}
+		else if (includeDriver)
+		{
+			if (vehicleid == INVALID_VEHICLE_ID)
+			{
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					if (GetPlayerState(i) == PLAYER_STATE_DRIVER)
+					{
+						YIELD__ return i;
+					}
+				}
+			}
+			else
+			{
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					if (GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER)
+					{
+						YIELD__ return i;
+						// You can only have one driver.
+						return;
+					}
+				}
+			}
+		}
+		else if (includePassenger)
+		{
+			if (vehicleid == INVALID_VEHICLE_ID)
+			{
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					if (GetPlayerState(i) == PLAYER_STATE_PASSENGER)
+					{
+						YIELD__ return i;
+					}
+				}
+			}
+			else
+			{
+				new
+					vehicleSeatsOccupied, 
+					vehicleModelSeats = Vehicle_Seats(vehicleid) - 1;
+				if (vehicleModelSeats == 0)
+				{
+					// Can't have passengers.
+					return;
+				}
+				FOREACH__ (new i : PlayersFromVehicles)
+				{
+					if (GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_PASSENGER)
+					{
+						YIELD__ return i;
+						if (++vehicleSeatsOccupied == vehicleModelSeats) 
+						{
+							return;
+						}
+					}
+				}
+			}
+		}
+		// Else no loop - we want everyone who is in a vehicle, but not a driver or
+		// a passenger.  I think that limits us to captives in the boot and Sideshow
+		// Bob strapped to the underside.
 	}
-}
-#define Iterator@VehicleOccupant iteryield
+	#define Iterator@VehicleOccupant iteryield
+	
+	iterfunc stock VehiclePassenger(vehicleid = INVALID_VEHICLE_ID)
+	{
+		Iter_Func@VehicleOccupant(vehicleid, false, true);
+	}
+	#define Iterator@VehiclePassenger iteryield
+	
+	iterfunc stock VehicleDriver(vehicleid = INVALID_VEHICLE_ID)
+	{
+		Iter_Func@VehicleOccupant(vehicleid, true, false);
+	}
+	#define Iterator@VehicleDriver iteryield
+#endif
 
-#pragma deprecated Use VehicleOccupant
-iterfunc stock VehiclePassenger(vehicleid)
-{
-    foreach (new i : VehicleOccupant(vehicleid)) YIELD__ return i;
-}
-#define Iterator@VehiclePassenger iteryield

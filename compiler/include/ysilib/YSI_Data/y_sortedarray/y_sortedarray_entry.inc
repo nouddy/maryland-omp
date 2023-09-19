@@ -91,7 +91,7 @@ Optional plugins:
  * <param name="last">The number of elements in the sorted array.</param>
  * <param name="value">The value to find.</param>
  * <returns>
- *  Does the array contain this value?
+ *   Does the array contain this value?
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -125,7 +125,7 @@ stock bool:_Sorted_Contains(arr[], last, value)
  * <param name="last">The number of elements in the sorted array.</param>
  * <param name="value">The value to find.</param>
  * <returns>
- *  The index at which the new value should be inserted.
+ *   The index at which the new value should be inserted.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -159,7 +159,7 @@ stock _Sorted_FindInsert(arr[], last, value)
  * <param name="last">The number of elements in the sorted array.</param>
  * <param name="value">The value to find.</param>
  * <returns>
- *  The index of the value, or <c>-1</c> if it doesn't exist.
+ *   The index of the value, or <c>-1</c> if it doesn't exist.
  * </returns>
  *//*------------------------------------------------------------------------**/
 
@@ -194,7 +194,7 @@ stock _Sorted_Find(arr[], last, value)
  * <param name="value">The value to add.</param>
  * <param name="max">The total size of the array.</param>
  * <remarks>
- *  Adds a value to the sorted array.
+ *   Adds a value to the sorted array.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -215,13 +215,13 @@ stock bool:_Sorted_Add(arr[], &size, value, max = sizeof (arr))
 	else if (arr[0] >= value)
 	{
 		// New smallest value.
-		memcpy(arr[1], arr[0], 0, size << __COMPILER_CELL_SHIFT, max - 1);
+		memcpy(arr[1], arr[0], 0, size << __cell_shift, max - 1);
 		arr[0] = value;
 	}
 	else
 	{
 		new idx = _Sorted_FindInsert(arr, size, value);
-		memcpy(arr[idx + 1], arr[idx], 0, (size - idx) << __COMPILER_CELL_SHIFT, max - idx - 1);
+		memcpy(arr[idx + 1], arr[idx], 0, (size - idx) << __cell_shift, max - idx - 1);
 		arr[idx] = value;
 	}
 	++size;
@@ -234,7 +234,7 @@ stock bool:_Sorted_Add(arr[], &size, value, max = sizeof (arr))
  * <param name="size">The number of elements in the sorted array.</param>
  * <param name="value">The value to add.</param>
  * <remarks>
- *  Removes a value from the sorted array.
+ *   Removes a value from the sorted array.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -254,7 +254,7 @@ stock bool:_Sorted_Remove(arr[], &size, value)
 		return true;
 	}
 	// We are shrinking the array, so the destination size doesn't matter.
-	memcpy(arr[idx], arr[idx + 1], 0, (size - idx) << __COMPILER_CELL_SHIFT, cellmax);
+	memcpy(arr[idx], arr[idx + 1], 0, (size - idx) << __cell_shift, cellmax);
 	return true;
 }
 #define Sorted_Remove SORTED_FUNC_N<Sorted_Remove>

@@ -114,11 +114,11 @@ enum E_BINTREE_INPUT
  * <param name="input">Data to sort.</param>
  * <param name="size">Size of data to sort.</param>
  * <remarks>
- *  Entry point for Bintree_QSort.
+ *   Entry point for Bintree_QSort.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Bintree_Sort(numbers[][E_BINTREE_INPUT], size = sizeof (data)));
+FUNC_PAWNDOC(Bintree_Sort(numbers[][E_BINTREE_INPUT], size = sizeof (data)));
 #define Bintree_Sort(%1,%2) \
 	Bintree_QSort((%1), 0, (%2) - 1)
 
@@ -127,14 +127,14 @@ P:D(Bintree_Sort(numbers[][E_BINTREE_INPUT], size = sizeof (data)));
  * <param name="data">Source data.</param>
  * <param name="size">Size of data.</param>
  * <returns>
- *  Bintree_SortHalf.
+ *   Bintree_SortHalf.
  * </returns>
  * <remarks>
- *  Entry point for Bintree_SortHalf.
+ *   Entry point for Bintree_SortHalf.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-P:D(Bintree_Fill(BinaryTree:output<>, data[][E_BINTREE_INPUT], size = sizeof (data)));
+FUNC_PAWNDOC(Bintree_Fill(BinaryTree:output<>, data[][E_BINTREE_INPUT], size = sizeof (data)));
 #define Bintree_Fill(%1,%2,%3) \
 	Bintree_SortHalf((%1), (%2), 0, (%3), 0, BINTREE_NO_BRANCH)
 
@@ -143,13 +143,13 @@ P:D(Bintree_Fill(BinaryTree:output<>, data[][E_BINTREE_INPUT], size = sizeof (da
  * <param name="input">Input data to get the data from.</param>
  * <param name="size">Number of items to sort.</param>
  * <remarks>
- *  Just calls the sort and fill routines.
+ *   Just calls the sort and fill routines.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_Generate(BinaryTree:output<>, BinaryInput:input<>, size = sizeof (input))
 {
-	P:3("Bintree_Generate called: %s, %s, %i", Bintree_DisplayOutput(output), Bintree_DisplayInput(input), size);
+	Debug_Print3("Bintree_Generate called: %s, %s, %i", Bintree_DisplayOutput(output), Bintree_DisplayInput(input), size);
 	if (!size)
 	{
 		output[0][E_BINTREE_TREE_PARENT] = BINTREE_NO_BRANCH;
@@ -166,13 +166,13 @@ stock Bintree_Generate(BinaryTree:output<>, BinaryInput:input<>, size = sizeof (
  * <param name="tree">Array to reset.</param>
  * <param name="pointer">Position to reset.</param>
  * <remarks>
- *  Initialises the array for use.
+ *   Initialises the array for use.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_Reset(BinaryTree:tree<>, pointer = 0)
 {
-	P:3("Bintree_Reset called: %s, %i", Bintree_DisplayOutput(tree), pointer);
+	Debug_Print3("Bintree_Reset called: %s, %i", Bintree_DisplayOutput(tree), pointer);
 	tree[pointer][E_BINTREE_TREE_VALUE] = 0;
 	tree[pointer][E_BINTREE_TREE_LEFT] = BINTREE_NO_BRANCH;
 	tree[pointer][E_BINTREE_TREE_RIGHT] = BINTREE_NO_BRANCH;
@@ -186,24 +186,24 @@ stock Bintree_Reset(BinaryTree:tree<>, pointer = 0)
  * <param name="cont">Start point.</param>
  * <param name="old">The last real leaf.</param>
  * <remarks>
- *  Itterates through the array following the various paths till it locates
- *  the value provided or reaches a dead end.  If the current value is greater
- *  than the search value, the search goes left, otherwise right.
+ *   Itterates through the array following the various paths till it locates
+ *   the value provided or reaches a dead end.  If the current value is greater
+ *   than the search value, the search goes left, otherwise right.
  *
- *  If cont is not -1 the search will start from the data pointed to by the
- *  data pointed to by conts' right path, this is to allow collisions to be
- *  passed over if you want a subsequent one.
+ *   If cont is not -1 the search will start from the data pointed to by the
+ *   data pointed to by conts' right path, this is to allow collisions to be
+ *   passed over if you want a subsequent one.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_FindValue(const BinaryTree:tree<>, value, &cont = 0, &old = 0)
 {
-	P:3("Bintree_FindValue called: %s, %i, %i, %i", Bintree_DisplayOutput(tree), value, cont, old);
+	Debug_Print3("Bintree_FindValue called: %s, %i, %i, %i", Bintree_DisplayOutput(tree), value, cont, old);
 	new
 		treeValue = 0;
 	while (cont != BINTREE_NO_BRANCH)
 	{
-		P:7("Bintree_FindValue: search %d %d %d %d", cont, old, tree[cont][E_BINTREE_TREE_VALUE], value);
+		Debug_Print7("Bintree_FindValue: search %d %d %d %d", cont, old, tree[cont][E_BINTREE_TREE_VALUE], value);
 		old = cont;
 		treeValue = tree[old][E_BINTREE_TREE_VALUE];
 		if (value < treeValue) cont = tree[old][E_BINTREE_TREE_LEFT];
@@ -224,14 +224,14 @@ stock Bintree_FindValue(const BinaryTree:tree<>, value, &cont = 0, &old = 0)
  * <param name="left">Start index.</param>
  * <param name="right">End index.</param>
  * <remarks>
- *  Custom version of QSort (see YSI_misc) allows for E_BINTREE_INPUT data
- *  types, preserving the relative pointers for the sorted data.
+ *   Custom version of QSort (see YSI_misc) allows for E_BINTREE_INPUT data
+ *   types, preserving the relative pointers for the sorted data.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_QSort(numbers[][E_BINTREE_INPUT], left, right)
 {
-	P:3("Bintree_QSort called: %s, %i, %i", Bintree_DisplayInput(numbers), left, right);
+	Debug_Print3("Bintree_QSort called: %s, %i, %i", Bintree_DisplayInput(numbers), left, right);
 	new
 		pivot = numbers[left][E_BINTREE_INPUT_VALUE],
 		pointer = numbers[left][E_BINTREE_INPUT_POINTER],
@@ -270,27 +270,27 @@ stock Bintree_QSort(numbers[][E_BINTREE_INPUT], left, right)
  * <param name="upper">End index of the source for processing.</param>
  * <param name="offset">Current offset in the destination array for writing.</param>
  * <returns>
- *  Size of balanced tree.
+ *   Size of balanced tree.
  * </returns>
  * <remarks>
- *  Recursively calls itself.  Bisects the passed array and passed each half
- *  back to itself, with the middle value of each half being the left and
- *  right branches of the middle value of the passed array (which isn't
- *  included in either bisected half).  This is itterative so those are again
- *  split and again split.  If the passed array is only one or two elements
- *  big the behaviour is set and hardcoded.
+ *   Recursively calls itself.  Bisects the passed array and passed each half
+ *   back to itself, with the middle value of each half being the left and
+ *   right branches of the middle value of the passed array (which isn't
+ *   included in either bisected half).  This is itterative so those are again
+ *   split and again split.  If the passed array is only one or two elements
+ *   big the behaviour is set and hardcoded.
  *
- *  Equal values SHOULD branch right, the code is designed for this however
- *  the generation is not fully tested (it mostly branches right but adjacent
- *  after bisecting values haven't been tested).
+ *   Equal values SHOULD branch right, the code is designed for this however
+ *   the generation is not fully tested (it mostly branches right but adjacent
+ *   after bisecting values haven't been tested).
  *
- *  Based on code written for PHP by me.
+ *   Based on code written for PHP by me.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_SortHalf(BinaryTree:output<>, data[][E_BINTREE_INPUT], index, upper, offset, parent)
 {
-	P:3("Bintree_SortHalf called: %s, %s, %i, %i, %i, %i", Bintree_DisplayOutput(output), Bintree_DisplayInput(data), index, upper, offset, parent);
+	Debug_Print3("Bintree_SortHalf called: %s, %s, %i, %i, %i, %i", Bintree_DisplayOutput(output), Bintree_DisplayInput(data), index, upper, offset, parent);
 	new
 		num = upper - index;
 	if (!num) return offset;
@@ -304,7 +304,7 @@ stock Bintree_SortHalf(BinaryTree:output<>, data[][E_BINTREE_INPUT], index, uppe
 	}
 	else if (num == 2)
 	{
-		P:3("Bintree_SortHalf: adding %i %i %i", index, data[index][E_BINTREE_INPUT_VALUE], data[index + 1][E_BINTREE_INPUT_VALUE]);
+		Debug_Print3("Bintree_SortHalf: adding %i %i %i", index, data[index][E_BINTREE_INPUT_VALUE], data[index + 1][E_BINTREE_INPUT_VALUE]);
 		output[offset][E_BINTREE_TREE_VALUE] = data[index][E_BINTREE_INPUT_VALUE];
 		output[offset][E_BINTREE_TREE_POINTER] = data[index][E_BINTREE_INPUT_POINTER];
 		output[offset][E_BINTREE_TREE_PARENT] = parent;
@@ -343,10 +343,10 @@ stock Bintree_SortHalf(BinaryTree:output<>, data[][E_BINTREE_INPUT], index, uppe
  * <param name="offset">Location in the array to store the data.</param>
  * <param name="maxsize">Size of data.</param>
  * <returns>
- *  Next free location
+ *   Next free location
  * </returns>
  * <remarks>
- *  -
+ *   -
  *
  * native Bintree_Add(BinaryTree:tree&lt;&gt;, pointer, value, offset, maxsize = sizeof (data));
  *
@@ -355,7 +355,7 @@ stock Bintree_SortHalf(BinaryTree:output<>, data[][E_BINTREE_INPUT], index, uppe
 
 stock Bintree_Add(BinaryTree:data<>, pointer, value, offset, maxsize = sizeof (data))
 {
-	P:3("Bintree_Add called: %s, %i, %i, %i, %i", Bintree_DisplayOutput(data), pointer, value, offset, maxsize);
+	Debug_Print3("Bintree_Add called: %s, %i, %i, %i, %i", Bintree_DisplayOutput(data), pointer, value, offset, maxsize);
 	if (offset >= maxsize) return BINTREE_NOT_FOUND;
 	if (offset)
 	{
@@ -389,18 +389,18 @@ stock Bintree_Add(BinaryTree:data<>, pointer, value, offset, maxsize = sizeof (d
  * <param name="index">Index to remove.</param>
  * <param name="count">Number of binary tree items.</param>
  * <remarks>
- *  The left branch is usually larger due to the division
- *  method used so we start there.  Even though right is
- *  &gt;= and left is only &lt; in even sized arrays the greater
- *  chunk (unless there's only 2 items) goes left.
+ *   The left branch is usually larger due to the division
+ *   method used so we start there.  Even though right is
+ *   &gt;= and left is only &lt; in even sized arrays the greater
+ *   chunk (unless there's only 2 items) goes left.
  *
- *  Called itteratively to ensure branches are maintained.
+ *   Called itteratively to ensure branches are maintained.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_Delete(BinaryTree:source<>, index, count)
 {
-	P:3("Bintree_Delete called: %s, %i, %i", Bintree_DisplayOutput(source), index, count);
+	Debug_Print3("Bintree_Delete called: %s, %i, %i", Bintree_DisplayOutput(source), index, count);
 	new
 		branch = 0,
 		old = index;
@@ -437,7 +437,7 @@ stock Bintree_Delete(BinaryTree:source<>, index, count)
 
 static stock Bintree_Compress(BinaryTree:data<>, index, count)
 {
-	P:4("Bintree_Compress called: %s, %i, %i", Bintree_DisplayOutput(data), index, count);
+	Debug_Print4("Bintree_Compress called: %s, %i, %i", Bintree_DisplayOutput(data), index, count);
 	new
 		index2 = index + 1;
 	while (index < count)
@@ -465,13 +465,13 @@ static stock Bintree_Compress(BinaryTree:data<>, index, count)
  * <param name="data">Array to search.</param>
  * <param name="offset">Start of branch to search.</param>
  * <remarks>
- *  Finds the smallest value on a branch
+ *   Finds the smallest value on a branch
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Bintree_FindMin(BinaryTree:data<>, offset)
 {
-	P:4("Bintree_FindMin called: %s, %i", Bintree_DisplayOutput(data), offset);
+	Debug_Print4("Bintree_FindMin called: %s, %i", Bintree_DisplayOutput(data), offset);
 	new
 		branch = 0;
 	while ((branch = data[offset][E_BINTREE_TREE_LEFT]) != BINTREE_NO_BRANCH) offset = branch;
@@ -482,13 +482,13 @@ static stock Bintree_FindMin(BinaryTree:data<>, offset)
  * <param name="data">Array to search.</param>
  * <param name="offset">Start of branch to search.</param>
  * <remarks>
- *  Finds the largest value on a branch
+ *   Finds the largest value on a branch
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock Bintree_FindMax(BinaryTree:data<>, offset)
 {
-	P:4("Bintree_FindMax called: %s, %i", Bintree_DisplayOutput(data), offset);
+	Debug_Print4("Bintree_FindMax called: %s, %i", Bintree_DisplayOutput(data), offset);
 	new
 		branch = 0;
 	while ((branch = data[offset][E_BINTREE_TREE_RIGHT]) != BINTREE_NO_BRANCH) offset = branch;
@@ -500,14 +500,14 @@ static stock Bintree_FindMax(BinaryTree:data<>, offset)
  * <param name="offset">Pointer to modify values after.</param>
  * <param name="mod">Value to modify by.</param>
  * <remarks>
- *  Used for updating pointers when the target data has been modifed (i.e. a
- *  value has been removed from the array and the array shifted).
+ *   Used for updating pointers when the target data has been modifed (i.e. a
+ *   value has been removed from the array and the array shifted).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock Bintree_UpdatePointers(BinaryTree:data<>, offset, size, mod = -1)
 {
-	P:3("Bintree_UpdatePointers called: %s, %i, %i, %i", Bintree_DisplayOutput(data), offset, size, mod);
+	Debug_Print3("Bintree_UpdatePointers called: %s, %i, %i, %i", Bintree_DisplayOutput(data), offset, size, mod);
 	for (new i = 0; i < size; i++)
 	{
 		if (data[i][E_BINTREE_TREE_POINTER] > offset) data[i][E_BINTREE_TREE_POINTER] += mod;

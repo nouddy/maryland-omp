@@ -1,3 +1,7 @@
+#if defined _INC_y_percent
+	#endinput
+#endif
+
 /**
  * <library
  *   name="y_percent"
@@ -93,16 +97,16 @@ Optional plugins:
 	#tryinclude "y_percent\y_percent_entry"
 #endif
 #if !defined _INC_y_percent
-	#tryinclude "YSI_Coding\y_percent\y_percent_entry"
+	#tryinclude "YSI_Data\y_percent\y_percent_entry"
 #endif
 #if !defined _INC_y_percent
-	#tryinclude "YSI\YSI_Coding\y_percent\y_percent_entry"
+	#tryinclude "YSI\YSI_Data\y_percent\y_percent_entry"
 #endif
 #if !defined _INC_y_percent
-	#tryinclude <YSI_Coding\y_percent\y_percent_entry>
+	#tryinclude <YSI_Data\y_percent\y_percent_entry>
 #endif
 #if !defined _INC_y_percent
-	#tryinclude <YSI\YSI_Coding\y_percent\y_percent_entry>
+	#tryinclude <YSI\YSI_Data\y_percent\y_percent_entry>
 #endif
 #if !defined _INC_y_percent
 	#error Could not find y_percent

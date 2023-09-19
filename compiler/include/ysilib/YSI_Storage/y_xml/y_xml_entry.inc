@@ -134,7 +134,7 @@ static stock
  * <param name="file">File to check validity of.</param>
  *//*------------------------------------------------------------------------**/
 
-P:D(bool:XML_IsValid(XML:file));
+FUNC_PAWNDOC(bool:XML_IsValid(XML:file));
 #define XML_IsValid(%1) \
 	((%1) >= XML:0 && (%1) < XML_MAX_XML_FILES && YSI_g_sCurHandler[(%1)] != -1)
 
@@ -142,22 +142,22 @@ P:D(bool:XML_IsValid(XML:file));
  * <param name="ch">Checks if a cell is a valid identifier character.</param>
  *//*------------------------------------------------------------------------**/
 
-P:D(bool:XML_IsChar(ch));
+FUNC_PAWNDOC(bool:XML_IsChar(ch));
 #define XML_IsChar(%1) \
 	(((%1) >= 'a' && (%1) <= 'z') || ((%1) >= 'A' && (%1) <= 'Z') || ((%1) >= '0' && (%1) <= '9') || (%1 == '_'))
 
 /*-------------------------------------------------------------------------*//**
  * <returns>
- *  XML
+ *   XML
  * </returns>
  * <remarks>
- *  Creates a new set of rules for parsing XML files.
+ *   Creates a new set of rules for parsing XML files.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML:XML_New()
 {
-	P:3("XML:XML_New called");
+	Debug_Print3("XML:XML_New called");
 	new
 		XML:i = XML:0;
 	while (i < XML_MAX_XML_FILES && YSI_g_sCurHandler[i] != -1) i++;
@@ -172,7 +172,7 @@ stock XML:XML_New()
 
 stock XML_Destroy(XML:rule)
 {
-	P:3("XML_Destroy called: %i", _:rule);
+	Debug_Print3("XML_Destroy called: %i", _:rule);
 	if (!XML_IsValid(rule)) return 0;
 	YSI_g_sCurBuffer = -1;
 	YSI_g_sCurHandler[rule] = -1;
@@ -183,13 +183,13 @@ stock XML_Destroy(XML:rule)
  * <param name="rule">Set of XML rules to parse against.</param>
  * <param name="filename">XML file to parse.</param>
  * <remarks>
- *  Now supports self-closing tags and XML comments.
+ *   Now supports self-closing tags and XML comments.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_Parse(XML:rule, const filename[])
 {
-	P:3("XML_Parse called: %i, \"%s\"", _:rule, filename);
+	Debug_Print3("XML_Parse called: %i, \"%s\"", _:rule, filename);
 	if (!XML_IsValid(rule)) return 0;
 	YSI_g_sCurBuffer = 0;
 	new
@@ -210,7 +210,7 @@ stock XML_Parse(XML:rule, const filename[])
 			inPar = 0;
 		while ((lineLen = fread(xFile, line[lineOffset], sizeof (line) - lineOffset)))
 		{
-			P:5("XML_Parse() line: %s", line);
+			Debug_Print5("XML_Parse() line: %s", line);
 			new
 				pos = 0,
 				ch = 0;
@@ -249,7 +249,7 @@ stock XML_Parse(XML:rule, const filename[])
 						// use this as a handy break point for long lines.
 						++pos;
 						lineOffset = sizeof (line) - 1 - pos;
-						memcpy(line, line[pos], 0, lineOffset << __COMPILER_CELL_SHIFT);
+						memcpy(line, line[pos], 0, lineOffset << __cell_shift);
 						break;
 					}
 					++pos;
@@ -368,41 +368,41 @@ stock XML_Parse(XML:rule, const filename[])
  * <param name="text">Data.</param>
  * <param name="depth">Current XML tree depth.</param>
  * <remarks>
- *  Pushes an identifier and it's value (either explicitaly stated or returned
- *  from another function) to the stack with basic parent info.
+ *   Pushes an identifier and it's value (either explicitaly stated or returned
+ *   from another function) to the stack with basic parent info.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_Push(const name[], const text[], depth)
 {
-	P:3("XML_Push called: \"%s\", \"%s\", %i, %i", name, text, depth, YSI_g_sCurBuffer);
+	Debug_Print3("XML_Push called: \"%s\", \"%s\", %i, %i", name, text, depth, YSI_g_sCurBuffer);
 	if (YSI_g_sCurBuffer < XML_BUFFER_SIZE && YSI_g_sCurBuffer >= 0)
 	{
-		P:7("XML_Push: first");
+		Debug_Print7("XML_Push: first");
 		StrCpy(YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_NAME], name, MAX_XML_ENTRY_NAME);
-		P:7("XML_Push: second");
+		Debug_Print7("XML_Push: second");
 		StrCpy(YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_VALUE], text, MAX_XML_ENTRY_TEXT);
-		P:7("XML_Push: third");
+		Debug_Print7("XML_Push: third");
 		YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_LEVEL] = depth;
-		P:7("XML_Push: fourth");
+		Debug_Print7("XML_Push: fourth");
 		++YSI_g_sCurBuffer;
-		P:7("XML_Push: fifth");
+		Debug_Print7("XML_Push: fifth");
 	}
-	P:5("XML_Push: YSI_g_sCurBuffer = %d", YSI_g_sCurBuffer);
+	Debug_Print5("XML_Push: YSI_g_sCurBuffer = %d", YSI_g_sCurBuffer);
 }
 
 /*-------------------------------------------------------------------------*//**
  * <param name="line">Data to extract from.</param>
  * <param name="pos">Start/end point of the text.</param>
  * <remarks>
- *  Gets the data from inside ""s in an identifier.  Now supports
- *  \ for escape characters.
+ *   Gets the data from inside ""s in an identifier.  Now supports
+ *   \ for escape characters.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_GetParameter(const line[], &pos)
 {
-	P:3("XML_GetParameter called: \"%s\", %i", line, pos);
+	Debug_Print3("XML_GetParameter called: \"%s\", %i", line, pos);
 	new
 		ch = 0,
 		ret[MAX_XML_ENTRY_TEXT],
@@ -469,13 +469,13 @@ stock XML_GetParameter(const line[], &pos)
  * <param name="line">Line to get data from.</param>
  * <param name="pos">Start and end position of the data.</param>
  * <remarks>
- *  Gets the text between tags.
+ *   Gets the text between tags.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_GetValue(const line[], &pos)
 {
-	P:3("XML_GetValue called: \"%s\", %i", line, pos);
+	Debug_Print3("XML_GetValue called: \"%s\", %i", line, pos);
 	new
 		ch = 0,
 		ret[MAX_XML_ENTRY_TEXT],
@@ -494,13 +494,13 @@ stock XML_GetValue(const line[], &pos)
  * <param name="line">Line to get data from.</param>
  * <param name="pos">Start and end position of text.</param>
  * <remarks>
- *  Gets the identifier of a piece of data.
+ *   Gets the identifier of a piece of data.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_GetName(const line[], &pos)
 {
-	P:3("XML_GetName called: \"%s\", %i", line, pos);
+	Debug_Print3("XML_GetName called: \"%s\", %i", line, pos);
 	new
 		ch = 0,
 		ret[MAX_XML_ENTRY_NAME],
@@ -523,7 +523,7 @@ stock XML_GetName(const line[], &pos)
 
 stock XML_ParseTag(XML:rule, const name[], tagCount)
 {
-	P:3("XML_ParseTag called: %i, \"%s\", %i", _:rule, name, tagCount);
+	Debug_Print3("XML_ParseTag called: %i, \"%s\", %i", _:rule, name, tagCount);
 	new
 		i = 0,
 		j = YSI_g_sCurHandler[rule],
@@ -537,7 +537,7 @@ stock XML_ParseTag(XML:rule, const name[], tagCount)
 		}
 		i++;
 	}
-	P:5("XML_ParseTag: Check %d != %d", i, j);
+	Debug_Print5("XML_ParseTag: Check %d != %d", i, j);
 	if (i != j)
 	{
 		//format(ret, sizeof (ret), "%d", CallLocalFunction(YSI_g_sHandlers[rule][i][E_XML_HANDLER_FUNCTION], ""));
@@ -545,7 +545,7 @@ stock XML_ParseTag(XML:rule, const name[], tagCount)
 	}
 	while (YSI_g_sCurBuffer-- && YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_LEVEL] > tagCount)
 	{
-		P:3("XML_ParseTag item: %d %s %d", YSI_g_sCurBuffer, YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_NAME], YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_LEVEL]);
+		Debug_Print3("XML_ParseTag item: %d %s %d", YSI_g_sCurBuffer, YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_NAME], YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_LEVEL]);
 		//--YSI_g_sCurBuffer;
 	}
 	++YSI_g_sCurBuffer;
@@ -564,21 +564,21 @@ stock XML_ParseTag(XML:rule, const name[], tagCount)
  * <param name="key">Variable to return identifier in.</param>
  * <param name="value">Variable to return value in.</param>
  * <returns>
- *  Data found.
+ *   Data found.
  * </returns>
  * <remarks>
- *  Pops items off the stack for use in custom functions.
+ *   Pops items off the stack for use in custom functions.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_GetKeyValue(key[], value[])
 {
-	P:3("XML_GetKeyValue called: \"%s\", \"%s\"", key, value);
+	Debug_Print3("XML_GetKeyValue called: \"%s\", \"%s\"", key, value);
 	key[0] = 1;
 	key[1] = 0;
 	value[0] = 1;
 	value[1] = 0;
-	P:5("XML_GetKeyValue: YSI_g_sCurBuffer: %d", YSI_g_sCurBuffer);
+	Debug_Print5("XML_GetKeyValue: YSI_g_sCurBuffer: %d", YSI_g_sCurBuffer);
 	if (YSI_g_sCurBuffer)
 	{
 		--YSI_g_sCurBuffer;
@@ -587,11 +587,11 @@ stock XML_GetKeyValue(key[], value[])
 			++YSI_g_sCurBuffer;
 			return 0;
 		}
-		P:5("XML_GetKeyValue: first");
+		Debug_Print5("XML_GetKeyValue: first");
 		StrCpy(key, YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_NAME], MAX_XML_ENTRY_NAME);
-		P:5("XML_GetKeyValue: second");
+		Debug_Print5("XML_GetKeyValue: second");
 		StrCpy(value, YSI_g_sParameters[YSI_g_sCurBuffer][E_XML_PARA_VALUE], MAX_XML_ENTRY_TEXT);
-		P:3("XML_GetKeyValue ending: \"%s\", \"%s\"", key, value);
+		Debug_Print3("XML_GetKeyValue ending: \"%s\", \"%s\"", key, value);
 		return 1;
 	}
 	return 0;
@@ -601,42 +601,42 @@ stock XML_GetKeyValue(key[], value[])
  * <param name="key">Name of the parameter to get.</param>
  * <param name="value">Variable to return value in.</param>
  * <returns>
- *  Data found.
+ *   Data found.
  * </returns>
  * <remarks>
- *  Does no poping, just searches for a value with the right name at the right
- *  depth so children can use the data if they HAVE to.
+ *   Does no poping, just searches for a value with the right name at the right
+ *   depth so children can use the data if they HAVE to.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_GetParentValue(const key[], value[])
 {
-	P:3("XML_GetParentValue called: \"%s\"", key);
+	Debug_Print3("XML_GetParentValue called: \"%s\"", key);
 	value[0] = 1;
 	value[1] = 0;
-	P:7("XML_GetParentValue: first");
-	//P:C(for (new i = 0; i != YSI_g_sCurBuffer; ++i) P:0("XML_GetParentValue: buffer[%d] = %s", i, YSI_g_sParameters[i][E_XML_PARA_NAME]););
+	Debug_Print7("XML_GetParentValue: first");
+	//Debug_Code1{for (new i = 0; i != YSI_g_sCurBuffer; ++i) Debug_Print0("XML_GetParentValue: buffer[%d] = %s", i, YSI_g_sParameters[i][E_XML_PARA_NAME]);}
 	for (new i = 0; i != YSI_g_sCurBuffer; ++i)
 	{
-		P:7("XML_GetParentValue: second %d %d %d", i, YSI_g_sParameters[i][E_XML_PARA_LEVEL], YSI_g_sEndTag);
+		Debug_Print7("XML_GetParentValue: second %d %d %d", i, YSI_g_sParameters[i][E_XML_PARA_LEVEL], YSI_g_sEndTag);
 		if (YSI_g_sParameters[i][E_XML_PARA_LEVEL] == YSI_g_sEndTag)
 		{
-			P:7("XML_GetParentValue: 2b: %s %s", key, YSI_g_sParameters[i][E_XML_PARA_NAME]);
+			Debug_Print7("XML_GetParentValue: 2b: %s %s", key, YSI_g_sParameters[i][E_XML_PARA_NAME]);
 			if (!strcmp(key, YSI_g_sParameters[i][E_XML_PARA_NAME]))
 			{
-				P:7("XML_GetParentValue: third");
+				Debug_Print7("XML_GetParentValue: third");
 				StrCpy(value, YSI_g_sParameters[i][E_XML_PARA_VALUE], MAX_XML_ENTRY_TEXT);
 				return 1;
 			}
 		}
 		else if (YSI_g_sParameters[i][E_XML_PARA_LEVEL] > YSI_g_sEndTag)
 		{
-			P:7("XML_GetParentValue: fourth");
+			Debug_Print7("XML_GetParentValue: fourth");
 			// In to child data.
 			return 0;
 		}
 	}
-	P:7("XML_GetParentValue: fifth");
+	Debug_Print7("XML_GetParentValue: fifth");
 	return 0;
 }
 
@@ -648,7 +648,7 @@ stock XML_GetParentValue(const key[], value[])
 
 stock XML_AddHandler(XML:rule, const trigger[], const function[])
 {
-	P:3("XML_AddHandler called: %i, \"%s\", \"%s\"", _:rule, trigger, function);
+	Debug_Print3("XML_AddHandler called: %i, \"%s\", \"%s\"", _:rule, trigger, function);
 	new
 		handle = 0;
 	if (!XML_IsValid(rule) || (handle = YSI_g_sCurHandler[rule]) >= MAX_XML_HANDLERS && handle >= 0) return 0;
@@ -665,7 +665,7 @@ stock XML_AddHandler(XML:rule, const trigger[], const function[])
 
 stock XML_RemoveHandler(XML:rule, const trigger[])
 {
-	P:3("XML_RemoveHandler called: %i, \"%s\"", _:rule, trigger);
+	Debug_Print3("XML_RemoveHandler called: %i, \"%s\"", _:rule, trigger);
 	if (XML_IsValid(rule))
 	{
 		for (new i = 0, j = YSI_g_sCurHandler[rule]; i < j; i++)
@@ -695,7 +695,7 @@ stock XML_RemoveHandler(XML:rule, const trigger[])
 //#define XML_AddSubEntry XML_AddParameter
 stock XMLEntry:XML_AddParameter(XMLEntry:parent, const tag[], const value[] = "")
 {
-	P:3("XMLEntry:XML_AddParameter called: %i, \"%s\", \"%s\"", _:parent, tag, value);
+	Debug_Print3("XMLEntry:XML_AddParameter called: %i, \"%s\", \"%s\"", _:parent, tag, value);
 	if (_:parent < YSI_g_sXMLWritePointer < XML_WRITE_BUFFER_SIZE)
 	{
 		StrCpy(YSI_g_sXMLWriteBuffer[YSI_g_sXMLWritePointer][E_XML_WRITE_TAG], tag, MAX_XML_ENTRY_NAME);
@@ -712,9 +712,9 @@ stock XMLEntry:XML_AddParameter(XMLEntry:parent, const tag[], const value[] = ""
  * <param name="tag">Type of data being added.</param>
  * <param name="name">The optional name parameter for identifying tags.</param>
  * <remarks>
- *  Starts the creation of a new tag to be written to a file, the structure
- *  has to be manually created then written.  There is no buffering of multiple
- *  tags before writing as a single tag can have quite a bit of data.
+ *   Starts the creation of a new tag to be written to a file, the structure
+ *   has to be manually created then written.  There is no buffering of multiple
+ *   tags before writing as a single tag can have quite a bit of data.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -722,7 +722,7 @@ stock XMLEntry:XML_AddParameter(XMLEntry:parent, const tag[], const value[] = ""
 #define XML_AddSubEntry XML_AddItem
 stock XMLEntry:XML_AddItem(const tag[], const name[] = "", XMLEntry:parent = XMLEntry:cellmax)
 {
-	P:3("XMLEntry:XML_AddItem called: \"%s\", \"%s\", %i", tag, name, _:parent);
+	Debug_Print3("XMLEntry:XML_AddItem called: \"%s\", \"%s\", %i", tag, name, _:parent);
 	if (_:parent != cellmax)
 	{
 		return XML_AddParameter(parent, tag, name);
@@ -744,14 +744,14 @@ stock XMLEntry:XML_AddItem(const tag[], const name[] = "", XMLEntry:parent = XML
  * <param name="bIncludeXML">Write the default &lt;XML&gt; tags or not?</param>
  * <param name="bFavourShort">Write the shortest tags possible.</param>
  * <remarks>
- *  Writea the data for a tag to a file.
+ *   Writea the data for a tag to a file.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 #define XML_WriteEntry XML_WriteItem
 stock XML_WriteItem(const filename[], XMLEntry:item, bool:bIncludeXML = true, bool:bFavourShort = false)
 {
-	P:3("XML_WriteItem called: \"%s\", %i", filename, _:item);
+	Debug_Print3("XML_WriteItem called: \"%s\", %i", filename, _:item);
 	if (_:item < YSI_g_sXMLWritePointer)
 	{
 		new
@@ -829,13 +829,13 @@ stock XML_WriteItem(const filename[], XMLEntry:item, bool:bIncludeXML = true, bo
  * <param name="fHnd">File to write to.</param>
  * <param name="depth">Current indentation.</param>
  * <remarks>
- *  Recursive function to write a tag and it's children to a file.
+ *   Recursive function to write a tag and it's children to a file.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock XML_WriteItemData(item, File:fHnd, depth)
 {
-	P:4("XML_WriteItemData called: %i, %i, %i", item, _:fHnd, depth);
+	Debug_Print4("XML_WriteItemData called: %i, %i, %i", item, _:fHnd, depth);
 	new
 		str[YSI_MAX_STRING],
 		i = YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_CHILDREN];
@@ -843,13 +843,13 @@ static stock XML_WriteItemData(item, File:fHnd, depth)
 	{
 		format(str, sizeof (str), "%*s<%s>%s</%s>\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG], YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_VALUE], YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
 		fwrite(fHnd, str);
-		P:7("XML_WriteItemData: writing %s", str);
+		Debug_Print7("XML_WriteItemData: writing %s", str);
 	}
 	else
 	{
 		if (YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_VALUE][0]) format(str, sizeof (str), "%*s<%s name=\"%s\">\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG], YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_VALUE]);
 		else format(str, sizeof (str), "%*s<%s>\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
-		P:7("XML_WriteItemData: writing %s", str);
+		Debug_Print7("XML_WriteItemData: writing %s", str);
 		fwrite(fHnd, str);
 		depth += 2;
 		while (i != -1)
@@ -859,7 +859,7 @@ static stock XML_WriteItemData(item, File:fHnd, depth)
 		}
 		depth -= 2;
 		format(str, sizeof (str), "%*s</%s>\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
-		P:7("XML_WriteItemData: writing %s", str);
+		Debug_Print7("XML_WriteItemData: writing %s", str);
 		fwrite(fHnd, str);
 	}
 }
@@ -869,15 +869,15 @@ static stock XML_WriteItemData(item, File:fHnd, depth)
  * <param name="fHnd">File to write to.</param>
  * <param name="depth">Current indentation.</param>
  * <remarks>
- *  Recursive function to write a tag and it's children to a file.  Writes tags
- *  in the shortest manner possible.  This does make it slower however (not much
- *  though given the use of linked lists).
+ *   Recursive function to write a tag and it's children to a file.  Writes tags
+ *   in the shortest manner possible.  This does make it slower however (not much
+ *   though given the use of linked lists).
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 static stock XML_WriteItemDataShort(item, File:fHnd, depth)
 {
-	P:4("XML_WriteItemDataShort called: %i, %i, %i", item, _:fHnd, depth);
+	Debug_Print4("XML_WriteItemDataShort called: %i, %i, %i", item, _:fHnd, depth);
 	new
 		str[YSI_MAX_STRING],
 		i = YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_CHILDREN];
@@ -885,13 +885,13 @@ static stock XML_WriteItemDataShort(item, File:fHnd, depth)
 	{
 		format(str, sizeof (str), "%*s<%s>%s</%s>\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG], YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_VALUE], YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
 		fwrite(fHnd, str);
-		P:7("XML_WriteItemDataShort: writing 0 %s", str);
+		Debug_Print7("XML_WriteItemDataShort: writing 0 %s", str);
 	}
 	else
 	{
 		// Loop through all children to find those with no children.
 		format(str, sizeof (str), "%*s<%s", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
-		P:7("XML_WriteItemDataShort: writing 1 %s", str);
+		Debug_Print7("XML_WriteItemDataShort: writing 1 %s", str);
 		fwrite(fHnd, str);
 		new
 			notDone = 0;
@@ -900,7 +900,7 @@ static stock XML_WriteItemDataShort(item, File:fHnd, depth)
 			if (YSI_g_sXMLWriteBuffer[i][E_XML_WRITE_CHILDREN] == -1)
 			{
 				format(str, sizeof (str), " %s=\"%s\"", YSI_g_sXMLWriteBuffer[i][E_XML_WRITE_TAG], YSI_g_sXMLWriteBuffer[i][E_XML_WRITE_VALUE]);
-				P:7("XML_WriteItemDataShort: writing 2 %s", str);
+				Debug_Print7("XML_WriteItemDataShort: writing 2 %s", str);
 				fwrite(fHnd, str);
 			}
 			else
@@ -912,7 +912,7 @@ static stock XML_WriteItemDataShort(item, File:fHnd, depth)
 		while (i != -1);
 		if (notDone)
 		{
-			P:7("XML_WriteItemDataShort: writing 3 >\n");
+			Debug_Print7("XML_WriteItemDataShort: writing 3 >\n");
 			fwrite(fHnd, ">\n");
 			depth += 2;
 			i = YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_CHILDREN];
@@ -928,11 +928,11 @@ static stock XML_WriteItemDataShort(item, File:fHnd, depth)
 			depth -= 2;
 			format(str, sizeof (str), "%*s</%s>\n", depth, "", YSI_g_sXMLWriteBuffer[item][E_XML_WRITE_TAG]);
 			fwrite(fHnd, str);
-			P:7("XML_WriteItemDataShort: writing 4 %s", str);
+			Debug_Print7("XML_WriteItemDataShort: writing 4 %s", str);
 		}
 		else
 		{
-			P:7("XML_WriteItemData: writing 5 />\n");
+			Debug_Print7("XML_WriteItemData: writing 5 />\n");
 			fwrite(fHnd, " />\n");
 		}
 	}
@@ -943,13 +943,13 @@ static stock XML_WriteItemDataShort(item, File:fHnd, depth)
  * <param name="tag">Type of tag to remove.</param>
  * <param name="name">Name of the tag to remove.</param>
  * <remarks>
- *  Does a replace on data in a file with no new data.
+ *   Does a replace on data in a file with no new data.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_RemoveItem(const file[], const tag[], const name[])
 {
-	P:3("XML_RemoveItem called: \"%s\", \"%s\", \"%s\", ", file, tag, name);
+	Debug_Print3("XML_RemoveItem called: \"%s\", \"%s\", \"%s\", ", file, tag, name);
 	return XML_ReplaceItem(file, tag, name, -1);
 }
 
@@ -959,13 +959,13 @@ stock XML_RemoveItem(const file[], const tag[], const name[])
  * <param name="name">Name of data to replace.</param>
  * <param name="replacement">Handle to the replacement data.</param>
  * <remarks>
- *  Replaces a tag's data with new data, basically changes a tag's value.
+ *   Replaces a tag's data with new data, basically changes a tag's value.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
 stock XML_ReplaceItem(const file[], const tag[], const name[], replacement)
 {
-	P:3("XML_ReplaceItem called: \"%s\", \"%s\", \"%s\", %i", file, tag, name, replacement);
+	Debug_Print3("XML_ReplaceItem called: \"%s\", \"%s\", \"%s\", %i", file, tag, name, replacement);
 	if (fexist(file))
 	{
 		new

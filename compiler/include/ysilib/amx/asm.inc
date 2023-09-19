@@ -94,16 +94,16 @@ enum AsmContext {
 const AsmContext:AsmContext__ = AsmContext;
 
 /// <library>amx_assembly asm</library>
-stock const ASM_ARGUMENTS_OFFSET    =  0x0C;
+stock const ASM_ARGUMENTS_OFFSET    =  3 * cellbytes;
 
 /// <library>amx_assembly asm</library>
-stock const ASM_LOCALS_OFFSET       = -0x04;
+stock const ASM_LOCALS_OFFSET       = -1 * cellbytes;
 
 /// <library>amx_assembly asm</library>
 stock const ASM_CALLER_FRAME_OFFSET =  0x00;
 
 /// <library>amx_assembly asm</library>
-stock const ASM_RETURN_ADDR_OFFSET  =  0x04;
+stock const ASM_RETURN_ADDR_OFFSET  =  1 * cellbytes;
 
 /// <library>amx_assembly asm</library>
 stock const ASM_CTRL_COD = 0;
@@ -155,7 +155,7 @@ static stock AsmError:AsmEmitCell(ctx[AsmContext], value) {
 	}
 
 	WriteAmxMemory(ctx[AsmContext_buffer] + ctx[AsmContext_buffer_offset], value);
-	ctx[AsmContext_buffer_offset] += 4;
+	ctx[AsmContext_buffer_offset] += cellbytes;
 
 	return ASM_ERROR_NONE;
 }
@@ -175,7 +175,7 @@ static stock AsmHashLabel(const label[]) {
 	new hash = -1;
 	new i = -1;
 	new ch = 0;
-	while ((ch = label[++i])) {
+	while ((ch = label[++i]) > ' ') {
 		hash = hash * 33 + ch;
 	}
 	return hash;
@@ -202,7 +202,7 @@ stock AsmError:AsmEmitLabelStringize(ctx[AsmContext], const label[]) {
 	// next instruction (8 bytes later), while we want it from right here, so
 	// shift back accordingly.
 	new datAddr = ctx[AsmContext_buffer] + ctx[AsmContext_buffer_offset];
-	new codAddr = AsmGetJumpAddressFromOffset(ctx, -8);
+	new codAddr = AsmGetJumpAddressFromOffset(ctx, -2 * cellbytes);
 	if (idx == -1) {
 		// Doesn't exist.  Get a free slot.
 		idx = AsmFindLabelIndex(ctx, 0);
@@ -220,7 +220,7 @@ stock AsmError:AsmEmitLabelStringize(ctx[AsmContext], const label[]) {
 		while (cur) {
 			new next = ReadAmxMemory(cur);
 			if (AsmIsJumpRelative(next)) {
-				WriteAmxMemory(cur, datAddr - cur - 4);
+				WriteAmxMemory(cur, datAddr - cur - cellbytes);
 			} else {
 				WriteAmxMemory(cur, codAddr);
 			}
@@ -251,7 +251,7 @@ stock AsmError:AsmEmitJumpStringize(ctx[AsmContext], const label[], bool:relativ
 		// The label was in the past, jump to that.
 		new cur = AsmGetLabel(ctx, idx);
 		if (relative) {
-			error = AsmEmitCell(ctx, cur - datAddr - 4);
+			error = AsmEmitCell(ctx, cur - datAddr - cellbytes);
 		} else {
 			error = AsmEmitCell(ctx, cur);
 		}
@@ -316,7 +316,7 @@ stock AsmGetJumpAddressFromOffset(const ctx[AsmContext], offset) {
 	new amxhdr[AMX_HDR];
 	GetAmxHeader(amxhdr);
 
-	new next_offset = 2 * 4; // offset to the next instruction
+	new next_offset = 2 * cellbytes; // offset to the next instruction
 	new base = GetAmxBaseAddress() + amxhdr[AMX_HDR_DAT];
 	new dest = ctx[AsmContext_buffer] + ctx[AsmContext_buffer_offset] + next_offset + offset;
 
@@ -367,7 +367,7 @@ stock AsmGetBufferSize(const ctx[AsmContext]) {
 
 /// <library>amx_assembly asm</library>
 stock AsmError:AsmInit(ctx[AsmContext], buffer[], size = sizeof(buffer)) {
-	AsmInitPtr(ctx, ref(buffer), size * 4);
+	AsmInitPtr(ctx, ref(buffer), size * cellbytes);
 }
 
 /// <library>amx_assembly asm</library>
@@ -427,7 +427,7 @@ stock AsmEmitPadding(ctx[AsmContext], Opcode:op = OP_NOP) {
 		end = ctx[AsmContext_buffer] + ctx[AsmContext_buffer_size];
 	while (cur < end) {
 		WriteAmxMemory(cur, _:op);
-		cur += 4;
+		cur += cellbytes;
 	}
 	ctx[AsmContext_buffer_offset] = ctx[AsmContext_buffer_size];
 }
@@ -1172,7 +1172,11 @@ stock AsmError:AsmEmitSysreqC(ctx[AsmContext], index) {
 
 /// <library>amx_assembly asm</library>
 stock AsmError:AsmEmitSysreqD(ctx[AsmContext], address) {
-	return AsmEmitInstruction(ctx, OP_SYSREQ_D, address);
+	if (HasSysreqD())
+	{
+		return AsmEmitInstruction(ctx, OP_SYSREQ_D, address);
+	}
+	return ASM_ERROR_OPCODE;
 }
 
 /// <library>amx_assembly asm</library>
@@ -1234,7 +1238,7 @@ stock AsmError:AsmEmitSysreq(ctx[AsmContext], const name[]) {
 
 /// <library>amx_assembly asm</library>
 stock AsmError:AsmEmitPopArgs(ctx[AsmContext], n) {
-	return AsmEmitStack(ctx, (n + 1) * 4);
+	return AsmEmitStack(ctx, (n + 1) * cellbytes);
 }
 
 /// <library>amx_assembly asm</library>
@@ -1244,13 +1248,117 @@ stock AsmError:AsmEmitPushArg(ctx[AsmContext], n) {
 
 /// <library>amx_assembly asm</library>
 stock AsmError:AsmEmitPushNumArgs(ctx[AsmContext], n) {
-	return AsmEmitPushC(ctx, 4 * n);
+	return AsmEmitPushC(ctx, cellbytes * n);
 }
 
 // Helpers:
 
 /// <library>amx_assembly asm</library>
 stock AsmGetArgOffset(n) {
-	return ASM_ARGUMENTS_OFFSET + 4 * n;
+	return ASM_ARGUMENTS_OFFSET + cellbytes * n;
+}
+
+#if !OPCODE_HAS_O2
+	#endinput
+#endif
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush2C(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_PUSH2_C, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush2(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_PUSH2, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush2S(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_PUSH2_S, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush2Adr(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_PUSH2_ADR, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush3C(ctx[AsmContext], a, b, c) {
+	return AsmEmitInstruction(ctx, OP_PUSH3_C, a, b, c);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush3(ctx[AsmContext], a, b, c) {
+	return AsmEmitInstruction(ctx, OP_PUSH3, a, b, c);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush3S(ctx[AsmContext], a, b, c) {
+	return AsmEmitInstruction(ctx, OP_PUSH3_S, a, b, c);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush3Adr(ctx[AsmContext], a, b, c) {
+	return AsmEmitInstruction(ctx, OP_PUSH3_ADR, a, b, c);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush4C(ctx[AsmContext], a, b, c, d) {
+	return AsmEmitInstruction(ctx, OP_PUSH4_C, a, b, c, d);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush4(ctx[AsmContext], a, b, c, d) {
+	return AsmEmitInstruction(ctx, OP_PUSH4, a, b, c, d);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush4S(ctx[AsmContext], a, b, c, d) {
+	return AsmEmitInstruction(ctx, OP_PUSH4_S, a, b, c, d);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush4Adr(ctx[AsmContext], a, b, c, d) {
+	return AsmEmitInstruction(ctx, OP_PUSH4_ADR, a, b, c, d);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush5C(ctx[AsmContext], a, b, c, d, e) {
+	return AsmEmitInstruction(ctx, OP_PUSH5_C, a, b, c, d, e);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush5(ctx[AsmContext], a, b, c, d, e) {
+	return AsmEmitInstruction(ctx, OP_PUSH5, a, b, c, d, e);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush5S(ctx[AsmContext], a, b, c, d, e) {
+	return AsmEmitInstruction(ctx, OP_PUSH5_S, a, b, c, d, e);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitPush5Adr(ctx[AsmContext], a, b, c, d, e) {
+	return AsmEmitInstruction(ctx, OP_PUSH5_ADR, a, b, c, d, e);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitLoadBoth(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_LOAD_BOTH, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitLoadSBoth(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_LOAD_S_BOTH, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitConst(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_CONST, a, b);
+}
+
+/// <library>amx_assembly asm</library>
+stock AsmError:AsmEmitConstS(ctx[AsmContext], a, b) {
+	return AsmEmitInstruction(ctx, OP_CONST_S, a, b);
 }
 

@@ -73,16 +73,12 @@ Optional plugins:
 
 // TODO: Two dialog IDs - one for `Dialog_ShowCallback`, one for `Dialog_Show`.
 // NEVER re-use `_A<_yD@>`
-#define YSI_DIALOG_ID_1 _A<@_yD>
-#define YSI_DIALOG_ID_2 _A<_@yD>
+const YSI_DIALOG_ID_1 = _A<@_yD>;
+const YSI_DIALOG_ID_2 = _A<_@yD>;
 
 #define YSI_DIALOG_NONE (Func:0<iiiis>)
 #define YSI_DIALOG_MASK (Func:cellmax<iiiis>)
 #define YSI_DIALOG_INVALID (Func:cellmin<iiiis>)
-
-#if !defined DIALOG_STYLE
-	#define DIALOG_STYLE: _:
-#endif
 
 static stock
 	YSI_g_sPlayerDialog[MAX_PLAYERS] = {-1, ...},
@@ -93,7 +89,7 @@ stock Dialog_Get(playerid)
 	return YSI_g_sPlayerDialog[playerid];
 }
 
-remotefunc void:Dialog_Set(playerid, dialogid)
+REMOTE_FUNC__ void:Dialog_Set(playerid, dialogid)
 {
 	// If they could already see a dialog shown by this script, get rid of the
 	// data from that one.
@@ -105,41 +101,47 @@ remotefunc void:Dialog_Set(playerid, dialogid)
 	YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_NONE;
 }
 
-#if defined _ALS_ShowPlayerDialog
-	#define Dialog_ShowPlayerNative ShowPlayerDialog
-#else
-	native Dialog_ShowPlayerNative(playerid, dialogid, DIALOG_STYLE:style, const caption[], const info[], const button1[], const button2[]) = ShowPlayerDialog;
-#endif
-
 // Func:callback<iiiis> | Func:callback<iis>
-stock Dialog_ShowCallback(playerid, {F@_@iiiis, F@_@iis}:callback, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "", tag = tagof (callback))
+stock bool:Dialog_ShowCallback(playerid, {F@_@iiiis, F@_@iis}:callback, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "", tag = tagof (callback))
 {
-	broadcastfunc Dialog_Set(playerid, YSI_DIALOG_ID_1);
+	BROADCAST_FUNC__ Dialog_Set(playerid, YSI_DIALOG_ID_1);
 	Indirect_Claim(callback),
 	Indirect_SetMeta(callback, tag),
 	// Works tag-safely because the compile-time tag check uses `<iiiis>`.
 	YSI_g_sPlayerCallback[playerid] = callback;
-	return Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_1, style, title, caption, button1, button2);
+	return bool:Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_1, style, title, caption, button1, button2);
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 #pragma deprecated Use Dialog_ShowCallback
-stock Dialog_ShowCallbackData(playerid, callback[E_CALLBACK_DATA], DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "")
+stock bool:Dialog_ShowCallbackData(playerid, callback[E_CALLBACK_DATA], DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "")
 {
-	return Dialog_ShowCallback(playerid, F@_@iiiis:callback[E_CALLBACK_DATA:0], style, title, caption, button1, button2);
+	return bool:Dialog_ShowCallback(playerid, F@_@iiiis:callback[E_CALLBACK_DATA:0], style, title, caption, button1, button2);
 }
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
 
-stock Dialog_Show(playerid, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "")
+stock bool:Dialog_Show(playerid, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[] = "")
 {
-	broadcastfunc Dialog_Set(playerid, YSI_DIALOG_ID_2);
+	BROADCAST_FUNC__ Dialog_Set(playerid, YSI_DIALOG_ID_2);
 	YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_INVALID;
-	return Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_2, style, title, caption, button1, button2);
+	return bool:Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_2, style, title, caption, button1, button2);
 }
 
-stock Dialog_Hide(playerid)
+stock bool:Dialog_Hide(playerid)
 {
-	// This almost looks like a Windows API function call!
-	broadcastfunc Dialog_Set(playerid, -1);
-	return Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+	BROADCAST_FUNC__ Dialog_Set(playerid, -1);
+	#if defined HidePlayerDialog
+		return bool:HidePlayerDialog(playerid);
+	#else
+		// This almost looks like a Windows API function call!
+		return bool:Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+	#endif
 }
 
 HOOK__ OnPlayerDisconnect(playerid, reason)
@@ -158,8 +160,13 @@ HOOK__ OnPlayerDisconnect(playerid, reason)
 		{
 			Indirect_Release(YSI_g_sPlayerCallback[playerid]);
 		}
-		YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_NONE,
-		Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+		YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_NONE;
+		
+		#if defined HidePlayerDialog
+			HidePlayerDialog(playerid);
+		#else
+			Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+		#endif
 	}
 	return 1;
 }
@@ -168,31 +175,34 @@ HOOK__ OnPlayerDisconnect(playerid, reason)
 __COMPILER_TAG_DATA(F@_@iis, 0);
 __COMPILER_TAG_DATA(F@_@iiiis, 0);
 
-HOOK__ OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+// `playerid, dialogid, response, listitem, inputtext[]`, but shorter (because
+// otherwise the old compiler crashes...)
+HOOK__ OnDialogResponse(p,d,r,l,i[])
 {
+	#pragma unused d
 	// Apparently there's a hack to alter this.
-	dialogid = YSI_g_sPlayerDialog[playerid];
-	P:1("Dialog_OnDialogResponse called: %d %d %d %d %s", playerid, dialogid, response, listitem, inputtext);
-	if (dialogid == YSI_DIALOG_ID_1)
+	d = YSI_g_sPlayerDialog[p];
+	Debug_Print1("Dialog_OnDialogResponse called: %d %d %d %d %s", p, d, r, l, i);
+	if (d == YSI_DIALOG_ID_1)
 	{
-		// Can't be `YSI_DIALOG_INVALID`, because `dialogid == YSI_DIALOG_ID_1.
-		if (YSI_g_sPlayerCallback[playerid])
+		// Can't be `YSI_DIALOG_INVALID`, because `d == YSI_DIALOG_ID_1.
+		if (YSI_g_sPlayerCallback[p])
 		{
 			new
-				Func:callback<iiiis> = YSI_g_sPlayerCallback[playerid];
-			YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_NONE;
+				Func:callback<iiiis> = YSI_g_sPlayerCallback[p];
+			YSI_g_sPlayerCallback[p] = YSI_DIALOG_NONE;
 			// Totally blank the stored dialog information, after making a local
 			// copy of it for the sake of calling the callback.  This is so that
 			// we don't free the memory for the callback prematurely.
-			broadcastfunc Dialog_Set(playerid, -1);
+			BROADCAST_FUNC__ Dialog_Set(p, -1);
 			// Call the callback.
 			if (Indirect_GetMeta(callback) == _:tagof (F@_@iiiis:))
 			{
-				Indirect_Call(_:callback, tagof (F@_@iiiis:), playerid, YSI_DIALOG_ID_1, response, listitem, IsNull(inputtext) ? NULL : inputtext);
+				Indirect_Call(_:callback, tagof (F@_@iiiis:), p, YSI_DIALOG_ID_1, r, l, IsNull(i) ? NULL : i);
 			}
 			else
 			{
-				Indirect_Call(_:callback, tagof (F@_@iis:), response, listitem, IsNull(inputtext) ? NULL : inputtext);
+				Indirect_Call(_:callback, tagof (F@_@iis:), r, l, IsNull(i) ? NULL : i);
 			}
 			// Free the data.
 			Indirect_Release(callback);
@@ -203,17 +213,17 @@ HOOK__ OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	return 0;
 }
 
-stock Dialog_ShowPlayerDialog(playerid, dialog, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[])
+stock bool:Dialog_ShowPlayerDialog(playerid, dialog, DIALOG_STYLE:style, const string:title[], const string:caption[], const string:button1[], const string:button2[])
 {
 	// Fail.
 	if (dialog == YSI_DIALOG_ID_1 || dialog == YSI_DIALOG_ID_2)
 	{
-		P:E("Trying to show a dialog with YSI reserved ID %d", dialog);
-		return 0;
+		Debug_Error("Trying to show a dialog with YSI reserved ID %d", dialog);
+		return false;
 	}
-	broadcastfunc Dialog_Set(playerid, dialog);
+	BROADCAST_FUNC__ Dialog_Set(playerid, dialog);
 	YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_INVALID;
-	return Dialog_ShowPlayerNative(playerid, dialog, style, title, caption, button1, button2);
+	return bool:Dialog_ShowPlayerNative(playerid, dialog, style, title, caption, button1, button2);
 }
 
 #if defined _ALS_ShowPlayerDialog

@@ -149,7 +149,7 @@ iterfunc stock TestState1_y_iter(&iterstate, cur)
 
 #define Iterator@TestState1_y_iter iterstate(-1, 800)
 
-TEST__ TestState1_y_iter()
+@test(.group = "y_iterate") TestState1_y_iter()
 {
 	new
 		count = 0;
@@ -172,7 +172,7 @@ iterfunc stock TestState2_y_iter(iterstate[2], cur)
 
 #define Iterator@TestState2_y_iter iterstate(-1, 500, 600)
 
-TEST__ TestState2_y_iter()
+@test(.group = "y_iterate") TestState2_y_iter()
 {
 	new
 		count = 0;
@@ -187,7 +187,7 @@ TEST__ TestState2_y_iter()
 	ASSERT_EQ(count, 2);
 }
 
-TEST__ y_iter_Range()
+@test(.group = "y_iterate") y_iter_Range()
 {
 	new
 		count = 0;
@@ -238,7 +238,7 @@ TEST__ y_iter_Range()
 	ASSERT_EQ(count, 1);
 }
 
-TEST__ y_iter_Add1()
+@test(.group = "y_iterate") y_iter_Add1()
 {
 	// Check we can only add a number once, and that we don't mess up the order.
 	new
@@ -275,7 +275,7 @@ TEST__ y_iter_Add1()
 	ASSERT_EQ(count, 1);
 }
 
-TEST__ y_iter_Add2()
+@test(.group = "y_iterate") y_iter_Add2()
 {
 	// Check we can only add a number once, and that we don't mess up the order.
 	new
@@ -327,7 +327,7 @@ TEST__ y_iter_Add2()
 	ASSERT_EQ(count, 2);
 }
 
-TEST__ y_iter_Prev()
+@test(.group = "y_iterate") y_iter_Prev()
 {
 	// Check we can only add a number once, and that we don't mess up the order.
 	new
@@ -352,6 +352,7 @@ TEST__ y_iter_Prev()
 	ASSERT_EQ(Iter_Next(iter, 3), 4);
 	ASSERT_EQ(Iter_Prev(iter, 4), 3);
 	ASSERT_EQ(Iter_First(iter), 3);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5], Iterator@iter[6], Iterator@iter[15], Iterator@iter[16], Iterator@iter[17], Iterator@iter[18], Iterator@iter[19], Iterator@iter[20]);
 	ASSERT_EQ(Iter_Last(iter), 4);
 	Iter_Add(iter, 18);
 	ASSERT_EQ(Iter_Last(iter), 18);
@@ -370,7 +371,27 @@ TEST__ y_iter_Prev()
 	ASSERT_ZE(Iter_Next(iter, 20));
 }
 
-TEST__ y_iter_Add3()
+@test(.group = "y_iterate") y_iter_Debug()
+{
+	// Check OOB numbers.
+	new
+		Iterator:iter1<20>;
+	Iter_Add(iter1, 4);
+	Iter_Add(iter1, 18);
+	Iter_Debug(iter1);
+	new
+		Iterator:iter2<6, 20>;
+	Iter_Add(iter2<2>, 4);
+	Iter_Add(iter2<2>, 18);
+	Iter_Add(iter2<3>, 10);
+	Iter_Add(iter2<3>, 11);
+	Iter_Add(iter2<4>, 12);
+	Iter_Debug(iter2<>);
+	ASSERT_EQ(Iter_Available(iter1), 18);
+	ASSERT_EQ(Iter_Available(iter2<>), 15);
+}
+
+@test(.group = "y_iterate") y_iter_Add3()
 {
 	// Check OOB numbers.
 	new
@@ -394,7 +415,7 @@ TEST__ y_iter_Add3()
 	ASSERT_EQ(count, 1);
 }
 
-TEST__ y_iter_Add4()
+@test(.group = "y_iterate") y_iter_Add4()
 {
 	// Check OOB numbers.
 	new
@@ -418,7 +439,7 @@ TEST__ y_iter_Add4()
 	ASSERT_EQ(count, 1);
 }
 
-TEST__ y_iter_Add5()
+@test(.group = "y_iterate") y_iter_Add5()
 {
 	// Add all numbers.
 	new
@@ -444,7 +465,7 @@ TEST__ y_iter_Add5()
 	ASSERT_EQ(count, 20);
 }
 
-TEST__ y_iter_MultiAdd1()
+@test(.group = "y_iterate") y_iter_MultiAdd1()
 {
 	// Add all numbers.
 	new
@@ -478,7 +499,7 @@ TEST__ y_iter_MultiAdd1()
 	ASSERT_EQ(count, 1);
 }
 
-TEST__ y_iter_Remove1()
+@test(.group = "y_iterate") y_iter_Remove1()
 {
 	new
 		Iterator:iter<50>,
@@ -528,7 +549,7 @@ TEST__ y_iter_Remove1()
 	ASSERT_EQ(count, 18);
 }
 
-TEST__ y_iter_Reverse1()
+@test(.group = "y_iterate") y_iter_Reverse1()
 {
 	new
 		count = 0,
@@ -547,7 +568,7 @@ TEST__ y_iter_Reverse1()
 	ASSERT_EQ(count, 5);
 }
 
-TEST__ y_iter_RandomRemove1()
+@test(.group = "y_iterate") y_iter_RandomRemove1()
 {
 	new
 		Iterator:iter<10>;
@@ -559,7 +580,7 @@ TEST__ y_iter_RandomRemove1()
 	ASSERT_ZE(Iter_Count(iter));
 }
 
-TEST__ y_iter_RandomRemove2()
+@test(.group = "y_iterate") y_iter_RandomRemove2()
 {
 	new
 		Iterator:iter[3]<10>;
@@ -584,19 +605,33 @@ TEST__ y_iter_RandomRemove2()
 	ASSERT_ZE(Iter_Count(iter[1]));
 }
 
-TEST__ y_iter_RandomRemove3()
+@test(.group = "y_iterate") y_iter_RandomRemove3()
 {
-	new
-		Iterator:iter<2, 10>;
-	Iter_Add(iter<0>, 2);
-	ASSERT_NE(Iter_RandomRemove(iter<0>), cellmin);
-	ASSERT_EQ(Iter_RandomRemove(iter<1>), cellmin);
-	ASSERT_EQ(Iter_RandomRemove(iter<0>), cellmin);
-	ASSERT_ZE(Iter_Count(iter<0>));
-	ASSERT_ZE(Iter_Count(iter<1>));
+	for (new i = 0; i != 100; ++i)
+	{
+		new
+			Iterator:iter<5, 10>;
+		Iter_Add(iter<4>, 2);
+		Iter_Add(iter<4>, 4);
+		Iter_Add(iter<4>, 5);
+		Iter_Add(iter<4>, 9);
+		Iter_Add(iter<4>, 10);
+		ASSERT_EQ(Iter_RandomRemove(iter<0>), cellmin);
+		ASSERT_EQ(Iter_RandomRemove(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomRemove(iter<4>), cellmin);
+		ASSERT_NE(Iter_RandomRemove(iter<4>), cellmin);
+		ASSERT_NE(Iter_RandomRemove(iter<4>), cellmin);
+		ASSERT_NE(Iter_RandomRemove(iter<4>), cellmin);
+		ASSERT_EQ(Iter_RandomRemove(iter<4>), cellmin);
+		ASSERT_EQ(Iter_RandomRemove(iter<1>), cellmin);
+		ASSERT_EQ(Iter_RandomRemove(iter<0>), cellmin);
+		ASSERT_ZE(Iter_Count(iter<0>));
+		ASSERT_ZE(Iter_Count(iter<1>));
+		ASSERT_ZE(Iter_Count(iter<4>));
+	}
 }
 
-TEST__ y_iter_RandomAdd1()
+@test(.group = "y_iterate") y_iter_RandomAdd1()
 {
 	new
 		Iterator:iter<10>;
@@ -616,7 +651,7 @@ TEST__ y_iter_RandomAdd1()
 	ASSERT_EQ(Iter_Count(iter), 10);
 }
 
-TEST__ y_iter_RandomAdd2()
+@test(.group = "y_iterate") y_iter_RandomAdd2()
 {
 	new
 		Iterator:iter[3]<10>;
@@ -651,28 +686,33 @@ TEST__ y_iter_RandomAdd2()
 	ASSERT_EQ(Iter_Count(iter[1]), 10);
 }
 
-TEST__ y_iter_RandomAdd3()
+@test(.group = "y_iterate") y_iter_RandomAdd3()
 {
-	new
-		Iterator:iter<2, 10>;
-	Iter_Add(iter<0>, 2);
-	ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_EQ(Iter_RandomAdd(iter<0>), cellmin);
-	ASSERT_EQ(Iter_RandomAdd(iter<1>), cellmin);
-	ASSERT_EQ(Iter_RandomAdd(iter<0>), cellmin);
-	ASSERT_EQ(Iter_Count(iter<0>), 4);
-	ASSERT_EQ(Iter_Count(iter<1>), 6);
+	// Loop this many times, because I managed to randomly get an error once,
+	// but with it being random it was hard to reproduce.
+	for (new i = 0; i != 100; ++i)
+	{
+		new
+			Iterator:iter<2, 10>;
+		Iter_Add(iter<0>, 2);
+		ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<0>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_NE(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_EQ(Iter_RandomAdd(iter<0>), cellmin);
+		ASSERT_EQ(Iter_RandomAdd(iter<1>), cellmin);
+		ASSERT_EQ(Iter_RandomAdd(iter<0>), cellmin);
+		ASSERT_EQ(Iter_Count(iter<0>), 4);
+		ASSERT_EQ(Iter_Count(iter<1>), 6);
+	}
 }
 
-TEST__ y_iter_RandomFree1()
+@test(.group = "y_iterate") y_iter_RandomFree1()
 {
 	new
 		Iterator:iter<10>,
@@ -706,7 +746,7 @@ TEST__ y_iter_RandomFree1()
 	ASSERT_EQ(Iter_RandomFree(iter), cellmin);
 }
 
-TEST__ y_iter_RandomFree2()
+@test(.group = "y_iterate") y_iter_RandomFree2()
 {
 	new
 		Iterator:iter<2, 10>,
@@ -741,7 +781,7 @@ TEST__ y_iter_RandomFree2()
 	ASSERT_EQ(Iter_RandomFree(iter<1>), cellmin);
 }
 
-TEST__ y_iter_RandomFree3()
+@test(.group = "y_iterate") y_iter_RandomFree3()
 {
 	new
 		Iterator:iter[2]<10>,
@@ -804,7 +844,7 @@ TEST__ y_iter_RandomFree3()
 	ASSERT_EQ(Iter_RandomFree(iter[1]), cellmin);
 }
 
-TEST__ y_iter_Reverse2()
+@test(.group = "y_iterate") y_iter_Reverse2()
 {
 	new
 		count = 0,
@@ -830,7 +870,7 @@ TEST__ y_iter_Reverse2()
 	ASSERT_EQ(count, 3);
 }
 
-TEST__ y_iter_Remove2()
+@test(.group = "y_iterate") y_iter_Remove2()
 {
 	new
 		Iterator:iter<5, 10>;
@@ -875,7 +915,7 @@ TEST__ y_iter_Remove2()
 	ASSERT_EQ(Iter_Count(iter<2>), 2);
 }
 
-TEST__ y_iter_Tags()
+@test(.group = "y_iterate") y_iter_Tags()
 {
 	new
 		Iterator:iter[5]<4>,
@@ -886,7 +926,7 @@ TEST__ y_iter_Tags()
 	Iter_Clear(iter[_:gg]);
 }
 
-TEST__ y_iter_Iter_Init1()
+@test(.group = "y_iterate") y_iter_Iter_Init1()
 {
 	new
 		Iterator:iter[10]<20>;
@@ -900,7 +940,7 @@ TEST__ y_iter_Iter_Init1()
 	ASSERT(Iter_TrueArray(iter)[9][19] <= 19);
 }
 
-TEST__ y_iter_Iter_Init2()
+@test(.group = "y_iterate") y_iter_Iter_Init2()
 {
 	new
 		Iterator:iter[10]<5, 20>;
@@ -917,7 +957,7 @@ TEST__ y_iter_Iter_Init2()
 	ASSERT(Iter_TrueArray(iter)[8][19] <= 19);
 }
 
-TEST__ y_iter_Starting()
+@test(.group = "y_iterate") y_iter_Starting()
 {
 	new
 		Iterator:Test1_y_iter<100>,
@@ -951,7 +991,7 @@ TEST__ y_iter_Starting()
 	#pragma unused i
 }
 
-TEST__ y_iter_Iter_Contains1()
+@test(.group = "y_iterate") y_iter_Iter_Contains1()
 {
 	new
 		Iterator:iter1<60>;
@@ -970,7 +1010,7 @@ TEST__ y_iter_Iter_Contains1()
 	ASSERT(Iter_Contains(iter2<4>, 5));
 }
 
-TEST__ y_iter_Iter_Contains2()
+@test(.group = "y_iterate") y_iter_Iter_Contains2()
 {
 	new
 		Iterator:iter1[4]<60>;
@@ -997,7 +1037,133 @@ TEST__ y_iter_Iter_Contains2()
 	ASSERT(!Iter_Contains(iter2[5]<4>, 5));
 }
 
-TEST__ y_iter_Iter_Free()
+@test(.group = "y_iterate") y_iter_Iter_IsEmpty1()
+{
+	new
+		Iterator:iter1<30>;
+	ASSERT(Iter_IsEmpty(iter1));
+	ASSERT(!Iter_NonEmpty(iter1));
+	ASSERT(!Iter_IsFull(iter1));
+	ASSERT(Iter_NonFull(iter1));
+	Iter_Add(iter1, 40);
+	ASSERT(Iter_IsEmpty(iter1));
+	ASSERT(!Iter_NonEmpty(iter1));
+	ASSERT(!Iter_IsFull(iter1));
+	ASSERT(Iter_NonFull(iter1));
+	Iter_Add(iter1, 20);
+	ASSERT(!Iter_IsEmpty(iter1));
+	ASSERT(Iter_NonEmpty(iter1));
+	ASSERT(!Iter_IsFull(iter1));
+	ASSERT(Iter_NonFull(iter1));
+	for (new i = 0; i != 30; ++i)
+	{
+		Iter_Add(iter1, i);
+	}
+	ASSERT(!Iter_IsEmpty(iter1));
+	ASSERT(Iter_NonEmpty(iter1));
+	ASSERT(Iter_IsFull(iter1));
+	ASSERT(!Iter_NonFull(iter1));
+}
+
+@test(.group = "y_iterate") y_iter_Iter_IsEmpty2()
+{
+	new
+		Iterator:iter1<5, 30>;
+	ASSERT(Iter_IsEmpty(iter1<>));
+	ASSERT(!Iter_NonEmpty(iter1<>));
+	ASSERT(!Iter_IsFull(iter1<>));
+	ASSERT(Iter_NonFull(iter1<>));
+	ASSERT(Iter_IsEmpty(iter1<1>));
+	ASSERT(!Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(Iter_IsEmpty(iter1<2>));
+	ASSERT(!Iter_NonEmpty(iter1<2>));
+	ASSERT(!Iter_IsFull(iter1<2>));
+	ASSERT(Iter_NonFull(iter1<2>));
+	Iter_Add(iter1<2>, 40);
+	ASSERT(Iter_IsEmpty(iter1<>));
+	ASSERT(!Iter_NonEmpty(iter1<>));
+	ASSERT(!Iter_IsFull(iter1<>));
+	ASSERT(Iter_NonFull(iter1<>));
+	ASSERT(Iter_IsEmpty(iter1<1>));
+	ASSERT(!Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(Iter_IsEmpty(iter1<2>));
+	ASSERT(!Iter_NonEmpty(iter1<2>));
+	ASSERT(!Iter_IsFull(iter1<2>));
+	ASSERT(Iter_NonFull(iter1<2>));
+	Iter_Add(iter1<2>, 20);
+	ASSERT(!Iter_IsEmpty(iter1<>));
+	ASSERT(Iter_NonEmpty(iter1<>));
+	ASSERT(!Iter_IsFull(iter1<>));
+	ASSERT(Iter_NonFull(iter1<>));
+	ASSERT(Iter_IsEmpty(iter1<1>));
+	ASSERT(!Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(!Iter_IsEmpty(iter1<2>));
+	ASSERT(Iter_NonEmpty(iter1<2>));
+	ASSERT(!Iter_IsFull(iter1<2>));
+	ASSERT(Iter_NonFull(iter1<2>));
+	for (new i = 0; i != 30; ++i)
+	{
+		Iter_Add(iter1<2>, i);
+	}
+	ASSERT(!Iter_IsEmpty(iter1<>));
+	ASSERT(Iter_NonEmpty(iter1<>));
+	ASSERT(Iter_IsFull(iter1<>));
+	ASSERT(!Iter_NonFull(iter1<>));
+	ASSERT(Iter_IsEmpty(iter1<1>));
+	ASSERT(!Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(!Iter_IsEmpty(iter1<2>));
+	ASSERT(Iter_NonEmpty(iter1<2>));
+	ASSERT(Iter_IsFull(iter1<2>));
+	ASSERT(!Iter_NonFull(iter1<2>));
+}
+
+@test(.group = "y_iterate") y_iter_Iter_IsEmpty3()
+{
+	new
+		Iterator:iter1<5, 30>;
+	ASSERT(Iter_IsEmpty(iter1<>));
+	ASSERT(!Iter_NonEmpty(iter1<>));
+	ASSERT(!Iter_IsFull(iter1<>));
+	ASSERT(Iter_NonFull(iter1<>));
+	ASSERT(Iter_IsEmpty(iter1<1>));
+	ASSERT(!Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(Iter_IsEmpty(iter1<2>));
+	ASSERT(!Iter_NonEmpty(iter1<2>));
+	ASSERT(!Iter_IsFull(iter1<2>));
+	ASSERT(Iter_NonFull(iter1<2>));
+	for (new i = 0; i != 30; ++i)
+	{
+		Iter_Add(iter1<i % 2>, i);
+	}
+	ASSERT(!Iter_IsEmpty(iter1<>));
+	ASSERT(Iter_NonEmpty(iter1<>));
+	ASSERT(Iter_IsFull(iter1<>));
+	ASSERT(!Iter_NonFull(iter1<>));
+	ASSERT(!Iter_IsEmpty(iter1<0>));
+	ASSERT(Iter_NonEmpty(iter1<0>));
+	ASSERT(!Iter_IsFull(iter1<0>));
+	ASSERT(Iter_NonFull(iter1<0>));
+	ASSERT(!Iter_IsEmpty(iter1<1>));
+	ASSERT(Iter_NonEmpty(iter1<1>));
+	ASSERT(!Iter_IsFull(iter1<1>));
+	ASSERT(Iter_NonFull(iter1<1>));
+	ASSERT(Iter_IsEmpty(iter1<2>));
+	ASSERT(!Iter_NonEmpty(iter1<2>));
+	ASSERT(!Iter_IsFull(iter1<2>));
+	ASSERT(Iter_NonFull(iter1<2>));
+}
+
+@test(.group = "y_iterate") y_iter_Iter_Free()
 {
 	new
 		Iterator:iter1<60>;
@@ -1015,7 +1181,7 @@ TEST__ y_iter_Iter_Free()
 	ASSERT_NZ(Iter_Free(iter2<3>));
 }
 
-TEST__ y_iter_Tag()
+@test(.group = "y_iterate") y_iter_Tag()
 {
 	new
 		Iterator:iter1<Group:60>,
@@ -1049,6 +1215,11 @@ TEST__ y_iter_Tag()
 	{
 		ASSERT_EQ(_:i / 11 * 11, _:i);
 	}
+	// Should also give warnings.
+	FOREACH__ (new i : iter1)
+	{
+		ASSERT_EQ(_:i / 11 * 11, _:i);
+	}
 	Iter_Alloc(iter2[0]);
 	Iter_Alloc(iter2[0]);
 	Iter_Alloc(iter2[0]);
@@ -1069,32 +1240,52 @@ TEST__ y_iter_Tag()
 	#pragma unused Iter_Single@iter3, Iterator@iter3, using_deprecated_itertag_syntax
 }
 
-TEST__ y_iter_Iter_Alloc()
+@test(.group = "y_iterate") y_iter_Iter_Alloc()
 {
 	new
-		Iterator:iter1<60>;
+		Iterator:iter1<12>;
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_ZE(Iter_Alloc(iter1));
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 1);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 2);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 3);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 4);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 5);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	Iter_Remove(iter1, 5);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 5);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 6);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 7);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 8);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 9);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	Iter_Remove(iter1, 5);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	Iter_Remove(iter1, 6);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	Iter_Remove(iter1, 7);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 5);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 6);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 7);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 	ASSERT_EQ(Iter_Alloc(iter1), 10);
+	//printf("%d %d %d %d %d %d %d %d %d %d %d %d %d", Iterator@iter1[0], Iterator@iter1[1], Iterator@iter1[2], Iterator@iter1[3], Iterator@iter1[4], Iterator@iter1[5], Iterator@iter1[6], Iterator@iter1[7], Iterator@iter1[8], Iterator@iter1[9], Iterator@iter1[10], Iterator@iter1[11], Iterator@iter1[12]);
 }
 
-TEST__ y_iter_Normal()
+@test(.group = "y_iterate") y_iter_Normal()
 {
 	new
 		Iterator: Test1_y_iter<100>;
@@ -1131,13 +1322,18 @@ TEST__ y_iter_Normal()
 	}
 }
 
-TEST__ y_iter_InfiniteLoop()
+@test(.group = "y_iterate") y_iter_InfiniteLoop()
 {
-    new Iterator:iter<20>;
-    Iter_Add(iter, 1);
+	new Iterator:iter<5>;
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
     Iter_Add(iter, 2);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+    Iter_Add(iter, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
     Iter_Remove(iter, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
     Iter_Remove(iter, 2);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
     FOREACH__ (new i : iter)
     {
         ASSERT(false);
@@ -1146,7 +1342,7 @@ TEST__ y_iter_InfiniteLoop()
 	ASSERT(true);
 }
 
-TEST__ y_iter_Syntax1()
+@test(.group = "y_iterate") y_iter_Syntax1()
 {
 	new
 		Iterator:Test1_y_iter <100>;
@@ -1228,7 +1424,7 @@ TEST__ y_iter_Syntax1()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax5a()
+@test(.group = "y_iterate") y_iter_Syntax5a()
 {
 	new
 		Iterator:Test5a_y_iter[4]< 20, 100>;
@@ -1311,7 +1507,7 @@ TEST__ y_iter_Syntax5a()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax5b()
+@test(.group = "y_iterate") y_iter_Syntax5b()
 {
 	new
 		Iterator:Test5b_y_iter[4]<20, 100 >;
@@ -1394,7 +1590,7 @@ TEST__ y_iter_Syntax5b()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax5c()
+@test(.group = "y_iterate") y_iter_Syntax5c()
 {
 	new
 		Iterator: Test5c_y_iter[4]< 20, 100>;
@@ -1477,7 +1673,7 @@ TEST__ y_iter_Syntax5c()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax5d()
+@test(.group = "y_iterate") y_iter_Syntax5d()
 {
 	new
 		Iterator: Test5d_y_iter [ 4 ] < 20, 100 >;
@@ -1560,7 +1756,7 @@ TEST__ y_iter_Syntax5d()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax4a()
+@test(.group = "y_iterate") y_iter_Syntax4a()
 {
 	new
 		Iterator:Test4a_y_iter[ 4 ] < 100 >;
@@ -1643,7 +1839,7 @@ TEST__ y_iter_Syntax4a()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax4b()
+@test(.group = "y_iterate") y_iter_Syntax4b()
 {
 	new
 		Iterator: Test4b_y_iter [4]<100>;
@@ -1726,7 +1922,7 @@ TEST__ y_iter_Syntax4b()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax4c()
+@test(.group = "y_iterate") y_iter_Syntax4c()
 {
 	new
 		Iterator: Test4c_y_iter[4 ]<100 >;
@@ -1809,7 +2005,7 @@ TEST__ y_iter_Syntax4c()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax4d()
+@test(.group = "y_iterate") y_iter_Syntax4d()
 {
 	new
 		Iterator: Test4d_y_iter[ 4]< 100>;
@@ -1892,7 +2088,7 @@ TEST__ y_iter_Syntax4d()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax3a()
+@test(.group = "y_iterate") y_iter_Syntax3a()
 {
 	new
 		Iterator: Test3a_y_iter <10, 100>;
@@ -1974,7 +2170,7 @@ TEST__ y_iter_Syntax3a()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax3b()
+@test(.group = "y_iterate") y_iter_Syntax3b()
 {
 	new
 		Iterator:Test3b_y_iter< 10, 100 >;
@@ -2056,7 +2252,7 @@ TEST__ y_iter_Syntax3b()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax3c()
+@test(.group = "y_iterate") y_iter_Syntax3c()
 {
 	new
 		Iterator: Test3c_y_iter <10, 100>;
@@ -2138,7 +2334,7 @@ TEST__ y_iter_Syntax3c()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax3d()
+@test(.group = "y_iterate") y_iter_Syntax3d()
 {
 	new
 		Iterator:Test3d_y_iter < 10, 100 >;
@@ -2226,13 +2422,15 @@ stock iterfunc y_iter_Syntax6(&iterstate, cur, inc)
 	return cur;
 }
 
-#define Iterator@y_iter_Syntax6 iterstate(0, 1024)
+// sqrt(max/4096)
+#define y_iter_Syntax6a_num (1024<<((cellbits/64)*16))
+#define Iterator@y_iter_Syntax6 iterstate(0, y_iter_Syntax6a_num)
 
-TEST__ y_iter_Syntax6a()
+@test(.group = "y_iterate") y_iter_Syntax6a()
 {
 	new
 		count = 0;
-	FOREACH__ (new i : y_iter_Syntax6(1024))
+	FOREACH__ (new i : y_iter_Syntax6(y_iter_Syntax6a_num))
 	{
 		ASSERT_ZE(i % 1048576);
 		++count;
@@ -2240,157 +2438,157 @@ TEST__ y_iter_Syntax6a()
 	ASSERT_EQ(count, 4095);
 }
 
-TEST__ y_iter_Syntax6b()
+@test(.group = "y_iterate") y_iter_Syntax6b()
 {
 	new
 		count = 0;
-	FOREACH__(new i:y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__(new i:y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__(new i: y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__(new i: y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__(new i :y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__(new i :y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__(new i : y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__(new i : y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__( new i:y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__( new i:y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__( new i: y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__( new i: y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__( new i :y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__( new i :y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__( new i : y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__( new i : y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ (new i:y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ (new i:y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ (new i: y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ (new i: y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ (new i :y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ (new i :y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ (new i : y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ (new i : y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ ( new i:y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ ( new i:y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ ( new i: y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ ( new i: y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ ( new i :y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ ( new i :y_iter_Syntax6(1024) ) { ++count; }
-	FOREACH__ ( new i : y_iter_Syntax6(1024)) { ++count; }
-	FOREACH__ ( new i : y_iter_Syntax6(1024) ) { ++count; }
+	FOREACH__(new i:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__(new i:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__(new i: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__(new i: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__(new i :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__(new i :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__(new i : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__(new i : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__( new i:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__( new i:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__( new i: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__( new i: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__( new i :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__( new i :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__( new i : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__( new i : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ (new i:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ (new i:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ (new i: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ (new i: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ (new i :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ (new i :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ (new i : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ (new i : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ ( new i:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ ( new i:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ ( new i: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ ( new i: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ ( new i :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ ( new i :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+	FOREACH__ ( new i : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+	FOREACH__ ( new i : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
 	ASSERT_EQ(count, 4095 * 1 * 32);
 	TODO(217, "Iterators with state in `FOREACH__` without `new`.");
 //	new
 //		j;
-//	FOREACH__(j:y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__(j:y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__(j: y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__(j: y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__(j :y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__(j :y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__(j : y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__(j : y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__( j:y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__( j:y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__( j: y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__( j: y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__( j :y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__( j :y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__( j : y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__( j : y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ (j:y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ (j:y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ (j: y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ (j: y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ (j :y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ (j :y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ (j : y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ (j : y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ ( j:y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ ( j:y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ ( j: y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ ( j: y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ ( j :y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ ( j :y_iter_Syntax6(1024) ) { ++count; }
-//	FOREACH__ ( j : y_iter_Syntax6(1024)) { ++count; }
-//	FOREACH__ ( j : y_iter_Syntax6(1024) ) { ++count; }
+//	FOREACH__(j:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__(j:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__(j: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__(j: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__(j :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__(j :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__(j : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__(j : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__( j:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__( j:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__( j: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__( j: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__( j :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__( j :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__( j : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__( j : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ (j:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ (j:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ (j: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ (j: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ (j :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ (j :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ (j : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ (j : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ ( j:y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ ( j:y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ ( j: y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ ( j: y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ ( j :y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ ( j :y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
+//	FOREACH__ ( j : y_iter_Syntax6(y_iter_Syntax6a_num)) { ++count; }
+//	FOREACH__ ( j : y_iter_Syntax6(y_iter_Syntax6a_num) ) { ++count; }
 //	ASSERT_EQ(count, 4095 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax6c()
+@test(.group = "y_iterate") y_iter_Syntax6c()
 {
 	new
 		count = 0;
-	FOREACH__(new i:y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__(new i:y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__(new i: y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__(new i: y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__(new i :y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__(new i :y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__(new i : y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__(new i : y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__( new i:y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__( new i:y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__( new i: y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__( new i: y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__( new i :y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__( new i :y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__( new i : y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__( new i : y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ (new i:y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ (new i:y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ (new i: y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ (new i: y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ (new i :y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ (new i :y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ (new i : y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ (new i : y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ ( new i:y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ ( new i:y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ ( new i: y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ ( new i: y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ ( new i :y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ ( new i :y_iter_Syntax6[1024] ) { ++count; }
-	FOREACH__ ( new i : y_iter_Syntax6[1024]) { ++count; }
-	FOREACH__ ( new i : y_iter_Syntax6[1024] ) { ++count; }
+	FOREACH__(new i:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__(new i:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__(new i: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__(new i: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__(new i :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__(new i :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__(new i : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__(new i : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__( new i:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__( new i:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__( new i: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__( new i: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__( new i :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__( new i :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__( new i : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__( new i : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ (new i:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ (new i:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ (new i: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ (new i: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ (new i :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ (new i :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ (new i : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ (new i : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ ( new i:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ ( new i:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ ( new i: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ ( new i: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ ( new i :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ ( new i :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+	FOREACH__ ( new i : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+	FOREACH__ ( new i : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
 	ASSERT_EQ(count, 4095 * 1 * 32);
 	TODO(217, "Iterators with state in `FOREACH__` without `new`.");
 //	new
 //		j;
-//	FOREACH__(j:y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__(j:y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__(j: y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__(j: y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__(j :y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__(j :y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__(j : y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__(j : y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__( j:y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__( j:y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__( j: y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__( j: y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__( j :y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__( j :y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__( j : y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__( j : y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ (j:y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ (j:y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ (j: y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ (j: y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ (j :y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ (j :y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ (j : y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ (j : y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ ( j:y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ ( j:y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ ( j: y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ ( j: y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ ( j :y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ ( j :y_iter_Syntax6[1024] ) { ++count; }
-//	FOREACH__ ( j : y_iter_Syntax6[1024]) { ++count; }
-//	FOREACH__ ( j : y_iter_Syntax6[1024] ) { ++count; }
+//	FOREACH__(j:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__(j:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__(j: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__(j: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__(j :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__(j :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__(j : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__(j : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__( j:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__( j:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__( j: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__( j: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__( j :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__( j :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__( j : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__( j : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ (j:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ (j:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ (j: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ (j: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ (j :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ (j :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ (j : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ (j : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ ( j:y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ ( j:y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ ( j: y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ ( j: y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ ( j :y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ ( j :y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
+//	FOREACH__ ( j : y_iter_Syntax6[y_iter_Syntax6a_num]) { ++count; }
+//	FOREACH__ ( j : y_iter_Syntax6[y_iter_Syntax6a_num] ) { ++count; }
 //	ASSERT_EQ(count, 4095 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax2a()
+@test(.group = "y_iterate") y_iter_Syntax2a()
 {
 	new
 		count = 0;
@@ -2463,7 +2661,7 @@ TEST__ y_iter_Syntax2a()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax2e()
+@test(.group = "y_iterate") y_iter_Syntax2e()
 {
 	new
 		count = 0;
@@ -2536,7 +2734,7 @@ TEST__ y_iter_Syntax2e()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax2b()
+@test(.group = "y_iterate") y_iter_Syntax2b()
 {
 	new
 		count = 0;
@@ -2609,7 +2807,7 @@ TEST__ y_iter_Syntax2b()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax2c()
+@test(.group = "y_iterate") y_iter_Syntax2c()
 {
 	new
 		count = 0;
@@ -2682,7 +2880,7 @@ TEST__ y_iter_Syntax2c()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Syntax2d()
+@test(.group = "y_iterate") y_iter_Syntax2d()
 {
 	new
 		count = 0;
@@ -2755,7 +2953,7 @@ TEST__ y_iter_Syntax2d()
 	ASSERT_EQ(count, 7 * 2 * 32);
 }
 
-TEST__ y_iter_Array()
+@test(.group = "y_iterate") y_iter_Array()
 {
 	new
 		Iterator:Test3[5]<20>;
@@ -2770,7 +2968,7 @@ TEST__ y_iter_Array()
 	ASSERT_ZE(count);
 }
 
-TEST__ y_iter_Multi()
+@test(.group = "y_iterate") y_iter_Multi()
 {
 	new
 		Iterator: Test4<7, 11>;
@@ -2784,7 +2982,7 @@ TEST__ y_iter_Multi()
 	ASSERT_ZE(count);
 }
 
-TEST__ y_iter_Clear()
+@test(.group = "y_iterate") y_iter_Clear()
 {
 	new
 		Iterator:a<30>,
@@ -2841,7 +3039,7 @@ TEST__ y_iter_Clear()
 	ASSERT_EQ(Iter_Count(a), 3);
 }
 
-TEST__ y_iter_ArrayMulti()
+@test(.group = "y_iterate") y_iter_ArrayMulti()
 {
 	new Iterator : Test5 [ 10 ] < 50, 25 >;
 	new
@@ -2923,24 +3121,24 @@ TEST__ y_iter_ArrayMulti()
 	ASSERT_ZE(count);
 }
 
-#if _FOREACH_PLAYERS
-	TEST__ y_iter_Deprecate()
-	{
-		#pragma tabsize 4
-		/* ================================================================== */
-		/* | THERE IS MEANT TO BE A WARNING ON THIS LINE                    | */
-		/* |                                                                | */
-		/* | */ FOREACH__ (Player, i)                                      /* | */
-		/* |                                                                | */
-		/* | It tests that the old syntax is nicely deprecated.             | */
-		/* ================================================================== */
-		#pragma tabsize 4
-		{
-		}
-	}
-#endif
+//#if _FOREACH_PLAYERS
+//	@test(.group = "y_iterate") y_iter_Deprecate()
+//	{
+//		#pragma tabsize 4
+//		/* ================================================================== */
+//		/* | THERE IS MEANT TO BE A WARNING ON THIS LINE                    | */
+//		/* |                                                                | */
+//		/* | */ FOREACH__ (Player, i)                                      /* | */
+//		/* |                                                                | */
+//		/* | It tests that the old syntax is nicely deprecated.             | */
+//		/* ================================================================== */
+//		#pragma tabsize 4
+//		{
+//		}
+//	}
+//#endif
 
-TEST__ y_iter_Random()
+@test(.group = "y_iterate") y_iter_Random()
 {
 	new
 		c = 0;
@@ -2957,7 +3155,7 @@ TEST__ y_iter_Random()
 	ASSERT_EQ(c, 1010);
 }
 
-TEST__ y_iter_RandomNested()
+@test(.group = "y_iterate") y_iter_RandomNested()
 {
 	new
 		c = 0;
@@ -2973,7 +3171,7 @@ TEST__ y_iter_RandomNested()
 	ASSERT_EQ(c, 100);
 }
 
-TEST__ y_iter_Powers()
+@test(.group = "y_iterate") y_iter_Powers()
 {
 	new
 		c = 1;
@@ -2982,10 +3180,10 @@ TEST__ y_iter_Powers()
 		ASSERT_EQ(i, c);
 		c *= 2;
 	}
-	ASSERT_EQ(c, 0x40000000 * 2);
+	ASSERT_EQ(c, cellmin);
 }
 
-TEST__ y_iter_Fib()
+@test(.group = "y_iterate") y_iter_Fib()
 {
 	new
 		a = 0,
@@ -2998,7 +3196,7 @@ TEST__ y_iter_Fib()
 	}
 }
 
-TEST__ y_iter_Null()
+@test(.group = "y_iterate") y_iter_Null()
 {
 	new
 		c = 0,
@@ -3011,7 +3209,7 @@ TEST__ y_iter_Null()
 	ASSERT_EQ(c, 4);
 }
 
-TEST__ y_iter_Filter1()
+@test(.group = "y_iterate") y_iter_Filter1()
 {
 	new
 		c = 0,
@@ -3024,7 +3222,7 @@ TEST__ y_iter_Filter1()
 	ASSERT_EQ(c, 4);
 }
 
-TEST__ y_iter_Filter2()
+@test(.group = "y_iterate") y_iter_Filter2()
 {
 	new
 		c = 0,
@@ -3037,7 +3235,7 @@ TEST__ y_iter_Filter2()
 	ASSERT_EQ(c, 3);
 }
 
-TEST__ y_iter_NonNull()
+@test(.group = "y_iterate") y_iter_NonNull()
 {
 	new
 		c = 0,
@@ -3050,7 +3248,7 @@ TEST__ y_iter_NonNull()
 	ASSERT_EQ(c, 6);
 }
 
-TEST__ y_iter_Until()
+@test(.group = "y_iterate") y_iter_Until()
 {
 	new
 		c = 0,
@@ -3063,7 +3261,7 @@ TEST__ y_iter_Until()
 	ASSERT_EQ(c, 6);
 }
 
-TEST__ y_iter_All1()
+@test(.group = "y_iterate") y_iter_All1()
 {
 	new Iterator:a<10>;
 	Iter_Add(a, 3);
@@ -3079,7 +3277,7 @@ TEST__ y_iter_All1()
 	ASSERT_EQ(count, 4);
 }
 
-TEST__ y_iter_None1()
+@test(.group = "y_iterate") y_iter_None1()
 {
 	new Iterator:a<10>;
 	Iter_Add(a, 3);
@@ -3095,7 +3293,7 @@ TEST__ y_iter_None1()
 	ASSERT_EQ(count, 6);
 }
 
-TEST__ y_iter_All2()
+@test(.group = "y_iterate") y_iter_All2()
 {
 	new Iterator:a<3, 10>;
 	Iter_Add(a<0>, 3);
@@ -3111,7 +3309,7 @@ TEST__ y_iter_All2()
 	ASSERT_EQ(count, 4);
 }
 
-TEST__ y_iter_None2()
+@test(.group = "y_iterate") y_iter_None2()
 {
 	new Iterator:a<3, 10>;
 	Iter_Add(a<2>, 3);
@@ -3127,7 +3325,7 @@ TEST__ y_iter_None2()
 	ASSERT_EQ(count, 6);
 }
 
-TEST__ y_iter_Index1()
+@test(.group = "y_iterate") y_iter_Index1()
 {
 	new Iterator:a<20>;
 	Iter_Add(a, 6);
@@ -3172,7 +3370,7 @@ TEST__ y_iter_Index1()
 	ASSERT_EQ(Iter_Index(a, 130, true), 17);
 }
 
-TEST__ y_iter_Index2()
+@test(.group = "y_iterate") y_iter_Index2()
 {
 	new Iterator:a<5, 20>;
 	Iter_Add(a<3>, 0);
@@ -3276,7 +3474,7 @@ static iterfunc stock y_iterDecl4X(cur) { return cur == 0 ? 5 : 0; }
 iterfunc stock static y_iterDecl6X(&iterstate, cur) { return cur == -1 ? iterstate : -1; }
 #define iterstart@y_iterDecl6X iterstate(-1, 5)
 
-TEST__ y_iter_MacroLess()
+@test(.group = "y_iterate") y_iter_MacroLess()
 {
 	new i = 0;
 	FOREACH__ (i : y_iterDecl1()) { ASSERT_EQ(i, 5); }
@@ -3298,7 +3496,7 @@ iterfunc stock y_iter_yield0()
 }
 #define Iterator@y_iter_yield0 iteryield
 
-TEST__ y_iter_yield0a()
+@test(.group = "y_iterate") y_iter_yield0a()
 {
 	new
 		count = 0;
@@ -3315,13 +3513,13 @@ TEST__ y_iter_yield0a()
 		++count;
 	}
 	ASSERT_ZE(count);
-	count = 0;
-	FOREACH__ (new i : y_iter_yield0[])
-	{
-		#pragma unused i
-		++count;
-	}
-	ASSERT_ZE(count);
+	//count = 0;
+	//FOREACH__ (new i : y_iter_yield0[])
+	//{
+	//	#pragma unused i
+	//	++count;
+	//}
+	//ASSERT_ZE(count);
 }
 
 iterfunc stock y_iter_yield1()
@@ -3333,7 +3531,7 @@ iterfunc stock y_iter_yield1()
 }
 #define Iterator@y_iter_yield1 iteryield
 
-TEST__ y_iter_yield1a()
+@test(.group = "y_iterate") y_iter_yield1a()
 {
 	new
 		count = 0;
@@ -3350,13 +3548,13 @@ TEST__ y_iter_yield1a()
 		++count;
 	}
 	ASSERT_EQ(count, 10);
-	count = 0;
-	FOREACH__ (new i : y_iter_yield1[])
-	{
-		#pragma unused i
-		++count;
-	}
-	ASSERT_EQ(count, 10);
+	//count = 0;
+	//FOREACH__ (new i : y_iter_yield1[])
+	//{
+	//	#pragma unused i
+	//	++count;
+	//}
+	//ASSERT_EQ(count, 10);
 }
 
 iterfunc stock y_iter_yield2(step, target = 100)
@@ -3371,7 +3569,7 @@ iterfunc stock y_iter_yield2(step, target = 100)
 }
 #define Iterator@y_iter_yield2 iteryield
 
-TEST__ y_iter_yield2a()
+@test(.group = "y_iterate") y_iter_yield2a()
 {
 	new
 		count = 0;
@@ -3411,7 +3609,7 @@ iterfunc stock y_iter_yield3(step, target = 100)
 }
 #define Iterator@y_iter_yield3 iteryield
 
-TEST__ y_iter_yield3a()
+@test(.group = "y_iterate") y_iter_yield3a()
 {
 	new
 		count = 0;
@@ -3446,7 +3644,7 @@ iterfunc stock y_iter_yield4(const arr[], size = sizeof (arr))
 }
 #define Iterator@y_iter_yield4 iteryield
 
-TEST__ y_iter_yield4a()
+@test(.group = "y_iterate") y_iter_yield4a()
 {
 	new
 		count = 0,
@@ -3458,53 +3656,49 @@ TEST__ y_iter_yield4a()
 	}
 }
 
-#if defined YSI_SLOW_TESTS
-
-	iterfunc stock y_iter_yield5()
+iterfunc stock y_iter_yield5()
+{
+	new
+		k = 0;
+	for (new i = 0; i != 65536; ++i)
 	{
-		new
-			k = 0;
-		for (new i = 0; i != 65536; ++i)
+		if (i % 655 == 0)
+			printf("%d%%...", i / 655);
+		for (new j = 0; j != 65536; ++j)
 		{
-			if (i % 655 == 0)
-				printf("%d%%...", i / 655);
-			for (new j = 0; j != 65536; ++j)
-			{
-				YIELD__ return k;
-				++k;
-			}
+			YIELD__ return k;
+			++k;
 		}
 	}
-	#define Iterator@y_iter_yield5 iteryield
-	
-	TEST__ y_iter_yield5a()
-	{
-		new
-			k = 0;
-		for (new i = 0; i != 65536; ++i)
-		{
-			if (i % 655 == 0)
-				printf("%d%%...", i / 655);
-			for (new j = 0; j != 65536; ++j)
-			{
-				++k;
-			}
-		}
-		ASSERT_ZE(k); // Overflow.
-		new
-			count = 0,
-			bool:ever = false;
-		FOREACH__ (new i : y_iter_yield5)
-		{
-			#pragma unused i
-			++count;
-			ever = true;
-		}
-		ASSERT_ZE(count); // Overflow.
-		ASSERT(ever);
-	}
+}
+#define Iterator@y_iter_yield5 iteryield
 
-#endif
+@test(.group = "y_iterate", .slow = true) y_iter_yield5a()
+{
+	//new
+	//	k = 0;
+	//for (new i = 0; i != 65536; ++i)
+	//{
+	//	if (i % 655 == 0)
+	//		printf("%d%%...", i / 655);
+	//	for (new j = 0; j != 65536; ++j)
+	//	{
+	//		++k;
+	//	}
+	//}
+	//ASSERT_ZE(k); // Overflow.
+	new
+		count = 0,
+		bool:ever = false;
+	FOREACH__ (new i : y_iter_yield5)
+	{
+		#pragma unused i
+		++count;
+		ever = true;
+	}
+	ASSERT_ZE(count); // Overflow.
+	ASSERT(ever);
+}
 
 iterfunc stock y_iter_yield6()
 {
@@ -3521,7 +3715,7 @@ iterfunc stock y_iter_yield6()
 }
 #define Iterator@y_iter_yield6 iteryield
 
-TEST__ y_iter_yield6a()
+@test(.group = "y_iterate") y_iter_yield6a()
 {
 	new
 		answers[] = { 0, 1, 2, 10, 20, 501, 502, 503, 504 },
@@ -3568,7 +3762,7 @@ iterfunc stock y_iter_yield7a(x)
 }
 #define Iterator@y_iter_yield7a iteryield
 
-TEST__ y_iter_yield7a()
+@test(.group = "y_iterate") y_iter_yield7a()
 {
 	new
 		answers[] = {
@@ -3588,18 +3782,320 @@ TEST__ y_iter_yield7a()
 	ASSERT_EQ(idx, sizeof(answers));
 }
 
-//static Iterator:y_iter_huge<100000>;
-//
-//TEST__ y_iter_huge()
-//{
-//	for (new i = 0; i < 50000; i++)
-//	{
-//		Iter_Add(y_iter_huge, i);
-//	}
-//	ASSERT_EQ(Iter_Count(y_iter_huge), 50000);
-//}
+static Iterator:y_iter_huge1<65535>;
 
-TEST__ y_iter_RandomFreeExclude()
+@test(.group = "y_iterate") y_iter_huge1()
+{
+	for (new i = 0; i != 50100; ++i)
+	{
+		Iter_Add(y_iter_huge1, i);
+	}
+	ASSERT_EQ(Iter_Count(y_iter_huge1), 50100);
+}
+
+static Iterator:y_iter_huge2<32767>;
+
+@test(.group = "y_iterate", .slow = true) y_iter_huge2()
+{
+	for (new i = 0; i != 20100; ++i)
+	{
+		//printf(" - iteration %d", i);
+		ASSERT_EQ(Iter_Count(y_iter_huge2), i);
+		Iter_RandomAdd(y_iter_huge2);
+		ASSERT_EQ(Iter_Count(y_iter_huge2), i + 1);
+	}
+	ASSERT_EQ(Iter_Count(y_iter_huge2), 20100);
+	new c = 0;
+	foreach (new i : y_iter_huge2)
+	{
+		++c;
+	}
+	ASSERT_EQ(c, 20100);
+}
+
+/*static Iterator:y_iter_huge3<32767>;
+
+static stock Iter_RandomFree_Single_2(count, const array[], start)
+{
+	// Get the unused count, not the used count.
+	count = start - count;
+	if (count <= 0)
+	{
+		return INVALID_ITERATOR_SLOT;
+	}
+	// There are enough elements to search from after exclusions.
+	count = random(count);
+	// No exclutions, use the old code.
+	for ( ; ; )
+	{
+		--start;
+		// Check if this value is not included in any iterator.  If it isn't
+		// then decrement the count until we have run out of values to test.
+		if (array[start] <= start)
+		{
+			if (count == 0)
+			{
+				break;
+			}
+			--count;
+		}
+	}
+	return start;
+}
+
+@profileinit() y_iter_huge2a()
+{
+	Iter_Clear(y_iter_huge3);
+}
+
+@profile(1) y_iter_huge2a()
+{
+	for (new i = 0; i != 20100; ++i)
+	{
+		new s = Iter_RandomFree_Single_2(Iter_TrueCount(y_iter_huge3), Iter_TrueArray(y_iter_huge3), Iter_End(y_iter_huge3));
+		Iter_Add(y_iter_huge3, s);
+	}
+}
+
+static stock Iter_Add_InternalC_A(&count, array[], size, value)
+{
+	Debug_Print3("Iter_Add called: %d, %d, %d", count, size, value);
+	if (0 <= value < size && array[value] <= value)
+	{
+		Debug_Print5("Iter_Add: In iterator");
+		new
+			next = array[size],
+			last;
+		// We use many heuristics to try and find where in the list to insert
+		// this new value as fast as possible.
+		//
+		// Version 0:
+		//
+		//   The value is being added to the very start of the list.  Only comes
+		//   before the end insertion case because of a bug getting `prev` in
+		//   empty lists.
+		//
+		if (next > value)
+		{
+			last = size;
+		}
+		//
+		// Version 1:
+		//
+		//   It is being inserted at the end.  By far the most common case when
+		//   initialising some list of items.
+		//
+		else if (value > (last = Iter_Prev_InternalD(array, size + 1, size)))
+		{
+			next = size;
+		}
+		//
+		// Version 2:
+		//
+		//   If the array is densely filled then just looping linearly from the
+		//   value until we hit something in the array will be faster than
+		//   iterating through the list.  For that we need the average number of
+		//   steps required, which is `count / 2`.  So if
+		//   `(last - first) / count / 2` is smaller than that number then the
+		//   density is sufficient to justify a linear scan.
+		//
+		//   Simplify:
+		//
+		//     d = last - next + 1
+		//     c = count
+		//   
+		//     d / c / 2 < c / 2
+		//     d / c     < c
+		//     d         < c^2
+		//
+		//else if ((last - next + 1) < count * count)
+		//{
+		//	next = value + 1;
+		//	while (array[next] <= next)
+		//	{
+		//		++next;
+		//	}
+		//	last = Iter_Prev_InternalD(array, size + 1, next);
+		//}
+		//
+		// Version 3:
+		//
+		//   Base case.  Loop through the list forwards.
+		//
+		else
+		{
+			last = size;
+			while (next < value)
+			{
+				Debug_Print6("Iter_Add: Finding prev %d, %d", next, last);
+				last = next,
+				next = array[last];
+			}
+		}
+		// Increase `size` so we modulo over the whole array, not just the
+		// valid values subset.
+		Debug_Print5("Iter_Add: Adding %d, %d, %d, %d, %d, %d", last, value, size, next, next - 1, (value - 1) % (size + 1));
+		
+		return
+			++size,
+			++count,
+			array[(value - 1) % size] = (last + 1) % size,
+			array[next - 1] = value + 1,
+			array[value] = next,
+			array[last] = value;
+	}
+	return INVALID_ITERATOR_SLOT;
+}
+
+static Iterator:y_iter_huge4<32767>;
+
+@profileinit() y_iter_huge2b()
+{
+	Iter_Clear(y_iter_huge4);
+}
+
+@profile(1) y_iter_huge2b()
+{
+	for (new i = 0; i != 20100; ++i)
+	{
+		new s = Iter_RandomFree_Single_2(Iter_TrueCount(y_iter_huge4), Iter_TrueArray(y_iter_huge4), Iter_End(y_iter_huge4));
+		Iter_Add_InternalC_A(Iter_TrueCount(y_iter_huge4), Iter_TrueArray(y_iter_huge4), Iter_TrueSize(y_iter_huge4) - 1, s);
+	}
+}
+
+static stock Iter_Add_InternalC_B(&count, array[], size, value)
+{
+	Debug_Print3("Iter_Add called: %d, %d, %d", count, size, value);
+	if (0 <= value < size && array[value] <= value)
+	{
+		Debug_Print5("Iter_Add: In iterator");
+		new
+			next = array[size],
+			last;
+		// We use many heuristics to try and find where in the list to insert
+		// this new value as fast as possible.
+		//
+		// Version 0:
+		//
+		//   The value is being added to the very start of the list.  Only comes
+		//   before the end insertion case because of a bug getting `prev` in
+		//   empty lists.
+		//
+		if (next > value)
+		{
+			last = size;
+		}
+		//
+		// Version 1:
+		//
+		//   It is being inserted at the end.  By far the most common case when
+		//   initialising some list of items.
+		//
+		//else if (value > (last = Iter_Prev_InternalD(array, size + 1, size)))
+		//{
+		//	next = size;
+		//}
+		//
+		// Version 2:
+		//
+		//   If the array is densely filled then just looping linearly from the
+		//   value until we hit something in the array will be faster than
+		//   iterating through the list.  For that we need the average number of
+		//   steps required, which is `count / 2`.  So if
+		//   `(last - first) / count / 2` is smaller than that number then the
+		//   density is sufficient to justify a linear scan.
+		//
+		//   Simplify:
+		//
+		//     d = last - next + 1
+		//     c = count
+		//   
+		//     d / c / 2 < c / 2
+		//     d / c     < c
+		//     d         < c^2
+		//
+		else if ((Iter_Prev_InternalD(array, size + 1, size) - next + 1) < count * count)
+		{
+			next = value + 1;
+			while (array[next] <= next)
+			{
+				++next;
+			}
+			last = Iter_Prev_InternalD(array, size + 1, next);
+		}
+		//
+		// Version 3:
+		//
+		//   Base case.  Loop through the list forwards.
+		//
+		else
+		{
+			last = size;
+			while (next < value)
+			{
+				Debug_Print6("Iter_Add: Finding prev %d, %d", next, last);
+				last = next,
+				next = array[last];
+			}
+		}
+		// Increase `size` so we modulo over the whole array, not just the
+		// valid values subset.
+		Debug_Print5("Iter_Add: Adding %d, %d, %d, %d, %d, %d", last, value, size, next, next - 1, (value - 1) % (size + 1));
+		
+		return
+			++size,
+			++count,
+			array[(value - 1) % size] = (last + 1) % size,
+			array[next - 1] = value + 1,
+			array[value] = next,
+			array[last] = value;
+	}
+	return INVALID_ITERATOR_SLOT;
+}
+
+static Iterator:y_iter_huge5<32767>;
+
+@profileinit() y_iter_huge2c()
+{
+	Iter_Clear(y_iter_huge5);
+}
+
+@profile(1) y_iter_huge2c()
+{
+	for (new i = 0; i != 20100; ++i)
+	{
+		new s = Iter_RandomFree_Single_2(Iter_TrueCount(y_iter_huge5), Iter_TrueArray(y_iter_huge5), Iter_End(y_iter_huge5));
+		Iter_Add_InternalC_B(Iter_TrueCount(y_iter_huge5), Iter_TrueArray(y_iter_huge5), Iter_TrueSize(y_iter_huge5) - 1, s);
+	}
+}*/
+
+@test(.group = "y_iterate") y_iter_AddHeuristics()
+{
+	// Test all the ways of adding values.
+	new
+		Iterator:iter<20>;
+	Iter_Add(iter, 2);  // Version 0
+	Iter_Add(iter, 18); // Version 1
+	Iter_Add(iter, 16); // Version 3
+	Iter_Add(iter, 3);  // Version 4
+	Iter_Add(iter, 7);  // Version 4
+	// 18 - 2 + 1 = 17
+	// 25 * 3 / 2 = 37.5
+	Iter_Add(iter, 8);  // Version 2
+	Iter_Add(iter, 9);  // Version 2
+	Iter_Add(iter, 10); // Version 2
+	ASSERT_EQ(Iter_Count(iter), 8);
+	ASSERT(Iter_Contains(iter, 2));
+	ASSERT(Iter_Contains(iter, 18));
+	ASSERT(Iter_Contains(iter, 16));
+	ASSERT(Iter_Contains(iter, 3));
+	ASSERT(Iter_Contains(iter, 7));
+	ASSERT(Iter_Contains(iter, 8));
+	ASSERT(Iter_Contains(iter, 9));
+	ASSERT(Iter_Contains(iter, 10));
+}
+
+@test(.group = "y_iterate") y_iter_RandomFreeExclude()
 {
 	new
 		Iterator:rand<20>;
@@ -3616,7 +4112,7 @@ TEST__ y_iter_RandomFreeExclude()
 	}
 }
 
-TEST__ y_iter_RandomAddExclude()
+@test(.group = "y_iterate") y_iter_RandomAddExclude()
 {
 	new
 		Iterator:rand<20>;
@@ -3630,7 +4126,7 @@ TEST__ y_iter_RandomAddExclude()
 	}
 }
 
-TEST__ y_iter_RandomRepeatExclude()
+@test(.group = "y_iterate") y_iter_RandomRepeatExclude()
 {
 	new
 		Iterator:rand<20>;
@@ -3651,7 +4147,7 @@ TEST__ y_iter_RandomRepeatExclude()
 	}
 }
 
-TEST__ y_iter_RandomExclude()
+@test(.group = "y_iterate") y_iter_RandomExclude()
 {
 	new
 		Iterator:rand<20>;
@@ -3702,7 +4198,7 @@ TEST__ y_iter_RandomExclude()
 	ASSERT_FALSE(selected[19]);
 }
 
-TEST__ y_iter_RemoveMidLoop()
+@test(.group = "y_iterate") y_iter_RemoveMidLoop()
 {
 	new
 		Iterator:iter<20>;
@@ -3711,7 +4207,7 @@ TEST__ y_iter_RemoveMidLoop()
 	{
 		ASSERT_EQ(i, 5);
 		Iter_Remove(iter, i);
-		ASSERT_LT(Iterator@iter[5], 0);
+		ASSERT_LT(Iterator@iter[_no_itertag:5], _no_itertag:0);
 		break;
 	}
 	Iter_Add(iter, 0);
@@ -3719,7 +4215,7 @@ TEST__ y_iter_RemoveMidLoop()
 	{
 		ASSERT_EQ(i, 0);
 		Iter_Remove(iter, i);
-		ASSERT_LT(Iterator@iter[0], 0);
+		ASSERT_LT(Iterator@iter[_no_itertag:0], _no_itertag:0);
 		break;
 	}
 	Iter_Add(iter, 19);
@@ -3727,12 +4223,12 @@ TEST__ y_iter_RemoveMidLoop()
 	{
 		ASSERT_EQ(i, 19);
 		Iter_Remove(iter, i);
-		ASSERT_LT(Iterator@iter[19], 0);
+		ASSERT_LT(Iterator@iter[_no_itertag:19], _no_itertag:0);
 		break;
 	}
 }
 
-TEST__ y_iter_RemoveThenReverse()
+@test(.group = "y_iterate") y_iter_RemoveThenReverse()
 {
 	new
 		Iterator:iter<20>;
@@ -3801,6 +4297,25 @@ TEST__ y_iter_RemoveThenReverse()
 		}
 		++j;
 	}
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	//j = Iter_Last(iter);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
+	//j = Iter_Prev(iter, j);
+	//printf("%d", j);
 	j = 0;
 	FOREACH__(new i : Reverse(iter))
 	{
@@ -3851,6 +4366,991 @@ TEST__ y_iter_RemoveThenReverse()
 			ASSERT(false);
 		}
 		++j;
+	}
+}
+
+static stock y_iterate_NestedYield(a, b)
+{
+	while (a != b)
+	{
+		YIELD__ return a;
+		++a;
+	}
+}
+
+iterfunc stock y_iterate_NestedYield(a = 10, b = 20)
+{
+	y_iterate_NestedYield(a, b);
+}
+#define Iterator@y_iterate_NestedYield iteryield
+
+iterfunc stock y_iterate_NestedInner(a = 5, b)
+{
+	Iter_Func@y_iterate_NestedYield(a, b);
+}
+#define Iterator@y_iterate_NestedInner iteryield
+
+@test(.group = "y_iterate") y_iterate_NestedYield()
+{
+	new sum = 0;
+	foreach (new i : y_iterate_NestedYield(30, 40))
+	{
+		sum += i;
+		ASSERT(30 <= i < 40);
+	}
+	ASSERT_EQ(sum, 345);
+	foreach (new i : y_iterate_NestedYield())
+	{
+		sum += i;
+		ASSERT(10 <= i < 20);
+	}
+	ASSERT_EQ(sum, 345 + 145);
+	foreach (new i : y_iterate_NestedInner(_, 15))
+	{
+		sum += i;
+		ASSERT(5 <= i < 15);
+	}
+	ASSERT_EQ(sum, 345 + 145 + 95);
+}
+
+@test(.group = "y_iterate") y_iterate_Tags()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 4);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 6);
+	Iter_Add(iter, 7);
+	n = Iter_First(iter);
+	ASSERT_EQ(n, 4);
+	n = Iter_Next(iter, Iter_Next(iter, n));
+	ASSERT_EQ(n, 6);
+	n = Iter_Prev(iter, n);
+	ASSERT_EQ(n, 5);
+	n = Iter_Last(iter);
+	ASSERT_EQ(n, 7);
+}
+
+@test(.group = "y_iterate") y_iterate_ToLast()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 7);
+	n = Iter_First(iter);
+	ASSERT_EQ(n, 7);
+	n = Iter_Last(iter);
+	ASSERT_EQ(n, 7);
+}
+
+@test(.group = "y_iterate") y_iterate_ConfirmRemoval()
+{
+	new
+		Iterator:iter<20>;
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 3);
+	Iter_Add(iter, 4);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 6);
+	ASSERT(Iter_Contains(iter, 2));
+	ASSERT(Iter_Contains(iter, 3));
+	ASSERT(Iter_Contains(iter, 4));
+	ASSERT(Iter_Contains(iter, 5));
+	ASSERT(Iter_Contains(iter, 6));
+	Iter_Remove(iter, 4);
+	ASSERT(Iter_Contains(iter, 2));
+	ASSERT(Iter_Contains(iter, 3));
+	ASSERT(!Iter_Contains(iter, 4));
+	ASSERT(Iter_Contains(iter, 5));
+	ASSERT(Iter_Contains(iter, 6));
+}
+
+@test(.group = "y_iterate") y_iterate_NowSafeRemoval1()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 3);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 5);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 7);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	n = 0;
+	foreach (new i : iter)
+	{
+		if (i == 3)
+		{
+			//printf("i: %d", i);
+			//printf("e: %04x%04x", Iterator@iter[i] >>> 16, Iterator@iter[i] & 65535);
+			//printf("e: %d", Iterator@iter[i] & 65535);
+			Iter_Remove(iter, i);
+			//printf("i: %d", i);
+			//printf("e: %04x%04x", Iterator@iter[i] >>> 16, Iterator@iter[i] & 65535);
+			//printf("e: %d", Iterator@iter[i] & 65535);
+			//break;
+		}
+		n += i;
+	}
+	ASSERT_EQ(n, 16);
+}
+
+@test(.group = "y_iterate") y_iterate_NowSafeRemoval2()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 2);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 3);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 4);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter, 5);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	n = 0;
+	foreach (new i : iter)
+	{
+		if (i == 3)
+		{
+			//printf("i: %d", i);
+			//printf("e: %04x%04x", Iterator@iter[i] >>> 16, Iterator@iter[i] & 65535);
+			//printf("e: %d", Iterator@iter[i] & 65535);
+			Iter_Remove(iter, i);
+			//printf("i: %d", i);
+			//printf("e: %04x%04x", Iterator@iter[i] >>> 16, Iterator@iter[i] & 65535);
+			//printf("e: %d", Iterator@iter[i] & 65535);
+			//printf("e: %d", Iterator@iter[i] / -65536);
+			//printf("e: %d", ceildiv(Iterator@iter[i], -65536));
+			//break;
+		}
+		n += i;
+	}
+	ASSERT_EQ(n, 15);
+}
+
+@test(.group = "y_iterate") y_iterate_NowSafeRemoval3()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 3);
+	Iter_Add(iter, 4);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 6);
+	Iter_Add(iter, 7);
+	Iter_Add(iter, 8);
+	n = 0;
+	foreach (new i : iter)
+	{
+		Iter_Remove(iter, i);
+		n += i;
+	}
+	ASSERT_EQ(n, 36);
+}
+
+@test(.group = "y_iterate") y_iterate_NowSafeRemoval4()
+{
+	new
+		Iterator:iter<5, 20>,
+		n;
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 2);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 3);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 4);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 5);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 6);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 7);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	Iter_Add(iter<0>, 8);
+	//printf("arr: %d, %d, %d, %d, %d, %d", Iterator@iter[0], Iterator@iter[1], Iterator@iter[2], Iterator@iter[3], Iterator@iter[4], Iterator@iter[5]);
+	n = 0;
+	foreach (new i : iter<0>)
+	{
+		//printf("i: %d", i);
+		//printf("e: %d", Iterator@iter[i]);
+		//printf("e: %d", Iterator@iter[i] % sizeof (Iterator@iter));
+		Iter_Remove(iter<0>, i);
+		//printf("i: %d", i);
+		//printf("e: %d", Iterator@iter[i]);
+		//printf("e: %d", Iterator@iter[i] % sizeof (Iterator@iter));
+		n += i;
+	}
+	ASSERT_EQ(n, 36);
+}
+
+@test(.group = "y_iterate") y_iterate_NowSafeRemoval5()
+{
+	new
+		Iterator:iter<5, 20>,
+		n;
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<0>, 1);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<0>, 2);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<1>, 3);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<1>, 4);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<1>, 5);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<1>, 6);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<0>, 7);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	Iter_Add(iter<0>, 8);
+	//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+	//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+	//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+	//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+	//);
+	n = 0;
+	foreach (new i : iter<1>)
+	{
+		//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+		//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+		//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+		//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+		//);
+		Iter_Remove(iter<1>, i);
+		//printf("arr: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d"
+		//	, Iterator@iter[ 0 + 0], Iterator@iter[ 0 + 1], Iterator@iter[ 0 + 2], Iterator@iter[ 0 + 3], Iterator@iter[ 0 + 4], Iterator@iter[ 0 + 5], Iterator@iter[ 0 + 6]
+		//	, Iterator@iter[ 7 + 0], Iterator@iter[ 7 + 1], Iterator@iter[ 7 + 2], Iterator@iter[ 7 + 3], Iterator@iter[ 7 + 4], Iterator@iter[ 7 + 5], Iterator@iter[ 7 + 6]
+		//	, Iterator@iter[14 + 0], Iterator@iter[14 + 1], Iterator@iter[14 + 2], Iterator@iter[14 + 3], Iterator@iter[14 + 4], Iterator@iter[14 + 5], Iterator@iter[14 + 6]
+		//);
+		n += i;
+	}
+	foreach (new i : iter<0>)
+	{
+		Iter_Remove(iter<0>, i);
+		n += i;
+	}
+	ASSERT_EQ(n, 36);
+}
+
+@test(.group = "y_iterate") y_iterate_SafeRemove1()
+{
+	new
+		Iterator:iter<5, 20>,
+		n;
+	Iter_Add(iter<0>, 1);
+	Iter_Add(iter<0>, 2);
+	Iter_Add(iter<1>, 3);
+	Iter_Add(iter<1>, 4);
+	Iter_Add(iter<1>, 5);
+	Iter_Add(iter<1>, 6);
+	Iter_Add(iter<0>, 7);
+	Iter_Add(iter<0>, 8);
+	n = 0;
+	foreach (new i : iter<1>)
+	{
+		n += i;
+		Iter_SafeRemove(iter<1>, i, i);
+	}
+	foreach (new i : iter<0>)
+	{
+		n += i;
+		Iter_SafeRemove(iter<0>, i, i);
+	}
+	ASSERT_EQ(n, 36);
+}
+
+@test(.group = "y_iterate") y_iterate_SafeRemove2()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 3);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 7);
+	n = 0;
+	foreach (new i : iter)
+	{
+		n += i;
+		if (i == 3)
+		{
+			Iter_SafeRemove(iter, i, i);
+		}
+	}
+	ASSERT_EQ(n, 16);
+}
+
+@test(.group = "y_iterate") y_iterate_AddInLoop1()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 3);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 7);
+	n = 0;
+	foreach (new i : iter)
+	{
+		n += i;
+		Iter_Add(iter, i);
+	}
+	ASSERT_EQ(n, 16);
+}
+
+@test(.group = "y_iterate") y_iterate_AddInLoop2()
+{
+	new
+		Iterator:iter<20>,
+		bool:z = false,
+		n;
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 7);
+	n = 0;
+	foreach (new i : iter)
+	{
+		if (i == 10)
+		{
+			z = true;
+			break;
+		}
+		n += i;
+		Iter_Add(iter, i + 1);
+	}
+	ASSERT_EQ(n, 5 + 6 + 7 + 8 + 9);
+	ASSERT(z);
+}
+
+@test(.group = "y_iterate") y_iterate_AddInLoop3()
+{
+	new
+		Iterator:iter<20>,
+		n;
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 9);
+	Iter_Add(iter, 15);
+	n = 0;
+	foreach (new i : iter)
+	{
+		n += i;
+		Iter_Add(iter, i - 1);
+	}
+	ASSERT_EQ(n, 31);
+	n = 0;
+	foreach (new i : iter)
+	{
+		n += i;
+	}
+	ASSERT_EQ(n, 58);
+}
+
+const YSI_G_C_STRESS_SIZE = 10000;
+
+static stock
+	Iterator:YSI_g_sStressPrev<2 * YSI_G_C_STRESS_SIZE>,
+	Iterator:YSI_g_sStressTest<2 * YSI_G_C_STRESS_SIZE>;
+
+@test(.group = "y_iterate", .slow = true) y_iterate_StressTest()
+{
+	printf(" ");
+	printf("Starting initialisation");
+	printf(" ");
+	Server_DisableLongCall();
+	//Debug_Level(7);
+	//Debug_Enable();
+	new n = 0;
+	new action = cellmin;
+	for (new i = 0; i != YSI_G_C_STRESS_SIZE; ++i)
+	{
+		if (i % (YSI_G_C_STRESS_SIZE / 100) == 0)
+		{
+			printf("    %d%%", i / (YSI_G_C_STRESS_SIZE / 100));
+		}
+		ASSERT_EQ(Iter_Count(YSI_g_sStressTest), i);
+		n = Iter_RandomAdd(YSI_g_sStressTest);
+		ASSERT_EQ(Iter_Count(YSI_g_sStressTest), i + 1);
+		ASSERT(_:Iterator@YSI_g_sStressTest[n] >= 0);
+		//for (new j = 0; j != 2 * YSI_G_C_STRESS_SIZE + 1; ++j)
+		foreach (new j : YSI_g_sStressTest)
+		{
+			ASSERT(_:Iterator@YSI_g_sStressTest[j] >= 0);
+			if (_:Iterator@YSI_g_sStressTest[j] < 0)
+			{
+				printf("Failed adding %d", n);
+				printf("iter[%d] = %d", j, _:Iterator@YSI_g_sStressTest[j]);
+				Server_Abort(0);
+			}
+		}
+	}
+	printf("    100%%");
+	printf(" ");
+	printf("Starting randomisation");
+	printf(" ");
+	Iterator@YSI_g_sStressPrev = Iterator@YSI_g_sStressTest;
+	Iter_Single@YSI_g_sStressPrev = Iter_Single@YSI_g_sStressTest;
+	n = YSI_G_C_STRESS_SIZE;
+	for (new i = 0; i != 1000000; ++i)
+	{
+		if (i % 10000 == 0)
+		{
+			printf("    %d%%", i / 10000);
+		}
+		new id = random(2 * YSI_G_C_STRESS_SIZE);
+		new bool:change = false;
+		if (random(2))
+		{
+			// Add.
+			if (!Iter_Contains(YSI_g_sStressTest, id))
+			{
+				//printf("Added %d", id);
+				action = id;
+				++n;
+				change = true;
+			}
+			Iter_Add(YSI_g_sStressTest, id);
+		}
+		else
+		{
+			if (Iter_Contains(YSI_g_sStressTest, id))
+			{
+				action = id + cellmin;
+				--n;
+				change = true;
+			}
+			Iter_Remove(YSI_g_sStressTest, id);
+		}
+		if (change)
+		{
+			ASSERT_EQ(Iter_Count(YSI_g_sStressTest), n);
+			foreach (new j : YSI_g_sStressTest)
+			{
+				ASSERT(_:Iterator@YSI_g_sStressTest[j] >= 0);
+				if (_:Iterator@YSI_g_sStressTest[j] < 0)
+				{
+					if (action < 0)
+						printf("Removed %d", action - cellmin);
+					else
+						printf("Added %d", action);
+					printf("=====PRE=====");
+					for (new k = 0; k != 2 * YSI_G_C_STRESS_SIZE + 1; ++k)
+					{
+						printf("iter[%d] = %d", k, Iterator@YSI_g_sStressPrev[k]);
+					}
+					printf("=====POST=====");
+					for (new k = 0; k != 2 * YSI_G_C_STRESS_SIZE + 1; ++k)
+					{
+						printf("iter[%d] = %d", k, Iterator@YSI_g_sStressTest[k]);
+					}
+					// Fully debug the internals.
+					Debug_Level(7);
+					Debug_Enable();
+					//printf("iter[%d] = %d", j, Iterator@YSI_g_sStressTest[j]);
+					if (action < 0)
+						Iter_Remove(YSI_g_sStressPrev, action - cellmin);
+					else
+						Iter_Remove(YSI_g_sStressPrev, action);
+					Debug_Level(0);
+					Debug_Disable();
+					Server_Abort(0);
+				}
+			}
+			Iterator@YSI_g_sStressPrev = Iterator@YSI_g_sStressTest;
+			Iter_Single@YSI_g_sStressPrev = Iter_Single@YSI_g_sStressTest;
+		}
+		else
+		{
+			for (new j = 0; j != 2 * YSI_G_C_STRESS_SIZE + 1; ++j)
+			{
+				ASSERT_EQ(Iterator@YSI_g_sStressPrev[j], Iterator@YSI_g_sStressTest[j]);
+			}
+			ASSERT_EQ(Iter_Single@YSI_g_sStressPrev, Iter_Single@YSI_g_sStressTest);
+		}
+	}
+	printf("    100%%");
+	printf(" ");
+	//Debug_Disable();
+	ASSERT_NZ(n);
+	ASSERT_EQ(n, Iter_Count(YSI_g_sStressTest));
+	Server_EnableLongCall();
+}
+
+@test(.group = "y_iterate") y_iterate_Regression1()
+{
+	Server_DisableLongCall();
+	//Debug_Level(7);
+	//Debug_Enable();
+	new Iterator:iter<10>;
+	Iter_Add(iter, 0);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 3);
+	Iter_Add(iter, 5);
+	Iter_Add(iter, 9);
+	Iter_Remove(iter, 1);
+	Iter_Remove(iter, 3);
+	Iter_Remove(iter, 2);
+	ASSERT_EQ(_:Iterator@iter[0], 5);
+	//Debug_Level(0);
+	//Debug_Disable();
+	Server_EnableLongCall();
+}
+
+@test(.group = "y_iterate") y_iterate_Regression2()
+{
+	Server_DisableLongCall();
+	new Iterator:iter<10>;
+	//Iter_Debug(iter);
+	Iter_Add(iter, 0);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 2);
+	//Iter_Debug(iter);
+	//Debug_Level(7);
+	//Debug_Enable();
+	Iter_Remove(iter, 0);
+	//Debug_Level(0);
+	//Debug_Disable();
+	//Iter_Debug(iter);
+	Iter_Remove(iter, 1);
+	//Iter_Debug(iter);
+	Iter_Remove(iter, 2);
+	//Iter_Debug(iter);
+	//FOREACH__ (new i : iter)
+	//{
+	//}
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	//ASSERT_EQ(Iterator@iter[0], 5);
+	Server_EnableLongCall();
+}
+
+@test(.group = "y_iterate") y_iterate_End0()
+{
+	new Iterator:iter<10>;
+	new first, last, begin;
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(first, begin);
+	ASSERT_EQ(last, begin);
+	ASSERT_EQ(Iter_Next(iter, first), begin);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), begin);
+	Iter_Add(iter, 7);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	ASSERT_EQ(first, 7);
+	ASSERT_EQ(last, 7);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(Iter_Next(iter, first), begin);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), begin);
+	Iter_Add(iter, 8);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	ASSERT_EQ(first, 7);
+	ASSERT_EQ(last, 8);
+	ASSERT_EQ(Iter_Next(iter, first), 8);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), 7);
+	Iter_Add(iter, 9);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	ASSERT_EQ(first, 7);
+	ASSERT_EQ(last, 9);
+	ASSERT_EQ(Iter_Next(iter, first), 8);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), 8);
+	Iter_Remove(iter, 7);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	ASSERT_EQ(first, 8);
+	ASSERT_EQ(last, 9);
+	ASSERT_EQ(Iter_Next(iter, first), 9);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), 8);
+	Iter_Remove(iter, 8);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	ASSERT_EQ(first, 9);
+	ASSERT_EQ(last, 9);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(Iter_Next(iter, first), begin);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), begin);
+	Iter_Remove(iter, 9);
+	first = Iter_First(iter);
+	last = Iter_Last(iter);
+	begin = Iter_Begin(iter);
+	ASSERT_EQ(first, begin);
+	ASSERT_EQ(last, begin);
+	ASSERT_EQ(Iter_Next(iter, first), begin);
+	ASSERT_EQ(Iter_Prev(iter, first), begin);
+	ASSERT_EQ(Iter_Next(iter, last), begin);
+	ASSERT_EQ(Iter_Prev(iter, last), begin);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End1()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 7);
+	Iter_Add(iter, 8);
+	Iter_Add(iter, 9);
+	Iter_Remove(iter, 9);
+	Iter_Remove(iter, 8);
+	Iter_Remove(iter, 7);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End2()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 9);
+	Iter_Add(iter, 8);
+	Iter_Add(iter, 7);
+	Iter_Remove(iter, 7);
+	Iter_Remove(iter, 8);
+	Iter_Remove(iter, 9);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End3()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 9);
+	Iter_Add(iter, 8);
+	Iter_Add(iter, 7);
+	Iter_Remove(iter, 9);
+	Iter_Remove(iter, 8);
+	Iter_Remove(iter, 7);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End4()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 0);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 2);
+	Iter_Remove(iter, 0);
+	Iter_Remove(iter, 1);
+	Iter_Remove(iter, 2);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End5()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 0);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 2);
+	Iter_Remove(iter, 2);
+	Iter_Remove(iter, 1);
+	Iter_Remove(iter, 0);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End6()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 0);
+	Iter_Remove(iter, 0);
+	Iter_Remove(iter, 1);
+	Iter_Remove(iter, 2);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_End7()
+{
+	new Iterator:iter<10>;
+	Iter_Add(iter, 2);
+	Iter_Add(iter, 1);
+	Iter_Add(iter, 0);
+	Iter_Remove(iter, 2);
+	Iter_Remove(iter, 1);
+	Iter_Remove(iter, 0);
+	ASSERT(Iter_Excludes(iter, 0));
+	ASSERT(Iter_Excludes(iter, 1));
+	ASSERT(Iter_Excludes(iter, 2));
+	ASSERT(Iter_Excludes(iter, 7));
+	ASSERT(Iter_Excludes(iter, 8));
+	ASSERT(Iter_Excludes(iter, 9));
+}
+
+@test(.group = "y_iterate") y_iterate_Range()
+{
+	new total;
+
+	total = 0;
+	foreach (new i : 5 .. 10)
+	{
+		//printf("i 0 = %d", i);
+		total += i;
+	}
+	ASSERT_EQ(total, 35); // 5 + 6 + 7 + 8 + 9
+
+	/*total = ( 10 -1+1);
+	printf("%d", total);
+	total = (( 2)-( 10 -1+1));
+	printf("%d", total);
+	total = ((( 2)-( 10 -1+1))>>(cellbits-1));
+	printf("%d", total);
+	total = (((( 2)-( 10 -1+1))>>(cellbits-1))|1);
+	printf("%d", total);*/
+	
+	total = 0;
+	foreach (new i : 10 .. 2)
+	{
+		//printf("i 1 = %d", i);
+		total += i;
+	}
+	ASSERT_EQ(total, 52); // 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10
+
+	total = 0;
+	foreach (new i : .. 10)
+	{
+		//printf("i 2 = %d", i);
+		total += i;
+	}
+	ASSERT_EQ(total, 45); // 0 + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9
+
+	total = 0;
+	foreach (new i : -5 .. -1)
+	{
+		//printf("i 3 = %d", i);
+		total += i;
+	}
+	ASSERT_EQ(total, -14); // -5 + -4 + -3 + -2
+
+	total = 0;
+	foreach (new i : -1 .. -5)
+	{
+		//printf("i 4 = %d", i);
+		total += i;
+	}
+	ASSERT_EQ(total, -10); // -4 + -3 + -2 + -1
+}
+
+@test(.group = "y_iterate") y_iterate_Array()
+{
+	new total;
+	new array[] = { 5, 6, 7, 8 };
+
+	total = 0;
+	foreach (new i : array[])
+	{
+		total += i;
+	}
+	ASSERT_EQ(total, 26); // 5 + 6 + 7 + 8
+}
+
+@iterfunc(.start = 5) y_iterate@iterfunc_1(cur)
+{
+	if (cur == 10)
+	{
+		return 5;
+	}
+	return cur + 1;
+}
+
+@iterfunc() y_iterate@iterfunc_3(cur)
+{
+	if (cur == 10)
+	{
+		return -1;
+	}
+	return cur + 1;
+}
+
+@test(.group = "y_iterate") y_iterate@iterfunc_1()
+{
+	new total;
+	total = 0;
+	foreach (new i : y_iterate@iterfunc_1())
+	{
+		total += i;
+	}
+	ASSERT_EQ(total, 40);
+	total = 0;
+	foreach (new i : y_iterate@iterfunc_3())
+	{
+		total += i;
+	}
+	ASSERT_EQ(total, 55);
+}
+
+@iterfunc(.yield = true) y_iterate@iterfunc_2()
+{
+	static calls = 0;
+	if (calls++ == 5)
+	{
+		calls = 0;
+		return -1;
+	}
+	return 100;
+}
+
+@test(.group = "y_iterate") y_iterate@iterfunc_2()
+{
+	new total;
+	total = 0;
+	foreach (new i : y_iterate@iterfunc_2())
+	{
+		total += i;
+	}
+	ASSERT_EQ(total, 500);
+}
+
+@test(.group = "y_iterate") y_iterate_Vehicles()
+{
+	new vehicleid = CreateVehicle(401, 10.0, 10.0, 3.0, 0.0, -1, -1, 10, false);
+	new playerid = 0;
+	foreach (new i : Vehicle)
+	{
+	}
+	foreach (new i : LocalVehicle)
+	{
+	}
+	foreach (new i : StreamedVehicle[playerid])
+	{
+	}
+	foreach (new i : VehicleOccupant)
+	{
+	}
+	foreach (new i : VehicleOccupant[vehicleid])
+	{
+	}
+	foreach (new i : VehicleDriver)
+	{
+	}
+	foreach (new i : VehicleDriver[vehicleid])
+	{
+	}
+	foreach (new i : VehiclePassenger)
+	{
+	}
+	foreach (new i : VehiclePassenger[vehicleid])
+	{
+	}
+	foreach (new i : Vehicle)
+	{
+	}
+	foreach (new i : LocalVehicle)
+	{
+	}
+	foreach (new i : StreamedVehicle[playerid])
+	{
+	}
+	foreach (new i : VehicleOccupant())
+	{
+	}
+	foreach (new i : VehicleOccupant(vehicleid))
+	{
+	}
+	foreach (new i : VehicleDriver())
+	{
+	}
+	foreach (new i : VehicleDriver(vehicleid))
+	{
+	}
+	foreach (new i : VehiclePassenger())
+	{
+	}
+	foreach (new i : VehiclePassenger(vehicleid))
+	{
 	}
 }
 

@@ -1,3 +1,7 @@
+#if defined _INC_y_files
+	#endinput
+#endif
+
 /**
  * <library
  *   name="y_files"
@@ -11,18 +15,6 @@
  *     This XSL has features such as library and markdown support, and will not
  *     render this message when used.
  *   </summary>
- *   <section>
- *     Functions
- *   </section>
- *   <subsection>
- *     Stock
- *   </subsection><ul>
- *     <symbol name="Files_CopySync">Copy a file.</symbol>
- *     <symbol name="Files_MoveSync">Move (rename) a file.</symbol>
- *     <symbol name="Files_CreateDirSync">Create a directory.</symbol>
- *   </ul><section>Compile options</section><ul>
- *     <symbol name="YSI_LARGE_FILE_SIZE">File size at which Windows uses shell copies/moves.</symbol>
- *   </ul>
  * </library>
  *//** *//*
 Legal:

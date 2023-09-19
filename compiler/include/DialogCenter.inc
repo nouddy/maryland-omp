@@ -140,7 +140,7 @@ static
 	bool:use = false
 ;
 
-stock dcenter_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[])
+stock bool:dcenter_ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE:style, caption[], info[], button1[], button2[])
 {
 	new defaultSize;
 

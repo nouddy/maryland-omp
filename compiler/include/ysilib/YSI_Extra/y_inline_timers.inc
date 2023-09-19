@@ -107,7 +107,7 @@ public @y_inlineTimerCount(Func:func<>, time, count, due)
 	if (count == 0)
 	{
 		Indirect_Release(func);
-		P:7("y_inlineTimerCount ending: %d (%d)", _:func, ++YSI_gsCalls);
+		Debug_Print7("y_inlineTimerCount ending: %d (%d)", _:func, ++YSI_gsCalls);
 	}
 	else
 	{
@@ -115,9 +115,9 @@ public @y_inlineTimerCount(Func:func<>, time, count, due)
 		//printf("%d %d %d", time, due, GetTickCount());
 		new timer = time + (due - GetTickCount());
 		//printf("delay = %d", timer);
-		timer = YSI_SetTimerEx("@y_inlineTimerCount", timer < 0 ? 0 : timer, false, "iiii", _:func, time, count, due + time);
+		timer = YSI_SetTimerEx__("@y_inlineTimerCount", timer < 0 ? 0 : timer, false, "iiii", _:func, time, count, due + time);
 		Indirect_SetMeta(func, timer);
-		P:7("y_inlineTimerCount calls: %d (%d), %d", _:func, ++YSI_gsCalls, timer);
+		Debug_Print7("y_inlineTimerCount calls: %d (%d), %d", _:func, ++YSI_gsCalls, timer);
 	}
 }
 
@@ -137,7 +137,7 @@ public @y_inlineTimerStart(Func:func<>, time, due)
 	//printf("%d %d %d", time, due, GetTickCount());
 	new timer = time + (due - GetTickCount());
 	//printf("delay = %d", timer);
-	timer = YSI_SetTimerEx("@y_inlineTimerRepeat", timer < 0 ? 0 : timer, true, "i", _:func);
+	timer = YSI_SetTimerEx__("@y_inlineTimerRepeat", timer < 0 ? 0 : timer, true, "i", _:func);
 	Indirect_SetMeta(func, timer);
 	// Call the function after setting the meta, incase it kills the timer.
 	@.func();
@@ -149,32 +149,32 @@ public @y_inlineTimerStart(Func:func<>, time, due)
  * <param name="time">Delay between subsequent calls.</param>
  * <param name="count">How many times to call it.</param>
  * <remarks>
- *  There are several ways to use this function:
+ *   There are several ways to use this function:
  *  
- *  <c>SetCallbackTimer(func, 100);</c>
- *  Calls the function once every 100ms.
+ *   <c>SetCallbackTimer(func, 100);</c>
+ *   Calls the function once every 100ms.
  *  
- *  <c>SetCallbackTimer(func, 100, 0);</c>
- *  Same as above (count is <c>0</c>, which means repeat forever).
+ *   <c>SetCallbackTimer(func, 100, 0);</c>
+ *   Same as above (count is <c>0</c>, which means repeat forever).
  *  
- *  <c>SetCallbackTimer(func, 100, 5);</c>
- *  Calls the function once every 100ms, but only 5 times.
+ *   <c>SetCallbackTimer(func, 100, 5);</c>
+ *   Calls the function once every 100ms, but only 5 times.
  *  
- *  <c>SetCallbackTimer(func, 100, 200, 0);</c>
- *  Calls the function once every 200ms, but the first call is after just 100ms.
+ *   <c>SetCallbackTimer(func, 100, 200, 0);</c>
+ *   Calls the function once every 200ms, but the first call is after just 100ms.
  *  
- *  <c>SetCallbackTimer(func, 100, 200, 42);</c>
- *  Calls the function 42 times, first after 100ms, then every 200ms.
+ *   <c>SetCallbackTimer(func, 100, 200, 42);</c>
+ *   Calls the function 42 times, first after 100ms, then every 200ms.
  *  
- *  When only one parameter is given its <c>time</c>.
+ *   When only one parameter is given its <c>time</c>.
  *  
- *  When two parameters are given they're <c>time</c> and <c>count</c>.
+ *   When two parameters are given they're <c>time</c> and <c>count</c>.
  *  
- *  When all three parameters are given they're <c>initial</c>, <c>time</c>,
- *  and <c>count</c>.
+ *   When all three parameters are given they're <c>initial</c>, <c>time</c>,
+ *   and <c>count</c>.
  *  
- *  Count is NOT like <c>repeat</c> in <c>SetTimer</c>.  <c>0</c> means repeat
- *  forever, anything not <c>0</c> means call it exactly that many times.
+ *   Count is NOT like <c>repeat</c> in <c>SetTimer</c>.  <c>0</c> means repeat
+ *   forever, anything not <c>0</c> means call it exactly that many times.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -194,18 +194,24 @@ stock Timer_CreateCallback(Func:func<>, initialOrTime, timeOrCount = 0, count = 
 	{
 		// Repeat forever, but DON'T repeat here, this is just the initial offset time.
 		Indirect_Claim(func);
-		new timer = YSI_SetTimerEx("@y_inlineTimerStart", initialOrTime, false, "iii", _:func, timeOrCount, GetTickCount() + initialOrTime);
+		new timer = YSI_SetTimerEx__("@y_inlineTimerStart", initialOrTime, false, "iii", _:func, timeOrCount, GetTickCount() + initialOrTime);
 		Indirect_SetMeta(func, timer);
 	}
 	else
 	{
 		// Repeat N times.
 		Indirect_Claim(func);
-		new timer = YSI_SetTimerEx("@y_inlineTimerCount", initialOrTime, false, "iiii", _:func, timeOrCount, count, GetTickCount() + initialOrTime);
+		new timer = YSI_SetTimerEx__("@y_inlineTimerCount", initialOrTime, false, "iiii", _:func, timeOrCount, count, GetTickCount() + initialOrTime);
 		Indirect_SetMeta(func, timer);
 	}
 	return _:func;
 }
+
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
 
 #pragma deprecated Use `Timer_CreateCallback`.
 stock SetCallbackTimer(Func:func<>, initialOrTime, timeOrCount = 0, count = -1)
@@ -213,11 +219,15 @@ stock SetCallbackTimer(Func:func<>, initialOrTime, timeOrCount = 0, count = -1)
 	return Timer_CreateCallback(func, initialOrTime, timeOrCount, count);
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
+
 /*-------------------------------------------------------------------------*//**
  * <param name="func">Timer to kill.</param>
  * <remarks>
- *  Kill a timer created by <c>SetCallbackTimer</c>.  Normal <c>KillTimer</c>
- *  won't work for them.
+ *   Kill a timer created by <c>SetCallbackTimer</c>.  Normal <c>KillTimer</c>
+ *   won't work for them.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -228,9 +238,19 @@ stock Timer_KillCallback(func)
 	return KillTimer(timer);
 }
 
+#if __COMPILER_WARNING_SUPPRESSION
+	// On old compilers, only issue the warning at the call site.
+	#pragma warning push
+	#pragma warning disable 234
+#endif
+
 #pragma deprecated Use `Timer_KillCallback`.
 stock KillCallbackTimer(func)
 {
 	return Timer_KillCallback(func);
 }
+
+#if __COMPILER_WARNING_SUPPRESSION
+	#pragma warning pop
+#endif
 

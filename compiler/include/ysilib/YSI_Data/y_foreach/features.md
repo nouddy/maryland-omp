@@ -397,6 +397,8 @@ foreach (new admin : Admin())
 }
 ```
 
+Note that `RconAdmin` already exists as a built-in iterator for exactly this usage.
+
 ### Invisible Special Iterators
 
 A normal iterator loop is:
@@ -1098,10 +1100,44 @@ foreach (new i : StreamedVehicle[playerid])
 
 ### `VehicleOccupant`
 
-Loop over all players in a vehicle:
+Loop over all players (driver and passengers) in any vehicle:
 
 ```pawn
-foreach (new i : VehicleOccupant(vehicleid))
+foreach (new i : VehicleOccupant)
+```
+
+Or loop over all players in a single vehicle:
+
+```pawn
+foreach (new i : VehicleOccupant[vehicleid])
+```
+
+### `VehicleDriver`
+
+Loop over all players driving a vehicle:
+
+```pawn
+foreach (new i : VehicleDriver[vehicleid])
+```
+
+Loop over all players driving any vehicle:
+
+```pawn
+foreach (new i : VehicleDriver)
+```
+
+### `VehiclePassenger`
+
+Loop over all passengers in a vehicle:
+
+```pawn
+foreach (new i : VehiclePassenger[vehicleid])
+```
+
+Loop over all passengers in any vehicle:
+
+```pawn
+foreach (new i : VehiclePassenger)
 ```
 
 ### `Command`
@@ -1117,7 +1153,7 @@ foreach (new i : Command)
 Loop over all y_commands command IDs that the given player can use:
 
 ```pawn
-foreach (new i : PlayerCommand(playerid))
+foreach (new i : PlayerCommand[playerid])
 ```
 
 ### `Group`
@@ -1133,7 +1169,7 @@ foreach (new Group:g : Group)
 Loop over all y_groups groups a single player is in:
 
 ```pawn
-foreach (new Group:g : PlayerGroups(playerid)) // [sic]
+foreach (new Group:g : PlayerGroups[playerid]) // [sic]
 ```
 
 ### `GroupMember`
@@ -1141,7 +1177,7 @@ foreach (new Group:g : PlayerGroups(playerid)) // [sic]
 Loop over everyone in a y_groups group:
 
 ```pawn
-foreach (new i : GroupMember(groupid)) // [sic]
+foreach (new i : GroupMember[groupid]) // [sic]
 ```
 
 ### `Group_...`
@@ -1150,7 +1186,15 @@ For every library that uses y_groups for permissions, there is an iterator to lo
 that library in a group.  For example, to loop over all the commands enabled in a group:
 
 ```pawn
-foreach (new i : Group_Command(groupid))
+foreach (new i : Group_Command[groupid])
+```
+
+### `RCON`
+
+Every player logged in as an RCON admin:
+
+```pawn
+foreach (new i : RconAdmin)
 ```
 
 ## You don't need n-dimensional arrays.

@@ -1,0 +1,118 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Ogysha
+ *  @Date           27th May 2023
+ *  @Weburl         weburl
+ *  @Project        maryland_project
+ *
+ *  @File           login_map.map
+ *  @Module         interior
+ */
+
+
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+hook OnGameModeInit()
+{
+
+	print("frontend/login_map.map loaded");
+
+	static loginmap;
+
+	loginmap = CreateObject(19380, 631.320007, -1769.953979, 17.877001, 0.000000, 90.000000, 347.997009);
+	SetObjectMaterial(loginmap, 0, 19004, "roundbuilding1", "stonewalltile4", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 627.757019, -1765.109009, 21.952000, 89.999001, 78.000000, -89.999001, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 627.030029, -1768.531982, 21.952000, 89.999001, 78.000000, -89.999001, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19380, 631.320007, -1769.953003, 21.427000, 0.000000, 90.000000, 347.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-10-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(1316, 631.369019, -1769.849976, 21.392000, 0.000000, 0.000000, 0.000000, -1, -1);
+	loginmap = Maryland_CreateDynamicObject(19444, 626.302002, -1771.956055, 21.952000, 89.999001, 78.000000, -89.999001, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(18880, 628.945984, -1774.385010, 22.212999, 0.000000, 180.000000, 618.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 2, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 626.885010, -1768.999023, 19.663000, 0.000000, 0.000000, 347.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-10-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 626.955994, -1773.906982, 21.952000, 90.000000, 78.000000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 637.067993, -1767.119019, 21.952000, 90.000000, -11.999000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 630.380005, -1774.633057, 21.952000, 90.000000, 78.000000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 636.341003, -1770.542969, 21.952000, 90.000000, -11.999000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(18880, 632.192993, -1775.073975, 22.153000, 0.000000, 180.000000, 618.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 2, 18646, "matcolours", "grey-90-percent", 0);
+	Maryland_CreateDynamicObject(19835, 631.572998, -1770.688965, 18.511999, 0.000000, 0.000000, -43.398998, -1, -1);
+	loginmap = Maryland_CreateDynamicObject(19478, 631.989990, -1770.994995, 18.704000, 0.000000, -18.100000, 86.599998, -1, -1);
+	SetDynamicObjectMaterialText(loginmap, 0, "-", 30, "Ariel", 199, 0, 0xFF000000, 0, 1);
+	loginmap = Maryland_CreateDynamicObject(19478, 631.991028, -1770.982056, 18.666000, 0.000000, -18.100000, 86.599998, -1, -1);
+	SetDynamicObjectMaterialText(loginmap, 0, "-", 30, "Ariel", 199, 0, 0xFF000000, 0, 1);
+	loginmap = Maryland_CreateDynamicObject(19478, 631.992004, -1770.975952, 18.646999, 0.000000, -18.100000, 86.599998, -1, -1);
+	SetDynamicObjectMaterialText(loginmap, 0, "-", 30, "Ariel", 199, 0, 0xFF000000, 0, 1);
+	loginmap = Maryland_CreateDynamicObject(19478, 631.992981, -1770.957031, 18.622000, 0.000000, -18.100000, 86.599998, -1, -1);
+	SetDynamicObjectMaterialText(loginmap, 0, "JOICE", 140, "Ariel", 115, 1, 0xFFFFFFFF, 0, 1);
+	loginmap = Maryland_CreateDynamicObject(19444, 635.612976, -1773.967041, 21.952000, 90.000000, -11.999000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19444, 633.804016, -1775.359009, 21.952000, 90.000000, 78.000000, 0.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19893, 632.007996, -1770.786011, 18.441999, 0.000000, 0.000000, 176.199005, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 1, 19894, "laptopsamp1", "laptopscreen3", 0);
+	loginmap = Maryland_CreateDynamicObject(1726, 631.205017, -1769.099976, 17.841999, 0.000000, 0.000000, -12.000000, -1, -1);
+	loginmap = Maryland_CreateDynamicObject(1817, 631.395996, -1771.396973, 17.941999, 0.000000, 0.000000, -12.400000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 1, 19083, "laserpointer5", "laserbeam-5-64x64", 0xFFFF0F30);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-93-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19451, 636.260986, -1771.077026, 19.663000, 0.000000, 0.000000, 347.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-10-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19476, 635.783020, -1772.435059, 19.992001, 0.000000, 0.000000, -11.999000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-95-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(2204, 626.495972, -1771.261963, 17.941999, 0.000000, 0.000000, 78.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-93-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19483, 635.755005, -1772.439941, 19.892000, 0.000000, 0.000000, 168.100006, -1, -1);
+	SetDynamicObjectMaterialText(loginmap, 0, "MARYLAND", 130, "Ariel", 90, 1, 0xFFFFFFFF, 0, 1);
+	loginmap = Maryland_CreateDynamicObject(19325, 625.625000, -1773.660034, 19.301001, 0.000000, 0.000000, 257.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 19083, "laserpointer5", "laserbeam-5-64x64", 0xFFFF0F30);
+	loginmap = Maryland_CreateDynamicObject(19476, 635.783020, -1772.435059, 19.752001, 0.000000, 0.000000, -11.999000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-95-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(1726, 629.341003, -1772.258057, 17.841999, 0.000000, 0.000000, 78.000000, -1, -1);
+	loginmap = Maryland_CreateDynamicObject(19786, 635.929993, -1772.479980, 19.722000, 0.000000, 0.000000, -102.000000, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 1, 19894, "laptopsamp1", "laptopscreen3", 0);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-95-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19325, 632.289001, -1775.076050, 19.301001, 0.000000, 0.000000, 257.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 19083, "laserpointer5", "laserbeam-5-64x64", 0xFFFF0F30);
+	loginmap = Maryland_CreateDynamicObject(19450, 626.913025, -1769.003052, 16.372999, 0.000000, 0.000000, 167.996994, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(2233, 636.413025, -1770.404053, 17.962000, 0.000000, 0.000000, -70.198997, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-93-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(2379, 637.523010, -1774.104980, 20.282000, -89.999001, -0.699000, 77.300003, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 2, 18646, "matcolours", "grey-95-percent", 0);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-95-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(2233, 635.093018, -1775.147949, 17.962000, 0.000000, 0.000000, -123.598999, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-93-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 624.304993, -1773.213013, 16.538000, 90.000000, 179.994003, 77.990997, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 624.388000, -1773.385010, 16.538000, 90.000000, 179.994003, 77.990997, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 630.593994, -1774.708008, 16.363001, 0.000000, 0.000000, 257.997009, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 636.263977, -1770.990967, 16.372999, 0.000000, 0.000000, 167.996994, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 636.742981, -1776.014038, 16.538000, 90.000000, 179.994003, 77.990997, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+	loginmap = Maryland_CreateDynamicObject(19450, 636.924011, -1775.896973, 16.538000, 90.000000, 179.994003, 77.990997, -1, -1);
+	SetDynamicObjectMaterial(loginmap, 0, 18646, "matcolours", "grey-90-percent", 0);
+
+	return (true);
+
+}

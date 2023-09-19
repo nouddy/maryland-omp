@@ -133,92 +133,95 @@ Optional plugins:
 #define Vehicle_GetCategory(%0)  VIM_GetCategory(Vehicle_GetVIM(%0))
 #define Vehicle_IsValid(%0)      VIM_IsValid(Vehicle_GetVIM(%0))
 
-#define Vehicle_IsCar(%0)        (_Vehicle_Is(Car       , %0))
-#define Vehicle_IsTruck(%0)      (_Vehicle_Is(Truck     , %0))
-#define Vehicle_IsVan(%0)        (_Vehicle_Is(Van       , %0))
-#define Vehicle_IsFire(%0)       (_Vehicle_Is(Fire      , %0))
-#define Vehicle_IsPolice(%0)     (_Vehicle_Is(Police    , %0))
-#define Vehicle_IsFBI(%0)        (_Vehicle_Is(FBI       , %0))
-#define Vehicle_IsSWAT(%0)       (_Vehicle_Is(SWAT      , %0))
-#define Vehicle_IsMilitary(%0)   (_Vehicle_Is(Military  , %0))
-#define Vehicle_IsWeaponised(%0) (_Vehicle_Is(Weaponised, %0))
-#define Vehicle_IsHelicopter(%0) (_Vehicle_Is(Helicopter, %0))
-#define Vehicle_IsBoat(%0)       (_Vehicle_Is(Boat      , %0))
-#define Vehicle_IsPlane(%0)      (_Vehicle_Is(Plane     , %0))
-#define Vehicle_IsBike(%0)       (_Vehicle_Is(Bike      , %0))
-#define Vehicle_IsManual(%0)     (_Vehicle_Is(Manual    , %0))
-#define Vehicle_IsAmbulance(%0)  (_Vehicle_Is(Ambulance , %0))
-#define Vehicle_IsTaxi(%0)       (_Vehicle_Is(Taxi      , %0))
-#define Vehicle_IsOnWater(%0)    (_Vehicle_Is(OnWater   , %0))
-#define Vehicle_IsCoastguard(%0) (_Vehicle_Is(Coastguard, %0))
-#define Vehicle_IsTrain(%0)      (_Vehicle_Is(Train     , %0))
-#define Vehicle_IsLS(%0)         (_Vehicle_Is(LS        , %0))
-#define Vehicle_IsSF(%0)         (_Vehicle_Is(SF        , %0))
-#define Vehicle_IsLV(%0)         (_Vehicle_Is(LV        , %0))
-#define Vehicle_IsTank(%0)       (_Vehicle_Is(Tank      , %0))
-#define Vehicle_IsFlowerpot(%0)  (_Vehicle_Is(Flowerpot , %0))
-#define Vehicle_IsTransport(%0)  (_Vehicle_Is(Transport , %0))
-#define Vehicle_IsArmed(%0) 		 (_Vehicle_Is(Armed      , %0))
+#define Vehicle_IsCar(%0)          (_Vehicle_Is(Car        , %0))
+#define Vehicle_IsTruck(%0)        (_Vehicle_Is(Truck      , %0))
+#define Vehicle_IsVan(%0)          (_Vehicle_Is(Van        , %0))
+#define Vehicle_IsFire(%0)         (_Vehicle_Is(Fire       , %0))
+#define Vehicle_IsPolice(%0)       (_Vehicle_Is(Police     , %0))
+#define Vehicle_IsFBI(%0)          (_Vehicle_Is(FBI        , %0))
+#define Vehicle_IsSWAT(%0)         (_Vehicle_Is(SWAT       , %0))
+#define Vehicle_IsMilitary(%0)     (_Vehicle_Is(Military   , %0))
+#define Vehicle_IsWeaponised(%0)   (_Vehicle_Is(Weaponised , %0))
+#define Vehicle_IsHelicopter(%0)   (_Vehicle_Is(Helicopter , %0))
+#define Vehicle_IsBoat(%0)         (_Vehicle_Is(Boat       , %0))
+#define Vehicle_IsPlane(%0)        (_Vehicle_Is(Plane      , %0))
+#define Vehicle_IsBike(%0)         (_Vehicle_Is(Bike       , %0))
+#define Vehicle_IsManual(%0)       (_Vehicle_Is(Manual     , %0))
+#define Vehicle_IsAmbulance(%0)    (_Vehicle_Is(Ambulance  , %0))
+#define Vehicle_IsTaxi(%0)         (_Vehicle_Is(Taxi       , %0))
+#define Vehicle_IsOnWater(%0)      (_Vehicle_Is(OnWater    , %0))
+#define Vehicle_IsCoastguard(%0)   (_Vehicle_Is(Coastguard , %0))
+#define Vehicle_IsTrain(%0)        (_Vehicle_Is(Train      , %0))
+#define Vehicle_IsLS(%0)           (_Vehicle_Is(LS         , %0))
+#define Vehicle_IsSF(%0)           (_Vehicle_Is(SF         , %0))
+#define Vehicle_IsLV(%0)           (_Vehicle_Is(LV         , %0))
+#define Vehicle_IsTank(%0)         (_Vehicle_Is(Tank       , %0))
+#define Vehicle_IsFlowerpot(%0)    (_Vehicle_Is(Flowerpot  , %0))
+#define Vehicle_IsTransport(%0)    (_Vehicle_Is(Transport  , %0))
+#define Vehicle_IsArmed(%0)        (_Vehicle_Is(Armed      , %0))
+#define Vehicle_HasNumberPlate(%0) (_Vehicle_Is(NumberPlate, %0))
 
 #define Model_GetCategory(%0)  VIM_GetCategory(Model_ToVIM((%0)))
 #define Model_IsValid(%0)      VIM_IsValid(Model_ToVIM((%0)))
 
-#define Model_IsCar(%0)        (_Model_Is(Car       , %0))
-#define Model_IsTruck(%0)      (_Model_Is(Truck     , %0))
-#define Model_IsVan(%0)        (_Model_Is(Van       , %0))
-#define Model_IsFire(%0)       (_Model_Is(Fire      , %0))
-#define Model_IsPolice(%0)     (_Model_Is(Police    , %0))
-#define Model_IsFBI(%0)        (_Model_Is(FBI       , %0))
-#define Model_IsSWAT(%0)       (_Model_Is(SWAT      , %0))
-#define Model_IsMilitary(%0)   (_Model_Is(Military  , %0))
-#define Model_IsWeaponised(%0) (_Model_Is(Weaponised, %0))
-#define Model_IsHelicopter(%0) (_Model_Is(Helicopter, %0))
-#define Model_IsBoat(%0)       (_Model_Is(Boat      , %0))
-#define Model_IsPlane(%0)      (_Model_Is(Plane     , %0))
-#define Model_IsBike(%0)       (_Model_Is(Bike      , %0))
-#define Model_IsManual(%0)     (_Model_Is(Manual    , %0))
-#define Model_IsAmbulance(%0)  (_Model_Is(Ambulance , %0))
-#define Model_IsTaxi(%0)       (_Model_Is(Taxi      , %0))
-#define Model_IsOnWater(%0)    (_Model_Is(OnWater   , %0))
-#define Model_IsCoastguard(%0) (_Model_Is(Coastguard, %0))
-#define Model_IsTrain(%0)      (_Model_Is(Train     , %0))
-#define Model_IsLS(%0)         (_Model_Is(LS        , %0))
-#define Model_IsSF(%0)         (_Model_Is(SF        , %0))
-#define Model_IsLV(%0)         (_Model_Is(LV        , %0))
-#define Model_IsTank(%0)       (_Model_Is(Tank      , %0))
-#define Model_IsFlowerpot(%0)  (_Model_Is(Flowerpot , %0))
-#define Model_IsTransport(%0)  (_Model_Is(Transport , %0))
-#define Model_IsArmed(%0)       (_Model_Is(Armed      , %0))
+#define Model_IsCar(%0)          (_Model_Is(Car        , %0))
+#define Model_IsTruck(%0)        (_Model_Is(Truck      , %0))
+#define Model_IsVan(%0)          (_Model_Is(Van        , %0))
+#define Model_IsFire(%0)         (_Model_Is(Fire       , %0))
+#define Model_IsPolice(%0)       (_Model_Is(Police     , %0))
+#define Model_IsFBI(%0)          (_Model_Is(FBI        , %0))
+#define Model_IsSWAT(%0)         (_Model_Is(SWAT       , %0))
+#define Model_IsMilitary(%0)     (_Model_Is(Military   , %0))
+#define Model_IsWeaponised(%0)   (_Model_Is(Weaponised , %0))
+#define Model_IsHelicopter(%0)   (_Model_Is(Helicopter , %0))
+#define Model_IsBoat(%0)         (_Model_Is(Boat       , %0))
+#define Model_IsPlane(%0)        (_Model_Is(Plane      , %0))
+#define Model_IsBike(%0)         (_Model_Is(Bike       , %0))
+#define Model_IsManual(%0)       (_Model_Is(Manual     , %0))
+#define Model_IsAmbulance(%0)    (_Model_Is(Ambulance  , %0))
+#define Model_IsTaxi(%0)         (_Model_Is(Taxi       , %0))
+#define Model_IsOnWater(%0)      (_Model_Is(OnWater    , %0))
+#define Model_IsCoastguard(%0)   (_Model_Is(Coastguard , %0))
+#define Model_IsTrain(%0)        (_Model_Is(Train      , %0))
+#define Model_IsLS(%0)           (_Model_Is(LS         , %0))
+#define Model_IsSF(%0)           (_Model_Is(SF         , %0))
+#define Model_IsLV(%0)           (_Model_Is(LV         , %0))
+#define Model_IsTank(%0)         (_Model_Is(Tank       , %0))
+#define Model_IsFlowerpot(%0)    (_Model_Is(Flowerpot  , %0))
+#define Model_IsTransport(%0)    (_Model_Is(Transport  , %0))
+#define Model_IsArmed(%0)        (_Model_Is(Armed      , %0))
+#define Model_HasNumberPlate(%0) (_Model_Is(NumberPlate, %0))
 
 #define VIM_GetCategory(%0)  (YSI_gVehicleFlags[(%0)] & e_VEHICLE_FLAGS_CATEGORY)
 #define VIM_IsValid(%0)      (YSI_gVehicleFlags[(%0)] != e_VEHICLE_FLAGS_NONE)
 
-#define VIM_IsCar(%0)        (_VIM_Is(Car       , %0))
-#define VIM_IsTruck(%0)      (_VIM_Is(Truck     , %0))
-#define VIM_IsVan(%0)        (_VIM_Is(Van       , %0))
-#define VIM_IsFire(%0)       (_VIM_Is(Fire      , %0))
-#define VIM_IsPolice(%0)     (_VIM_Is(Police    , %0))
-#define VIM_IsFBI(%0)        (_VIM_Is(FBI       , %0))
-#define VIM_IsSWAT(%0)       (_VIM_Is(SWAT      , %0))
-#define VIM_IsMilitary(%0)   (_VIM_Is(Military  , %0))
-#define VIM_IsWeaponised(%0) (_VIM_Is(Weaponised, %0))
-#define VIM_IsHelicopter(%0) (_VIM_Is(Helicopter, %0))
-#define VIM_IsBoat(%0)       (_VIM_Is(Boat      , %0))
-#define VIM_IsPlane(%0)      (_VIM_Is(Plane     , %0))
-#define VIM_IsBike(%0)       (_VIM_Is(Bike      , %0))
-#define VIM_IsManual(%0)     (_VIM_Is(Manual    , %0))
-#define VIM_IsAmbulance(%0)  (_VIM_Is(Ambulance , %0))
-#define VIM_IsTaxi(%0)       (_VIM_Is(Taxi      , %0))
-#define VIM_IsOnWater(%0)    (_VIM_Is(OnWater   , %0))
-#define VIM_IsCoastguard(%0) (_VIM_Is(Coastguard, %0))
-#define VIM_IsTrain(%0)      (_VIM_Is(Train     , %0))
-#define VIM_IsLS(%0)         (_VIM_Is(LS        , %0))
-#define VIM_IsSF(%0)         (_VIM_Is(SF        , %0))
-#define VIM_IsLV(%0)         (_VIM_Is(LV        , %0))
-#define VIM_IsTank(%0)       (_VIM_Is(Tank      , %0))
-#define VIM_IsFlowerpot(%0)  (_VIM_Is(Flowerpot , %0))
-#define VIM_IsTransport(%0)  (_VIM_Is(Transport , %0))
-#define VIM_IsArmed(%0)       (_VIM_Is(Armed      , %0))
+#define VIM_IsCar(%0)          (_VIM_Is(Car        , %0))
+#define VIM_IsTruck(%0)        (_VIM_Is(Truck      , %0))
+#define VIM_IsVan(%0)          (_VIM_Is(Van        , %0))
+#define VIM_IsFire(%0)         (_VIM_Is(Fire       , %0))
+#define VIM_IsPolice(%0)       (_VIM_Is(Police     , %0))
+#define VIM_IsFBI(%0)          (_VIM_Is(FBI        , %0))
+#define VIM_IsSWAT(%0)         (_VIM_Is(SWAT       , %0))
+#define VIM_IsMilitary(%0)     (_VIM_Is(Military   , %0))
+#define VIM_IsWeaponised(%0)   (_VIM_Is(Weaponised , %0))
+#define VIM_IsHelicopter(%0)   (_VIM_Is(Helicopter , %0))
+#define VIM_IsBoat(%0)         (_VIM_Is(Boat       , %0))
+#define VIM_IsPlane(%0)        (_VIM_Is(Plane      , %0))
+#define VIM_IsBike(%0)         (_VIM_Is(Bike       , %0))
+#define VIM_IsManual(%0)       (_VIM_Is(Manual     , %0))
+#define VIM_IsAmbulance(%0)    (_VIM_Is(Ambulance  , %0))
+#define VIM_IsTaxi(%0)         (_VIM_Is(Taxi       , %0))
+#define VIM_IsOnWater(%0)      (_VIM_Is(OnWater    , %0))
+#define VIM_IsCoastguard(%0)   (_VIM_Is(Coastguard , %0))
+#define VIM_IsTrain(%0)        (_VIM_Is(Train      , %0))
+#define VIM_IsLS(%0)           (_VIM_Is(LS         , %0))
+#define VIM_IsSF(%0)           (_VIM_Is(SF         , %0))
+#define VIM_IsLV(%0)           (_VIM_Is(LV         , %0))
+#define VIM_IsTank(%0)         (_VIM_Is(Tank       , %0))
+#define VIM_IsFlowerpot(%0)    (_VIM_Is(Flowerpot  , %0))
+#define VIM_IsTransport(%0)    (_VIM_Is(Transport  , %0))
+#define VIM_IsArmed(%0)        (_VIM_Is(Armed      , %0))
+#define VIM_HasNumberPlate(%0) (_VIM_Is(NumberPlate, %0))
 
 #define Vehicle_GetVIM(%0) (Model_ToVIM(GetVehicleModel((%0))))
 #define Model_ToVIM(%0) (VIM:(_Model_Validate(%0)))
@@ -243,6 +246,10 @@ native y_vehicledata_StrUnpack(dest[], const src[], size = sizeof (dest)) = stru
 #define Vehicle_TopSpeed(%0) (VIM_TopSpeed(Vehicle_GetVIM(%0)))
 #define Model_TopSpeed(%0) (VIM_TopSpeed(Model_ToVIM(%0)))
 #define VIM_TopSpeed(%0) (YSI_gVehicleTopSpeed[(%0)])
+
+#define Vehicle_Seats(%0) (VIM_Seats(Vehicle_GetVIM(%0)))
+#define Model_Seats(%0) (VIM_Seats(Model_ToVIM(%0)))
+#define VIM_Seats(%0) (YSI_gVehicleSeats[(%0)])
 
 /*
 
@@ -279,33 +286,44 @@ enum e_VEHICLE_FLAGS:(<<= 1)
 	e_VEHICLE_FLAGS_CAT_RC          = 15,
 	e_VEHICLE_FLAGS_CATEGORY        = 0x0F,
 	e_VEHICLE_FLAGS_Car             = 0x10,
-	e_VEHICLE_FLAGS_Truck,
-	e_VEHICLE_FLAGS_Van,
-	e_VEHICLE_FLAGS_Fire,
-	e_VEHICLE_FLAGS_Police,
-	e_VEHICLE_FLAGS_FBI,
-	e_VEHICLE_FLAGS_SWAT,
-	e_VEHICLE_FLAGS_Military,
-	e_VEHICLE_FLAGS_Weaponised,
-	e_VEHICLE_FLAGS_Helicopter,
-	e_VEHICLE_FLAGS_Boat,
-	e_VEHICLE_FLAGS_Plane,
-	e_VEHICLE_FLAGS_Bike,
-	e_VEHICLE_FLAGS_Manual,
-	e_VEHICLE_FLAGS_Ambulance,
-	e_VEHICLE_FLAGS_Taxi,
-	e_VEHICLE_FLAGS_OnWater,
-	e_VEHICLE_FLAGS_Coastguard,
-	e_VEHICLE_FLAGS_Train,
-	e_VEHICLE_FLAGS_LS,
-	e_VEHICLE_FLAGS_SF,
-	e_VEHICLE_FLAGS_LV,
-	e_VEHICLE_FLAGS_Tank,
-	e_VEHICLE_FLAGS_Flowerpot,
-	e_VEHICLE_FLAGS_Transport,
-	e_VEHICLE_FLAGS_Armed
+	e_VEHICLE_FLAGS_Truck,         // 0x00000020
+	e_VEHICLE_FLAGS_Van,           // 0x00000040
+	e_VEHICLE_FLAGS_Fire,          // 0x00000080
+	e_VEHICLE_FLAGS_Police,        // 0x00000100
+	e_VEHICLE_FLAGS_FBI,           // 0x00000200
+	e_VEHICLE_FLAGS_SWAT,          // 0x00000400
+	e_VEHICLE_FLAGS_Military,      // 0x00000800
+	e_VEHICLE_FLAGS_Weaponised,    // 0x00001000
+	e_VEHICLE_FLAGS_Helicopter,    // 0x00002000
+	e_VEHICLE_FLAGS_Boat,          // 0x00004000
+	e_VEHICLE_FLAGS_Plane,         // 0x00008000
+	e_VEHICLE_FLAGS_Bike,          // 0x00010000
+	e_VEHICLE_FLAGS_Manual,        // 0x00020000
+	e_VEHICLE_FLAGS_Ambulance,     // 0x00040000
+	e_VEHICLE_FLAGS_Taxi,          // 0x00080000
+	e_VEHICLE_FLAGS_OnWater,       // 0x00100000
+	e_VEHICLE_FLAGS_Coastguard,    // 0x00200000
+	e_VEHICLE_FLAGS_Train,         // 0x00400000
+	e_VEHICLE_FLAGS_LS,            // 0x00800000
+	e_VEHICLE_FLAGS_SF,            // 0x01000000
+	e_VEHICLE_FLAGS_LV,            // 0x02000000
+	e_VEHICLE_FLAGS_Tank,          // 0x04000000
+	e_VEHICLE_FLAGS_Flowerpot,     // 0x08000000
+	e_VEHICLE_FLAGS_Transport,     // 0x10000000
+	e_VEHICLE_FLAGS_Armed,         // 0x20000000
+	e_VEHICLE_FLAGS_NumberPlate    // 0x40000000
 }
 
+// These macros just prepend `e_VEHICLE_FLAGS_` to every entry inside
+// `_VEHICLE_FLAGS` so that:
+//
+//    _VEHICLE_FLAGS<Saloon | Car>
+//
+// Becomes:
+//
+//    e_VEHICLE_FLAGS_Saloon | e_VEHICLE_FLAGS_Car
+//
+// Which is more correct but less readable.
 #define _VEHICLE_FLAGS<%0> e_VEHICLE_FLAGS_NONE| CAT_%0| END|
 #define e_VEHICLE_FLAGS_NONE|%0\32;%1| e_VEHICLE_FLAGS_%1|e_VEHICLE_FLAGS_NONE|
 #define e_VEHICLE_FLAGS_END|e_VEHICLE_FLAGS_NONE| e_VEHICLE_FLAGS_NONE
@@ -365,52 +383,20 @@ This comment can be collapsed - it pushes line numbers down to match models.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+This comment can be collapsed - it pushes line numbers down to match models.
 
 */
+
+#if defined __line
+	#if __line != 391
+		#error Model IDs not aligned with line numbers.
+	#endif
+#endif
 
 stock
 	e_VEHICLE_FLAGS:YSI_gVehicleFlags[VIM:VIM_MODEL_COUNT] =
 		{
-			e_VEHICLE_FLAGS_NONE,
+			e_VEHICLE_FLAGS_NONE, // This should remain on line 399 forever.
 			_VEHICLE_FLAGS<OffRoad     | Car       >,
 			_VEHICLE_FLAGS<Saloon      | Car       >,
 			_VEHICLE_FLAGS<Sport       | Car       >,
@@ -627,224 +613,224 @@ stock
 		},
 	YSI_gVehicleNames[VIM:VIM_MODEL_COUNT][32 char] =
 		{
-			!"",
-			!"Landstalker",
-			!"Bravura",
-			!"Buffalo",
-			!"Linerunner",
-			!"Perennial",
-			!"Sentinel",
-			!"Dumper",
-			!"Firetruck",
-			!"Trashmaster",
-			!"Stretch",
-			!"Manana",
-			!"Infernus",
-			!"Voodoo",
-			!"Pony",
-			!"Mule",
-			!"Cheetah",
-			!"Ambulance",
-			!"Leviathan",
-			!"Moonbeam",
-			!"Esperanto",
-			!"Taxi",
-			!"Washington",
-			!"Bobcat",
-			!"Mr Whoopee",
-			!"BF Injection",
-			!"Hunter",
-			!"Premier",
-			!"Enforcer",
-			!"Securicar",
-			!"Banshee",
-			!"Predator",
-			!"Bus",
-			!"Rhino",
-			!"Barracks",
-			!"Hotknife",
-			!"Article Trailer",
-			!"Previon",
-			!"Coach",
-			!"Cabbie",
-			!"Stallion",
-			!"Rumpo",
-			!"RC Bandit",
-			!"Romero",
-			!"Packer",
-			!"Monster",
-			!"Admiral",
-			!"Squalo",
-			!"Seasparrow",
-			!"Pizzaboy",
-			!"Tram",
-			!"Article Trailer 2",
-			!"Turismo",
-			!"Speeder",
-			!"Reefer",
-			!"Tropic",
-			!"Flatbed",
-			!"Yankee",
-			!"Caddy",
-			!"Solair",
-			!"Topfun Van (Berkley's RC)",
-			!"Skimmer",
-			!"PCJ-600",
-			!"Faggio",
-			!"Freeway",
-			!"RC Baron",
-			!"RC Raider",
-			!"Glendale",
-			!"Oceanic",
-			!"Sanchez",
-			!"Sparrow",
-			!"Patriot",
-			!"Quad",
-			!"Coastguard",
-			!"Dinghy",
-			!"Hermes",
-			!"Sabre",
-			!"Rustler",
-			!"ZR-350",
-			!"Walton",
-			!"Regina",
-			!"Comet",
-			!"BMX",
-			!"Burrito",
-			!"Camper",
-			!"Marquis",
-			!"Baggage",
-			!"Dozer",
-			!"Maverick",
-			!"SAN News Maverick",
-			!"Rancher",
-			!"FBI Rancher",
-			!"Virgo",
-			!"Greenwood",
-			!"Jetmax",
-			!"Hotring Racer",
-			!"Sandking",
-			!"Blista Compact",
-			!"Police Maverick",
-			!"Boxville",
-			!"Benson",
-			!"Mesa",
-			!"RC Goblin",
-			!"Hotring Racer \"A\"",
-			!"Hotring Racer \"B\"",
-			!"Bloodring Banger",
-			!"Rancher Lure",
-			!"Super GT",
-			!"Elegant",
-			!"Journey",
-			!"Bike",
-			!"Mountain Bike",
-			!"Beagle",
-			!"Cropduster",
-			!"Stuntplane",
-			!"Tanker",
-			!"Roadtrain",
-			!"Nebula",
-			!"Majestic",
-			!"Buccaneer",
-			!"Shamal",
-			!"Hydra",
-			!"FCR-900",
-			!"NRG-500",
-			!"HPV1000",
-			!"Cement Truck",
-			!"Towtruck",
-			!"Fortune",
-			!"Cadrona",
-			!"FBI Truck",
-			!"Willard",
-			!"Forklift",
-			!"Tractor",
-			!"Combine Harvester",
-			!"Feltzer",
-			!"Remington",
-			!"Slamvan",
-			!"Blade",
-			!"Freight (Train)",
-			!"Brownstreak (Train)",
-			!"Vortex",
-			!"Vincent",
-			!"Bullet",
-			!"Clover",
-			!"Sadler",
-			!"Firetruck LA",
-			!"Hustler",
-			!"Intruder",
-			!"Primo",
-			!"Cargobob",
-			!"Tampa",
-			!"Sunrise",
-			!"Merit",
-			!"Utility Van",
-			!"Nevada",
-			!"Yosemite",
-			!"Windsor",
-			!"Monster \"A\"",
-			!"Monster \"B\"",
-			!"Uranus",
-			!"Jester",
-			!"Sultan",
-			!"Stratum",
-			!"Elegy",
-			!"Raindance",
-			!"RC Tiger",
-			!"Flash",
-			!"Tahoma",
-			!"Savanna",
-			!"Bandito",
-			!"Freight Flat Trailer (Train)",
-			!"Streak Trailer (Train)",
-			!"Kart",
-			!"Mower",
-			!"Dune",
-			!"Sweeper",
-			!"Broadway",
-			!"Tornado",
-			!"AT400",
-			!"DFT-30",
-			!"Huntley",
-			!"Stafford",
-			!"BF-400",
-			!"Newsvan",
-			!"Tug",
-			!"Petrol Trailer",
-			!"Emperor",
-			!"Wayfarer",
-			!"Euros",
-			!"Hotdog",
-			!"Club",
-			!"Freight Box Trailer (Train)",
-			!"Article Trailer 3",
-			!"Andromada",
-			!"Dodo",
-			!"RC Cam",
-			!"Launch",
-			!"Police Car (LSPD)",
-			!"Police Car (SFPD)",
-			!"Police Car (LVPD)",
-			!"Police Ranger",
-			!"Picador",
-			!"S.W.A.T.",
-			!"Alpha",
-			!"Phoenix",
-			!"Glendale Shit",
-			!"Sadler Shit",
-			!"Baggage Trailer \"A\"",
-			!"Baggage Trailer \"B\"",
-			!"Tug Stairs Trailer",
-			!"Boxville",
-			!"Farm Trailer",
-			!"Utility Trailer",
-			!""
+			__COMPILER_PACK"",
+			__COMPILER_PACK"Landstalker",
+			__COMPILER_PACK"Bravura",
+			__COMPILER_PACK"Buffalo",
+			__COMPILER_PACK"Linerunner",
+			__COMPILER_PACK"Perennial",
+			__COMPILER_PACK"Sentinel",
+			__COMPILER_PACK"Dumper",
+			__COMPILER_PACK"Firetruck",
+			__COMPILER_PACK"Trashmaster",
+			__COMPILER_PACK"Stretch",
+			__COMPILER_PACK"Manana",
+			__COMPILER_PACK"Infernus",
+			__COMPILER_PACK"Voodoo",
+			__COMPILER_PACK"Pony",
+			__COMPILER_PACK"Mule",
+			__COMPILER_PACK"Cheetah",
+			__COMPILER_PACK"Ambulance",
+			__COMPILER_PACK"Leviathan",
+			__COMPILER_PACK"Moonbeam",
+			__COMPILER_PACK"Esperanto",
+			__COMPILER_PACK"Taxi",
+			__COMPILER_PACK"Washington",
+			__COMPILER_PACK"Bobcat",
+			__COMPILER_PACK"Mr Whoopee",
+			__COMPILER_PACK"BF Injection",
+			__COMPILER_PACK"Hunter",
+			__COMPILER_PACK"Premier",
+			__COMPILER_PACK"Enforcer",
+			__COMPILER_PACK"Securicar",
+			__COMPILER_PACK"Banshee",
+			__COMPILER_PACK"Predator",
+			__COMPILER_PACK"Bus",
+			__COMPILER_PACK"Rhino",
+			__COMPILER_PACK"Barracks",
+			__COMPILER_PACK"Hotknife",
+			__COMPILER_PACK"Article Trailer",
+			__COMPILER_PACK"Previon",
+			__COMPILER_PACK"Coach",
+			__COMPILER_PACK"Cabbie",
+			__COMPILER_PACK"Stallion",
+			__COMPILER_PACK"Rumpo",
+			__COMPILER_PACK"RC Bandit",
+			__COMPILER_PACK"Romero",
+			__COMPILER_PACK"Packer",
+			__COMPILER_PACK"Monster",
+			__COMPILER_PACK"Admiral",
+			__COMPILER_PACK"Squalo",
+			__COMPILER_PACK"Seasparrow",
+			__COMPILER_PACK"Pizzaboy",
+			__COMPILER_PACK"Tram",
+			__COMPILER_PACK"Article Trailer 2",
+			__COMPILER_PACK"Turismo",
+			__COMPILER_PACK"Speeder",
+			__COMPILER_PACK"Reefer",
+			__COMPILER_PACK"Tropic",
+			__COMPILER_PACK"Flatbed",
+			__COMPILER_PACK"Yankee",
+			__COMPILER_PACK"Caddy",
+			__COMPILER_PACK"Solair",
+			__COMPILER_PACK"Topfun Van (Berkley's RC)",
+			__COMPILER_PACK"Skimmer",
+			__COMPILER_PACK"PCJ-600",
+			__COMPILER_PACK"Faggio",
+			__COMPILER_PACK"Freeway",
+			__COMPILER_PACK"RC Baron",
+			__COMPILER_PACK"RC Raider",
+			__COMPILER_PACK"Glendale",
+			__COMPILER_PACK"Oceanic",
+			__COMPILER_PACK"Sanchez",
+			__COMPILER_PACK"Sparrow",
+			__COMPILER_PACK"Patriot",
+			__COMPILER_PACK"Quad",
+			__COMPILER_PACK"Coastguard",
+			__COMPILER_PACK"Dinghy",
+			__COMPILER_PACK"Hermes",
+			__COMPILER_PACK"Sabre",
+			__COMPILER_PACK"Rustler",
+			__COMPILER_PACK"ZR-350",
+			__COMPILER_PACK"Walton",
+			__COMPILER_PACK"Regina",
+			__COMPILER_PACK"Comet",
+			__COMPILER_PACK"BMX",
+			__COMPILER_PACK"Burrito",
+			__COMPILER_PACK"Camper",
+			__COMPILER_PACK"Marquis",
+			__COMPILER_PACK"Baggage",
+			__COMPILER_PACK"Dozer",
+			__COMPILER_PACK"Maverick",
+			__COMPILER_PACK"SAN News Maverick",
+			__COMPILER_PACK"Rancher",
+			__COMPILER_PACK"FBI Rancher",
+			__COMPILER_PACK"Virgo",
+			__COMPILER_PACK"Greenwood",
+			__COMPILER_PACK"Jetmax",
+			__COMPILER_PACK"Hotring Racer",
+			__COMPILER_PACK"Sandking",
+			__COMPILER_PACK"Blista Compact",
+			__COMPILER_PACK"Police Maverick",
+			__COMPILER_PACK"Boxville",
+			__COMPILER_PACK"Benson",
+			__COMPILER_PACK"Mesa",
+			__COMPILER_PACK"RC Goblin",
+			__COMPILER_PACK"Hotring Racer \"A\"",
+			__COMPILER_PACK"Hotring Racer \"B\"",
+			__COMPILER_PACK"Bloodring Banger",
+			__COMPILER_PACK"Rancher Lure",
+			__COMPILER_PACK"Super GT",
+			__COMPILER_PACK"Elegant",
+			__COMPILER_PACK"Journey",
+			__COMPILER_PACK"Bike",
+			__COMPILER_PACK"Mountain Bike",
+			__COMPILER_PACK"Beagle",
+			__COMPILER_PACK"Cropduster",
+			__COMPILER_PACK"Stuntplane",
+			__COMPILER_PACK"Tanker",
+			__COMPILER_PACK"Roadtrain",
+			__COMPILER_PACK"Nebula",
+			__COMPILER_PACK"Majestic",
+			__COMPILER_PACK"Buccaneer",
+			__COMPILER_PACK"Shamal",
+			__COMPILER_PACK"Hydra",
+			__COMPILER_PACK"FCR-900",
+			__COMPILER_PACK"NRG-500",
+			__COMPILER_PACK"HPV1000",
+			__COMPILER_PACK"Cement Truck",
+			__COMPILER_PACK"Towtruck",
+			__COMPILER_PACK"Fortune",
+			__COMPILER_PACK"Cadrona",
+			__COMPILER_PACK"FBI Truck",
+			__COMPILER_PACK"Willard",
+			__COMPILER_PACK"Forklift",
+			__COMPILER_PACK"Tractor",
+			__COMPILER_PACK"Combine Harvester",
+			__COMPILER_PACK"Feltzer",
+			__COMPILER_PACK"Remington",
+			__COMPILER_PACK"Slamvan",
+			__COMPILER_PACK"Blade",
+			__COMPILER_PACK"Freight (Train)",
+			__COMPILER_PACK"Brownstreak (Train)",
+			__COMPILER_PACK"Vortex",
+			__COMPILER_PACK"Vincent",
+			__COMPILER_PACK"Bullet",
+			__COMPILER_PACK"Clover",
+			__COMPILER_PACK"Sadler",
+			__COMPILER_PACK"Firetruck LA",
+			__COMPILER_PACK"Hustler",
+			__COMPILER_PACK"Intruder",
+			__COMPILER_PACK"Primo",
+			__COMPILER_PACK"Cargobob",
+			__COMPILER_PACK"Tampa",
+			__COMPILER_PACK"Sunrise",
+			__COMPILER_PACK"Merit",
+			__COMPILER_PACK"Utility Van",
+			__COMPILER_PACK"Nevada",
+			__COMPILER_PACK"Yosemite",
+			__COMPILER_PACK"Windsor",
+			__COMPILER_PACK"Monster \"A\"",
+			__COMPILER_PACK"Monster \"B\"",
+			__COMPILER_PACK"Uranus",
+			__COMPILER_PACK"Jester",
+			__COMPILER_PACK"Sultan",
+			__COMPILER_PACK"Stratum",
+			__COMPILER_PACK"Elegy",
+			__COMPILER_PACK"Raindance",
+			__COMPILER_PACK"RC Tiger",
+			__COMPILER_PACK"Flash",
+			__COMPILER_PACK"Tahoma",
+			__COMPILER_PACK"Savanna",
+			__COMPILER_PACK"Bandito",
+			__COMPILER_PACK"Freight Flat Trailer (Train)",
+			__COMPILER_PACK"Streak Trailer (Train)",
+			__COMPILER_PACK"Kart",
+			__COMPILER_PACK"Mower",
+			__COMPILER_PACK"Dune",
+			__COMPILER_PACK"Sweeper",
+			__COMPILER_PACK"Broadway",
+			__COMPILER_PACK"Tornado",
+			__COMPILER_PACK"AT400",
+			__COMPILER_PACK"DFT-30",
+			__COMPILER_PACK"Huntley",
+			__COMPILER_PACK"Stafford",
+			__COMPILER_PACK"BF-400",
+			__COMPILER_PACK"Newsvan",
+			__COMPILER_PACK"Tug",
+			__COMPILER_PACK"Petrol Trailer",
+			__COMPILER_PACK"Emperor",
+			__COMPILER_PACK"Wayfarer",
+			__COMPILER_PACK"Euros",
+			__COMPILER_PACK"Hotdog",
+			__COMPILER_PACK"Club",
+			__COMPILER_PACK"Freight Box Trailer (Train)",
+			__COMPILER_PACK"Article Trailer 3",
+			__COMPILER_PACK"Andromada",
+			__COMPILER_PACK"Dodo",
+			__COMPILER_PACK"RC Cam",
+			__COMPILER_PACK"Launch",
+			__COMPILER_PACK"Police Car (LSPD)",
+			__COMPILER_PACK"Police Car (SFPD)",
+			__COMPILER_PACK"Police Car (LVPD)",
+			__COMPILER_PACK"Police Ranger",
+			__COMPILER_PACK"Picador",
+			__COMPILER_PACK"S.W.A.T.",
+			__COMPILER_PACK"Alpha",
+			__COMPILER_PACK"Phoenix",
+			__COMPILER_PACK"Glendale Shit",
+			__COMPILER_PACK"Sadler Shit",
+			__COMPILER_PACK"Baggage Trailer \"A\"",
+			__COMPILER_PACK"Baggage Trailer \"B\"",
+			__COMPILER_PACK"Tug Stairs Trailer",
+			__COMPILER_PACK"Boxville",
+			__COMPILER_PACK"Farm Trailer",
+			__COMPILER_PACK"Utility Trailer",
+			__COMPILER_PACK""
 		},
 	YSI_gVehicleTopSpeed[VIM:VIM_MODEL_COUNT] =
 		{
-            0,
+			0,
 			157,
 			147,
 			186,
@@ -863,7 +849,7 @@ stock
 			192,
 			154,
 			270,
-		    115,
+			115,
 			149,
 			145,
 			154,
@@ -882,7 +868,7 @@ stock
 			167,
 			0,
 			149,
-		    158,
+			158,
 			142,
 			168,
 			136,
@@ -901,7 +887,7 @@ stock
 			60,
 			135,
 			157,
-		    106,
+			106,
 			95,
 			157,
 			136,
@@ -919,7 +905,7 @@ stock
 			110,
 			190,
 			190,
-		    149,
+			149,
 			173,
 			270,
 			186,
@@ -938,7 +924,7 @@ stock
 			157,
 			149,
 			140,
-		    270,
+			270,
 			214,
 			176,
 			162,
@@ -957,7 +943,7 @@ stock
 			79,
 			101,
 			270,
-		    270,
+			270,
 			270,
 			120,
 			142,
@@ -976,7 +962,7 @@ stock
 			176,
 			149,
 			60,
-		    70,
+			70,
 			110,
 			167,
 			168,
@@ -996,7 +982,7 @@ stock
 			270,
 			153,
 			145,
-		    157,
+			157,
 			121,
 			270,
 			144,
@@ -1016,7 +1002,7 @@ stock
 			146,
 			0,
 			0,
-		    93,
+			93,
 			60,
 			110,
 			60,
@@ -1037,7 +1023,7 @@ stock
 			162,
 			0,
 			0,
-		    270,
+			270,
 			270,
 			130,
 			190,
@@ -1057,15 +1043,230 @@ stock
 			108,
 			0,
 			0,
-            0
+			0
+		},
+	YSI_gVehicleSeats[VIM:VIM_MODEL_COUNT] = 
+		{
+			4, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			1, 
+			2, 
+			2, 
+			4, 
+			2, 
+			2, 
+			2, 
+			4, 
+			2, 
+			2, 
+			4, 
+			2, 
+			4, 
+			2, 
+			4, 
+			2, 
+			2, 
+			2, 
+			2, 
+			1, 
+			4, 
+			4, 
+			4, 
+			2, 
+			1, 
+			9, 
+			1, 
+			2, 
+			2, 
+			1, 
+			2, 
+			9, 
+			4, 
+			2, 
+			4, 
+			1, 
+			2, 
+			2, 
+			2, 
+			4, 
+			1, 
+			2, 
+			1, 
+			2, 
+			1, 
+			2, 
+			1, 
+			1, 
+			1, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			2, 
+			2, 
+			2, 
+			2, 
+			1, 
+			1, 
+			4, 
+			4, 
+			2, 
+			2, 
+			4, 
+			2, 
+			1, 
+			1, 
+			2, 
+			2, 
+			1, 
+			2, 
+			2, 
+			4, 
+			2, 
+			1, 
+			2, 
+			3, 
+			1, 
+			1, 
+			1, 
+			4, 
+			2, 
+			2, 
+			4, 
+			2, 
+			4, 
+			1, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			2,
+			2, 
+			1, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			2, 
+			1, 
+			1, 
+			2, 
+			1, 
+			1, 
+			2, 
+			2, 
+			4, 
+			2, 
+			2, 
+			1, 
+			1, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			1, 
+			1, 
+			1, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			1, 
+			4, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			2, 
+			2, 
+			4, 
+			4,
+			2, 
+			1, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			2, 
+			2, 
+			1, 
+			2, 
+			4, 
+			4, 
+			1, 
+			1, 
+			1, 
+			1, 
+			1, 
+			2, 
+			1, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			4, 
+			2, 
+			4, 
+			1, 
+			1, 
+			4, 
+			2, 
+			2, 
+			2, 
+			2, 
+			1, 
+			1, 
+			2, 
+			2, 
+			1, 
+			1, 
+			4, 
+			4, 
+			4, 
+			2, 
+			2, 
+			2, 
+			2, 
+			2, 
+			4, 
+			2, 
+			1, 
+			1, 
+			1, 
+			4, 
+			1, 
+			1
 		};
 /*-------------------------------------------------------------------------*//**
  * <param name="vehicleid">The vehicleid to get speed.</param>
  * <returns>
- *  Current vehicle speed.
+ *   Current vehicle speed.
  * </returns>
  * <remarks>
- *  This function have returns in KM/H.
+ *   This function have returns in KM/H.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1077,7 +1278,7 @@ stock Vehicle_Speed(vehicleid)
 		Float:Vz = 0.0
 	;
 	GetVehicleVelocity(vehicleid, Vx, Vy, Vz);
-	return floatround((floatsqroot((Vx * Vx) + (Vy * Vy) + (Vz * Vz)) * 136.666667));
+	return floatround(VectorSize(Vx, Vy, Vz) * 136.666667);
 }
 
 #undef _VEHICLE_FLAGS

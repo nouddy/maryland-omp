@@ -1,4 +1,9 @@
-/*+
+#if defined _INC_y_pp
+	#endinput
+#endif
+#define _INC_y_pp
+
+/**
  * <library
  *   name="y_pp"
  *   version="1.0"
@@ -90,7 +95,7 @@ Optional plugins:
  * <param name="%0">What to repeat.</param>
  * <param name="%1">What to insert between repetitions.</param>
  * <remarks>
- *  Does something in the pre-processor multiple times.
+ *   Does something in the pre-processor multiple times.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -245,8 +250,16 @@ Optional plugins:
 
 #define PP_MRET(%0)(%1)(%3) PP_MRET(){%0(%1);}DO%3E_%0(){}
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_scriptinit</library>
+ * <remarks>
+ *   Call <c>@init(init_main)</c> functions.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 main()
 {
+	ScriptInit_MainInitFuncs_();
 	#if defined PP_main
 		PP_main();
 	#endif
