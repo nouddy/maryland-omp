@@ -1,1 +1,4 @@
-[9/20/2023 7:58:44 AM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:33:07 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:33:07 PM] [plugins/mysql] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/20/2023 9:33:07 PM] [plugins/mysql] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/20/2023 9:33:07 PM] [plugins/mysql] cache_get_value_name_float: field 'fPoliceExitZ' not found

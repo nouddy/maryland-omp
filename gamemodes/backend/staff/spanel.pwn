@@ -89,7 +89,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica",
+					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nPolicija",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
@@ -259,6 +259,11 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_odabirstanice", DIALOG_STYLE_INPUT, "Maryland - Metro Kreiraj:", "** Upisite zeljenu rutu za vas metro\n\nMetro stanice: 1 - Ruta1 | 1 - Ruta2 | 2 - Ruta2 | 3 - Ruta3 | 4 - Ruta4 | 5 - Ruta5", "Dalje", "Izlaz");
 
+			}
+
+			case 7: {
+
+				Dialog_Show(playerid, "dialog_createPolice", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Upisite zeljeno ime za policiju", "Unesi", "Odustani");
 			}
 		}
 	}

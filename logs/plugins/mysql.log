@@ -72,3 +72,39 @@
 [9/20/2023 7:36:44 AM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
 [9/20/2023 7:58:44 AM] [WARNING] mysql_connect: no password specified
 [9/20/2023 7:58:44 AM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:37:25 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:37:25 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:41:14 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:41:14 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:45:30 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:45:30 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:48:55 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:48:55 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:51:13 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:51:13 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:52:18 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 8:52:18 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 8:54:15 PM] [ERROR] mysql_format: destination size '369' is too small
+[9/20/2023 8:54:15 PM] [ERROR] error #1065 while executing query "": Query was empty
+[9/20/2023 9:08:18 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:08:18 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:09:44 PM] [ERROR] mysql_format: destination size '369' is too small
+[9/20/2023 9:09:44 PM] [ERROR] error #1065 while executing query "": Query was empty
+[9/20/2023 9:12:53 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:12:53 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:15:18 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:15:18 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:16:03 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:16:03 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:21:12 PM] [ERROR] mysql_format: no value for specifier '%i' passed
+[9/20/2023 9:21:12 PM] [ERROR] error #1065 while executing query "": Query was empty
+[9/20/2023 9:23:06 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:23:06 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:24:30 PM] [ERROR] error #1064 while executing query "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ` `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES ('Palicija Bejha', 'PBHD', 'Market, Maryland', '1', '808.391663', '-1322.791016', '13.568503', 'Rank 1', 'Rank 2', 'Rank 3', '1', '2', '3', '292')": You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '`fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkin...' at line 1
+[9/20/2023 9:27:43 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:27:43 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:33:07 PM] [WARNING] mysql_connect: no password specified
+[9/20/2023 9:33:07 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found

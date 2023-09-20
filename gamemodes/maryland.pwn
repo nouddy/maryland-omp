@@ -569,7 +569,7 @@ YCMD:restart(playerid, const string: params[], help)
 //-------------------------------------------------------------------------------------------------------- Factions Section
 
 //-------------------------------------------------------------------------------------------------------- State Factions
-//#include "backend/factions/state/faction_police.pwn"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+#include "backend/factions/state/faction_police.pwn"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.pwn"					//* Bunker
