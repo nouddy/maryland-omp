@@ -58,17 +58,17 @@ CreatePickupsAnd3Ds()
     // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", -1980.0436,427.9458,24.7925, -1, -1, 1212, 3.0); // Bankar oprema
     // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", 2551.8596,2003.8356,10.8152, -1, -1, 1212, 3.0); // Bankar oprema
 
-    Create3DandP(""c_server"Maryland ï¿½ Community\n\nï¿½ Owners: {ffffff}Ogy & Lasee\n"c_server"ï¿½ Developers: {ffffff}Vostic & Ogy_\n"c_server"ï¿½ Mappers: {ffffff}Ogy\n\n"c_server"(c) copyright 2023", 1585.3817,-2327.9243,13.547+0.6, -1, -1, 18749, 6.0); //
+    Create3DandP(""c_server"Maryland © Community\n\n» Owners: {ffffff}Ogy & Lasee\n"c_server"» Developers: {ffffff}Vostic & Ogy_\n"c_server"» Mappers: {ffffff}Ogy\n\n"c_server"(c) copyright 2023", 1585.3817,-2327.9243,13.547+0.6, -1, -1, 18749, 6.0); //
 
     //? Maryland Customs
-    Create3DandP(""c_server"[ Repair ]\n"c_server"ï¿½ "c_white"'/fixengine'\n"c_server"ï¿½ "c_white"'/fullrepair'", 1088.2130,-1224.8868,18.3765, -1, -1, 19621, 6.0); // popravka motora i limarije
-    Create3DandP(""c_server"[ Service ]\n"c_server"ï¿½ "c_white"'/changeoil'\n"c_server"ï¿½ "c_white"'/carservice'", 1103.1528,-1224.9373,18.3765, -1, -1, 19621, 6.0); // provera ulja i servis
-    Create3DandP(""c_server"[ Tuning ]\n"c_server"ï¿½ "c_white"'/tunecar'", 1114.1785,-1193.1130,19.6612, -1, -1, 1080, 6.0); // tune car 1
-    Create3DandP(""c_server"[ Tuning ]\n"c_server"ï¿½ "c_white"'/tunecar'", 1105.6414,-1193.0107,19.6612, -1, -1, 1080, 6.0); // tune car 2
-    Create3DandP(""c_server"[ Pay 'n spray ]\n"c_server"ï¿½ "c_white"'/paintjob'", 1107.7605,-1185.3486,18.3704, -1, -1, 365, 6.0); // farbanje vozila
-    Create3DandP(""c_server"[ Plates ]\n"c_server"ï¿½ "c_white"'/buyplates'", 1085.3119,-1184.1718,21.9630, -1, -1, 19792, 6.0); // Kupovina tablica
-    Create3DandP(""c_server"[ Technical Review ]\n"c_server"ï¿½ "c_white"'/treview'", 1104.7944,-1248.6990,15.8231, -1, -1, 19627, 6.0); // Tehnicki Pregled
-    Create3DandP(""c_server"[ Technical Review ]\n"c_server"ï¿½ "c_white"'/treview'", 1090.3774,-1248.8459,15.8271, -1, -1, 19627, 6.0); // Tehnicki Pregled
+    Create3DandP(""c_server"[ Repair ]\n"c_server"» "c_white"'/fixengine'\n"c_server"» "c_white"'/fullrepair'", 1088.2130,-1224.8868,18.3765, -1, -1, 19621, 6.0); // popravka motora i limarije
+    Create3DandP(""c_server"[ Service ]\n"c_server"» "c_white"'/changeoil'\n"c_server"» "c_white"'/carservice'", 1103.1528,-1224.9373,18.3765, -1, -1, 19621, 6.0); // provera ulja i servis
+    Create3DandP(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1114.1785,-1193.1130,19.6612, -1, -1, 1080, 6.0); // tune car 1
+    Create3DandP(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1105.6414,-1193.0107,19.6612, -1, -1, 1080, 6.0); // tune car 2
+    Create3DandP(""c_server"[ Pay 'n spray ]\n"c_server"» "c_white"'/paintjob'", 1107.7605,-1185.3486,18.3704, -1, -1, 365, 6.0); // farbanje vozila
+    Create3DandP(""c_server"[ Plates ]\n"c_server"» "c_white"'/buyplates'", 1085.3119,-1184.1718,21.9630, -1, -1, 19792, 6.0); // Kupovina tablica
+    Create3DandP(""c_server"[ Technical Review ]\n"c_server"» "c_white"'/treview'", 1104.7944,-1248.6990,15.8231, -1, -1, 19627, 6.0); // Tehnicki Pregled
+    Create3DandP(""c_server"[ Technical Review ]\n"c_server"» "c_white"'/treview'", 1090.3774,-1248.8459,15.8271, -1, -1, 19627, 6.0); // Tehnicki Pregled
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

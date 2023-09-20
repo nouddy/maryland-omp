@@ -66,7 +66,7 @@ timer dronunisti[30000](playerid)
 	if(PlayerElectronic[playerid][eBaterijaItem] > 0)
 	{
 		PlayerElectronic[playerid][eBaterijaItem]--;
-		SendClientMessage(playerid, -1, ""c_server"koriscenje ï¿½ "c_white"Ispraznila ti se jedna baterija nastavi da se vozis ili kucaj '/dron' da prekines voznju.");
+		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Ispraznila ti se jedna baterija nastavi da se vozis ili kucaj '/dron' da prekines voznju.");
 
         SaveElectronic(playerid);SavePlayer(playerid);
 
@@ -77,7 +77,7 @@ timer dronunisti[30000](playerid)
 		DestroyVehicle(Drone[playerid]);
 		Drone[playerid] = INVALID_PLAYER_ID;
 
-		SendClientMessage(playerid, -1, ""c_server"koriscenje ï¿½ "c_white"Dron je unisten jer nemate vise baterija na stanju.");
+		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Dron je unisten jer nemate vise baterija na stanju.");
 		
 	}
 
@@ -86,8 +86,8 @@ timer dronunisti[30000](playerid)
  
 YCMD:dron(playerid, params[], help)
 {
-	if(PlayerElectronic[playerid][eDronItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje ï¿½ "c_white"Nemas dron, kupi ga u gigatronu!");
-	if(PlayerElectronic[playerid][eBaterijaItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje ï¿½ "c_white"Nemas baterije kupi ih u gigatronu ili prodavnici!");
+	if(PlayerElectronic[playerid][eDronItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje » "c_white"Nemas dron, kupi ga u gigatronu!");
+	if(PlayerElectronic[playerid][eBaterijaItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje » "c_white"Nemas baterije kupi ih u gigatronu ili prodavnici!");
 
     new Float:x, Float:y, Float:z;
 
@@ -111,7 +111,7 @@ YCMD:dron(playerid, params[], help)
 	        SetVehicleParamsEx(vehicleid, false, false, false, doors, bonnet, boot, objective);
 		}
 
-		SendClientMessage(playerid, -1, ""c_server"koriscenje ï¿½ "c_white"Pokrenuo si dron na svakih 3 minuta ti se potrosi jedna baterija.");
+		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Pokrenuo si dron na svakih 3 minuta ti se potrosi jedna baterija.");
 		defer dronunisti(playerid);
 	}
 	else
@@ -119,7 +119,7 @@ YCMD:dron(playerid, params[], help)
 		DestroyVehicle(Drone[playerid]);
 		Drone[playerid] = INVALID_PLAYER_ID;
 
-		SendClientMessage(playerid, -1, ""c_server"koriscenje ï¿½ "c_white"Unistio si dron. '/dron' da ga opet koristis.");		
+		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Unistio si dron. '/dron' da ga opet koristis.");		
 	}
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

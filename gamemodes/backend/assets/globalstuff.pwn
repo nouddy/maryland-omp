@@ -29,7 +29,7 @@
 	va_SendClientMessage(%0, x_ogyColour, "[?/Job]: {FFFFFF}"%1)
 
 #define SendInfoMessage(%0,%1) \
-	va_SendClientMessage(%0, x_server, "ï¿½ ï¿½ MARYLAND: {FFFFFF}"%1)
+	va_SendClientMessage(%0, x_server, "» » MARYLAND: {FFFFFF}"%1)
 
 hook OnGameModeInit()
 {

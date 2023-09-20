@@ -20,10 +20,10 @@
 
 new RandomSPoruke[4][128] =
 {
-	"~w~Poseti nas discord � https://discord.gg/JbYWfNDgcj .",
-	"~w~Backend � Vostic & Ogy_",
-	"~w~Ako si nov � /pitaj",
-	"~w~vosta i ogy su kraljevi"
+	"~w~Poseti nas discord https://discord.gg/JbYWfNDgcj .",
+	"~w~Backend Silent & Ogy_ & Ferid Olsun.",
+	"~w~Ako si nov > /pitaj",
+	"~w~Uzivaj u unikatnostima naseg servera."
 
 };
 

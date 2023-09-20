@@ -86,12 +86,12 @@ YCMD:sduty(playerid, params[], help)
 		SetPlayerArmour( playerid, 99);
 		
 		StaffDuty[ playerid ] = true;
-		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", ReturnPlayerName(playerid));
+		va_SendClientMessageToAll(-1,""c_server"» "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", ReturnPlayerName(playerid));
 	}
 	else if(StaffDuty[playerid] == true)
 	{
 	 	StaffDuty[playerid] = false;
-		va_SendClientMessageToAll(-1,""c_server"\187; "c_white"Staff "c_server"%s "c_white"vise nije na duznosti.", ReturnPlayerName(playerid));
+		va_SendClientMessageToAll(-1,""c_server"» "c_white"Staff "c_server"%s "c_white"vise nije na duznosti.", ReturnPlayerName(playerid));
 	}
     return true;
 }
@@ -112,7 +112,7 @@ YCMD:sc(playerid, const string: params[], help)
 
 	static tmp_str[128];
 
-	format(tmp_str, sizeof(tmp_str), "Staff \187; %s(%d): "c_white"%s", ReturnPlayerName(playerid), playerid, params);
+	format(tmp_str, sizeof(tmp_str), "Staff » %s(%d): "c_white"%s", ReturnPlayerName(playerid), playerid, params);
 
 	foreach (new i: Player)
 		if (PlayerInfo[i][Staff])
@@ -230,10 +230,10 @@ YCMD:cc(playerid, params[], help)
 	static fmt_string[120], sati, minuta, sekunda; gettime(sati, minuta, sekunda);
 	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", ReturnPlayerName(playerid));
 	SendClientMessageToAll(-1, fmt_string);
-	SendClientMessageToAll(-1, ""c_white"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" );
-	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" \187; "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
+	SendClientMessageToAll(-1, ""c_white"•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" );
+	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" » "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
 	SendClientMessageToAll(-1, fmt_string );
-	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" \187; "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");
+	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" » "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");
 
     return 1;
 }

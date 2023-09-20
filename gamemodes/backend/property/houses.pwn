@@ -127,7 +127,7 @@ public House_LoadData() {
 
 			if(house_Owner[i] < 1) {
 
-				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"%s\n\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"'/buyhouse'", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], FormatNumber(house_Price[i]));
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], FormatNumber(house_Price[i]));
 
 				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 				house_Pickup[i] = CreateDynamicPickup(19522, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
@@ -135,7 +135,7 @@ public House_LoadData() {
 
 			else {
 
-				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"%s\n\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], zakljucan1);
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], zakljucan1);
 
 				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 				house_Pickup[i] = CreateDynamicPickup(1273, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
@@ -192,7 +192,7 @@ stock House_UpdateLabel(id, const option) {
 
 	if(option == 1) {
 
-		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"%s\n\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], FormatNumber(house_Price[id]));
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], FormatNumber(house_Price[id]));
 
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(19522, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
@@ -200,7 +200,7 @@ stock House_UpdateLabel(id, const option) {
 
 	else if(option == 2)
 	{
-		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½\n"c_white"%s\n\n"c_white"ï¿½ "c_server"%s "c_white"ï¿½", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
 
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
@@ -280,16 +280,16 @@ YCMD:buyhouse(playerid, params[], help) {
 	new ID = GetNearestHouse(playerid);
 
 	if(ID == -1)
-		return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Ne nalazite se blizu kuce!");
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se blizu kuce!");
 
 	if(house_Owner[ID] > 0)
-		return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Ova kuca je vec kupljena");
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ova kuca je vec kupljena");
 
 	if(GetPlayerMoney(playerid) < house_Price[ID])
-		return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Nemate dovoljno novca!");
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Nemate dovoljno novca!");
 
 	if(player_House[playerid] != -1) 
-		return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Vec posjedujete kucu!");
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Vec posjedujete kucu!");
 
 	player_House[playerid] = ID;
 
@@ -301,7 +301,7 @@ YCMD:buyhouse(playerid, params[], help) {
 
 	VosticGiveMoney(playerid, -house_Price[ID]);
 
-	SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Uspjesno ste kupili kucu!");
+	SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kupili kucu!");
 
 	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `player_id` = '%d'", house_ID[ID], PlayerInfo[playerid][SQLID]);
 	mysql_tquery(SQL, query);

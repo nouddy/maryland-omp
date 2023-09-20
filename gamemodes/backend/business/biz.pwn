@@ -386,7 +386,7 @@ Business_Refresh(bizid)
             pickup;
 
         if (!BusinessData[bizid][bizOwner]) {
-            format(string, sizeof(string), "ï¿½ Biznis("c_white"%d"c_server")\nï¿½ Cena biznisa: "c_white"%s\n"c_server"ï¿½ Opis biznisa: "c_white"%s\n"c_server"ï¿½ Kupovina: "c_white"/kupibiznis",bizid, FormatNumber(BusinessData[bizid][bizPrice]), BusinessData[bizid][bizName]);
+            format(string, sizeof(string), "» Biznis("c_white"%d"c_server")\n» Cena biznisa: "c_white"%s\n"c_server"» Opis biznisa: "c_white"%s\n"c_server"» Kupovina: "c_white"/kupibiznis",bizid, FormatNumber(BusinessData[bizid][bizPrice]), BusinessData[bizid][bizName]);
             BusinessData[bizid][bizText3D] = CreateDynamic3DTextLabel(string, x_server, BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, BusinessData[bizid][bizExteriorVW], BusinessData[bizid][bizExterior]);
         }
         else

@@ -87,9 +87,9 @@ public Job_LoadData() {
 
             new job_string[64], uniform_string[32];
 
-            format(job_string, sizeof job_string, ""c_server"Posao ï¿½ "c_white"%s\n"c_server"Za uzimanje posla "c_white"ï¿½ 'N'", job_Name[i]);
+            format(job_string, sizeof job_string, ""c_server"Posao » "c_white"%s\n"c_server"Za uzimanje posla "c_white"» 'N'", job_Name[i]);
 
-            format(job_string, sizeof uniform_string, ""c_server"Uniforma ï¿½ "c_white"%s\n"c_server"Za uzimanje uniforme "c_white"ï¿½ 'N'", job_Name[i]);
+            format(job_string, sizeof uniform_string, ""c_server"Uniforma » "c_white"%s\n"c_server"Za uzimanje uniforme "c_white"» 'N'", job_Name[i]);
 
             job_Pickup[i][0] = CreateDynamicPickup(1210, 1, job_Position[i][0], job_Position[i][1], job_Position[i][2], 0);
             job_Pickup[i][1] = CreateDynamicPickup(1275, 1, job_UnifromPos[i][0], job_UnifromPos[i][1], job_UnifromPos[i][2], job_Interior[i]);
@@ -112,12 +112,12 @@ public Job_CreateData(id, playerid) {
     job_ID[id] = cache_insert_id();
 
     new job_string[64];
-    format(job_string, sizeof job_string, ""c_server"Posao ï¿½ "c_white"%s\n"c_server"Za uzimanje posla "c_white"ï¿½ 'N'", job_Name[id]);
+    format(job_string, sizeof job_string, ""c_server"Posao » "c_white"%s\n"c_server"Za uzimanje posla "c_white"» 'N'", job_Name[id]);
 
     job_Pickup[id][0] = CreateDynamicPickup(1210, 1, job_Position[id][0], job_Position[id][1], job_Position[id][2], 0);
     job_Label[id][0] = Create3DTextLabel(job_string, -1, job_Position[id][0], job_Position[id][1], job_Position[id][2], 3.5, 0, false);
 
-    va_SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Uspjesno ste kreirali posao ï¿½ "c_server"(%s)", id);
+    va_SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kreirali posao » "c_server"(%s)", id);
 
     return 1;
 }
@@ -132,7 +132,7 @@ hook OnGameModeInit() {
 forward Job_OnLoaded(id);
 public Job_OnLoaded(id) {
 
-    // ? FERID NOTE va_SendClientMessage(playerid, colour, "maryland ï¿½ "c_white"Uspjesno ste kreirali posao ï¿½ "c_server"(%s)", id);
+    // ? FERID NOTE va_SendClientMessage(playerid, colour, "maryland » "c_white"Uspjesno ste kreirali posao » "c_server"(%s)", id);
 
     return (true); 
 }
@@ -140,15 +140,15 @@ public Job_OnLoaded(id) {
 YCMD:createjob(playerid, params[], help) {
 
     if(!IsPlayerAdmin(playerid))
-        return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Niste registrovani kao RCON Admin");
+        return SendClientMessage(playerid, x_server, "maryland » "c_white"Niste registrovani kao RCON Admin");
 
     new name[MAX_JOB_NAME_LEN], uniform, salary;
 
     if(sscanf(params, "s[32]dd", name, salary, uniform))
-        return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"/createjob [Name] [Salary] [Uniform]");
+        return SendClientMessage(playerid, x_server, "maryland » "c_white"/createjob [Name] [Salary] [Uniform]");
 
     if(strlen(name) < 4 || strlen(name) > MAX_JOB_NAME_LEN)
-        return SendClientMessage(playerid, x_server, "maryland ï¿½ "c_white"Ime ne moze biti manje od 4 a vece od 32 znaka!");
+        return SendClientMessage(playerid, x_server, "maryland » "c_white"Ime ne moze biti manje od 4 a vece od 32 znaka!");
 
     new jobID = Job_GetNextID(), Float:pPos[3];
 

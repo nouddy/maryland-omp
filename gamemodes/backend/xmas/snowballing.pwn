@@ -44,7 +44,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
     if(PRESSED(KEY_CROUCH)) {
 
         if(snowball_inHand[playerid])
-            return SendClientMessage(playerid, 0x737BE1FF, ""c_server"xmas ï¿½ "c_white"Vec imas grudvu u ruci!");
+            return SendClientMessage(playerid, 0x737BE1FF, ""c_server"xmas » "c_white"Vec imas grudvu u ruci!");
 
         ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 2.67, false, true, true, true, 3000);
         defer snowball_Make(playerid);

@@ -61,11 +61,11 @@ hook OnGameModeInit(){
 
 	if(SQL == MYSQL_INVALID_HANDLE || mysql_errno(SQL) != 0)
 	{
-		print("MySQL \187; Niste se uspjeli konektovati na data bazu, gasim server.");
+		print("MySQL » Niste se uspjeli konektovati na data bazu, gasim server.");
 		SendRconCommand("exit");
 		return 1;
 	}
-	print("MySQL \187; Uspjesno smo se konektovali na SQL server.");
+	print("MySQL » Uspjesno smo se konektovali na SQL server.");
 	print("database/db-config.script loaded");
 	//****************************************************************************//
 	return 1;

@@ -12,55 +12,6 @@ hook OnGameModeInit()
     CreateTextdraws();		//Stock za tdove
 }
 
-hook OnPlayerSpawn(playerid)
-{
-    //! GlobalTD
-    /*
-  
-    ? Zbog umiranja igraca, svakog pozivanja "SpawnPlayer"(Kada izadje/udje u interier itd... premaknjeno u timer Spawn_Player);
-
-    for(new i=0; i< 30; i++)
-    {
-        TextDrawShowForPlayer(playerid, MarylandLogo[i]);
-    }
-
-    for(new i=0; i< 40; i++)
-    {
-        TextDrawShowForPlayer(playerid, Global_TD[i]);
-    }
-
-    //
-    for(new i=0; i< 8; i++)
-    {
-        PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-    }
-    //! Ime Igraca
-    static pname[25];
-	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
-	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
-    PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
-
-    // //! Banka Igraca
-    // static stringic[ 40 ];
-
-	// if(player_BankAccount[playerid] == 0) {
-	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
-    // }
-    // else {
-    //     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
-	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
-    // }
-    // PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
-
-	//!skin provera
-	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
-	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
-
-    */
-
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
 hook OnPlayerConnect(playerid)
 {
     CreatePlayerTextDraws(playerid);

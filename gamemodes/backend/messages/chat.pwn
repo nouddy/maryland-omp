@@ -34,7 +34,7 @@ hook OnPlayerText(playerid, text[])
     if(IC_CHAT)
     {
         static string[256];
-        format(string,sizeof(string), "%s kaze \187; %s",ReturnPlayerName(playerid), text);
+        format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
         ProxDetector(playerid, Float:30.0, x_white, string);
         return Y_HOOKS_BREAK_RETURN_0;
     }

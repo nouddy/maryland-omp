@@ -268,7 +268,7 @@ public safeZoneLabel(id)
 	DestroyDynamicPickup(SafeZone[id][safePickup]);
 	DestroyDynamic3DTextLabel(SafeZone[id][safeLabel]);
 	new string[150];
-	format( string, sizeof( string ), "   ï¿½ {ffffff}SAFE ZONA{70D869} ï¿½   \n{ffffff}Radius {70D869} %.2f metara\n{ffffff}Zabranjeno je udaranje/pucanje/ubijanje igraca u {70D869}Safe Zoni.",SafeZone[id][safeRadius],id);
+	format( string, sizeof( string ), "   » {ffffff}SAFE ZONA{70D869} «   \n{ffffff}Radius {70D869} %.2f metara\n{ffffff}Zabranjeno je udaranje/pucanje/ubijanje igraca u {70D869}Safe Zoni.",SafeZone[id][safeRadius],id);
 	SafeZone[ id ][ safeLabel ] = CreateDynamic3DTextLabel( string, 0x70D869FF, SafeZone[ id ][ safePickupX ], SafeZone[ id ][ safePickupY ], SafeZone[ id ][ safePickupZ ], 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, 0, 0 );
 	SafeZone[ id ][ safePickup ] = CreateDynamicPickup( 1240, 1, SafeZone[ id ][ safePickupX ], SafeZone[ id ][ safePickupY ], SafeZone[ id ][ safePickupZ ]);
 	return (true);

@@ -335,7 +335,7 @@ public MetrosLabel(id)
 	DestroyDynamic3DTextLabel(MetroLabel[id]);
 	DestroyDynamicPickup(MetroPickup[id]);
 	new stringic[100];
-	format(stringic, sizeof(stringic),"   ï¿½ {ffffff}METRO STANICA{23DEEB} ï¿½   \n\nStanica: %s",StanicaIzRute(id));
+	format(stringic, sizeof(stringic),"   » {ffffff}METRO STANICA{23DEEB} «   \n\nStanica: %s",StanicaIzRute(id));
 	MetroLabel[id] = CreateDynamic3DTextLabel(stringic, 0x23DEEBFF, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ],10.0,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, 0, 0);
 
 	//MetroPickup[id] = CreateDynamicPickup(19605, 1, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ]);
