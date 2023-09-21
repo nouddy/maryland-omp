@@ -62,6 +62,11 @@ new fPoliceRanks[MAX_POLICE][3][MAX_RANK_NAME];
 
 new fCreatingID[MAX_PLAYERS] = -1;
 
+new italy_Area1, italy_Area2, egypt_Area1, egypt_Area2;
+
+new Text3D:dutyLabel[MAX_POLICE];
+new dutyPickup[MAX_POLICE];
+
 //============================================================ Boze Pomozi
 
 stock GetPoliceType(id) {
@@ -79,6 +84,12 @@ stock GetPoliceType(id) {
 hook OnGameModeInit()
 {
     print("backend/faction_police.script loaded");
+
+    italy_Area1 = CreateDynamicRectangle(-2160, -893, -1320, 1575, -1, -1, -1);
+    italy_Area2 = CreateDynamicRectangle(-3000, -884.5, -2156, 2539.5, -1, -1, -1);
+    
+    egypt_Area1 = CreateDynamicRectangle(-863, 575, 3001, 1703, -1, -1, -1);
+    egypt_Area2 = CreateDynamicRectangle(-2096, 1700, 3000, 3000, -1, -1, -1);
 
     mysql_tquery(SQL, "SELECT * FROM `faction_police`", "PoliceLoad", "");
 }
@@ -139,11 +150,14 @@ public PoliceLoad()
         cache_get_value_name_int(i, "fPoliceSkins4", fPoliceInfo[i][fPoliceSkins][3]);
 
         new tmp_str[420];
-        format(tmp_str, sizeof tmp_str, ""c_server"%s \187; "c_white"%d\n "c_server"Tip \187; "c_white"%s\n"c_server"Adresa \187; "c_white"%s", fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceID], fPoliceInfo[i][fPoliceAdress]);
+        format(tmp_str, sizeof tmp_str, ""c_server"%s \187; "c_white"%d\n "c_server"Tip \187; "c_white"%s\n"c_server"Adresa \187; "c_white"%s", fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceID], GetPoliceType(i), fPoliceInfo[i][fPoliceAdress]);
 
         fPoliceInfo[i][fPolicePickup] = CreatePickup(1581, 1, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2], 0);
         fPoliceInfo[i][fPoliceLabel] = Create3DTextLabel(tmp_str, -1, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2], 3.0, 0);
     
+        dutyLabel[i] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete opremu pritisnite "c_server"'N'", -1, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2], 4.5, -1);
+        dutyPickup[i] = CreatePickup(334, 1, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2], -1);
+
         Iter_Add(iter_Police, i);
     }
     printf("\n[State Factions]: %d Factions ucitano.\n",rows);
@@ -158,14 +172,41 @@ public CreatePolice(id) {
 
     new tmp_str[420];
 
-    // TU sm brzo
-
-     format(tmp_str, sizeof tmp_str, ""c_server"%s \187; "c_white"%d\n "c_server"Tip \187; "c_white"%s\n"c_server"Adresa \187; "c_white"%s", fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceID], fPoliceInfo[i][fPoliceAdress]);
+    format(tmp_str, sizeof tmp_str, ""c_server"%s \187; "c_white"%d\n "c_server"Tip \187; "c_white"%s\n"c_server"Adresa \187; "c_white"%s", fPoliceInfo[id][fPoliceName], fPoliceInfo[id][fPoliceID], GetPoliceType(id), fPoliceInfo[id][fPoliceAdress]);
 
     fPoliceInfo[id][fPolicePickup] = CreatePickup(1581, 1, fPoliceInfo[id][fPoliceEntrance][0], fPoliceInfo[id][fPoliceEntrance][1], fPoliceInfo[id][fPoliceEntrance][2], 0);
     fPoliceInfo[id][fPoliceLabel] = Create3DTextLabel(tmp_str, -1, fPoliceInfo[id][fPoliceEntrance][0], fPoliceInfo[id][fPoliceEntrance][1], fPoliceInfo[id][fPoliceEntrance][2], 3.0, 0);
 
     return 1;
+}
+
+forward CreateDutyPoint(id);
+public CreateDutyPoint(id) {
+
+    dutyLabel[id] = Create3DTextLabel(""c_server"[ DUTY POINT ]\n"c_white"Da uzmete duznost pritisnite "c_server"'N'", -1, fPoliceInfo[id][fDutyPoint][0], fPoliceInfo[id][fDutyPoint][1], fPoliceInfo[id][fDutyPoint][2], 4.5, -1);
+    dutyPickup[id] = CreatePickup(334, 1, fPoliceInfo[id][fDutyPoint][0], fPoliceInfo[id][fDutyPoint][1], fPoliceInfo[id][fDutyPoint][2], -1);
+
+    return 1;
+}
+
+stock PoliceStateCheck(playerid) {
+
+    new fpID = fCreatingID[playerid];
+    new str_state[30];
+
+    if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
+        
+        format(str_state, sizeof str_state, "Little Italy");
+    }
+    
+    else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
+
+        format(str_state, sizeof str_state, "Egypt");
+    }
+    
+    else { format(str_state, sizeof str_state, "Maryland"); }
+
+    return strmid(fPoliceInfo[fpID][fPoliceState], str_state, 0, sizeof(str_state), 255);
 }
 
 Dialog:dialog_createPolice(const playerid, response, listitem, string:inputtext[]) {
@@ -363,21 +404,26 @@ Dialog:dialog_policeAccept(const playerid, response, listitem, string:inputtext[
         new Float:pPos[3];
 
         GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+        PoliceStateCheck(playerid);
 
         new zone[28], add[35];
         GetPlayer2DZone(playerid, zone, sizeof(zone));
-        format(add, sizeof(add), "%s, Maryland", zone);
+        format(add, sizeof(add), "%s, %s", fPoliceInfo[fpID][fPoliceState]);
         strmid(fPoliceInfo[fpID][fPoliceAdress], add, 0, sizeof(add), 255);
 
         fPoliceInfo[fpID][fPoliceEntrance][0] = pPos[0];
         fPoliceInfo[fpID][fPoliceEntrance][1] = pPos[1];
         fPoliceInfo[fpID][fPoliceEntrance][2] = pPos[2];
 
+        fPoliceInfo[fpID][fPoliceExit][0] = 246.66;
+        fPoliceInfo[fpID][fPoliceExit][1] = 65.80;
+        fPoliceInfo[fpID][fPoliceExit][2] = 1003.64;
+
         new query[789];
-        mysql_format(SQL, query, sizeof query, "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, \
+        mysql_format(SQL, query, sizeof query, "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, \
                                                 `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) \
-                                                VALUES ('%e', '%e', '%e', '%i', '%f', '%f', '%f', '%e', '%e', '%e', '%i', '%i', '%i', '%i')", 
-                                                fPoliceInfo[fpID][fPoliceName], fPoliceInfo[fpID][fPoliceShortName], fPoliceInfo[fpID][fPoliceAdress],
+                                                VALUES ('%e', '%e', '%e', '%e', '%i', '%f', '%f', '%f', '%e', '%e', '%e', '%i', '%i', '%i', '%i')", 
+                                                fPoliceInfo[fpID][fPoliceName], fPoliceInfo[fpID][fPoliceShortName], fPoliceInfo[fpID][fPoliceAdress], fPoliceInfo[fpID][fPoliceState],
                                                 fPoliceInfo[fpID][fPoliceType], fPoliceInfo[fpID][fPoliceEntrance][0], fPoliceInfo[fpID][fPoliceEntrance][1],
                                                 fPoliceInfo[fpID][fPoliceEntrance][2], fPoliceRanks[fpID][0], fPoliceRanks[fpID][1], fPoliceRanks[fpID][2], 
                                                 fPoliceInfo[fpID][fPoliceSkins][0], fPoliceInfo[fpID][fPoliceSkins][1], fPoliceInfo[fpID][fPoliceSkins][2], fPoliceInfo[fpID][fPoliceSkins][3]);
@@ -386,4 +432,63 @@ Dialog:dialog_policeAccept(const playerid, response, listitem, string:inputtext[
     }
 
     return 1;
+}
+
+Dialog:dialog_policeEdit(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    switch(listitem) {
+
+        case 0: {
+
+            Dialog_Show(playerid, "dialog_createDuty", DIALOG_STYLE_INPUT, 
+                                                       "Police - Duty Point", "Unesi ID Policije za koju zelite napraviti 'Duty Point'",
+                                                       "Unesi", "Ok"
+            );
+        }
+
+        case 1: {
+
+            Dialog_Show(playerid, "dialog_createEqu", DIALOG_STYLE_INPUT, 
+                                                       "Police - Equipment Point", "Unesi ID Policije za koju zelite napraviti 'Equipment Point'",
+                                                       "Unesi", "Ok"
+            );
+        }
+
+        case 2: {
+
+            Dialog_Show(playerid, "dialog_changeType", DIALOG_STYLE_LIST, 
+                                                       "Police - Type", "Saobracajna Policija\nPolicija",
+                                                       "Odaberi", "Ok"
+            );
+        }
+    }
+    return 1;
+}
+
+Dialog:dialog_createDuty(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    new Float:pPos[3], fpID;
+
+    if(sscanf(inputtext, "i", fpID))
+        return Dialog_Show(playerid, "dialog_createDuty", DIALOG_STYLE_INPUT, 
+                                                       "Police - Duty Point", "Unjeli ste krivi ID Policije!\nUnesi ISPRAVAN ID Policije za koju zelite napraviti 'Duty Point'",
+                                                       "Unesi", "Ok"
+                );
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    fPoliceInfo[fpID][fDutyPoint][0] = pPos[0];
+    fPoliceInfo[fpID][fDutyPoint][1] = pPos[1];
+    fPoliceInfo[fpID][fDutyPoint][2] = pPos[2];
+
+    new queryS[450];
+    mysql_format(SQL, queryS, sizeof queryS, "UPDATE `faction_police` SET `fDutyPointX` = '%f', `fDutyPointY` = '%f', `fDutyPointZ` = '%f' WHERE `fPoliceID` = '%i'",
+                                              fPoliceInfo[fpID][fDutyPoint][0], fPoliceInfo[fpID][fDutyPoint][1], fPoliceInfo[fpID][fDutyPoint][2], fpID);
+    mysql_tquery(SQL, queryS, "CreateDutyPoint", "i", fpID);
+    return true;
 }

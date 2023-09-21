@@ -160,44 +160,28 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		    SafeZonaKreiraID[playerid] = -1;
 		    SendClientMessage(playerid, x_server, "Uspesno si napravio safe zonu.");
 		}
-    }
-	return (true);
-}
 
-hook OnPlayerGiveDamage(playerid, damagedid, Float: amount, weaponid)
-{
- 	new Float:php;
-    foreach(new Sz : SafeZone)
-    {
-		if(InSafeZone[playerid])
-		{// If Player In Safe Zone
-			if(!IsPlayerAdmin(playerid))
+		if(!IsPlayerAdmin(playerid))
+		{
+			if(InSafeZone[playerid]) 
 			{
-				GameTextForPlayer(playerid, ""c_red"IGRAC JE U SAFE ZONI", 5000, 3);
-				TogglePlayerControllable(playerid, false);
-				SetTimerEx("ZonaReload", 5000, false, "i", playerid);
-				GetPlayerHealth(playerid, php);
-				SetPlayerHealth(playerid, php-amount*2);
-			}
-		}
-		if(!InSafeZone[playerid])
-		{//if Player outside safe zone and damagedid inside safe zone
-			if(InSafeZone[playerid])
-			{
-				if(!IsPlayerAdmin(playerid))
-				{
-					GameTextForPlayer(playerid, ""c_red"IGRAC JE U SAFE ZONI", 5000, 3);
+
+				if(!IsPlayerInAnyVehicle(playerid)) {
+
+
+					GameTextForPlayer(playerid, "NE TUCI SE U SAFE ZONI!!!", 5000, 3);
 					TogglePlayerControllable(playerid, false);
+
+					new Float:pPos[3];
+					GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+					SetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]+2.0);
 					SetTimerEx("ZonaReload", 5000, false, "i", playerid);
-					GetPlayerHealth(playerid,php);
-					SetPlayerHealth(playerid,php-70);
 				}
 			}
 		}
-	}
- 	return 1;
+    }
+	return (true);
 }
-
 
 forward ZonaReload(playerid);
 public ZonaReload(playerid)

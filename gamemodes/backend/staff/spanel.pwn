@@ -96,7 +96,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu\nActor Banker\nBankomat\nBiznis\nMetro Stanica",
+					"Kucu\nActor Banker\nBankomat\nBiznis\nMetro Stanica\nPolicija",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
@@ -385,6 +385,10 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 				if(id == -1)
 					return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nema metroa u blizini");
 				Dialog_Show(playerid, "dialog_izmenistanicu", DIALOG_STYLE_LIST, "metro Stanica - izmena", "Ruta1\nRuta2\nRuta3\nRuta5\nRuta5\n", "Dalje", "Izlaz");
+			}
+			case 5: {
+
+				Dialog_Show(playerid, "dialog_policeEdit", DIALOG_STYLE_LIST, "Police Department - izmena", "Napravi Duty Point\nNapravi Equipment Point\nPromjeni Tip", "Odaberi", "Odustani");
 			}
 		}
 	}

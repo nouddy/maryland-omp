@@ -192,12 +192,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 {
 	return 0;
 }
-/*
-public OnPlayerText(playerid, text[])
-{
-	return (true);
-}
-*/
+
 public OnPlayerUpdate(playerid)
 {
 	return 1;

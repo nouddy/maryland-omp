@@ -108,3 +108,76 @@
 [9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
 [9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
 [9/20/2023 9:33:07 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 4:19:10 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 4:19:10 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 4:19:11 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 4:19:11 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 4:19:11 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 4:24:02 PM] [ERROR] error #1064 while executing query "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState` `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES ('Palicija Mehmedagici', 'PMHD', 'Santa Flora, Maryland', '77', '0.000000', '-2654.984375', '638.953735', 'Ag@', 'Rank1', 'Rank2', '82', '109', '102', '103')": You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '`fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceRank1`, `fPoliceRa...' at line 1
+[9/21/2023 4:50:18 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 4:50:18 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 4:50:18 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 4:50:18 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 4:50:18 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 4:51:41 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 4:51:41 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 4:51:41 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 4:51:41 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 4:51:41 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 4:53:37 PM] [ERROR] error #1136 while executing query "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES ('Palicija Muhamedagici', 'PHMD', 'Doherty, Maryland', '77', '0.000000', '-2128.135254', '33.828609', 'B°', 'Officir', 'Kadet-Bradet', '69', '109', '220', '211')": Column count doesn't match value count at row 1
+[9/21/2023 4:57:56 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 4:57:56 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 4:57:56 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 4:57:56 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 4:57:56 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:02:47 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 5:02:47 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 5:02:47 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 5:02:47 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 5:02:47 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:11:27 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 5:11:28 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 5:11:28 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 5:11:28 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 5:11:28 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:14:31 PM] [ERROR] error #1062 while executing query "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES ('Ferid Police Muhamedagici', 'FPD', 'Juniper Hill, Maryland', 'Maryland', '1', '-2442.607910', '754.789307', '35.171875', 'Rank1', 'Rank2', 'Rank3', '101', '102', '103', '294')": Duplicate entry '0' for key 'fPoliceBoss'
+[9/21/2023 5:16:22 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 5:16:22 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 5:16:22 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 5:16:22 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 5:16:22 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:23:19 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 5:23:19 PM] [ERROR] error #1146 while executing query "SELECT * FROM `job_vehicles`": Table 'maryland.job_vehicles' doesn't exist
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 5:23:19 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 5:29:44 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 5:29:44 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 7:43:36 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 7:43:36 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:16:43 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:16:43 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:16:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 8:16:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 8:16:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 8:25:43 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:25:43 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:25:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 8:25:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 8:25:43 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 8:25:58 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:25:59 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:25:59 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitX' not found
+[9/21/2023 8:25:59 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitY' not found
+[9/21/2023 8:25:59 PM] [ERROR] cache_get_value_name_float: field 'fPoliceExitZ' not found
+[9/21/2023 8:29:19 PM] [ERROR] mysql_tquery: callback error: parameter count does not match format specifier length
+[9/21/2023 8:33:13 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:33:14 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:35:32 PM] [ERROR] mysql_tquery: callback error: parameter count does not match format specifier length
+[9/21/2023 8:36:41 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:36:41 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/21/2023 8:42:45 PM] [WARNING] mysql_connect: no password specified
+[9/21/2023 8:42:45 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
