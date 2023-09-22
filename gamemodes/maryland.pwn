@@ -652,6 +652,7 @@ YCMD:restart(playerid, const string: params[], help)
 #include "frontend/exterior/ml-gym.pwn"							//* ML Gym Map
 #include "frontend/exterior/ls-ukrasi.pwn"						//* ML Ukrasi po gradu
 #include "frontend/exterior/ml-busvozac.pwn"					//* ML Bus Station
+#include "frontend/exterior/ml-zlatara.pwn"						//* ML Zlatara
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
 #include "frontend/exterior/italy_zicara.pwn"					//* Zicara u Italy (SF)

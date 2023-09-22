@@ -16,7 +16,7 @@ Object_IsLarge( id ) {
 
 Object_IsMedium( id ) {
 	switch( id ) {
-		case 18981, 19377, 18766: return true;
+		case 18981, 19377, 4141, 4033, 10377, 10376, 9915, 10381, 18766: return true;
 	}
 	return false;
 }
