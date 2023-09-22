@@ -189,6 +189,15 @@ public CreateDutyPoint(id) {
     return 1;
 }
 
+forward CreateEquPoint(id);
+public CreateEquPoint(id) {
+
+    dutyLabel[id] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete equipment pritisnite "c_server"'N'", -1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], 4.5, -1);
+    dutyPickup[id] = CreatePickup(19773, 1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], -1);
+
+    return 1;
+}
+
 stock PoliceStateCheck(playerid) {
 
     new fpID = fCreatingID[playerid];
@@ -490,5 +499,30 @@ Dialog:dialog_createDuty(const playerid, response, listitem, string:inputtext[])
     mysql_format(SQL, queryS, sizeof queryS, "UPDATE `faction_police` SET `fDutyPointX` = '%f', `fDutyPointY` = '%f', `fDutyPointZ` = '%f' WHERE `fPoliceID` = '%i'",
                                               fPoliceInfo[fpID][fDutyPoint][0], fPoliceInfo[fpID][fDutyPoint][1], fPoliceInfo[fpID][fDutyPoint][2], fpID);
     mysql_tquery(SQL, queryS, "CreateDutyPoint", "i", fpID);
+    return true;
+}
+
+Dialog:dialog_createEqu(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    new Float:pPos[3], fpID;
+
+    if(sscanf(inputtext, "i", fpID))
+        return Dialog_Show(playerid, "dialog_createEqu", DIALOG_STYLE_INPUT, 
+                                                       "Police - Equipment Point", "Unjeli ste krivi ID Policije!\nUnesi ISPRAVAN ID Policije za koju zelite napraviti 'Equipment Point'",
+                                                       "Unesi", "Ok"
+                );
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    fPoliceInfo[fpID][fEquipment][0] = pPos[0];
+    fPoliceInfo[fpID][fEquipment][1] = pPos[1];
+    fPoliceInfo[fpID][fEquipment][2] = pPos[2];
+
+    new queryS[450];
+    mysql_format(SQL, queryS, sizeof queryS, "UPDATE `faction_police` SET `fEquipmentX` = '%f', `fEquipmentY` = '%f', `fEquipmentZ` = '%f' WHERE `fPoliceID` = '%i'",
+                                              fPoliceInfo[fpID][fEquipment][0], fPoliceInfo[fpID][fEquipment][1], fPoliceInfo[fpID][fEquipment][2], fpID);
+    mysql_tquery(SQL, queryS, "CreateEquPoint", "i", fpID);
     return true;
 }

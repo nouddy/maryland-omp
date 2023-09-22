@@ -247,6 +247,7 @@ stock GetSpeed(playerid) {
     ST[ 3 ] = floatsqroot(floatpower(floatabs(ST[ 0 ]), 2.0) + floatpower(floatabs(ST[ 1 ]), 2.0) + floatpower(floatabs(ST[ 2 ]), 2.0)) * 178.8617875;
     return floatround( ST[ 3 ] );
 }
+
 ReturnVehicleModelName(model)
 {
     new

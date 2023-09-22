@@ -492,3 +492,43 @@ YCMD:setstaff(playerid, const string: params[], help)
 	
     return 1;
 }
+
+YCMD:restart(playerid, const string: params[], help)
+{
+	if(!IsPlayerAdmin(playerid))
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	SendRconCommand("gmx");
+
+    return 1;
+}
+
+YCMD:slap(playerid, const params[], help)
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda da slapate igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+
+	new targetid;
+
+	if(sscanf(params, "u", targetid)) return notification.Show(playerid, "KORISCENJE", "/slap [id]", "?", BOXCOLOR_BLUE);
+
+	if(targetid == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru", "!", BOXCOLOR_RED);
+	if(targetid == playerid) return notification.Show(playerid, "GRESKA", "Ne mozes slapati samog sebe", "!", BOXCOLOR_RED);
+
+	new Float:pPos[3];
+
+	GetPlayerPos(targetid, pPos[0], pPos[1], pPos[2]);
+
+	SetPlayerPos(targetid, pPos[0], pPos[1], pPos[2]+5);
+
+	va_SendClientMessage(targetid, x_ogyColour, "SLAP > {ffffff}%s vas je slapao.",ReturnPlayerName(playerid));
+	va_SendClientMessage(playerid, x_ogyColour, "SLAP > {ffffff}Slapao si igraca %s.",ReturnPlayerName(targetid));
+
+	return 1;
+}
