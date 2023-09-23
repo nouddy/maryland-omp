@@ -31,10 +31,10 @@ hook OnGameModeInit()
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
-	if(playertextid == Register_PTD[playerid][50])
+	if(playertextid == Register_PTD[playerid][59])
 	{
 		if(RegisterPass[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vec ste popunili ovo polje.");
+			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
 
 		Dialog_Show(playerid, "dialog_regpassword", DIALOG_STYLE_INPUT,
 					"Registracija",
@@ -42,10 +42,10 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					"Potvrdi", "Izlaz", ReturnPlayerName(playerid)
 				);		
 	}
-	else if(playertextid == Register_PTD[playerid][49]) // email
+	else if(playertextid == Register_PTD[playerid][58]) // email
 	{
 		if(RegisterEmail[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vec ste popunili ovo polje.");
+			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
 
 
 		Dialog_Show(playerid, "dialog_reggmail", DIALOG_STYLE_INPUT,
@@ -53,11 +53,12 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Upisite vas email, sa kojim cete u slucaju gubitka akaunta vratiti isti.",
 			"Unesi", "Izlaz"
 			);
+
 	}
-	else if(playertextid == Register_PTD[playerid][51]) // drzava
+	else if(playertextid == Register_PTD[playerid][61]) // drzava
 	{
 		if(RegisterDrzava[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vec ste popunili ovo polje.");
+			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
 
 
 		Dialog_Show(playerid, "dialog_regdrzava", DIALOG_STYLE_LIST,
@@ -66,10 +67,10 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Unesi", "Izlaz"
 			);
 	}	
-	else if(playertextid == Register_PTD[playerid][52])
+	else if(playertextid == Register_PTD[playerid][60])
 	{
 		if(RegisterGodine[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vec ste popunili ovo polje.");
+			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
 
 
 		Dialog_Show(playerid, "dialog_regages", DIALOG_STYLE_INPUT,
@@ -77,11 +78,12 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Koliko imate godina: ",
 			"Unesi", "Izlaz"
 			);
+
 	}
-	else if(playertextid == Register_PTD[playerid][53]) // pol
+	else if(playertextid == Register_PTD[playerid][62]) // pol
 	{
 		if(RegisterPol[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vec ste popunili ovo polje.");
+			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
 
 
 		Dialog_Show(playerid, "dialog_regpol", DIALOG_STYLE_LIST,
@@ -89,26 +91,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			"Musko\nZensko",
 			"Unesi", "Izlaz"
 			);
-	}
-	else if(playertextid == Register_PTD[playerid][55])
-	{
-		if(!RegisterPol[playerid] || !RegisterPass[playerid] || !RegisterEmail[playerid] || !RegisterDrzava[playerid] || !RegisterGodine[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Nesto od ponudjenih delova registera niste popunili.");
 
-
-		if(Registered[playerid])
-			return SendClientMessage(playerid, x_ogyColour, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
-
-		CreatePlayerRegister(playerid, false);
-		new query[550];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
-			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
-		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
-
-
-		Registered[playerid] = true;
-		defer Register_Player(playerid);
 	}
 	else if(playertextid == OdabirSkina_PTD[playerid][3]) // sesir promeni samo ono sranje td
 	{	

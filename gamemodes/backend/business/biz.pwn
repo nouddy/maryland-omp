@@ -673,9 +673,9 @@ Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
                     id = -1;
 
                 if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1 && Business_IsOwner(playerid, id)) {
-                    va_SendClientMessage(playerid, x_ogyColour,"ID: %d | Business: %s | Products: %d | Vault: %s", id, BusinessData[id][bizName], BusinessData[id][bizProducts], FormatNumber(BusinessData[id][bizVault]));
+                    va_SendClientMessage(playerid, x_ltorange,"ID: %d | Business: %s | Products: %d | Vault: %s", id, BusinessData[id][bizName], BusinessData[id][bizProducts], FormatNumber(BusinessData[id][bizVault]));
                 }
-                else SendClientMessage(playerid, x_ogyColour,"You are not in range of your business.");
+                else SendClientMessage(playerid, x_ltorange,"You are not in range of your business.");
             }
             case 1:
             {
@@ -692,7 +692,7 @@ Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
                             Business_Refresh(id);
                             Business_Save(id);
 
-                            SendClientMessage(playerid, x_ogyColour, "> Zakljucali ste biznis.");
+                            SendClientMessage(playerid, x_ltorange, "> Zakljucali ste biznis.");
                             PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
                         }
                         else
@@ -702,7 +702,7 @@ Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
                             Business_Refresh(id);
                             Business_Save(id);
 
-                            SendClientMessage(playerid, x_ogyColour, "> Otkljucali ste biznis.");
+                            SendClientMessage(playerid, x_ltorange, "> Otkljucali ste biznis.");
                             PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
                         }
                     }
@@ -715,7 +715,7 @@ Dialog:dialog_biznis(const playerid, response, listitem, string:inputtext[])
                 if ((id = Business_Inside(playerid)) != -1 && Business_IsOwner(playerid, id)) {
                     Business_ProductMenu(playerid, id);
                 }
-                else SendClientMessage(playerid, x_ogyColour,"Niste u enterijeru biznisa.");
+                else SendClientMessage(playerid, x_ltorange,"Niste u enterijeru biznisa.");
             }
             case 3:
             {
@@ -764,7 +764,7 @@ Dialog:dialog_biznisname(const playerid, response, listitem, string: inputtext[]
             Business_Refresh(id);
             Business_Save(id);
 
-            va_SendClientMessage(playerid, x_ogyColour,"> Business name set to: \"%s\".", inputtext);
+            va_SendClientMessage(playerid, x_ltorange,"> Business name set to: \"%s\".", inputtext);
         }
     }
     return (true);
@@ -788,14 +788,14 @@ Dialog:dialog_biznismsg(const playerid, response, listitem, string:inputtext[])
                 BusinessData[id][bizMessage][0] = '\0';
 
                 Business_Save(id);
-                SendClientMessage(playerid, x_ogyColour,"> You have removed the business message.");
+                SendClientMessage(playerid, x_ltorange,"> You have removed the business message.");
             }
             else
             {
                 format(BusinessData[id][bizMessage], 128, inputtext);
 
                 Business_Save(id);
-                va_SendClientMessage(playerid, x_ogyColour,"> Business message set to: \"%s\".", inputtext);
+                va_SendClientMessage(playerid, x_ltorange,"> Business message set to: \"%s\".", inputtext);
             }
         }
     }
@@ -842,7 +842,7 @@ YCMD:kupibiznis(const playerid, params[], help)
     Business_Save(id);
 
     VosticGiveMoney(playerid, -BusinessData[id][bizPrice]);
-    va_SendClientMessage(playerid, x_ogyColour,"You have purchased \"%s\" for %s!", BusinessData[id][bizName], FormatNumber(BusinessData[id][bizPrice]));
+    va_SendClientMessage(playerid, x_ltorange,"You have purchased \"%s\" for %s!", BusinessData[id][bizName], FormatNumber(BusinessData[id][bizPrice]));
 
     //ShowPlayerFooter(playerid, "You have ~g~purchased~w~ a business!");
     return (true);

@@ -26,7 +26,7 @@
 	va_SendClientMessage(%0, x_red, "[!/Error]: {FFFFFF}"%1) 
 
 #define SendJobMessage(%0,%1) \
-	va_SendClientMessage(%0, x_ogyColour, "[?/Job]: {FFFFFF}"%1)
+	va_SendClientMessage(%0, x_ltorange, "[?/Job]: {FFFFFF}"%1)
 
 #define SendInfoMessage(%0,%1) \
 	va_SendClientMessage(%0, x_server, "» » MARYLAND: {FFFFFF}"%1)
@@ -44,7 +44,7 @@ new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za
 new Text:Global_TD[40];
 new Text:MarylandLogo[30];
 new PlayerText:Player_TDs[MAX_PLAYERS][8];
-new PlayerText:Register_PTD[MAX_PLAYERS][77];
+new PlayerText:Register_PTD[MAX_PLAYERS][70];
 new PlayerText:OdabirSkina_PTD[MAX_PLAYERS][9];
 
 
@@ -58,6 +58,8 @@ new bool:RegisterPol[MAX_PLAYERS],
     bool:RegisterDrzava[MAX_PLAYERS],
     bool:Registered[MAX_PLAYERS],
     bool:OnRegisterSkinLoad[MAX_PLAYERS];
+
+new bool:choosingSkin[MAX_PLAYERS];
 
 
 hook OnPlayerConnect(playerid)

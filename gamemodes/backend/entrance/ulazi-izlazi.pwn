@@ -42,7 +42,7 @@ public UlaziIzlazi(playerid)
         SetCameraBehindPlayer(playerid);
 
         if (strlen(BusinessData[id][bizMessage]) && strcmp(BusinessData[id][bizMessage], "NULL", true)) {
-            SendClientMessage(playerid, x_ogyColour, BusinessData[id][bizMessage]);
+            SendClientMessage(playerid, x_ltorange, BusinessData[id][bizMessage]);
         }
         return 1;
     }

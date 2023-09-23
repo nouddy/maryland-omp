@@ -1119,7 +1119,7 @@ CMD:banka(const playerid, params[])
         {
             TextDrawShowForPlayer(playerid, BankLoginTD[i]);
         }
-        SelectTextDraw(playerid, x_ogyColour);
+        SelectTextDraw(playerid, x_ltorange);
         GledaLoginTD[playerid] = true;  
     }
     if(GledaLoginTD[playerid])
@@ -1415,7 +1415,7 @@ public BuildBankAccountTDs(const playerid, bool: show)
         for(new i = 0; i < 16; i++) { PlayerTextDrawShow(playerid, BankAccountPTD[playerid][i]); }
         GledaBankaAcc[playerid] = true;
 
-        SelectTextDraw(playerid, x_ogyColour);
+        SelectTextDraw(playerid, x_ltorange);
 
         StringBankTDs(playerid);
     }

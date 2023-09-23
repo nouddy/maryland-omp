@@ -227,3 +227,26 @@ GetPlayerSQLID(playerid)
 {
 	return (PlayerInfo[playerid][SQLID]);
 }
+
+FormatNumber(number, const prefix[] = "$")
+{
+	static
+		value[32],
+		length;
+
+	format(value, sizeof(value), "%d", (number < 0) ? (-number) : (number));
+
+	if ((length = strlen(value)) > 3)
+	{
+		for (new i = length, l = 0; --i >= 0; l ++) {
+		    if ((l > 0) && (l % 3 == 0)) strins(value, ",", i + 1);
+		}
+	}
+	if (prefix[0] != 0)
+	    strins(value, prefix, 0);
+
+	if (number < 0)
+		strins(value, "-", 0);
+
+	return value;
+}

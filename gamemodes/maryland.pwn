@@ -68,7 +68,7 @@
 #define     c_orange        "{ffa200}"
 #define     c_greey         "{787878}"
 #define     c_purple        "{C2A2DA}"
-#define 	c_ogyColour		"{EB8C6C}"
+#define 	c_ltorange		"{EB8C6C}"
 
 #define     x_server     0x8DC9F3FF
 #define     x_server2    0xC092DEFF
@@ -82,7 +82,7 @@
 #define     x_orange     0xffa200AA
 #define     x_greey      0x787878AA
 #define     x_purple     0xC2A2DAAA 
-#define 	x_ogyColour	 0xEB8C6CFF
+#define 	x_ltorange	 0xEB8C6CFF
 
 main()
 {
@@ -121,6 +121,12 @@ public OnGameModeInit()
 	AllowInteriorWeapons(true);
 	EnableVehicleFriendlyFire();
 	EnableStuntBonusForAll(false);	
+
+
+	new vehicle = CreateVehicle(562, 1282.8285,1566.7600,100.9567, 90.0, 3, 3, 1500);
+	SetVehicleVirtualWorld(vehicle, 1);
+
+	printf("VEHICLE VW - %d", GetVehicleVirtualWorld(vehicle));
 
 	return 1;
 }

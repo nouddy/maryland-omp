@@ -69,7 +69,7 @@ public SendPlayerNotify(playerid,const naslov[], const poruka[], id_simbola) // 
         PlayerNotifyTimer[playerid] = SetTimerEx("UgasiNotifyIgracu", 8000, false, "i", playerid);
 
     }
-    else return SendClientMessage(playerid, x_ogyColour, poruka);
+    else return SendClientMessage(playerid, x_ltorange, poruka);
     return 1;
 }
 forward UgasiNotifyIgracu(playerid);

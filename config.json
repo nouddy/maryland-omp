@@ -80,7 +80,7 @@
         "main_scripts": [
             "maryland 1"
         ],
-        "side_scripts": []
+        "side_scripts": ["filterscripts/cameditor"]
     },
     "rcon": {
         "allow_teleport": false,

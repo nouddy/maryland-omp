@@ -146,8 +146,9 @@ YCMD:sveh(playerid, params[], help)
 		if (400 > modelid > 611)
 			return SendPlayerNotify(playerid, "Greska", "Invalid model vozila 400 - 611", 1);
 
-		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z, 0.0, 1, 0, -1);
+		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z+2.0, 0.0, 1, 0, -1);
 
+		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(playerid));
 		SetVehicleNumberPlate(vehicleid, "STAFF");
 		PutPlayerInVehicle(playerid, vehicleid, 0);
 		ChangeVehicleColours(vehicleid, 0, 0);
@@ -410,19 +411,19 @@ YCMD:setint(const playerid, params[], help)
 {
 	if(help)
     {
-        SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}Postavka igracevog interijera.");
+        SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}Postavka igracevog interijera.");
         return 1;
     }
 	if (PlayerInfo[playerid][Staff] < 1)
 		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
 
 	new id,int;
-	if(sscanf(params, "ii", id, int)) return SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}/setint id igraca id interior");
+	if(sscanf(params, "ii", id, int)) return SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}/setint id igraca id interior");
  
 	SetPlayerInterior(id, int);
 
-	va_SendClientMessage(playerid, x_ogyColour, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",ReturnPlayerName(id),int);
-	va_SendClientMessage(id, x_ogyColour, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",ReturnPlayerName(playerid),int);
+	va_SendClientMessage(playerid, x_ltorange, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",ReturnPlayerName(id),int);
+	va_SendClientMessage(id, x_ltorange, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",ReturnPlayerName(playerid),int);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -433,12 +434,12 @@ YCMD:setvw(const playerid, params[], help)
 		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
 	
 	new id,vw;
-	if(sscanf(params, "ii", id, vw)) return SendClientMessage(playerid, x_ogyColour, "[Syntax]: {ffffff}/setvw id igraca id interior");
+	if(sscanf(params, "ii", id, vw)) return SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}/setvw id igraca id interior");
  
 	SetPlayerVirtualWorld(id, vw);
 
-	va_SendClientMessage(playerid, x_ogyColour, "[SET-VW]: > {ffffff}Postavili ste igracu(%s) virtual world(%d)",ReturnPlayerName(id),vw);
-	va_SendClientMessage(id, x_ogyColour, "[SET-VW]: > {ffffff}%s vam je podesio virtual world(%d)",ReturnPlayerName(playerid),vw);
+	va_SendClientMessage(playerid, x_ltorange, "[SET-VW]: > {ffffff}Postavili ste igracu(%s) virtual world(%d)",ReturnPlayerName(id),vw);
+	va_SendClientMessage(id, x_ltorange, "[SET-VW]: > {ffffff}%s vam je podesio virtual world(%d)",ReturnPlayerName(playerid),vw);
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -527,8 +528,8 @@ YCMD:slap(playerid, const params[], help)
 
 	SetPlayerPos(targetid, pPos[0], pPos[1], pPos[2]+5);
 
-	va_SendClientMessage(targetid, x_ogyColour, "SLAP > {ffffff}%s vas je slapao.",ReturnPlayerName(playerid));
-	va_SendClientMessage(playerid, x_ogyColour, "SLAP > {ffffff}Slapao si igraca %s.",ReturnPlayerName(targetid));
+	va_SendClientMessage(targetid, x_ltorange, "SLAP > {ffffff}%s vas je slapao.",ReturnPlayerName(playerid));
+	va_SendClientMessage(playerid, x_ltorange, "SLAP > {ffffff}Slapao si igraca %s.",ReturnPlayerName(targetid));
 
 	return 1;
 }

@@ -1877,7 +1877,7 @@ stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
             printf("%.3f",kolicina / dobija);
             PlayerCrypto[playerid][countBTC] += kolicina / dobija;
 
-            va_SendClientMessage(playerid, x_ogyColour, "%.3f",kolicina / dobija);
+            va_SendClientMessage(playerid, x_ltorange, "%.3f",kolicina / dobija);
 
             transactionsBTC++;
             transactions++;
@@ -1890,7 +1890,7 @@ stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
             printf("%.3f",kolicina / dobija);
             PlayerCrypto[playerid][countLTC] += kolicina / dobija;
 
-            va_SendClientMessage(playerid, x_ogyColour, "%.3f",kolicina / dobija);
+            va_SendClientMessage(playerid, x_ltorange, "%.3f",kolicina / dobija);
 
             transactionsLTC++;
             transactions++;
@@ -1904,7 +1904,7 @@ stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
             printf("%.3f",kolicina / dobija);
             PlayerCrypto[playerid][countDOT] += kolicina / dobija;
 
-            va_SendClientMessage(playerid, x_ogyColour, "%.3f",kolicina / dobija);
+            va_SendClientMessage(playerid, x_ltorange, "%.3f",kolicina / dobija);
 
             transactionsDOT++;
             transactions++;
@@ -1918,7 +1918,7 @@ stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
             printf("%.3f",kolicina / dobija);
             PlayerCrypto[playerid][countXRP] += kolicina / dobija;
 
-            va_SendClientMessage(playerid, x_ogyColour, "%.3f",kolicina / dobija);
+            va_SendClientMessage(playerid, x_ltorange, "%.3f",kolicina / dobija);
 
             transactionsXRP++;
             transactions++;
@@ -1932,7 +1932,7 @@ stock CalculatorCryptoPlayer(const playerid, kolicina, idcrypta)
             printf("%.3f",kolicina / dobija);
             PlayerCrypto[playerid][countUSDT] += kolicina / dobija;
 
-            va_SendClientMessage(playerid, x_ogyColour, "%.3f",kolicina / dobija);
+            va_SendClientMessage(playerid, x_ltorange, "%.3f",kolicina / dobija);
 
             transactionsUSDT++;
             transactions++;

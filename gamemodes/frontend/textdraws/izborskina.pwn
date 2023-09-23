@@ -124,7 +124,7 @@ stock IzborSkinaTextDraws(playerid, bool:show)
 
         for(new izz = 0; izz < 9; izz++) { PlayerTextDrawShow(playerid, OdabirSkina_PTD[playerid][izz]); }
 
-        SelectTextDraw(playerid, x_ogyColour);
+        SelectTextDraw(playerid, x_ltorange);
 
     }
     else

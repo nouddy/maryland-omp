@@ -27,6 +27,13 @@ static player_LoginAttempts[MAX_PLAYERS];
 
 static LoginActor[MAX_PLAYERS];
 
+enum {
+
+	e_CHOOSE_SKIN = 1,
+	e_CHOOSE_STATE,
+	e_CHOOSE_WALKING_STYLE,
+	e_CHOOSE_ATTACH
+}
 
 
 new bool:UcitavanjeObjekata[MAX_PLAYERS],
@@ -304,29 +311,32 @@ timer Spawn_Player[100](playerid, type)
 	return (true);
 }
 
-
 //
 timer Register_Player[500](playerid)
 {
 	if(!Registered[playerid])
 		return 1;
 
-	SetPlayerVirtualWorld(playerid, playerid+2);
+	SetPlayerVirtualWorld(playerid, 8);
 	TogglePlayerSpectating(playerid, true);
-	InterpolateCameraPos(playerid, 526.880737, -3685.986328, 27.082427, 527.714477, -3703.954101, 14.042599, 4000);
-	InterpolateCameraLookAt(playerid, 526.876220, -3689.528320, 23.553344, 528.050537, -3708.888427, 13.308375, 1500);
+	InterpolateCameraPos(playerid, 2346.160644, 615.735900, 34.767421, 2341.763183, 611.536254, 36.004734, 3500);
+	InterpolateCameraLookAt(playerid, 2347.318847, 610.874267, 34.919742, 2336.986083, 610.083007, 35.747035, 3500);
 
 
-	RegisterActor[playerid] = CreateDynamicActor(PlayerInfo[playerid][Skin], 527.7463,-3714.8406,10.0209,0.8036, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
+	RegisterActor[playerid] = CreateDynamicActor(PlayerInfo[playerid][Skin], 2346.3308,611.4606,34.8162,11.7130, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
+
+	new Float:pPos[3];
+	GetDynamicActorPos(RegisterActor[playerid], pPos[0], pPos[1], pPos[2]);
+
+	ApplyDynamicActorAnimation(RegisterActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, false, false, false, 0);
 
 	OnRegisterSkinLoad[playerid] = true;
 
-	//
-	IzborSkinaTextDraws(playerid, true);
-	//
 	return 1;
 }
 //
+
+
 Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 {
 	if (!response)
@@ -343,7 +353,25 @@ Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 
 	RegisterPass[playerid] = true;
 
-	SendClientMessage(playerid, x_ogyColour, "> Uneli ste vasu lozinku.");
+	SendClientMessage(playerid, x_ltorange, "> Uneli ste vasu lozinku.");
+
+	if(RegisterPol[playerid] && RegisterPass[playerid] && RegisterEmail[playerid] && RegisterDrzava[playerid] && RegisterGodine[playerid])
+	{
+
+		if(Registered[playerid])
+		return SendClientMessage(playerid, x_ltorange, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+		CreatePlayerRegister(playerid, false);
+		new query[550];
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+		Registered[playerid] = true;
+		defer Register_Player(playerid);
+	}
 
 	return 1;
 }
@@ -364,7 +392,25 @@ Dialog: dialog_regages(const playerid, response, listitem, string: inputtext[])
 
 	RegisterGodine[playerid] = true;
 
-	SendClientMessage(playerid, x_ogyColour, "> Uneli ste vase godine.");
+	SendClientMessage(playerid, x_ltorange, "> Uneli ste vase godine.");
+
+	if(RegisterPol[playerid] && RegisterPass[playerid] && RegisterEmail[playerid] && RegisterDrzava[playerid] && RegisterGodine[playerid])
+	{
+
+		if(Registered[playerid])
+		return SendClientMessage(playerid, x_ltorange, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+		CreatePlayerRegister(playerid, false);
+		new query[550];
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+		Registered[playerid] = true;
+		defer Register_Player(playerid);
+	}
 
 	return 1;
 }
@@ -389,9 +435,27 @@ Dialog:dialog_reggmail(const playerid, response, listitem , string: inputtext[])
 
 		RegisterEmail[playerid] = true;
 
-		SendClientMessage(playerid, x_ogyColour, "> Uneli ste vas email.");
-
+		SendClientMessage(playerid, x_ltorange, "> Uneli ste vas email.");
 	}
+
+	if(RegisterPol[playerid] && RegisterPass[playerid] && RegisterEmail[playerid] && RegisterDrzava[playerid] && RegisterGodine[playerid])
+	{
+
+		if(Registered[playerid])
+		return SendClientMessage(playerid, x_ltorange, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+		CreatePlayerRegister(playerid, false);
+		new query[550];
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+		Registered[playerid] = true;
+		defer Register_Player(playerid);
+	}
+
 	return (true);
 }
 Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
@@ -411,7 +475,26 @@ Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
 			case 5: { strmid( PlayerInfo[ playerid ][ Drzava ], "Slovenija", 0, strlen( "Slovenija"), 50 ); }
 		}
 		RegisterDrzava[playerid] = true;
-		SendClientMessage(playerid, x_ogyColour, "> Odabrali ste vasu drzavu.");
+		SendClientMessage(playerid, x_ltorange, "> Odabrali ste vasu drzavu.");
+
+		if(RegisterPol[playerid] && RegisterPass[playerid] && RegisterEmail[playerid] && RegisterDrzava[playerid] && RegisterGodine[playerid])
+		{
+
+			if(Registered[playerid])
+			return SendClientMessage(playerid, x_ltorange, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+			CreatePlayerRegister(playerid, false);
+			new query[550];
+			mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+				VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+			Registered[playerid] = true;
+			defer Register_Player(playerid);
+		}
+
 	}
 	return (true);
 }
@@ -433,7 +516,26 @@ Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 		if(odabir == 1){PlayerInfo[playerid][Skin] = 250;}
 		else if(odabir == 2){PlayerInfo[playerid][Skin] = 191;}
 
-		SendClientMessage(playerid, x_ogyColour, "> Odabrali ste vas pol.");
+		SendClientMessage(playerid, x_ltorange, "> Odabrali ste vas pol.");
+
+		if(RegisterPol[playerid] && RegisterPass[playerid] && RegisterEmail[playerid] && RegisterDrzava[playerid] && RegisterGodine[playerid])
+		{
+
+			if(Registered[playerid])
+			return SendClientMessage(playerid, x_ltorange, "> Vas akaunt je vec napravljen u bazi podataka, sacekajte...");
+
+			CreatePlayerRegister(playerid, false);
+			new query[550];
+			mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) \ 
+				VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
+				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
+			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+
+
+			Registered[playerid] = true;
+			defer Register_Player(playerid);
+		}
+
 	}
 	return (true);
 }
