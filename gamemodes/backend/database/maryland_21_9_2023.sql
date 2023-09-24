@@ -34,7 +34,7 @@ CREATE TABLE `bankers` (
   `PosY` float NOT NULL,
   `PosZ` float NOT NULL,
   `PosA` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ CREATE TABLE `bank_accounts` (
   `CreatedOn` int(11) NOT NULL,
   `LastAccess` int(11) NOT NULL,
   `Disabled` smallint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE `bank_atms` (
   `RotX` float NOT NULL,
   `RotY` float NOT NULL,
   `RotZ` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE `bank_logs` (
   `Player` varchar(24) NOT NULL,
   `Amount` int(11) NOT NULL,
   `Date` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE `businesses` (
   `bizPrice19` int(12) DEFAULT 0,
   `bizPrice20` int(12) DEFAULT 0,
   `bizShipment` int(4) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -186,7 +186,7 @@ CREATE TABLE `cars` (
   `carAmmo5` int(12) DEFAULT 0,
   `carImpoundPrice` int(12) DEFAULT 0,
   `carFaction` int(12) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `cars`
@@ -273,7 +273,7 @@ CREATE TABLE `houses` (
   `FridgeY` float NOT NULL,
   `FridgeZ` float NOT NULL,
   `Int` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `houses`
@@ -314,7 +314,7 @@ CREATE TABLE `klupe` (
   `seat_y` float NOT NULL,
   `seat_z` float NOT NULL,
   `seat_a` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `klupe`
@@ -340,7 +340,7 @@ CREATE TABLE `metros` (
   `metroRuta` int(11) NOT NULL DEFAULT 1,
   `metroInt` int(11) NOT NULL DEFAULT 0,
   `metroVw` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `metros`
@@ -371,7 +371,7 @@ CREATE TABLE `players` (
   `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
   `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
   `Objekat1` tinyint(4) NOT NULL DEFAULT -1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `players`
@@ -409,7 +409,7 @@ CREATE TABLE `player_crypto` (
   `KolicinaLTC` float DEFAULT NULL,
   `KolicinaUSDT` float DEFAULT NULL,
   `KolicinaDOT` float DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_crypto`
@@ -444,7 +444,7 @@ CREATE TABLE `player_documents` (
   `MotoLicence` int(11) NOT NULL,
   `BrodLicence` int(11) NOT NULL,
   `OruzjeLicence` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_documents`
@@ -507,7 +507,7 @@ CREATE TABLE `player_finance` (
   `BankAccount` tinyint(4) NOT NULL DEFAULT 0,
   `BankMoney` int(11) NOT NULL DEFAULT 0,
   `BankPin` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_finance`
@@ -563,7 +563,7 @@ CREATE TABLE `safezones` (
   `PickupX` float NOT NULL DEFAULT 0,
   `PickupY` float NOT NULL DEFAULT 0,
   `PickupZ` float NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `safezones`

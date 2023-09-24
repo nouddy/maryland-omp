@@ -34,7 +34,7 @@ enum e_VEHICLE_DATA {
 	vID,
 	vOwner,
 	vModel,
-	vColor[2], // ? SLJEPAC MENTOLAC :::: BOJA - COLOUR - COLOR - 
+	vColor[2], 
 	vPlate[MAX_PLATE_LEN],
 
 	Float:vPos[4],
@@ -86,6 +86,11 @@ public LoadVehicleData() {
 
 			pvVehicle[i] = CreateVehicle(eVehicle[i][vModel], eVehicle[i][vPos][0], eVehicle[i][vPos][1], eVehicle[i][vPos][2], eVehicle[i][vPos][3], eVehicle[i][vColor][0], eVehicle[i][vColor][1], 1500, true);
 
+			new plate_string[MAX_PLATE_LEN];
+			format(plate_string, sizeof plate_string, "%s", eVehicle[i][vPlate]);
+
+			SetVehicleNumberPlate(pvVehicle[i], plate_string);
+
 			Iter_Add(iter_Vehicles, i);
 
 		}
@@ -102,7 +107,12 @@ forward CreateVehicleData(id);
 public CreateVehicleData(id) {
 
 	eVehicle[id][vID] = cache_insert_id();
-	pvVehicle[id] = CreateVehicle(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+2.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true);
+	pvVehicle[id] = CreateVehicle(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+4.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true);
+
+	new plate_string[MAX_PLATE_LEN];
+	format(plate_string, sizeof plate_string, "%s", eVehicle[id][vPlate]);
+
+	SetVehicleNumberPlate(pvVehicle[id], plate_string);
 
 	Iter_Add(iter_Vehicles, id);
 	return 1;
@@ -129,7 +139,7 @@ YCMD:createvehicle(playerid, params[], help) {
 	new Float:pPos[4], id = Iter_Free(iter_Vehicles);
 
 	new plate_str[MAX_PLATE_LEN];
-	format(plate_str, sizeof plate_str, "UNREGISTERED-00");
+	format(plate_str, sizeof plate_str, "N/A-00-12");
 
 	eVehicle[id][vOwner] = 0;
 	eVehicle[id][vModel] = model;
