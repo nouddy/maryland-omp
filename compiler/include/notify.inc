@@ -25,7 +25,6 @@ PlayerText:notifyPTD[MAX_PLAYERS][MAX_NOTIFY * 6],
 notifyIndex[MAX_PLAYERS];
 
 #define notify::%0(%1) forward %0(%1); public %0(%1)
-#define InternalNotification_show InternalNotification_Show
 #define notification.	InternalNotification_
 
 static const TDTextCaracterWidth[] = {
