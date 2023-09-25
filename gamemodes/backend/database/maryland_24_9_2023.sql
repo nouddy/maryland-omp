@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2023 at 09:06 PM
+-- Generation Time: Sep 25, 2023 at 02:42 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -140,6 +140,23 @@ CREATE TABLE `businesses` (
   `bizPrice20` int(12) DEFAULT 0,
   `bizShipment` int(4) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `containers`
+--
+
+CREATE TABLE `containers` (
+  `conID` int(11) NOT NULL,
+  `con_x` float DEFAULT 0,
+  `con_y` float DEFAULT 0,
+  `con_z` float DEFAULT 0,
+  `con_rx` float DEFAULT 0,
+  `con_ry` float DEFAULT 0,
+  `con_rz` float DEFAULT 0,
+  `con_jnumber` mediumint(9) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -316,31 +333,33 @@ CREATE TABLE `players` (
   `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
   `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
   `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
-  `Objekat1` tinyint(4) NOT NULL DEFAULT -1
+  `Objekat1` tinyint(4) NOT NULL DEFAULT -1,
+  `ZivotnoOsiguranje` tinyint(4) NOT NULL DEFAULT -1,
+  `ZivotnoTraje` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `players`
 --
 
-INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Silent', 297206591, 1, 556600, 2, 21, 4, '12/09/2023 - 13:49', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1),
-(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1),
-(4, 'Andjelkovic', 464192652, 1, 0, 281, 22, 4, '12/07/2023 - 15:15', '26/06/2023 - 14:40', 'Srbija', 'Musko', 'andjelkovic@gmail.com', -1, -1),
-(5, 'Ogi', 336986984, 1, 0, 124, 31, 4, '11/07/2023 - 10:44', '26/06/2023 - 16:27', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
-(6, 'Blake_Owens', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 17:27', '29/06/2023 - 17:26', 'Srbija', 'Musko', '@gmail.com', 1, 1),
-(7, 'Ogishy', 225510090, 1, 2000, 250, 31, 0, '29/06/2023 - 18:22', '29/06/2023 - 18:17', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1),
-(8, 'Blake_Castiglione', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 18:38', '29/06/2023 - 18:36', 'Srbija', 'Musko', '@gmail.com', 1, -1),
-(9, 'bino', 141427310, 1, 0, 250, 21, 0, '29/06/2023 - 19:59', '29/06/2023 - 19:48', 'Bosna i Hercegovina', 'Musko', 'idegas@gmail.com', -1, -1),
-(10, 'Zlatan_Music', 299172650, 1, 1600, 250, 26, 0, '01/07/2023 - 08:32', '30/06/2023 - 23:38', 'Bosna i Hercegovina', 'Musko', 'zlajaavlija@gmail.com', -1, -1),
-(11, 'Bettino_Ricasoli', 190644874, 1, 2000, 250, 23, 0, '02/07/2023 - 07:23', '02/07/2023 - 07:23', 'Srbija', 'Musko', 'spaso@gmail.com', 1, -1),
-(12, 'Ronald_Trotero', 219415261, 1, 2000, 250, 30, 0, '02/07/2023 - 12:56', '02/07/2023 - 11:32', 'Bosna i Hercegovina', 'Musko', 'ronaldtrotero65@gmail.com', -1, -1),
-(13, 'adis_adis', 242615107, 1, 0, 250, 12, 0, '02/07/2023 - 12:22', '02/07/2023 - 12:22', 'Bosna i Hercegovina', 'Musko', 'adisadis@gmail.cm', -1, -1),
-(14, 'Ali_Hadzic', 68944173, 1, 2000, 250, 18, 0, '02/07/2023 - 12:25', '02/07/2023 - 12:24', 'Bosna i Hercegovina', 'Musko', 'dabdjab123@gmail.com', -1, -1),
-(15, 'daddyDOT', 96993690, 1, 2000, 250, 19, 0, '02/07/2023 - 12:53', '02/07/2023 - 12:51', 'Bosna i Hercegovina', 'Musko', 'daddy.active@aol.com', -1, -1),
-(16, 'Dlittle_Coke', 70123830, 1, 2000, 250, 21, 0, '09/07/2023 - 12:10', '09/07/2023 - 12:10', 'Srbija', 'Musko', '123456@gmail.com', -1, 1),
-(17, 'Ferid_Olsun', 422249563, 1, 949922, 250, 16, 4, '24/09/2023 - 21:00', '29/08/2023 - 21:40', 'Bosna i Hercegovina', 'Musko', 'dino@mailler.com', -1, 1),
-(18, 'Faruk_Macola', 229245614, 1, 2000, 250, 16, 4, '30/08/2023 - 13:59', '30/08/2023 - 13:58', 'Bosna i Hercegovina', 'Musko', 'faruk1995@gmail.com', -1, -1);
+INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`, `ZivotnoOsiguranje`, `ZivotnoTraje`) VALUES
+(1, 'Silent', 297206591, 1, 556600, 2, 21, 4, '12/09/2023 - 13:49', 'NEMA', 'Srbija', '0', '@gmail.com', -1, -1, -1, NULL),
+(3, 'Ogy_', 252642079, 1, 38400, 289, 19, 4, '06/06/2023 - 15:57', '17/05/2023 - 19:57', 'Srbija', '0', '@gmail.com', -1, -1, -1, NULL),
+(4, 'Andjelkovic', 464192652, 1, 0, 281, 22, 4, '12/07/2023 - 15:15', '26/06/2023 - 14:40', 'Srbija', 'Musko', 'andjelkovic@gmail.com', -1, -1, -1, NULL),
+(5, 'Ogi', 336986984, 1, 0, 124, 31, 4, '11/07/2023 - 10:44', '26/06/2023 - 16:27', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1, -1, NULL),
+(6, 'Blake_Owens', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 17:27', '29/06/2023 - 17:26', 'Srbija', 'Musko', '@gmail.com', 1, 1, -1, NULL),
+(7, 'Ogishy', 225510090, 1, 2000, 250, 31, 0, '29/06/2023 - 18:22', '29/06/2023 - 18:17', 'Srbija', 'Musko', 'dexterwalton132@gmail.com', -1, -1, -1, NULL),
+(8, 'Blake_Castiglione', 70123830, 1, 2000, 250, 20, 0, '29/06/2023 - 18:38', '29/06/2023 - 18:36', 'Srbija', 'Musko', '@gmail.com', 1, -1, -1, NULL),
+(9, 'bino', 141427310, 1, 0, 250, 21, 0, '29/06/2023 - 19:59', '29/06/2023 - 19:48', 'Bosna i Hercegovina', 'Musko', 'idegas@gmail.com', -1, -1, -1, NULL),
+(10, 'Zlatan_Music', 299172650, 1, 1600, 250, 26, 0, '01/07/2023 - 08:32', '30/06/2023 - 23:38', 'Bosna i Hercegovina', 'Musko', 'zlajaavlija@gmail.com', -1, -1, -1, NULL),
+(11, 'Bettino_Ricasoli', 190644874, 1, 2000, 250, 23, 0, '02/07/2023 - 07:23', '02/07/2023 - 07:23', 'Srbija', 'Musko', 'spaso@gmail.com', 1, -1, -1, NULL),
+(12, 'Ronald_Trotero', 219415261, 1, 2000, 250, 30, 0, '02/07/2023 - 12:56', '02/07/2023 - 11:32', 'Bosna i Hercegovina', 'Musko', 'ronaldtrotero65@gmail.com', -1, -1, -1, NULL),
+(13, 'adis_adis', 242615107, 1, 0, 250, 12, 0, '02/07/2023 - 12:22', '02/07/2023 - 12:22', 'Bosna i Hercegovina', 'Musko', 'adisadis@gmail.cm', -1, -1, -1, NULL),
+(14, 'Ali_Hadzic', 68944173, 1, 2000, 250, 18, 0, '02/07/2023 - 12:25', '02/07/2023 - 12:24', 'Bosna i Hercegovina', 'Musko', 'dabdjab123@gmail.com', -1, -1, -1, NULL),
+(15, 'daddyDOT', 96993690, 1, 2000, 250, 19, 0, '02/07/2023 - 12:53', '02/07/2023 - 12:51', 'Bosna i Hercegovina', 'Musko', 'daddy.active@aol.com', -1, -1, -1, NULL),
+(16, 'Dlittle_Coke', 70123830, 1, 2000, 250, 21, 0, '09/07/2023 - 12:10', '09/07/2023 - 12:10', 'Srbija', 'Musko', '123456@gmail.com', -1, 1, -1, NULL),
+(17, 'Ferid_Olsun', 422249563, 1, 949922, 250, 16, 4, '24/09/2023 - 21:00', '29/08/2023 - 21:40', 'Bosna i Hercegovina', 'Musko', 'dino@mailler.com', -1, 1, -1, NULL),
+(18, 'Faruk_Macola', 229245614, 1, 2000, 250, 16, 4, '30/08/2023 - 13:59', '30/08/2023 - 13:58', 'Bosna i Hercegovina', 'Musko', 'faruk1995@gmail.com', -1, -1, -1, NULL);
 
 -- --------------------------------------------------------
 
@@ -587,6 +606,12 @@ ALTER TABLE `businesses`
   ADD PRIMARY KEY (`bizID`);
 
 --
+-- Indexes for table `containers`
+--
+ALTER TABLE `containers`
+  ADD PRIMARY KEY (`conID`);
+
+--
 -- Indexes for table `faction_police`
 --
 ALTER TABLE `faction_police`
@@ -698,6 +723,12 @@ ALTER TABLE `bank_logs`
 --
 ALTER TABLE `businesses`
   MODIFY `bizID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `containers`
+--
+ALTER TABLE `containers`
+  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `faction_police`
