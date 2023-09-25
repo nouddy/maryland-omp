@@ -89,7 +89,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nPolicija",
+					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
@@ -103,7 +103,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica",
+					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nKontejner",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -264,6 +264,46 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			case 7: {
 
 				Dialog_Show(playerid, "dialog_createPolice", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Upisite zeljeno ime za policiju", "Unesi", "Odustani");
+			}
+			case 8: {
+
+				new conID = 0;
+				for( new j = 0; j < MAX_CONTAINERS; j++ ) {
+					if( containerInfo[ j ][ conbaseID ] == -1 ) {
+					    conID = j;
+					    break;
+					}
+				}
+				if( conID != 0 ) return SendClientMessage( playerid,-1, "Vec je jedan kontejner u procesu izgradnje." );
+				
+				conID = -1;
+				for( new i = 0; i < MAX_CONTAINERS; i++) {
+				    if( containerInfo[ i ][ conbaseID ] == 0 ) {
+						conID = i;
+						break;
+				    }
+				}
+				if( conID == -1 ) return SendClientMessage( playerid,-1,"Ima maksimalno kreiranih kontejnera." );		
+
+	            
+				new Float:x, Float:y, Float:z, Float:angle;
+				GetPlayerPos( playerid, x, y, z); 
+				GetPlayerFacingAngle( playerid, angle);
+
+				containerInfo[ conID ][ conbaseID ] = -1;
+				containerInfo[ conID ][ conObjPos_X ] = x;
+	    		containerInfo[ conID ][ conObjPos_Y ] = y;
+	    		containerInfo[ conID ][ conObjPos_Z ] = z;
+	    		containerInfo[ conID ][ conObjRot_X ] = 0;
+	    		containerInfo[ conID ][ conObjRot_Y ] = 0;
+	    		containerInfo[ conID ][ conObjRot_Z ] = 0;
+	    		containerInfo[ conID ][ conJobNumber ] = 0;
+				containerInfo[ conID ][ conObjID ] = CreateDynamicObject(1345, x+2, y, z+0.6, 0.0, 0.0, angle);
+
+                Streamer_Update( playerid );
+				EditDynamicObject( playerid, containerInfo[ conID ][ conObjID ] ); 
+				EditContainer[ playerid ] = conID;
+				creatingContainer[ playerid ] = true;
 			}
 		}
 	}
@@ -529,6 +569,31 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 			    Iter_Remove(Metros, id);
 
 			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali metro.");	
+			}
+			case 8:
+			{
+				if( GetNearestContainer( playerid ) == -1 ) return SendClientMessage(playerid, x_server, "Niste u blizini kontejnera.");
+				new i = GetNearestContainer( playerid );
+
+				if( IsValidDynamicObject( containerInfo[ i ][ conObjID ] ) ) {
+					DestroyDynamicObject( containerInfo[ i ][ conObjID ] );
+					containerInfo[ i ][ conObjID ] = INVALID_OBJECT_ID;
+				}
+
+				containerInfo[ i ][ conObjPos_X ] = 0;
+				containerInfo[ i ][ conObjPos_Y ] = 0;
+				containerInfo[ i ][ conObjPos_Z ] = 0;
+				containerInfo[ i ][ conObjRot_X ] = 0;
+				containerInfo[ i ][ conObjRot_Y ] = 0;
+				containerInfo[ i ][ conObjRot_Z ] = 0;
+			    containerInfo[ i ][ conbaseID ] = 0;
+			    containerInfo[ i ][ conJobNumber ] = 0;
+
+			    new query[ 128 ];
+				mysql_format( SQL, query, sizeof( query ), "DELETE FROM containers WHERE conID = '%d'", containerInfo[ i ][ conbaseID ] );
+				mysql_pquery( SQL, query, "", "" );
+
+				SendClientMessage(playerid, x_server, "Obrisali ste kontejner.");
 			}
 		}
 	}

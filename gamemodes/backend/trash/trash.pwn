@@ -1,0 +1,280 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Ogy__
+ *  @Date           25th Sept. 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           trash.script
+ *  @Module         trash
+ */
+
+
+
+/*
+CREATE TABLE IF NOT EXISTS `containers` (
+  `conID` int(11) NOT NULL,
+  `con_x` float DEFAULT '0',
+  `con_y` float DEFAULT '0',
+  `con_z` float DEFAULT '0',
+  `con_rx` float DEFAULT '0',
+  `con_ry` float DEFAULT '0',
+  `con_rz` float DEFAULT '0',
+  `con_jnumber` mediumint(9) DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=latin1;
+
+ALTER TABLE `containers`
+  ADD PRIMARY KEY (`conID`);
+
+ALTER TABLE `containers`
+  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+*/
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+
+#define MAX_CONTAINERS		(300)
+
+
+/*
+     ___                 _      
+    (  _)               ( )     
+    | |   ___  ____  __ | |  __ 
+    ( )_ ( o )( __ )(_' ( _)(_' 
+    /___\ \_/ /_\/_\/__)/_\ /__)
+                                
+*/
+
+new bool:creatingContainer[MAX_PLAYERS],
+	bool:ogy_finishedzz = true,
+	EditContainer[MAX_PLAYERS];
+/*
+     ____                        
+    (  __)                       
+    | |_   ____  _ _  __  __  __ 
+    (  _) ( __ )( U )( _`'_ )(_' 
+    /____\/_\/_\/___\/_\`'/_\/__)
+
+*/
+enum container {
+
+	conbaseID,
+	Float:conObjPos_X,
+	Float:conObjPos_Y,
+	Float:conObjPos_Z,
+	Float:conObjRot_X,
+	Float:conObjRot_Y,
+	Float:conObjRot_Z,
+	conJobNumber,
+	conObjID
+}
+new containerInfo[ MAX_CONTAINERS ][ container ],
+	Text3D:conText3D[MAX_CONTAINERS];
+
+new Iterator:Containers<MAX_CONTAINERS>;
+
+
+
+/*
+     _  _            _        
+    ( )( )          ( )       
+    | L| | ___  ___ | | _  __ 
+    ( __ )( o )( o )( _'( (_' 
+    /_\/_\ \_/  \_/ /_\\_|/__)
+
+*/
+
+hook OnGameModeInit()
+{
+	if(ogy_finishedzz)
+    {
+        print("trash/trash.script loaded");  
+    }
+
+    Iter_Init(Metros);
+    mysql_pquery(SQL, "SELECT * FROM `containers`", "LoadContainers" );
+	return (true);
+}
+
+hook OnPlayerConnect(playerid)
+{
+	creatingContainer[playerid] = false;
+	EditContainer[playerid] = -1;
+	return (true);
+}
+
+hook OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+{
+	new Float:oldX, Float:oldY, Float:oldZ,
+		Float:oldRotX, Float:oldRotY, Float:oldRotZ;
+	GetObjectPos(objectid, oldX, oldY, oldZ);
+	GetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+
+	if( response == EDIT_RESPONSE_FINAL )
+	{
+		if( EditContainer[ playerid ] != -1 ) {
+
+		    new conID = EditContainer[ playerid ];
+
+		    if( IsValidDynamicObject( containerInfo[ conID ][ conObjID ] ) ) {
+		   		DestroyDynamicObject( containerInfo[ conID ][ conObjID ] );
+				containerInfo[ conID ][ conObjID ] = INVALID_OBJECT_ID;
+			}
+
+		   	containerInfo[ conID ][ conObjPos_X ] = x;
+    		containerInfo[ conID ][ conObjPos_Y ] = y;
+    		containerInfo[ conID ][ conObjPos_Z ] = z;
+    		containerInfo[ conID ][ conObjRot_X ] = rx;
+    		containerInfo[ conID ][ conObjRot_Y ] = ry;
+    		containerInfo[ conID ][ conObjRot_Z ] = rz;
+			containerInfo[ conID ][ conObjID ] = CreateDynamicObject(1345, x, y, z, rx, ry, rz);
+			
+
+			if( creatingContainer[ playerid ] ) {
+
+				conText3D[conID] = CreateDynamic3DTextLabel( "{8dc9f3}   » {ffffff}KONTEJNER{8dc9f3} «   \n{c092de}Koristi 'N'", -1, containerInfo[ conID ][conObjPos_X ], containerInfo[ conID ][conObjPos_Y ], containerInfo[ conID ][conObjPos_Z ], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1 );
+				containerInfo[ conID ][ conJobNumber ] = 0;
+				SQL_CreateContainer( conID );
+			}
+			else {
+
+				if( IsValidDynamic3DTextLabel( conText3D[conID]  ) )
+					DestroyDynamic3DTextLabel(conText3D[conID] );
+
+				conText3D[conID] = CreateDynamic3DTextLabel( "{8dc9f3}   » {ffffff}KONTEJNER{8dc9f3} «   \n{c092de}Koristi 'N'", -1, containerInfo[ conID ][conObjPos_X ], containerInfo[ conID ][conObjPos_Y ], containerInfo[ conID ][conObjPos_Z ], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1 );
+					
+				SQL_UpdateContainerPos( conID );	
+			}
+
+			creatingContainer[ playerid ] = false;
+			EditContainer[ playerid ] = -1;
+			return true;
+		}
+	}
+	return (true);
+}
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+{
+	if(newkeys & KEY_NO)
+	{
+		new id = GetNearestContainer(playerid);
+
+		if(id != -1)
+		{
+			printf("%d igrac kod kontejnera",playerid);
+			//GivePlayerItem(playerid,random(2), random(4)); // ovde da se podesi sta igrac da dobija
+		}
+	}
+	return (true);
+}
+
+/*
+     _                _      _   ___                 
+    ( )              ( )    / ) /  _)                
+    | |   ___  ___  _| |   / /  \_"-.  ___  _ _  ___ 
+    ( )_ ( o )( o )/ o )  ( /    __) )( o )( V )( o_)
+    /___\ \_/ /_^_\\___\ /_/    /___/ /_^_\ \_/  \(  
+
+*/
+forward LoadContainers();
+public LoadContainers()
+{
+	new iRows, conID;
+	cache_get_row_count(iRows);
+	for(new i = 0; i < iRows; i++)
+	{
+	    cache_get_value_name_int(i, "conID", conID);
+
+		cache_get_value_name_float( i, "con_x", containerInfo[ conID ][ conObjPos_X ]);
+		cache_get_value_name_float( i, "con_y", containerInfo[ conID ][ conObjPos_Y ]);
+		cache_get_value_name_float( i, "con_z", containerInfo[ conID ][ conObjPos_Z ]);
+		cache_get_value_name_float( i, "con_rx", containerInfo[ conID ][ conObjRot_X ]);
+		cache_get_value_name_float( i, "con_ry", containerInfo[ conID ][ conObjRot_Y ]);
+		cache_get_value_name_float( i, "con_rz", containerInfo[ conID ][ conObjRot_Z ]);
+		cache_get_value_name_int( i, "con_jnumber", containerInfo[ conID ][ conJobNumber ]);
+		Iter_Add(Containers, 0);
+		Iter_Add(Containers, conID);
+
+		containerInfo[ conID ][ conObjID ] = CreateDynamicObject(1345, containerInfo[ conID ][ conObjPos_X ], containerInfo[ conID ][ conObjPos_Y ], containerInfo[ conID ][ conObjPos_Z ], containerInfo[ conID ][ conObjRot_X ], containerInfo[ conID ][ conObjRot_Y ], containerInfo[ conID ][ conObjRot_Z ] );
+            
+       	conText3D[conID] = CreateDynamic3DTextLabel( "{8dc9f3}   » {ffffff}KONTEJNER{8dc9f3} «   \n{c092de}Koristi 'N'", -1, containerInfo[ conID ][conObjPos_X ], containerInfo[ conID ][conObjPos_Y ], containerInfo[ conID ][conObjPos_Z ], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1 );
+	}
+	printf("Ucitavanje Kontejnera(%d)... Uspesno",iRows);
+	return (true);
+}
+/*
+     ____                _   _                
+    (  __)              ( ) (_)               
+    | |_   _ _  ____  __| |  _  ___  ____  __ 
+    ( __) ( U )( __ )/ /( _)( )( o )( __ )(_' 
+    /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
+
+*/
+
+forward SQL_UpdateContainerPos(id);
+public SQL_UpdateContainerPos(id)
+{
+	new q[ 192 ];
+	mysql_format( SQL, q, sizeof(q), "UPDATE containers SET con_x = '%f', con_y = '%f', con_z = '%f', con_rx = '%f', con_ry = '%f', con_rz = '%f'  WHERE conID = '%d'",
+		containerInfo[ id ][ conObjPos_X ], 
+        containerInfo[ id ][ conObjPos_Y ], 
+        containerInfo[ id ][ conObjPos_Z ], 
+        containerInfo[ id ][ conObjRot_X ], 
+        containerInfo[ id ][ conObjRot_Y ], 
+        containerInfo[ id ][ conObjRot_Z ],
+		containerInfo[ id ][ conbaseID ] );
+
+	mysql_pquery( SQL, q, "", "");
+
+	Iter_Add(Containers, id);
+	return (true);
+}
+
+forward SQL_CreateContainer( conID );
+public SQL_CreateContainer(conID) {
+
+	new query[ 192 ];
+    mysql_format( SQL, query, sizeof( query ), "INSERT INTO containers ( con_x, con_y, con_z, con_rx, con_ry, con_rz ) VALUES('%f', '%f', '%f', '%f', '%f', '%f')",
+
+        containerInfo[ conID ][ conObjPos_X ], 
+        containerInfo[ conID ][ conObjPos_Y ], 
+        containerInfo[ conID ][ conObjPos_Z ], 
+        containerInfo[ conID ][ conObjRot_X ], 
+        containerInfo[ conID ][ conObjRot_Y ], 
+        containerInfo[ conID ][ conObjRot_Z ] );
+
+	mysql_pquery( SQL, query, "OnContainerCreated", "i", conID );
+
+	return (true);
+}
+
+forward OnContainerCreated( conID );
+public OnContainerCreated( conID ){
+
+	containerInfo[ conID ][ conbaseID ] = cache_insert_id();
+
+	return true;
+
+}
+
+GetNearestContainer( playerid ) {
+    for( new b = 0; b < MAX_CONTAINERS; b++ ) {
+        if( IsPlayerInRangeOfPoint( playerid, 4.0, containerInfo[b][conObjPos_X ], containerInfo[b][conObjPos_Y ], containerInfo[b][conObjPos_Z ] ) ) return b; }
+    return -1;
+}
+
+forward GivePlayerItem(playerid, iditema, kolicina);
+public GivePlayerItem(playerid, iditema, kolicina)
+{
+	// playerid = igrac kojem se daje | iditema = treba podesiti | kolicina = kolicina koja se dobija
+	return (true);
+}

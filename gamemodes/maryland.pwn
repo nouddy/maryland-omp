@@ -603,6 +603,13 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/metros/end/do-not-look.pwn"
 
+//-------------------------------------------------------------------------------------------------------- Trashs
+
+#include "backend/trash/trash.pwn"							//* Kontejner system
+
+//-------------------------------------------------------------------------------------------------------- Temp
+#include "backend/trash/end/do-not-look.pwn"
+
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/labels.pwn"							//* Labeli
 #include "backend/assets/custom_markers.pwn"					//* Markeri
