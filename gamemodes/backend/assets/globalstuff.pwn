@@ -40,6 +40,7 @@ hook OnGameModeInit()
 
 new IC_CHAT = 1;                                            //* Variabla za globalni chat
 new bool:IgracUlogovan[MAX_PLAYERS];                             //* Variabla za proveru
+new bool:ImaZivotnoOsiguranje[MAX_PLAYERS];
 
 new Text:Global_TD[40];
 new Text:MarylandLogo[30];
@@ -70,6 +71,7 @@ hook OnPlayerConnect(playerid)
     RegisterEmail[playerid] = 
     RegisterDrzava[playerid] =
     Registered[playerid] =
+    ImaZivotnoOsiguranje[playerid] =
     OnRegisterSkinLoad[playerid] = false;
     return 1;
 }
