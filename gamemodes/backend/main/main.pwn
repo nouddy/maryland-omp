@@ -65,9 +65,7 @@ enum PlayerInformation
 	Drzava[50],
 	Pol[10],
 	AttachedObject[2],
-	pBiznisID,
-	ZivotnoOsiguranje,
-	ZivotnoTraje
+	pBiznisID
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 
@@ -106,7 +104,6 @@ public SQL_AccountLoad(playerid)
 		cache_get_value_name_int(0, "Skin", PlayerInfo[playerid][Skin]);
 		cache_get_value_name_int(0, "Godine", PlayerInfo[playerid][Godine]);
 		cache_get_value_name_int(0, "Staff", PlayerInfo[playerid][Staff]);
-		cache_get_value_name_int(0, "ZivotnoOsiguranje", PlayerInfo[playerid][ZivotnoOsiguranje]);
 
 		CreateLoginTextDraws(playerid);
 
@@ -261,12 +258,14 @@ timer Spawn_Player[100](playerid)
 	}
 
 	//
-	if(PlayerInfo[playerid][ZivotnoOsiguranje] != -1)
+	/*
+	if(PlayerDocuments[playerid][pZivotnoOsiguranje] != -1)
 	{
 		new string[128];
-		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(ZivotnoTraje,CURRENT_DATE), ZivotnoTraje from `players` where `ID`='%i'", PlayerInfo[playerid][SQLID]);
+		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(ZivotnoTraje,CURRENT_DATE), ZivotnoTraje from `player_documents` where `player_id`='%i'", PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL, string, "ProveraOsiguranja", "i", playerid);
 	}
+	*/
 	//
 	UcitajIgracuObjekte(playerid);
 	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
@@ -724,25 +723,4 @@ public RegisterIgraca(playerid)
 {
 	CreatePlayerRegister(playerid, true);
 	return (true);
-}
-
-forward ProveraOsiguranja(playerid);
-public ProveraOsiguranja(playerid)
-{
-	new diff;
-    cache_get_value_int(0, 0, diff);
-	if(diff <= 0)
-	{
-	    ImaZivotnoOsiguranje[playerid] = false;
-		PlayerInfo[playerid][ZivotnoOsiguranje] = -1;
-		SendClientMessage(playerid, 0x32a88dFF, "[ZIVOTNO-OSIGURANJE] {ffffff}Vase zivotno osiguranje je isteklo.");
-	}
-	else
-	{
-		new date[24];
-		cache_get_value_name(0, "ZivotnoTraje", date, 24);
-		va_SendClientMessage(playerid, 0x32a88dFF, "[ZIVOTNO-OSIGURANJE] {ffffff}Vase zivotno osiguranje traje do datuma: %s.",date);
-		ImaZivotnoOsiguranje[playerid] = true;
-	}
-	return 1;
 }
