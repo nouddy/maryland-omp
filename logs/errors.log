@@ -1,1 +1,2 @@
-[9/24/2023 9:36:42 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/25/2023 2:38:01 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `containers`": Table 'maryland.containers' doesn't exist
+[9/25/2023 2:38:01 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
