@@ -29,23 +29,25 @@ static LoginActor[MAX_PLAYERS];
 
 enum {
 
-	e_CHOOSE_SKIN = 1,
+	e_CHOOSE_SEX = 1,
 	e_CHOOSE_STATE,
 	e_CHOOSE_WALKING_STYLE,
 	e_CHOOSE_ATTACH
 }
 
+new bool:e_REGISTERING_PROGRESS[MAX_PLAYERS],
+	bool:e_LOGIN_PROGRESS[MAX_PLAYERS];
 
 new bool:UcitavanjeObjekata[MAX_PLAYERS],
 	bool:ImaLoginTD[MAX_PLAYERS];
 
 new PlayerText:Login_TD[MAX_PLAYERS][85];
 
-enum
-{
-	e_SPAWN_TYPE_REGISTER = 1,
-    e_SPAWN_TYPE_LOGIN
-};
+new e_CHARACTER_OBJ[4],
+	e_SELECTED_OBJ[MAX_PLAYERS],
+	e_PROGRESS[MAX_PLAYERS][4];
+
+//  new Menu:e_Character[2];
 
 enum PlayerInformation
 {
@@ -128,6 +130,48 @@ public PlayerRegistered(playerid)
 	PlayerInfo[playerid][Level] = 1;
     IgracUlogovan[playerid] = true;
 	SavePlayer(playerid);
+
+	SetSpawnInfo(playerid, 0, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
+	SpawnPlayer(playerid);
+
+	SetPlayerInterior(playerid, 1);
+	SetPlayerVirtualWorld(playerid, playerid+1);
+
+	// TogglePlayerSpectating(playerid, false);
+
+	InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+	InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+	printf("DEVLOG - %d - VW", GetPlayerVirtualWorld(playerid));
+	printf("DEVLOG - %d - INT", GetPlayerInterior(playerid));
+
+
+	SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+
+	// e_Character[0] = CreateMenu("Character", 1, 30.0, 150.0, 190.0, 180.0);
+	// AddMenuItem(e_Character[0], 0, "Sex");
+	// AddMenuItem(e_Character[0], 0, "Walking Style");
+	// AddMenuItem(e_Character[0], 0, "Attachment");
+	// AddMenuItem(e_Character[0], 0, "State");
+
+	TogglePlayerControllable(playerid, false);
+
+	ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+
+	e_CHARACTER_OBJ[0] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.825523, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00);
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[0], 0, "{FFFFFF}SEX", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[1] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.355529, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[1], 0, "{FFFFFF}WALK STYLE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[2] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.895565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[2], 0, "{FFFFFF}STATE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[3] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.415565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[3], 0, "{FFFFFF}ATTACHMENTS", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+
+	e_REGISTERING_PROGRESS[playerid] = true;
+
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da dovrsite svog karaktera koritite strelice ka gore/dole.");
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'ENTER'.");
+
 }
 
 hook OnGameModeInit()
@@ -137,6 +181,7 @@ hook OnGameModeInit()
 	return 1;
 }
 
+
 hook OnPlayerConnect(playerid)
 {
 	ResetujVariable(playerid);
@@ -144,6 +189,8 @@ hook OnPlayerConnect(playerid)
 	IgracUlogovan[playerid] = false;
 	UcitavanjeObjekata[playerid] = false;
 	ImaLoginTD[playerid] = false;
+
+	e_SELECTED_OBJ[playerid] = -1;
 
 	new query[120];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
@@ -159,193 +206,130 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-timer Spawn_Player[100](playerid, type)
-{
-	if (type == e_SPAWN_TYPE_REGISTER)
-		{
-			new rand = random( sizeof( RandomSpawnCords ) );
-			SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
-				RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
-			);
-			
-			SetPlayerVirtualWorld(playerid, 6);
-			SetPlayerInterior(playerid, 6);
-			SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
-			GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
-			SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
-			UcitajIgracuObjekte(playerid);
-			
-			//SpawnPlayer(playerid);
-			//SetCameraBehindPlayer(playerid);
+	if(PRESSED( KEY_YES )) {
 
-			TogglePlayerSpectating(playerid, false);
+		if(e_REGISTERING_PROGRESS[playerid]) {
 
-			SetCameraBehindPlayer(playerid);
 
-			DestroyDynamicActor(RegisterActor[playerid]);
+			if(e_SELECTED_OBJ[playerid] == -1) {
 
-			CancelSelectTextDraw(playerid);
-
-			IzborSkinaTextDraws(playerid, false);
-
-			SavePlayer(playerid);
-
-			for(new i=0; i< 30; i++)
-			{
-				TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+				e_SELECTED_OBJ[playerid]++;
+				SetDynamicObjectMaterial(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], 0, 18646, "MatColours", "lightblue", 0xFFFFFFFF);
 			}
 
-			for(new i=0; i< 40; i++)
-			{
-				TextDrawShowForPlayer(playerid, Global_TD[i]);
-			}
-
-			//
-			for(new i=0; i< 8; i++)
-			{
-				PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-			}
-			//! Ime Igraca
-			static pname[25];
-			format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
-			PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
-			PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
-
-			// //! Banka Igraca
-			// static stringic[ 40 ];
-
-			// if(player_BankAccount[playerid] == 0) {
-			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
-			// }
-			// else {
-			//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
-			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
-			// }
-			// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
-
-			//!skin provera
-			PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
-			PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 		}
+	}
+	if(PRESSED( KEY_NO )) {
 
-		else if (type == e_SPAWN_TYPE_LOGIN)
-		{
-			new rand = random( sizeof( RandomSpawnCords ) );
-			//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Maryland", "!", BOXCOLOR_GREEN);
+		if(e_REGISTERING_PROGRESS[playerid]) {
 
-			SetPlayerVirtualWorld(playerid, 6);
-			SetPlayerInterior(playerid, 6);
+			if(e_SELECTED_OBJ[playerid] == 3) {
 
-			printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
-			printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
-
-			SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
-			SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
-				RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
-			);
-
-			printf("DEVLOG - POS : %f %f %f", RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ] );
-
-			if(ImaLoginTD[playerid])
-			{
-				PrikaziLoginTDs(playerid, false);
-				ImaLoginTD[playerid] = false;
+				e_SELECTED_OBJ[playerid]--;
+				SetDynamicObjectMaterial(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], 0, 18646, "MatColours", "white", 0xFFFFFFFF);
 			}
-
-			//
-			if(PlayerInfo[playerid][ZivotnoOsiguranje] != -1)
-			{
-				new string[128];
-				mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(ZivotnoTraje,CURRENT_DATE), ZivotnoTraje from `players` where `ID`='%i'", PlayerInfo[playerid][SQLID]);
-				mysql_tquery(SQL, string, "ProveraOsiguranja", "i", playerid);
-			}
-			//
-			UcitajIgracuObjekte(playerid);
-			SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
-			SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
-			IgracUlogovan[playerid] = true;
-
-			//SpawnPlayer(playerid);
-			//SetCameraBehindPlayer(playerid);
-
-			TogglePlayerSpectating(playerid, false);
-
-			SetCameraBehindPlayer(playerid);
-
-			DestroyDynamicActor(LoginActor[playerid]);
-
-			//
-			static q[ 120 ];
-			mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
-			mysql_tquery(SQL, q);
-			//
-
-			for(new i=0; i< 30; i++)
-			{
-				TextDrawShowForPlayer(playerid, MarylandLogo[i]);
-			}
-
-			for(new i=0; i< 40; i++)
-			{
-				TextDrawShowForPlayer(playerid, Global_TD[i]);
-			}
-
-			//
-			for(new i=0; i< 8; i++)
-			{
-				PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-			}
-			//! Ime Igraca
-			static pname[25];
-			format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
-			PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
-			PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
-
-			// //! Banka Igraca
-			// static stringic[ 40 ];
-
-			// if(player_BankAccount[playerid] == 0) {
-			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
-			// }
-			// else {
-			//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
-			//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
-			// }
-			// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
-
-			//!skin provera
-			PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
-			PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 		}
-	return (true);
-}
-
-//
-timer Register_Player[500](playerid)
-{
-	if(!Registered[playerid])
-		return 1;
-
-	SetPlayerVirtualWorld(playerid, 8);
-	TogglePlayerSpectating(playerid, true);
-	InterpolateCameraPos(playerid, 2346.160644, 615.735900, 34.767421, 2341.763183, 611.536254, 36.004734, 3500);
-	InterpolateCameraLookAt(playerid, 2347.318847, 610.874267, 34.919742, 2336.986083, 610.083007, 35.747035, 3500);
-
-
-	RegisterActor[playerid] = CreateDynamicActor(PlayerInfo[playerid][Skin], 2346.3308,611.4606,34.8162,11.7130, true, 100.0, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
-
-	new Float:pPos[3];
-	GetDynamicActorPos(RegisterActor[playerid], pPos[0], pPos[1], pPos[2]);
-
-	ApplyDynamicActorAnimation(RegisterActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, false, false, false, 0);
-
-	OnRegisterSkinLoad[playerid] = true;
+	}
 
 	return 1;
 }
+
+timer Spawn_Player[100](playerid)
+{
+	new rand = random( sizeof( RandomSpawnCords ) );
+	//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Maryland", "!", BOXCOLOR_GREEN);
+
+	SetPlayerVirtualWorld(playerid, 6);
+	SetPlayerInterior(playerid, 6);
+
+	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
+	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
+
+	SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
+	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
+		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
+	);
+
+	printf("DEVLOG - POS : %f %f %f", RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ] );
+
+	if(ImaLoginTD[playerid])
+	{
+		PrikaziLoginTDs(playerid, false);
+		ImaLoginTD[playerid] = false;
+	}
+
+	//
+	if(PlayerInfo[playerid][ZivotnoOsiguranje] != -1)
+	{
+		new string[128];
+		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(ZivotnoTraje,CURRENT_DATE), ZivotnoTraje from `players` where `ID`='%i'", PlayerInfo[playerid][SQLID]);
+		mysql_tquery(SQL, string, "ProveraOsiguranja", "i", playerid);
+	}
+	//
+	UcitajIgracuObjekte(playerid);
+	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
+	ResetPlayerMoney(playerid);
+	GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
+	SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
+	IgracUlogovan[playerid] = true;
+
+	//SpawnPlayer(playerid);
+	//SetCameraBehindPlayer(playerid);
+
+
+	TogglePlayerSpectating(playerid, false);
+
+	SetCameraBehindPlayer(playerid);
+
+	DestroyDynamicActor(LoginActor[playerid]);
+
+	//
+	static q[ 120 ];
+	mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
+	mysql_tquery(SQL, q);
+	//
+
+	for(new i=0; i< 30; i++)
+	{
+		TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+	}
+
+	for(new i=0; i< 40; i++)
+	{
+		TextDrawShowForPlayer(playerid, Global_TD[i]);
+	}
+
+	//
+	for(new i=0; i< 8; i++)
+	{
+		PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
+	}
+	//! Ime Igraca
+	static pname[25];
+	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
+	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+	// //! Banka Igraca
+	// static stringic[ 40 ];
+
+	// if(player_BankAccount[playerid] == 0) {
+	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
+	// }
+	// else {
+	//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
+	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
+	// }
+	// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
+
+	//!skin provera
+	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
+	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
+	return (true);
+}
+
 //
 
 
@@ -380,9 +364,9 @@ Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
+		
 
 		Registered[playerid] = true;
-		defer Register_Player(playerid);
 	}
 
 	return 1;
@@ -419,9 +403,9 @@ Dialog: dialog_regages(const playerid, response, listitem, string: inputtext[])
 			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
+		e_REGISTERING_PROGRESS[playerid] = true;
 
 		Registered[playerid] = true;
-		defer Register_Player(playerid);
 	}
 
 	return 1;
@@ -463,9 +447,9 @@ Dialog:dialog_reggmail(const playerid, response, listitem , string: inputtext[])
 			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
+		e_REGISTERING_PROGRESS[playerid] = true;
 
 		Registered[playerid] = true;
-		defer Register_Player(playerid);
 	}
 
 	return (true);
@@ -502,9 +486,9 @@ Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
 				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
+			e_REGISTERING_PROGRESS[playerid] = true;
 
 			Registered[playerid] = true;
-			defer Register_Player(playerid);
 		}
 
 	}
@@ -543,9 +527,10 @@ Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Godine], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][Drzava],PlayerInfo[playerid][Pol] );
 			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
 
+			e_REGISTERING_PROGRESS[playerid] = true;
 
 			Registered[playerid] = true;
-			defer Register_Player(playerid);
+			SetPlayerInterior(playerid, 1);
 		}
 
 	}
@@ -561,7 +546,7 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 		if(udb_hash(inputtext) == PlayerInfo[playerid][Password])
 		{
 			if(IgracUlogovan[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Maryland \187; "c_white"Vec si ulogovan");
-			defer Spawn_Player(playerid, 2);
+			defer Spawn_Player(playerid);
 		}
 		else
 		{
@@ -633,27 +618,6 @@ Dialog:dialog_obrisiobjekte(const playerid, response, listitem, string:inputtext
 	}
 	return (true);
 }
-Dialog:dialog_confirmreg(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-	{
-		if(PlayerInfo[playerid][AttachedObject][0] == -1 && PlayerInfo[playerid][AttachedObject][1] == -1)
-			return Spawn_Player(playerid, 1);
-
-
-		Dialog_Show(playerid, "dialog_obrisiobjekte", DIALOG_STYLE_LIST,
-				"Trenutno posedujete.",
-				"%s\n%s\n",
-				"Odaberi", "Izlaz",PlayerInfo[playerid][AttachedObject][0] == 1 ? "{36FF00}Kapica." : "{FF2D00}Nista.", PlayerInfo[playerid][AttachedObject][1] == 1 ? "{36FF00}Naocare." : "{FF2D00}Nista."
-		);
-	}
-
-	if(response)
-	{
-		Spawn_Player(playerid, 1);
-	}
-	return (true);
-}
 
 Dialog:dialog_cryptofaq(const playerid, response, listitem, string:inputtext[])
 {
@@ -711,10 +675,11 @@ public LoginIgraca(playerid)
 {
 
 	TogglePlayerSpectating(playerid, true);
-	SetPlayerInterior(playerid, 0);
+	SetPlayerInterior(playerid, 1);
 	SetPlayerVirtualWorld( playerid, playerid+1 );
 	SetPlayerPos(playerid,633.7927,-1765.8979,19.4339);
 	SetPlayerFacingAngle(playerid,176.0717);
+
 	InterpolateCameraPos(playerid, 628.761047, -1764.393554, 19.677539, 628.761047, -1764.393554, 19.677539, 1000);
 	InterpolateCameraLookAt(playerid, 629.909790, -1769.228637, 19.127872, 629.909790, -1769.228637, 19.127872, 1000);
 
@@ -723,6 +688,8 @@ public LoginIgraca(playerid)
 	ApplyActorAnimation(LoginActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, false, false, false, 0); 
 
 	PrikaziLoginTDs(playerid, true);
+
+	e_LOGIN_PROGRESS[playerid] = true;
 
 	new sDStrg[ 560 ],ip[50];
 	GetPlayerIp(playerid, ip, sizeof(ip));
@@ -747,15 +714,7 @@ public LoginIgraca(playerid)
 
 	return 1;
 }
-hook OnPlayerSpawn(playerid)
-{
-	if(PlayerInfo[playerid][AttachedObject][0] != -1)
-		return SetPlayerAttachedObject(playerid, 1, 18968, 2,  0.176000, -0.011000, -0.001000,  89.400024, 79.100112, 1.600000,  1.000000, 1.000000, 1.000000); // 29
 
-	else if(PlayerInfo[playerid][AttachedObject][1] != -1)
-		return SetPlayerAttachedObject(playerid, 1, 19025, 2,  0.086000, 0.013999, -0.001000,  89.500022, 72.500076, 1.600000,  1.000000, 1.000000, 1.000000); // 289
-	return (true);
-}
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	return 1;

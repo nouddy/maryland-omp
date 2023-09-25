@@ -18,25 +18,6 @@
  */
 
 
-
-/*
-CREATE TABLE IF NOT EXISTS `containers` (
-  `conID` int(11) NOT NULL,
-  `con_x` float DEFAULT '0',
-  `con_y` float DEFAULT '0',
-  `con_z` float DEFAULT '0',
-  `con_rx` float DEFAULT '0',
-  `con_ry` float DEFAULT '0',
-  `con_rz` float DEFAULT '0',
-  `con_jnumber` mediumint(9) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=latin1;
-
-ALTER TABLE `containers`
-  ADD PRIMARY KEY (`conID`);
-
-ALTER TABLE `containers`
-  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
-*/
 #include <ysilib\YSI_Coding\y_hooks>
 
 
@@ -82,6 +63,32 @@ new containerInfo[ MAX_CONTAINERS ][ container ],
 new Iterator:Containers<MAX_CONTAINERS>;
 
 
+timer trash_StartSearch[6500](playerid) {
+
+	new money = randomEx(20, 100);
+	TogglePlayerControllable(playerid, true);
+	ClearAnimations(playerid);
+
+	new try = randomEx(1, 2);
+
+	switch (try) {
+
+		case 1: {
+
+			VosticGiveMoney(playerid, money);
+			va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste pronasli : %d novca u kontejneru", money);
+		}
+
+		case 2: {
+
+			va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vise srece drugi put, niste nista nasli...");
+		}
+
+	}
+
+	return 1;
+}
+
 
 /*
      _  _            _        
@@ -111,7 +118,7 @@ hook OnPlayerConnect(playerid)
 	return (true);
 }
 
-hook OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+hook OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
 	new Float:oldX, Float:oldY, Float:oldZ,
 		Float:oldRotX, Float:oldRotY, Float:oldRotZ;
@@ -162,7 +169,7 @@ hook OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, F
 	return (true);
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 	if(newkeys & KEY_NO)
 	{
@@ -170,8 +177,9 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 		if(id != -1)
 		{
-			printf("%d igrac kod kontejnera",playerid);
-			//GivePlayerItem(playerid,random(2), random(4)); // ovde da se podesi sta igrac da dobija
+			// new money = randomEx(20, 100);
+			ApplyAnimation(playerid, "POLICE", "plc_drgbst_02", 4.1, false, true, true, true, SYNC_NONE);
+			defer trash_StartSearch(playerid);
 		}
 	}
 	return (true);
@@ -270,11 +278,4 @@ GetNearestContainer( playerid ) {
     for( new b = 0; b < MAX_CONTAINERS; b++ ) {
         if( IsPlayerInRangeOfPoint( playerid, 4.0, containerInfo[b][conObjPos_X ], containerInfo[b][conObjPos_Y ], containerInfo[b][conObjPos_Z ] ) ) return b; }
     return -1;
-}
-
-forward GivePlayerItem(playerid, iditema, kolicina);
-public GivePlayerItem(playerid, iditema, kolicina)
-{
-	// playerid = igrac kojem se daje | iditema = treba podesiti | kolicina = kolicina koja se dobija
-	return (true);
 }

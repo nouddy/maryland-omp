@@ -132,6 +132,7 @@ stock CreatePlayerRegister(playerid, bool:show)
         PlayerTextDrawTextSize(playerid, Register_PTD[playerid][9], 61.000000, 53.000000);
         PlayerTextDrawAlignment(playerid, Register_PTD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, Register_PTD[playerid][9], -200);
+        PlayerTextDrawBackgroundColour(playerid, Register_PTD[playerid][9], 0xFFFFFF00);
         PlayerTextDrawSetShadow(playerid, Register_PTD[playerid][9], 0);
         PlayerTextDrawFont(playerid, Register_PTD[playerid][9], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, Register_PTD[playerid][9], false);
@@ -226,6 +227,7 @@ stock CreatePlayerRegister(playerid, bool:show)
         PlayerTextDrawTextSize(playerid, Register_PTD[playerid][18], 43.000000, 53.000000);
         PlayerTextDrawAlignment(playerid, Register_PTD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, Register_PTD[playerid][18], -200);
+        PlayerTextDrawBackgroundColour(playerid, Register_PTD[playerid][18], 0xFFFFFF00);
         PlayerTextDrawSetShadow(playerid, Register_PTD[playerid][18], 0);
         PlayerTextDrawFont(playerid, Register_PTD[playerid][18], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, Register_PTD[playerid][18], false);

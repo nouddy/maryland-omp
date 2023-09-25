@@ -54,6 +54,7 @@
 #include <DialogCenter>
 #include <crashdetect>
 #include <marylandFix>
+#include <3DMenu>
 
 
 #define     c_server        "{8dc9f3}"
@@ -84,6 +85,7 @@
 #define     x_purple     0xC2A2DAAA 
 #define 	x_ltorange	 0xEB8C6CFF
 
+
 main()
 {
     print("-                                     -");
@@ -99,6 +101,8 @@ main()
 
 #define PRESSED(%0) \
     (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+
+#define randomEx(%0,%1) random((%1 - %0 + 1)) + %0
 
 public OnGameModeInit()
 {
@@ -199,15 +203,29 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	return 0;
 }
 
+/*
+
+hook function SetPlayerInterior(playerid, interiorid) {
+
+	printf("DEVLOG - %d INT", interiorid);
+
+	return continue(playerid, interiorid);
+}
+
+hook function SetPlayerVirtualWorld(playerid, worldid) {
+
+	printf("DEVLOG - %d VW", worldid);
+
+	return continue(playerid, worldid);
+}
+
+*/
+
 public OnPlayerUpdate(playerid)
 {
 	return 1;
 }
 
-public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
-{
-	return 1;
-}
 
 public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 {

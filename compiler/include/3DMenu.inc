@@ -1,15 +1,8 @@
-#define MAX_BOXES (16)
+#define MAX_BOXES (36)
 #define MENU3D_KEY_DOWN KEY_NO
 #define MENU3D_KEY_UP KEY_YES
 #define MENU3D_KEY_SELECT KEY_SPRINT
 
-/*
-native Create3DMenu(playerid,Float:x,Float:y,Float:z,Float:rotation,boxes);
-native SetBoxText(playerid,box,text[],materialsize,fontface[],fontsize,bold,fontcolor,selectcolor,unselectcolor,textalignment);
-native Select3DMenu(playerid);
-native CancelSelect3DMenu(playerid);
-native Destroy3DMenu(playerid);
-*/
 
 forward OnPlayerSelect3DMenuBox(playerid,boxid);
 forward OnPlayerChange3DMenuBox(playerid,boxid);
@@ -38,16 +31,16 @@ stock Create3DMenu(playerid,Float:x,Float:y,Float:z,Float:rotation,boxes)
     NextLineY = floatsin(rotation,degrees)+0.05*floatsin(rotation,degrees);
     for(new b = 0; b < boxes; b++)
     {
-        if(b%4 == 0 && b != 0) lineindx++,binc+=4;
-        MenuData[playerid][Objects][b] = CreateDynamicObject(2661,x+NextLineX*lineindx,y+NextLineY*lineindx,z+1.65-0.55*(b-binc),0,0,rotation,-1,-1,playerid,100.0);
-        GetDynamicObjectPos(MenuData[playerid][Objects][b],MenuData[playerid][OrigPosX][b],MenuData[playerid][OrigPosY][b],MenuData[playerid][OrigPosZ][b]);
+        if(b%6 == 0 && b != 0) lineindx++,binc+=6;
+        MenuData[playerid][Objects][b] = CreateDynamicObject(2661,x+NextLineX*lineindx,y+NextLineY*lineindx,z+1.65-0.55*(b-binc),0,0,rotation,-1, -1, playerid,100.0);
+        GetDynamicObjectPos(MenuData[playerid][Objects][b], MenuData[playerid][OrigPosX][b],MenuData[playerid][OrigPosY][b],MenuData[playerid][OrigPosZ][b]);
     }
     MenuData[playerid][IsExist] = true;
     Streamer_Update(playerid);
     return true;
 }
 
-stock SetBoxText(playerid,box,text[],materialsize,fontface[],fontsize,bold,fontcolor,selectcolor,unselectcolor,textalignment)
+stock SetBoxText(playerid,box, const text[],materialsize, const fontface[],fontsize,bold,fontcolor,selectcolor,unselectcolor,textalignment)
 {
     if(!MenuData[playerid][IsExist]) return false;
     if(box == MenuData[playerid][Boxes] || box < 0) return false;
@@ -186,7 +179,7 @@ public OnPlayerDisconnect(playerid,reason)
 #define OnPlayerDisconnect menu3d_OnPlayerDisconnect
 forward menu3d_OnPlayerDisconnect(playerid, reason);
 
-public OnPlayerKeyStateChange(playerid,newkeys,oldkeys)
+public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(SelectedMenu[playerid] != -1)
     {
