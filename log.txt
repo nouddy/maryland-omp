@@ -5881,3 +5881,278 @@ Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
 [2023-09-27T20:24:03+0200] [Info] DEVLOG - POS : 1401.779052 1591.346557 12.048100
 [2023-09-27T20:24:56+0200] [Warning] RCON (In-Game): Player #0 (Silentus) has logged in.
 [2023-09-27T20:33:43+0200] [Info] [part] Silentus has left the server (0:1)
+Starting open.mp server (1.0.1.2409) from commit dcd0190a91e67c99217e8ed3254baeb86733a0e4
+Loading component Actors.dll
+	Successfully loaded component Actors (1.0.1.2409) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.0.1.2409) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.0.1.2409) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.0.1.2409) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.0.1.2409) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.0.1.2409) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.0.1.2409) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.0.1.2409) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.0.1.2409) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.0.1.2409) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.0.1.2409) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.0.1.2409) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.0.1.2409) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.0.1.2409) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.0.1.2409) with UID cf304faa363dd971
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.0.1.2409) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.0.1.2409) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.0.1.2409) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.0.1.2409) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.0.1.2409) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.0.1.2409) with UID 3f1f62ee9e22ab19
+Loaded 22 component(s) from D:\Mods\maryland\components
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info]  ===============================
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info]      sscanf component loaded.   
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info]          Version: 2.13.8
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info]  ===============================
+[2023-09-28T01:36:24+0200] [Info] 
+[2023-09-28T01:36:24+0200] [Info] Loading plugin: crashdetect
+[2023-09-28T01:36:24+0200] [Info]   CrashDetect plugin 4.21
+[2023-09-28T01:36:24+0200] [Info] Loading plugin: streamer
+[2023-09-28T01:36:24+0200] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-09-28T01:36:24+0200] [Info] Loading plugin: mysql
+[2023-09-28T01:36:24+0200] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-09-28T01:36:24+0200] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-09-28T01:36:24+0200] [Info]  
+[2023-09-28T01:36:24+0200] [Info]  
+[2023-09-28T01:36:24+0200] [Info]          ==============================================================
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-09-28T01:36:24+0200] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-09-28T01:36:24+0200] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-09-28T01:36:24+0200] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-09-28T01:36:24+0200] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-09-28T01:36:24+0200] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-09-28T01:36:24+0200] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-09-28T01:36:24+0200] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-09-28T01:36:24+0200] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-09-28T01:36:24+0200] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          |                                                            |
+[2023-09-28T01:36:24+0200] [Info]          ==============================================================
+[2023-09-28T01:36:24+0200] [Info]  
+[2023-09-28T01:36:24+0200] [Info]  
+[2023-09-28T01:36:24+0200] [Info]  ========================================== 
+[2023-09-28T01:36:24+0200] [Info]  |                                        | 
+[2023-09-28T01:36:24+0200] [Info]  |   Generating code, this may take a     | 
+[2023-09-28T01:36:24+0200] [Info]  |  little bit of time.  Note that this   | 
+[2023-09-28T01:36:24+0200] [Info]  |  code generation works best with the   | 
+[2023-09-28T01:36:24+0200] [Info]  |     JIT plugin, which you are not      | 
+[2023-09-28T01:36:24+0200] [Info]  |     currently using.  Get it here:     | 
+[2023-09-28T01:36:24+0200] [Info]  |                                        | 
+[2023-09-28T01:36:24+0200] [Info]  |       https://git.io/jit-plugin        | 
+[2023-09-28T01:36:24+0200] [Info]  |                                        | 
+[2023-09-28T01:36:24+0200] [Info]  |             Please wait...             | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  |             Done in 609ms!             | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  ========================================== 
+[2023-09-28T01:36:25+0200] [Info] *** YSI Info: YSI Script ID: 1
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  | Server:      open.mp 1.0.1.2409 (Wind  | 
+[2023-09-28T01:36:25+0200] [Info]  | Started:     28 Sep 2023 - 01:36:24    | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-09-28T01:36:25+0200] [Info]  | Includes:    open.mp v037030           | 
+[2023-09-28T01:36:25+0200] [Info]  | Codepage:    <none>                    | 
+[2023-09-28T01:36:25+0200] [Info]  | Built:       28 Sep 2023 - 01:35:24    | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  | YSI:         v5.07.3082                | 
+[2023-09-28T01:36:25+0200] [Info]  | Master:      1                         | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  | JIT:         <none>                    | 
+[2023-09-28T01:36:25+0200] [Info]  | Crashdetect: <found>                   | 
+[2023-09-28T01:36:25+0200] [Info]  |                                        | 
+[2023-09-28T01:36:25+0200] [Info]  ========================================== 
+[2023-09-28T01:36:25+0200] [Info]  
+[2023-09-28T01:36:25+0200] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-09-28T01:36:25+0200] [Info] [debug] AMX backtrace:
+[2023-09-28T01:36:25+0200] [Info] [debug] #0 00007364 in ?? (0, 217, 62296000, 1598650688) in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #1 000074f8 in ?? (0, 0, 62296032, 1598650688) in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #2 0000bbcc in ?? () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #3 00003de4 in public y_inline_HTTPCallback () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] finance/bank_ogy.aio loaded
+[2023-09-28T01:36:25+0200] [Info]  
+[2023-09-28T01:36:25+0200] [Info] [MYSQL] Connected to database succesfully
+[2023-09-28T01:36:25+0200] [Info] assets/globalstuff.asset loaded
+[2023-09-28T01:36:25+0200] [Info] assets/proxdetect.asset loaded
+[2023-09-28T01:36:25+0200] [Info] assets/anims.asset loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] main/main.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] documentation/playerdocuments.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] frontend/speed_TD.tde loaded
+[2023-09-28T01:36:25+0200] [Info] vehicle/vehicle.script loaded
+[2023-09-28T01:36:25+0200] [Info] vehicle/servis.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] finance/bank.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] backend/property/houses.script * loaded...
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] business/biz.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] benches/klupe_ogy.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] attachments/attach.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] backend/faction_police.script loaded
+[2023-09-28T01:36:25+0200] [Info] factions/illegal/bunker.script loaded
+[2023-09-28T01:36:25+0200] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-09-28T01:36:25+0200] [Info] [debug] AMX backtrace:
+[2023-09-28T01:36:25+0200] [Info] [debug] #0 000f8dd8 in ?? () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #1 00129b78 in ?? () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #2 0001ce28 in public OnScriptInit@E () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] [debug] #3 native CallLocalFunction () in Pawn.dll
+[2023-09-28T01:36:25+0200] [Info] [debug] #4 00003eb8 in public y_inline_HTTPCallback () in <unknown>
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] safezone/safezone.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] messages/chat.script loaded
+[2023-09-28T01:36:25+0200] [Info] messages/random_poruke.script loaded
+[2023-09-28T01:36:25+0200] [Info] messages/notifikacije.script loaded
+[2023-09-28T01:36:25+0200] [Info] messages/custom_tags.script loaded.
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] npcs/actor.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] tehnomedia/tehnomedia.script loaded
+[2023-09-28T01:36:25+0200] [Info] tehnomedia/drone.script loaded
+[2023-09-28T01:36:25+0200] [Info] tehnomedia/navigation.script loaded
+[2023-09-28T01:36:25+0200] [Info] tehnomedia/playerlocation.script loaded
+[2023-09-28T01:36:25+0200] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] metros/metros.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] trash/trash.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] assets/labels.asset loaded
+[2023-09-28T01:36:25+0200] [Info] backend/asset/custom_markers.asset loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] frontend/main.tde loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/starbucks.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/opstina.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/glavnaulica.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/crnotrziste.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/tehnomedia.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/spawn.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/izborskina.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/glenpark.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/maryland-pd.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/bolnica-ext.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/hotel-ext.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/customs.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/shopping-center.map loaded
+[2023-09-28T01:36:25+0200] [Info] name/bizcent-ext.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/centar_park.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/binance_ext.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/poligon-as.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/croswellas.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/birorada.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/italy-granica.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/ml-gym.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/ls-ukrasi.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/ml-busvozac.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/opstina.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/italy_zicara.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/egypt_centar.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/egypt_hotel.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/egypt_ulica.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/egypt_ukrasi.map loaded
+[2023-09-28T01:36:25+0200] [Info] exterior/egypt_pumpa.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/opstina-int.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/flecca-bank.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/garaza.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/kanalizacija.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/spawn_int.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/login_map.map loaded
+[2023-09-28T01:36:25+0200] [Info] interior/bizcent-int.map loaded
+[2023-09-28T01:36:25+0200] [Info] interior/hotel-int.map loaded
+[2023-09-28T01:36:25+0200] [Info] frontend/login-new.map loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] xmas/xmas.script loaded
+[2023-09-28T01:36:25+0200] [Info] xmas/snowballing.script loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] staff/staff.script loaded
+[2023-09-28T01:36:25+0200] [Info] staff/spanel.script loaded
+[2023-09-28T01:36:25+0200] [Info] stocks/chat.stock loaded
+[2023-09-28T01:36:25+0200] [Info] stocks/db.stock loaded
+[2023-09-28T01:36:25+0200] [Info] stocks/vehicle.stock loaded
+[2023-09-28T01:36:25+0200] [Info] stocks/variable.stock loaded
+[2023-09-28T01:36:25+0200] [Info] backend/asset/clickplayertd.asset loaded
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] VEHICLE VW - 1
+[2023-09-28T01:36:25+0200] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info]  Founder : Ogy
+[2023-09-28T01:36:25+0200] [Info]  Version : 1.0 - Maryland
+[2023-09-28T01:36:25+0200] [Info]  Developer : Vostic & Ogy_ & Ferid Olsun 
+[2023-09-28T01:36:25+0200] [Info]  Credits : daddyDOT, realnaith
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] > Gamemode Starting...
+[2023-09-28T01:36:25+0200] [Info] >> Maryland Gamemode Started
+[2023-09-28T01:36:25+0200] [Info] -                                     -
+[2023-09-28T01:36:25+0200] [Info] Legacy Network started on port 7777
+[2023-09-28T01:36:25+0200] [Info] Ucitano 2 vozila
+[2023-09-28T01:36:25+0200] [Info] backend/property/houses.script loaded(1) houses
+[2023-09-28T01:36:25+0200] [Info] 
+[Business]: 0 business loaded.
+
+[2023-09-28T01:36:25+0200] [Info] backend/klupe_ogy.script loaded(5) seats
+[2023-09-28T01:36:25+0200] [Info] 
+[State Factions]: 1 Factions ucitano.
+
+[2023-09-28T01:36:25+0200] [Info] Ucitavanje Safe Zona(1)... Uspesno
+[2023-09-28T01:36:25+0200] [Info] Ucitavanje Metro Stanica(1)... Uspesno
+[2023-09-28T01:36:25+0200] [Info] Ucitavanje Kontejnera(1)... Uspesno
+[2023-09-28T01:36:25+0200] [Info] [SQL]: Nije moguce ucitati tabelu `jobs`
+[2023-09-28T01:36:30+0200] [Info] Failed to announce legacy network to open.mp list

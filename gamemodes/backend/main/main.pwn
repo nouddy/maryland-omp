@@ -366,7 +366,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	if(PRESSED(KEY_NO)) {
 		if(e_REGISTERING_PROGRESS[playerid]){
 
-		if(e_SELECTED_OBJ[playerid] >= 0) {
+			if(e_SELECTED_OBJ[playerid] >= 0) {
 
 				switch(e_SELECTED_OBJ[playerid]) {
 
