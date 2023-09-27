@@ -47,7 +47,12 @@ new e_CHARACTER_OBJ[4],
 
 //  new Menu:e_Character[2];
 
+enum e_PLAYER_FITNESS {
 
+	pWalkStyle
+}
+
+new playerFitness[MAX_PLAYERS][e_PLAYER_FITNESS];
 
 static const NameAnimations[][] =
 {
@@ -150,8 +155,6 @@ public PlayerRegistered(playerid)
 	SetPlayerInterior(playerid, 1);
 	SetPlayerVirtualWorld(playerid, playerid+1);
 
-	// TogglePlayerSpectating(playerid, false);
-
 	InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
 	InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
 
@@ -182,7 +185,10 @@ public PlayerRegistered(playerid)
 
 	e_REGISTERING_PROGRESS[playerid] = true;
 
-	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da dovrsite svog karaktera koritite 'LALT'.");
+	va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Dobro dosli %s na karakterizaciju vaseg karaktera.", ReturnPlayerName(playerid));
+	va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Izabrane opcije se cuvaju na vas nalog i nece se moci mijenjati, izuzetak je skin.");
+
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da listate ponudjene opcije karakterizacije pritisnite 'Y'.");
 	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'N'.");
 
 	return 1;
@@ -220,6 +226,7 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	IgracUlogovan[playerid] = false;
 	ImaLoginTD[playerid] = false;
+
 	return 1;
 }
 
@@ -321,7 +328,7 @@ timer Spawn_Player[100](playerid)
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
-	if(PRESSED( KEY_WALK)) {
+	if(PRESSED( KEY_YES)) {
 
 		if(e_REGISTERING_PROGRESS[playerid]) {		
 			
@@ -440,11 +447,17 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 			e_REGISTERING_PROGRESS[playerid] = true;
 			e_SELECTED_OBJ[playerid] = 0;
 
+			Player_SetWalkingStyle(playerid, WALKING_STYLES:e_CHOSEN_WALK[playerid]);
+
+			playerFitness[playerid][pWalkStyle] = e_CHOSEN_WALK[playerid];
+
+			/*
+
+			*/
+
 			if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
 
-
 				InitializeCharacter(playerid);
-
 			}
 		}
 	}
@@ -465,7 +478,6 @@ Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
 
 			e_CHOSEN_ATTACH[playerid] = true;
 
-			SetPlayerAttachedObject(playerid, 0, 19042, 5, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 			PlayerInfo[playerid][AttachedObject][0] = 1;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
@@ -481,7 +493,6 @@ Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
 
 			e_CHOSEN_ATTACH[playerid] = true;
 
-			SetPlayerAttachedObject(playerid, 0, 18951, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 			PlayerInfo[playerid][AttachedObject][0] = 2;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
@@ -497,7 +508,6 @@ Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
 
 			e_CHOSEN_ATTACH[playerid] = true;
 
-			SetPlayerAttachedObject(playerid, 0, 19023, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 			PlayerInfo[playerid][AttachedObject][0] = 3;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
@@ -964,10 +974,6 @@ public LoginIgraca(playerid)
 	return 1;
 }
 
-hook OnPlayerClickTextDraw(playerid, Text:clickedid)
-{
-	return 1;
-}
 forward RegisterIgraca(playerid);
 public RegisterIgraca(playerid)
 {
@@ -982,6 +988,16 @@ stock InitializeCharacter(playerid) {
 
 	TogglePlayerSpectating(playerid, false);
 
+	new wQ[120];
+
+	mysql_format(SQL, wQ, sizeof wQ, "INSERT INTO `player_fitness` (`pID`, `pWalkStyle`) VALUES ('%d', '%d')", PlayerInfo[playerid][SQLID], playerFitness[playerid][pWalkStyle]);
+	mysql_tquery(SQL, wQ);
+
+	new q[260];
+	mysql_format(SQL, q, sizeof q, "UPDATE `players` SET `Drzava` = '%e', `Pol` = '%e' WHERE `ID` = '%d'", 
+									PlayerInfo[playerid][Drzava], PlayerInfo[playerid][Pol], PlayerInfo[playerid][SQLID]);
+	mysql_tquery(SQL, q);
+	
 	new rand = random( sizeof( RandomSpawnCords ) );
 
 	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
@@ -1002,6 +1018,25 @@ stock InitializeCharacter(playerid) {
 	SpawnPlayer(playerid);
 
 	VosticGiveMoney(playerid, 2000);
+
+	switch(PlayerInfo[playerid][AttachedObject][0]) {
+
+		case 1: {
+
+			SetPlayerAttachedObject(playerid, 1, 19042, 5, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+		}
+
+		case 2: {
+
+			SetPlayerAttachedObject(playerid, 3, 18951, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+
+		}
+
+		case 3: {
+
+			SetPlayerAttachedObject(playerid, 2, 19023, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+		}
+	}
 
 	return 1;
 }

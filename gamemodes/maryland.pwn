@@ -54,7 +54,7 @@
 #include <DialogCenter>
 #include <crashdetect>
 #include <marylandFix>
-#include <3DMenu>
+#include <walking_styles>
 
 
 #define     c_server        "{8dc9f3}"
@@ -154,11 +154,6 @@ public OnPlayerConnect(playerid)
 }
 
 public OnPlayerDisconnect(playerid, reason)
-{
-	return 1;
-}
-
-public OnPlayerRequestClass(playerid, classid)
 {
 	return 1;
 }

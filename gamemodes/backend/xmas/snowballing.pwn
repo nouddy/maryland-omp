@@ -23,6 +23,18 @@
 static bool:snowball_inHand[MAX_PLAYERS];
 static snowObject;
 
+stock GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance)
+{
+    new Float:a;
+    GetPlayerPos(playerid, x, y, a);
+    GetPlayerFacingAngle(playerid, a);
+    if (GetPlayerVehicleID(playerid))
+    {
+      GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
+    }
+    x += (distance * floatsin(-a, degrees));
+    y += (distance * floatcos(-a, degrees));
+}
 
 hook OnGameModeInit() {
 
@@ -59,12 +71,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             snowball_inHand[playerid] = false;
 
-            snowObject = CreateDynamicObject(3003, pPos[0], pPos[1], pPos[2], 0.0, 0.0, 0.0, -1,  -1, -1);
+            snowObject = CreateDynamicObject(3003, pPos[0], pPos[1], pPos[2]+1.00, 0.0, 0.0, 0.0, -1,  -1, -1);
 
-            MoveDynamicObject(snowObject, pPos[0]-4.0, pPos[1], pPos[2]+0.450, 2.0, -1000.0, -1000.0, -1000.0);
+            GetXYInFrontOfPlayer(playerid, pPos[0], pPos[1], 50.0);
+
+            MoveDynamicObject(snowObject, pPos[0], pPos[1], pPos[2]+1.00, 2.0);
             RemovePlayerAttachedObject(playerid, 0);
 
             ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 0.87, false, true, true, true, 3000);
+
 
         }
     }
