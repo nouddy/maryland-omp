@@ -1,3 +1,5 @@
-[9/26/2023 8:42:58 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[9/26/2023 8:42:58 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[9/26/2023 8:42:58 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/27/2023 11:41:26 AM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[9/27/2023 11:41:26 AM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[9/27/2023 11:41:26 AM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `containers`": Table 'maryland.containers' doesn't exist
+[9/27/2023 11:41:26 AM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/27/2023 11:41:26 AM] [log-core] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
