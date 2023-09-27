@@ -191,3 +191,9 @@
 [9/27/2023 6:33:01 PM] [INFO] received Windows console close event; shutting log-core down
 [9/27/2023 6:46:46 PM] [INFO] received Windows console close event; shutting log-core down
 [9/27/2023 6:47:28 PM] [INFO] received Windows console close event; shutting log-core down
+[9/27/2023 8:17:10 PM] [ERROR] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
+[9/27/2023 8:18:39 PM] [INFO] received Windows console close event; shutting log-core down
+[9/27/2023 8:19:23 PM] [INFO] received Windows console close event; shutting log-core down
+[9/27/2023 8:22:56 PM] [INFO] received Windows console close event; shutting log-core down
+[9/27/2023 8:23:31 PM] [INFO] received Windows console close event; shutting log-core down
+[9/27/2023 8:33:46 PM] [INFO] received Windows console close event; shutting log-core down
