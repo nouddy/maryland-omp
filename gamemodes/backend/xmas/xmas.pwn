@@ -20,14 +20,15 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define MAX_SNOW_OBJECTS    	3
-#define SNOW_UPDATE_INTERVAL    1000
+#define MAX_SNOW_OBJECTS    3
+#define SNOW_UPDATE_INTERVAL     1000
 
 static
 	bool:SpawnedOnce[MAX_PLAYERS],
+	bool:NoXmasHat[MAX_PLAYERS],
 	bool:snowOn[MAX_PLAYERS],
 	snowObject[MAX_PLAYERS][MAX_SNOW_OBJECTS],
-	updateSnow[MAX_PLAYERS];
+	updateTimer[MAX_PLAYERS];
 
 hook OnGameModeInit()
 {
@@ -39,6 +40,8 @@ hook OnGameModeInit()
 		StopAudioStreamForPlayer(i);
 			
         SpawnedOnce[i] = true;
+        NoXmasHat[i] = false;
+        SetPlayerTime(i, 23, 0);
         CreateSnow(i);
 	}
 
@@ -49,6 +52,7 @@ hook OnGameModeExit()
 {
     foreach(new i : Player)
 	{
+        SetPlayerTime(i, 9, 0);
         DeleteSnow(i);
 		StopAudioStreamForPlayer(i);
 	    if(IsPlayerAttachedObjectSlotUsed(i, 1))
@@ -60,6 +64,7 @@ hook OnGameModeExit()
 hook OnPlayerConnect(playerid)
 {
 	SpawnedOnce[playerid] = false;
+	NoXmasHat[playerid] = false;
 
 	return (true);
 }
@@ -71,7 +76,9 @@ hook OnPlayerSpawn(playerid)
 	    case false:
 	    {
 	        SpawnedOnce[playerid] = true;
+	        SetPlayerTime(playerid, 23, 0);
 	        CreateSnow(playerid);
+			//PlayRandomXmasSong(playerid);
 	    }
 	}
 	return (true);
@@ -109,6 +116,14 @@ YCMD:snow(playerid, params[], help)
 	return (true);
 }
 
+YCMD:xmashat(playerid, params[], help)
+{
+    NoXmasHat[playerid] = false;
+	RemovePlayerAttachedObject(playerid,1);
+
+	return (true);
+}
+
 YCMD:xmasmusic(playerid, params[], help)
 {
 	PlayRandomXmasSong(playerid);
@@ -123,6 +138,25 @@ YCMD:stopmusic(playerid, params[], help)
 	return (true);
 }
 
+stock GiveChristmasHat(playerid,number)
+{
+	switch(number)
+	{
+		case 0:
+		{
+		    if(IsPlayerAttachedObjectSlotUsed(playerid,1))
+				RemovePlayerAttachedObject(playerid,1);
+		    SetPlayerAttachedObject(playerid, 1, 19064, 2, 0.120000, 0.040000, -0.003500, 0, 100, 100, 1.4, 1.4, 1.4);
+		}
+		case 1:
+		{
+			if(IsPlayerAttachedObjectSlotUsed(playerid,1))
+				RemovePlayerAttachedObject(playerid,1);
+			SetPlayerAttachedObject(playerid, 1, 19065, 2, 0.120000, 0.040000, -0.003500, 0, 100, 100, 1.4, 1.4, 1.4);
+		}
+	}
+}
+
 Snow_OnDisconnect(playerid)
 {
 	if(snowOn[playerid])
@@ -130,7 +164,7 @@ Snow_OnDisconnect(playerid)
 	    for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 			DestroyPlayerObject(playerid, snowObject[playerid][i]);
 		snowOn[playerid] = false;
-		KillTimer(updateSnow[playerid]);
+		KillTimer(updateTimer[playerid]);
 	}
 	return (true);
 }
@@ -168,7 +202,7 @@ CreateSnow(playerid)
 	for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 		snowObject[playerid][i] = CreatePlayerObject(playerid, 18864, pPos[0] + random(25), pPos[1] + random (25), pPos[2] - 5 + random(10), random(280), random(280), 0);
 	snowOn[playerid] = true;
-	updateSnow[playerid] = SetTimerEx("UpdateSnow", SNOW_UPDATE_INTERVAL, true, "i", playerid);
+	updateTimer[playerid] = SetTimerEx("UpdateSnow", SNOW_UPDATE_INTERVAL, true, "i", playerid);
 	return (true);
 }
 
@@ -177,7 +211,7 @@ DeleteSnow(playerid)
 	if(!snowOn[playerid]) return 0;
 	for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
 		DestroyPlayerObject(playerid, snowObject[playerid][i]);
-	KillTimer(updateSnow[playerid]);
+	KillTimer(updateTimer[playerid]);
 	snowOn[playerid] = false;
 	return (true);
 }
