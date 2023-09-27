@@ -38,14 +38,11 @@ hook OnGameModeInit()
 	{
 		DeleteSnow(i);
 		StopAudioStreamForPlayer(i);
-	    if(IsPlayerAttachedObjectSlotUsed(i, 1))
-			RemovePlayerAttachedObject(i, 1);
 			
         SpawnedOnce[i] = true;
         NoXmasHat[i] = false;
         SetPlayerTime(i, 23, 0);
         CreateSnow(i);
-		GiveChristmasHat(i, random(2));
 	}
 
     return (true);
@@ -84,8 +81,6 @@ hook OnPlayerSpawn(playerid)
 			//PlayRandomXmasSong(playerid);
 	    }
 	}
-	if(NoXmasHat[playerid] != true)
-		GiveChristmasHat(playerid, random(2));
 	return (true);
 }
 
@@ -124,7 +119,8 @@ YCMD:snow(playerid, params[], help)
 YCMD:xmashat(playerid, params[], help)
 {
     NoXmasHat[playerid] = false;
-    GiveChristmasHat(playerid, random(2));
+	RemovePlayerAttachedObject(playerid,1);
+
 	return (true);
 }
 

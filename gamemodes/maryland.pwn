@@ -106,7 +106,7 @@ main()
 
 public OnGameModeInit()
 {
-	mysql_log();
+	mysql_log(ALL);
 	
 	//!Streamer za ucitavanje mapa
 

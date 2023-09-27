@@ -60,8 +60,6 @@ new bool:RegisterPol[MAX_PLAYERS],
     bool:Registered[MAX_PLAYERS],
     bool:OnRegisterSkinLoad[MAX_PLAYERS];
 
-new bool:choosingSkin[MAX_PLAYERS];
-
 
 hook OnPlayerConnect(playerid)
 {

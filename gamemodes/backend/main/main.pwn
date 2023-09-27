@@ -18,6 +18,7 @@
  */
 
 #include <ysilib\YSI_Coding\y_hooks>
+#include <ysilib\YSI_Coding\y_inline>
 
 const MAX_PASSWORD_LENGTH = 64;
 const MIN_PASSWORD_LENGTH = 6;
@@ -27,13 +28,6 @@ static player_LoginAttempts[MAX_PLAYERS];
 
 static LoginActor[MAX_PLAYERS];
 
-enum {
-
-	e_CHOOSE_SEX = 1,
-	e_CHOOSE_STATE,
-	e_CHOOSE_WALKING_STYLE,
-	e_CHOOSE_ATTACH
-}
 
 new bool:e_REGISTERING_PROGRESS[MAX_PLAYERS],
 	bool:e_LOGIN_PROGRESS[MAX_PLAYERS];
@@ -45,9 +39,35 @@ new PlayerText:Login_TD[MAX_PLAYERS][85];
 
 new e_CHARACTER_OBJ[4],
 	e_SELECTED_OBJ[MAX_PLAYERS],
-	e_PROGRESS[MAX_PLAYERS][4];
+	bool:e_WALK_STYLE[MAX_PLAYERS],
+	e_CHOSEN_WALK[MAX_PLAYERS],
+	e_CHOSEN_ATTACH[MAX_PLAYERS],
+	e_CHOSEN_SEX[MAX_PLAYERS],
+	e_CHOSEN_STATE[MAX_PLAYERS];
 
 //  new Menu:e_Character[2];
+
+
+
+static const NameAnimations[][] =
+{
+    "WALK_player",
+    "WALK_civi",
+    "WALK_gang1",
+    "WALK_gang2",
+    "WALK_old",
+    "WALK_fatold",
+    "WALK_fat",
+    "WOMAN_walkold",
+    "WOMAN_walkfatold",
+    "WALK_shuffle",
+    "WOMAN_walknorm",
+    "WOMAN_walkbusy",
+    "WOMAN_walkpro",
+    "WOMAN_walksexy",
+    "WALK_drunk",
+    "WALK_Wuzi"
+};
 
 enum PlayerInformation
 {
@@ -123,10 +143,6 @@ forward PlayerRegistered(playerid);
 public PlayerRegistered(playerid)
 {
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
-    PlayerInfo[playerid][Novac] = 2000;
-	PlayerInfo[playerid][Level] = 1;
-    IgracUlogovan[playerid] = true;
-	SavePlayer(playerid);
 
 	SetSpawnInfo(playerid, 0, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 	SpawnPlayer(playerid);
@@ -166,8 +182,10 @@ public PlayerRegistered(playerid)
 
 	e_REGISTERING_PROGRESS[playerid] = true;
 
-	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da dovrsite svog karaktera koritite strelice ka gore/dole.");
-	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'ENTER'.");
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da dovrsite svog karaktera koritite 'LALT'.");
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'N'.");
+
+	return 1;
 
 }
 
@@ -181,13 +199,15 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
+
+	e_CHOSEN_WALK[playerid] = -1;
+	e_WALK_STYLE[playerid] = false;
+
 	ResetujVariable(playerid);
 
 	IgracUlogovan[playerid] = false;
 	UcitavanjeObjekata[playerid] = false;
 	ImaLoginTD[playerid] = false;
-
-	e_SELECTED_OBJ[playerid] = -1;
 
 	new query[120];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
@@ -200,36 +220,6 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	IgracUlogovan[playerid] = false;
 	ImaLoginTD[playerid] = false;
-	return 1;
-}
-
-hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
-
-	if(PRESSED( KEY_YES )) {
-
-		if(e_REGISTERING_PROGRESS[playerid]) {
-
-
-			if(e_SELECTED_OBJ[playerid] == -1) {
-
-				e_SELECTED_OBJ[playerid]++;
-				SetDynamicObjectMaterial(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], 0, 18646, "MatColours", "lightblue", 0xFFFFFFFF);
-			}
-
-		}
-	}
-	if(PRESSED( KEY_NO )) {
-
-		if(e_REGISTERING_PROGRESS[playerid]) {
-
-			if(e_SELECTED_OBJ[playerid] == 3) {
-
-				e_SELECTED_OBJ[playerid]--;
-				SetDynamicObjectMaterial(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], 0, 18646, "MatColours", "white", 0xFFFFFFFF);
-			}
-		}
-	}
-
 	return 1;
 }
 
@@ -270,7 +260,7 @@ timer Spawn_Player[100](playerid)
 	UcitajIgracuObjekte(playerid);
 	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
 	ResetPlayerMoney(playerid);
-	GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
+	VosticGiveMoney(playerid, PlayerInfo[playerid][Novac]);
 	SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
 	IgracUlogovan[playerid] = true;
 
@@ -329,8 +319,240 @@ timer Spawn_Player[100](playerid)
 	return (true);
 }
 
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+	if(PRESSED( KEY_WALK)) {
+
+		if(e_REGISTERING_PROGRESS[playerid]) {		
+			
+			new Float:x, Float:y, Float:z;
+			//BACK
+			GetDynamicObjectPos(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]],  //back
+			x, y+0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);
+			//
+			e_SELECTED_OBJ[playerid] += 1;
+			if (e_SELECTED_OBJ[playerid] == 4) 
+			{ 
+				e_SELECTED_OBJ[playerid] = 0; 
+			}
+
+			//FORWARD
+			GetDynamicObjectPos(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]],  //forward
+			x, y-0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);
+		}
+
+		if(e_WALK_STYLE[playerid]) {
+
+			e_CHOSEN_WALK[playerid]+=1;
+			if(e_CHOSEN_WALK[playerid] == 16) { e_CHOSEN_WALK[playerid] = 0; }
+
+			ApplyAnimation(playerid,"PED",NameAnimations[e_CHOSEN_WALK[playerid]],4.1,true,true,true,true,1);
+		}
+	}
+
+	if(PRESSED(KEY_NO)) {
+
+		if(e_SELECTED_OBJ[playerid] >= 0) {
+
+			switch(e_SELECTED_OBJ[playerid]) {
+
+				case 0: {
+
+					// SEX
+					Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
+
+				}
+
+				case 1: {
+
+					e_WALK_STYLE[playerid] = true;
+
+					e_SELECTED_OBJ[playerid] = -1;
+
+					e_REGISTERING_PROGRESS[playerid] = false;
+
+					InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
+					InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
+
+					SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
+					SetPlayerFacingAngle(playerid, 59.7749);
+				}
+
+				case 2: {
+
+					Dialog_Show(playerid, "dialog_cState", DIALOG_STYLE_LIST, "[C] >> Izaberite Drzavu", "1. Maryland\n2. Little Italy\n3. Egypt", "Odaberi", "Odustani");
+
+					InterpolateCameraPos(playerid, -1632.717773, 1050.919677, 53.783699, -1628.127807, 1047.886962, 54.736480, 3500);
+					InterpolateCameraLookAt(playerid, -1633.778930, 1055.779785, 53.280643, -1629.691162, 1043.138183, 54.806789, 3500);
+
+					SetPlayerPos(playerid, -1629.8636,1044.3052,54.1497);
+					SetPlayerFacingAngle(playerid, 3.3744);
+
+					ClearAnimations(playerid);
+				}
+
+				case 3: {
+
+					InterpolateCameraPos(playerid, -1632.313110, 1050.430664, 54.104110, -1638.467407, 1050.249877, 55.013023, 3500);
+					InterpolateCameraLookAt(playerid, -1633.612792, 1055.235351, 53.628269, -1638.389648, 1045.250976, 54.941501, 3500);
+				
+					SetPlayerPos(playerid, -1638.5516,1044.1083,54.1497);
+					SetPlayerFacingAngle(playerid, 357.4210);
+			
+
+					Dialog_Show(playerid, "dialog_cAttach", DIALOG_STYLE_LIST, "[C] >> Attach", "1. Sat\n2. Sesir\n3. Naocale", "Odaberi", "Odustani");
+					
+				}
+			}
+		}
+
+		if(e_WALK_STYLE[playerid] && e_CHOSEN_WALK[playerid] >= 0) {
+
+			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+			SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+			SetPlayerFacingAngle(playerid, 187.4477);
+
+			ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+
+			new Float:x, Float:y, Float:z;
+			//BACK
+			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			x, y+0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);  //back
+
+			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			x, y+0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);
+
+			e_WALK_STYLE[playerid] = false;
+			e_REGISTERING_PROGRESS[playerid] = true;
+			e_SELECTED_OBJ[playerid] = 0;
+
+			if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
+
+
+				InitializeCharacter(playerid);
+
+			}
+		}
+	}
+
+	return 1;
+}
+
 //
 
+Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
+
+	if(!response)
+		return Kick(playerid);
+
+	switch(listitem) {
+
+		case 0: {
+
+			e_CHOSEN_ATTACH[playerid] = true;
+
+			SetPlayerAttachedObject(playerid, 0, 19042, 5, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+			PlayerInfo[playerid][AttachedObject][0] = 1;
+
+			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+			SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+			SetPlayerFacingAngle(playerid, 187.4477);
+
+			ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+		}
+
+		case 1: {
+
+			e_CHOSEN_ATTACH[playerid] = true;
+
+			SetPlayerAttachedObject(playerid, 0, 18951, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+			PlayerInfo[playerid][AttachedObject][0] = 2;
+
+			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+			SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+			SetPlayerFacingAngle(playerid, 187.4477);
+
+			ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+		}
+
+		case 2: {
+
+			e_CHOSEN_ATTACH[playerid] = true;
+
+			SetPlayerAttachedObject(playerid, 0, 19023, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
+			PlayerInfo[playerid][AttachedObject][0] = 3;
+
+			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+			SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+			SetPlayerFacingAngle(playerid, 187.4477);
+
+			ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+		}
+	}
+
+	if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
+
+		InitializeCharacter(playerid);
+
+	}
+
+	return 1;
+}
+
+Dialog: dialog_cState(playerid, response, listitem, string: inputtext[]) {
+
+	if(!response)
+		return Kick(playerid);
+
+	if(response) {
+
+		switch(listitem) {
+
+			case 0: { strmid( PlayerInfo[ playerid ][ Drzava ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
+			case 1: { strmid( PlayerInfo[ playerid ][ Drzava ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
+			case 2: { strmid( PlayerInfo[ playerid ][ Drzava ], "Egypt", 0, strlen( "Egypt"), 50 ); }
+		}
+
+		InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+		InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+		SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+		SetPlayerFacingAngle(playerid, 187.4477);
+
+		ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+
+		e_CHOSEN_STATE[playerid] = true;
+
+		if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
+
+			InitializeCharacter(playerid);
+		}
+
+	}
+
+	return 1;
+
+}
 
 Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 {
@@ -462,12 +684,9 @@ Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
 	{
 		switch(listitem)
 		{
-			case 0: { strmid( PlayerInfo[ playerid ][ Drzava ], "Srbija", 0, strlen( "Srbija" ), 50 ); }
-			case 1: { strmid( PlayerInfo[ playerid ][ Drzava ], "Crna Gora", 0, strlen( "Crna Gora"), 50 ); }
-			case 2: { strmid( PlayerInfo[ playerid ][ Drzava ], "Bosna i Hercegovina", 0, strlen( "Bosna i Hercegovina"), 50 ); }
-			case 3: { strmid( PlayerInfo[ playerid ][ Drzava ], "Makedonija", 0, strlen( "Makedonija"), 50 ); }
-			case 4: { strmid( PlayerInfo[ playerid ][ Drzava ], "Hrvatska", 0, strlen( "Hrvatska"), 50 ); }
-			case 5: { strmid( PlayerInfo[ playerid ][ Drzava ], "Slovenija", 0, strlen( "Slovenija"), 50 ); }
+			case 0: { strmid( PlayerInfo[ playerid ][ Drzava ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
+			case 1: { strmid( PlayerInfo[ playerid ][ Drzava ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
+			case 2: { strmid( PlayerInfo[ playerid ][ Drzava ], "Egypt", 0, strlen( "Egypt"), 50 ); }
 		}
 		RegisterDrzava[playerid] = true;
 		SendClientMessage(playerid, x_ltorange, "> Odabrali ste vasu drzavu.");
@@ -493,6 +712,37 @@ Dialog:dialog_regdrzava(const playerid, response, listitem, string: inputtext[])
 	}
 	return (true);
 }
+
+Dialog:dialog_cSex(const playerid, response, listitem, string: inputtext[]) {
+
+	if(!response)
+		return Kick(playerid);
+
+
+	new odabir = listitem+1;
+	strmid( PlayerInfo[ playerid ][ Pol ], (odabir == 1 ? ("Musko") : ("Zensko")), 0, strlen( (odabir == 1 ? ("Musko") : ("Zensko")) ), 50 );
+
+	if(odabir == 1){PlayerInfo[playerid][Skin] = 29;}
+	else if(odabir == 2){PlayerInfo[playerid][Skin] = 12;}
+
+	InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+	InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+	SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+	SetPlayerFacingAngle(playerid, 187.4477);
+
+	e_CHOSEN_SEX[playerid] = true;
+
+	ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+
+	if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
+
+		InitializeCharacter(playerid);
+	}
+
+	return 1;
+}
+
 Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 {
 	if(!response)
@@ -723,4 +973,35 @@ public RegisterIgraca(playerid)
 {
 	CreatePlayerRegister(playerid, true);
 	return (true);
+}
+
+stock InitializeCharacter(playerid) {
+
+	SetPlayerVirtualWorld(playerid, 6);
+	SetPlayerInterior(playerid, 6);
+
+	TogglePlayerSpectating(playerid, false);
+
+	new rand = random( sizeof( RandomSpawnCords ) );
+
+	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
+	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
+
+	SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
+	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
+		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
+	);
+
+	PlayerInfo[playerid][Level] = 1;
+    IgracUlogovan[playerid] = true;
+
+	SavePlayer(playerid);
+
+	e_REGISTERING_PROGRESS[playerid] = false;
+
+	SpawnPlayer(playerid);
+
+	VosticGiveMoney(playerid, 2000);
+
+	return 1;
 }

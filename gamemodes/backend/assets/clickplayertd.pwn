@@ -55,7 +55,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 			);
 
 	}
-	else if(playertextid == Register_PTD[playerid][61]) // drzava
+	else if(playertextid == Register_PTD[playerid][61]) // dialog_regdrzavadrzava
 	{
 		if(RegisterDrzava[playerid])
 			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
@@ -63,7 +63,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 
 		Dialog_Show(playerid, "dialog_regdrzava", DIALOG_STYLE_LIST,
 			"Izaberite drzavu",
-			"Srbija\nCrna Gora\nBosna i Hercegovina\nMakedonija\nHrvatska\nSlovenija",
+			"Maryland\nLittle Italy\nEgypt",
 			"Unesi", "Izlaz"
 			);
 	}	

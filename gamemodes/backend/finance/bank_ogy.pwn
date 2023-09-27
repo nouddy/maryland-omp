@@ -183,7 +183,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     }
     return (true);
 }
-hook OnGameModeInit()
+hook OnScriptInit()
 {
     print("finance/bank_ogy.aio loaded");
 
