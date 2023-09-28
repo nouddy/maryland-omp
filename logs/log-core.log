@@ -198,3 +198,7 @@
 [9/27/2023 8:23:31 PM] [INFO] received Windows console close event; shutting log-core down
 [9/27/2023 8:33:46 PM] [INFO] received Windows console close event; shutting log-core down
 [9/28/2023 1:36:51 AM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 1:22:22 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 1:25:13 PM] [ERROR] exception 0X80000001 (<unknown>) from Unhandled Exception Handler catched; shutting log-core down
+[9/28/2023 1:27:07 PM] [ERROR] exception 0X80000001 (<unknown>) from Unhandled Exception Handler catched; shutting log-core down
+[9/28/2023 1:51:24 PM] [INFO] received Windows console close event; shutting log-core down
