@@ -230,7 +230,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-timer Spawn_Player[100](playerid)
+timer Spawn_Player[1500](playerid)
 {
 	new rand = random( sizeof( RandomSpawnCords ) );
 	//notification.Show(playerid, "USPESNO", "Dobrodosao nazad na Maryland", "!", BOXCOLOR_GREEN);
@@ -364,104 +364,101 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	}
 
 	if(PRESSED(KEY_NO)) {
-		if(e_REGISTERING_PROGRESS[playerid]){
 
-			if(e_SELECTED_OBJ[playerid] >= 0) {
+		if(e_SELECTED_OBJ[playerid] >= 0) {
 
-				switch(e_SELECTED_OBJ[playerid]) {
+			switch(e_SELECTED_OBJ[playerid]) {
 
-					case 0: {
+				case 0: {
 
-						// SEX
-						Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
+					// SEX
+					Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
 
-					}
+				}
 
-					case 1: {
+				case 1: {
 
-						e_WALK_STYLE[playerid] = true;
+					e_WALK_STYLE[playerid] = true;
 
-						e_SELECTED_OBJ[playerid] = -1;
+					e_SELECTED_OBJ[playerid] = -1;
 
-						e_REGISTERING_PROGRESS[playerid] = false;
+					e_REGISTERING_PROGRESS[playerid] = false;
 
-						InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
-						InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
+					InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
+					InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
 
-						SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
-						SetPlayerFacingAngle(playerid, 59.7749);
-					}
+					SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
+					SetPlayerFacingAngle(playerid, 59.7749);
+				}
 
-					case 2: {
+				case 2: {
 
-						Dialog_Show(playerid, "dialog_cState", DIALOG_STYLE_LIST, "[C] >> Izaberite Drzavu", "1. Maryland\n2. Little Italy\n3. Egypt", "Odaberi", "Odustani");
+					Dialog_Show(playerid, "dialog_cState", DIALOG_STYLE_LIST, "[C] >> Izaberite Drzavu", "1. Maryland\n2. Little Italy\n3. Egypt", "Odaberi", "Odustani");
 
-						InterpolateCameraPos(playerid, -1632.717773, 1050.919677, 53.783699, -1628.127807, 1047.886962, 54.736480, 3500);
-						InterpolateCameraLookAt(playerid, -1633.778930, 1055.779785, 53.280643, -1629.691162, 1043.138183, 54.806789, 3500);
+					InterpolateCameraPos(playerid, -1632.717773, 1050.919677, 53.783699, -1628.127807, 1047.886962, 54.736480, 3500);
+					InterpolateCameraLookAt(playerid, -1633.778930, 1055.779785, 53.280643, -1629.691162, 1043.138183, 54.806789, 3500);
 
-						SetPlayerPos(playerid, -1629.8636,1044.3052,54.1497);
-						SetPlayerFacingAngle(playerid, 3.3744);
+					SetPlayerPos(playerid, -1629.8636,1044.3052,54.1497);
+					SetPlayerFacingAngle(playerid, 3.3744);
 
-						ClearAnimations(playerid);
-					}
+					ClearAnimations(playerid);
+				}
 
-					case 3: {
+				case 3: {
 
-						InterpolateCameraPos(playerid, -1632.313110, 1050.430664, 54.104110, -1638.467407, 1050.249877, 55.013023, 3500);
-						InterpolateCameraLookAt(playerid, -1633.612792, 1055.235351, 53.628269, -1638.389648, 1045.250976, 54.941501, 3500);
-					
-						SetPlayerPos(playerid, -1638.5516,1044.1083,54.1497);
-						SetPlayerFacingAngle(playerid, 357.4210);
+					InterpolateCameraPos(playerid, -1632.313110, 1050.430664, 54.104110, -1638.467407, 1050.249877, 55.013023, 3500);
+					InterpolateCameraLookAt(playerid, -1633.612792, 1055.235351, 53.628269, -1638.389648, 1045.250976, 54.941501, 3500);
 				
+					SetPlayerPos(playerid, -1638.5516,1044.1083,54.1497);
+					SetPlayerFacingAngle(playerid, 357.4210);
+			
 
-						Dialog_Show(playerid, "dialog_cAttach", DIALOG_STYLE_LIST, "[C] >> Attach", "1. Sat\n2. Sesir\n3. Naocale", "Odaberi", "Odustani");
-						
-					}
+					Dialog_Show(playerid, "dialog_cAttach", DIALOG_STYLE_LIST, "[C] >> Attach", "1. Sat\n2. Sesir\n3. Naocale", "Odaberi", "Odustani");
+					
 				}
 			}
+		}
 
-			if(e_WALK_STYLE[playerid] && e_CHOSEN_WALK[playerid] >= 0) {
+		if(e_WALK_STYLE[playerid] && e_CHOSEN_WALK[playerid] >= 0) {
 
-				InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
-				InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
 
-				SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
-				SetPlayerFacingAngle(playerid, 187.4477);
+			SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+			SetPlayerFacingAngle(playerid, 187.4477);
 
-				ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+			ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
 
-				new Float:x, Float:y, Float:z;
-				//BACK
-				GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
-				MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
-				x, y+0.30, z, 
-				1.0,
-				0.000000, 0.000000, -13.500000);  //back
+			new Float:x, Float:y, Float:z;
+			//BACK
+			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			x, y+0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);  //back
 
-				GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
-				MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
-				x, y+0.30, z, 
-				1.0,
-				0.000000, 0.000000, -13.500000);
+			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			x, y+0.30, z, 
+			1.0,
+			0.000000, 0.000000, -13.500000);
 
-				e_WALK_STYLE[playerid] = false;
-				e_REGISTERING_PROGRESS[playerid] = true;
-				e_SELECTED_OBJ[playerid] = 0;
+			e_WALK_STYLE[playerid] = false;
+			e_REGISTERING_PROGRESS[playerid] = true;
+			e_SELECTED_OBJ[playerid] = 0;
 
-				Player_SetWalkingStyle(playerid, WALKING_STYLES:e_CHOSEN_WALK[playerid]);
+			Player_SetWalkingStyle(playerid, WALKING_STYLES:e_CHOSEN_WALK[playerid]);
 
-				playerFitness[playerid][pWalkStyle] = e_CHOSEN_WALK[playerid];
+			playerFitness[playerid][pWalkStyle] = e_CHOSEN_WALK[playerid];
 
-				/*
+			/*
 
-				*/
+			*/
 
-				if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
+			if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
 
-					InitializeCharacter(playerid);
-				}
+				InitializeCharacter(playerid);
 			}
-
 		}
 
 	}
@@ -471,7 +468,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 //
 
-Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
+Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 
 	if(!response)
 		return Kick(playerid);
@@ -524,16 +521,13 @@ Dialog: dialog_cAttach(playerid, response, listitem, string: inputtext[]) {
 		}
 	}
 
-	if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) {
-
+	if(e_CHOSEN_ATTACH[playerid] && e_CHOSEN_SEX[playerid] && e_CHOSEN_STATE[playerid] && e_CHOSEN_WALK[playerid]) 
 		InitializeCharacter(playerid);
-
-	}
 
 	return 1;
 }
 
-Dialog: dialog_cState(playerid, response, listitem, string: inputtext[]) {
+Dialog:dialog_cState(playerid, response, listitem, string: inputtext[]) {
 
 	if(!response)
 		return Kick(playerid);
@@ -987,29 +981,23 @@ public RegisterIgraca(playerid)
 
 stock InitializeCharacter(playerid) {
 
-	SetPlayerVirtualWorld(playerid, 6);
-	SetPlayerInterior(playerid, 6);
-
 	TogglePlayerSpectating(playerid, false);
+	/*
 
 	new wQ[120];
 
 	mysql_format(SQL, wQ, sizeof wQ, "INSERT INTO `player_fitness` (`pID`, `pWalkStyle`) VALUES ('%d', '%d')", PlayerInfo[playerid][SQLID], playerFitness[playerid][pWalkStyle]);
 	mysql_tquery(SQL, wQ);
 
+	*/
+
 	new q[260];
 	mysql_format(SQL, q, sizeof q, "UPDATE `players` SET `Drzava` = '%e', `Pol` = '%e' WHERE `ID` = '%d'", 
 									PlayerInfo[playerid][Drzava], PlayerInfo[playerid][Pol], PlayerInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
-	
-	new rand = random( sizeof( RandomSpawnCords ) );
 
-	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
-	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
-
-	SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
 	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
-		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
+		1401.7791,1591.3466,12.0481, 90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
 
 	PlayerInfo[playerid][Level] = 1;
@@ -1018,10 +1006,16 @@ stock InitializeCharacter(playerid) {
 	SavePlayer(playerid);
 
 	e_REGISTERING_PROGRESS[playerid] = false;
+	e_SELECTED_OBJ[playerid] = -1;
 
 	SpawnPlayer(playerid);
 
 	VosticGiveMoney(playerid, 2000);
+
+	SetPlayerVirtualWorld(playerid, 6);
+	SetPlayerInterior(playerid, 6);
+
+
 
 	switch(PlayerInfo[playerid][AttachedObject][0]) {
 
@@ -1041,6 +1035,29 @@ stock InitializeCharacter(playerid) {
 			SetPlayerAttachedObject(playerid, 2, 19023, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
 		}
 	}
+
+	for(new i=0; i< 30; i++)
+	{
+		TextDrawShowForPlayer(playerid, MarylandLogo[i]);
+	}
+
+	for(new i=0; i< 40; i++)
+	{
+		TextDrawShowForPlayer(playerid, Global_TD[i]);
+	}
+
+	for(new i=0; i< 8; i++)
+	{
+		PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
+	}
+
+	static pname[25];
+	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
+	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
+	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 
 	return 1;
 }

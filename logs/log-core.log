@@ -202,3 +202,14 @@
 [9/28/2023 1:25:13 PM] [ERROR] exception 0X80000001 (<unknown>) from Unhandled Exception Handler catched; shutting log-core down
 [9/28/2023 1:27:07 PM] [ERROR] exception 0X80000001 (<unknown>) from Unhandled Exception Handler catched; shutting log-core down
 [9/28/2023 1:51:24 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 2:42:34 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:43:08 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:43:19 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:43:32 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:47:11 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:48:51 PM] [ERROR] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
+[9/28/2023 6:55:25 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:55:58 PM] [INFO] received Windows console close event; shutting log-core down
+[9/28/2023 6:57:37 PM] [ERROR] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
+[9/28/2023 7:02:12 PM] [ERROR] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
+[9/28/2023 7:15:20 PM] [INFO] received Windows console close event; shutting log-core down
