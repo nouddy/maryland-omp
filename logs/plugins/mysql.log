@@ -27511,3 +27511,669 @@
 [9/28/2023 7:11:18 PM] [DEBUG] CResultSet::Create(connection=0x3bc7828, query_str='UPDATE `players` SET `Novac` = '2000' WHERE `ID` = '1'')
 [9/28/2023 7:11:18 PM] [DEBUG] created new resultset '0x419cd60'
 [9/28/2023 7:11:18 PM] [DEBUG] fetched MySQL result '0x0'
+[9/30/2023 9:30:40 AM] [ERROR] mysql_tquery: invalid connection handle '0'
+[9/30/2023 9:30:40 AM] [ERROR] mysql_tquery: invalid connection handle '0'
+[9/30/2023 9:30:40 AM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_connect_file("mysql.ini")
+[9/30/2023 9:30:40 AM] [DEBUG] CHandleManager::CreateFromFile(this=0x30eabd0, file_path='mysql.ini')
+[9/30/2023 9:30:40 AM] [INFO] Options instance with id '1' successfully created.
+[9/30/2023 9:30:40 AM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x3370fc0 (id '1')
+[9/30/2023 9:30:40 AM] [DEBUG] CHandleManager::Create(this=0x30eabd0, host='localhost', user='root', pass='****', db='maryland', options=0x3370fc0)
+[9/30/2023 9:30:40 AM] [INFO] Creating new connection handle...
+[9/30/2023 9:30:40 AM] [WARNING] mysql_connect_file: no password specified
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection(this=0x336ccd8, host='localhost', user='root', passw='****', db='maryland', options=0x3370fc0)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection - new connection = 0x2806430
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection(this=0x5af5020, host='localhost', user='root', passw='****', db='maryland', options=0x3370fc0)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection - new connection = 0x2918fb8
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::WorkerFunc(this=0x5af5020, connection=0x5af5020)
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0x5af5020, connection=0x5af5020)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x336cd58)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection(this=0x9d11020, host='localhost', user='root', passw='****', db='maryland', options=0x3370fc0)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection - new connection = 0x33786a8
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::WorkerFunc(this=0x9d11020, connection=0x9d11020)
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0x9d11020, connection=0x9d11020)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection(this=0x9eee020, host='localhost', user='root', passw='****', db='maryland', options=0x3370fc0)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::CConnection - new connection = 0x38f7628
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::WorkerFunc(this=0x9eee020, connection=0x9eee020)
+[9/30/2023 9:30:40 AM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0x9eee020, connection=0x9eee020)
+[9/30/2023 9:30:40 AM] [INFO] Connection handle with id '1' successfully created.
+[9/30/2023 9:30:40 AM] [DEBUG] CHandleManager::Create - new handle = 0x2802a38
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_connect_file: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_errno(1)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::GetErrorId(this=0x2802a38)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::GetError(this=0x336ccd8, connection=0x2806430)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_errno: return value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='LoadVehicleData', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[9/30/2023 9:30:40 AM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x2805a70)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x2805a70, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x2805a70, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 6.326 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `vehicles`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x2808e60'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x391bae8'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 312 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='House_LoadData', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[9/30/2023 9:30:40 AM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x391bf30)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x391bf30, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x391bf30, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='Business_Load', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[9/30/2023 9:30:40 AM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x2809918)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `houses`" successfully executed within 5.387 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `houses`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x2808df0'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x28099a0'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 244 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x2809918, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x2809918, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='KlupeLoading', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[9/30/2023 9:30:40 AM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x28099b0)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 7.882 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `businesses`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x391ac88'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x391b800'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 0 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x28099b0, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x28099b0, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='PoliceLoad', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 376
+[9/30/2023 9:30:40 AM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x391a360)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 5.319 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `klupe`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x391add8'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x291b988'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 272 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x391a360, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x391a360, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='SafeZonesLoad', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 395
+[9/30/2023 9:30:40 AM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=2, query=0x391aa28)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnectionPool::Queue(query=0x391aa28, this=0x336cd58)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x391aa28, this=0x9d11020, connection=0x33786a8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x391aa28, connection=0x33786a8)
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 5.678 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `faction_police`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x391acf8'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x2914368'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 316 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 6.837 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x33786a8, query_str='SELECT * FROM `safezones`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x3a265f0'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x38f75a8'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 124 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='LoadMetros', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[9/30/2023 9:30:40 AM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=2, query=0x3a37aa0)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnectionPool::Queue(query=0x3a37aa0, this=0x336cd58)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x3a37aa0, this=0x9eee020, connection=0x38f7628)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x3a37aa0, connection=0x38f7628)
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='LoadContainers', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[9/30/2023 9:30:40 AM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=2, query=0x3ab8bc8)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnectionPool::Queue(query=0x3ab8bc8, this=0x336cd58)
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x3ab8bc8, this=0x9d11020, connection=0x33786a8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x3ab8bc8, connection=0x33786a8)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_pquery: return value: '1'
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `metros`" successfully executed within 9.836 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x38f7628, query_str='SELECT * FROM `metros`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x2805060'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x391b3e0'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 76 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `containers`" successfully executed within 7.178 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x33786a8, query_str='SELECT * FROM `containers`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x391aef0'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x391b020'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 84 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='Job_LoadVehicleData', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='Job_LoadData', format='', params=0x9bc67c4, param_offset=5)
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[9/30/2023 9:30:40 AM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[9/30/2023 9:30:40 AM] [DEBUG] created delayed callback with 0 parameter
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0x3ab84a8)
+[9/30/2023 9:30:40 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:30:40 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] CConnection::Execute(query=0x3ab84a8, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [DEBUG] CQuery::Execute(this=0x3ab84a8, connection=0x2918fb8)
+[9/30/2023 9:30:40 AM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 7.913 milliseconds
+[9/30/2023 9:30:40 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `jobs`')
+[9/30/2023 9:30:40 AM] [DEBUG] created new resultset '0x2804c00'
+[9/30/2023 9:30:40 AM] [DEBUG] fetched MySQL result '0x30e69d0'
+[9/30/2023 9:30:40 AM] [DEBUG] allocated 0 bytes for PAWN result
+[9/30/2023 9:30:40 AM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=258, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '258'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67F0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vID", 0x0881BDE4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vOwner", 0x0881BDE8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vModel", 0x0881BDEC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '411'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Color1", 0x0881BDF0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Color2", 0x0881BDF4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "vPlate", 0x0881BDF8, 32)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'UNREGISTERED-00'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "vPosX", 0x0881BE78)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '819.28'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "vPosY", 0x0881BE7C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1323.17'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "vPosZ", 0x0881BE80)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.469'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "vPosZ", 0x0881BE84)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.469'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vRegDate", 0x0881BE88)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vOil", 0x0881BE8C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '100'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vRange", 0x0881BE90)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vFuel", 0x0881BE94)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '100'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vFuelType", 0x0881BE98)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "vAlarm", 0x0881BE9C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vID", 0x0881BEA0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '2'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vOwner", 0x0881BEA4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vModel", 0x0881BEA8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '562'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "Color1", 0x0881BEAC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "Color2", 0x0881BEB0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(1, "vPlate", 0x0881BEB4, 32)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'N/A-00-12'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "vPosX", 0x0881BF34)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '839.961'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "vPosY", 0x0881BF38)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1319.57'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "vPosZ", 0x0881BF3C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.3927'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "vPosZ", 0x0881BF40)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.3927'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vRegDate", 0x0881BF44)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vOil", 0x0881BF48)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '100'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vRange", 0x0881BF4C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vFuel", 0x0881BF50)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '100'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vFuelType", 0x0881BF54)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "vAlarm", 0x0881BF58)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=226, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '226'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67F0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "ID", 0x08958DE8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '2'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "PID", 0x08959298)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Price", 0x08959748)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '50000'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Type", 0x08959BF8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "Adress", 0x0895A558, 50)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Market, Maryland'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Locked", 0x0896ED78)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PosX", 0x0896F6D8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '830.025'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PosY", 0x0896F6DC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1331.26'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PosZ", 0x0896F6E0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.3969'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "ExitX", 0x08970998)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '224.28'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "ExitY", 0x0897099C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1289.19'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "ExitZ", 0x089709A0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1082.14'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Safe", 0x089717A8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Money", 0x08971C58)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Weed", 0x089725B8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Cocaine", 0x089725BC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Extazy", 0x089725C0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "WardX", 0x08973878)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '224.28'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "WardY", 0x0897387C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1289.19'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "WardZ", 0x08973880)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1082.14'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "FridgeX", 0x08974B38)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '224.28'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "FridgeY", 0x08974B3C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1289.19'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "FridgeZ", 0x08974B40)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1082.14'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Int", 0x08975948)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=200, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '200'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67F4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=250, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '250'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67EC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "seat_ID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "seat_x", 0x089E833C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1204.19'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "seat_y", 0x089E8340)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-907.003'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "seat_z", 0x089E8344)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '42.8876'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "seat_a", 0x089E8348)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '169.787'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(1, "seat_ID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '3'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "seat_x", 0x089E836C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1468.92'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "seat_y", 0x089E8370)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1748.95'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "seat_z", 0x089E8374)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.5669'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(1, "seat_a", 0x089E8378)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '274.739'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(2, "seat_ID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '4'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(2, "seat_x", 0x089E8384)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1925.46'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(2, "seat_y", 0x089E8388)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1200.3'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(2, "seat_z", 0x089E838C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '20.0235'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(2, "seat_a", 0x089E8390)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '284.166'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(3, "seat_ID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '5'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(3, "seat_x", 0x089E839C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '924.495'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(3, "seat_y", 0x089E83A0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1753.68'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(3, "seat_z", 0x089E83A4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.5469'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(3, "seat_a", 0x089E83A8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '80.2901'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=376, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '376'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67F0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceID", 0x089EAAD0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceName", 0x089EAAD4, 60)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Maryland Police Department'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceShortName", 0x089EABC4, 30)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'MPD'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceAdress", 0x089EAC3C, 35)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Maryland, '
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceState", 0x089EACC8, 30)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Maryland'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceBoss", 0x089EAD40)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceType", 0x089EAD44)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '2'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceX", 0x089EAD48)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '326.158'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceY", 0x089EAD4C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1514.57'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceZ", 0x089EAD50)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '36.0325'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceExitX", 0x089EAD54)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '246.66'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceExitY", 0x089EAD58)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '65.8'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fPoliceExitZ", 0x089EAD5C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1003.64'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceInt", 0x089EAD60)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '6'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceVault", 0x089EAD64)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceMoney", 0x089EAD68)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceDirtMoney", 0x089EAD6C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fConfiscatedDrugs", 0x089EAD70)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fDutyPointX", 0x089EAD74)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '254.418'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fDutyPointY", 0x089EAD78)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '77.0467'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fDutyPointZ", 0x089EAD7C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1003.64'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fEquipmentX", 0x089EAD80)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fEquipmentY", 0x089EAD84)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "fEquipmentZ", 0x089EAD88)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceRank1", 0x089F0208, 32)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Officer'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceRank2", 0x089F0288, 32)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Sarge'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name(0, "fPoliceRank3", 0x089F0308, 32)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: assigned value: 'Major'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceSkins1", 0x089EAD94)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '287'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceSkins2", 0x089EAD98)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '286'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceSkins3", 0x089EAD9C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '300'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "fPoliceSkins4", 0x089EADA0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '303'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=395, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '395'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC6800)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "safeSQLID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '4'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "MinX", 0x08A069A0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1437.3'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "MinY", 0x08A069A4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1723.03'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "MaxX", 0x08A069A8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1522.43'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "MaxY", 0x08A069AC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1600.28'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "Radius", 0x08A069B0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '30'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "Color", 0x08A069B4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '10040234'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PickupX", 0x08A069C0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1479.35'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PickupY", 0x08A069C4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1659.08'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "PickupZ", 0x08A069C8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '12.1709'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=255, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '255'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC6800)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "metroID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "metroRuta", 0x08A4D95C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '2'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "metroX", 0x08A4D960)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '1076.06'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "metroY", 0x08A4D964)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1076.9'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "metroZ", 0x08A4D968)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '27.3969'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "metroInt", 0x08A4D96C)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "metroVw", 0x08A4D970)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=254, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '254'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC6800)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "conID", 0x09BC67FC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_x", 0x08A52DA4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '811.135'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_y", 0x08A52DA8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1310.95'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_z", 0x08A52DAC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '13.1908'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_rx", 0x08A52DB0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_ry", 0x08A52DB4)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float(0, "con_rz", 0x08A52DB8)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: assigned value: '-1.43625'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_float: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int(0, "con_jnumber", 0x08A52DBC)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_value_name_int: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:30:40 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=247, num_params=0)
+[9/30/2023 9:30:40 AM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[9/30/2023 9:30:40 AM] [DEBUG] executing AMX callback with index '247'
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count(0x09BC67F0)
+[9/30/2023 9:30:40 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:30:40 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:30:40 AM] [INFO] Callback successfully executed.
+[9/30/2023 9:31:35 AM] [DEBUG] mysql_format(1, 0x09BC6570, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[9/30/2023 9:31:35 AM] [DEBUG] CHandle::EscapeString(this=0x2802a38, src='ferid420')
+[9/30/2023 9:31:35 AM] [DEBUG] CConnection::EscapeString(src='ferid420', this=0x336ccd8, connection=0x2806430)
+[9/30/2023 9:31:35 AM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'ferid420'
+[9/30/2023 9:31:35 AM] [DEBUG] mysql_format: return value: '62'
+[9/30/2023 9:31:35 AM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'ferid420'  LIMIT 1", "SQL_AccountLoad", "i")
+[9/30/2023 9:31:35 AM] [DEBUG] CCallback::Create(amx=0x30eb4c8, name='SQL_AccountLoad', format='i', params=0x9bc6558, param_offset=5)
+[9/30/2023 9:31:35 AM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 384
+[9/30/2023 9:31:35 AM] [DEBUG] processing specifier 'i' with parameter index 0
+[9/30/2023 9:31:35 AM] [DEBUG] retrieved and pushed value '0'
+[9/30/2023 9:31:35 AM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[9/30/2023 9:31:35 AM] [DEBUG] created delayed callback with 1 parameter
+[9/30/2023 9:31:35 AM] [DEBUG] CHandle::Execute(this=0x2802a38, type=1, query=0xcd40e10)
+[9/30/2023 9:31:35 AM] [DEBUG] CConnection::Execute(query=0xcd40e10, this=0x5af5020, connection=0x2918fb8)
+[9/30/2023 9:31:35 AM] [DEBUG] CQuery::Execute(this=0xcd40e10, connection=0x2918fb8)
+[9/30/2023 9:31:35 AM] [DEBUG] CHandle::Execute - return value: true
+[9/30/2023 9:31:35 AM] [DEBUG] mysql_tquery: return value: '1'
+[9/30/2023 9:31:35 AM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'ferid420'  LIMIT 1" successfully executed within 6.840 milliseconds
+[9/30/2023 9:31:35 AM] [DEBUG] CResultSet::Create(connection=0x2918fb8, query_str='SELECT * FROM `players` WHERE `Username` = 'ferid420'  LIMIT 1')
+[9/30/2023 9:31:35 AM] [DEBUG] created new resultset '0x391ac50'
+[9/30/2023 9:31:35 AM] [DEBUG] fetched MySQL result '0xcd40350'
+[9/30/2023 9:31:35 AM] [DEBUG] allocated 0 bytes for PAWN result
+[9/30/2023 9:31:35 AM] [DEBUG] CCallback::Execute(amx=0x30eb4c8, index=384, num_params=1)
+[9/30/2023 9:31:35 AM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[9/30/2023 9:31:35 AM] [DEBUG] processing internal specifier 'c'
+[9/30/2023 9:31:35 AM] [DEBUG] pushed value '0' onto AMX stack
+[9/30/2023 9:31:35 AM] [DEBUG] executing AMX callback with index '384'
+[9/30/2023 9:31:35 AM] [DEBUG] cache_get_row_count(0x087FCAC8)
+[9/30/2023 9:31:35 AM] [DEBUG] cache_get_row_count: return value: '1'
+[9/30/2023 9:31:35 AM] [DEBUG] AMX callback executed with error '0'
+[9/30/2023 9:31:35 AM] [INFO] Callback successfully executed.

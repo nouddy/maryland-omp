@@ -144,6 +144,7 @@ stock SaveElectronic(playerid)
 //* Save sve u vezi finansija
 stock SaveFinance(playerid)
 {
+
     if(IgracUlogovan[playerid] == true)
     {
         new query[500];

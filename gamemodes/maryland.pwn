@@ -667,7 +667,11 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/ml-gym.pwn"							//* ML Gym Map
 #include "frontend/exterior/ls-ukrasi.pwn"						//* ML Ukrasi po gradu
 #include "frontend/exterior/ml-busvozac.pwn"					//* ML Bus Station
-#include "frontend/exterior/ml-zlatara.pwn"						//* ML Zlatara
+#include "frontend/exterior/gov_ext.pwn"						//* Goverment
+#include "frontend/exterior/plaza_map.pwn"						//* Plaza
+#include "frontend/exterior/pizzeria.pwn"						//* Pizzeria
+#include "frontend/exterior/driving_school.pwn"					//* Driving_School
+#include "frontend/exterior/vinewood_map.pwn"					//* VineWood
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
 #include "frontend/exterior/italy_zicara.pwn"					//* Zicara u Italy (SF)
