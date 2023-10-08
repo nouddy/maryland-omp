@@ -364,57 +364,59 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	}
 
 	if(PRESSED(KEY_NO)) {
+		if(e_REGISTERING_PROGRESS[playerid])
+		{
+			if(e_SELECTED_OBJ[playerid] >= 0) {
 
-		if(e_SELECTED_OBJ[playerid] >= 0) {
+				switch(e_SELECTED_OBJ[playerid]) {
 
-			switch(e_SELECTED_OBJ[playerid]) {
+					case 0: {
 
-				case 0: {
+						// SEX
+						Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
 
-					// SEX
-					Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
+					}
 
-				}
+					case 1: {
 
-				case 1: {
+						e_WALK_STYLE[playerid] = true;
 
-					e_WALK_STYLE[playerid] = true;
+						e_SELECTED_OBJ[playerid] = -1;
 
-					e_SELECTED_OBJ[playerid] = -1;
+						e_REGISTERING_PROGRESS[playerid] = false;
 
-					e_REGISTERING_PROGRESS[playerid] = false;
+						InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
+						InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
 
-					InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
-					InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
+						SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
+						SetPlayerFacingAngle(playerid, 59.7749);
+					}
 
-					SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
-					SetPlayerFacingAngle(playerid, 59.7749);
-				}
+					case 2: {
 
-				case 2: {
+						Dialog_Show(playerid, "dialog_cState", DIALOG_STYLE_LIST, "[C] >> Izaberite Drzavu", "1. Maryland\n2. Little Italy\n3. Egypt", "Odaberi", "Odustani");
 
-					Dialog_Show(playerid, "dialog_cState", DIALOG_STYLE_LIST, "[C] >> Izaberite Drzavu", "1. Maryland\n2. Little Italy\n3. Egypt", "Odaberi", "Odustani");
+						InterpolateCameraPos(playerid, -1632.717773, 1050.919677, 53.783699, -1628.127807, 1047.886962, 54.736480, 3500);
+						InterpolateCameraLookAt(playerid, -1633.778930, 1055.779785, 53.280643, -1629.691162, 1043.138183, 54.806789, 3500);
 
-					InterpolateCameraPos(playerid, -1632.717773, 1050.919677, 53.783699, -1628.127807, 1047.886962, 54.736480, 3500);
-					InterpolateCameraLookAt(playerid, -1633.778930, 1055.779785, 53.280643, -1629.691162, 1043.138183, 54.806789, 3500);
+						SetPlayerPos(playerid, -1629.8636,1044.3052,54.1497);
+						SetPlayerFacingAngle(playerid, 3.3744);
 
-					SetPlayerPos(playerid, -1629.8636,1044.3052,54.1497);
-					SetPlayerFacingAngle(playerid, 3.3744);
+						ClearAnimations(playerid);
+					}
 
-					ClearAnimations(playerid);
-				}
+					case 3: {
 
-				case 3: {
-
-					InterpolateCameraPos(playerid, -1632.313110, 1050.430664, 54.104110, -1638.467407, 1050.249877, 55.013023, 3500);
-					InterpolateCameraLookAt(playerid, -1633.612792, 1055.235351, 53.628269, -1638.389648, 1045.250976, 54.941501, 3500);
-				
-					SetPlayerPos(playerid, -1638.5516,1044.1083,54.1497);
-					SetPlayerFacingAngle(playerid, 357.4210);
-			
-
-					Dialog_Show(playerid, "dialog_cAttach", DIALOG_STYLE_LIST, "[C] >> Attach", "1. Sat\n2. Sesir\n3. Naocale", "Odaberi", "Odustani");
+						InterpolateCameraPos(playerid, -1632.313110, 1050.430664, 54.104110, -1638.467407, 1050.249877, 55.013023, 3500);
+						InterpolateCameraLookAt(playerid, -1633.612792, 1055.235351, 53.628269, -1638.389648, 1045.250976, 54.941501, 3500);
 					
+						SetPlayerPos(playerid, -1638.5516,1044.1083,54.1497);
+						SetPlayerFacingAngle(playerid, 357.4210);
+				
+
+						Dialog_Show(playerid, "dialog_cAttach", DIALOG_STYLE_LIST, "[C] >> Attach", "1. Sat\n2. Sesir\n3. Naocale", "Odaberi", "Odustani");
+						
+					}
 				}
 			}
 		}
