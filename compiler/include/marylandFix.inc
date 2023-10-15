@@ -9,7 +9,7 @@
 
 Object_IsLarge( id ) {
 	switch( id ) {
-		case 7584, 8395, 9901, 6863: return true;
+		case 7584, 8395, 6157, 9901, 6863: return true;
 	}
 	return false;
 }
