@@ -1,98 +1,402 @@
-
-/***
- *
- *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
- *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
- *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
- *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
- *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
- *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
- *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
- *
- *  @Author         Ferid Olsun
- *  @Date           11th Sep 2023
- *  @Weburl         weburl
- *  @Project        maryland_project
- *
- *  @File           snowballing.script
- *  @Module         xmas
- */
-
 #include <ysilib\YSI_Coding\y_hooks>
 
-static bool:snowball_inHand[MAX_PLAYERS];
-static snowObject;
+#define MAX_SNOWBALLS 100
+enum E_SNOWBALLS {
+	sb_owner,
+	sb_status,
+	sb_sphere,
+	sb_object,
+	bool:sb_exists
+}
+new SnowBallData[MAX_SNOWBALLS][E_SNOWBALLS];
+new bool:PlayerCreatedSnowBall[MAX_PLAYERS] = false;
 
-stock GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance)
+hook OnPlayerConnect(playerid) {
+
+	PlayerCreatedSnowBall[playerid] = false;
+
+	print("OnPlayerConnect - snowballing");
+
+	return true;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
+{	
+	if (PRESSED( KEY_CROUCH) )
+	{
+
+		print("Crnci - Key Crouch");
+
+		if (!PlayerCreatedSnowBall[playerid])
+		{
+			print("Ferid Musliman - KeyStateChange TRUE");
+
+			new Float:tx, Float:ty, Float:tz, index;
+			GetPlayerPos(playerid, tx, ty, tz);
+			index = CA_RayCastLine(tx, ty, tz+ 2, tx, ty, tz-2.5, tx, ty, tz); 		
+			if (IsObjectSnowGround(index)) {
+				SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pravite grudvu sacekajte malo..");
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, true, false, false, false, false);
+				SetTimerEx("MakeSnowBall", 1500, false, "i", playerid);
+				print("MakeSnowBall");
+			}
+			else {
+				if (!WinterPlayerSettings[playerid][p_map])
+					SendClientMessage(playerid, x_server, "maryland \187; "c_white"Grudvu mozete praviti samo na povrsinama gde je sneg! '/winter > Snezna Mapa' ako je iskljucen");
+			}
+		}
+	}   
+	if (PRESSED( KEY_FIRE) && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+		if (PlayerCreatedSnowBall[playerid])
+		{
+			if (CA_IsPlayerBlocked(playerid, 5.0, -1.0)) return SendClientMessage(playerid, x_red, "Ne mozete bacati grudvu ovde!");
+			PushPlayerSnowBall(playerid);
+			PlayerCreatedSnowBall[playerid] = false;
+			RemovePlayerAttachedObject(playerid, 9);
+			DisablePlayerCheckpoint(playerid);
+		}
+	}	
+	return true;
+} 
+
+GetFreeSnowballID()
+{	
+	new id = -1;
+	for (new i; i < MAX_SNOWBALLS; i++) {
+		if (!SnowBallData[i][sb_exists]) {
+			id = i;
+			break;
+		}		
+	}	
+	return id;
+}
+
+PushPlayerSnowBall(playerid)
 {
-    new Float:a;
-    GetPlayerPos(playerid, x, y, a);
-    GetPlayerFacingAngle(playerid, a);
-    if (GetPlayerVehicleID(playerid))
-    {
-      GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
-    }
-    x += (distance * floatsin(-a, degrees));
-    y += (distance * floatcos(-a, degrees));
+	new id = GetFreeSnowballID();
+	if (id != -1) {
+		new Float:x, Float:y, Float:z, Float:angle;
+		GetPlayerPos(playerid, x, y, z);
+		GetPlayerFacingAngle(playerid, angle);
+		x += (0.3400 * floatsin(-angle, degrees));
+		y -= (0.3800 * floatcos(-angle, degrees));
+		
+		new Float:col_Pos[3],
+			Float:end_Pos[3];
+
+		new sphere = CreateDynamicSphere(0, 0, 0, 1.0, -1, -1, -1);
+		new objectid = CreateDynamicObject(19574, x, y, z, 0.000000, 0.000000, angle, -1, -1, -1, 100.00, 100.00, .priority = 1); 
+		AttachDynamicAreaToObject(sphere, objectid, STREAMER_OBJECT_TYPE_DYNAMIC, INVALID_PLAYER_ID, 0.0, 0.0, 0.0);
+		SetDynamicObjectMaterial(objectid, 0, 3922, "bistro", "mp_snow", 0xFFFFFFFF);
+		SnowBallData[id][sb_object] = objectid;
+		SnowBallData[id][sb_sphere] = sphere;
+		SnowBallData[id][sb_owner] = playerid;
+
+		end_Pos[0] = x + (20.0 * floatsin(-angle, degrees));
+		end_Pos[1] = y + (20.0 * floatcos(-angle, degrees));
+		end_Pos[2] = z + 0.3;
+
+		new test = CA_RayCastLine(
+			x, //start
+			y, //start
+			z, //start
+			end_Pos[0], //max
+			end_Pos[1], //max 
+			end_Pos[2], //max
+			col_Pos[0], //output
+			col_Pos[1], //output
+			col_Pos[2]); //output	
+		
+		if(test != 0 && test != WATER_OBJECT) {
+
+			MoveDynamicObject(objectid, col_Pos[0], col_Pos[1], col_Pos[2], 15.0);
+		}
+		else {
+
+			MoveDynamicObject(objectid, end_Pos[0], end_Pos[1], end_Pos[2], 15.0);
+		}
+
+		printf(" DEBUG: Ferid CA_RayCastLine [%d]", test);
+
+		SnowBallData[id][sb_status] = 1;
+		SnowBallData[id][sb_exists] = true;
+		ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",3.0,false,false,false,false,false);
+	}
+	return true;
 }
 
-hook OnGameModeInit() {
 
-    print("xmas/snowballing.script loaded");
-
-    return (true);
+hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid)
+{
+	for (new i = 0; i < MAX_SNOWBALLS; i++) {
+		if (areaid == SnowBallData[i][sb_sphere])
+		{
+			if (playerid == SnowBallData[i][sb_owner]) return false;
+			new info[100];
+			format(info, sizeof(info), "Pogodili ste %s sa grudvom.", ReturnPlayerName(playerid));
+			SendClientMessage(SnowBallData[i][sb_owner], 0x33AA33FF, info);
+			format(info, sizeof(info), "Pogodio vas je %s sa grudvom.", ReturnPlayerName(SnowBallData[i][sb_owner]));
+			SendClientMessage(playerid, x_red, info);
+			new Float:x, Float:y, Float:z;
+			GetDynamicObjectPos(SnowBallData[i][sb_object], x, y, z);
+			new object = CreateDynamicObject(18675, x, y, z - 1.1, 0, 0, 0, -1, -1, -1, 100.0, 100.0, -1, 0);
+			SetTimerEx("DestroySnowBallEffectObject", 800, false, "i", object);
+			StopDynamicObject(SnowBallData[i][sb_object]);
+			DestroyDynamicObject(SnowBallData[i][sb_object]);
+			DestroyDynamicArea(SnowBallData[i][sb_sphere]);
+			SnowBallData[i][sb_status] = SnowBallData[i][sb_object] =
+			SnowBallData[i][sb_sphere] = -1;
+			SnowBallData[i][sb_exists] = false;
+			SnowBallData[i][sb_owner] = INVALID_PLAYER_ID;			
+			ApplyAnimation(playerid, "PED", "SHOT_partial", 3.0,false, false, false, false, false);
+		}
+	}
+	return true;
+}
+hook OnDynamicObjectMoved(objectid)
+{	
+	for (new i = 0; i < MAX_SNOWBALLS; i++) {
+		if (objectid == SnowBallData[i][sb_object]) {
+			new Float:x, Float:y, Float:z;
+			GetDynamicObjectPos(SnowBallData[i][sb_object], x, y, z);
+			new object = CreateDynamicObject(18675, x, y, z - 1.1, 0, 0, 0, -1, -1, -1, 100.0, 100.0, -1, 0);
+			SetTimerEx("DestroySnowBallEffectObject", 800, false, "i", object);
+			DestroyDynamicObject(SnowBallData[i][sb_object]);
+			DestroyDynamicArea(SnowBallData[i][sb_sphere]);
+			SnowBallData[i][sb_status] = SnowBallData[i][sb_object] =
+			SnowBallData[i][sb_sphere] = -1;
+			SnowBallData[i][sb_exists] = false;
+			SnowBallData[i][sb_owner] = INVALID_PLAYER_ID;
+		}
+	}
+	return true;
 }
 
-timer snowball_Make[3000](playerid) 
-{   
-    RemovePlayerAttachedObject(playerid, 1);
-    SetPlayerAttachedObject(playerid, 0, 3003, 6, 0.068999, 0.037999, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
-    snowball_inHand[playerid] = true;
-    return 1;
+//FORWARD PUBLIC
+forward DestroySnowBallEffectObject(objectid);
+public DestroySnowBallEffectObject(objectid)
+{
+	if (IsValidDynamicObject(objectid))
+		DestroyDynamicObject(objectid);
+	return true;
 }
 
-hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
-
-    if(PRESSED(KEY_CROUCH)) {
-
-        if(snowball_inHand[playerid])
-            return SendClientMessage(playerid, 0x737BE1FF, ""c_server"xmas » "c_white"Vec imas grudvu u ruci!");
-
-        ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 2.67, false, true, true, true, 3000);
-        defer snowball_Make(playerid);
-    }
-
-    if(PRESSED(KEY_FIRE)) {
-
-        if(snowball_inHand[playerid]) {
-            
-            new Float:pPos[3];
-            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-
-            snowball_inHand[playerid] = false;
-
-            snowObject = CreateDynamicObject(3003, pPos[0], pPos[1], pPos[2]+1.00, 0.0, 0.0, 0.0, -1,  -1, -1);
-
-            GetXYInFrontOfPlayer(playerid, pPos[0], pPos[1], 50.0);
-
-            MoveDynamicObject(snowObject, pPos[0], pPos[1], pPos[2]+1.00, 2.0);
-            RemovePlayerAttachedObject(playerid, 0);
-
-            ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 0.87, false, true, true, true, 3000);
-
-
-        }
-    }
-
-    return (true);
+forward MakeSnowBall(playerid);
+public MakeSnowBall(playerid)
+{
+	ApplyAnimation(playerid,"BOMBER","BOM_Plant_Crouch_Out", 4.0, false, false, false, false, false);
+	SendClientMessage(playerid, 0x33AA33FF, "Napravili ste grudvu, bacate je tipkom na 'LMB'");
+	PlayerCreatedSnowBall[playerid] = true;
+	SetPlayerAttachedObject(playerid,9,1974,6,0.053999,-0.011000,0.050000,0.000000,0.000000,0.000000,1.124003,1.232001,1.000000);
+	return true;
 }
 
-hook OnDynamicObjectMoved(objectid) {
 
-    if(objectid == snowObject) {
-
-        DestroyDynamicObject(snowObject);
-    }
-
-    return (true);
+IsObjectSnowGround(modelid) {
+	switch (modelid) {
+		case 2910,3330,3331,3381,3411,3412,3990,3991,3992,3993,3994,3995,3996: return true;
+		case 4085,4086,4087,4088,4089,4090,4091,4107,4108,4125,4127,4128,4129,4131,4133: return true;
+		case 4139,4142,4144,4146,4148,4150,4152,4154,4156,4158,4160,4163,4165,4168,4182: return true;
+		case 4203,4207,4209,4233,4553,4557,4567,4589,4644,4645,4646,4647,4648,4649,4650,4651: return true;
+		case 4652,4653,4654,4656,4658,4660,4662,4664,4666,4679,4692,4694,4695,4710,4807,4808: return true;
+		case 4809,4820,4821,4822,4823,4827,4834,4835,4836,4837,4839,4840,4841,4846,4868,4870: return true;
+		case 4871,4872,4878,4883,4895,5013,5021,5026,5028,5038,5046,5052,5106,5112,5113,5120: return true;
+		case 5121,5124,5125,5128,5133,5141,5147,5148,5149,5178,5188,5191,5243,5250,5271,5276: return true;
+		case 5296,5297,5298,5314,5329,5330,5333,5349,5353,5391,5394,5395,5411,5431,5432,5433: return true;
+		case 5434,5435,5436,5437,5438,5439,5440,5441,5442,5456,5469,5470,5472,5473,5481,5482: return true;
+		case 5483,5484,5485,5486,5487,5488,5489,5490,5491,5492,5493,5494,5495,5496,5497,5498: return true;
+		case 5499,5500,5501,5502,5503,5504,5505,5506,5507,5508,5509,5510,5511,5512,5528,5650: return true;
+		case 5668,5703,5707,5744,5745,5746,5747,5748,5749,5750,5751,5752,5753,5754,5755,5756: return true;
+		case 5757,5758,5759,5793,5794,5795,5796,5797,5798,5799,5800,5801,5802,5803,5804,5805: return true;
+		case 5806,5807,5808,5809,5859,5860,5861,5862,5866,5994,5995,6035,6054,6055,6111,6112: return true;
+		case 6113,6114,6115,6116,6117,6118,6119,6120,6121,6122,6123,6124,6125,6126,6127,6128: return true;
+		case 6129,6225,6228,6231,6232,6235,6291,6301,6302,6303,6304,6305,6306,6307,6308,6309: return true;
+		case 6310,6311,6314,6316,6317,6318,6319,6320,6321,6322,6323,6324,6325,6326,6327,6329: return true;
+		case 6330,6331,6333,6341,6345,6427,6428,6448,6449,6450,6507,6508,6509,6876,6877,6878: return true;
+		case 6879,6880,6881,6886,6887,6888,6897,6898,6899,6900,6945,6948,6949,6950,6951,6952: return true;
+		case 6953,6956,6974,6990,6991,6999,7036,7041,7042,7043,7052,7053,7054,7055,7056,7057: return true;
+		case 7064,7069,7320,7321,7324,7326,7327,7334,7335,7336,7337,7355,7362,7364,7383,7427: return true;
+		case 7428,7429,7430,7431,7432,7433,7434,7435,7436,7437,7438,7439,7440,7441,7442,7443: return true;
+		case 7444,7445,7446,7447,7476,7477,7478,7479,7480,7481,7482,7483,7484,7485,7486,7544: return true;
+		case 7545,7546,7547,7548,7549,7550,7551,7552,7558,7559,7580,7581,7587,7589,7590,7605: return true;
+		case 7629,7631,7632,7633,7634,7729,7730,7731,7755,7849,7852,7854,7863,7864,7865,7866: return true;
+		case 7867,7868,7878,7881,7938,7945,7963,7965,7967,7969,7987,7988,7989,7990,7991,7992: return true;
+		case 7993,7995,8009,8010,8036,8039,8045,8046,8047,8048,8049,8050,8051,8052,8053,8054: return true;
+		case 8055,8056,8070,8080,8128,8135,8137,8212,8213,8214,8215,8216,8217,8218,8219,8236: return true;
+		case 8244,8245,8246,8256,8290,8305,8368,8377,8380,8382,8383,8386,8388,8438,8439,8440: return true;
+		case 8441,8442,8443,8444,8445,8446,8447,8448,8449,8450,8451,8452,8453,8454,8455,8456: return true;
+		case 8457,8458,8471,8472,8473,8474,8475,8476,8477,8510,8511,8512,8514,8517,8518,8519: return true;
+		case 8520,8521,8522,8523,8524,8525,8543,8552,8561,8562,8609,8610,8611,8612,8616,8622: return true;
+		case 8637,8638,8824,8832,8838,8932,9000,9001,9002,9003,9004,9005,9006,9007,9008,9021: return true;
+		case 9022,9023,9024,9025,9026,9027,9028,9036,9042,9115,9116,9117,9118,9119,9120,9150: return true;
+		case 9205,9222,9231,9232,9233,9250,9251,9252,9262,9264,9265,9266,9267,9269,9476,9485: return true;
+		case 9486,9487,9488,9489,9490,9491,9492,9493,9570,9571,9575,9591,9600,9601,9602,9603: return true;
+		case 9652,9653,9683,9685,9689,9690,9693,9694,9696,9699,9700,9701,9702,9703,9704,9706: return true;
+		case 9707,9708,9709,9710,9711,9712,9713,9714,9715,9716,9717,9718,9719,9720,9721,9722: return true;
+		case 9723,9724,9725,9726,9727,9728,9729,9730,9731,9732,9733,9734,9735,9736,9747,9827: return true;
+		case 9832,9837,9838,10018,10065,10066,10067,10068,10069,10070,10071,10072: return true;
+		case 10073,10074,10075,10076,10077,10078,10110,10111,10112,10113,10114,10115: return true;
+		case 10116,10117,10118,10119,10120,10121,10122,10123,10124,10125,10126,10127: return true;
+		case 10128,10129,10130,10131,10132,10133,10134,10135,10136,10137,10138,10139: return true;
+		case 10165,10235,10247,10275,10276,10294,10295,10296,10359,10360,10361,10362: return true;
+		case 10363,10364,10365,10366,10367,10424,10426,10440,10448,10449,10450,10452: return true;
+		case 10455,10456,10457,10458,10459,10460,10461,10462,10463,10464,10465,10466: return true;
+		case 10467,10468,10469,10470,10471,10472,10473,10474,10475,10476,10477,10478: return true;
+		case 10479,10480,10481,10482,10483,10484,10485,10486,10487,10488,10489,10490: return true;
+		case 10493,10572,10573,10574,10614,10617,10622,10623,10636,10639,10649,10651: return true;
+		case 10750,10751,10753,10754,10759,10770,10777,10790,10791,10792,10820,10821: return true;
+		case 10822,10823,10848,10849,10852,10854,10855,10857,10858,10859,10860,10866: return true;
+		case 10867,10868,10869,10870,10928,10929,10930,10937,10940,10958,10967,10968: return true;
+		case 10970,10971,11003,11071,11072,11073,11074,11075,11076,11077,11078,11079: return true;
+		case 11080,11084,11094,11095,11096,11098,11100,11104,11105,11110,11111,11112: return true;
+		case 11113,11114,11115,11116,11117,11118,11119,11120,11121,11122,11123,11124: return true;		
+		case 11125,11126,11127,11128,11129,11130,11131,11132,11133,11134,11135,11136: return true;
+		case 11137,11138,11246,11252,11253,11254,11255,11256,11257,11258,11259,11260: return true;
+		case 11261,11299,11302,11308,11316,11318,11345,11351,11365,11386,11409,11421: return true;		
+		case 11422,11423,11424,11439,11448,11462,11463,11534,11536,11572,12800,12801: return true;
+		case 12802,12803,12806,12809,12810,12811,12812,12813,12815,12816,12817,12818: return true;
+		case 12819,12820,12826,12827,12828,12829,12830,12851,12852,12856,12857,12867: return true;
+		case 12873,12874,12875,12876,12877,12878,12879,12880,12881,12882,12883,12884: return true;
+		case 12885,12886,12887,12888,12889,12890,12891,12892,12893,12894,12895,12896: return true;
+		case 12897,12898,12899,12900,12901,12902,12903,12904,12905,12906,12907,12909: return true;
+		case 12910,12965,12966,12967,12968,12970,12971,12972,12973,12974,12975,12992: return true;
+		case 12993,12994,12995,12996,12997,12998,12999,13000,13001,13020,13033,13034: return true;
+		case 13058,13088,13092,13095,13119,13127,13128,13129,13138,13139,13141,13142: return true;
+		case 13168,13169,13170,13173,13321,13323,13324,13325,13332,13342,13345,13347: return true;
+		case 13348,13349,13368,13422,13470,13626,13652,13655,13664,13672,13673,13674: return true;
+		case 13676,13677,13678,13680,13682,13683,13684,13685,13688,13689,13690,13693: return true;
+		case 13703,13704,13706,13707,13708,13709,13713,13717,13718,13720,13726,13727: return true;
+		case 13730,13732,13733,13735,13736,13738,13739,13751,13752,13784,13789,13814: return true;
+		case 13845,13865,13882,13887,16008,16009,16037,16223,16266,16308,16357,16358: return true;
+		case 16384,16420,16430,16571,16610,17002,17003,17004,17043,17062,17077,17078: return true;
+		case 17110,17111,17112,17120,17146,17148,17150,17152,17154,17156,17158,17160: return true;
+		case 17162,17164,17166,17168,17170,17172,17174,17176,17178,17180,17182,17184: return true;
+		case 17186,17188,17190,17192,17194,17196,17198,17200,17202,17204,17208,17210: return true; 
+		case 17212,17214,17216,17218,17220,17222,17224,17226,17228,17230,17234,17236: return true; 
+		case 17238,17240,17242,17244,17246,17248,17250,17252,17254,17256,17258,17260: return true; 
+		case 17262,17267,17269,17271,17273,17275,17277,17279,17281,17293,17294,17295: return true; 
+		case 17300,17303,17305,17307,17308,17309,17310,17326,17327,17329,17331,17333: return true; 
+		case 17334,17501,17502,17525,17550,17561,17576,17595,17596,17597,17598,17599: return true; 
+		case 17600,17602,17603,17604,17605,17606,17607,17608,17609,17610,17611,17612: return true; 
+		case 17613,17621,17622,17623,17624,17625,17626,17627,17628,17629,17630,17631: return true; 
+		case 17632,17634,17635,17637,17638,17639,17640,17641,17642,17643,17644,17646: return true; 
+		case 17647,17648,17649,17650,17651,17652,17653,17654,17655,17656,17657,17658: return true;
+		case 17659,17660,17661,17662,17663,17666,17667,17668,17669,17670,17671,17672: return true; 
+		case 17673,17674,17675,17676,17680,17681,17682,17683,17684,17686,17687,17692: return true; 
+		case 17693,17695,17829,17849,17867,17920,17921,17927,17936,18229,18256,18369: return true; 
+		case 18370,18371,18372,18373,18374,18375,18376,18377,18378,18379,18380,18381: return true; 
+		case 18382,18383,18384,18385,18386,18387,18388,18389,18390,18391,18392,18393: return true; 
+		case 18394,18449,18450,18476,18477,18478,18479,18480,18481,18482,18483,18484: return true; 
+		case 18518,18561,18788,18789,18790,18791,18792,18793,18794,18795,18796,18797: return true; 
+		case 18798,18799,18800,18801,18802,18803,18804,18805,18806,18807,19532,19533: return true;
+        case 19534,19535,19628,19629,19788,4854,4855,4856,4862,4863,4864,4865,4866,4867:  return true;
+		case 5001 .. 5004:	return true;
+		case 3694,3975,3977,3978,3981,3982,3983,3984,3985,3987,3989,3997: return true;
+		case 4000,4010,4012,4020,4027,4029,4030,4109,4110,4122,4186,4197,4198: return true;
+		case 4240,4241,4242,4243,4244,4245,4246,4247,4248,4249,4250,4251,4252: return true;
+		case 4253,4254,4255,4256,4257,4258,4259,4260,4261,4262,4263,4264,4265: return true;
+		case 4266,4267,4268,4269,4270,4271,4272,4273,4274,4275,4276,4277,4278: return true;
+		case 4279,4280,4281,4282,4283,4284,4285,4286,4287,4288,4289,4290,4291: return true;
+		case 4292,4293,4294,4295,4296,4297,4298,4299,4300,4301,4302,4303,4304: return true;
+		case 4305,4306,4307,4308,4309,4310,4311,4312,4313,4314,4315,4316,4317: return true;
+		case 4318,4319,4320,4321,4322,4323,4324,4325,4326,4327,4328,4329,4330: return true;
+		case 4331,4332,4333,4334,4335,4336,4337,4338,4339,4340,4341,4342,4343: return true;
+		case 4344,4345,4346,4347,4348,4349,4350,4351,4352,4353,4354,4355,4356: return true;
+		case 4357,4358,4359,4360,4361,4362,4363,4364,4365,4366,4367,4368,4369: return true;
+		case 4370,4371,4372,4373,4374,4533,4535,4538,4540,4551,4556,4562,4568: return true;
+		case 4584,4590,4591,4592,4604,4643,4684,4685,4700,4701,4702,4703,4712: return true;
+		case 4806,4810,4811,4812,4813,4814,4815,4842,4843,4844,4845,4847,4849: return true;
+		case 4851,4852,4858,4859,4873,4875,4876,4879,4896,4897,4898,5036,5105: return true;
+		case 5107,5111,5114,5122,5123,5144,5172,5185,5186,5270,5273,5274,5279: return true;
+		case 5311,5342,5343,5355,5404,5419,5420,5424,5427,5428,5429,5443,5457: return true;
+		case 5458,5459,5471,5474,5518,5519,5624,5640,5652,5739,5741,5743,5812: return true;
+		case 5815,5823,5845,5857,5871,5875,5878,5887,5987,6006,6007,6064,6065: return true;
+		case 6094,6101,6152,6160,6165,6203,6213,6217,6227,6229,6233,6234,6236: return true;
+		case 6280,6281,6293,6297,6312,6313,6315,6343,6347,6356,6398,6416,6417: return true;
+		case 6443,6487,6497,6882,6883,6884,6885,6959,6979,7032,7044,7045,7046: return true;
+		case 7047,7048,7049,7050,7051,7098,7099,7100,7101,7203,7217,7218,7247: return true;
+		case 7248,7249,7250,7251,7252,7253,7254,7353,7357,7359,7448,7449,7450: return true;
+		case 7451,7452,7453,7454,7455,7456,7457,7458,7459,7460,7461,7462,7463: return true;
+		case 7464,7465,7466,7467,7468,7469,7470,7471,7472,7473,7474,7475,7530: return true;
+		case 7536,7537,7553,7557,7579,7582,7588,7616,7882,7889,7994,7996,7997: return true;
+		case 7998,7999,8000,8001,8002,8003,8004,8005,8006,8007,8008,8033,8037: return true;
+		case 8071,8072,8091,8133,8198,8199,8200,8202,8228,8232,8264,8283,8288: return true;
+		case 8306,8351,8352,8353,8398,8402,8404,8459,8460,8461,8462,8463,8465: return true;
+		case 8466,8467,8468,8469,8470,8486,8497,8515,8529,8531,8532,8533,8547: return true;
+		case 8553,8554,8560,8564,8577,8582,8583,8584,8585,8654,8655,8661,8664: return true;
+		case 8671,8672,8677,8678,8844,8845,8850,8857,8859,8868,8983,9046,9047: return true;
+		case 9056,9057,9062,9064,9065,9066,9082,9083,9086,9087,9135,9136,9137: return true;
+		case 9138,9139,9140,9173,9206,9207,9208,9209,9210,9211,9212,9213,9214: return true;
+		case 9215,9216,9217,9218,9219,9223,9224,9225,9226,9234,9235,9236,9242: return true;
+		case 9246,9248,9249,9254,9255,9256,9261,9276,9284,9285,9286,9287,9288: return true;
+		case 9289,9290,9291,9304,9306,9307,9309,9311,9312,9313,9315,9338,9342: return true;
+		case 9346,9353,9483,9505,9508,9519,9530,9551,9552,9553,9554,9555,9556: return true;
+		case 9596,9597,9605,9606,9607,9609,9610,9611,9614,9616,9617,9830,9863: return true;
+		case 9864,9889,9891,9905,9915,9930,9946,10034,10036,10047,10083,10087: return true;
+		case 10151,10242,10273,10274,10290,10350,10351,10352,10353,10354: return true;
+		case 10355,10356,10358,10370,10371,10372,10373,10374,10382,10384: return true;
+		case 10386,10387,10389,10395,10399,10400,10403,10404,10411,10413: return true;
+		case 10414,10415,10416,10417,10418,10419,10420,10421,10422,10436: return true;
+		case 10438,10443,10451,10453,10454,10491,10492,10559,10560,10562: return true;
+		case 10563,10564,10565,10566,10567,10568,10569,10570,10571,10601: return true;
+		case 10608,10609,10612,10613,10615,10616,10618,10635,10637,10638: return true;
+		case 10694,10850,10851,10861,10862,10863,10864,10865,10903,10904: return true;
+		case 10905,10917,10926,10936,10938,10939,10943,10946,10959,10960: return true;
+		case 10961,10962,10969,10972,10976,10983,11005,11006,11013,11082: return true;
+		case 11083,11097,11106,11107,11139,11223,11224,11226,11287,11288: return true;
+		case 11297,11303,11332,11335,11340,11362,11363,11364,11367,11408: return true;
+		case 11420,11429,11430,11488,11506,11507,11508,11509,11510,11511: return true;
+		case 11512,11513,11514,11515,11516,11517,11518,11519,11520,11521: return true;
+		case 11522,11523,11524,11525,11526,11527,11528,11529,11530,11531: return true;
+		case 11532,11533,11535,11537,11538,11539,11540,11541,11542,11552: return true;
+		case 11553,11554,11555,11557,11559,11560,11628,11629,11647,11692: return true;
+		case 11693,11694,11695,11696,12804,12814,12823,12824,12825,12864: return true;
+		case 12865,12866,12868,12869,12870,12871,12872,12908,12916,12926: return true;
+		case 12952,12969,12989,13017,13019,13021,13030,13035,13036,13039: return true;
+		case 13040,13041,13042,13043,13044,13049,13050,13051,13070,13071: return true;
+		case 13072,13081,13082,13083,13084,13099,13100,13101,13102,13103: return true;
+		case 13104,13105,13106,13107,13120,13121,13122,13123,13124,13125: return true;
+		case 13126,13134,13135,13136,13144,13145,13146,13147,13148,13149: return true;
+		case 13150,13156,13157,13158,13163,13165,13167,13171,13172,13175: return true;
+		case 13176,13177,13178,13179,13180,13181,13207,13208,13209,13210: return true;
+		case 13211,13212,13213,13214,13235,13236,13237,13297,13370,13371: return true;
+		case 13486,13490,13675,13679,13686,13691,13692,13698,13700,13702: return true;
+		case 13710,13711,13715,13716,13719,13723,13734,13737,13740,13741: return true;
+		case 13742,13756,13757,13795,13804,13805,13809,13810,13813,13818: return true;
+		case 13820,13821,13823,13824,13825,13826,13871,13872,16055,16056: return true;
+		case 16057,16058,16059,16097,16102,16103,16109,16147,16148,16149: return true;
+		case 16157,16158,16159,16160,16161,16162,16163,16164,16165,16166: return true;
+		case 16167,16168,16169,16170,16171,16172,16173,16174,16175,16176: return true;
+		case 16177,16178,16179,16180,16181,16182,16183,16184,16185,16186: return true;
+		case 16187,16188,16189,16190,16191,16192,16193,16194,16195,16196: return true;
+		case 16197,16198,16199,16200,16201,16202,16203,16204,16205,16206: return true;
+		case 16207,16208,16209,16210,16211,16212,16213,16214,16215,16216: return true;
+		case 16217,16218,16219,16220,16221,16222,16224,16225,16226,16227: return true;
+		case 16228,16229,16230,16231,16232,16233,16234,16235,16236,16237: return true;
+		case 16238,16239,16240,16241,16242,16243,16244,16245,16246,16247: return true;
+		case 16248,16249,16250,16251,16252,16253,16254,16255,16256,16257: return true;
+		case 16258,16259,16260,16261,16262,16263,16264,16397,16421,16422: return true;
+		case 16423,16424,16593,16684,16685,16693,16694,17075,17079,17080: return true;
+		case 17081,17082,17083,17084,17085,17086,17087,17088,17089,17090: return true;
+		case 17091,17092,17093,17094,17095,17096,17097,17098,17099,17100: return true;
+		case 17101,17102,17103,17104,17105,17106,17107,17108,17109,17113: return true;
+		case 17114,17115,17116,17117,17118,17119,17121,17122,17123,17124: return true;
+		case 17125,17126,17127,17128,17129,17130,17131,17132,17133,17134: return true;
+		case 17135,17136,17137,17138,17139,17140,17141,17142,17143,17144: return true;
+		case 17145,17301,17302,17471,17472,17500,17505,17506,17507,17509: return true;
+		case 17541,17545,17548,17559,17567,17568,17574,17589,17594,17601: return true;
+		case 17614,17615,17616,17617,17618,17619,17620,17633,17645,17664: return true;
+		case 17665,17677,17678,17685,17689,17691,17694,17696,17864,17865: return true;
+		case 17866,17877,17878,17880,17881,17892,17906,17953,18231,18293: return true;
+		case 18294,18295,18296,18297,18298,18299,18300,18301,18302,18303: return true;
+		case 18304,18305,18306,18307,18308,18309,18310,18311,18312,18313: return true;
+		case 18314,18315,18316,18317,18318,18319,18320,18321,18322,18323: return true;
+		case 18324,18325,18326,18327,18328,18329,18330,18331,18332,18333: return true;
+		case 18334,18335,18336,18337,18338,18339,18340,18341,18342,18343: return true;
+		case 18344,18345,18346,18347,18348,18349,18350,18351,18352,18353: return true;
+		case 18354,18355,18356,18357,18358,18359,18360,18361,18362,18363: return true;
+		case 18364,18435,18436,18437,18438,18439,18469,18473,18475,18485: return true;
+		case 18551,18753,18754,18863,18864,19340,19484,19485,19600,19794: return true;
+	}
+	return false;
 }

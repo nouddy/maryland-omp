@@ -76,7 +76,7 @@
     },
     "password": "",
     "pawn": {
-        "legacy_plugins": ["crashdetect", "streamer", "mysql"],
+        "legacy_plugins": ["crashdetect", "streamer", "mysql", "ColAndreas"],
         "main_scripts": [
             "maryland 1"
         ],

@@ -215,6 +215,8 @@ hook OnPlayerConnect(playerid)
 	UcitavanjeObjekata[playerid] = false;
 	ImaLoginTD[playerid] = false;
 
+	e_SELECTED_OBJ[playerid] = -1;
+
 	new query[120];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountLoad", "i", playerid);
@@ -366,7 +368,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 	if(PRESSED(KEY_NO)) {
 
-		if(e_SELECTED_OBJ[playerid] >= 0) {
+		if(e_SELECTED_OBJ[playerid] > -1) {
 			switch(e_SELECTED_OBJ[playerid]) {
 				case 0: {
 					// SEX

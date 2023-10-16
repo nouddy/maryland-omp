@@ -51,6 +51,7 @@
 #include <animated-textdraw>
 #include <DialogCenter>
 #include <crashdetect>
+#include <colandreas>
 #include <marylandFix>
 #include <walking_styles>
 
@@ -102,6 +103,12 @@ main()
 
 #define randomEx(%0,%1) random((%1 - %0 + 1)) + %0
 
+#define HOLDING(%0) \
+	((newkeys & (%0)) == (%0))
+
+#define RELEASED(%0) \
+	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
+
 public OnGameModeInit()
 {
 	mysql_log(ALL);
@@ -114,6 +121,8 @@ public OnGameModeInit()
 	Streamer_VisibleItems(STREAMER_TYPE_OBJECT, 975);
 	Streamer_SetTickRate(25);
 	
+	CA_Init();
+
 	DisableInteriorEnterExits();
 	ManualVehicleEngineAndLights();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
@@ -124,6 +133,7 @@ public OnGameModeInit()
 	EnableVehicleFriendlyFire();
 	EnableStuntBonusForAll(false);	
 
+	SnowMap_Init();
 
 	new vehicle = CreateVehicle(562, 1282.8285,1566.7600,100.9567, 90.0, 3, 3, 1500);
 	SetVehicleVirtualWorld(vehicle, 1);
@@ -703,7 +713,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/jobs/job_main.pwn" 							//* Dinamicni poslovi - Credits : job-framework
 
 //-------------------------------------------------------------------------------------------------------- XMAS
-#include "backend/xmas/xmas.pwn"
+#include "backend/xmas/winter.pwn"
 #include "backend/xmas/snowballing.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Temp
