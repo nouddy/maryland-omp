@@ -74,7 +74,7 @@ public LoadVehicleData() {
 			cache_get_value_name_float(i, "vPosX", eVehicle[i][vPos][0]);
 			cache_get_value_name_float(i, "vPosY", eVehicle[i][vPos][1]);
 			cache_get_value_name_float(i, "vPosZ", eVehicle[i][vPos][2]);
-			cache_get_value_name_float(i, "vPosZ", eVehicle[i][vPos][3]);
+			cache_get_value_name_float(i, "vPosA", eVehicle[i][vPos][3]);
 
 			cache_get_value_name_int(i, "vRegDate", eVehicle[i][vRegDate]);
 			cache_get_value_name_int(i, "vOil", eVehicle[i][vOil]);

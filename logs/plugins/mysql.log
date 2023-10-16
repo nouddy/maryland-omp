@@ -39052,3 +39052,1827 @@
 [10/15/2023 9:34:17 PM] [DEBUG] CResultSet::Create(connection=0x2b1eb60, query_str='UPDATE `players` SET `LastLogin` = '15/10/2023 - 21:34' WHERE `Username` = 'Silent'  LIMIT 1')
 [10/15/2023 9:34:17 PM] [DEBUG] created new resultset '0xceb8880'
 [10/15/2023 9:34:17 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:47:26 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 6:47:26 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 6:47:26 PM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_connect_file("mysql.ini")
+[10/16/2023 6:47:26 PM] [DEBUG] CHandleManager::CreateFromFile(this=0x3f22b88, file_path='mysql.ini')
+[10/16/2023 6:47:26 PM] [INFO] Options instance with id '1' successfully created.
+[10/16/2023 6:47:26 PM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x305c7d8 (id '1')
+[10/16/2023 6:47:26 PM] [DEBUG] CHandleManager::Create(this=0x3f22b88, host='localhost', user='root', pass='****', db='maryland', options=0x305c7d8)
+[10/16/2023 6:47:26 PM] [INFO] Creating new connection handle...
+[10/16/2023 6:47:26 PM] [WARNING] mysql_connect_file: no password specified
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection(this=0x3061de8, host='localhost', user='root', passw='****', db='maryland', options=0x305c7d8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection - new connection = 0x3066b18
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection(this=0xa199020, host='localhost', user='root', passw='****', db='maryland', options=0x305c7d8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection - new connection = 0x2f0abe0
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa199020, connection=0xa199020)
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa199020, connection=0xa199020)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x3061aa8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection(this=0xa361020, host='localhost', user='root', passw='****', db='maryland', options=0x305c7d8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection - new connection = 0x2f0afb0
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa361020, connection=0xa361020)
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa361020, connection=0xa361020)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection(this=0xa532020, host='localhost', user='root', passw='****', db='maryland', options=0x305c7d8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::CConnection - new connection = 0x40b0b50
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa532020, connection=0xa532020)
+[10/16/2023 6:47:26 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa532020, connection=0xa532020)
+[10/16/2023 6:47:26 PM] [INFO] Connection handle with id '1' successfully created.
+[10/16/2023 6:47:26 PM] [DEBUG] CHandleManager::Create - new handle = 0x305c2e0
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_connect_file: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_errno(1)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::GetErrorId(this=0x305c2e0)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::GetError(this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_errno: return value: '0'
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='LoadVehicleData', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[10/16/2023 6:47:26 PM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108cd78)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108cd78, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108cd78, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 0.243 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `vehicles`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x2f009b0'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x108da78'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='House_LoadData', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[10/16/2023 6:47:26 PM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108d530)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d530, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d530, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `houses`" successfully executed within 1.316 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `houses`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x2f00eb8'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x407c308'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='Business_Load', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[10/16/2023 6:47:26 PM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108d498)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d498, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d498, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 0.608 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `businesses`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c0470'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x40c2b58'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='KlupeLoading', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[10/16/2023 6:47:26 PM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108d958)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d958, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d958, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 0.134 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `klupe`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c05c0'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x2f0b380'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='PoliceLoad', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 377
+[10/16/2023 6:47:26 PM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108cf40)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108cf40, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108cf40, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 0.593 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `faction_police`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c05f8'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x3064e90'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='SafeZonesLoad', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 396
+[10/16/2023 6:47:26 PM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=2, query=0x108d368)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnectionPool::Queue(query=0x108d368, this=0x3061aa8)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d368, this=0xa361020, connection=0x2f0afb0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d368, connection=0x2f0afb0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 0.213 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0afb0, query_str='SELECT * FROM `safezones`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c0668'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x2f0ab60'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='LoadMetros', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[10/16/2023 6:47:26 PM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=2, query=0x108d660)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnectionPool::Queue(query=0x108d660, this=0x3061aa8)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d660, this=0xa532020, connection=0x40b0b50)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d660, connection=0x40b0b50)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `metros`" successfully executed within 0.207 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x40b0b50, query_str='SELECT * FROM `metros`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c0320'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x41a8030'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='LoadContainers', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[10/16/2023 6:47:26 PM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=2, query=0x108d5c8)
+[10/16/2023 6:47:26 PM] [DEBUG] CConnectionPool::Queue(query=0x108d5c8, this=0x3061aa8)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d5c8, this=0xa361020, connection=0x2f0afb0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d5c8, connection=0x2f0afb0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `containers`" successfully executed within 0.609 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0afb0, query_str='SELECT * FROM `containers`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x2f00780'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x41a7dd8'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='Job_LoadVehicleData', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '0'
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='Job_LoadData', format='', params=0xa041a84, param_offset=5)
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[10/16/2023 6:47:26 PM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[10/16/2023 6:47:26 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0x108d9f0)
+[10/16/2023 6:47:26 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:26 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] CConnection::Execute(query=0x108d9f0, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [DEBUG] CQuery::Execute(this=0x108d9f0, connection=0x2f0abe0)
+[10/16/2023 6:47:26 PM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 0.624 milliseconds
+[10/16/2023 6:47:26 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `jobs`')
+[10/16/2023 6:47:26 PM] [DEBUG] created new resultset '0x40c0208'
+[10/16/2023 6:47:26 PM] [DEBUG] fetched MySQL result '0x315e548'
+[10/16/2023 6:47:26 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:26 PM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=258, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '258'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AB0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=226, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '226'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AB0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=200, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '200'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AB4)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=250, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '250'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AAC)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=377, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '377'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AB0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=396, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '396'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AC0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=255, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '255'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AC0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=254, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '254'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AC0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:26 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=247, num_params=0)
+[10/16/2023 6:47:26 PM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[10/16/2023 6:47:26 PM] [DEBUG] executing AMX callback with index '247'
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count(0x0A041AB0)
+[10/16/2023 6:47:26 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:26 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:26 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:47:53 PM] [DEBUG] mysql_format(1, 0x0A041830, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 6:47:53 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='Silent')
+[10/16/2023 6:47:53 PM] [DEBUG] CConnection::EscapeString(src='Silent', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:47:53 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent'
+[10/16/2023 6:47:53 PM] [DEBUG] mysql_format: return value: '60'
+[10/16/2023 6:47:53 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1", "SQL_AccountLoad", "i")
+[10/16/2023 6:47:53 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='SQL_AccountLoad', format='i', params=0xa041818, param_offset=5)
+[10/16/2023 6:47:53 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 385
+[10/16/2023 6:47:53 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:47:53 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:47:53 PM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[10/16/2023 6:47:53 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:47:53 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0xd3990a0)
+[10/16/2023 6:47:53 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:47:53 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:47:53 PM] [DEBUG] CConnection::Execute(query=0xd3990a0, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:47:53 PM] [DEBUG] CQuery::Execute(this=0xd3990a0, connection=0x2f0abe0)
+[10/16/2023 6:47:53 PM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1" successfully executed within 0.263 milliseconds
+[10/16/2023 6:47:53 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1')
+[10/16/2023 6:47:53 PM] [DEBUG] created new resultset '0xc8cd858'
+[10/16/2023 6:47:53 PM] [DEBUG] fetched MySQL result '0xd398e30'
+[10/16/2023 6:47:53 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:47:53 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=385, num_params=1)
+[10/16/2023 6:47:53 PM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[10/16/2023 6:47:53 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:47:53 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:47:53 PM] [DEBUG] executing AMX callback with index '385'
+[10/16/2023 6:47:53 PM] [DEBUG] cache_get_row_count(0x08C82B00)
+[10/16/2023 6:47:53 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:47:53 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:47:53 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:48:35 PM] [DEBUG] mysql_format(1, 0x0A041114, 550, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')")
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='Silent')
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::EscapeString(src='Silent', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent'
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='16/10/2023 - 18:48')
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 18:48', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 18:48'
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='vostic@gmail.com')
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::EscapeString(src='vostic@gmail.com', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'vostic@gmail.com'
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='Maryland')
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::EscapeString(src='Maryland', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Maryland'
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString(this=0x305c2e0, src='Musko')
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::EscapeString(src='Musko', this=0x3061de8, connection=0x3066b18)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Musko'
+[10/16/2023 6:48:35 PM] [DEBUG] mysql_format: return value: '244'
+[10/16/2023 6:48:35 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:48', 'vostic@gmail.com', 'Maryland', 'Musko')", "PlayerRegistered", "i")
+[10/16/2023 6:48:35 PM] [DEBUG] CCallback::Create(amx=0x305fd68, name='PlayerRegistered', format='i', params=0xa0410fc, param_offset=5)
+[10/16/2023 6:48:35 PM] [DEBUG] CCallback::Create - callback index for 'PlayerRegistered': 376
+[10/16/2023 6:48:35 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:48:35 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:48:35 PM] [INFO] Callback 'PlayerRegistered' set up for delayed execution.
+[10/16/2023 6:48:35 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::Execute(this=0x305c2e0, type=1, query=0xd398c78)
+[10/16/2023 6:48:35 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:48:35 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:48:35 PM] [DEBUG] CConnection::Execute(query=0xd398c78, this=0xa199020, connection=0x2f0abe0)
+[10/16/2023 6:48:35 PM] [DEBUG] CQuery::Execute(this=0xd398c78, connection=0x2f0abe0)
+[10/16/2023 6:48:35 PM] [INFO] query "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:48', 'vostic@gmail.com', 'Maryland', 'Musko')" successfully executed within 3.626 milliseconds
+[10/16/2023 6:48:35 PM] [DEBUG] CResultSet::Create(connection=0x2f0abe0, query_str='INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:48', 'vostic@gmail.com', 'Maryland', 'Musko')')
+[10/16/2023 6:48:35 PM] [DEBUG] created new resultset '0xc8cdc48'
+[10/16/2023 6:48:35 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:48:35 PM] [DEBUG] CCallback::Execute(amx=0x305fd68, index=376, num_params=1)
+[10/16/2023 6:48:35 PM] [INFO] Executing callback 'PlayerRegistered' with 1 parameter...
+[10/16/2023 6:48:35 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:48:35 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:48:35 PM] [DEBUG] executing AMX callback with index '376'
+[10/16/2023 6:48:35 PM] [DEBUG] cache_insert_id()
+[10/16/2023 6:48:35 PM] [DEBUG] cache_insert_id: return value: '1'
+[10/16/2023 6:48:35 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:48:35 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 6:53:47 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 6:53:47 PM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_connect_file("mysql.ini")
+[10/16/2023 6:53:47 PM] [DEBUG] CHandleManager::CreateFromFile(this=0x3d20578, file_path='mysql.ini')
+[10/16/2023 6:53:47 PM] [INFO] Options instance with id '1' successfully created.
+[10/16/2023 6:53:47 PM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x31d05c0 (id '1')
+[10/16/2023 6:53:47 PM] [DEBUG] CHandleManager::Create(this=0x3d20578, host='localhost', user='root', pass='****', db='maryland', options=0x31d05c0)
+[10/16/2023 6:53:47 PM] [INFO] Creating new connection handle...
+[10/16/2023 6:53:47 PM] [WARNING] mysql_connect_file: no password specified
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection(this=0x33065c0, host='localhost', user='root', passw='****', db='maryland', options=0x31d05c0)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection - new connection = 0x330ea88
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection(this=0xa372020, host='localhost', user='root', passw='****', db='maryland', options=0x31d05c0)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection - new connection = 0x3d22fc8
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa372020, connection=0xa372020)
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa372020, connection=0xa372020)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x3305e00)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection(this=0xa549020, host='localhost', user='root', passw='****', db='maryland', options=0x31d05c0)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection - new connection = 0x3d2ca80
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa549020, connection=0xa549020)
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa549020, connection=0xa549020)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection(this=0xa717020, host='localhost', user='root', passw='****', db='maryland', options=0x31d05c0)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::CConnection - new connection = 0x42ae200
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa717020, connection=0xa717020)
+[10/16/2023 6:53:47 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa717020, connection=0xa717020)
+[10/16/2023 6:53:47 PM] [INFO] Connection handle with id '1' successfully created.
+[10/16/2023 6:53:47 PM] [DEBUG] CHandleManager::Create - new handle = 0x31cfd48
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_connect_file: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_errno(1)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::GetErrorId(this=0x31cfd48)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::GetError(this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_errno: return value: '0'
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='LoadVehicleData', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[10/16/2023 6:53:47 PM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0x42b5640)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42b5640, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42b5640, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 0.267 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `vehicles`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x3312680'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x330e880'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='House_LoadData', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[10/16/2023 6:53:47 PM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0x42bf8a0)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42bf8a0, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42bf8a0, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `houses`" successfully executed within 0.278 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `houses`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x3312bc0'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x3d1d7f8'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='Business_Load', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[10/16/2023 6:53:47 PM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0x42bfc00)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42bfc00, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42bfc00, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 0.275 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `businesses`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x3312798'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x42bfc88'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='KlupeLoading', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[10/16/2023 6:53:47 PM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0x42c6b88)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42c6b88, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42c6b88, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 0.190 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `klupe`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x3312d48'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x3d2ef68'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='PoliceLoad', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 377
+[10/16/2023 6:53:47 PM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0x42bff88)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42bff88, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42bff88, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 0.205 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `faction_police`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x42c0638'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x3308a20'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SafeZonesLoad', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 396
+[10/16/2023 6:53:47 PM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=2, query=0x42ddfa0)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnectionPool::Queue(query=0x42ddfa0, this=0x3305e00)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x42ddfa0, this=0xa549020, connection=0x3d2ca80)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x42ddfa0, connection=0x3d2ca80)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 0.241 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d2ca80, query_str='SELECT * FROM `safezones`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x42c0868'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x3d2ef68'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='LoadMetros', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[10/16/2023 6:53:47 PM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=2, query=0x121ef00)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnectionPool::Queue(query=0x121ef00, this=0x3305e00)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x121ef00, this=0xa717020, connection=0x42ae200)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x121ef00, connection=0x42ae200)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `metros`" successfully executed within 0.232 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x42ae200, query_str='SELECT * FROM `metros`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x42c0be8'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x42c0e40'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='LoadContainers', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[10/16/2023 6:53:47 PM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=2, query=0x43c3ec8)
+[10/16/2023 6:53:47 PM] [DEBUG] CConnectionPool::Queue(query=0x43c3ec8, this=0x3305e00)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0x43c3ec8, this=0xa549020, connection=0x3d2ca80)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0x43c3ec8, connection=0x3d2ca80)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `containers`" successfully executed within 0.177 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d2ca80, query_str='SELECT * FROM `containers`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x42c0718'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x42c0fa8'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='Job_LoadVehicleData', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '0'
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='Job_LoadData', format='', params=0xa223a84, param_offset=5)
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[10/16/2023 6:53:47 PM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[10/16/2023 6:53:47 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xab3b2a0)
+[10/16/2023 6:53:47 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:53:47 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] CConnection::Execute(query=0xab3b2a0, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [DEBUG] CQuery::Execute(this=0xab3b2a0, connection=0x3d22fc8)
+[10/16/2023 6:53:47 PM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 0.194 milliseconds
+[10/16/2023 6:53:47 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `jobs`')
+[10/16/2023 6:53:47 PM] [DEBUG] created new resultset '0x3312b18'
+[10/16/2023 6:53:47 PM] [DEBUG] fetched MySQL result '0x3199908'
+[10/16/2023 6:53:47 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:53:47 PM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=258, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '258'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AB0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=226, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '226'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AB0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=200, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '200'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AB4)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=250, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '250'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AAC)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=377, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '377'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AB0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=396, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '396'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AC0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=255, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '255'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AC0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=254, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '254'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AC0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:53:47 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=247, num_params=0)
+[10/16/2023 6:53:47 PM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[10/16/2023 6:53:47 PM] [DEBUG] executing AMX callback with index '247'
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count(0x0A223AB0)
+[10/16/2023 6:53:47 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:53:47 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:53:47 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223830, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Silent')
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::EscapeString(src='Silent', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '60'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1", "SQL_AccountLoad", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SQL_AccountLoad', format='i', params=0xa223818, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 385
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1ad0)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c1ad0, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c1ad0, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1" successfully executed within 0.285 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `players` WHERE `Username` = 'Silent'  LIMIT 1')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xd55b410'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xd5c1d20'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 172 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=385, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '385'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x08E64B00)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "ID", 0x08D76650)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Password", 0x08D766B4)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '297206591'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Level", 0x08D766B8)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Novac", 0x08D766BC)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '2000'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Skin", 0x08D766C0)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '250'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Godine", 0x08D766C4)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '21'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int(0, "Staff", 0x08D766C8)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: assigned value: '0'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_value_name_int: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A2238A8, 120, "SELECT * FROM player_documents WHERE player_id = '%d' LIMIT 1")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '60'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM player_documents WHERE player_id = '1' LIMIT 1", "SQL_AccountDocumentsLoad", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SQL_AccountDocumentsLoad', format='i', params=0xa223890, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountDocumentsLoad': 383
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'SQL_AccountDocumentsLoad' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1d30)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223830, 150, "SELECT * FROM player_crypto WHERE crypto_id = '%d' LIMIT 1")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '57'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM player_crypto WHERE crypto_id = '1' LIMIT 1", "LoadPlayerCrypto", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='LoadPlayerCrypto', format='i', params=0xa223818, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c1d30, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'LoadPlayerCrypto': 256
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c1d30, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'LoadPlayerCrypto' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c2028)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223888, 128, "SELECT * FROM player_finance WHERE finance_id = '%d' LIMIT 1")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '59'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM player_finance WHERE finance_id = '1' LIMIT 1", "SQL_AccountFinanceLoad", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SQL_AccountFinanceLoad', format='i', params=0xa223870, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountFinanceLoad': 384
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'SQL_AccountFinanceLoad' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c23b8)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A2238A8, 120, "SELECT * FROM player_property WHERE player_id = '%d'")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '51'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM player_property WHERE player_id = '1'", "LoadPlayerProperty", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='LoadPlayerProperty', format='i', params=0xa223890, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'LoadPlayerProperty': 257
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'LoadPlayerProperty' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1dc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A2238A8, 120, "SELECT * FROM player_electronic WHERE player_id = '%d'")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '53'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM player_electronic WHERE player_id = '1'", "SQL_ElectronicLoad", "i")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SQL_ElectronicLoad', format='i', params=0xa223890, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create - callback index for 'SQL_ElectronicLoad': 387
+[10/16/2023 6:54:09 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:09 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback 'SQL_ElectronicLoad' set up for delayed execution.
+[10/16/2023 6:54:09 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c2288)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM player_documents WHERE player_id = '1' LIMIT 1" successfully executed within 0.239 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM player_documents WHERE player_id = '1' LIMIT 1')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xd55b3d8'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xd592ee8'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c2028, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c2028, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM player_crypto WHERE crypto_id = '1' LIMIT 1" successfully executed within 0.106 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM player_crypto WHERE crypto_id = '1' LIMIT 1')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xd55b330'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xd5ac4d8'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c23b8, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c23b8, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM player_finance WHERE finance_id = '1' LIMIT 1" successfully executed within 0.98 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM player_finance WHERE finance_id = '1' LIMIT 1')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9808'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xcaae258'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c1dc8, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c1dc8, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM player_property WHERE player_id = '1'" successfully executed within 0.89 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM player_property WHERE player_id = '1'')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa98e8'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xd5a4538'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c2288, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c2288, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "SELECT * FROM player_electronic WHERE player_id = '1'" successfully executed within 0.84 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM player_electronic WHERE player_id = '1'')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9aa8'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0xcaae188'
+[10/16/2023 6:54:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=383, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'SQL_AccountDocumentsLoad' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '383'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x08E72AB8)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223610, 300, "INSERT INTO `player_documents` (player_id, NationalID, Passport, VoziloLicence, MotoLicence, BrodLicence, OruzjeLicence, ZivotnoOsiguranje) VALUES('%d', '0', '0', '0', '0', '0', '0', '-1')")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '187'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `player_documents` (player_id, NationalID, Passport, VoziloLicence, MotoLicence, BrodLicence, OruzjeLicence, ZivotnoOsiguranje) VALUES('1', '0', '0', '0', '0', '0', '0', '-1')", "", "")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa2235fc, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1ad0)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c1ad0, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c1ad0, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=256, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'LoadPlayerCrypto' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '256'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x0A223ABC)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A22360C, 300, "INSERT INTO `player_crypto` (crypto_id, KolicinaBTC, KolicinaETH, KolicinaLTC, KolicinaDOT, KolicinaUSDT) VALUES('%d', '0', '0', '0', '0', '0')")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '142'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `player_crypto` (crypto_id, KolicinaBTC, KolicinaETH, KolicinaLTC, KolicinaDOT, KolicinaUSDT) VALUES('1', '0', '0', '0', '0', '0')", "", "")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa2235f8, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c20c0)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=384, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'SQL_AccountFinanceLoad' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '384'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x08F96E94)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223610, 300, "INSERT INTO `player_finance` (finance_id, BankAccount, BankMoney, BankPin) VALUES('%d', '0', '0', '0')")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '101'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `player_finance` (finance_id, BankAccount, BankMoney, BankPin) VALUES('1', '0', '0', '0')", "", "")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa2235fc, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c2320)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=257, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'LoadPlayerProperty' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '257'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x0A223AAC)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A22342C, 420, "INSERT INTO `player_property` (player_id, HouseID) VALUES('%d', '-1')")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '68'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `player_property` (player_id, HouseID) VALUES('1', '-1')", "", "")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa223418, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c2028)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=387, num_params=1)
+[10/16/2023 6:54:09 PM] [INFO] Executing callback 'SQL_ElectronicLoad' with 1 parameter...
+[10/16/2023 6:54:09 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:09 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:09 PM] [DEBUG] executing AMX callback with index '387'
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count(0x090A8010)
+[10/16/2023 6:54:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format(1, 0x0A223610, 300, "INSERT INTO `player_electronic` (player_id, Dron, Baterije, Navigacija) VALUES('%d', '0', '0', '0')")
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_format: return value: '98'
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `player_electronic` (player_id, Dron, Baterije, Navigacija) VALUES('1', '0', '0', '0')", "", "")
+[10/16/2023 6:54:09 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa2235fc, param_offset=5)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c2158)
+[10/16/2023 6:54:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:54:09 PM] [INFO] query "INSERT INTO `player_documents` (player_id, NationalID, Passport, VoziloLicence, MotoLicence, BrodLicence, OruzjeLicence, ZivotnoOsiguranje) VALUES('1', '0', '0', '0', '0', '0', '0', '-1')" successfully executed within 3.333 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `player_documents` (player_id, NationalID, Passport, VoziloLicence, MotoLicence, BrodLicence, OruzjeLicence, ZivotnoOsiguranje) VALUES('1', '0', '0', '0', '0', '0', '0', '-1')')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9958'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c20c0, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c20c0, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "INSERT INTO `player_crypto` (crypto_id, KolicinaBTC, KolicinaETH, KolicinaLTC, KolicinaDOT, KolicinaUSDT) VALUES('1', '0', '0', '0', '0', '0')" successfully executed within 2.809 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `player_crypto` (crypto_id, KolicinaBTC, KolicinaETH, KolicinaLTC, KolicinaDOT, KolicinaUSDT) VALUES('1', '0', '0', '0', '0', '0')')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9a70'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c2320, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c2320, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "INSERT INTO `player_finance` (finance_id, BankAccount, BankMoney, BankPin) VALUES('1', '0', '0', '0')" successfully executed within 2.539 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `player_finance` (finance_id, BankAccount, BankMoney, BankPin) VALUES('1', '0', '0', '0')')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9a00'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c2028, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c2028, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "INSERT INTO `player_property` (player_id, HouseID) VALUES('1', '-1')" successfully executed within 2.814 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `player_property` (player_id, HouseID) VALUES('1', '-1')')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa99c8'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:09 PM] [DEBUG] CConnection::Execute(query=0xd5c2158, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [DEBUG] CQuery::Execute(this=0xd5c2158, connection=0x3d22fc8)
+[10/16/2023 6:54:09 PM] [INFO] query "INSERT INTO `player_electronic` (player_id, Dron, Baterije, Navigacija) VALUES('1', '0', '0', '0')" successfully executed within 2.538 milliseconds
+[10/16/2023 6:54:09 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `player_electronic` (player_id, Dron, Baterije, Navigacija) VALUES('1', '0', '0', '0')')
+[10/16/2023 6:54:09 PM] [DEBUG] created new resultset '0xcaa9760'
+[10/16/2023 6:54:09 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:21 PM] [DEBUG] mysql_format(1, 0x08E65740, 120, "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 6:54:21 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Silent')
+[10/16/2023 6:54:21 PM] [DEBUG] CConnection::EscapeString(src='Silent', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:54:21 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent'
+[10/16/2023 6:54:21 PM] [DEBUG] mysql_format: return value: '92'
+[10/16/2023 6:54:21 PM] [DEBUG] mysql_tquery(1, "UPDATE `players` SET `LastLogin` = '16/10/2023 - 18:54' WHERE `Username` = 'Silent'  LIMIT 1", "", "")
+[10/16/2023 6:54:21 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='', format='', params=0xa223a94, param_offset=5)
+[10/16/2023 6:54:21 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1d30)
+[10/16/2023 6:54:21 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:21 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:21 PM] [DEBUG] CConnection::Execute(query=0xd5c1d30, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:21 PM] [DEBUG] CQuery::Execute(this=0xd5c1d30, connection=0x3d22fc8)
+[10/16/2023 6:54:21 PM] [INFO] query "UPDATE `players` SET `LastLogin` = '16/10/2023 - 18:54' WHERE `Username` = 'Silent'  LIMIT 1" successfully executed within 11.834 milliseconds
+[10/16/2023 6:54:21 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='UPDATE `players` SET `LastLogin` = '16/10/2023 - 18:54' WHERE `Username` = 'Silent'  LIMIT 1')
+[10/16/2023 6:54:21 PM] [DEBUG] created new resultset '0xcaa9840'
+[10/16/2023 6:54:21 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:54:48 PM] [DEBUG] mysql_format(1, 0x0A223830, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 6:54:48 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Silent_Developer')
+[10/16/2023 6:54:48 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developer', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:54:48 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developer'
+[10/16/2023 6:54:48 PM] [DEBUG] mysql_format: return value: '70'
+[10/16/2023 6:54:48 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'Silent_Developer'  LIMIT 1", "SQL_AccountLoad", "i")
+[10/16/2023 6:54:48 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='SQL_AccountLoad', format='i', params=0xa223818, param_offset=5)
+[10/16/2023 6:54:48 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 385
+[10/16/2023 6:54:48 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:54:48 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:54:48 PM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[10/16/2023 6:54:48 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:54:48 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1dc8)
+[10/16/2023 6:54:48 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:54:48 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:54:48 PM] [DEBUG] CConnection::Execute(query=0xd5c1dc8, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:54:48 PM] [DEBUG] CQuery::Execute(this=0xd5c1dc8, connection=0x3d22fc8)
+[10/16/2023 6:54:48 PM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'Silent_Developer'  LIMIT 1" successfully executed within 0.289 milliseconds
+[10/16/2023 6:54:48 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='SELECT * FROM `players` WHERE `Username` = 'Silent_Developer'  LIMIT 1')
+[10/16/2023 6:54:48 PM] [DEBUG] created new resultset '0xcaa9808'
+[10/16/2023 6:54:48 PM] [DEBUG] fetched MySQL result '0xd5c2278'
+[10/16/2023 6:54:48 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 6:54:48 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=385, num_params=1)
+[10/16/2023 6:54:48 PM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[10/16/2023 6:54:48 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:54:48 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:54:48 PM] [DEBUG] executing AMX callback with index '385'
+[10/16/2023 6:54:48 PM] [DEBUG] cache_get_row_count(0x08E64B00)
+[10/16/2023 6:54:48 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 6:54:48 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:54:48 PM] [INFO] Callback successfully executed.
+[10/16/2023 6:55:15 PM] [DEBUG] mysql_format(1, 0x0A223114, 550, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')")
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Silent_Developer')
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developer', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developer'
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='16/10/2023 - 18:55')
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 18:55', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 18:55'
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Vostica@gmail.com')
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::EscapeString(src='Vostica@gmail.com', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Vostica@gmail.com'
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Maryland')
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::EscapeString(src='Maryland', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Maryland'
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString(this=0x31cfd48, src='Musko')
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::EscapeString(src='Musko', this=0x33065c0, connection=0x330ea88)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Musko'
+[10/16/2023 6:55:15 PM] [DEBUG] mysql_format: return value: '255'
+[10/16/2023 6:55:15 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developer', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:55', 'Vostica@gmail.com', 'Maryland', 'Musko')", "PlayerRegistered", "i")
+[10/16/2023 6:55:15 PM] [DEBUG] CCallback::Create(amx=0x330b790, name='PlayerRegistered', format='i', params=0xa2230fc, param_offset=5)
+[10/16/2023 6:55:15 PM] [DEBUG] CCallback::Create - callback index for 'PlayerRegistered': 376
+[10/16/2023 6:55:15 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 6:55:15 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 6:55:15 PM] [INFO] Callback 'PlayerRegistered' set up for delayed execution.
+[10/16/2023 6:55:15 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::Execute(this=0x31cfd48, type=1, query=0xd5c1dc8)
+[10/16/2023 6:55:15 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 6:55:15 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 6:55:15 PM] [DEBUG] CConnection::Execute(query=0xd5c1dc8, this=0xa372020, connection=0x3d22fc8)
+[10/16/2023 6:55:15 PM] [DEBUG] CQuery::Execute(this=0xd5c1dc8, connection=0x3d22fc8)
+[10/16/2023 6:55:15 PM] [INFO] query "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developer', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:55', 'Vostica@gmail.com', 'Maryland', 'Musko')" successfully executed within 3.318 milliseconds
+[10/16/2023 6:55:15 PM] [DEBUG] CResultSet::Create(connection=0x3d22fc8, query_str='INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developer', '297206591', '250', '1', '2000', '21', '16/10/2023 - 18:55', 'Vostica@gmail.com', 'Maryland', 'Musko')')
+[10/16/2023 6:55:15 PM] [DEBUG] created new resultset '0xcaa9840'
+[10/16/2023 6:55:15 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 6:55:15 PM] [DEBUG] CCallback::Execute(amx=0x330b790, index=376, num_params=1)
+[10/16/2023 6:55:15 PM] [INFO] Executing callback 'PlayerRegistered' with 1 parameter...
+[10/16/2023 6:55:15 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 6:55:15 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 6:55:15 PM] [DEBUG] executing AMX callback with index '376'
+[10/16/2023 6:55:15 PM] [DEBUG] cache_insert_id()
+[10/16/2023 6:55:15 PM] [DEBUG] cache_insert_id: return value: '2'
+[10/16/2023 6:55:15 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 6:55:15 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:01:33 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:01:33 PM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_connect_file("mysql.ini")
+[10/16/2023 7:01:33 PM] [DEBUG] CHandleManager::CreateFromFile(this=0x38f6110, file_path='mysql.ini')
+[10/16/2023 7:01:33 PM] [INFO] Options instance with id '1' successfully created.
+[10/16/2023 7:01:33 PM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x38f92b8 (id '1')
+[10/16/2023 7:01:33 PM] [DEBUG] CHandleManager::Create(this=0x38f6110, host='localhost', user='root', pass='****', db='maryland', options=0x38f92b8)
+[10/16/2023 7:01:33 PM] [INFO] Creating new connection handle...
+[10/16/2023 7:01:33 PM] [WARNING] mysql_connect_file: no password specified
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection(this=0x3982898, host='localhost', user='root', passw='****', db='maryland', options=0x38f92b8)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection - new connection = 0x397fa88
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection(this=0xa0c6020, host='localhost', user='root', passw='****', db='maryland', options=0x38f92b8)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection - new connection = 0x2f95c80
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa0c6020, connection=0xa0c6020)
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa0c6020, connection=0xa0c6020)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x39828d8)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection(this=0xa29e020, host='localhost', user='root', passw='****', db='maryland', options=0x38f92b8)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection - new connection = 0x398c6c8
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa29e020, connection=0xa29e020)
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa29e020, connection=0xa29e020)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection(this=0xa46e020, host='localhost', user='root', passw='****', db='maryland', options=0x38f92b8)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::CConnection - new connection = 0x3f12a50
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa46e020, connection=0xa46e020)
+[10/16/2023 7:01:33 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa46e020, connection=0xa46e020)
+[10/16/2023 7:01:33 PM] [INFO] Connection handle with id '1' successfully created.
+[10/16/2023 7:01:33 PM] [DEBUG] CHandleManager::Create - new handle = 0x397f188
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_connect_file: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_errno(1)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::GetErrorId(this=0x397f188)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::GetError(this=0x3982898, connection=0x397fa88)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_errno: return value: '0'
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='LoadVehicleData', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[10/16/2023 7:01:33 PM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0x3985d58)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x3985d58, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x3985d58, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 0.339 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `vehicles`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2dee9e8'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x2f96050'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='House_LoadData', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[10/16/2023 7:01:33 PM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0x3f1ff08)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x3f1ff08, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x3f1ff08, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `houses`" successfully executed within 0.207 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `houses`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2deea20'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x2df00c8'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='Business_Load', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[10/16/2023 7:01:33 PM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0x2df0150)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x2df0150, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x2df0150, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 0.228 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `businesses`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2dee9b0'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x3f1f740'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='KlupeLoading', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[10/16/2023 7:01:33 PM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0x398ef60)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x398ef60, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x398ef60, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 0.175 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `klupe`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2dee7f0'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x3f0b460'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='PoliceLoad', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 377
+[10/16/2023 7:01:33 PM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0x3f27d08)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x3f27d08, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x3f27d08, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 0.231 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `faction_police`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2dee588'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x2dea6a0'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='SafeZonesLoad', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 396
+[10/16/2023 7:01:33 PM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=2, query=0x2f96060)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnectionPool::Queue(query=0x2f96060, this=0x39828d8)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x2f96060, this=0xa29e020, connection=0x398c6c8)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x2f96060, connection=0x398c6c8)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 0.242 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x398c6c8, query_str='SELECT * FROM `safezones`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x4014f00'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x3f67b38'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='LoadMetros', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[10/16/2023 7:01:33 PM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=2, query=0x4024360)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnectionPool::Queue(query=0x4024360, this=0x39828d8)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x4024360, this=0xa46e020, connection=0x3f12a50)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x4024360, connection=0x3f12a50)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `metros`" successfully executed within 0.220 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x3f12a50, query_str='SELECT * FROM `metros`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x4012238'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x40ba790'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='LoadContainers', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[10/16/2023 7:01:33 PM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=2, query=0x40c3b10)
+[10/16/2023 7:01:33 PM] [DEBUG] CConnectionPool::Queue(query=0x40c3b10, this=0x39828d8)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0x40c3b10, this=0xa29e020, connection=0x398c6c8)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0x40c3b10, connection=0x398c6c8)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `containers`" successfully executed within 0.94 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x398c6c8, query_str='SELECT * FROM `containers`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x4014e20'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x40bad30'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='Job_LoadVehicleData', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '0'
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create(amx=0x3985af0, name='Job_LoadData', format='', params=0x9f70b00, param_offset=5)
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[10/16/2023 7:01:33 PM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[10/16/2023 7:01:33 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute(this=0x397f188, type=1, query=0xa86b3d0)
+[10/16/2023 7:01:33 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:01:33 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] CConnection::Execute(query=0xa86b3d0, this=0xa0c6020, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [DEBUG] CQuery::Execute(this=0xa86b3d0, connection=0x2f95c80)
+[10/16/2023 7:01:33 PM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 0.188 milliseconds
+[10/16/2023 7:01:33 PM] [DEBUG] CResultSet::Create(connection=0x2f95c80, query_str='SELECT * FROM `jobs`')
+[10/16/2023 7:01:33 PM] [DEBUG] created new resultset '0x2dee908'
+[10/16/2023 7:01:33 PM] [DEBUG] fetched MySQL result '0x305e8d8'
+[10/16/2023 7:01:33 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:01:33 PM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=258, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '258'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B2C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=226, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '226'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B2C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=200, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '200'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B30)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=250, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '250'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B28)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=377, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '377'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B2C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=396, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '396'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B3C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=255, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '255'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B3C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=254, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '254'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B3C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:01:33 PM] [DEBUG] CCallback::Execute(amx=0x3985af0, index=247, num_params=0)
+[10/16/2023 7:01:33 PM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[10/16/2023 7:01:33 PM] [DEBUG] executing AMX callback with index '247'
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count(0x09F70B2C)
+[10/16/2023 7:01:33 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:01:33 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:01:33 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:02:09 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:02:09 PM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_connect_file("mysql.ini")
+[10/16/2023 7:02:09 PM] [DEBUG] CHandleManager::CreateFromFile(this=0x2cc56e0, file_path='mysql.ini')
+[10/16/2023 7:02:09 PM] [INFO] Options instance with id '1' successfully created.
+[10/16/2023 7:02:09 PM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x3849fb0 (id '1')
+[10/16/2023 7:02:09 PM] [DEBUG] CHandleManager::Create(this=0x2cc56e0, host='localhost', user='root', pass='****', db='maryland', options=0x3849fb0)
+[10/16/2023 7:02:09 PM] [INFO] Creating new connection handle...
+[10/16/2023 7:02:09 PM] [WARNING] mysql_connect_file: no password specified
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection(this=0x384c890, host='localhost', user='root', passw='****', db='maryland', options=0x3849fb0)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection - new connection = 0x2dfbae0
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection(this=0x9fda020, host='localhost', user='root', passw='****', db='maryland', options=0x3849fb0)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection - new connection = 0x2c87e40
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0x9fda020, connection=0x9fda020)
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0x9fda020, connection=0x9fda020)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x384cc90)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection(this=0xa1a9020, host='localhost', user='root', passw='****', db='maryland', options=0x3849fb0)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection - new connection = 0x2c8ac50
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa1a9020, connection=0xa1a9020)
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa1a9020, connection=0xa1a9020)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection(this=0xa37e020, host='localhost', user='root', passw='****', db='maryland', options=0x3849fb0)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::CConnection - new connection = 0x3e067e0
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa37e020, connection=0xa37e020)
+[10/16/2023 7:02:09 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa37e020, connection=0xa37e020)
+[10/16/2023 7:02:09 PM] [INFO] Connection handle with id '1' successfully created.
+[10/16/2023 7:02:09 PM] [DEBUG] CHandleManager::Create - new handle = 0x3849398
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_connect_file: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_errno(1)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::GetErrorId(this=0x3849398)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::GetError(this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_errno: return value: '0'
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='LoadVehicleData', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[10/16/2023 7:02:09 PM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2b5d8)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2b5d8, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2b5d8, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 0.258 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `vehicles`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x2df9f78'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0xf2afd8'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='House_LoadData', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[10/16/2023 7:02:09 PM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2b8d0)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2b8d0, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2b8d0, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `houses`" successfully executed within 0.216 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `houses`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x2dfa288'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x2dfb220'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='Business_Load', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[10/16/2023 7:02:09 PM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2afe8)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2afe8, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2afe8, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 0.241 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `businesses`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x2dfa528'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x3e19a80'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='KlupeLoading', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[10/16/2023 7:02:09 PM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2b080)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2b080, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2b080, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 0.107 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `klupe`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x2dfa448'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0xf2e370'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='PoliceLoad', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 377
+[10/16/2023 7:02:09 PM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2acf0)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2acf0, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2acf0, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 0.159 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `faction_police`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x3844988'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x2df80d8'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='SafeZonesLoad', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 396
+[10/16/2023 7:02:09 PM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=2, query=0xf2b708)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnectionPool::Queue(query=0xf2b708, this=0x384cc90)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2b708, this=0xa1a9020, connection=0x2c8ac50)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2b708, connection=0x2c8ac50)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 0.305 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c8ac50, query_str='SELECT * FROM `safezones`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x3e1f308'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0xf2e370'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='LoadMetros', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[10/16/2023 7:02:09 PM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=2, query=0xf2b968)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnectionPool::Queue(query=0xf2b968, this=0x384cc90)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2b968, this=0xa37e020, connection=0x3e067e0)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2b968, connection=0x3e067e0)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `metros`" successfully executed within 0.213 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x3e067e0, query_str='SELECT * FROM `metros`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x3e1f458'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x2cc5df0'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='LoadContainers', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[10/16/2023 7:02:09 PM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=2, query=0xf2ab28)
+[10/16/2023 7:02:09 PM] [DEBUG] CConnectionPool::Queue(query=0xf2ab28, this=0x384cc90)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2ab28, this=0xa1a9020, connection=0x2c8ac50)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2ab28, connection=0x2c8ac50)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `containers`" successfully executed within 0.185 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c8ac50, query_str='SELECT * FROM `containers`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x3e1f2d0'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x2cc5df0'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='Job_LoadVehicleData', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '0'
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='Job_LoadData', format='', params=0x9e83b00, param_offset=5)
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[10/16/2023 7:02:09 PM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[10/16/2023 7:02:09 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xf2abc0)
+[10/16/2023 7:02:09 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:09 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] CConnection::Execute(query=0xf2abc0, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [DEBUG] CQuery::Execute(this=0xf2abc0, connection=0x2c87e40)
+[10/16/2023 7:02:09 PM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 0.197 milliseconds
+[10/16/2023 7:02:09 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `jobs`')
+[10/16/2023 7:02:09 PM] [DEBUG] created new resultset '0x3e1f5e0'
+[10/16/2023 7:02:09 PM] [DEBUG] fetched MySQL result '0x101ddd8'
+[10/16/2023 7:02:09 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:09 PM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=258, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '258'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B2C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=226, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '226'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B2C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=200, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '200'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B30)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=250, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '250'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B28)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=377, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '377'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B2C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=396, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '396'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B3C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=255, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '255'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B3C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=254, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '254'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B3C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:09 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=247, num_params=0)
+[10/16/2023 7:02:09 PM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[10/16/2023 7:02:09 PM] [DEBUG] executing AMX callback with index '247'
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count(0x09E83B2C)
+[10/16/2023 7:02:09 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:09 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:09 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:31 PM] [DEBUG] mysql_format(1, 0x09E838AC, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 7:02:31 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='Silent_Developera')
+[10/16/2023 7:02:31 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developera', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:31 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developera'
+[10/16/2023 7:02:31 PM] [DEBUG] mysql_format: return value: '71'
+[10/16/2023 7:02:31 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'Silent_Developera'  LIMIT 1", "SQL_AccountLoad", "i")
+[10/16/2023 7:02:31 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='SQL_AccountLoad', format='i', params=0x9e83894, param_offset=5)
+[10/16/2023 7:02:31 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 385
+[10/16/2023 7:02:31 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 7:02:31 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 7:02:31 PM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[10/16/2023 7:02:31 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 7:02:31 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xd1ceb78)
+[10/16/2023 7:02:31 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:31 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:31 PM] [DEBUG] CConnection::Execute(query=0xd1ceb78, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:31 PM] [DEBUG] CQuery::Execute(this=0xd1ceb78, connection=0x2c87e40)
+[10/16/2023 7:02:31 PM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'Silent_Developera'  LIMIT 1" successfully executed within 0.356 milliseconds
+[10/16/2023 7:02:31 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='SELECT * FROM `players` WHERE `Username` = 'Silent_Developera'  LIMIT 1')
+[10/16/2023 7:02:31 PM] [DEBUG] created new resultset '0xc6fd3b8'
+[10/16/2023 7:02:31 PM] [DEBUG] fetched MySQL result '0xd1ce1e8'
+[10/16/2023 7:02:31 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:02:31 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=385, num_params=1)
+[10/16/2023 7:02:31 PM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[10/16/2023 7:02:31 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 7:02:31 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 7:02:31 PM] [DEBUG] executing AMX callback with index '385'
+[10/16/2023 7:02:31 PM] [DEBUG] cache_get_row_count(0x08AC4B7C)
+[10/16/2023 7:02:31 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:02:31 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:31 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:02:54 PM] [DEBUG] mysql_format(1, 0x09E83190, 550, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')")
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='Silent_Developera')
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developera', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developera'
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='16/10/2023 - 19:02')
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 19:02', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 19:02'
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='Vostica@gmail.com')
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::EscapeString(src='Vostica@gmail.com', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Vostica@gmail.com'
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='Maryland')
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::EscapeString(src='Maryland', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Maryland'
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString(this=0x3849398, src='Musko')
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::EscapeString(src='Musko', this=0x384c890, connection=0x2dfbae0)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Musko'
+[10/16/2023 7:02:54 PM] [DEBUG] mysql_format: return value: '256'
+[10/16/2023 7:02:54 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developera', '297206591', '250', '1', '2000', '21', '16/10/2023 - 19:02', 'Vostica@gmail.com', 'Maryland', 'Musko')", "PlayerRegistered", "i")
+[10/16/2023 7:02:54 PM] [DEBUG] CCallback::Create(amx=0x2df8b78, name='PlayerRegistered', format='i', params=0x9e83178, param_offset=5)
+[10/16/2023 7:02:54 PM] [DEBUG] CCallback::Create - callback index for 'PlayerRegistered': 376
+[10/16/2023 7:02:54 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 7:02:54 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 7:02:54 PM] [INFO] Callback 'PlayerRegistered' set up for delayed execution.
+[10/16/2023 7:02:54 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::Execute(this=0x3849398, type=1, query=0xd1cde68)
+[10/16/2023 7:02:54 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:02:54 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:02:54 PM] [DEBUG] CConnection::Execute(query=0xd1cde68, this=0x9fda020, connection=0x2c87e40)
+[10/16/2023 7:02:54 PM] [DEBUG] CQuery::Execute(this=0xd1cde68, connection=0x2c87e40)
+[10/16/2023 7:02:54 PM] [INFO] query "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developera', '297206591', '250', '1', '2000', '21', '16/10/2023 - 19:02', 'Vostica@gmail.com', 'Maryland', 'Musko')" successfully executed within 3.257 milliseconds
+[10/16/2023 7:02:54 PM] [DEBUG] CResultSet::Create(connection=0x2c87e40, query_str='INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developera', '297206591', '250', '1', '2000', '21', '16/10/2023 - 19:02', 'Vostica@gmail.com', 'Maryland', 'Musko')')
+[10/16/2023 7:02:54 PM] [DEBUG] created new resultset '0xc6fd1c0'
+[10/16/2023 7:02:54 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 7:02:54 PM] [DEBUG] CCallback::Execute(amx=0x2df8b78, index=376, num_params=1)
+[10/16/2023 7:02:54 PM] [INFO] Executing callback 'PlayerRegistered' with 1 parameter...
+[10/16/2023 7:02:54 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 7:02:54 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 7:02:54 PM] [DEBUG] executing AMX callback with index '376'
+[10/16/2023 7:02:54 PM] [DEBUG] cache_insert_id()
+[10/16/2023 7:02:54 PM] [DEBUG] cache_insert_id: return value: '3'
+[10/16/2023 7:02:54 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:02:54 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:06:18 PM] [ERROR] mysql_tquery: invalid connection handle '0'
+[10/16/2023 7:06:18 PM] [INFO] changed log level from 'warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_connect_file("mysql.ini")
+[10/16/2023 7:06:18 PM] [DEBUG] CHandleManager::CreateFromFile(this=0x3d7a928, file_path='mysql.ini')
+[10/16/2023 7:06:18 PM] [INFO] Options instance with id '1' successfully created.
+[10/16/2023 7:06:18 PM] [DEBUG] CHandleManager::CreateFromFile - new options = 0x3c02cc0 (id '1')
+[10/16/2023 7:06:18 PM] [DEBUG] CHandleManager::Create(this=0x3d7a928, host='localhost', user='root', pass='****', db='maryland', options=0x3c02cc0)
+[10/16/2023 7:06:18 PM] [INFO] Creating new connection handle...
+[10/16/2023 7:06:18 PM] [WARNING] mysql_connect_file: no password specified
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection(this=0x4194090, host='localhost', user='root', passw='****', db='maryland', options=0x3c02cc0)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection - new connection = 0x4197b00
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection(this=0xa2a3020, host='localhost', user='root', passw='****', db='maryland', options=0x3c02cc0)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection - new connection = 0x3011090
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa2a3020, connection=0xa2a3020)
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa2a3020, connection=0xa2a3020)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnectionPool::CConnectionPool(size=2, this=0x4194390)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection(this=0xa47b020, host='localhost', user='root', passw='****', db='maryland', options=0x3c02cc0)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection - new connection = 0x3c056a8
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa47b020, connection=0xa47b020)
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa47b020, connection=0xa47b020)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection(this=0xa645020, host='localhost', user='root', passw='****', db='maryland', options=0x3c02cc0)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::CConnection - new connection = 0x3c0ddf8
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::WorkerFunc(this=0xa645020, connection=0xa645020)
+[10/16/2023 7:06:18 PM] [DEBUG] CThreadedConnection::CThreadedConnection(this=0xa645020, connection=0xa645020)
+[10/16/2023 7:06:18 PM] [INFO] Connection handle with id '1' successfully created.
+[10/16/2023 7:06:18 PM] [DEBUG] CHandleManager::Create - new handle = 0x418f500
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_connect_file: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_errno(1)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::GetErrorId(this=0x418f500)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::GetError(this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::GetErrorId - return value: true, error id: '0', error msg: ''
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_errno: return value: '0'
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `vehicles`", "LoadVehicleData", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='LoadVehicleData', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'LoadVehicleData': 258
+[10/16/2023 7:06:18 PM] [INFO] Callback 'LoadVehicleData' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0x3e91e70)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x3e91e70, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x3e91e70, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `vehicles`" successfully executed within 0.576 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `vehicles`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x41c2dd0'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x317cb70'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `houses`", "House_LoadData", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='House_LoadData', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'House_LoadData': 226
+[10/16/2023 7:06:18 PM] [INFO] Callback 'House_LoadData' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0x317cb80)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x317cb80, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x317cb80, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `houses`" successfully executed within 0.265 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `houses`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x3c023d0'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x123ab48'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `businesses`", "Business_Load", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='Business_Load', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'Business_Load': 200
+[10/16/2023 7:06:18 PM] [INFO] Callback 'Business_Load' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0x123ab58)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x123ab58, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x123ab58, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `businesses`" successfully executed within 0.263 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `businesses`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x3c02408'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x3c0eea0'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `klupe`", "KlupeLoading", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='KlupeLoading', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'KlupeLoading': 250
+[10/16/2023 7:06:18 PM] [INFO] Callback 'KlupeLoading' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0x3016538)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x3016538, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x3016538, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `klupe`" successfully executed within 0.141 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `klupe`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x41cebb8'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x317bfa0'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `faction_police`", "PoliceLoad", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='PoliceLoad', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'PoliceLoad': 377
+[10/16/2023 7:06:18 PM] [INFO] Callback 'PoliceLoad' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0x3c0eeb0)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x3c0eeb0, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x3c0eeb0, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `faction_police`" successfully executed within 0.216 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `faction_police`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x41cea68'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x4195f88'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `safezones`", "SafeZonesLoad", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='SafeZonesLoad', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'SafeZonesLoad': 396
+[10/16/2023 7:06:18 PM] [INFO] Callback 'SafeZonesLoad' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=2, query=0x3c0ef48)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnectionPool::Queue(query=0x3c0ef48, this=0x4194390)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x3c0ef48, this=0xa47b020, connection=0x3c056a8)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x3c0ef48, connection=0x3c056a8)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `safezones`" successfully executed within 0.253 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3c056a8, query_str='SELECT * FROM `safezones`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x42d52c8'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x3011010'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `metros`", "LoadMetros", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='LoadMetros', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'LoadMetros': 255
+[10/16/2023 7:06:18 PM] [INFO] Callback 'LoadMetros' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=2, query=0x42e8328)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnectionPool::Queue(query=0x42e8328, this=0x4194390)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x42e8328, this=0xa645020, connection=0x3c0ddf8)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x42e8328, connection=0x3c0ddf8)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `metros`" successfully executed within 0.204 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3c0ddf8, query_str='SELECT * FROM `metros`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x431da60'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x3011010'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery(1, "SELECT * FROM `containers`", "LoadContainers", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='LoadContainers', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'LoadContainers': 254
+[10/16/2023 7:06:18 PM] [INFO] Callback 'LoadContainers' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=2, query=0x436c648)
+[10/16/2023 7:06:18 PM] [DEBUG] CConnectionPool::Queue(query=0x436c648, this=0x4194390)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_pquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0x436c648, this=0xa47b020, connection=0x3c056a8)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0x436c648, connection=0x3c056a8)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `containers`" successfully executed within 0.107 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3c056a8, query_str='SELECT * FROM `containers`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x42d5300'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x3011010'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `job_vehicles`", "Job_LoadVehicleData", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='Job_LoadVehicleData', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [ERROR] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '0'
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `jobs`", "Job_LoadData", "")
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='Job_LoadData', format='', params=0xa15aa48, param_offset=5)
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Create - callback index for 'Job_LoadData': 247
+[10/16/2023 7:06:18 PM] [INFO] Callback 'Job_LoadData' set up for delayed execution.
+[10/16/2023 7:06:18 PM] [DEBUG] created delayed callback with 0 parameter
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xacce9c0)
+[10/16/2023 7:06:18 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:18 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] CConnection::Execute(query=0xacce9c0, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [DEBUG] CQuery::Execute(this=0xacce9c0, connection=0x3011090)
+[10/16/2023 7:06:18 PM] [INFO] query "SELECT * FROM `jobs`" successfully executed within 0.193 milliseconds
+[10/16/2023 7:06:18 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `jobs`')
+[10/16/2023 7:06:18 PM] [DEBUG] created new resultset '0x443ee28'
+[10/16/2023 7:06:18 PM] [DEBUG] fetched MySQL result '0x30149d0'
+[10/16/2023 7:06:18 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:18 PM] [INFO] changed log level from 'debug, info, warning, error' to 'debug, info, warning, error'
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=258, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'LoadVehicleData' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '258'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA74)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=226, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'House_LoadData' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '226'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA74)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=200, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'Business_Load' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '200'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA78)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=250, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'KlupeLoading' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '250'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA70)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=377, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'PoliceLoad' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '377'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA74)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=396, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'SafeZonesLoad' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '396'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA84)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=255, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'LoadMetros' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '255'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA84)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=254, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'LoadContainers' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '254'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA84)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:18 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=247, num_params=0)
+[10/16/2023 7:06:18 PM] [INFO] Executing callback 'Job_LoadData' with 0 parameter...
+[10/16/2023 7:06:18 PM] [DEBUG] executing AMX callback with index '247'
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count(0x0A15AA74)
+[10/16/2023 7:06:18 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:18 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:18 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:06:45 PM] [DEBUG] mysql_format(1, 0x0A15A7F4, 120, "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1")
+[10/16/2023 7:06:45 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Silent_Developeraa')
+[10/16/2023 7:06:45 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developeraa', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:06:45 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developeraa'
+[10/16/2023 7:06:45 PM] [DEBUG] mysql_format: return value: '72'
+[10/16/2023 7:06:45 PM] [DEBUG] mysql_tquery(1, "SELECT * FROM `players` WHERE `Username` = 'Silent_Developeraa'  LIMIT 1", "SQL_AccountLoad", "i")
+[10/16/2023 7:06:45 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='SQL_AccountLoad', format='i', params=0xa15a7dc, param_offset=5)
+[10/16/2023 7:06:45 PM] [DEBUG] CCallback::Create - callback index for 'SQL_AccountLoad': 385
+[10/16/2023 7:06:45 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 7:06:45 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 7:06:45 PM] [INFO] Callback 'SQL_AccountLoad' set up for delayed execution.
+[10/16/2023 7:06:45 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 7:06:45 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb788)
+[10/16/2023 7:06:45 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:06:45 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:06:45 PM] [DEBUG] CConnection::Execute(query=0xd4bb788, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:06:45 PM] [DEBUG] CQuery::Execute(this=0xd4bb788, connection=0x3011090)
+[10/16/2023 7:06:45 PM] [INFO] query "SELECT * FROM `players` WHERE `Username` = 'Silent_Developeraa'  LIMIT 1" successfully executed within 0.324 milliseconds
+[10/16/2023 7:06:45 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='SELECT * FROM `players` WHERE `Username` = 'Silent_Developeraa'  LIMIT 1')
+[10/16/2023 7:06:45 PM] [DEBUG] created new resultset '0x443ee98'
+[10/16/2023 7:06:45 PM] [DEBUG] fetched MySQL result '0xd4bbc38'
+[10/16/2023 7:06:45 PM] [DEBUG] allocated 0 bytes for PAWN result
+[10/16/2023 7:06:45 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=385, num_params=1)
+[10/16/2023 7:06:45 PM] [INFO] Executing callback 'SQL_AccountLoad' with 1 parameter...
+[10/16/2023 7:06:45 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 7:06:45 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 7:06:45 PM] [DEBUG] executing AMX callback with index '385'
+[10/16/2023 7:06:45 PM] [DEBUG] cache_get_row_count(0x08D9BAC4)
+[10/16/2023 7:06:45 PM] [DEBUG] cache_get_row_count: return value: '1'
+[10/16/2023 7:06:45 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:06:45 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:07:06 PM] [DEBUG] mysql_format(1, 0x0A15A0D8, 550, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')")
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Silent_Developeraa')
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::EscapeString(src='Silent_Developeraa', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Silent_Developeraa'
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='16/10/2023 - 19:07')
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 19:07', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 19:07'
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Vostic@gmail.com')
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::EscapeString(src='Vostic@gmail.com', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Vostic@gmail.com'
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Maryland')
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::EscapeString(src='Maryland', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Maryland'
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Musko')
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::EscapeString(src='Musko', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Musko'
+[10/16/2023 7:07:06 PM] [DEBUG] mysql_format: return value: '256'
+[10/16/2023 7:07:06 PM] [DEBUG] mysql_tquery(1, "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developeraa', '293602177', '250', '1', '2000', '21', '16/10/2023 - 19:07', 'Vostic@gmail.com', 'Maryland', 'Musko')", "PlayerRegistered", "i")
+[10/16/2023 7:07:06 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='PlayerRegistered', format='i', params=0xa15a0c0, param_offset=5)
+[10/16/2023 7:07:06 PM] [DEBUG] CCallback::Create - callback index for 'PlayerRegistered': 376
+[10/16/2023 7:07:06 PM] [DEBUG] processing specifier 'i' with parameter index 0
+[10/16/2023 7:07:06 PM] [DEBUG] retrieved and pushed value '0'
+[10/16/2023 7:07:06 PM] [INFO] Callback 'PlayerRegistered' set up for delayed execution.
+[10/16/2023 7:07:06 PM] [DEBUG] created delayed callback with 1 parameter
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb198)
+[10/16/2023 7:07:06 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:07:06 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:07:06 PM] [DEBUG] CConnection::Execute(query=0xd4bb198, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:07:06 PM] [DEBUG] CQuery::Execute(this=0xd4bb198, connection=0x3011090)
+[10/16/2023 7:07:06 PM] [INFO] query "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developeraa', '293602177', '250', '1', '2000', '21', '16/10/2023 - 19:07', 'Vostic@gmail.com', 'Maryland', 'Musko')" successfully executed within 3.351 milliseconds
+[10/16/2023 7:07:06 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Novac`, `Godine`, `RegisterDate`, `Email`, `Drzava`, `Pol`) VALUES ('Silent_Developeraa', '293602177', '250', '1', '2000', '21', '16/10/2023 - 19:07', 'Vostic@gmail.com', 'Maryland', 'Musko')')
+[10/16/2023 7:07:06 PM] [DEBUG] created new resultset '0x443edf0'
+[10/16/2023 7:07:06 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 7:07:06 PM] [DEBUG] CCallback::Execute(amx=0x4191fb0, index=376, num_params=1)
+[10/16/2023 7:07:06 PM] [INFO] Executing callback 'PlayerRegistered' with 1 parameter...
+[10/16/2023 7:07:06 PM] [DEBUG] processing internal specifier 'c'
+[10/16/2023 7:07:06 PM] [DEBUG] pushed value '0' onto AMX stack
+[10/16/2023 7:07:06 PM] [DEBUG] executing AMX callback with index '376'
+[10/16/2023 7:07:06 PM] [DEBUG] cache_insert_id()
+[10/16/2023 7:07:06 PM] [DEBUG] cache_insert_id: return value: '4'
+[10/16/2023 7:07:06 PM] [DEBUG] AMX callback executed with error '0'
+[10/16/2023 7:07:06 PM] [INFO] Callback successfully executed.
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format(1, 0x0A15A554, 260, "UPDATE `players` SET `Drzava` = '%e', `Pol` = '%e' WHERE `ID` = '%d'")
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Maryland')
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::EscapeString(src='Maryland', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Maryland'
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='Musko')
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::EscapeString(src='Musko', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: 'Musko'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format: return value: '76'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery(1, "UPDATE `players` SET `Drzava` = 'Maryland', `Pol` = 'Musko' WHERE `ID` = '4'", "", "")
+[10/16/2023 7:07:21 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='', format='', params=0xa15a540, param_offset=5)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb5c0)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::Execute(query=0xd4bb5c0, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [DEBUG] CQuery::Execute(this=0xd4bb5c0, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format(1, 0x0A159D74, 500, "UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d', `Objekat0` = '%d', `Objekat1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'")
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='16/10/2023 - 19:07')
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 19:07', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 19:07'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format: return value: '183'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery(1, "UPDATE `players` SET `Level` = '1',`Novac` = '0',`Skin` = '29',`Godine` = '21', `Staff` = '0', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'", "", "")
+[10/16/2023 7:07:21 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='', format='', params=0xa159d60, param_offset=5)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb100)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format(1, 0x0A159D70, 500, "UPDATE `players` SET `Novac` = '%d' WHERE `ID` = '%d'")
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_format: return value: '54'
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery(1, "UPDATE `players` SET `Novac` = '2000' WHERE `ID` = '4'", "", "")
+[10/16/2023 7:07:21 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='', format='', params=0xa159d5c, param_offset=5)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb198)
+[10/16/2023 7:07:21 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:07:21 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:07:21 PM] [INFO] query "UPDATE `players` SET `Drzava` = 'Maryland', `Pol` = 'Musko' WHERE `ID` = '4'" successfully executed within 0.268 milliseconds
+[10/16/2023 7:07:21 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='UPDATE `players` SET `Drzava` = 'Maryland', `Pol` = 'Musko' WHERE `ID` = '4'')
+[10/16/2023 7:07:21 PM] [DEBUG] created new resultset '0x443ee28'
+[10/16/2023 7:07:21 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::Execute(query=0xd4bb100, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [DEBUG] CQuery::Execute(this=0xd4bb100, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [INFO] query "UPDATE `players` SET `Level` = '1',`Novac` = '0',`Skin` = '29',`Godine` = '21', `Staff` = '0', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'" successfully executed within 3.332 milliseconds
+[10/16/2023 7:07:21 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='UPDATE `players` SET `Level` = '1',`Novac` = '0',`Skin` = '29',`Godine` = '21', `Staff` = '0', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'')
+[10/16/2023 7:07:21 PM] [DEBUG] created new resultset '0x443ee98'
+[10/16/2023 7:07:21 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 7:07:21 PM] [DEBUG] CConnection::Execute(query=0xd4bb198, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [DEBUG] CQuery::Execute(this=0xd4bb198, connection=0x3011090)
+[10/16/2023 7:07:21 PM] [INFO] query "UPDATE `players` SET `Novac` = '2000' WHERE `ID` = '4'" successfully executed within 2.542 milliseconds
+[10/16/2023 7:07:21 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='UPDATE `players` SET `Novac` = '2000' WHERE `ID` = '4'')
+[10/16/2023 7:07:21 PM] [DEBUG] created new resultset '0x443ee28'
+[10/16/2023 7:07:21 PM] [DEBUG] fetched MySQL result '0x0'
+[10/16/2023 7:07:46 PM] [DEBUG] mysql_format(1, 0x0A15A254, 500, "UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d', `Objekat0` = '%d', `Objekat1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'")
+[10/16/2023 7:07:46 PM] [DEBUG] CHandle::EscapeString(this=0x418f500, src='16/10/2023 - 19:07')
+[10/16/2023 7:07:46 PM] [DEBUG] CConnection::EscapeString(src='16/10/2023 - 19:07', this=0x4194090, connection=0x4197b00)
+[10/16/2023 7:07:46 PM] [DEBUG] CHandle::EscapeString - return value: true, escaped string: '16/10/2023 - 19:07'
+[10/16/2023 7:07:46 PM] [DEBUG] mysql_format: return value: '186'
+[10/16/2023 7:07:46 PM] [DEBUG] mysql_tquery(1, "UPDATE `players` SET `Level` = '1',`Novac` = '2000',`Skin` = '29',`Godine` = '21', `Staff` = '4', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'", "", "")
+[10/16/2023 7:07:46 PM] [DEBUG] CCallback::Create(amx=0x4191fb0, name='', format='', params=0xa15a240, param_offset=5)
+[10/16/2023 7:07:46 PM] [DEBUG] CHandle::Execute(this=0x418f500, type=1, query=0xd4bb490)
+[10/16/2023 7:07:46 PM] [DEBUG] CHandle::Execute - return value: true
+[10/16/2023 7:07:46 PM] [DEBUG] mysql_tquery: return value: '1'
+[10/16/2023 7:07:46 PM] [DEBUG] CConnection::Execute(query=0xd4bb490, this=0xa2a3020, connection=0x3011090)
+[10/16/2023 7:07:46 PM] [DEBUG] CQuery::Execute(this=0xd4bb490, connection=0x3011090)
+[10/16/2023 7:07:46 PM] [INFO] query "UPDATE `players` SET `Level` = '1',`Novac` = '2000',`Skin` = '29',`Godine` = '21', `Staff` = '4', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'" successfully executed within 3.425 milliseconds
+[10/16/2023 7:07:46 PM] [DEBUG] CResultSet::Create(connection=0x3011090, query_str='UPDATE `players` SET `Level` = '1',`Novac` = '2000',`Skin` = '29',`Godine` = '21', `Staff` = '4', `Objekat0` = '1', `Objekat1` = '-1', `LastLogin` = '16/10/2023 - 19:07' WHERE `ID` = '4'')
+[10/16/2023 7:07:46 PM] [DEBUG] created new resultset '0x443ee98'
+[10/16/2023 7:07:46 PM] [DEBUG] fetched MySQL result '0x0'

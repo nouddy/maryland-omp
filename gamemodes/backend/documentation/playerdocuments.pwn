@@ -49,6 +49,18 @@ hook OnPlayerLoaded(playerid)
 	return 1;
 }
 
+hook OnPlayerFirstStream(playerid)
+{
+	if(PlayerDocuments[playerid][pZivotnoOsiguranje] != -1)
+	{
+		new string[128];
+		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(ZivotnoTraje,CURRENT_DATE), ZivotnoTraje from `player_documents` where `player_id`='%i'", PlayerInfo[playerid][SQLID]);
+		mysql_tquery(SQL, string, "ProveraOsiguranja", "i", playerid);
+	}
+
+    return (true);
+}
+
 //
 YCMD:izvadilicnu(playerid, params[], help)
 {

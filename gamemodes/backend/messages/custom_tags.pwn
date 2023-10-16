@@ -51,7 +51,7 @@ task SyncName[60000]() // OnPlayerUpdate causes lag
         {
             new nametag[128], playername[MAX_PLAYER_NAME];
             GetPlayerName(i, playername, sizeof(playername));
-            format(nametag, sizeof(nametag), "{%06x}%s {FFFFFF}(%i)", GetPlayerColor(i) >>> 8, playername, i);
+            format(nametag, sizeof(nametag), "%s (%i)", playername, i);
             UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, nametag);
         }
     }   

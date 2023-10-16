@@ -40,6 +40,7 @@ ResetujVariable(playerid)
     PlayerDocuments[playerid][pMotoLicence] = 0;
     PlayerDocuments[playerid][pBoatLicence] = 0;
     PlayerDocuments[playerid][pGunLicence] = 0;
+    PlayerDocuments[playerid][pZivotnoOsiguranje] = -1;
     // Finance of player
     PlayerFinance[playerid][pBankAccount] = 0;
     PlayerFinance[playerid][pBankMoney] = 0;
