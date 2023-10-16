@@ -33,7 +33,6 @@
 
 #include <open.mp>
 #include <a_mysql>
-//#include <SKY>  													 // Ne radi trenutno na open.mp
 //#include <weapon-config>  										// Ne radi trenutno na open.mp
 #include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>

@@ -1,3 +1,0 @@
-[10/16/2023 7:06:18 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/16/2023 7:06:18 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/16/2023 7:06:18 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
