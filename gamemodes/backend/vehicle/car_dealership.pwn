@@ -1,0 +1,859 @@
+/*
+*
+*  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+*  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+*  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+*  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+*  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+*  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+*  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+*
+*  @Author         Vostic & Ogy_
+*  @Date           05th May 2023
+*  @Weburl         https://maryland-ogc.com
+*  @Project        maryland_project
+*
+*  @File           car_dealership.pwn
+*  @Module         vehicle
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+new sz_MarylandModels[][] = {
+
+    // Low Class Vehicles
+
+    421,
+    401,
+    404,
+    405,
+    410,
+    462,
+    481,
+    581,
+    509,
+    510,
+
+    // Mid Class Vehicles
+
+    400,
+    415,
+    436,
+    480,
+    496,
+    445,
+    463,
+    461,
+    468,
+    471,
+    589,
+
+    // High Class Vehicles
+
+    411,
+    402,
+    521,
+    522,
+    541,
+    451,
+    477,
+    429,
+    560,
+    562,
+    587
+
+};
+
+new PlayerText:dealership_TD[MAX_PLAYERS][69],
+    bool:dealership_UI[MAX_PLAYERS],
+    e_CHOSEN_MODEL[MAX_PLAYERS];
+
+static Text3D:dealership_Catalogue;
+
+static temp_Vehicle[MAX_PLAYERS] = INVALID_VEHICLE_ID;
+
+hook OnGameModeInit()
+{
+    print("backend/vehicles/car_dealership.pwn loaded");
+
+    dealership_Catalogue = Create3DTextLabel("{DAA520}Car Dealership\n{FFFFFF}/catalogue", -1, 970.1960,-1702.6202,13.5727, 3.50, 0);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock Dealership_ShowInterface(playerid, const bool: option) {
+
+    if(option) {
+
+        for(new i = 0; i < 69; i++) {
+
+            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
+            PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
+
+            dealership_TD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        }
+
+        dealership_TD[playerid][0] = CreatePlayerTextDraw(playerid, 576.000061, 84.896278, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][0], 176.000000, 337.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][0], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][0], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][0], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][0], false);
+
+        dealership_TD[playerid][1] = CreatePlayerTextDraw(playerid, 576.333435, 159.977752, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][1], -74.000000, -75.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][1], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][1], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][1], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][1], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][1], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][1], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][1], 19.000000, 235.000000, 0.000000, 0.400000);
+
+        dealership_TD[playerid][2] = CreatePlayerTextDraw(playerid, 531.000366, 230.081451, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][2], -74.000000, -75.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][2], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][2], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][2], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][2], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][2], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][2], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][2], 19.000000, 235.000000, 0.000000, 0.400000);
+
+        dealership_TD[playerid][3] = CreatePlayerTextDraw(playerid, 485.666748, 299.770446, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][3], -74.000000, -75.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][3], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][3], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][3], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][3], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][3], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][3], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][3], 19.000000, 235.000000, 0.000000, 0.400000);
+
+        dealership_TD[playerid][4] = CreatePlayerTextDraw(playerid, 440.333404, 369.459320, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][4], -74.000000, -75.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][4], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][4], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][4], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][4], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][4], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][4], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][4], 19.000000, 235.000000, 0.000000, 0.400000);
+
+        dealership_TD[playerid][5] = CreatePlayerTextDraw(playerid, 405.999938, 422.140747, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][5], -74.000000, -75.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][5], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][5], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][5], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][5], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][5], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][5], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][5], 19.000000, 235.000000, 0.000000, 0.400000);
+
+        dealership_TD[playerid][6] = CreatePlayerTextDraw(playerid, 402.999908, 310.225952, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][6], 321.000000, 112.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][6], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][6], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][6], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][6], false);
+
+        dealership_TD[playerid][7] = CreatePlayerTextDraw(playerid, 432.666473, 268.329650, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][7], 321.000000, 112.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][7], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][7], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][7], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][7], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][7], false);
+
+        dealership_TD[playerid][8] = CreatePlayerTextDraw(playerid, 460.333129, 224.359283, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][8], 321.000000, 112.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][8], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][8], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][8], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][8], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][8], false);
+
+        dealership_TD[playerid][9] = CreatePlayerTextDraw(playerid, 520.666320, 155.085220, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][9], 321.000000, 112.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][9], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][9], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][9], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][9], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][9], false);
+
+        dealership_TD[playerid][10] = CreatePlayerTextDraw(playerid, 570.333374, 92.103683, "vehicle_dealership");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][10], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][10], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][10], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][10], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][10], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][10], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][10], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][10], true);
+
+        dealership_TD[playerid][11] = CreatePlayerTextDraw(playerid, 567.666381, 100.329658, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][11], 58.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][11], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][11], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][11], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][11], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][11], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][11], false);
+
+        dealership_TD[playerid][12] = CreatePlayerTextDraw(playerid, 624.000000, 87.540718, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][12], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][12], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][12], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][12], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][12], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][12], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][12], true);
+
+        dealership_TD[playerid][13] = CreatePlayerTextDraw(playerid, 391.333099, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][13], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][13], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][13], -1378294017);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][13], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][13], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][13], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][13], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][13], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][13], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][14] = CreatePlayerTextDraw(playerid, 417.666442, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][14], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][14], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][14], -2132508417);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][14], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][14], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][14], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][14], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][14], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][14], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][15] = CreatePlayerTextDraw(playerid, 443.666534, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][15], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][15], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][15], -446103297);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][15], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][15], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][15], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][15], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][15], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][15], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][16] = CreatePlayerTextDraw(playerid, 468.333190, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][16], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][16], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][16], -5963521);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][16], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][16], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][16], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][16], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][16], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][16], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][17] = CreatePlayerTextDraw(playerid, 493.666534, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][17], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][17], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][17], -16711681);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][17], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][17], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][17], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][17], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][17], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][17], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][18] = CreatePlayerTextDraw(playerid, 518.333129, 345.814819, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][18], 17.000000, 17.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][18], -16776961);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][18], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][18], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][18], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][18], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][18], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][18], 90.000000, 0.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][19] = CreatePlayerTextDraw(playerid, 390.999755, 369.129638, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][19], 148.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][19], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][19], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][19], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][19], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][19], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][19], false);
+
+        dealership_TD[playerid][20] = CreatePlayerTextDraw(playerid, 536.666931, 352.192382, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][20], 0.422666, 2.093626);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][20], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][20], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][20], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][20], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][20], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][20], true);
+
+        dealership_TD[playerid][21] = CreatePlayerTextDraw(playerid, 390.666534, 342.166503, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][21], 148.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][21], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][21], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][21], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][21], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][21], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][21], false);
+
+        dealership_TD[playerid][22] = CreatePlayerTextDraw(playerid, 385.333709, 336.844268, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][22], 0.422666, 2.093626);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][22], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][22], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][22], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][22], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][22], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][22], true);
+
+        dealership_TD[playerid][23] = CreatePlayerTextDraw(playerid, 534.999816, 327.148284, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][23], 42.000000, 53.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][23], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][23], -175);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][23], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][23], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][23], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][23], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][23], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][23], 0.000000, 270.000000, 0.000000, 1.000000);
+
+        dealership_TD[playerid][24] = CreatePlayerTextDraw(playerid, 604.333618, 350.948089, "Colour_ADJUSTMENT");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][24], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][24], 0.000000, -128.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][24], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][24], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][24], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][24], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][24], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][24], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][24], true);
+
+        dealership_TD[playerid][25] = CreatePlayerTextDraw(playerid, 574.666381, 360.418548, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][25], 58.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][25], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][25], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][25], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][25], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][25], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][25], false);
+
+        dealership_TD[playerid][26] = CreatePlayerTextDraw(playerid, 530.666381, 176.985244, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][26], 120.000000, 15.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][26], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][26], -159);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][26], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][26], -256);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][26], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][26], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][26], 1317);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][26], 339.000000, 0.000000, 90.000000, 1.000000);
+
+        dealership_TD[playerid][27] = CreatePlayerTextDraw(playerid, 553.000183, 129.281494, "");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][27], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][27], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][27], 0);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][27], false);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], 560);
+        PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][27], 0.000000, 360.000000, -30.000000, 1.000000);
+        PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 12983129, 1);
+
+        dealership_TD[playerid][28] = CreatePlayerTextDraw(playerid, 562.000122, 152.181518, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][28], 58.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][28], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][28], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][28], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][28], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][28], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][28], false);
+
+        dealership_TD[playerid][29] = CreatePlayerTextDraw(playerid, 618.000000, 139.392547, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][29], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][29], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][29], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][29], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][29], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][29], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][29], true);
+
+        dealership_TD[playerid][30] = CreatePlayerTextDraw(playerid, 583.000122, 141.466629, "SULTAN");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][30], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][30], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][30], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][30], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][30], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][30], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][30], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][30], true);
+
+        dealership_TD[playerid][31] = CreatePlayerTextDraw(playerid, 513.333251, 168.688873, "ld_beat:up");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][31], 10.000000, 10.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][31], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][31], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][31], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][31], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][31], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][31], false);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][31], true);
+
+        dealership_TD[playerid][32] = CreatePlayerTextDraw(playerid, 513.333251, 184.451812, "ld_beat:down");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][32], 10.000000, 10.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][32], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][32], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][32], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][32], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][32], false);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][32], true);
+
+        dealership_TD[playerid][33] = CreatePlayerTextDraw(playerid, 502.900329, 175.436553, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][33], 22.000000, 11.720012);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][33], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][33], 892811775);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][33], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][33], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][33], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][33], false);
+
+        dealership_TD[playerid][34] = CreatePlayerTextDraw(playerid, 398.000091, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][34], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][34], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][34], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][34], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][34], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][34], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][34], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][34], true);
+
+        dealership_TD[playerid][35] = CreatePlayerTextDraw(playerid, 400.000030, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][35], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][35], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][35], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][35], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][35], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][35], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][35], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][35], true);
+
+        dealership_TD[playerid][36] = CreatePlayerTextDraw(playerid, 444.333374, 284.162933, "ALARM");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][36], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][36], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][36], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][36], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][36], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][36], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][36], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][36], true);
+
+        dealership_TD[playerid][37] = CreatePlayerTextDraw(playerid, 488.333496, 284.162963, "XENON_LIGHTS");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][37], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][37], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][37], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][37], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][37], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][37], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][37], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][37], true);
+
+        dealership_TD[playerid][38] = CreatePlayerTextDraw(playerid, 542.333190, 284.162994, "CUSTOM_PLATE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][38], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][38], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][38], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][38], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][38], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][38], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][38], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][38], true);
+
+        dealership_TD[playerid][39] = CreatePlayerTextDraw(playerid, 606.666931, 284.162963, "NITRO");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][39], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][39], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][39], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][39], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][39], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][39], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][39], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][39], true);
+
+        dealership_TD[playerid][40] = CreatePlayerTextDraw(playerid, 442.333038, 291.974060, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][40], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][40], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][40], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][40], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][40], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][40], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][40], false);
+
+        dealership_TD[playerid][41] = CreatePlayerTextDraw(playerid, 496.666381, 291.974060, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][41], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][41], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][41], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][41], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][41], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][41], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][41], false);
+
+        dealership_TD[playerid][42] = CreatePlayerTextDraw(playerid, 550.332946, 291.974060, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][42], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][42], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][42], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][42], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][42], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][42], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][42], false);
+
+        dealership_TD[playerid][43] = CreatePlayerTextDraw(playerid, 602.666198, 291.974060, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][43], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][43], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][43], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][43], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][43], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][43], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][43], false);
+
+        dealership_TD[playerid][44] = CreatePlayerTextDraw(playerid, 453.333435, 294.118469, "FALSE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][44], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][44], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][44], -16776961);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][44], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][44], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][44], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][44], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][44], true);
+
+        dealership_TD[playerid][45] = CreatePlayerTextDraw(playerid, 508.333404, 294.118469, "FALSE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][45], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][45], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][45], -16776961);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][45], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][45], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][45], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][45], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][45], true);
+
+        dealership_TD[playerid][46] = CreatePlayerTextDraw(playerid, 561.666442, 294.118469, "FALSE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][46], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][46], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][46], -16776961);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][46], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][46], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][46], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][46], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][46], true);
+
+        dealership_TD[playerid][47] = CreatePlayerTextDraw(playerid, 613.666137, 294.118469, "FALSE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][47], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][47], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][47], -16776961);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][47], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][47], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][47], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][47], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][47], true);
+
+        dealership_TD[playerid][48] = CreatePlayerTextDraw(playerid, 520.000183, 404.459197, "COMPLETE_ORDER");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][48], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][48], 0.000000, -128.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][48], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][48], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][48], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][48], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][48], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][48], true);
+        PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][48], true);
+
+        dealership_TD[playerid][49] = CreatePlayerTextDraw(playerid, 490.666320, 414.344482, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][49], 58.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][49], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][49], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][49], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][49], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][49], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][49], true);
+
+        dealership_TD[playerid][50] = CreatePlayerTextDraw(playerid, 490.666320, 401.485290, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][50], 58.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][50], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][50], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][50], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][50], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][50], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][50], false);
+
+        dealership_TD[playerid][51] = CreatePlayerTextDraw(playerid, 547.000183, 403.214752, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][51], 0.327666, 1.346963);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][51], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][51], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][51], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][51], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][51], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][51], true);
+
+        dealership_TD[playerid][52] = CreatePlayerTextDraw(playerid, 486.333404, 398.236938, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][52], 0.327666, 1.346963);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][52], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][52], -222);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][52], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][52], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][52], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][52], true);
+
+        dealership_TD[playerid][53] = CreatePlayerTextDraw(playerid, 507.666839, 226.918502, "fuel_type");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][53], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][53], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][53], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][53], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][53], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][53], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][53], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][53], true);
+
+        dealership_TD[playerid][54] = CreatePlayerTextDraw(playerid, 602.333618, 226.918502, "PRICE");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][54], 0.124999, 0.571259);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][54], -128.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][54], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][54], -147);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][54], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][54], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][54], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][54], true);
+
+        dealership_TD[playerid][55] = CreatePlayerTextDraw(playerid, 509.332794, 235.559219, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][55], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][55], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][55], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][55], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][55], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][55], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][55], false);
+
+        dealership_TD[playerid][56] = CreatePlayerTextDraw(playerid, 598.332702, 235.559219, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][56], 22.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][56], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][56], -235);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][56], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][56], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][56], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][56], false);
+
+        dealership_TD[playerid][57] = CreatePlayerTextDraw(playerid, 519.999938, 240.192550, "PETROL");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][57], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][57], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][57], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][57], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][57], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][57], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][57], true);
+
+        dealership_TD[playerid][58] = CreatePlayerTextDraw(playerid, 609.666442, 240.192550, "15.000$");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][58], 0.151666, 0.703998);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][58], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][58], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][58], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][58], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][58], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][58], true);
+
+        dealership_TD[playerid][59] = CreatePlayerTextDraw(playerid, 424.666809, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][59], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][59], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][59], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][59], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][59], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][59], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][59], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][59], true);
+
+        dealership_TD[playerid][60] = CreatePlayerTextDraw(playerid, 426.666595, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][60], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][60], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][60], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][60], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][60], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][60], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][60], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][60], true);
+
+        dealership_TD[playerid][61] = CreatePlayerTextDraw(playerid, 450.666900, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][61], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][61], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][61], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][61], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][61], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][61], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][61], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][61], true);
+
+        dealership_TD[playerid][62] = CreatePlayerTextDraw(playerid, 452.666656, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][62], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][62], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][62], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][62], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][62], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][62], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][62], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][62], true);
+
+        dealership_TD[playerid][63] = CreatePlayerTextDraw(playerid, 475.666931, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][63], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][63], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][63], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][63], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][63], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][63], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][63], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][63], true);
+
+        dealership_TD[playerid][64] = CreatePlayerTextDraw(playerid, 478.000061, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][64], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][64], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][64], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][64], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][64], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][64], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][64], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][64], true);
+
+        dealership_TD[playerid][65] = CreatePlayerTextDraw(playerid, 501.000366, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][65], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][65], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][65], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][65], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][65], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][65], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][65], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][65], true);
+
+        dealership_TD[playerid][66] = CreatePlayerTextDraw(playerid, 503.333526, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][66], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][66], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][66], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][66], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][66], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][66], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][66], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][66], true);
+
+        dealership_TD[playerid][67] = CreatePlayerTextDraw(playerid, 525.333618, 349.288787, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][67], 0.360666, 1.081480);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][67], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][67], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][67], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][67], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][67], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][67], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][67], true);
+
+        dealership_TD[playerid][68] = CreatePlayerTextDraw(playerid, 527.666748, 352.192474, "/");
+        PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][68], -0.284332, 0.650074);
+        PlayerTextDrawTextSize(playerid, dealership_TD[playerid][68], -88.000000, 0.000000);
+        PlayerTextDrawAlignment(playerid, dealership_TD[playerid][68], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][68], -1);
+        PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][68], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][68], 255);
+        PlayerTextDrawFont(playerid, dealership_TD[playerid][68], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][68], true);
+
+        for(new i = 0; i < 69; i++) {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][i]);
+        }
+        SelectTextDraw(playerid, 0x003333FF);
+
+        dealership_UI[playerid] = true;
+    }
+    else {
+
+        for(new i = 0; i < 69; i++) {
+
+            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
+            PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
+
+            dealership_TD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        }
+
+        CancelSelectTextDraw(playerid);
+
+        dealership_UI[playerid] = false;
+    }
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    dealership_UI[playerid] = false;
+
+    return 1;
+}
+
+YCMD:catalogue(playerid, params[], help) 
+{
+    
+    new Float:lb_Pos[3];
+    Get3DTextLabelPos(dealership_Catalogue, lb_Pos[0], lb_Pos[1], lb_Pos[2]);
+
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
+        return SendClientMessageEx(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
+
+    if(dealership_UI[playerid])
+        return SendClientMessageEx(playerid, x_server, "maryland \187;"c_white" Vec pregledate katalog!");
+
+    Dealership_ShowInterface(playerid, true);
+
+    return 1;
+}
+
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
+
+    if(playertextid == dealership_TD[playerid][31]) {
+
+        // Model Gore
+
+        e_CHOSEN_MODEL[playerid]++;
+
+        if(e_CHOSEN_MODEL[playerid] > 31 ) {
+
+            e_CHOSEN_MODEL[playerid] = 0;
+        }
+
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][27]);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+        PlayerTextDrawShow(playerid, dealership_TD[playerid][27]);
+    }
+
+    else if(playertextid == dealership_TD[playerid][32]) {
+
+        // Model Dole
+
+        e_CHOSEN_MODEL[playerid]--;
+
+        if(e_CHOSEN_MODEL[playerid] < 0 ) {
+
+            e_CHOSEN_MODEL[playerid] = 0;
+        }
+
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][27]);
+        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+        PlayerTextDrawShow(playerid, dealership_TD[playerid][27]);
+    }
+
+    return 1;
+}

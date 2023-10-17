@@ -1,7 +1,5 @@
-[10/17/2023 2:57:08 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/17/2023 2:57:08 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/17/2023 2:57:08 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
-[10/17/2023 2:57:17 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
-[10/17/2023 2:57:44 PM] [plugins/mysql] error #1146 while executing query "UPDATE `winter_settings` SET `map` = '1', `breath` = '0', `fallsnow` = '0' WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
-[10/17/2023 2:59:02 PM] [plugins/mysql] error #1146 while executing query "UPDATE `winter_settings` SET `map` = '1', `breath` = '0', `fallsnow` = '1' WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
-[10/17/2023 3:00:45 PM] [plugins/mysql] error #1146 while executing query "UPDATE `winter_settings` SET `map` = '1', `breath` = '1', `fallsnow` = '1' WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
+[10/17/2023 10:29:39 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[10/17/2023 10:29:39 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[10/17/2023 10:29:40 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/17/2023 10:31:23 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
+[10/17/2023 10:31:23 PM] [log-core] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down

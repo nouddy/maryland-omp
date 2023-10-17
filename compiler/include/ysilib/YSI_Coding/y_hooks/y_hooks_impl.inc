@@ -1424,6 +1424,7 @@ public OnCodeInit()
 				{
 				case 1: // `hook`
 				{
+					Debug_Print7("Hooks_OnCodeInit: type = hook");
 					// Always restore `YSI_g_sNPSTrampoline` outside case `2`.
 					YSI_g_sNPSTrampoline = YSI_g_sTempRet;
 					state y_hooks_scan : y_hooks_scan_legacy_hook;
@@ -1437,6 +1438,7 @@ public OnCodeInit()
 				}
 				case 2: // `hook stock`
 				{
+					Debug_Print7("Hooks_OnCodeInit: type = hook stock");
 					if (YSI_g_sNPSStack != YSI_g_sNPSTrampoline)
 					{
 						YHNPS_Push(heap, allocated, nativeCount, stockCount, base, YSI_g_sNPSReplace, YSI_g_sNPSStack);
@@ -1447,6 +1449,7 @@ public OnCodeInit()
 				}
 				case 3: // `hook stock`, for a not currently processed function.
 				{
+					Debug_Print7("Hooks_OnCodeInit: type = not processed");
 					// Always restore `YSI_g_sNPSTrampoline` outside case `2`.
 					YSI_g_sNPSTrampoline = YSI_g_sTempRet;
 					retry = true;
@@ -1459,6 +1462,7 @@ public OnCodeInit()
 				//}
 				default: // Anything else, gets dropped.
 				{
+					Debug_Print7("Hooks_OnCodeInit: type = other");
 					// Always restore `YSI_g_sNPSTrampoline` outside case `2`.
 					YSI_g_sNPSTrampoline = YSI_g_sTempRet;
 					Hooks_InvalidatePointer(entry);
@@ -1467,10 +1471,12 @@ public OnCodeInit()
 			}
 			if (YSI_g_sNPSBaseCall != cellmin)
 			{
+				Debug_Print7("Hooks_OnCodeInit: final chain");
 				// Store the final chain.
 				YHNPS_Push(heap, allocated, nativeCount, stockCount, base, YSI_g_sNPSBaseCall, YSI_g_sNPSTrampoline);
 				YSI_g_sNPSBaseCall = cellmin;
 			}
+			Debug_Print7("Hooks_OnCodeInit: retry: %d", retry);
 		}
 		while (retry);
 		//while (newpub)
@@ -2392,7 +2398,7 @@ stock _yH@(compressedFormat, address, order = cellmin, &a = 0, &b = 0, &c = 0, &
 	// the stack the final parameter won't be the string we passed here, but
 	// `a` from the extra parameters above.  But that's fine - either way it
 	// points to nothing.
-	return Hooks_RegisterNPSHook(compressedFormat, address, "", order);
+	return Hooks_RegisterNPSHook(compressedFormat, address, YSI_EMPTY, order);
 }
 
 stock _yH@(compressedFormat, address, order = cellmin, &a = 0, &b = 0, &c = 0, &d = 0, &e = 0, &f = 0, &g = 0) <>

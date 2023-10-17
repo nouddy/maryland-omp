@@ -112,14 +112,25 @@ Optional plugins:
 	ASSERT_ZE(strlen(Command_GetName(-1)));
 }
 
+@test(.group = "y_commands") y_commands_Find()
+{
+	new
+		id = YCMD:y_commands_1;
+	ASSERT_NE(id, COMMAND_NOT_FOUND);
+}
+
 @test(.group = "y_commands") y_commands_AddAlt()
 {
 	new
 		id1 = YCMD:y_commands_1,
 		id2 = Command_AddAlt(id1, "y_commands_alt1"),
 		id3 = Command_AddAltNamed("y_commands_1", "y_commands_alt1");
+	ASSERT_NE(id1, COMMAND_NOT_FOUND);
 	ASSERT_NE(id1, id2);
 	ASSERT_NE(id2, COMMAND_NOT_FOUND);
+	// The semantics of this has now changed...  We can have two alt commands
+	// with the same name pointing to the same command.  Quite why you would, I
+	// don't know...  Actually, maybe we should special-case that.
 	ASSERT_EQ(id2, id3);
 }
 
@@ -142,23 +153,32 @@ Optional plugins:
 	ASSERT(!Command_GetPlayer(id, 101));
 	ASSERT(!Command_GetPlayerNamed("y_commands_1", 101));
 	Command_SetPlayerNamed("y_commands_1", 101, true);
-	printf("%d", Command_Find("y_commands_1"));
-	printf("%d", id);
+	//printf("%d", Command_Find("y_commands_1"));
+	//printf("%d", id);
 	ASSERT(Command_GetPlayer(id, 101));
 	ASSERT(Command_GetPlayerNamed("y_commands_1", 101));
 }
 
 @test(.group = "y_commands") y_commands_Perms2()
 {
+	Command_AddAltNamed("y_commands_1", "y_commands_alt0");
+	Command_AddAltNamed("y_commands_1", "y_cómmańds_ąlt2");
 	new
-		id = Command_Find("y_cómmańds_ąlt");
+		id = Command_Find("y_cómmańds_ąlt2");
 	Command_SetPlayer(id, 101, false);
 	ASSERT(!Command_GetPlayer(id, 101));
-	ASSERT(!Command_GetPlayerNamed("y_cómmańds_ąlt", 101));
-	Command_SetPlayerNamed("y_cómmańds_ąlt", 101, true);
+	ASSERT(!Command_GetPlayerNamed("y_cómmańds_ąlt2", 101));
+	Command_SetPlayerNamed("y_cómmańds_ąlt2", 101, true);
 	ASSERT(Command_GetPlayer(id, 101));
-	ASSERT(Command_GetPlayerNamed("y_cómmańds_ąlt", 101));
+	ASSERT(Command_GetPlayerNamed("y_cómmańds_ąlt2", 101));
 }
+
+//@test(.group = "y_commands") y_commands_Find()
+//{
+//	new
+//		id = Command_Find("y_cómmańds_ąlt");
+//	ASSERT_NE(id, COMMAND_NOT_FOUND);
+//}
 
 static stock
 	YSI_g_sRemovableRan = 0;
@@ -387,11 +407,11 @@ YCMD:y_commands_12(playerid, cmdtext[], help) = y_commands_10;
 	call OnPlayerCommandText(80, "/y_commands_8 70");
 	//printf("gSomeVar: %d", gSomeVar);
 	ASSERT_EQ(gSomeVar, 150);
-	ASSERT_NE(YCMD:y_commands_4, COMMAND_NOT_FOUND);
-	ASSERT_NE(YCMD:y_commands_6, COMMAND_NOT_FOUND);
-	ASSERT_NE(YCMD:y_commands_8, COMMAND_NOT_FOUND);
-	ASSERT_EQ(YCMD:y_commands_10, COMMAND_NOT_FOUND);
-	ASSERT_EQ(YCMD:y_commands_12, COMMAND_NOT_FOUND);
+	ASSERT_NE(_:YCMD:y_commands_4, COMMAND_NOT_FOUND);
+	ASSERT_NE(_:YCMD:y_commands_6, COMMAND_NOT_FOUND);
+	ASSERT_NE(_:YCMD:y_commands_8, COMMAND_NOT_FOUND);
+	ASSERT_EQ(_:YCMD:y_commands_10, COMMAND_NOT_FOUND);
+	ASSERT_EQ(_:YCMD:y_commands_12, COMMAND_NOT_FOUND);
 }
 
 static stock
@@ -900,4 +920,148 @@ YCMD:ycmdtest2(playerid, params[], help) = ycmdtest1;
 		ASK("Can you not use /ycmdtest16?");
 	}
 #endif
+
+static stock
+	YSI_g_sy_commands_EnableableA = COMMAND_NOT_FOUND,
+	YSI_g_sy_commands_EnableableB = COMMAND_NOT_FOUND;
+
+YCMD:y_commands_enableablea(playerid, params[], help)
+{
+}
+
+YCMD:y_commands_alternativea(playerid, params[], help) = y_commands_enableablea;
+
+@test(.group = "y_commands") y_commands_Disable()
+{
+	new str[YSI_MAX_STRING];
+	YSI_g_sy_commands_EnableableA = YCMD:y_commands_enableablea;
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableA, 0);
+	ASSERT_SAME(str, "y_commands_enableablea");
+	str = Command_GetDisplayNamed("y_commands_alternativea", 0);
+	ASSERT_SAME(str, "y_commands_alternativea");
+	Command_SetDisabled(YSI_g_sy_commands_EnableableA, true);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableA, 0);
+	ASSERT_SAME(str, "y_commands_alternativea");
+	str = Command_GetDisplayNamed("y_commands_alternativea", 0);
+	ASSERT_SAME(str, "y_commands_alternativea");
+	Command_SetDisabled(YCMD:y_commands_alternativea, true);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableA, 0);
+	ASSERT_SAME(str, "");
+	str = Command_GetDisplayNamed("y_commands_alternativea", 0);
+	ASSERT_SAME(str, "");
+	Command_SetDisabled(YSI_g_sy_commands_EnableableA, false);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableA, 0);
+	ASSERT_SAME(str, "y_commands_enableablea");
+	str = Command_GetDisplayNamed("y_commands_alternativea", 0);
+	ASSERT_SAME(str, "y_commands_enableablea");
+	ASSERT(Command_GetDisabled(YCMD:y_commands_alternativea));
+	ASSERT(!Command_GetDisabled(YSI_g_sy_commands_EnableableA));
+	Command_SetDisabled(YCMD:y_commands_alternativea, false);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableA, 0);
+	ASSERT_SAME(str, "y_commands_enableablea");
+	str = Command_GetDisplayNamed("y_commands_alternativea", 0);
+	ASSERT_SAME(str, "y_commands_alternativea");
+}
+
+@cmd(.alts = { "y_commands_alternativeb" }, .id = YSI_g_sy_commands_EnableableB) y_commands_enableableb(playerid, params[], help)
+{
+}
+
+@test(.group = "y_commands") y_commands_DisableB()
+{
+	new str[YSI_MAX_STRING];
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableB, 0);
+	ASSERT_SAME(str, "y_commands_enableableb");
+	str = Command_GetDisplayNamed("y_commands_alternativeb", 0);
+	ASSERT_SAME(str, "y_commands_alternativeb");
+	Command_SetDisabled(YSI_g_sy_commands_EnableableB, true);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableB, 0);
+	ASSERT_SAME(str, "y_commands_alternativeb");
+	str = Command_GetDisplayNamed("y_commands_alternativeb", 0);
+	ASSERT_SAME(str, "y_commands_alternativeb");
+	Command_SetDisabled(YCMD:y_commands_alternativeb, true);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableB, 0);
+	ASSERT_SAME(str, "");
+	str = Command_GetDisplayNamed("y_commands_alternativeb", 0);
+	ASSERT_SAME(str, "");
+	Command_SetDisabled(YSI_g_sy_commands_EnableableB, false);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableB, 0);
+	ASSERT_SAME(str, "y_commands_enableableb");
+	str = Command_GetDisplayNamed("y_commands_alternativeb", 0);
+	ASSERT_SAME(str, "y_commands_enableableb");
+	ASSERT(Command_GetDisabled(YCMD:y_commands_alternativeb));
+	ASSERT(!Command_GetDisabled(YSI_g_sy_commands_EnableableB));
+	Command_SetDisabled(YCMD:y_commands_alternativeb, false);
+	str = Command_GetDisplay(YSI_g_sy_commands_EnableableB, 0);
+	ASSERT_SAME(str, "y_commands_enableableb");
+	str = Command_GetDisplayNamed("y_commands_alternativeb", 0);
+	ASSERT_SAME(str, "y_commands_alternativeb");
+}
+
+@test(.group = "y_commands") y_commands_AddCallback()
+{
+	static
+		var = 0;
+	call OnPlayerConnect(202);
+	call OnPlayerConnect(203);
+	ASSERT_ZE(Command_ReProcess(202, "/inline_cmd_1 200", 0));
+	ASSERT_ZE(Command_ReProcess(203, "/inline_cmd_1 200", 0));
+	inline inline_cmd_1(string:params[])
+	{
+		var += strval(params);
+		@return 1;
+	}
+	var = 0;
+	Command_AddCallback("inline_cmd_1", 202, using inline inline_cmd_1);
+	ASSERT_NZ(Command_ReProcess(202, "/inline_cmd_1 200", 0));
+	ASSERT_ZE(Command_ReProcess(203, "/inline_cmd_1 200", 0));
+	ASSERT_EQ(var, 200);
+	inline inline_cmd_2(playerid, string:params[], help)
+	{
+		var += playerid;
+		var += strval(params);
+		var += help ? 10 : 11;
+		@return 1;
+	}
+	var = 0;
+	Command_AddCallback("inline_cmd_1", 203, using inline inline_cmd_2);
+	ASSERT_NZ(Command_ReProcess(202, "/inline_cmd_1 200", 0));
+	ASSERT_NZ(Command_ReProcess(203, "/inline_cmd_1 200", 0));
+	ASSERT_EQ(var, 200 + 200 + 11 + 203);
+	var = 0;
+	Command_AddCallback("inline_cmd_1", 202, using inline inline_cmd_2);
+	ASSERT_NZ(Command_ReProcess(202, "/inline_cmd_1 200", 0));
+	ASSERT_NZ(Command_ReProcess(203, "/inline_cmd_1 200", 0));
+	ASSERT_EQ(var, 200 + 11 + 202 + 200 + 11 + 203);
+	Command_AddCallback("inline_cmd_2", 202, using inline inline_cmd_2);
+	Command_RemoveCallback("inline_cmd_1", 202);
+	var = 0;
+	ASSERT_ZE(Command_ReProcess(202, "/inline_cmd_1 200", 0));
+	ASSERT_NZ(Command_ReProcess(203, "/inline_cmd_1 200", 0));
+	ASSERT_EQ(var, 200 + 11 + 203);
+	ASSERT_NZ(Command_ReProcess(202, "/inline_cmd_2 300", 0));
+	ASSERT_EQ(var, 300 + 11 + 202 + 200 + 11 + 203);
+}
+
+static
+	gScriptTotal = 0;
+
+@cmd() scriptcom1(playerid, params[], help)
+{
+	gScriptTotal = gScriptTotal + strval(params) + strval(params[2]);
+	return 1;
+}
+
+@cmd() scriptcom2(playerid, params[], help)
+{
+	gScriptTotal = gScriptTotal + strval(params) * strval(params[2]);
+	return 1;
+}
+
+@test(.group = "y_commands") y_commands_RunScript()
+{
+	gScriptTotal = 0;
+	ASSERT(Command_RunScript(202, "/scriptcom1 5 6 ; /scriptcom2 5 6 ; /scriptcom1 8 9"));
+	ASSERT_EQ(gScriptTotal, 5 + 6 + 5 * 6 + 8 + 9);
+}
 

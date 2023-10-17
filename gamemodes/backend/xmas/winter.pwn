@@ -32,7 +32,7 @@ hook OnPlayerConnect(playerid)
 	return true;
 }	
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 	if (WinterPlayerSettings[playerid][p_breath]) {
 		new Float:speed;

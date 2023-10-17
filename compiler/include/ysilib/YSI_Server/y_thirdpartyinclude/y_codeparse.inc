@@ -1,6 +1,7 @@
-#if defined _INC_y_codeparse
+#if defined _INC_y_thirdparty_codeparse
 	#endinput
 #endif
+#define _INC_y_thirdparty_codeparse
 
 /*+
  * <library

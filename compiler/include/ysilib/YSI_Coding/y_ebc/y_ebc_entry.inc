@@ -82,13 +82,18 @@ Optional plugins:
 #undef EBC
 
 // The true definition which relies on a better compiler.
-#define EBC(%0,%1) (%1)$(Inline_EBC__(_:(%0),_:tagof(%0)))
+#define EBC(%0) Inline_EBC__(_:(%0),_:tagof(%0))
+#define TBC(%0) Inline_EBC__(_:(%0),(_:-1,)) // `_:` is one of the oldest macros
+// in YSI, and removes trailing commas in cases like this.
+
+#define Inline_EBC__(_:(%0,%1),%2(%3,%9)) (%1)$(Inline_EBC__(_:(%0),%2(%3)))
 
 // Common EBC tags.
 __COMPILER_TAG_DATA(Vehicle, INVALID_VEHICLE_ID);
 __COMPILER_TAG_DATA(Player, INVALID_PLAYER_ID);
 __COMPILER_TAG_DATA(Object, INVALID_OBJECT_ID);
 __COMPILER_TAG_DATA(PlayerObject, INVALID_OBJECT_ID);
+__COMPILER_TAG_DATA(Pickup, INVALID_PICKUP);
 
 stock EBC_Deactivate_(owner, tag)
 {
@@ -155,4 +160,28 @@ stock bool:EBC_DestroyPlayerObject(playerid, objectid)
 #endif
 #define _ALS_DestroyPlayerObject
 #define DestroyPlayerObject( EBC_DestroyPlayerObject(
+
+stock bool:EBC_bool:DestroyPickup(pickupid)
+{
+	EBC_Deactivate(pickupid, tagof(Pickup:));
+	return bool:DestroyPickup(pickupid);
+}
+
+#if defined _ALS_DestroyPickup
+	#undef DestroyPickup
+#endif
+#define _ALS_DestroyPickup
+#define DestroyPickup( EBC_DestroyPickup(
+
+//stock bool:EBC_DisablePlayerCheckpoint(playerid)
+//{
+//	EBC_Deactivate(playerid, tagof(Checkpoint:));
+//	return bool:DisablePlayerCheckpoint(playerid);
+//}
+//
+//#if defined _ALS_DisablePlayerCheckpoint
+//	#undef DisablePlayerCheckpoint
+//#endif
+//#define _ALS_DisablePlayerCheckpoint
+//#define DisablePlayerCheckpoint( EBC_DisablePlayerCheckpoint(
 

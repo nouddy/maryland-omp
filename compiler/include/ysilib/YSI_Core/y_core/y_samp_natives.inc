@@ -113,6 +113,46 @@ native YSI_PrintF__(const format[], GLOBAL_TAG_TYPES:...) = printf;
 /*-------------------------------------------------------------------------*//**
  * <library>y_samp_natives</library>
  * <remarks>
+ *   The name of the public wrapper function to call.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+static stock const
+	YSI_gscTimerStub[] = "@_yT";
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
+ *   This is a tiny stub function to call other public functions via an address
+ *   instead of via a name.  This allows the compiler to skip functions that
+ *   aren't used at all.  It does require amx-assembly though.  The prefix
+ *   <c>@_yT</c> is used to denote timers in <em>y_timers</em>, so we may as
+ *   well reuse it here for the ultimate timer.  I might even rewrite
+ *   <em>y_timers</em> to use this timer.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+@_yT(addr);
+
+@_yT(addr)
+{
+	// Reset the frame.
+	#emit POP.pri
+	#emit SCTRL        5
+	// Get the return address (always 0).
+	#emit POP.alt
+	// Decrease the parameter count.
+	#emit POP.pri
+	#emit ADD.C        __m1_cell
+	// Get the target address.
+	#emit SWAP.pri
+	#emit PUSH.alt
+	#emit SCTRL        __cip
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
  *   Const-correct <c>SetTimer</c>.
  * </remarks>
  *//*------------------------------------------------------------------------**/
@@ -127,6 +167,93 @@ native YSI_SetTimer__(const funcname[], interval, bool:repeating) = SetTimer;
  *//*------------------------------------------------------------------------**/
 
 native YSI_SetTimerEx__(const funcname[], interval, bool:repeating, const format[], GLOBAL_TAG_TYPES:...) = SetTimerEx;
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
+ *   <c>SetTimer</c> version that takes function addresses, not names.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock SetTimerAddr(addr, time, bool:repeat)
+{
+	return YSI_SetTimerEx__(YSI_gscTimerStub, time, repeat, YSI_gcI, addr);
+}
+
+#if defined _ALS_SetTimer
+	#undef SetTimer
+#endif
+#define _ALS_SetTimer
+
+// Force all function passed to `SetTimer` to have no parameters.
+#define @yS2:addressof(%0<%9><>) @yS2:addressof(%0<>)
+
+#define SetTimer(&%0,%1) SetTimerAddr(_:@yS2:addressof(%0<>),%1)
+#define YSI_SetTimer__(&%0,%1) SetTimerAddr(_:@yS2:addressof(%0<>),%1)
+//#define SetTimerAddr(&%0,%1) SetTimerAddr(_:@yS2:addressof(%0<>),%1)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
+ *   <c>SetTimerEx</c> version that takes function addresses, not names.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock SetTimerExAddr(dummy__ = 0, time, bool:repeat, const fmt[], addr, GLOBAL_TAG_TYPES:...)
+{
+	#pragma unused time, repeat
+	Q@ = "i",
+	strcat(Q@, fmt, sizeof (Q@));
+	
+	// Convert the address parameter to a reference to an address.  This is
+	// better than making `addr` a reference, which would seem to be correct.
+	// It avoids a load of additional heap allocations and actually compiles
+	// when using the `addressof` macro (which could be fixed by not using
+	// `?1:2` in it, but that's not important).
+	#emit LOAD.S.pri   addr
+	#emit STOR.pri     I@
+	#emit CONST.pri    I@
+	#emit STOR.S.pri   addr
+	#emit CONST.pri    Q@
+	#emit STOR.S.pri   fmt
+	
+	// Inject the target function.
+	#emit CONST.pri    YSI_gscTimerStub
+	#emit STOR.S.pri   dummy__
+	
+	// Restore the frame.
+	#emit POP.pri
+	#emit SCTRL        __frm
+	
+	// Get the return address.
+	#emit POP.alt
+	
+	// Call the function.
+	#emit SYSREQ.C     SetTimerEx
+	
+	// Return.
+	#emit PUSH.alt
+	#emit PROC
+	#emit RETN
+	
+	return 0;
+}
+
+#if defined _ALS_SetTimerEx
+	#undef SetTimerEx
+#endif
+#define _ALS_SetTimerEx
+
+// Normal addressof.
+// TODO: Extract the format specifier.
+#define @yS0:@yS1:addressof(%0<%8>) addressof(%0<%8>)
+// Ensure the parameters are correct.
+#define Y_HOOKS_ADDRESSOF(%0(%1)) (O@D_:O@A_())?(((_:%0(%1)),O@V_)?1:2):(O@V_)
+#define @yS1:addressof(%0),%1) (Y_HOOKS_ADDRESSOF(%0(%1))),%1)
+
+#define SetTimerEx(&%0,%1,%2,%3,%4) SetTimerExAddr(_,%1,%2,%3,_:@yS0:@yS1:addressof(%0),%4)
+#define YSI_SetTimerEx__(&%0,%1,%2,%3,%4) SetTimerExAddr(_,%1,%2,%3,_:@yS0:@yS1:addressof(%0),%4)
+//#define SetTimerExAddr(&%0,%1,%2,%3,%4) SetTimerExAddr(_,%1,%2,%3,_:@yS0:@yS1:addressof(%0),%4)
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_samp_natives</library>
@@ -194,6 +321,24 @@ native YSI_Random__(max) = random;
  *//*------------------------------------------------------------------------**/
 
 native _YSI_ConstCpy__(const dst[], const src[], index, numbytes, maxlength) = memcpy;
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
+ *   Case-correct <c>CallRemoteFunction</c>.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+native YSI_CallRemoteFunction__(const function[], const format[], GLOBAL_TAG_TYPES:...) = CallRemoteFunction;
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_samp_natives</library>
+ * <remarks>
+ *   Case-correct <c>CallLocalFunction</c>.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+native YSI_CallLocalFunction__(const function[], const format[], GLOBAL_TAG_TYPES:...) = CallLocalFunction;
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_samp_natives</library>

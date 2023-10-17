@@ -97,6 +97,8 @@ public LoadVehicleData() {
 
 			Iter_Add(iter_Vehicles, i);
 
+			printf("LOADED : Vehicle %d * Owner %d * VehicleID %d", eVehicle[i][vID], eVehicle[i][vOwner], pvVehicle[i]);
+
 		}
 
 		printf("Ucitano %d vozila", rows);

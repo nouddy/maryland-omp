@@ -97,19 +97,9 @@ CHAIN_HOOK(YVers)
 // Amazingly, this fixes hooking OnYSIInit...
 CHAIN_FORWARD:YVers_OnYSIInit() = 1;
 
-#define YSI_VERSION_RESPO               2
-
-#define YSI_VERSION_MAJOR               5
-#define YSI_VERSION_MINOR               07
-#define YSI_VERSION_BUILD               3082
-
-#define YSI_VERSION                     #YSI_VERSION_MAJOR "." #YSI_VERSION_MINOR "." #YSI_VERSION_BUILD
-
 #if defined YSI_NO_VERSION_CHECK && !defined _YSI_NO_VERSION_CHECK
 	#define _YSI_NO_VERSION_CHECK
 #endif
-
-forward YVers_Callback(index, code, data[]);
 
 static stock const
 	/**
@@ -611,7 +601,7 @@ static stock YVers_PrintHeader()
 	GetConsoleVarAsString("version", version, sizeof (version));
 	if (version[0])
 	{
-		format(version, sizeof (version), "Server:      %s (%s)", version, Server_IsWindowsHost() ? YSI_gscWindows : YSI_gscLinux);
+		format(version, sizeof (version), "Server:      %s (%c)", version, Server_IsWindowsHost() ? 'W' : 'L');
 	}
 	else
 	{
@@ -622,7 +612,7 @@ static stock YVers_PrintHeader()
 	Script_GetStartString(version),
 	format(version, sizeof (version), "Started:     %s", version),
 	Server_PrintIntroPart(version),
-	Server_PrintIntroPart(""),
+	Server_PrintIntroPart(YSI_EMPTY),
 	Script_GetCompilerString(version, os),
 	format(version, sizeof (version), "Compiler:    %s (%s)", version, os),
 	Server_PrintIntroPart(version),
@@ -636,15 +626,16 @@ static stock YVers_PrintHeader()
 		format(version, sizeof (version), "Built:       %s - %s", __date, __time),
 		Server_PrintIntroPart(version);
 	#endif
-	Server_PrintIntroPart(""),
-	Server_PrintIntroPart("YSI:         v" YSI_VERSION);
+	Server_PrintIntroPart(YSI_EMPTY),
+	format(version, sizeof (version), "YSI:         v%02d.%02d.%04d", YSI_VERSION_MAJOR, YSI_VERSION_MINOR, YSI_VERSION_BUILD),
+	Server_PrintIntroPart(version);
 	#if defined YSI_NO_MASTER
 		Server_PrintIntroPart("Master:      <none>");
 	#else
 		format(version, sizeof (version), "Master:      %d", @_),
 		Server_PrintIntroPart(version);
 	#endif
-	Server_PrintIntroPart(""),
+	Server_PrintIntroPart(YSI_EMPTY),
 	Server_GetJITString(version),
 	format(version, sizeof (version), "JIT:         %s", version),
 	Server_PrintIntroPart(version);
@@ -723,14 +714,16 @@ static stock YVers_PrintHeader()
 			YSI_gLockData[x / 3] = x * 10,
 			YSI_gLockData[1] = (YSI_gLockData[2] - YSI_gLockData[3]) / 2 + YSI_gLockData[3];
 		#endif
+		#if __debug > 0
 			YVers_PrintHeader();
-		#if _YSI_SAFE_STARTUP
-			Server_PrintIntroMessage(
-				"Unable to check the latest YSI version",
-				"- please watch the forums and github:",
-				YSI_EMPTY,
-				"         https://git.io/5.x"
-			);
+			#if _YSI_SAFE_STARTUP
+				Server_PrintIntroMessage(
+					"Unable to check the latest YSI version",
+					"- please watch the forums and github:",
+					YSI_EMPTY,
+					"         https://git.io/5.x"
+				);
+			#endif
 		#endif
 		return 1;
 	}
@@ -753,7 +746,9 @@ stock YVers_StartCheck()
 		YSI_gLockData[0] -= 1,
 		YSI_gLockData[1] = YSI_gLockData[0] + 7;
 	#endif
-	YVers_PrintHeader();
+	#if __debug > 0
+		YVers_PrintHeader();
+	#endif
 	//YSI_Print__(" |                                      | ");
 	//YSI_Print__(" |  Checking the latest YSI version..   | ");
 	//YSI_Print__(YSI_gscSpacer);
@@ -780,7 +775,7 @@ stock YVers_StartCheck()
 	//  
 	// This remote script has now been updated to include changelog
 	// information and keeps a record of what IPs are connecting.
-	//HTTP(0, HTTP_GET, "version.ysi.tl/index.php?c=" #YSI_VERSION_RESPO "&v=" YSI_VERSION, YSI_EMPTY, "YVers_Callback");
+	//HTTP(0, HTTP_GET, "version.ysi.tl/index.php?c=" #YSI_VERSION_RESPO "&v=" YSI_VERSION, YSI_EMPTY, &YVers_Callback<>);
 	return 1;
 }
 
@@ -799,7 +794,7 @@ stock YVers_StartCheck()
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-public YVers_Callback(index, code, data[])
+static stock YVers_Callback(index, code, data[])
 {
 	if (code == 200)
 	{

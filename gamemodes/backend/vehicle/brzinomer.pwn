@@ -29,6 +29,8 @@ hook OnGameModeInit()
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+
 //
 new stock g_arrVehicleNames[][] = {
     "Landstalker", "Bravura", "Buffalo", "Linerunner", "Perrenial", "Sentinel", "Dumper", "Firetruck", "Trashmaster",
@@ -62,7 +64,13 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
     new string[32];
     if( newstate == PLAYER_STATE_DRIVER ) {
 
-        printf("%d Vlasnik vozila - %d Vozilo ID", eVehicle[vehicle][vOwner], eVehicle[vehicle][vID]);
+        foreach(new v : iter_Vehicles) {
+
+            if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) {
+
+                printf("%d Vlasnik vozila - %d Vozilo ID", eVehicle[v][vOwner], eVehicle[v][vID]);
+            }
+        }
 
         if( !IsVehicleBicycle(vehicle)) {
 
@@ -105,19 +113,24 @@ ptask BrzinomerUpdate[1000](playerid)
 				}
             }
 
-            if(eVehicle[vehicle][vOwner] == PlayerInfo[playerid][SQLID]) {
-                
-				eVehicle[ vehicle ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
-				if( eVehicle[ vehicle ][ vRange ] > 999 )
-				{
-					eVehicle[ vehicle ][ vRangeKM ]++;
-					eVehicle[ vehicle ][ vRange ] = 0;
+            foreach(new v : iter_Vehicles) 
+            {
 
-                    new query[350];
+                if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) 
+                {
+                    
+                    eVehicle[ v ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
+                    if( eVehicle[ v ][ vRange ] > 999 )
+                    {
+                        eVehicle[ v ][ vRangeKM ]++;
+                        eVehicle[ v ][ vRange ] = 0;
 
-                    format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[vehicle][vRange], eVehicle[vehicle][vRangeKM], eVehicle[vehicle][vOwner]);
-                    mysql_tquery(SQL, query);
-				}
+                        new query[350];
+
+                        format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vOwner]);
+                        mysql_tquery(SQL, query);
+                    }
+                }
             }
 
             new string[ 32 ];
@@ -139,6 +152,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

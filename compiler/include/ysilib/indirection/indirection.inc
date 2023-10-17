@@ -888,6 +888,37 @@ stock Indirect_SetNext_(func, data)
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
+ * <param name="func">The function pointer to attach Nextdata to.</param>
+ * <returns><c>1</c> - an indirection function.  <c>2</c> - a string name.
+ * <c>3</c> - a code pointer.
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_GetType_(func)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// String.
+			return 2;
+		}
+		// Indirect.
+		return 1;
+	}
+	// Pointer.
+	return 3;
+}
+#define Indirect_GetType(%0) Indirect_GetType_(_:(%0))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
  * <param name="func">The function pointer with a tag.</param>
  * <remarks>
  *   Gets the tag of the pointer.
@@ -1179,9 +1210,22 @@ static stock Indirect_Stub(...)
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
- * <param name="func">The function pointer you had previously stored.</param>
  * <remarks>
- *   Disables all callbacks belonging to this person.
+ *   Hack to allow external access to this address, so that we can do some tests
+ *   more quickly in places.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Indirect_GetStubPointer()
+{
+	return _:addressof (Indirect_Stub);
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="owner">A person or other entity that no longer exists.</param>
+ * <remarks>
+ *   Disables all callbacks belonging to this entity.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -1190,29 +1234,120 @@ stock Indirect_Disconnect(owner)
 	// Special "owned" flag.
 	owner |= cellmin;
 	new
-		next = ref(gsKnownOwnedCallbacks),
-		cur = ReadAmxMemory(next);
+		prev = ref(gsKnownOwnedCallbacks),
+		cur = ReadAmxMemory(prev),
+		stub = _:addressof (Indirect_Stub);
 	while (cur)
 	{
 		if (ReadAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__)) == owner)
 		{
-			new tmp = _:addressof (Indirect_Stub);
 			// Disable the handler.
-			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_HANDER__), tmp);
+			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_HANDER__), stub);
 			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__), 0);
 			// Remove from the list.
-			tmp = ReadAmxMemory(cur);
-			WriteAmxMemory(next, tmp);
+			new
+				tmp = ReadAmxMemory(cur);
+			WriteAmxMemory(prev, tmp);
 			WriteAmxMemory(cur, 0);
 			cur = tmp;
 		}
 		else
 		{
-			next = cur;
-			cur = ReadAmxMemory(next);
+			prev = cur;
+			cur = ReadAmxMemory(prev);
 		}
 	}
 }
+
+///*-------------------------------------------------------------------------*//**
+// * <library>indirection</library>
+// * <param name="owner">A person or other entity that no longer exists.</param>
+// * <param name="meta">Meta-data that needs matching.</param>
+// * <remarks>
+// *   This is a cheap way of adding two owners, To only disable all callbacks
+// *   belonging to this entity with matching meta-data.
+// * </remarks>
+// *//*------------------------------------------------------------------------**/
+//
+//stock Indirect_Disconnect2(owner, meta)
+//{
+//	// Special "owned" flag.
+//	owner |= cellmin;
+//	new
+//		prev = ref(gsKnownOwnedCallbacks),
+//		cur = ReadAmxMemory(prev),
+//		stub = _:addressof (Indirect_Stub);
+//	while (cur)
+//	{
+//		if (
+//			ReadAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_METADATA__)) == meta &&
+//			ReadAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__)) == owner
+//			)
+//		{
+//			// Disable the handler.
+//			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_HANDER__), stub);
+//			WriteAmxMemory(cur - (E_INDIRECTION_NEXT__ - E_INDIRECTION_OWNER__), 0);
+//			// Remove from the list.
+//			new
+//				tmp = ReadAmxMemory(cur);
+//			WriteAmxMemory(prev, tmp);
+//			WriteAmxMemory(cur, 0);
+//			cur = tmp;
+//		}
+//		else
+//		{
+//			prev = cur;
+//			cur = ReadAmxMemory(prev);
+//		}
+//	}
+//}
+//
+//#define Indirect_Disconnect(%0,%1) Indirect_Disconnect2(%0,%1)
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ *//*------------------------------------------------------------------------**/
+
+native Indirect_FuncIDX_(ptr) = funcidx;
+
+/*-------------------------------------------------------------------------*//**
+ * <library>indirection</library>
+ * <param name="func">The function pointer you had previously stored.</param>
+ * <remarks>
+ *   Is it still valid (exists and not disabled).
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock bool:Indirect_IsValid_(func)
+{
+	if (func >= gsCodSize)
+	{
+		// Get the data at `func - COD`.
+		#emit LOAD.S.pri   func
+		#emit LOAD.alt     gsCodSize
+		#emit SUB
+		#emit MOVE.alt
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		if (func)
+		{
+			// Strings must be valid.  I guess we could use `funcidx`...
+			// Extract the pointer back out of `alt`.
+			#emit STOR.S.alt   func
+			return Indirect_FuncIDX_(func) != -1;
+		}
+		{}
+		// I'm relying on `alt` not changing here...
+		#emit CONST.pri    E_INDIRECTION_HANDER__
+		#emit ADD
+		#emit LOAD.I
+		#emit STOR.S.pri   func
+		return func != _:addressof (Indirect_Stub);
+	}
+	// Direct pointers are always valid (because we can't tell otherwise).
+	return func != 0;
+}
+#define Indirect_IsValid(%0) Indirect_IsValid_(_:%0)
 
 /*-------------------------------------------------------------------------*//**
  * <library>indirection</library>
@@ -1614,4 +1749,5 @@ public OnGameModeInit()
 	#define _ALS_OnGameModeInit
 #endif
 #define OnGameModeInit(%0) Indirection_OnGameModeInit(%0)
+
 

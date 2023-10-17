@@ -89,7 +89,6 @@ Optional plugins:
 enum e_COMMAND_FLAGS
 {
 	e_COMMAND_FLAG_PREFIX = 0xFF,
-	e_COMMAND_FLAG_BITS = 0xFF000000,
 	// Inherit user permissions.
 	e_COMMAND_FLAG_INHERIT = 0x01000000,
 	// Can't be listed.
@@ -97,9 +96,53 @@ enum e_COMMAND_FLAGS
 	// Can't be used by default.
 	e_COMMAND_FLAG_DISABLED = 0x04000000,
 	// Is a primary.
-	e_COMMAND_FLAG_PRI = 0x08000000,
+	e_COMMAND_FLAG_PRI = 0x00000000,
 	// Is an alternative.
 	e_COMMAND_FLAG_ALT = 0x10000000,
+	// Is an inline, or more strictly it is a per-player defined function called
+	// via `indirection.inc`.  In this case the use of the permissions changes
+	// to represent whether the player had a personal command with this name.
+	// However, this data may become stale when you're using `EBC` as the
+	// command may have stopped exsting another way in the interim.  To check
+	// this we always need to iterate through the list of inlines to find the
+	// one for this player, then check it is valid.
+	e_COMMAND_FLAG_INLINE = 0x20000000,
+	// A reference to the original command with this name.
+	e_COMMAND_FLAG_PARENT = 0x0FFFFF,
+	// Breakdown of the type specialisations.
+	e_COMMAND_FLAG_ARGS_ISI = 0x000000,
+	e_COMMAND_FLAG_ARGS_IS = 0x100000,
+	e_COMMAND_FLAG_ARGS_S = 0x200000,
+	e_COMMAND_FLAG_TYPE_INL = 0xC00000,
+	e_COMMAND_FLAG_TYPE_PTR = 0x800000,
+	e_COMMAND_FLAG_TYPE_STR = 0x400000,
+	e_COMMAND_FLAG_TYPE_NRM = 0x000000,
+	
+	// If this is set this is a function that only takes a single string
+	// parameter, and is an inline in the current script.  We do this so that we
+	// can call that code way more directly, or at least slightly more directly,
+	// since we still need to go through the inline handler.  And actually,
+	// since we still need to go through the handler anyway to set up the stack
+	// and frame we can short-circuit a few other calls as well - no need to
+	// check if this is a pointer and no need to do any tag-based parameter
+	// resolution.  Now expanded to special-case all the variants.
+	e_COMMAND_FLAG_INL_ISI = e_COMMAND_FLAG_TYPE_INL | e_COMMAND_FLAG_ARGS_ISI,
+	e_COMMAND_FLAG_INL_IS  = e_COMMAND_FLAG_TYPE_INL | e_COMMAND_FLAG_ARGS_IS,
+	e_COMMAND_FLAG_INL_S   = e_COMMAND_FLAG_TYPE_INL | e_COMMAND_FLAG_ARGS_S,
+	// Normal function pointer.
+	e_COMMAND_FLAG_PTR_ISI = e_COMMAND_FLAG_TYPE_PTR | e_COMMAND_FLAG_ARGS_ISI,
+	e_COMMAND_FLAG_PTR_IS  = e_COMMAND_FLAG_TYPE_PTR | e_COMMAND_FLAG_ARGS_IS,
+	e_COMMAND_FLAG_PTR_S   = e_COMMAND_FLAG_TYPE_PTR | e_COMMAND_FLAG_ARGS_S,
+	// String name.
+	e_COMMAND_FLAG_STR_ISI = e_COMMAND_FLAG_TYPE_STR | e_COMMAND_FLAG_ARGS_ISI,
+	e_COMMAND_FLAG_STR_IS  = e_COMMAND_FLAG_TYPE_STR | e_COMMAND_FLAG_ARGS_IS,
+	e_COMMAND_FLAG_STR_S   = e_COMMAND_FLAG_TYPE_STR | e_COMMAND_FLAG_ARGS_S,
+	// A normal command (actually works out as `0`).
+	e_COMMAND_FLAG_NRM_ISI = e_COMMAND_FLAG_TYPE_NRM | e_COMMAND_FLAG_ARGS_ISI,
+	// Mask for switches.
+	e_COMMAND_FLAG_ARGS = 0x300000,
+	e_COMMAND_FLAG_DEST = 0xC00000,
+	e_COMMAND_FLAG_TYPE = e_COMMAND_FLAG_ARGS | e_COMMAND_FLAG_DEST
 }
 
 enum E_COMMAND
@@ -113,11 +156,27 @@ enum E_COMMAND
 	E_COMMAND_HASH_MAP[HASH_MAP_DATA],
 	// _E_COMMAND_PAD_0, _E_COMMAND_PAD_1,
 	
-	// Who can use this command?
+	// Who can use this command?  For inlines, the players currently with one.
 	PlayerArray:E_COMMAND_USERS<MAX_PLAYERS>,
+	// Meta-data.
 	e_COMMAND_FLAGS:E_COMMAND_FLAGS,
-	// Function pointer.
-	E_COMMAND_POINTER
+	// Function pointer, or for inlines the index of the first entry to search.
+	E_COMMAND_POINTER,
+	// The base case for altnames.
+	E_COMMAND_PARENT,
+	// Circular linked list of the same name commands.
+	E_COMMAND_NEXT
+}
+
+enum E_COMMAND_INLINE
+{
+	// The pointer.
+	E_COMMAND_INLINE_POINTER,
+	// The script that this callback is in.
+	Bit:E_COMMAND_INLINE_MASTER,
+	// Any special flags for this call.  We can use this to slightly optimise
+	// the most common case of call.
+	e_COMMAND_FLAGS:E_COMMAND_INLINE_FLAGS
 }
 
 enum e_COMMAND_ERRORS
@@ -132,22 +191,15 @@ enum e_COMMAND_ERRORS
 	COMMAND_DISABLED      = 7 , // All commands are disabled for this player.
 	COMMAND_BAD_PREFIX    = 8 , // Used "/" instead of "#", or something similar.
 	COMMAND_INVALID_INPUT = 10, // Didn't type "/something".
-	COMMAND_SILENT        = 11, // Just end.  Don't call the command or print anything.
+	COMMAND_SILENT        = 11  // Just end.  Don't call the command or print anything.
 }
 
-enum e_SYSTEM_SETTINGS:(<<= 1)
+enum e_SYSTEM_SETTINGS:
 {
-	e_SYSTEM_SETTINGS_ZERO_RET = 1,  // The command returned 0.
-	e_SYSTEM_SETTINGS_OK,            // Called corectly.
-	e_SYSTEM_SETTINGS_NOT_FOUND,     // Command doesn't exist.
-	e_SYSTEM_SETTINGS_DENIED,        // Can't use the command.
-	e_SYSTEM_SETTINGS_HIDDEN,
-	_e_SYSTEM_SETTINGS_unused,
-	e_SYSTEM_SETTINGS_NO_PLAYER,     // Used by a player who shouldn't exist.
-	e_SYSTEM_SETTINGS_DISABLED,      // All commands are disabled for this player.
-	e_SYSTEM_SETTINGS_BAD_PREFIX,
-	e_SYSTEM_SETTINGS_INVALID_INPUT, // Didn't type "/something".
-	e_SYSTEM_SETTINGS_SILENT,        // Do nothing.
+	// Space reserved for `e_COMMAND_ERRORS` return values.
+	e_COMM_FLAG_RETURNS_ = 0x00000FFF,
+	// Mark the script as having a punycode command.
+	e_COMM_FLAG_PUNYCODE = 0x00008000,
 	// Save counts for callbacks.
 	e_COMM_FLAG_OPCP     = 0x00FF0000,
 	e_COMM_FLAG_OPCP_ADD = 0x00010000,
@@ -165,20 +217,43 @@ static stock __declspec(distributed) YSI_g_sErrorMessages[e_COMMAND_ERRORS][144]
 static stock __declspec(dist_special) PlayerArray:YSI_g_sDisabledPlayers<MAX_PLAYERS>;
 
 static stock
+	YSI_g_sCodSize = 0,
 	YSI_g_sCurrentID = COMMAND_NOT_FOUND,
 	BitArray:YSI_g_sPrefixes<128>,
 	YSI_g_sHighestID = 0,
 	YSI_g_sReturnBuffer[YSI_MAX_STRING],
 	// Quickly reference and store commands by name.
-	HashMap:YSI_g_sCommandMap<>;
+	HashMap:YSI_g_sCommandMap<>,
+	// These two MUST be adjacent in memory.
+	YSI_g_sCommandPrefix[4] = { '@', 'y', 'C', '_' },
+	YSI_g_sCommandName[60],
+	Iterator:YSI_g_sPlayerCommands<MAX_PLAYERS, MAX_COMMANDS>;
 
 static stock __declspec(dist_master) YSI_g_sCommands[MAX_COMMANDS][E_COMMAND];
+static stock __declspec(dist_master) YSI_g_sInlineCommands[MAX_COMMANDS][E_COMMAND_INLINE];
 
 static stock const
 	YSI_gscOPCR[] = "OnPlayerCommandReceived",
 	YSI_gscOPCP[] = "OnPlayerCommandPerformed",
-	YSI_gscISI[] = "isi",
-	YSI_gscISII[] = "isii";
+	YSI_gscCommand_FastCallS[] = "Command_FastCallS",
+	YSI_gscCommand_FastCallIS[] = "Command_FastCallIS",
+	YSI_gscCommand_FastCallISI[] = "Command_FastCallISI";
+
+// Why are these parameters in a seemingly random order?  To reduce duplication
+// in the number of specifier strings that we need.
+forward Command_FastCallS(Func:func<s>, string:params[], master);
+forward Command_FastCallIS(playerid, string:params[], master, Func:func<is>);
+forward Command_FastCallISI(playerid, string:params[], help, master, Func:func<isi>);
+
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <remarks>
+ *   <c>funcidx</c> by pointer not name.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+native Command_FuncIDX(func) = funcidx;
 
 // "YCMD:" macros.  The true core is "YSIM_COMMAND", which is in "y_master".
 #define _YCMD_0:(_:_YCMD_1:_YCMD_2:_YCMD_3:%0(%1[]%2) YSIM_COMMAND %0(%1[]%2)
@@ -270,7 +345,7 @@ FUNC_PAWNDOC(bool:_Command_IsAlt(idx));
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-#define Command_ErrorRet(%2) (YSI_g_sSystemSettings&e_SYSTEM_SETTINGS:(1<<_:(%2)))
+#define Command_ErrorRet(%2) (YSI_g_sSystemSettings&e_SYSTEM_SETTINGS:(1<<_:(%2)-1))
 #if defined COMMAND_USE_ERRORS
 	
 	#define Command_ErrorMsg(%2) YSI_g_sErrorMessages[%2]
@@ -284,7 +359,7 @@ FUNC_PAWNDOC(bool:_Command_IsAlt(idx));
 	#define Command_Error(%0,%2) Command_ErrorRet(%2)
 #endif
 
-#define Command_OnReceived(%2,%0,%1) ((sErr=(YSI_g_sSystemSettings&e_COMM_FLAG_OPCR)?(e_COMMAND_ERRORS:W@(YSI_gscOPCR,YSI_gscISI,(%0),(%1),_:(%2))):(%2)),Command_Error(%0,sErr))
+#define Command_OnReceived(%2,%0,%1) ((YSI_g_sSystemSettings&e_COMM_FLAG_OPCR)?(e_COMMAND_ERRORS:W@(YSI_gscOPCR,YSI_gcISI,(%0),(%1),_:(%2))):(%2))
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
@@ -311,8 +386,22 @@ FUNC_PAWNDOC(bool:_Command_IsActive(command));
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-//#define _Command_IsValid(%0) ((0 <= (%0) < YSI_g_sHighestID) && _Command_IsActive(%0))
+FUNC_PAWNDOC(bool:_Command_IsValid(command));
 #define _Command_IsValid(%0) (IS_IN_RANGE((%0), 0, MAX_COMMANDS) && _Command_IsActive(%0))
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="command">Command to get for.</param>
+ * <returns>
+ *   Is this command ID a special inline representation?
+ * </returns>
+ * <remarks>
+ *   Internal direct-access check.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FUNC_PAWNDOC(bool:_Command_IsInline(command));
+#define _Command_IsInline(%0) (YSI_g_sCommands[(%0)][E_COMMAND_FLAGS] & e_COMMAND_FLAG_INLINE)
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
@@ -438,64 +527,101 @@ FOREIGN__ Command_AddAlt__(oidx, const string:cmd[], bool:inherit);
 
 GLOBAL__ Command_AddAlt__(oidx, const string:cmd[], bool:inherit)
 {
-	static
-		sCmd[64],
-		sHash = 0;
-
-	if (!_Command_IsValid(oidx))
+	Debug_Print2("Command_AddAlt called: %d, %s, %d", oidx, cmd, inherit);
+	if (!_Command_IsValid(oidx) || _Command_IsInline(oidx))
 	{
 		return COMMAND_NOT_FOUND;
 	}
 	// Check the pointer is valid.
 	new
+		hash,
 		id = YSI_g_sCommands[oidx][E_COMMAND_POINTER];
 	// The command we are pointing to is already an alternate for a third
 	// command - point this new command at the parent.
 	if (id & cellmin)
 	{
-		Debug_Warning("Command_AddAlt: Using grandparent for alternate `/%s`", cmd);
 		oidx = id & ~cellmin;
-	}
-
-	Puny_EncodeHash(sCmd, cmd, sHash, .delimiter = '@');
-
-	// Now point this new command at the real (software) command.
-	strpack(sCmd, sCmd, cellmax);
-	if ((id = HashMap_GetWithHash(YSI_g_sCommandMap, sCmd, sHash)) == COMMAND_NOT_FOUND)
-	{
-		// Command doesn't already exist, add it.
-		if ((id = Command_GetEmptySlot()) == COMMAND_NOT_FOUND)
+		if (_Command_IsInline(oidx))
 		{
-			Debug_Error("Could not add alt command to array.");
 			return COMMAND_NOT_FOUND;
 		}
-		// This sets the prefix even when that feature is disabled, because
-		// there's literally no overhead in doing so.
-		YSI_g_sCommands[id][E_COMMAND_FLAGS] = e_COMMAND_FLAG_ALT | (e_COMMAND_FLAGS:'/'),
-		// Save the new highest ID for loops later.
-		YSI_g_sHighestID = max(YSI_g_sHighestID, id + 1),
-		// Save the command's pointer.
-		YSI_g_sCommands[id][E_COMMAND_POINTER] = cellmin | oidx,
-		// Add this command to the hash map (does the name too).
-		HashMap_Add(YSI_g_sCommandMap, sCmd, id);
-		// Add all players, or defer to y_groups.
-		if (inherit)
-		{
-			YSI_g_sCommands[id][E_COMMAND_FLAGS] |= e_COMMAND_FLAG_INHERIT;
-		}
-		else
-		{
-			PA_FastInit(YSI_g_sCommands[id][E_COMMAND_USERS]);
-			NO_GROUPS<Command>(id)
-			{
-				PA_Init(YSI_g_sCommands[id][E_COMMAND_USERS], true);
-			}
-			
-		}
-		// Copy the master script information.  Note that this won't be kept up
-		// to date with new scripts unfortunately.
-		MASTER_COPY<id, oidx>
+		Debug_Warning("Command_AddAlt: Using grandparent for alternate `/%s`", cmd);
 	}
+	
+	if ((id = Command_GetEmptySlot()) == COMMAND_NOT_FOUND)
+	{
+		Debug_Error("Could not add alt command to array.");
+		return COMMAND_NOT_FOUND;
+	}
+	// Copy the master script information.  Note that this won't be kept up
+	// to date with new scripts unfortunately.
+	MASTER_COPY<id, oidx>
+	// Save the command's pointer.
+	oidx |= cellmin,
+	YSI_g_sCommands[id][E_COMMAND_POINTER] = oidx;
+	
+	//if (strfind(cmd, "@") == -1)
+	//{
+	//	strpack(YSI_g_sCommandName, cmd, cellmax),
+	//	hash = BernsteinHash(cmd);
+	//}
+	//else
+	Puny_EncodeHash(YSI_g_sCommandName, cmd, hash, .delimiter = '@'),
+	strpack(YSI_g_sCommandName, YSI_g_sCommandName, cellmax);
+	Debug_Print5("Command_AddAlt: packed %s, %s", YSI_g_sCommandName, cmd);
+	Debug_Print5("Command_AddAlt: unpacked %s, %s", Unpack(YSI_g_sCommandName), Unpack(cmd));
+	if (strcmp(YSI_g_sCommandName, cmd))
+	{
+		// There is any punycode command.
+		YSI_g_sSystemSettings |= e_COMM_FLAG_PUNYCODE;
+	}
+
+	// Add all players, or defer to y_groups.
+	if (inherit)
+	{
+		YSI_g_sCommands[id][E_COMMAND_FLAGS] |= e_COMMAND_FLAG_INHERIT;
+	}
+	else
+	{
+		PA_FastInit(YSI_g_sCommands[id][E_COMMAND_USERS]);
+		NO_GROUPS<Command>(id)
+		{
+			PA_Init(YSI_g_sCommands[id][E_COMMAND_USERS], true);
+		}
+	}
+
+	// Now point this new command at the real (software) command.
+	inherit = bool:HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash),
+	YSI_g_sCommands[id][E_COMMAND_NEXT] = _:inherit;
+	if (_:inherit != COMMAND_NOT_FOUND)
+	{
+		// There's another command with this name already.  Is it an existing
+		// alt command pointing to exactly the same destination?
+		do
+		{
+			if ((YSI_g_sCommands[_:inherit][E_COMMAND_FLAGS] & e_COMMAND_FLAG_ALT) && (YSI_g_sCommands[_:inherit][E_COMMAND_POINTER] == oidx))
+			{
+				// Yes - this is a special case of adding the same alt twice.
+				// Do nothing except return the old ID.  By this point the new
+				// slot has not been "committed", so we can just return and our
+				// changes will not be persisted.
+				return _:inherit;
+			}
+		}
+		while ((_:inherit = YSI_g_sCommands[_:inherit][E_COMMAND_NEXT]) != COMMAND_NOT_FOUND);
+		// Otherwise add us to the linked list of lookups for the name.
+		HashMap_RemoveKeyWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash);
+	}
+
+	// This is the point at which the slot is marked as in use.  Returning
+	// before this will not remove it from the available list.
+	HashMap_AddWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash, id),
+	// This sets the prefix even when that feature is disabled, because
+	// there's literally no overhead in doing so.
+	YSI_g_sCommands[id][E_COMMAND_FLAGS] = e_COMMAND_FLAG_ALT | (e_COMMAND_FLAGS:'/') | e_COMMAND_FLAG_NRM_ISI,
+	// Save the new highest ID for loops later.
+	YSI_g_sHighestID = max(YSI_g_sHighestID, id + 1);
+
 	return id;
 }
 
@@ -558,6 +684,560 @@ stock Command_AddAlt(oidx, const string:cmd[], bool:inherit = false)
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
+ * <param name="owner">The owning entity for EBC callbacks.</param>
+ * <param name="ptr">The inline itself.</param>
+ * <returns>
+ *   -
+ * </returns>
+ * <remarks>
+ *   This handles the remote cleanup.  An owner of <c>cellmin</c> means "always"
+ *   while an owner of <c>-1</c> means "if invalid".
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+REMOTE_FUNC__ bool:Command_TryRelease__(owner, ptr)
+{
+	switch (owner)
+	{
+	case cellmin:
+		{}
+	case -1:
+		if (Indirect_IsValid(ptr)) return false;
+	default:
+		if (Indirect_GetOwner(ptr) != owner) return false;
+	}
+	Indirect_Release(owner);
+	return true;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="p">(playerid) - Player who entered the command.</param>
+ * <param name="c">(cmdtext) - Text entered.</param>
+ * <param name="h">
+ *   1 - Called from the help commmand or OnPlayerCommandText.
+ *   2 - Bypass permissions checks.
+ * </param>
+ * <returns>
+ *   true - success or hidden fail.
+ *   false - fail.
+ * </returns>
+ * <remarks>
+ *   Does all the command and error handling.  The macro version takes four
+ *   parameters:
+ *
+ *   <code>Command_ReProcess(playerid,cmdtext,help,force);</code>
+ *
+ *   <c>help</c> and <c>force</c> are combined together in to a bitmap.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+static stock e_COMMAND_ERRORS:Command_ReProcess__(playerid, const string:cmdtext[], help)
+{
+	Debug_Print1("Commands_OnPlayerCommandText called: %d %s", playerid, cmdtext);
+	// Check for a valid player.
+	#if !defined Y_COMMANDS_NO_IPC
+		if (!IsPlayerConnected(playerid))
+		{
+			return Command_OnReceived(COMMAND_NO_PLAYER, playerid, cmdtext);
+		}
+	#endif
+	const
+		Func:tagS<s> = Func:0<s>,
+		Func:tagIS<is> = Func:0<is>,
+		Func:tagISI<isi> = Func:0<isi>;
+	// Apparently being using in `tagof` doesn't mark them as used (which is
+	// somewhat understandable, that's usually a mistake).
+	#pragma unused tagS, tagIS, tagISI
+	static
+		sPos = 0,
+		e_COMMAND_ERRORS:sRet = COMMAND_OK,
+		sHash = 0,
+		e_COMMAND_FLAGS:sFlags = e_COMMAND_FLAGS:0;
+	// Skip whitespace.
+	new
+		prefix = cmdtext[0];
+	if (!(sRet = e_COMMAND_ERRORS:_Command_IsPrefix(prefix)))
+	{
+		prefix = '\0';
+	}
+	while (cmdtext[sRet] == ' ') ++sRet;
+	if (0 <= cmdtext[sRet] <= 1)
+	{
+		return Command_OnReceived(COMMAND_INVALID_INPUT, playerid, cmdtext);
+	}
+	if (PA_Get(YSI_g_sDisabledPlayers, playerid))
+	{
+		if ((sRet = Command_OnReceived(COMMAND_DISABLED, playerid, cmdtext)) != COMMAND_OK)
+			return sRet;
+	}
+	// Get the hashed version of the decoded string, skipping the possible  "/".
+	if (YSI_g_sSystemSettings & e_COMM_FLAG_PUNYCODE)
+	{
+		sPos = Puny_EncodeHash(YSI_g_sCommandName, cmdtext[_:sRet], sHash, sizeof (YSI_g_sCommandName), '@') + _:sRet;
+	}
+	else
+	{
+		sPos = sRet,
+		sHash = 5381;
+		while ((_:sFlags = cmdtext[sPos]) > ' ')
+		{
+			YSI_g_sCommandName[sPos - _:sRet] = _:sFlags,
+			sHash = sHash * 33 ^ _:sFlags,
+			++sPos;
+		}
+	}
+	// Skip whitespace.
+	while (cmdtext[sPos] == ' ') ++sPos; // Better/slower: ('\0' < cmdtext[sPos] <= ' ').
+	// Find the command in the array.
+	YSI_g_sCurrentID = HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, sHash);
+	Debug_Print5("Commands_OnPlayerCommandText: %s, %d, %d, %d", YSI_g_sCommandName, sPos, sHash, YSI_g_sCurrentID);
+	if (YSI_g_sCurrentID == COMMAND_NOT_FOUND)
+	{
+		return Command_OnReceived(COMMAND_UNDEFINED, playerid, cmdtext);
+	}
+	// Loop through all the commands with this name and find the first one that
+	// this player can use.
+	for ( ; ; )
+	{
+		#if defined Y_COMMANDS_USE_CHARS
+			// Have a prefix, but not the right one.  Calling this function
+			// directly always works for all possible command prefixes.
+			if (prefix && _Command_GetPrefix(YSI_g_sCurrentID) != prefix)
+			{
+				if ((YSI_g_sCurrentID = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_NEXT]) == COMMAND_NOT_FOUND)
+					return Command_OnReceived(COMMAND_BAD_PREFIX, playerid, cmdtext);
+			}
+		#endif
+		//Debug_Print5("Commands_OnPlayerCommandText: Use %d", _Command_GetPlayer(YSI_g_sCurrentID, playerid));
+		// Can the player use this command?
+		sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER],
+		sFlags = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_FLAGS];
+		switch (sFlags & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
+		{
+		case e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_INHERIT:
+		{
+			// Disabled primary commands.
+			if ((sRet = Command_OnReceived((help & 2) ? COMMAND_OK : COMMAND_DENIED, playerid, cmdtext)) == COMMAND_OK)
+				break;
+		}
+		case e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
+		{
+			// Disabled alternate commands.  We still get the primary as the call
+			// to `Command_OnReceived` may result in it being called.
+			if ((sRet = Command_OnReceived((help & 2) ? COMMAND_OK : COMMAND_DENIED, playerid, cmdtext)) == COMMAND_OK)
+			{
+				YSI_g_sCurrentID = sHash & ~cellmin,
+				sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER];
+				break;
+			}
+		}
+		case e_COMMAND_FLAG_ALT:
+		{
+			// Alternate command with its own permissions.
+			sRet = (help & 2) || PA_Get(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], playerid) ? COMMAND_OK : COMMAND_DENIED;
+			if ((sRet = Command_OnReceived(sRet, playerid, cmdtext)) == COMMAND_OK)
+			{
+				YSI_g_sCurrentID = sHash & ~cellmin,
+				sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER];
+				break;
+			}
+		}
+		case e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
+		{
+			// Alternate command with inherited permissions.
+			sRet = (help & 2) || PA_Get(YSI_g_sCommands[sHash & ~cellmin][E_COMMAND_USERS], playerid) ? COMMAND_OK : COMMAND_DENIED;
+			if ((sRet = Command_OnReceived(sRet, playerid, cmdtext)) == COMMAND_OK)
+			{
+				YSI_g_sCurrentID = sHash & ~cellmin,
+				sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER];
+				break;
+			}
+		}
+		case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_INHERIT:
+		{
+			// Technically `e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_INHERIT` is an
+			// invalid combination, but don't worry about that here.
+			sRet = (help & 2) || PA_Get(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], playerid) ? COMMAND_OK : COMMAND_DENIED;
+			if ((sRet = Command_OnReceived(sRet, playerid, cmdtext)) == COMMAND_OK)
+				break;
+		}
+		default:
+		{
+			// This is an indirect function, defined for a single player.  The
+			// `help & 2` above will override normal permissions to allow you to
+			// call any command for any player, but these commands don't have
+			// permissions, they literally don't exist for other players.
+			sRet = COMMAND_UNDEFINED;
+			FOREACH__ (sHash : YSI_g_sPlayerCommands<playerid>)
+			{
+				sFlags = YSI_g_sInlineCommands[sHash][E_COMMAND_INLINE_FLAGS];
+				if (_:(sFlags & e_COMMAND_FLAG_PARENT) == YSI_g_sCurrentID)
+				{
+						sRet = e_COMMAND_ERRORS:YSI_g_sInlineCommands[sHash][E_COMMAND_INLINE_POINTER];
+						// Found it.
+					#if YSIM_HAS_MASTER
+						// Fake the master data so that the correct script is used.
+						YSI_g_sMasterData[YSI_g_sCurrentID] = YSI_g_sInlineCommands[sHash][E_COMMAND_INLINE_MASTER];
+						if (MASTER_EXCLUSIVE<YSI_g_sCurrentID>)
+					#endif
+						{
+							if (Indirect_IsValid(_:sRet))
+							{
+								sHash = _:sRet,
+								sRet = COMMAND_OK;
+								break;
+							}
+							else
+							{
+								// Release any dangling pointers.
+								Indirect_Release(_:sRet),
+								Iter_Remove(YSI_g_sPlayerCommands<playerid>, sHash),
+								sRet = COMMAND_DENIED;
+							}
+						}
+					#if YSIM_HAS_MASTER
+						else
+						{
+							if (TARGET_FUNC__ Command_TryRelease__<_:YSI_g_sMasterData[YSI_g_sCurrentID]>(-1, _:sRet))
+							{
+								// Release any dangling pointers.
+								Iter_Remove(YSI_g_sPlayerCommands<playerid>, sHash),
+								sRet = COMMAND_DENIED;
+							}
+							else
+							{
+								sHash = _:sRet,
+								sRet = COMMAND_OK;
+								break;
+							}
+						}
+					#endif
+				}
+			}
+			// We must confirm that the command was actually found first.
+			if (sRet == COMMAND_DENIED)
+			{
+				// A command was removed, and no alternative was found.
+				PA_Set(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], playerid, false),
+				sRet = COMMAND_UNDEFINED;
+			}
+			else if (sRet == COMMAND_OK && (sRet = Command_OnReceived(COMMAND_OK, playerid, cmdtext)) == COMMAND_OK)
+				break;
+		}
+		}
+		if ((YSI_g_sCurrentID = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_NEXT]) == COMMAND_NOT_FOUND)
+			return sRet;
+	}
+	Debug_Print5("Commands_OnPlayerCommandText: Read %d", YSI_g_sCurrentID);
+	Debug_Print5("Commands_OnPlayerCommandText: Master %d %d", Master_ID(), _:MASTER_GET<YSI_g_sCurrentID>);
+	#if YSIM_HAS_MASTER
+		if (MASTER_EXCLUSIVE<YSI_g_sCurrentID>)
+	#endif
+		{
+			Debug_Print5("Commands_OnPlayerCommandText: Local %08x %08x (%d, \"%s\", %d)", sFlags, sHash, playerid, cmdtext[sPos], help & 1);
+			// In this script.  More to the point, in ONLY this script, so
+			// we can't have another script as the master.  I tried updating
+			// this code but then realised that the update would ignore the
+			// case where a command was in both the current script and
+			// another script, but the other script was the master script.
+			static
+				sParams[144];
+			sParams[0] = '\0',
+			strcat(sParams, cmdtext[sPos]),
+			// Strip out all other flags.
+			help &= 1;
+			//sRet = Command_FastCall(sFlags, sHash, playerid, sParams, bool:(help & 1), true);
+			//Debug_Print4("Command_FastCall called: %08x, %08x, %d, \"%s\", %d, %d", _:flags, func, playerid, params, help, unique);
+			//#pragma unused params
+			// `params` is NOT `const` here.  This is NOT a mistake.  I mean...
+			// ultimately it IS a mistake, since it is done that way to account
+			// for commands themselves not having `const` parameters.  But
+			// beyond that, no.
+			// Only call this in the correct script.
+			switch (sFlags & e_COMMAND_FLAG_TYPE)
+			{
+			case e_COMMAND_FLAG_INL_ISI:
+			{
+				Debug_Print5("Command_FastCall: Type INL_ISI %08x %08x", sHash, AMX_Read(sHash - YSI_g_sCodSize + E_INDIRECTION_HANDER__));
+				INDIRECTION_DATA = sHash - YSI_g_sCodSize,
+				//INDIRECTION_TAG = tagof(tagISI),
+				sHash = AMX_Read(INDIRECTION_DATA + E_INDIRECTION_HANDER__);
+				#emit PUSH.ADR     help
+				#emit PUSH.C       sParams
+				#emit PUSH.ADR     playerid
+				#emit PUSH.C       __3_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_INL_IS:
+			{
+				Debug_Print5("Command_FastCall: Type INL_IS %08x %08x", sHash, AMX_Read(sHash - YSI_g_sCodSize + E_INDIRECTION_HANDER__));
+				INDIRECTION_DATA = sHash - YSI_g_sCodSize,
+				//INDIRECTION_TAG = tagof(tagIS),
+				sHash = AMX_Read(INDIRECTION_DATA + E_INDIRECTION_HANDER__);
+				#emit PUSH.C       sParams
+				#emit PUSH.ADR     playerid
+				#emit PUSH.C       __2_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_INL_S:
+			{
+				Debug_Print5("Command_FastCall: Type INL_S %08x %08x", sHash, AMX_Read(sHash - YSI_g_sCodSize + E_INDIRECTION_HANDER__));
+				INDIRECTION_DATA = sHash - YSI_g_sCodSize,
+				//INDIRECTION_TAG = tagof(tagS),
+				sHash = AMX_Read(INDIRECTION_DATA + E_INDIRECTION_HANDER__);
+				#emit PUSH.C       sParams
+				#emit PUSH.C       __1_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_PTR_ISI:
+			{
+				Debug_Print5("Command_FastCall: Type PTR_ISI");
+				#emit PUSH.S       help
+				#emit PUSH.C       sParams
+				#emit PUSH.S       playerid
+				#emit PUSH.C       __3_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_PTR_IS:
+			{
+				Debug_Print5("Command_FastCall: Type PTR_IS");
+				#emit PUSH.C       sParams
+				#emit PUSH.S       playerid
+				#emit PUSH.C       __2_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_PTR_S:
+			{
+				Debug_Print5("Command_FastCall: Type PTR_S");
+				#emit PUSH.C       sParams
+				#emit PUSH.C       __1_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_STR_ISI:
+			{
+				Debug_Print5("Command_FastCall: Type STR_ISI");
+				if ((sHash = Command_FuncIDX(sHash - YSI_g_sCodSize)) == -1)
+				{
+					return COMMAND_UNDEFINED;
+				}
+				sHash = AMX_Read(sHash * __defsize_cells + AMX_HEADER_PUBLICS);
+				#emit PUSH.S       help
+				#emit PUSH.C       sParams
+				#emit PUSH.S       playerid
+				#emit PUSH.C       __3_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_STR_IS:
+			{
+				Debug_Print5("Command_FastCall: Type STR_IS");
+				if ((sHash = Command_FuncIDX(sHash - YSI_g_sCodSize)) == -1)
+				{
+					return COMMAND_UNDEFINED;
+				}
+				sHash = AMX_Read(sHash * __defsize_cells + AMX_HEADER_PUBLICS);
+				#emit PUSH.C       sParams
+				#emit PUSH.S       playerid
+				#emit PUSH.C       __2_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_STR_S:
+			{
+				Debug_Print5("Command_FastCall: Type STR_S");
+				if ((sHash = Command_FuncIDX(sHash - YSI_g_sCodSize)) == -1)
+				{
+					return COMMAND_UNDEFINED;
+				}
+				#emit PUSH.C       sParams
+				#emit PUSH.C       __1_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			case e_COMMAND_FLAG_NRM_ISI:
+			{
+				Debug_Print5("Command_FastCall: Type NRM_ISI");
+				#emit PUSH.S       help
+				#emit PUSH.C       sParams
+				#emit PUSH.S       playerid
+				#emit PUSH.C       __3_cells
+				#emit LCTRL        __cip
+				#emit ADD.C        __11_cells
+				#emit LCTRL        __jit_jump
+				#emit PUSH.pri
+				#emit LOAD.pri     sHash
+				#emit SCTRL        __jit_jump
+				#emit SCTRL        __cip
+				#emit STOR.pri     sRet
+			}
+			// Does nothing
+			default:
+			{
+				return COMMAND_UNDEFINED;
+			}
+			}
+		}
+	#if YSIM_HAS_MASTER
+		else if (sFlags & e_COMMAND_FLAG_DEST == e_COMMAND_FLAG_TYPE_NRM)
+		{
+			Debug_Print5("Commands_OnPlayerCommandText: Normal %08x %08x (%d, \"%s\", %d)", sFlags, sHash, playerid, cmdtext[sPos], help & 1);
+			// This is in another script, or multiple scripts.
+			// Call the command in another script.  If no particular script
+			// is set up as the "master", call it in the first one found...
+			// Using `YSI_g_sCommandPrefix` here has a buffer overflow in to
+			// `YSI_g_sCommandName`, which is what we want.
+			if (cmdtext[sPos])
+				YSI_CallRemoteFunction__(YSI_g_sCommandPrefix, YSI_gcISII, playerid, cmdtext[sPos], help & 1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
+			else
+				YSI_CallRemoteFunction__(YSI_g_sCommandPrefix, YSI_gcISII, playerid, NULL, help & 1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
+			sRet = e_COMMAND_ERRORS:getproperty(8, YSIM_RETURN);
+		}
+		else switch (sFlags & e_COMMAND_FLAG_ARGS)
+		{
+		case e_COMMAND_FLAG_ARGS_IS:
+		{
+			Debug_Print5("Commands_OnPlayerCommandText: Inline IS %08x %08x (%d, \"%s\", %d)", sFlags, sHash, playerid, cmdtext[sPos], help & 1);
+			if (cmdtext[sPos])
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallIS, YSI_gcISII, playerid, cmdtext[sPos], Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>), sHash);
+			else
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallIS, YSI_gcISII, playerid, NULL, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>), sHash);
+			sRet = e_COMMAND_ERRORS:getproperty(8, YSIM_RETURN);
+		}
+		case e_COMMAND_FLAG_ARGS_S:
+		{
+			Debug_Print5("Commands_OnPlayerCommandText: Inline S %08x %08x (%d, \"%s\", %d)", sFlags, sHash, playerid, cmdtext[sPos], help & 1);
+			if (cmdtext[sPos])
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallS, YSI_gcISI, sHash, cmdtext[sPos], Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
+			else
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallS, YSI_gcISI, sHash, NULL, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
+			sRet = e_COMMAND_ERRORS:getproperty(8, YSIM_RETURN);
+		}
+		case e_COMMAND_FLAG_ARGS_ISI:
+		{
+			Debug_Print5("Commands_OnPlayerCommandText: Inline ISI %08x %08x (%d, \"%s\", %d)", sFlags, sHash, playerid, cmdtext[sPos], help & 1);
+			if (cmdtext[sPos])
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallISI, YSI_gcISIII, playerid, cmdtext[sPos], help & 1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>), sHash);
+			else
+				YSI_CallRemoteFunction__(YSI_gscCommand_FastCallISI, YSI_gcISIII, playerid, NULL, help & 1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>), sHash);
+			sRet = e_COMMAND_ERRORS:getproperty(8, YSIM_RETURN);
+		}
+		default:
+		{
+			return COMMAND_UNDEFINED;
+		}
+		}
+	#endif
+	Debug_Print5("Command_ReProces: Result = %d %d %d", _:sRet, Command_ErrorRet(sRet), _:COMMAND_OK);
+	if (YSI_g_sSystemSettings & e_COMM_FLAG_OPCP)
+		sRet = e_COMMAND_ERRORS:YSI_CallRemoteFunction__(YSI_gscOPCP, YSI_gcISI, playerid, cmdtext, _:sRet);
+	Debug_Print5("Command_ReProces: Return = %d %d %d", playerid, _:sRet, Command_ErrorRet(sRet));
+	return sRet;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="playerid">The player to run the script for.</param>
+ * <param name="cmdtext">The script.</param>
+ * <returns>
+ *   true - success or hidden fail.
+ *   false - fail.
+ * </returns>
+ * <remarks>
+ *   Run a series of commands separated by <c>;</c>s.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FOREIGN__ bool:Command_RunScript(playerid, const string:cmdtext[]);
+
+GLOBAL__ bool:Command_RunScript(playerid, const string:cmdtext[])
+{
+	for (new end = -1, start = cellmax; start; )
+	{
+		end = strfind(cmdtext, ";", false, (start = end + 1));
+		// `Command_ReProcess__` doesn't expect leading spaces, and shouldn't
+		// really.  So deal with them here.
+		while ('\0' < cmdtext[start] <= ' ')
+		{
+			++start;
+		}
+		if (end == -1)
+		{
+			return Command_ReProcess__(playerid, cmdtext[start], 0) == COMMAND_OK;
+		}
+		else
+		{
+			_YSI_ConstMod(cmdtext[end], '\0'),
+			start = Command_ReProcess__(playerid, cmdtext[start], 0) == COMMAND_OK,
+			_YSI_ConstMod(cmdtext[end], ';');
+		}
+	}
+	
+	return false;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
  * <param name="p">(playerid) - Player who entered the command.</param>
  * <param name="c">(cmdtext) - Text entered.</param>
  * <param name="h">
@@ -581,153 +1261,13 @@ stock Command_AddAlt(oidx, const string:cmd[], bool:inherit = false)
 //FUNC_PAWNDOC(Command_ReProcess(playerid,cmdtext,help,force));
 #define Command_ReProcess(%0,%1,%2,%3) Command_ReProcess(%0,%1, _:(%2)|(_:(%3)<<1))
 
-FOREIGN__ Command_ReProcess(p,string:c[],h);
+FOREIGN__ Command_ReProcess(p,const string:c[],h);
 
-GLOBAL__ Command_ReProcess(p,string:c[],h)
+GLOBAL__ Command_ReProcess(p,const string:c[],h)
 {
-	static
-		sCmd[64] = "@yC_",
-		sPos = 0,
-		sRet,
-		sHash = 0,
-		e_COMMAND_ERRORS:sErr = COMMAND_ZERO_RET;
-	// Check that the input is a valid command.  Note that changing the command
-	// prefix here would be VERY trivial!
-	if ((sRet = _:_Command_IsPrefix(c[0]))) // Relies on "true = 1" later on!
-	{
-		if (!c[1])
-		{
-			return Command_OnReceived(COMMAND_INVALID_INPUT, p, c);
-		}
-	}
-	else
-	{
-		if (IsNull(c))
-		{
-			return Command_OnReceived(COMMAND_INVALID_INPUT, p, NULL);
-		}
-	}
-	// Check for a valid player.
-	#if !defined Y_COMMANDS_NO_IPC
-		if (!IsPlayerConnected(p))
-		{
-			return Command_OnReceived(COMMAND_NO_PLAYER, p, c);
-		}
-	#endif
-	Debug_Print1("Commands_OnPlayerCommandText called: %d %s", p, c);
-	if (PA_Get(YSI_g_sDisabledPlayers, p))
-	{
-		sRet = Command_OnReceived(COMMAND_DISABLED, p, c);
-		if (sErr != COMMAND_OK)
-			return sRet;
-	}
-	// Get the hashed version of the decoded string, skipping the possible  "/".
-	sPos = Puny_EncodeHash(sCmd[4], c[sRet], sHash, sizeof (sCmd) - 4, '@') + sRet;
-	while (c[sPos] == ' ') ++sPos; // Better/slower: ('\0' < c[sPos] <= ' ').
-	// Find the command in the array.
-	YSI_g_sCurrentID = HashMap_GetWithHash(YSI_g_sCommandMap, sCmd[4], sHash);
-	Debug_Print5("Commands_OnPlayerCommandText: %s, %d, %d, %d", sCmd[4], sPos, sHash, YSI_g_sCurrentID);
-	if (YSI_g_sCurrentID == COMMAND_NOT_FOUND)
-	{
-		return Command_OnReceived(COMMAND_UNDEFINED, p, c);
-	}
-	#if defined Y_COMMANDS_USE_CHARS
-		// Have a prefix, but not the right one.  Calling this function directly
-		// always works for all possible command prefixes.
-		if (sRet && _Command_GetPrefix(YSI_g_sCurrentID) != c[0])
-		{
-			return Command_OnReceived(COMMAND_BAD_PREFIX, p, c);
-		}
-	#endif
-	//Debug_Print5("Commands_OnPlayerCommandText: Use %d", _Command_GetPlayer(YSI_g_sCurrentID, p));
-	// Can the player use this command?  `Command_OnReceived` sets "sErr".
-	sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER];
-	if (h & 2)
-	{
-		sRet = _:COMMAND_OK;
-	}
-	else switch (YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT))
-	{
-	case e_COMMAND_FLAG_DISABLED:
-		// Disabled primary commands.
-		sRet = _:COMMAND_DENIED;
-	case e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
-		// Disabled alternate commands.  We still get the primary as the call
-		// to `Command_OnReceived` may result in it being called.
-		sRet = _:COMMAND_DENIED,
-		YSI_g_sCurrentID = sHash & ~cellmin,
-		sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER],
-		strunpack(sCmd[4], YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_NAME]);
-	case e_COMMAND_FLAG_ALT:
-		// Alternate command with its own permissions.
-		sRet = _:(PA_Get(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], p) ? COMMAND_OK : COMMAND_DENIED),
-		YSI_g_sCurrentID = sHash & ~cellmin,
-		sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER],
-		strunpack(sCmd[4], YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_NAME]);
-	case e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
-		// Alternate command with inherited permissions.
-		YSI_g_sCurrentID = sHash & ~cellmin,
-		sRet = _:(PA_Get(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], p) ? COMMAND_OK : COMMAND_DENIED),
-		sHash = YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_POINTER],
-		strunpack(sCmd[4], YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_NAME]);
-	default:
-		// No flags.
-		sRet = _:(PA_Get(YSI_g_sCommands[YSI_g_sCurrentID][E_COMMAND_USERS], p) ? COMMAND_OK : COMMAND_DENIED);
-	}
-	sRet = Command_OnReceived(e_COMMAND_ERRORS:sRet, p, c);
-	if (sErr != COMMAND_OK)
-	{
-		return sRet;
-	}
-	Debug_Print5("Commands_OnPlayerCommandText: Read %d", YSI_g_sCurrentID);
-	Debug_Print5("Commands_OnPlayerCommandText: Master %d %d", Master_ID(), _:MASTER_GET<YSI_g_sCurrentID>);
-	#if YSIM_HAS_MASTER
-		if (MASTER_EXCLUSIVE<YSI_g_sCurrentID>)
-	#endif
-		{
-			Debug_Print5("Commands_OnPlayerCommandText: Local %08x (%d, \"%s\", %d)", sHash, p, c[sPos], h & 1);
-			// In this script.  More to the point, in ONLY this script, so
-			// we can't have another script as the master.  I tried updating
-			// this code but then realised that the update would ignore the
-			// case where a command was in both the current script and
-			// another script, but the other script was the master script.
-			#emit LOAD.S.pri  h
-			#emit CONST.alt   1
-			#emit AND
-			#emit PUSH.pri
-			#emit LOAD.pri    sPos
-			#emit LOAD.S.alt  c
-			#emit IDXADDR
-			#emit PUSH.pri
-			#emit PUSH.S      p
-			#emit PUSH.C      __3_cells
-			#emit LCTRL       __cip
-			#emit ADD.C       __11_cells
-			#emit LCTRL       __jit_jump
-			#emit PUSH.pri
-			#emit LOAD.pri    sHash
-			#emit SCTRL       __jit_jump
-			#emit SCTRL       __cip
-			#emit STOR.pri    sRet
-			Debug_Print5("Command_ReProces: Result = %d %d %d", sRet, Command_Error(p, e_COMMAND_ERRORS:sRet), _:COMMAND_OK);
-		}
-	#if YSIM_HAS_MASTER
-		else
-		{
-			// This is in another script, or multiple scripts.
-			// Call the command in another script.  If no particular script
-			// is set up as the "master", call it in the first one found...
-			if (c[sPos])
-				CallRemoteFunction(sCmd, YSI_gscISII, p, c[sPos], h&1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
-			else
-				CallRemoteFunction(sCmd, YSI_gscISII, p, NULL, h&1, Cell_GetLowestBit(_:MASTER_GET<YSI_g_sCurrentID>));
-			sRet = getproperty(8, YSIM_RETURN);
-		}
-	#endif
-	if (YSI_g_sSystemSettings & e_COMM_FLAG_OPCP)
-		sRet = CallRemoteFunction(YSI_gscOPCP, YSI_gscISI, p, c, sRet);
-	Debug_Print5("Command_ReProces: Return = %d %d %d", p, sRet, Command_Error(p, e_COMMAND_ERRORS:sRet));
-	return Command_Error(p, e_COMMAND_ERRORS:sRet);
+	new
+		e_COMMAND_ERRORS:sErr = Command_ReProcess__(p, c, h);
+	return Command_Error(playerid, sErr);
 }
 
 /*
@@ -866,14 +1406,16 @@ FOREIGN__ bool:Command_GetPlayer(cmd, pid);
 
 GLOBAL__ bool:Command_GetPlayer(cmd, pid)
 {
+	Debug_Print2("Command_GetPlayer called: %i, %i", cmd, pid);
 	if (_Command_IsValid(cmd) && VALID_PLAYERID(pid))
 	{
-		switch (YSI_g_sCommands[cmd][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+		Debug_Print5("Command_GetPlayer: valid");
+		switch (YSI_g_sCommands[cmd][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 		{
-		case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT:
+		case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_INLINE:
 		{
-			// Primary command that isn't indirect, hidden, or disabled.
-			// Alternate command that isn't inherited, hidden, or disabled.
+			// Primary command that isn't indirect or disabled.
+			// Alternate command that isn't inherited or disabled.
 			return PA_Get(YSI_g_sCommands[cmd][E_COMMAND_USERS], pid);
 		}
 		case e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
@@ -926,8 +1468,9 @@ FOREIGN__ void:Command_SetPlayer(c, p, bool:s);
 GLOBAL__ void:Command_SetPlayer(c, p, bool:s)
 {
 	Debug_Print2("Command_SetPlayer called: %i, %i, %i", c, p, s);
-	if (_Command_IsValid(c) && VALID_PLAYERID(p))
+	if (_Command_IsValid(c) && !_Command_IsInline(c) && VALID_PLAYERID(p))
 	{
+		Debug_Print5("Command_SetPlayer: valid");
 		PA_Set(YSI_g_sCommands[c][E_COMMAND_USERS], p, s);
 	}
 }
@@ -949,9 +1492,106 @@ FOREIGN__ void:Command_SetPlayerNamed(const string:f[],p,bool:s);
 
 GLOBAL__ void:Command_SetPlayerNamed(const string:f[],p,bool:s)
 {
+	Debug_Print2("Command_SetPlayerNamed called: %s, %i, %i", f, p, s);
 	Command_SetPlayer(Command_Find(f), p, s);
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="cmd">The command name to find.</param>
+ * <param name="playerid">Whose permissions to check or <c>INVALID_PLAYER_ID</c>.</param>
+ * <returns>
+ *   The ID, or <c>ID | cellmin</c> for inline commands, or
+ *   <c>COMMAND_NOT_FOUND</c> if there isn't one.  Returns "true" commands if
+ *   possible, i.e. not alts if both exist.
+ * </returns>
+ *//*------------------------------------------------------------------------**/
+
+static stock Command_Find__(const string:cmd[], playerid)
+{
+	new
+		id,
+		candidate = COMMAND_NOT_FOUND;
+	if (YSI_g_sSystemSettings & e_COMM_FLAG_PUNYCODE)
+	{
+		new
+			encoded[64],
+			hash;
+		Puny_EncodeHash(encoded, cmd, hash, sizeof (encoded), '@'),
+		id = HashMap_GetWithHash(YSI_g_sCommandMap, encoded, hash);
+	}
+	else
+	{
+		id = HashMap_Get(YSI_g_sCommandMap, cmd);
+	}
+	Debug_Print4("Command_Find__ called: %s, %d, %d, %d", cmd, playerid, alts, id);
+	if (id == COMMAND_NOT_FOUND)
+	{
+		return COMMAND_NOT_FOUND;
+	}
+	// Loop through all the commands with this name and find the first one that
+	// this player can use.
+	do
+	{
+		switch (YSI_g_sCommands[id][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
+		{
+		case e_COMMAND_FLAG_DISABLED, e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INHERIT:
+		{
+			// These are only disabled for players, not if we test globally.
+			// `e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INHERIT` should be
+			// invalid, but don't fail this code just in case.
+			if (playerid == INVALID_PLAYER_ID)
+				candidate = id;
+		}
+		case e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
+		{
+			// These are only disabled for players, not if we test globally.
+			if (candidate == COMMAND_NOT_FOUND && playerid == INVALID_PLAYER_ID)
+				candidate = id;
+		}
+		case e_COMMAND_FLAG_ALT:
+		{
+			// Alternate command with its own permissions.
+			if (candidate == COMMAND_NOT_FOUND && (playerid == INVALID_PLAYER_ID || PA_Get(YSI_g_sCommands[id][E_COMMAND_USERS], playerid)))
+				candidate = id;
+		}
+		case e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT:
+		{
+			// Alternate command with inherited permissions.
+			if (candidate == COMMAND_NOT_FOUND && (playerid == INVALID_PLAYER_ID || PA_Get(YSI_g_sCommands[YSI_g_sCommands[id][E_COMMAND_POINTER] & ~cellmin][E_COMMAND_USERS], playerid))
+				candidate = id;
+		}
+		case e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_INHERIT, e_COMMAND_FLAG_PRI:
+		{
+			// No flags (or only `e_COMMAND_FLAG_INHERIT` on a base command).
+			if (playerid == INVALID_PLAYER_ID || PA_Get(YSI_g_sCommands[id][E_COMMAND_USERS], playerid))
+				candidate = id;
+		}
+		default:
+		{
+			// Anything inline.  Only matters for players.
+			if (candidate == COMMAND_NOT_FOUND && VALID_PLAYERID(playerid) && PA_Get(YSI_g_sCommands[id][E_COMMAND_USERS], playerid))
+			{
+				// This player has an inline in the list so find it.  Also there
+				// isn't a better option already.  We loop through all the per-
+				// player commands for this player and check if any of the point
+				// to the current ID as their parent.
+				FOREACH__ (candidate : YSI_g_sPlayerCommands<playerid>)
+				{
+					if (_:(YSI_g_sInlineCommands[candidate][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == id)
+					{
+						// Found it.
+						candidate = id;
+						break;
+					}
+				}
+			}
+		}
+		}
+	}
+	while ((id = YSI_g_sCommands[id][E_COMMAND_NEXT]) != COMMAND_NOT_FOUND);
+	return candidate;
+}
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
@@ -965,13 +1605,17 @@ FOREIGN__ Command_Find(const string:cmd[]);
 
 GLOBAL__ Command_Find(const string:cmd[])
 {
+	Debug_Print2("Command_Find called: %s", cmd);
 	static
-		sCmd[64] = "",
 		sHash = 0;
 
-	Puny_EncodeHash(sCmd, cmd, sHash, .delimiter = '@');
+	Puny_EncodeHash(YSI_g_sCommandName, cmd, sHash, .delimiter = '@');
+	Debug_Print5("Command_Find: hash %s, %d, %d", YSI_g_sCommandName, sHash, BernsteinHash(cmd));
+	//printf("Command_Find: hash 1, %d", BernsteinHash(cmd));
+	//printf("Command_Find: hash 2, %d", sHash);
 
-	return HashMap_GetWithHash(YSI_g_sCommandMap, sCmd, sHash);
+	Debug_Print5("Command_Find: return %d", HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, sHash));
+	return HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, sHash);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1011,7 +1655,7 @@ FOREIGN__ void:Command_Touch(command);
 
 GLOBAL__ void:Command_Touch(command)
 {
-	if (_Command_IsValid(command))
+	if (_Command_IsValid(command) && !_Command_IsInline(command))
 	{
 		NO_GROUPS<Command>(command)
 		{
@@ -1029,9 +1673,9 @@ FOREIGN__ void:Command_SetDeniedReturn(bool:set);
 GLOBAL__ void:Command_SetDeniedReturn(bool:set)
 {
 	if (set)
-		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS_DENIED;
+		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS:(1 << _:COMMAND_DENIED - 1);
 	else
-		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS_DENIED;
+		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS:(1 << _:COMMAND_DENIED - 1);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1042,7 +1686,7 @@ FOREIGN__ bool:Command_GetDeniedReturn();
 
 GLOBAL__ bool:Command_GetDeniedReturn()
 {
-	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS_DENIED);
+	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS:(1 << _:COMMAND_DENIED - 1));
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1054,9 +1698,9 @@ FOREIGN__ void:Command_SetIllegalReturn(bool:set);
 GLOBAL__ void:Command_SetIllegalReturn(bool:set)
 {
 	if (set)
-		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS_INVALID_INPUT;
+		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS:(1 << _:COMMAND_INVALID_INPUT - 1);
 	else
-		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS_INVALID_INPUT;
+		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS:(1 << _:COMMAND_INVALID_INPUT - 1);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1067,7 +1711,7 @@ FOREIGN__ bool:Command_GetIllegalReturn();
 
 GLOBAL__ bool:Command_GetIllegalReturn()
 {
-	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS_INVALID_INPUT);
+	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS:(1 << _:COMMAND_INVALID_INPUT - 1));
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1079,9 +1723,9 @@ FOREIGN__ void:Command_SetUnknownReturn(bool:set);
 GLOBAL__ void:Command_SetUnknownReturn(bool:set)
 {
 	if (set)
-		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS_NOT_FOUND;
+		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS:(1 << _:COMMAND_UNDEFINED - 1);
 	else
-		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS_NOT_FOUND;
+		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS:(1 << _:COMMAND_UNDEFINED - 1);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1092,7 +1736,7 @@ FOREIGN__ bool:Command_GetUnknownReturn();
 
 GLOBAL__ bool:Command_GetUnknownReturn()
 {
-	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS_NOT_FOUND);
+	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS:(1 << _:COMMAND_UNDEFINED - 1));
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1104,9 +1748,9 @@ FOREIGN__ void:Command_SetDisconnectReturn(bool:set);
 GLOBAL__ void:Command_SetDisconnectReturn(bool:set)
 {
 	if (set)
-		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS_NO_PLAYER;
+		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS:(1 << _:COMMAND_NO_PLAYER - 1);
 	else
-		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS_NO_PLAYER;
+		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS:(1 << _:COMMAND_NO_PLAYER - 1);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1117,7 +1761,7 @@ FOREIGN__ bool:Command_GetDisconnectReturn();
 
 GLOBAL__ bool:Command_GetDisconnectReturn()
 {
-	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS_NO_PLAYER);
+	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS:(1 << _:COMMAND_NO_PLAYER - 1));
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1129,9 +1773,9 @@ FOREIGN__ void:Command_SetSilentReturn(bool:set);
 GLOBAL__ void:Command_SetSilentReturn(bool:set)
 {
 	if (set)
-		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS_SILENT;
+		YSI_g_sSystemSettings |= e_SYSTEM_SETTINGS:(1 << _:COMMAND_SILENT - 1);
 	else
-		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS_SILENT;
+		YSI_g_sSystemSettings &= ~e_SYSTEM_SETTINGS:(1 << _:COMMAND_SILENT - 1);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1142,7 +1786,7 @@ FOREIGN__ bool:Command_GetSilentReturn();
 
 GLOBAL__ bool:Command_GetSilentReturn()
 {
-	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS_SILENT);
+	return bool:(YSI_g_sSystemSettings & e_SYSTEM_SETTINGS:(1 << _:COMMAND_SILENT - 1));
 }
 
 /*
@@ -1210,15 +1854,44 @@ FOREIGN__ void:Command_Remove(func);
 
 GLOBAL__ void:Command_Remove(func)
 {
-	// Annoyingly, this is actually better with "HashMap_RemoveKey", but then we
-	// don't have the ID for later use.
-	if (HashMap_RemoveValue(YSI_g_sCommandMap, func))
+	if (!_Command_IsValid(func) || _Command_IsInline(func))
 	{
-		#if defined Y_COMMANDS_USE_CHARS
-			Command_FlushPrefixes(_Command_GetPrefix(func)),
-		#endif
-		YSI_g_sCommands[func][E_COMMAND_POINTER] = -1;
+		return;
 	}
+	// Step one: Get the name as well.  We need both now.
+	new
+		name[64];
+	strcat(name, YSI_g_sCommands[func][E_COMMAND_NAME]);
+	new
+		hash = BernsteinHash(name),
+		start = HashMap_GetWithHash(YSI_g_sCommandMap, name, hash);
+	if (start == func)
+	{
+		// We have found the first one.
+		HashMap_RemoveKeyWithHash(YSI_g_sCommandMap, name, hash),
+		start = YSI_g_sCommands[func][E_COMMAND_NEXT];
+		if (start != COMMAND_NOT_FOUND)
+		{
+			// There are more.  We need to replace the pointer.
+			HashMap_AddWithHash(YSI_g_sCommandMap, name, hash, start);
+		}
+	}
+	else
+	{
+		while (start != COMMAND_NOT_FOUND && (hash = YSI_g_sCommands[start][E_COMMAND_NEXT]) != func)
+		{
+			start = hash;
+		}
+		if (start != COMMAND_NOT_FOUND)
+		{
+			YSI_g_sCommands[start][E_COMMAND_NEXT] = YSI_g_sCommands[func][E_COMMAND_NEXT];
+		}
+	}
+	#if defined Y_COMMANDS_USE_CHARS
+		Command_FlushPrefixes(_Command_GetPrefix(func)),
+	#endif
+	YSI_g_sCommands[func][E_COMMAND_POINTER] = -1,
+	YSI_g_sCommands[func][E_COMMAND_NAME] = '\0';
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1231,11 +1904,13 @@ GLOBAL__ void:Command_Remove(func)
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-FOREIGN__ void:Command_RemoveNamed(const string:func[]);
+FOREIGN__ void:Command_RemoveNamed(const string:name[]);
 
-GLOBAL__ void:Command_RemoveNamed(const string:func[])
+GLOBAL__ void:Command_RemoveNamed(const string:name[])
 {
-	Command_Remove(Command_Find(func));
+	new
+		func = Command_Find(name);
+	Command_Remove(func);
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1293,9 +1968,9 @@ GLOBAL__ YCMD_GetPlayerCommandCount(playerid)
 	{
 		if (_Command_IsActive(i))
 		{
-			switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+			switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 			{
-			case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT:
+			case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_INLINE:
 			{
 				// Primary command that isn't indirect, hidden, or disabled.
 				// Alternate command that isn't inherited, hidden, or disabled.
@@ -1438,9 +2113,9 @@ GLOBAL__ string:Command_GetNext(index, playerid)
 		{
 			if (_Command_IsActive(i))
 			{
-				switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+				switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 				{
-				case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT:
+				case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_INLINE:
 				{
 					// Primary command that isn't indirect, hidden, or disabled.
 					// Alternate command that isn't inherited, hidden, or disabled.
@@ -1546,9 +2221,9 @@ GLOBAL__ Iter_Func@PlayerCommand(start, pid)
 	{
 		if (_Command_IsActive(i))
 		{
-			switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+			switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 			{
-			case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT:
+			case e_COMMAND_FLAG_PRI, e_COMMAND_FLAG_ALT, e_COMMAND_FLAG_INLINE:
 			{
 				// Primary command that isn't indirect, hidden, or disabled.
 				// Alternate command that isn't inherited, hidden, or disabled.
@@ -1604,13 +2279,13 @@ GLOBAL__ Iter_Func@PlayerCommand(start, pid)
 	
 	GLOBAL__ Command_GetPrefix(c)
 	{
-		if (_Command_IsValid(c)) return _Command_GetPrefix(c);
+		if (_Command_IsValid(c) && !_Command_IsInline(c)) return _Command_GetPrefix(c);
 		return '/';
 	}
 	
-	FOREIGN__ Command_GetPrefixNamed(string:c[]);
+	FOREIGN__ Command_GetPrefixNamed(const string:c[]);
 	
-	GLOBAL__ Command_GetPrefixNamed(string:c[])
+	GLOBAL__ Command_GetPrefixNamed(const string:c[])
 	{
 		return Command_GetPrefix(Command_Find(c));
 	}
@@ -1695,7 +2370,7 @@ GLOBAL__ Iter_Func@PlayerCommand(start, pid)
 	{
 		if (Command_IsValidPrefix(prefix))
 		{
-			if (_Command_IsValid(c))
+			if (_Command_IsValid(c) && !_Command_IsInline(c))
 			{
 				// Set this command's prefix, and add the prefix to the list.
 				new
@@ -1721,9 +2396,9 @@ GLOBAL__ Iter_Func@PlayerCommand(start, pid)
  *//*------------------------------------------------------------------------**/
 
 #if defined Y_COMMANDS_USE_CHARS
-	FOREIGN__ bool:Command_SetPrefixNamed(string:c[], prefix);
+	FOREIGN__ bool:Command_SetPrefixNamed(const string:c[], prefix);
 	
-	GLOBAL__ bool:Command_SetPrefixNamed(string:c[], prefix)
+	GLOBAL__ bool:Command_SetPrefixNamed(const string:c[], prefix)
 	{
 		return Command_SetPrefix(Command_Find(c), prefix);
 	}
@@ -1761,7 +2436,9 @@ MASTER_HOOK__ OnPlayerText(playerid, text[])
 	if (_Command_IsPrefix(text[0]))
 	{
 		// The default return for OnPlayerText is opposite OnPlayerCommandText.
-		return !Command_ReProcess(playerid, text, 0);
+		new
+			e_COMMAND_ERRORS:sErr = Command_ReProcess__(playerid, text, 0);
+		return !Command_Error(playerid, sErr);
 	}
 	// Default return, do nothing.
 	return 1;
@@ -1798,7 +2475,9 @@ MASTER_HOOK__ OnPlayerCommandText(playerid, cmdtext[])
 	// An interesting side-effect of this code is that, in theory, hacks that
 	// submit commands without the "/" will still work.  Or you could hook
 	// "OnPlayerText" to call "Command_ReProcess" and still work as well.
-	return Command_ReProcess(playerid, cmdtext, 0);
+	new
+		e_COMMAND_ERRORS:sErr = Command_ReProcess__(playerid, cmdtext, 0);
+	return Command_Error(playerid, sErr);
 }
 
 MASTER_REHOOK__ OnPlayerCommandText(playerid, cmdtext[])
@@ -1817,7 +2496,8 @@ MASTER_REHOOK__ OnPlayerCommandText(playerid, cmdtext[])
 HOOK__ OnYSIInit()
 {
 	Debug_Print1("Command_OnYSIInit called");
-	YSI_g_sSystemSettings = e_SYSTEM_SETTINGS_OK | e_SYSTEM_SETTINGS_SILENT;
+	// Cache the pointer for faster checks later.
+	YSI_g_sSystemSettings = e_SYSTEM_SETTINGS:((1 << _:COMMAND_OK - 1) | (1 << _:COMMAND_SILENT - 1));
 	#if YSIM_NOT_CLIENT
 		#if defined Y_COMMANDS_USE_CHARS
 			Bit_SetAll(YSI_g_sPrefixes, false),
@@ -1851,11 +2531,19 @@ HOOK__ OnYSIInit()
 			if (buffer{id2} != tolower(buffer{id2})) Debug_Error("Commands must be in lower-case in your source code.");
 		}
 		// Add the command regardless.
-		Command_Add(buffer[1], ResolveJITAddress(AMX_Read(entryPublic)));
+		Command_Add__(buffer[1], ResolveJITAddress(AMX_Read(entryPublic)));
 		Debug_Print6("Command_OnYSIInit: Name %s", Unpack(buffer[1]));
 	}
 	if (funcidx(YSI_gscOPCR) != -1) Command_IncOPCR();
 	if (funcidx(YSI_gscOPCP) != -1) Command_IncOPCP();
+	if (!YSI_g_sCodSize)
+	{
+		AddressofResolve();
+		new
+			amxhdr[AMX_HDR];
+		GetAmxHeader(amxhdr);
+		YSI_g_sCodSize = amxhdr[AMX_HDR_DAT] - amxhdr[AMX_HDR_COD];
+	}
 }
 
 /*-------------------------------------------------------------------------*//**
@@ -1949,6 +2637,51 @@ HOOK__ OnScriptExit()
     88 88       88  "Y888 `"Ybbd8"' 88         88       88 `"8bbdP"Y8 88  
 
 */
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <remarks>
+ *   Call an inline command remotely, with a known type.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+public Command_FastCallS(Func:func<s>, string:params[], master)
+{
+	if (Master_ID() == master)
+	{
+		setproperty(8, YSIM_RETURN, @.func(params));
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <remarks>
+ *   Call an inline command remotely, with a known type.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+public Command_FastCallIS(playerid, string:params[], master, Func:func<is>)
+{
+	if (Master_ID() == master)
+	{
+		setproperty(8, YSIM_RETURN, @.func(playerid, params));
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <remarks>
+ *   Call an inline command remotely, with a known type.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+public Command_FastCallISI(playerid, string:params[], help, master, Func:func<isi>)
+{
+	if (Master_ID() == master)
+	{
+		setproperty(8, YSIM_RETURN, @.func(playerid, params, help));
+	}
+}
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
@@ -2069,6 +2802,371 @@ static stock Command_GetEmptySlot()
 
 /*-------------------------------------------------------------------------*//**
  * <library>y_commands</library>
+ * <param name="c">The command name to add.</param>
+ * <param name="p">The player this command is for.</param>
+ * <param name="i">The command's implementation.</param>
+ * <param name="f">Flags.</param>
+ * <returns>
+ *   The command's ID.
+ * </returns>
+ * <remarks>
+ *   Multiple commands for different players with the same name may return the
+ *   same ID.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FOREIGN__ Command_AddCallback__(const string:c[],p,i,f);
+
+GLOBAL__ Command_AddCallback__(const string:c[],p,i,f)
+{
+	Debug_Print2("Command_AddCallback called: %s, %d, %08x, %d", c, p, i, f);
+	new
+		hash,
+		id = Iter_Alloc(YSI_g_sPlayerCommands<p>);
+	if (id == INVALID_ITERATOR_SLOT)
+	{
+		Debug_Error("Could not add inline command to array.");
+		return COMMAND_NOT_FOUND;
+	}
+	
+	Puny_EncodeHash(YSI_g_sCommandName, c, hash, .delimiter = '@'),
+	strpack(YSI_g_sCommandName, YSI_g_sCommandName, cellmax);
+	Debug_Print5("Command_AddCallback: packed %s, %s", YSI_g_sCommandName, c);
+	Debug_Print5("Command_AddCallback: unpacked %s, %s", Unpack(YSI_g_sCommandName), Unpack(c));
+	
+	// Check if there is already an inline entry point for this command.
+	new
+		parent = HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash),
+		tmp = parent;
+	while (parent != COMMAND_NOT_FOUND)
+	{
+		if (YSI_g_sCommands[parent][E_COMMAND_FLAGS] & e_COMMAND_FLAG_INLINE)
+		{
+			break;
+		}
+		parent = YSI_g_sCommands[parent][E_COMMAND_NEXT];
+	}
+	if (parent == COMMAND_NOT_FOUND)
+	{
+		Debug_Print5("Command_AddCallback: New command name");
+		if ((parent = Command_GetEmptySlot()) == COMMAND_NOT_FOUND)
+		{
+			Debug_Error("Could not add inline command to array.");
+			return COMMAND_NOT_FOUND;
+		}
+		if ((YSI_g_sCommands[parent][E_COMMAND_NEXT] = tmp) != COMMAND_NOT_FOUND)
+		{
+			HashMap_RemoveKeyWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash);
+		}
+		if (strcmp(YSI_g_sCommandName, c))
+		{
+			// There is any punycode command.
+			YSI_g_sSystemSettings |= e_COMM_FLAG_PUNYCODE;
+		}
+		HashMap_AddWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, hash, parent),
+		// This sets the prefix even when that feature is disabled, because
+		// there's literally no overhead in doing so.
+		YSI_g_sCommands[parent][E_COMMAND_FLAGS] = e_COMMAND_FLAG_INLINE | (e_COMMAND_FLAGS:'/'),
+		// Save the new highest ID for loops later.
+		YSI_g_sHighestID = max(YSI_g_sHighestID, parent + 1),
+		PA_FastInit(YSI_g_sCommands[parent][E_COMMAND_USERS]);
+		NO_GROUPS<Command>(parent)
+		{
+			PA_Init(YSI_g_sCommands[parent][E_COMMAND_USERS], false);
+		}
+	}
+	
+	// Check if they already have an inline command with this name.
+	if (PA_Get(YSI_g_sCommands[parent][E_COMMAND_USERS], p))
+	{
+		Debug_Print5("Command_AddCallback: Has existing command");
+		FOREACH__ (tmp : YSI_g_sPlayerCommands<p>)
+		{
+			if ((YSI_g_sInlineCommands[tmp][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == (e_COMMAND_FLAGS:parent))
+			{
+				if (tmp != id)
+				{
+					// This is a different inline with the same parent, but comes
+					// before our new one.  Swap everything.  We haven't actually
+					// set the new command's data yet, so only need to move.
+					YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER] = YSI_g_sInlineCommands[tmp][E_COMMAND_INLINE_POINTER],
+					YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER] = YSI_g_sInlineCommands[tmp][E_COMMAND_INLINE_MASTER],
+					YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] = YSI_g_sInlineCommands[tmp][E_COMMAND_INLINE_FLAGS],
+					id = tmp;
+				}
+				break;
+			}
+		}
+	}
+	
+	Debug_Print5("Command_AddCallback: return %d, %d, %d, %d", parent, id, _:Master_Caller(), _:(f | parent));
+	return
+		PA_Set(YSI_g_sCommands[parent][E_COMMAND_USERS], p, true),
+		YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER] = i,
+		YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER] = Bit:Master_Caller(),
+		YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] = e_COMMAND_FLAGS:(f | parent),
+		parent;
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="cmd">The command name to add.</param>
+ * <param name="playerid">The player this command is for.</param>
+ * <param name="ptr">The command's implementation.</param>
+ * <param name="tag">The type of command call to use.</param>
+ * <returns>
+ *   The command's ID.
+ * </returns>
+ * <remarks>
+ *   Multiple commands for different players with the same name may return the
+ *   same ID.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Command_AddCallback(const string:cmd[], playerid, {F@_@s, F@_@is, F@_@isi}:ptr, tag = tagof (ptr))
+{
+	// This code is done locally because the inline may always reside in local
+	// assigned memory.
+	const
+		Func:tagS<s> = Func:0<s>,
+		Func:tagIS<is> = Func:0<is>,
+		Func:tagISI<isi> = Func:0<isi>;
+	// Apparently being using in `tagof` doesn't mark them as used (which is
+	// somewhat understandable, that's usually a mistake).
+	#pragma unused tagS, tagIS, tagISI
+	const
+		tagofS = tagof (tagS),
+		tagofIS = tagof (tagIS),
+		tagofISI = tagof (tagISI);
+	new
+		e_COMMAND_FLAGS:flags = e_COMMAND_FLAG_INLINE;
+	// The compiler really doesn't like `tagof` in `case`.
+	switch (tag)
+	{
+	case tagofS:
+		flags |= e_COMMAND_FLAG_ARGS_S;
+	case tagofIS:
+		flags |= e_COMMAND_FLAG_ARGS_IS;
+	case tagofISI:
+		flags |= e_COMMAND_FLAG_ARGS_ISI;
+	}
+	switch (Indirect_GetType(ptr))
+	{
+	case 1:
+		flags |= e_COMMAND_FLAG_TYPE_INL;
+	case 2:
+		flags |= e_COMMAND_FLAG_TYPE_STR;
+	case 3:
+		flags |= e_COMMAND_FLAG_TYPE_PTR;
+	}
+	if (Command_AddCallback__(cmd, playerid, _:ptr, _:flags) != COMMAND_NOT_FOUND)
+	{
+		Indirect_Claim(ptr);
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="c">The command name to remove.</param>
+ * <param name="p">The player this command is for.</param>
+ * <param name="o">The owning entity for EBC callbacks.</param>
+ * <param name="i">The inline itself.</param>
+ * <returns>
+ *   -
+ * </returns>
+ * <remarks>
+ *   We need to call in to the owning script for each candidate because the
+ *   allocated memory is there.  They will return whether this should be
+ *   removed and do the local memory deallocation.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+FOREIGN__ void:Command_RemoveCallback__(const string:c[],p,o,i);
+
+GLOBAL__ void:Command_RemoveCallback__(const string:c[],p,o,i)
+{
+	Debug_Print2("Command_RemoveCallback called: %s, %d, %d, %08x", c, p, o, i);
+	// TODO: I need to 
+	if (i != 0)
+	{
+		Debug_Print5("Command_RemoveCallback: Exact pointer");
+		// Given an exact pointer.  Don't worry about anything else, just
+		// remove exactly this one.
+		#if YSIM_HAS_MASTER
+			new
+				m = Master_Caller();
+		#endif
+			o = COMMAND_NOT_FOUND; // Unknown.
+			FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+			{
+				if (YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER] == i)
+				{
+						// Remove it.
+					#if YSIM_HAS_MASTER
+						// We need to check the origin script as well.  It
+						// is possible that two different ones give the same
+						// pointer in their own memory spaces.
+						if (YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER] == Bit:m)
+						{
+					#endif
+							o = YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT,
+							Iter_Remove(YSI_g_sPlayerCommands<p>, id);
+					#if YSIM_HAS_MASTER
+							TARGET_FUNC__ Command_TryRelease__<m>(cellmin, i);
+						}
+					#else
+							Indirect_Release(i);
+					#endif
+				}
+			}
+			if (o != COMMAND_NOT_FOUND)
+			{
+				FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+				{
+					if ((YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == e_COMMAND_FLAGS:o)
+					{
+						// Another command has the same parent.  Don't
+						// remove this player from the list.
+						return;
+					}
+				}
+				PA_Set(YSI_g_sCommands[o][E_COMMAND_USERS], p, false);
+			}
+	}
+	else if (IsNull(c))
+	{
+		Debug_Print5("Command_RemoveCallback: All for player");
+		// No command specified.  Remove everything for this player.
+		FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+		{
+			// Remove it.
+			#if YSIM_HAS_MASTER
+				TARGET_FUNC__ Command_TryRelease__<_:YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER]>(cellmin, YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]);
+			#else
+				Indirect_Release(YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]);
+			#endif
+				PA_Set(YSI_g_sCommands[YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT][E_COMMAND_USERS], p, false),
+				Iter_Remove(YSI_g_sPlayerCommands<p>, id);
+		}
+	}
+	else if (o == cellmin)
+	{
+		Debug_Print5("Command_RemoveCallback: All for command");
+		// No owner specified.  Remove all instances of this command.
+		Puny_EncodeHash(YSI_g_sCommandName, c, i, .delimiter = '@'),
+		i = HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, i);
+		while (i != COMMAND_NOT_FOUND)
+		{
+			if (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_INLINE)
+			{
+				break;
+			}
+			i = YSI_g_sCommands[i][E_COMMAND_NEXT];
+		}
+		if (i != COMMAND_NOT_FOUND && PA_Get(YSI_g_sCommands[i][E_COMMAND_USERS], p))
+		{
+			FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+			{
+				if ((YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == e_COMMAND_FLAGS:i)
+				{
+					// Remove it.
+					#if YSIM_HAS_MASTER
+						TARGET_FUNC__ Command_TryRelease__<_:YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER]>(cellmin, YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]);
+					#else
+						Indirect_Release(YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]);
+					#endif
+						Iter_Remove(YSI_g_sPlayerCommands<p>, id);
+				}
+			}
+			PA_Set(YSI_g_sCommands[i][E_COMMAND_USERS], p, false);
+		}
+	}
+	else
+	{
+		Debug_Print5("Command_RemoveCallback: Owned for command");
+		#if YSIM_HAS_MASTER
+			new
+				m = Master_Caller();
+		#endif
+			Puny_EncodeHash(YSI_g_sCommandName, c, i, .delimiter = '@'),
+			i = HashMap_GetWithHash(YSI_g_sCommandMap, YSI_g_sCommandName, i);
+			while (i != COMMAND_NOT_FOUND)
+			{
+				if (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_INLINE)
+				{
+					break;
+				}
+				i = YSI_g_sCommands[i][E_COMMAND_NEXT];
+			}
+			if (i != COMMAND_NOT_FOUND && PA_Get(YSI_g_sCommands[i][E_COMMAND_USERS], p))
+			{
+				FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+				{
+					#if YSIM_HAS_MASTER
+						// Only the originating script can remove a callback
+						// with a specified owner.
+						if ((YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == e_COMMAND_FLAGS:i && YSI_g_sInlineCommands[id][E_COMMAND_INLINE_MASTER] == Bit:m && TARGET_FUNC__ Command_TryRelease__<m>(o, YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]))
+						{
+							Iter_Remove(YSI_g_sPlayerCommands<p>, id);
+						}
+					#else
+						if ((YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == e_COMMAND_FLAGS:i && Indirect_GetOwner(YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]) == o)
+						{
+							Indirect_Release(YSI_g_sInlineCommands[id][E_COMMAND_INLINE_POINTER]),
+							Iter_Remove(YSI_g_sPlayerCommands<p>, id);
+						}
+					#endif
+				}
+				FOREACH__ (new id : YSI_g_sPlayerCommands<p>)
+				{
+					if ((YSI_g_sInlineCommands[id][E_COMMAND_INLINE_FLAGS] & e_COMMAND_FLAG_PARENT) == e_COMMAND_FLAGS:i)
+					{
+						// Another command has the same parent.  Don't
+						// remove this player from the list.
+						return;
+					}
+				}
+				PA_Set(YSI_g_sCommands[i][E_COMMAND_USERS], p, false);
+			}
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
+ * <param name="cmd">The command name to remove.</param>
+ * <param name="playerid">The player this command is for.</param>
+ * <param name="owner">The owning entity for EBC callbacks.</param>
+ * <returns>
+ *   -
+ * </returns>
+ * <remarks>
+ *   We need to call in to the owning script for each candidate because the
+ *   allocated memory is there.  They will return whether this should be
+ *   removed and do the local memory deallocation.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+stock Command_RemoveCallback(const string:cmd[], playerid, {_, F@_@s, F@_@is, F@_@isi}:owner = cellmin, tag = tagof (owner))
+{
+	if (tag == tagof (tag)) // tagof (_:)
+	{
+		// A specified owner, not a function.
+		// A pointer of `0` should in theory be a valid inline function, but
+		// points to the start of COD where the public return code is, so we
+		// assume it isn't a valid pointer.  Plus `owner` isn't `cellmin`.
+		Command_RemoveCallback__(cmd, playerid, owner, 0);
+	}
+	else
+	{
+		// Much simpler - we only need to find an exact matching function.  We
+		// use `cellmin` because that bit can never be set by an owner - it is
+		// reserved by `indirection.inc`.
+		Command_RemoveCallback__(cmd, playerid, cellmin, owner);
+	}
+}
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_commands</library>
  * <param name="cmd">The command name to add.</param>
  * <param name="ptr">The command's pointer.</param>
  * <returns>
@@ -2080,15 +3178,25 @@ static stock Command_GetEmptySlot()
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
-FOREIGN__ Command_Add(string:cmd[], ptr);
+FOREIGN__ Command_Add__(const string:cmd[], ptr);
 
-GLOBAL__ Command_Add(string:cmd[], ptr)
+GLOBAL__ Command_Add__(const string:cmd[], ptr)
 {
-	// The commands all need to be stored packed.
-	strpack(cmd, cmd, cellmax);
-	Debug_Print2("Command_Add: %s, %d", Unpack(cmd), ptr);
 	new
-		id = Command_Find(cmd);
+		packed[64] = "",
+		hash = 0,
+		id;
+	// The commands all need to be stored packed.
+	Debug_Print2("Command_Add: %s, %d", Unpack(cmd), ptr);
+	if (strfind(cmd, "@") == -1)
+	{
+		// There is any punycode command.
+		YSI_g_sSystemSettings |= e_COMM_FLAG_PUNYCODE;
+	}
+	// We don't need to use `Puny_EncodeHash` here since the input is already
+	// correctly encoded.
+	hash = BernsteinHash(cmd),
+	id = HashMap_GetWithHash(YSI_g_sCommandMap, cmd, hash);
 	Debug_Print5("Command_Add: found %d", id);
 	if (id == COMMAND_NOT_FOUND)
 	{
@@ -2100,12 +3208,15 @@ GLOBAL__ Command_Add(string:cmd[], ptr)
 		}
 		// This sets the prefix even when that feature is disabled, because
 		// there's literally no overhead in doing so.
-		YSI_g_sCommands[id][E_COMMAND_FLAGS] = e_COMMAND_FLAG_PRI | (e_COMMAND_FLAGS:'/'),
+		YSI_g_sCommands[id][E_COMMAND_FLAGS] = e_COMMAND_FLAG_PRI | (e_COMMAND_FLAGS:'/') | e_COMMAND_FLAG_NRM_ISI,
 		YSI_g_sHighestID = max(YSI_g_sHighestID, id + 1),
 		// Save the command's pointer.
 		YSI_g_sCommands[id][E_COMMAND_POINTER] = ptr,
+		// This should always be the first command of this name.
+		YSI_g_sCommands[id][E_COMMAND_NEXT] = COMMAND_NOT_FOUND,
 		// Add this command to the hash map (does the name too).
-		HashMap_Add(YSI_g_sCommandMap, cmd, id),
+		strpack(packed, cmd, cellmax),
+		HashMap_AddWithHash(YSI_g_sCommandMap, packed, hash, id),
 		// Add all players, or defer to y_groups.
 		PA_FastInit(YSI_g_sCommands[id][E_COMMAND_USERS]);
 		NO_GROUPS<Command>(id)
@@ -2134,15 +3245,17 @@ GLOBAL__ Command_Add(string:cmd[], ptr)
 
 static stock _Command_GetDisplay(funcid, playerid)
 {
+	Debug_Print4("_Command_GetDisplay called: %d %d", funcid, playerid);
 	YSI_g_sReturnBuffer[0] = '\0';
 	if (_Command_IsValid(funcid) && VALID_PLAYERID(playerid))
 	{
+		Debug_Print5("_Command_GetDisplay: valid");
 		new
 			slot = PA_Slot(playerid),
 			Bit:mask = PA_Mask(playerid);
 _Command_GetDisplay_retry:
 		// Check if they can use the original version.
-		switch (YSI_g_sCommands[funcid][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+		switch (YSI_g_sCommands[funcid][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 		{
 		case e_COMMAND_FLAG_ALT:
 		{
@@ -2183,6 +3296,15 @@ _Command_GetDisplay_retry:
 				return strunpack(YSI_g_sReturnBuffer, Command_Name(funcid));
 			}
 		}
+		case e_COMMAND_FLAG_INLINE:
+		{
+			// Allowed inline.
+			if (YSI_g_sCommands[funcid][E_COMMAND_USERS][slot] & mask)
+			{
+				return strunpack(YSI_g_sReturnBuffer, Command_Name(funcid));
+			}
+			return 0;
+		}
 		//case e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_HIDDEN                                                    ,
 		//     e_COMMAND_FLAG_PRI                         | e_COMMAND_FLAG_DISABLED                          ,
 		//     e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED                          :
@@ -2197,7 +3319,7 @@ _Command_GetDisplay_retry:
 		{
 			if (_Command_IsActive(i) && YSI_g_sCommands[i][E_COMMAND_POINTER] == playerid)
 			{
-				switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & e_COMMAND_FLAG_BITS)
+				switch (YSI_g_sCommands[i][E_COMMAND_FLAGS] & (e_COMMAND_FLAG_PRI | e_COMMAND_FLAG_ALT | e_COMMAND_FLAG_INHERIT | e_COMMAND_FLAG_HIDDEN | e_COMMAND_FLAG_DISABLED | e_COMMAND_FLAG_INLINE))
 				{
 				case e_COMMAND_FLAG_ALT:
 				{
@@ -2256,6 +3378,7 @@ native Command_Strcat_(dest[], src, len) = strcat;
  * <param name="group">An optional group that has exclusive use of this command.</param>
  * <param name="disabled">Not usable by default.</param>
  * <param name="hidden">Not listed in command loops.</param>
+ * <param name="id">Variable to return the ID in.</param>
  * <library>y_commands</library>
  * <returns>
  *   The name of a command for a single player.
@@ -2299,29 +3422,14 @@ native Command_Strcat_(dest[], src, len) = strcat;
  *//*------------------------------------------------------------------------**/
 
 #if defined Y_COMMANDS_USE_CHARS
-	stock Command_Decorator__(const __COMPILER_NAMED.string:func__[], const __COMPILER_NAMED.string:name[] = "", __COMPILER_NAMED.altcnt__ = 0, __COMPILER_NAMED.altptr__ = 0, __COMPILER_NAMED.prefix = '/', __COMPILER_NAMED.Group:group = Group:0, __COMPILER_NAMED.bool:disabled = false, __COMPILER_NAMED.bool:hidden = false)
+	stock Command_Decorator__(const __COMPILER_NAMED.string:func__[], const __COMPILER_NAMED.string:name[] = "", __COMPILER_NAMED.altcnt__ = 0, __COMPILER_NAMED.altptr__ = 0, __COMPILER_NAMED.prefix = '/', __COMPILER_NAMED.Group:group = Group:0, __COMPILER_NAMED.bool:disabled = false, __COMPILER_NAMED.bool:hidden = false, __COMPILER_NAMED.&id = 0)
 #else
-	stock Command_Decorator__(const __COMPILER_NAMED.string:func__[], const __COMPILER_NAMED.string:name[] = "", __COMPILER_NAMED.altcnt__ = 0, __COMPILER_NAMED.altptr__ = 0, __COMPILER_NAMED.Group:group = Group:0, __COMPILER_NAMED.bool:disabled = false, __COMPILER_NAMED.bool:hidden = false)
+	stock Command_Decorator__(const __COMPILER_NAMED.string:func__[], const __COMPILER_NAMED.string:name[] = "", __COMPILER_NAMED.altcnt__ = 0, __COMPILER_NAMED.altptr__ = 0, __COMPILER_NAMED.Group:group = Group:0, __COMPILER_NAMED.bool:disabled = false, __COMPILER_NAMED.bool:hidden = false, __COMPILER_NAMED.&id = 0)
 #endif
 {
 	state y_groups : y_groups_exists;
-	new cmd = Command_GetID(func__);
+	id = Command_GetID(func__);
 	new str[FUNCTION_LENGTH];
-	if (IsNull(name))
-	{
-		// Use `func__` for everything.
-	}
-	else
-	{
-		// `func__` remains the canonical internal name, but isn't what the
-		// user types.  This is simply implemented as another alternate name
-		// with the original name completely disabled for all players.
-		Command_AddAlt(cmd, name, true);
-		// Remove all players.
-		// TODO: Set the group default.
-		Command_SetDisabled(cmd, true),
-		Command_SetHidden(cmd, true);
-	}
 	while (altcnt__--)
 	{
 		// Add alternate versions of this command.
@@ -2329,31 +3437,36 @@ native Command_Strcat_(dest[], src, len) = strcat;
 		str[0] = '\0',
 		Command_Strcat_(str, altptr__ + AMX_Read(altptr__), FUNCTION_LENGTH),
 		altptr__ += cellbytes;
-		new aid = Command_AddAlt(cmd, str);
-		Command_SetDisabled(aid, disabled),
-		Command_SetHidden(aid, hidden);
-		if (group)
-		{
-			Command_DecoratorGroup__(aid, group);
-		}
+		new aid = Command_AddAlt(id, str);
+		// A simple `Command_SetDisabled(aid, disabled);` would seem to make more
+		// sense in these following lines, and be more readable, but this way is
+		// much faster in the enabled case.
+		if (disabled) Command_SetDisabled(aid, true);
+		if (hidden) Command_SetHidden(aid, true);
+		if (group) Command_DecoratorGroup__(aid, group);
 	}
-	if (group)
+	if (!IsNull(name))
 	{
-		// There's a group given, as the only users of this command.
-		Command_DecoratorGroup__(cmd, group);
+		// Remove all players.
+		// TODO: Set the group default.
+		Command_SetDisabled(id, true),
+		Command_SetHidden(id, true);
+		// `func__` remains the canonical internal name, but isn't what the
+		// user types.  This is simply implemented as another alternate name
+		// with the original name completely disabled for all players.
+		id = Command_AddAlt(id, name, true);
 	}
-	if (disabled)
-	{
-		// Disable this command initially.
-		Command_SetDisabled(cmd, true);
-	}
-	if (hidden)
-	{
-		// TODO:  We don't actually currently have a way to mark a command as
-		// hidden.  Things like `foreach (new c : Command(playerid))` will loop
-		// through all the commands the player can use, regardless of anything.
-		Command_SetHidden(cmd, true);
-	}
+	// There's a group given, as the only users of this command.
+	if (group) Command_DecoratorGroup__(id, group);
+	// Disable this command initially.
+	if (disabled) Command_SetDisabled(id, true);
+	// TODO:  We don't actually currently have a way to mark a command as
+	// hidden.  Things like `foreach (new c : Command(playerid))` will loop
+	// through all the commands the player can use, regardless of anything.
+	if (hidden) Command_SetHidden(id, true);
+	#if defined Y_COMMANDS_USE_CHARS
+		Command_SetPrefix(id, prefix);
+	#endif
 }
 
 // Un-inline the alt commands array.

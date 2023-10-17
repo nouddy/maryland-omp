@@ -27,7 +27,7 @@
  ? Bank system da dovrsis koji si ostavio na pola jer nemam predstavu sta si hteo da radis.
  */
 
-#define YSI_YES_HEAP_MALLOC
+#define YSI_NO_HEAP_MALLOC
 
 #define CGEN_MEMORY 80000
 
@@ -53,7 +53,7 @@
 #include <crashdetect>
 #include <colandreas>
 #include <marylandFix>
-#include <walking_styles>
+#include <walking_styles> //uso mi cale cek
 
 
 #define     c_server        "{8dc9f3}"
@@ -108,6 +108,8 @@ main()
 
 #define RELEASED(%0) \
 	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
+
+// necu sad
 
 public OnGameModeInit()
 {
@@ -536,6 +538,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/veh_ownership.pwn"					//* Vehicle ownership
 #include "backend/vehicle/servis.pwn"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 #include "backend/vehicle/brzinomer.pwn"						//* Brzinomer
+#include "backend/vehicle/car_dealership.pwn"					//* Vozila paljenje gasenje itd
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.pwn"
