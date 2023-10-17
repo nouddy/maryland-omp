@@ -1,3 +1,4 @@
-[10/16/2023 9:54:16 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/16/2023 9:54:16 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
-[10/16/2023 9:54:16 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/17/2023 1:57:04 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[10/17/2023 1:57:04 PM] [plugins/mysql] mysql_tquery: invalid connection handle '0'
+[10/17/2023 1:57:04 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/17/2023 1:57:11 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist

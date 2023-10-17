@@ -19,6 +19,8 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+#define VEHICLE_OWNER_NONE			(0)
+
 const MAX_CARS = 2000;
 const MAX_PLATE_LEN = 32;
 
@@ -42,6 +44,7 @@ enum e_VEHICLE_DATA {
 	vRegDate,
 	vOil,
 	vRange,
+	vRangeKM,
  
 	vFuel,
 	vFuelType,		
@@ -79,6 +82,7 @@ public LoadVehicleData() {
 			cache_get_value_name_int(i, "vRegDate", eVehicle[i][vRegDate]);
 			cache_get_value_name_int(i, "vOil", eVehicle[i][vOil]);
 			cache_get_value_name_int(i, "vRange", eVehicle[i][vRange]);
+			cache_get_value_name_int(i, "vRangeKM", eVehicle[i][vRangeKM]);
 
 			cache_get_value_name_int(i, "vFuel", eVehicle[i][vFuel]);
 			cache_get_value_name_int(i, "vFuelType", eVehicle[i][vFuelType]);
@@ -121,6 +125,8 @@ public CreateVehicleData(id) {
 
 hook OnGameModeInit() {
 
+	Iter_Init(iter_Vehicles);
+
 	mysql_tquery(SQL, "SELECT * FROM `vehicles`", "LoadVehicleData");
 
 	return 1;
@@ -159,6 +165,7 @@ YCMD:createvehicle(playerid, params[], help) {
 	eVehicle[id][vRegDate] = 0;
 	eVehicle[id][vOil] = 100;
 	eVehicle[id][vRange] = 0;
+	eVehicle[id][vRangeKM] = 0;
 
 	eVehicle[id][vFuel] = 100;
 	eVehicle[id][vFuelType] = FUEL_TYPE_PETROL;
@@ -167,8 +174,8 @@ YCMD:createvehicle(playerid, params[], help) {
 	new q[666];
 
 	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
-								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vFuel`, `vAlarm`) \
-									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '100', '0')",
+								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vAlarm`) \
+									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '0')",
 									eVehicle[id][vModel], eVehicle[id][vColor][0], eVehicle[id][vColor][1],
 									eVehicle[id][vPlate], eVehicle[id][vPos][0], eVehicle[id][vPos][1],
 									eVehicle[id][vPos][2], eVehicle[id][vPos][3]);

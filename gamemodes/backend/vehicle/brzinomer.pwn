@@ -62,6 +62,8 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
     new string[32];
     if( newstate == PLAYER_STATE_DRIVER ) {
 
+        printf("%d Vlasnik vozila - %d Vozilo ID", eVehicle[vehicle][vOwner], eVehicle[vehicle][vID]);
+
         if( !IsVehicleBicycle(vehicle)) {
 
             BuildSpeedTextDraws(playerid, true);
@@ -72,6 +74,10 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
             // Ime vozila
             format( string, sizeof( string ), "%s", ReturnVehicleModelName(GetVehicleModel(vehicle)));
             PlayerTextDrawSetString( playerid, speed_TD[playerid][8], string );
+
+            new miles[ 64 ];
+            format( miles, sizeof( miles ), "%dkm", eVehicle[vehicle][vRangeKM]);
+            PlayerTextDrawSetString(playerid, speed_TD[playerid][7], miles);
         }
     }
     else if( newstate == PLAYER_STATE_ONFOOT ) {
@@ -82,14 +88,48 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 
 ptask BrzinomerUpdate[1000](playerid)
 {
-    if( IsPlayerInAnyVehicle( playerid )&& GetPlayerState( playerid ) == PLAYER_STATE_DRIVER ) {
-        new vehicle = GetPlayerVehicleID( playerid );
+    if( IsPlayerInAnyVehicle( playerid ) && GetPlayerState( playerid ) == PLAYER_STATE_DRIVER ) {
+
+        new vehicle = GetPlayerVehicleID(playerid);
+
         if(!IsVehicleBicycle(vehicle)) 
-        { 
+        {
+            if(eVehicle[vehicle][vOwner] == VEHICLE_OWNER_NONE) {
+
+				eVehicle[ vehicle ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
+				if( eVehicle[ vehicle ][ vRange ] > 999 )
+				{
+					eVehicle[ vehicle ][ vRangeKM ]++;
+					eVehicle[ vehicle ][ vRange ] = 0;
+                    printf("%d - Nova kilometraza, %d - Novi metri", eVehicle[vehicle][vRangeKM], eVehicle[vehicle][vRange]);
+				}
+            }
+
+            if(eVehicle[vehicle][vOwner] == PlayerInfo[playerid][SQLID]) {
+                
+				eVehicle[ vehicle ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
+				if( eVehicle[ vehicle ][ vRange ] > 999 )
+				{
+					eVehicle[ vehicle ][ vRangeKM ]++;
+					eVehicle[ vehicle ][ vRange ] = 0;
+
+                    new query[350];
+
+                    format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[vehicle][vRange], eVehicle[vehicle][vRangeKM], eVehicle[vehicle][vOwner]);
+                    mysql_tquery(SQL, query);
+				}
+            }
+
             new string[ 32 ];
             format( string, sizeof( string ), "%d", GetSpeed( playerid ) );
             PlayerTextDrawSetString( playerid, speed_TD[playerid][2], string );
+
+            new miles[ 64 ];
+            format( miles, sizeof( miles ), "%dkm", eVehicle[vehicle][vRangeKM]);
+            PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
+
         }
+
     }    
     return 1;
 }
@@ -183,7 +223,7 @@ public BuildSpeedTextDraws(playerid, bool:show)
         PlayerTextDrawFont(playerid, speed_TD[playerid][6], TEXT_DRAW_FONT_2);
         PlayerTextDrawSetProportional(playerid, speed_TD[playerid][6], true);
 
-        speed_TD[playerid][7] = CreatePlayerTextDraw(playerid, 469.634399, 402.552215, "~w~0000500km");
+        speed_TD[playerid][7] = CreatePlayerTextDraw(playerid, 469.634399, 402.552215, "~w~0000000km");
         PlayerTextDrawLetterSize(playerid, speed_TD[playerid][7], 0.094663, 0.600296);
         PlayerTextDrawAlignment(playerid, speed_TD[playerid][7], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColour(playerid, speed_TD[playerid][7], -1061109505);

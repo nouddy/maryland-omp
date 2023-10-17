@@ -532,10 +532,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/documentation/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Vehicle
-#include "backend/vehicle/brzinomer.pwn"						//* Brzinomer
 #include "backend/vehicle/vehicle.pwn"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/veh_ownership.pwn"					//* Vehicle ownership
 #include "backend/vehicle/servis.pwn"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
+#include "backend/vehicle/brzinomer.pwn"						//* Brzinomer
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.pwn"

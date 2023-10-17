@@ -41,7 +41,7 @@ hook OnVehicleSpawn(vehicleid)
     }*/
     else 
     {
-        SetVehicleParamsEx(vehicleid, false, false, false, doors, bonnet, boot, objective);
+        SetVehicleParamsEx(vehicleid, VEHICLE_PARAMS_OFF, false, false, doors, bonnet, boot, objective);
     }
 
 	return 1;
