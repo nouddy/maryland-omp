@@ -23,33 +23,7 @@ new WinterPlayerSettings[MAX_PLAYERS][E_WINTER_PLAYER_SETTINGS];
 hook OnPlayerConnect(playerid)
 {
 	if (IsPlayerNPC(playerid)) return false;
-	RemoveBuildingForPlayer(playerid, 700, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 669, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 691, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 672, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 705, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 706, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 615, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 709, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 617, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 707, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 673, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 671, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 733, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 620, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 731, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 708, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 713, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 710, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 714, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 616, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 621, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 645, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 716, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 712, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 717, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 618, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 792, 0.0, 0.0, 0.0, 6000.0);
+	
 	Streamer_ToggleIdleUpdate(playerid, true);
 	SetSnowMapForPlayer(playerid, false);
 	new query[128];
@@ -158,7 +132,7 @@ stock SnowMap_AddGround(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, 
 	new
 		object = CreateDynamicObject(modelid, x + 0.05, y + 0.075, z + 0.1, rx, ry, rz, .streamdistance = d_stream + 300, .priority = 1);
 	for (new index; index < 16; index++) 
-		SetDynamicObjectMaterial(object, index, 17944, "lngblok_lae2", "white64bumpy", 0xE8E8E8FF);
+		SetDynamicObjectMaterial(object, index, 3922, "bistro", "mp_snow", 0x00000000);
 	new id = SnowMap_GetFreeIndex();
 	if (id != -1)
 		SnowMapObjects[id] = object;
@@ -893,8 +867,8 @@ stock SnowMap_Init() {
 	SnowMap_AddGround(4144, 1442.160, -1517.530, 12.453, 0.000, 0.000, 0.000, 169.4);
 	SnowMap_AddGround(4139, 1406.170, -1418.099, 12.789, 0.000, 0.000, 0.000, 150.7);
 	SnowMap_AddGround(4203, 1406.479, -1408.550, 10.046, 0.000, 0.000, 0.000, 141.6);
-	SnowMap_AddGround(4186, 1479.550, -1693.140, 19.578, 0.000, 0.000, 0.000, 157.4);
-	SnowMap_AddGround(3985, 1479.560, -1631.449, 12.078, 0.000, 0.000, 0.000, 156.5);
+	//SnowMap_AddGround(4186, 1479.550, -1693.140, 19.578, 0.000, 0.000, 0.000, 157.4); - Centar Maryland
+	//SnowMap_AddGround(3985, 1479.560, -1631.449, 12.078, 0.000, 0.000, 0.000, 156.5); - Centar Maryland
 	SnowMap_AddGround(3994, 1479.550, -1592.290, 12.453, 0.000, 0.000, 0.000, 160.8);
 	SnowMap_AddGround(4142, 1494.760, -1410.880, 12.453, 0.000, 0.000, 0.000, 164.1);
 	SnowMap_AddGround(4209, 1569.939, -1802.290, 12.320, 0.000, 0.000, 0.000, 160.8);
@@ -1140,7 +1114,7 @@ stock SnowMap_Init() {
 	SnowMap_AddGround(5994, 1259.229, -1400.410, 10.781, 0.000, 0.000, 0.000, 175.0);
 	SnowMap_AddGround(5995, 1130.050, -1400.699, 12.523, 0.000, 0.000, 0.000, 158.7);
 	SnowMap_AddGround(5815, 877.164, -1361.199, 12.453, 0.000, 0.000, 0.000, 138.5);
-	SnowMap_AddGround(5703, 998.156, -1220.819, 15.835, 0.000, 0.000, 0.000, 147.1);
+	//SnowMap_AddGround(5703, 998.156, -1220.819, 15.835, 0.000, 0.000, 0.000, 147.1); Banka ulica
 	SnowMap_AddGround(5755, 796.460, -1111.130, 23.187, 0.000, 0.000, 0.000, 155.9);
 	SnowMap_AddGround(5987, 913.718, -918.585, 49.343, 0.000, 0.000, 0.000, 171.7);
 	SnowMap_AddGround(5875, 1022.640, -1080.329, 27.257, 0.000, 0.000, 0.000, 159.0);
