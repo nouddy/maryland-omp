@@ -848,6 +848,12 @@ YCMD:catalogue(playerid, params[], help)
     if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
 
         Dealership_ShowInterface(playerid, false);
+
+        TogglePlayerControllable(playerid, true);
+        SetCameraBehindPlayer(playerid);
+        
+        DestroyVehicle(temp_Vehicle[playerid]);
+
     }
     else {
 
@@ -959,7 +965,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][34]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][35]);
 
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_ltblue, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 7, 7);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
@@ -974,7 +980,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][59]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][60]);
             
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_green, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 16, 16);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
@@ -988,7 +994,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][61]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][62]);
 
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_orange, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 6, 6);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
@@ -1002,7 +1008,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][63]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][64]);
 
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_yellow, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 142, 142);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
@@ -1016,7 +1022,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][65]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][66]);
 
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_purple, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 211, 211);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
@@ -1031,7 +1037,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][67]);
             PlayerTextDrawShow(playerid, dealership_TD[playerid][68]);
 
-            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_red, 1);
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], 3, 3);
 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 

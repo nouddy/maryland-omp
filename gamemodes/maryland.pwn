@@ -50,7 +50,7 @@
 #include <markerplus>
 #include <animated-textdraw>
 #include <DialogCenter>
-// #include <crashdetect>
+#include <crashdetect>
 #include <colandreas>
 #include <marylandFix>
 #include <walking_styles>
@@ -90,7 +90,7 @@ main()
     print("-                                     -");
 	print(" Founder : Ogy");
 	print(" Version : 1.0 - Maryland");
-	print(" Developer : Vostic & Ogy_ & Ferid Olsun ");
+	print(" Developer : Silent & DinoWETT");
 	print(" Credits : daddyDOT, realnaith");
 	print("-                                     -");
 	print("> Gamemode Starting...");
