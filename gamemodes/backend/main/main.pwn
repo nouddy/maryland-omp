@@ -106,6 +106,9 @@ new Float:RandomSpawnCords[ 3 ][ 3 ] = {
 forward SQL_AccountLoad(playerid);
 public SQL_AccountLoad(playerid)
 {
+	print("AGRONOM: SQL_AccountLoad function which is called in mysql_tquery");
+
+
     static rows;
 	cache_get_row_count(rows);
 	if(!rows)
@@ -220,6 +223,8 @@ hook OnPlayerConnect(playerid)
 	new query[120];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountLoad", "i", playerid);
+
+	print("DEVLOG: SQL_AccountLoad [func] * mysql_tquery");
 
 	return 1;
 }

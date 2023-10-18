@@ -22,6 +22,8 @@
 new TehnomediaActor;
 new mCustomsActors[9];
 
+static dealership_Actor;
+
 //! Task actor preload
 
 hook OnGameModeInit()
@@ -65,6 +67,10 @@ hook OnGameModeInit()
     mCustomsActors[8] = CreateActor(50, 1099.8085, -1251.3958, 15.8203, 181.3707);
     ApplyActorAnimation(mCustomsActors[8],"POLICE","plc_drgbst_02",4.000000,true, false, false, false,0);
 
+    dealership_Actor = CreateActor(12, 972.0587,-1702.8320,13.5727,82.0353);
+    ApplyActorAnimation(dealership_Actor,"GANGS","prtial_gngtlkA",4.000000,true, false, false, false,0);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 task resetActorPos[4000]() 
@@ -118,6 +124,11 @@ task resetActorPos[4000]()
     SetActorPos(mCustomsActors[8],1099.8085, -1251.3958, 15.8203);
     SetActorFacingAngle(mCustomsActors[8], 181.3707);
     ApplyActorAnimation(mCustomsActors[8],"POLICE","plc_drgbst_02",4.000000,true, false, false, false,0);
+
+    //? Auto Salon Cmrlj
+    SetActorPos(dealership_Actor, 972.0587,-1702.8320,13.5727);
+    SetActorFacingAngle(dealership_Actor, 82.0353);
+    ApplyActorAnimation(dealership_Actor,"GANGS","prtial_gngtlkA",4.000000,true, false, false, false,0);
 
     return 1;
 }

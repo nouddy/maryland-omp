@@ -37,7 +37,7 @@ udb_hash(const buf[]) {
     }
     return (s2 << 16) + s1;
 }
-formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
+stock formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
 {
     /*
         By Kar

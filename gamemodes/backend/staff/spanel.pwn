@@ -212,6 +212,11 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			}
 			case 3:
 			{
+
+				SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
+
+				/*
+
 				new idzz = Iter_Free(ATMs);
 				if(idzz == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mogu kreirati vise ATMs.");
 				ATMData[idzz][atmRX] = ATMData[idzz][atmRY] = 0.0;
@@ -243,6 +248,8 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 				mysql_tquery(SQL, query);
 
 				Iter_Add(ATMs, idzz);
+			*/
+
 			}
 			case 4:
 			{
@@ -368,6 +375,11 @@ Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
 		return 1;
 	if(response)
 	{
+
+		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
+
+		/*
+
 		new id = Iter_Free(Bankers);
 		if(id == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Dostigli ste limit bankera.");
 		new skin;
@@ -399,6 +411,7 @@ Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
 		mysql_tquery(SQL, query);
 		
 		Iter_Add(Bankers, id);
+		*/
 	}
 	return (true);
 }
@@ -607,6 +620,11 @@ Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
 
 	if(response)
 	{
+
+		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
+
+		/*
+
 		new id;
 		if(sscanf(inputtext, "i", id)) return 				
 				Dialog_Show(playerid, "obrisi_bankomat", DIALOG_STYLE_INPUT,
@@ -630,6 +648,9 @@ Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
 		new query[48];
 		mysql_format(SQL, query, sizeof(query), "DELETE FROM bank_atms WHERE ID=%d", id);
 		mysql_tquery(SQL, query);
+
+		*/
+
 	}
 	return (true);
 }
@@ -641,6 +662,11 @@ Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
 
 	if(response)
 	{
+
+		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
+
+		/*
+
 		new id;
 		if(sscanf(inputtext, "i", id)) return 				
 			Dialog_Show(playerid, "obrisi_bankera", DIALOG_STYLE_INPUT,
@@ -664,6 +690,9 @@ Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
 		new query[48];
 		mysql_format(SQL, query, sizeof(query), "DELETE FROM bankers WHERE ID=%d", id);
 		mysql_tquery(SQL, query);
+
+		*/
+
 	}
 	return (true);
 }

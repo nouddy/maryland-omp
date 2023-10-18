@@ -1,0 +1,59 @@
+
+/*
+*
+*  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+*  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+*  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+*  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+*  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+*  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+*  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+*
+*  @Author         Nodi A.K.A Ferid Olsun
+*  @Date           05th May 2023
+*  @Weburl         https://maryland-ogc.com
+*  @Project        maryland_project
+*
+*  @File           textdraw.stock
+*  @Module         stocks
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+enum {
+
+    e_OPTION_PROPORTIONAL = 1,
+    e_OPTION_SELECTABLE
+}
+
+hook OnGameModeInit() {
+
+    Debug_Print0("[ferid] - textdraw.stock * import - maryland.pwn");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock PlayerTextDraw_FixTextSize(const playerid, PlayerText:text) {
+
+    PlayerTextDrawTextSize(playerid, PlayerText:text, 300, 5);
+}
+
+stock PlayerTextDraw_SwitchMode(const playerid, PlayerText:text, const option, const bool: set) {
+
+    if(option == e_OPTION_PROPORTIONAL) {
+
+        PlayerTextDrawSetProportional(playerid, PlayerText:text, set);
+    }
+
+    else if(option -- e_OPTION_SELECTABLE) {
+
+        PlayerTextDrawSetSelectable(playerid, PlayerText:text, set);
+    }
+}
+
+stock PlayerTextDraw_UpdateModel(playerid, PlayerText:text, model) {
+
+    PlayerTextDrawHide(playerid, PlayerText:text);
+    PlayerTextDrawSetPreviewModel(playerid, PlayerText:text, model);
+    PlayerTextDrawShow(playerid, PlayerText:text);
+}

@@ -124,6 +124,8 @@ public OnPlayerLeaveDynamicArea(playerid, areaid)
 }
 public OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
+    /*
+
     if(Iter_Contains(ATMs, EditingATMID[playerid]))
     {
         if(response == EDIT_RESPONSE_FINAL)
@@ -165,5 +167,8 @@ public OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Flo
             EditingATMID[playerid] = -1;
         }
     }
+
+    */
+
     return (true);
 }

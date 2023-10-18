@@ -20,11 +20,11 @@
 
 
  /*
- * Kad se seti OGY imas sledeci zadatak.
- ? Da fixas ulaz i izlaz iz kuca jer si s ovim script za entrance kuce pojebao.
- ? Firme da zavrsis do kraja jer nisu zavrsene ne rade kako treba i da vratis ikonice za firme koje su bile.
- ? Da zavrsis vehicle ownership salone i ono sto sam ti pricao da treba da zavrsis.
- ? Bank system da dovrsis koji si ostavio na pola jer nemam predstavu sta si hteo da radis.
+	* Kad se seti OGY imas sledeci zadatak.
+	? Da fixas ulaz i izlaz iz kuca jer si s ovim script za entrance kuce pojebao.
+	? Firme da zavrsis do kraja jer nisu zavrsene ne rade kako treba i da vratis ikonice za firme koje su bile.
+	? Da zavrsis vehicle ownership salone i ono sto sam ti pricao da treba da zavrsis.
+	? Bank system da dovrsis koji si ostavio na pola jer nemam predstavu sta si hteo da radis.
  */
 
 #define YSI_NO_HEAP_MALLOC
@@ -50,10 +50,10 @@
 #include <markerplus>
 #include <animated-textdraw>
 #include <DialogCenter>
-#include <crashdetect>
+// #include <crashdetect>
 #include <colandreas>
 #include <marylandFix>
-#include <walking_styles> //uso mi cale cek
+#include <walking_styles>
 
 
 #define     c_server        "{8dc9f3}"
@@ -129,7 +129,7 @@ public OnGameModeInit()
 	ManualVehicleEngineAndLights();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
 	ShowNameTags(false);												//? Gasi Imena Health Bar i to iznad igraca
-	//SetNameTagDrawDistance(20.0);									//? Ovo se pali samo ako je show name tags na enable
+	
 	LimitGlobalChatRadius(20.0);
 	AllowInteriorWeapons(true);
 	EnableVehicleFriendlyFire();
@@ -550,8 +550,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/crypto/end/do-not-look.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Finances
-#include "backend/finance/bank_old.pwn"							//* Bankarstvo
-#include "backend/finance/bank_ogy.pwn"							//* Bankarstvo
+//#include "backend/finance/bank_old.pwn"							//* Bankarstvo
+//#include "backend/finance/bank_ogy.pwn"							//* Bankarstvo
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.pwn"
@@ -731,6 +731,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/stocks/db.pwn"								//* Database Stock Cuvanja
 #include "backend/stocks/vehicle.pwn"							//* Vehicle Stock Provere
 #include "backend/stocks/variable.pwn"							//* Variable stock rest
+#include "backend/stocks/textdraw.stock"						//* TextDraw Stocks
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/clickplayertd.pwn"						//* OnPlayerClickPlayerTextdraw

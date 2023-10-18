@@ -42,9 +42,9 @@ ResetujVariable(playerid)
     PlayerDocuments[playerid][pGunLicence] = 0;
     PlayerDocuments[playerid][pZivotnoOsiguranje] = -1;
     // Finance of player
-    PlayerFinance[playerid][pBankAccount] = 0;
-    PlayerFinance[playerid][pBankMoney] = 0;
-    PlayerFinance[playerid][pBankPin] = 0;
+    // PlayerFinance[playerid][pBankAccount] = 0;
+    // PlayerFinance[playerid][pBankMoney] = 0;
+    // PlayerFinance[playerid][pBankPin] = 0;
     // Safe zone
     InSafeZone[playerid] = false;
     //Customs Vrata itd

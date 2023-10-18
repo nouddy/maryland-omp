@@ -76,11 +76,11 @@
     },
     "password": "",
     "pawn": {
-        "legacy_plugins": ["crashdetect", "streamer", "mysql", "ColAndreas"],
+        "legacy_plugins": ["streamer", "mysql", "ColAndreas"],
         "main_scripts": [
             "maryland 1"
         ],
-        "side_scripts": []
+        "side_scripts": ["filterscripts/cameditor.amx"]
     },
     "rcon": {
         "allow_teleport": false,

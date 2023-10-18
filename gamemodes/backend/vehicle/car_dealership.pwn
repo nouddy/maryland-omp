@@ -17,6 +17,8 @@
 *  @Module         vehicle
 */
 
+
+
 #include <ysilib\YSI_Coding\y_hooks>
 
 new sz_MarylandModels[][] = {
@@ -72,23 +74,43 @@ static Text3D:dealership_Catalogue;
 
 static temp_Vehicle[MAX_PLAYERS] = INVALID_VEHICLE_ID;
 
+static dealership_Vehicle[5];
+static Text3D:dealership_VehicleLabel[5];
+
 hook OnGameModeInit()
 {
     print("backend/vehicles/car_dealership.pwn loaded");
 
     dealership_Catalogue = Create3DTextLabel("{DAA520}Car Dealership\n{FFFFFF}/catalogue", -1, 970.1960,-1702.6202,13.5727, 3.50, 0);
 
+    dealership_Vehicle[0] = AddStaticVehicle(562,961.5083,-1693.0735,13.7107,270.5628,0,0); // cmrlj1
+    dealership_Vehicle[1] = AddStaticVehicle(411,961.6058,-1712.5038,13.6952,269.5265,0,0); // cmrlj2
+    dealership_Vehicle[2] = AddStaticVehicle(402,973.5029,-1712.8794,13.6544,89.8228,0,0); // cmrlj3
+    dealership_Vehicle[3] = AddStaticVehicle(541,961.5135,-1721.8722,13.7301,269.7008,0,0); // cmrlj4
+    dealership_Vehicle[4] = AddStaticVehicle(522,974.2634,-1722.9049,13.7694,89.6863,0,0); // cmrlj5
+
+    dealership_VehicleLabel[0] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.5083, -1693.0735, 13.7107, 3.50, 0);
+    dealership_VehicleLabel[1] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.6058, -1712.5038, 13.6952, 3.50, 0);
+    dealership_VehicleLabel[2] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 973.5029, -1712.8794, 13.6544, 3.50, 0);
+    dealership_VehicleLabel[3] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.5135, -1721.8722, 13.7301, 3.50, 0);
+    dealership_VehicleLabel[4] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 974.2634, -1722.9049, 13.7694, 3.50, 0);
+
+    for(new i = 0; i < sizeof dealership_Vehicle; i++) {
+
+        Attach3DTextLabelToVehicle(dealership_VehicleLabel[i], dealership_Vehicle[i], 0.0, 0.0, 0.0);
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-stock Dealership_ShowInterface(playerid, const bool: option) {
+stock Dealership_ShowInterface(playerid, const bool:option) {
 
-    if(option) {
+    if(option == true) {
 
         for(new i = 0; i < 69; i++) {
 
-            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
             PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
+            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
 
             dealership_TD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
         }
@@ -334,7 +356,7 @@ stock Dealership_ShowInterface(playerid, const bool: option) {
         PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][23], 19177);
         PlayerTextDrawSetPreviewRot(playerid, dealership_TD[playerid][23], 0.000000, 270.000000, 0.000000, 1.000000);
 
-        dealership_TD[playerid][24] = CreatePlayerTextDraw(playerid, 604.333618, 350.948089, "Colour_ADJUSTMENT");
+        dealership_TD[playerid][24] = CreatePlayerTextDraw(playerid, 604.333618, 350.948089, "COLOR_ADJUSTMENT");
         PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][24], 0.124999, 0.571259);
         PlayerTextDrawTextSize(playerid, dealership_TD[playerid][24], 0.000000, -128.000000);
         PlayerTextDrawAlignment(playerid, dealership_TD[playerid][24], TEXT_DRAW_ALIGN_CENTRE);
@@ -344,6 +366,8 @@ stock Dealership_ShowInterface(playerid, const bool: option) {
         PlayerTextDrawFont(playerid, dealership_TD[playerid][24], TEXT_DRAW_FONT_2);
         PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][24], true);
         PlayerTextDrawSetSelectable(playerid, dealership_TD[playerid][24], true);
+
+        PlayerTextDraw_FixTextSize(playerid, dealership_TD[playerid][24]);
 
         dealership_TD[playerid][25] = CreatePlayerTextDraw(playerid, 574.666381, 360.418548, "LD_SPAC:white");
         PlayerTextDrawTextSize(playerid, dealership_TD[playerid][25], 58.000000, -1.000000);
@@ -370,6 +394,7 @@ stock Dealership_ShowInterface(playerid, const bool: option) {
         PlayerTextDrawAlignment(playerid, dealership_TD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, dealership_TD[playerid][27], -1);
         PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][27], 0);
+        PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][27], 0xFF999000);
         PlayerTextDrawFont(playerid, dealership_TD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][27], false);
         PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], 560);
@@ -417,7 +442,7 @@ stock Dealership_ShowInterface(playerid, const bool: option) {
         dealership_TD[playerid][32] = CreatePlayerTextDraw(playerid, 513.333251, 184.451812, "ld_beat:down");
         PlayerTextDrawTextSize(playerid, dealership_TD[playerid][32], 10.000000, 10.000000);
         PlayerTextDrawAlignment(playerid, dealership_TD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
-        PlayerTextDrawColour(playerid, dealership_TD[playerid][32], 892811775);
+        PlayerTextDrawColour(playerid, dealership_TD[playerid][32], -1);
         PlayerTextDrawSetShadow(playerid, dealership_TD[playerid][32], 0);
         PlayerTextDrawBackgroundColour(playerid, dealership_TD[playerid][32], 255);
         PlayerTextDrawFont(playerid, dealership_TD[playerid][32], TEXT_DRAW_FONT_SPRITE_DRAW);
@@ -772,20 +797,27 @@ stock Dealership_ShowInterface(playerid, const bool: option) {
         PlayerTextDrawFont(playerid, dealership_TD[playerid][68], TEXT_DRAW_FONT_2);
         PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][68], true);
 
+        PlayerTextDraw_FixTextSize(playerid, dealership_TD[playerid][44]);
+        PlayerTextDraw_FixTextSize(playerid, dealership_TD[playerid][45]);
+        PlayerTextDraw_FixTextSize(playerid, dealership_TD[playerid][46]);
+        PlayerTextDraw_FixTextSize(playerid, dealership_TD[playerid][47]);
+
         for(new i = 0; i < 69; i++) {
 
             PlayerTextDrawShow(playerid, dealership_TD[playerid][i]);
         }
-        SelectTextDraw(playerid, 0x003333FF);
+        SelectTextDraw(playerid, 892811775);
 
         dealership_UI[playerid] = true;
+
+
     }
     else {
 
         for(new i = 0; i < 69; i++) {
 
-            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
             PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
+            PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
 
             dealership_TD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
         }
@@ -812,12 +844,30 @@ YCMD:catalogue(playerid, params[], help)
 
     if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
         return SendClientMessageEx(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
+    
+    if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
 
-    if(dealership_UI[playerid])
-        return SendClientMessageEx(playerid, x_server, "maryland \187;"c_white" Vec pregledate katalog!");
+        Dealership_ShowInterface(playerid, false);
+    }
+    else {
 
-    Dealership_ShowInterface(playerid, true);
+        Dealership_ShowInterface(playerid, true);
 
+        if(!IsValidVehicle(temp_Vehicle[playerid])) {
+
+            InterpolateCameraPos(playerid, 965.256958, -1704.411865, 15.187615, 964.599182, -1695.346191, 15.187615, 3500);
+            InterpolateCameraLookAt(playerid, 970.190490, -1703.935180, 14.529376, 969.156066, -1693.405761, 14.502281, 3500);
+
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[0][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+        }
+    }
+
+    return 1;
+}
+
+YCMD:forcehide(playerid, params[], help) 
+{
+    Dealership_ShowInterface(playerid, false);
     return 1;
 }
 
@@ -825,7 +875,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
     if(playertextid == dealership_TD[playerid][31]) {
 
-        // Model Gore
+        // Model Up
 
         e_CHOSEN_MODEL[playerid]++;
 
@@ -834,26 +884,162 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
             e_CHOSEN_MODEL[playerid] = 0;
         }
 
-        PlayerTextDrawHide(playerid, dealership_TD[playerid][27]);
-        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
-        PlayerTextDrawShow(playerid, dealership_TD[playerid][27]);
+        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+
+        new tmp_string[64];
+        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
+        PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
+
+        if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+            DestroyVehicle(temp_Vehicle[playerid]);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+        }
     }
 
     else if(playertextid == dealership_TD[playerid][32]) {
 
-        // Model Dole
+        // Model Down
 
         e_CHOSEN_MODEL[playerid]--;
 
         if(e_CHOSEN_MODEL[playerid] < 0 ) {
 
-            e_CHOSEN_MODEL[playerid] = 0;
+            e_CHOSEN_MODEL[playerid] = 31;
         }
 
-        PlayerTextDrawHide(playerid, dealership_TD[playerid][27]);
-        PlayerTextDrawSetPreviewModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
-        PlayerTextDrawShow(playerid, dealership_TD[playerid][27]);
+        if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+            DestroyVehicle(temp_Vehicle[playerid]);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+        }
+
+        new tmp_string[64];
+        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
+        PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
+
+        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+    }
+
+    else if(playertextid == dealership_TD[playerid][24]) {
+
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][34]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][35]);
+
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][59]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][60]);
+        
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][61]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][62]);
+        
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][63]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][64]);
+        
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][65]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][66]);
+        
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][67]);
+        PlayerTextDrawHide(playerid, dealership_TD[playerid][68]);
+
+        Dialog_Show(playerid, "dealership_Color", DIALOG_STYLE_LIST, ""c_server"[?] >> "c_white"Izaberi Boju", "- Plava\n- Zelena\n- Narandzasta\n- Zuta\n- Ljubicasta\n- Crvena", "Odaberi", "Odustani");
     }
 
     return 1;
+}
+
+Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    switch(listitem) {
+
+        case 0: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][34]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][35]);
+
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_ltblue, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 7, 7, 1500);
+            }
+
+        }
+
+        case 1: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][59]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][60]);
+            
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_green, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 16, 16, 1500);
+            }   
+
+        }
+        case 2: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][61]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][62]);
+
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_orange, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 6, 6, 1500);
+            } 
+            
+        }
+        case 3: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][63]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][64]);
+
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_yellow, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 142, 142, 1500);
+            } 
+            
+        }
+        case 4: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][65]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][66]);
+
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_purple, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 211, 211, 1500);
+            } 
+            
+        }
+
+        case 5: {
+
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][67]);
+            PlayerTextDrawShow(playerid, dealership_TD[playerid][68]);
+
+            PlayerTextDrawSetPreviewVehicleColours(playerid, dealership_TD[playerid][27], x_red, 1);
+
+            if(IsValidVehicle(temp_Vehicle[playerid])) {
+
+                DestroyVehicle(temp_Vehicle[playerid]);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+            } 
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
