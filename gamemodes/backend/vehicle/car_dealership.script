@@ -110,6 +110,7 @@ agronom Dealership_StreamVehicle(id, playerid) {
     TogglePlayerControllable(playerid, true);
     SetCameraBehindPlayer(playerid);
     Dealership_ShowInterface(playerid, false);
+    DestroyVehicle(temp_Vehicle[playerid]);
 
 	Iter_Add(iter_Vehicles, id);
 }
