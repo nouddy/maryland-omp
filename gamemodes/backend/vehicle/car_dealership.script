@@ -21,6 +21,9 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+#define DEALERSHIP_PLATE_PRICE          (300)
+
+
 new sz_MarylandModels[] = {
 
     // Low Class Vehicles
@@ -68,7 +71,13 @@ new sz_MarylandModels[] = {
 
 new PlayerText:dealership_TD[MAX_PLAYERS][69],
     bool:dealership_UI[MAX_PLAYERS],
-    e_CHOSEN_MODEL[MAX_PLAYERS];
+    e_CHOSEN_MODEL[MAX_PLAYERS],
+    e_CHOSEN_COLOUR[MAX_PLAYERS],
+    bool:e_CHOSEN_ALARM[MAX_PLAYERS],
+    bool:e_CHOSEN_XENON[MAX_PLAYERS],
+    bool:e_CUSTOM_PLATE[MAX_PLAYERS],
+    bool:e_CHOSEN_NITRO[MAX_PLAYERS]
+;
 
 static Text3D:dealership_Catalogue;
 

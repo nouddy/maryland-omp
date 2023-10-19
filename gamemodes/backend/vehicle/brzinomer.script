@@ -30,6 +30,19 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnGameModeExit() {
+
+    foreach(new v : iter_Vehicles) {
+
+        new query[120];
+
+        format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vID` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vID]);
+        mysql_tquery(SQL, query);
+    }
+
+    return 1;
+}
+
 hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 {
     new vehicle = GetPlayerVehicleID( playerid );
@@ -67,42 +80,24 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 
 ptask BrzinomerUpdate[1000](playerid)
 {
-    if( IsPlayerInAnyVehicle( playerid ) && GetPlayerState( playerid ) == PLAYER_STATE_DRIVER ) {
+    if( IsPlayerInAnyVehicle( playerid ) && GetPlayerState( playerid ) == PLAYER_STATE_DRIVER ) 
+    {
 
         new vehicle = GetPlayerVehicleID(playerid);
 
-        if(!IsVehicleBicycle(vehicle)) 
-        {
-            if(eVehicle[vehicle][vOwner] == VEHICLE_OWNER_NONE) {
-
-				eVehicle[ vehicle ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
-				if( eVehicle[ vehicle ][ vRange ] > 999 )
-				{
-					eVehicle[ vehicle ][ vRangeKM ]++;
-					eVehicle[ vehicle ][ vRange ] = 0;
-                    printf("%d - Nova kilometraza, %d - Novi metri", eVehicle[vehicle][vRangeKM], eVehicle[vehicle][vRange]);
-				}
-                new fuel[ 64 ];
-                format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(vehicle), eVehicle[vehicle][vFuel]);
-                PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
-            }
+        if(!IsVehicleBicycle(vehicle)) { 
 
             foreach(new v : iter_Vehicles) 
             {
-
                 if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) 
                 {
+                    if(!IsPlayerInVehicle(playerid, pvVehicle[v])) return false;
                     
                     eVehicle[ v ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
                     if( eVehicle[ v ][ vRange ] > 999 )
                     {
                         eVehicle[ v ][ vRangeKM ]++;
                         eVehicle[ v ][ vRange ] = 0;
-
-                        new query[350];
-
-                        format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vOwner]);
-                        mysql_tquery(SQL, query);
                     }
                     new miles[ 64 ];
                     format( miles, sizeof( miles ), "%dkm", eVehicle[v][vRangeKM]);
@@ -111,14 +106,29 @@ ptask BrzinomerUpdate[1000](playerid)
                     format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(v), eVehicle[v][vFuel]);
                     PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
                 }
-            }
 
+                else if(eVehicle[v][vOwner] == VEHICLE_OWNER_NONE) {
+
+                    eVehicle[ v ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
+                    if( eVehicle[ v ][ vRange ] > 999 )
+                    {
+                        eVehicle[ v ][ vRangeKM ]++;
+                        eVehicle[ v ][ vRange ] = 0;
+                        printf("%d - Nova kilometraza, %d - Novi metri", eVehicle[v][vRangeKM], eVehicle[v][vRange]);
+                    }
+                    new fuel[ 64 ];
+                    format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(v), eVehicle[v][vFuel]);
+                    PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
+
+                    new miles[ 64 ];
+                    format( miles, sizeof( miles ), "%dkm", eVehicle[v][vRangeKM]);
+                    PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
+                }
+            }
             new string[ 32 ];
             format( string, sizeof( string ), "%d", GetSpeed( playerid ) );
             PlayerTextDrawSetString( playerid, speed_TD[playerid][2], string );
-
         }
-
     }    
     return 1;
 }
@@ -129,6 +139,39 @@ hook OnPlayerDisconnect(playerid, reason)
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
+
+    foreach(new v : iter_Vehicles) {
+
+        if(vehicleid == pvVehicle[v]) {
+
+            if(eVehicle[v][vOwner] != PlayerInfo[playerid][SQLID]) {
+
+                ClearAnimations(playerid);
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate kljuceve ovog vozila!");
+            }   
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerExitVehicle(playerid, vehicleid) {
+
+    foreach(new v : iter_Vehicles) 
+    {
+
+        if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) 
+        {
+            new query[350];
+
+            format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vOwner]);
+            mysql_tquery(SQL, query);
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -277,3 +320,8 @@ stock GetSpeed(playerid) {
     ST[ 3 ] = floatsqroot(floatpower(floatabs(ST[ 0 ]), 2.0) + floatpower(floatabs(ST[ 1 ]), 2.0) + floatpower(floatabs(ST[ 2 ]), 2.0)) * 178.8617875;
     return floatround( ST[ 3 ] );
 }
+
+/*
+F
+
+*/
