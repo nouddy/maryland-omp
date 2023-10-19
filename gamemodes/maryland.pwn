@@ -13,7 +13,7 @@
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
  *
- *  @File           maryland.pwn
+ *  @File           maryland.core
  *  @Module         main
  */
 
@@ -510,231 +510,227 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Includes List
 
 //* Bitno jako da bude medju prvima
-#include "backend/database/db-config.pwn" 
-#include "backend/assets/globalstuff.pwn"
+#include "backend/database/db-config.script" 
+#include "backend/assets/globalstuff.asset"
 
 
 //-------------------------------------------------------------------------------------------------------- Assets
-#include "backend/assets/proxdetect.pwn" 						//* ProxDetector
-#include "backend/assets/anims.pwn"							//* Anim preload
+#include "backend/assets/proxdetect.asset" 						//* ProxDetector
+#include "backend/assets/anims.asset"							//* Anim preload
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/assets/end/do-not-look.pwn" 
+#include "backend/assets/end/do-not-look.temp" 
 
 //-------------------------------------------------------------------------------------------------------- Main
-#include "backend/main/main.pwn"								//* Log/Reg
+#include "backend/main/main.core"								//* Log/Reg
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/main/end/do-not-look.pwn"
+#include "backend/main/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Documentation
-#include "backend/documentation/playerdocuments.pwn"			//* Dokumenta
+#include "backend/documentation/playerdocuments.script"			//* Dokumenta
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/documentation/end/do-not-look.pwn"
+#include "backend/documentation/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Vehicle
-#include "backend/vehicle/vehicle.pwn"							//* Vozila paljenje gasenje itd
-#include "backend/vehicle/veh_ownership.pwn"					//* Vehicle ownership
-#include "backend/vehicle/servis.pwn"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
-#include "backend/vehicle/brzinomer.pwn"						//* Brzinomer
-#include "backend/vehicle/car_dealership.pwn"					//* Vozila paljenje gasenje itd
+#include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
+#include "backend/vehicle/veh_ownership.script"						//* Vehicle ownership
+#include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
+#include "backend/vehicle/brzinomer.script"							//* Brzinomer
+#include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/vehicle/end/do-not-look.pwn"
+#include "backend/vehicle/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Crypto
-#include "backend/crypto/crypto_ogy.pwn"						//* Crypto
+#include "backend/crypto/crypto_ogy.script"						//* Crypto
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/crypto/end/do-not-look.pwn"
+#include "backend/crypto/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Finances
-//#include "backend/finance/bank_old.pwn"							//* Bankarstvo
-//#include "backend/finance/bank_ogy.pwn"							//* Bankarstvo
+//#include "backend/finance/bank_old.script"							//* Bankarstvo
+//#include "backend/finance/bank_ogy.script"							//* Bankarstvo
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/finance/end/do-not-look.pwn"
+#include "backend/finance/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Property
-#include "backend/property/houses.pwn"							//* Imovina
+#include "backend/property/houses.script"							//* Imovina
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/property/end/do-not-look.pwn"
+#include "backend/property/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Business
-#include "backend/business/biz.pwn"								//* Firme tek zapocete soo
+#include "backend/business/biz.script"								//* Firme tek zapocete soo
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/business/end/do-not-look.pwn"
+#include "backend/business/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Benches
-#include "backend/benches/klupe_ogy.pwn"						//* Klupe
+#include "backend/benches/klupe_ogy.script"						//* Klupe
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/benches/end/do-not-look.pwn"
+#include "backend/benches/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Attachments
-#include "backend/attachments/attach.pwn"						//* Attach
+#include "backend/attachments/attach.script"						//* Attach
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/attachments/end/do-not-look.pwn"
+#include "backend/attachments/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Factions Section
 
 //-------------------------------------------------------------------------------------------------------- State Factions
-#include "backend/factions/state/faction_police.pwn"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
-#include "backend/factions/illegal/bunker.pwn"					//* Bunker
+#include "backend/factions/illegal/bunker.script"					//* Bunker
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/factions/end/do-not-look.pwn"
+#include "backend/factions/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Safe Zone
-#include "backend/safezone/safezone.pwn"
+#include "backend/safezone/safezone.script"
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/safezone/end/do-not-look.pwn"
+#include "backend/safezone/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Messages
 
-#include "backend/messages/chat.pwn"							//* Chat
-#include "backend/messages/random_poruke.pwn"					//* Random poruke
-#include "backend/messages/notifikacije.pwn"					//* Notifikacije
-#include "backend/messages/custom_tags.pwn"						//* Custom tags iznad glave bez health bara i armora
+#include "backend/messages/chat.script"							//* Chat
+#include "backend/messages/random_poruke.script"					//* Random poruke
+#include "backend/messages/notifikacije.script"					//* Notifikacije
+#include "backend/messages/custom_tags.script"						//* Custom tags iznad glave bez health bara i armora
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/messages/end/do-not-look.pwn"
+#include "backend/messages/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- All NPCs, Actors
-#include "backend/npcs/actor.pwn"								//* Aktori bebo
+#include "backend/npcs/actor.script"								//* Aktori bebo
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/npcs/end/do-not-look.pwn"
+#include "backend/npcs/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Tehnomedia
-#include "backend/tehnomedia/tehnomedia.pwn"					//* Tehnomedia prodavnica
-#include "backend/tehnomedia/drone.pwn"							//* Drone
-#include "backend/tehnomedia/navigation.pwn"					//* Navigacija
-#include "backend/tehnomedia/playerlocation.pwn"				//* Lokacija
+#include "backend/tehnomedia/tehnomedia.script"						//* Tehnomedia prodavnica
+#include "backend/tehnomedia/drone.script"							//* Drone
+#include "backend/tehnomedia/navigation.script"						//* Navigacija
+#include "backend/tehnomedia/playerlocation.script"					//* Lokacija
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/tehnomedia/end/do-not-look.pwn"
+#include "backend/tehnomedia/end/do-not-look.temp"
 
 
 //-------------------------------------------------------------------------------------------------------- Metros
 
-#include "backend/metros/metros.pwn"							//* Metro System
+#include "backend/metros/metros.script"							//* Metro System
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/metros/end/do-not-look.pwn"
+#include "backend/metros/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Trashs
 
-#include "backend/trash/trash.pwn"							//* Kontejner system
+#include "backend/trash/trash.script"							//* Kontejner system
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/trash/end/do-not-look.pwn"
+#include "backend/trash/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/labels.pwn"							//* Labeli
-#include "backend/assets/custom_markers.pwn"					//* Markeri
+#include "backend/assets/labels.asset"							//* Labeli
+#include "backend/assets/custom_markers.asset"					//* Markeri
 
 //-------------------------------------------------------------------------------------------------------- Crossover > Koristi se kad je 31 characters hook truncated
-#include "backend/crossover/DynamicArea.pwn"					//* Dynamic Area Crossover
+#include "backend/crossover/DynamicArea.script"					//* Dynamic Area Crossover
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/crossover/end/do-not-look.pwn"
-
-//-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/entrance/end/do-not-look.pwn"
+#include "backend/crossover/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Frontend
 
 //-------------------------------------------------------------------------------------------------------- Textdraws
-#include "frontend/textdraws/main.pwn"							//* Glavni tdovi
-#include "frontend/textdraws/login.pwn"							//* Login tdovi
-#include "frontend/textdraws/register.pwn"						//* Register tdovi
-#include "frontend/textdraws/izborskina.pwn"					//* Izborskina tdovi na registeru
+#include "frontend/textdraws/main.tde"							//* Glavni tdovi
+#include "frontend/textdraws/login.tde"							//* Login tdovi
+#include "frontend/textdraws/register.tde"						//* Register tdovi
+#include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
 
 //-------------------------------------------------------------------------------------------------------- Exteriors
-#include "frontend/exterior/starbucks.pwn"						//* Starbucks map 
-#include "frontend/exterior/opstina.pwn"						//* Opstina map
-#include "frontend/exterior/glavnaulica.pwn"					//* Glavna ulica map
-#include "frontend/exterior/crnotrziste.pwn"					//* Crno trziste map
-#include "frontend/exterior/tehnomedia.pwn"						//* Tehnomedia map Ogy
-#include "frontend/exterior/spawn.pwn"							//* Spawn Mapa
-#include "frontend/exterior/izborskina.pwn"						//* Izbor skina mapa
-#include "frontend/exterior/glenpark.pwn"						//* Glen park map
-#include "frontend/exterior/maryland-pd.pwn"					//* MLPD Mapa Ext
-#include "frontend/exterior/bolnica-ext.pwn"					//* Bolnica ext Mapa
-#include "frontend/exterior/hotel-ext.pwn"						//* Hotel Mapa
-#include "frontend/exterior/customs.pwn"						//* Customs Mapa
-#include "frontend/exterior/shopping-center.pwn"				//* Shopping Center Mapa
-#include "frontend/exterior/bizcent-ext.pwn"					//* Shopping Center Mapa
-#include "frontend/exterior/centar_park.pwn"					//* Center Park Mapa
-#include "frontend/exterior/binance_ext.pwn"					//* Binance Exterior Mapa
-#include "frontend/exterior/poligon-as.pwn"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
-#include "frontend/exterior/croswellas.pwn"						//* Auto Salon Croswell
-#include "frontend/exterior/birorada.pwn"						//* Biro Rada
-#include "frontend/exterior/italy-granica.pwn"					//* Granica Maryland-Italy
-#include "frontend/exterior/ml-gym.pwn"							//* ML Gym Map
-#include "frontend/exterior/ls-ukrasi.pwn"						//* ML Ukrasi po gradu
-#include "frontend/exterior/ml-busvozac.pwn"					//* ML Bus Station
-#include "frontend/exterior/ml-zlatara.pwn"						//* ML Zlatara
-#include "frontend/exterior/gov_ext.pwn"						//* Goverment
-#include "frontend/exterior/plaza_map.pwn"						//* Plaza
-#include "frontend/exterior/pizzeria.pwn"						//* Pizzeria
-#include "frontend/exterior/driving_school.pwn"					//* Driving_School
-#include "frontend/exterior/vinewood_map.pwn"					//* VineWood
-#include "frontend/exterior/bank_ml.pwn"						//* Banka Maryland
+#include "frontend/exterior/starbucks.map"						//* Starbucks map 
+#include "frontend/exterior/opstina.map"						//* Opstina map
+#include "frontend/exterior/glavnaulica.map"					//* Glavna ulica map
+#include "frontend/exterior/crnotrziste.map"					//* Crno trziste map
+#include "frontend/exterior/tehnomedia.map"						//* Tehnomedia map Ogy
+#include "frontend/exterior/spawn.map"							//* Spawn Mapa
+#include "frontend/exterior/izborskina.map"						//* Izbor skina mapa
+#include "frontend/exterior/glenpark.map"						//* Glen park map
+#include "frontend/exterior/maryland-pd.map"					//* MLPD Mapa Ext
+#include "frontend/exterior/bolnica-ext.map"					//* Bolnica ext Mapa
+#include "frontend/exterior/hotel-ext.map"						//* Hotel Mapa
+#include "frontend/exterior/customs.map"						//* Customs Mapa
+#include "frontend/exterior/shopping-center.map"				//* Shopping Center Mapa
+#include "frontend/exterior/bizcent-ext.map"					//* Shopping Center Mapa
+#include "frontend/exterior/centar_park.map"					//* Center Park Mapa
+#include "frontend/exterior/binance_ext.map"					//* Binance Exterior Mapa
+#include "frontend/exterior/poligon-as.map"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
+#include "frontend/exterior/croswellas.map"						//* Auto Salon Croswell
+#include "frontend/exterior/birorada.map"						//* Biro Rada
+#include "frontend/exterior/italy-granica.map"					//* Granica Maryland-Italy
+#include "frontend/exterior/ml-gym.map"							//* ML Gym Map
+#include "frontend/exterior/ls-ukrasi.map"						//* ML Ukrasi po gradu
+#include "frontend/exterior/ml-busvozac.map"					//* ML Bus Station
+#include "frontend/exterior/ml-zlatara.map"						//* ML Zlatara
+#include "frontend/exterior/gov_ext.map"						//* Goverment
+#include "frontend/exterior/plaza_map.map"						//* Plaza
+#include "frontend/exterior/pizzeria.map"						//* Pizzeria
+#include "frontend/exterior/driving_school.map"					//* Driving_School
+#include "frontend/exterior/vinewood_map.map"					//* VineWood
+#include "frontend/exterior/bank_ml.map"						//* Banka Maryland
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
-#include "frontend/exterior/italy_zicara.pwn"					//* Zicara u Italy (SF)
+#include "frontend/exterior/italy_zicara.map"					//* Zicara u Italy (SF)
 
 //-------------------------------------------------------------------------------------------------------- Egypt Exteriors
 
-#include "frontend/exterior/zeleznicka-egypt.pwn"				//* Zeleznicka u Egypt (LV)
-#include "frontend/exterior/egypt_centar.pwn"					//* Egypt Centar (PD - OPSTINA)
-#include "frontend/exterior/egypt_hotel.pwn"					//* Egypt Hotel
-#include "frontend/exterior/egypt_ulica.pwn"					//* Egypt Glavna Ulica
-#include "frontend/exterior/egypt_ukrasi.pwn"					//* Egypt Ukrasi
-#include "frontend/exterior/egypt_pumpa.pwn"					//* Egypt Pumpa
+#include "frontend/exterior/zeleznicka-egypt.map"				//* Zeleznicka u Egypt (LV)
+#include "frontend/exterior/egypt_centar.map"					//* Egypt Centar (PD - OPSTINA)
+#include "frontend/exterior/egypt_hotel.map"					//* Egypt Hotel
+#include "frontend/exterior/egypt_ulica.map"					//* Egypt Glavna Ulica
+#include "frontend/exterior/egypt_ukrasi.map"					//* Egypt Ukrasi
+#include "frontend/exterior/egypt_pumpa.map"					//* Egypt Pumpa
 
 //------------------------------------------------------------------------------------------------------------------- Interiors
-#include "frontend/interior/opstina-int.pwn"					//* Opstina int map (vw > 5 | interior 5)
-#include "frontend/interior/flecca-bank.pwn"					//* Flecca bank map
-#include "frontend/interior/garaza.pwn"							//* Garaza mapa (vw > 2 | interior 2)
-#include "frontend/interior/kanalizacija.pwn"					//* Kanalizacija map (vw > 3 | interior 3)
-#include "frontend/interior/spawn-int.pwn"						//* Spawn Int Mapa (vw > 6 | interior 6)
-#include "frontend/interior/login_map.pwn"						//* Login Soba Mapa
-#include "frontend/interior/bizcent-int.pwn"					//* Biz centar interior (vw > 4 | interior 4)
-#include "frontend/interior/hotel-int.pwn"						//* Hotel interior (vw > 7 | interior 7)
-#include "frontend/interior/login-new.pwn"						//* Login interior novi Ogy (vw > 8 | interior 8)
+#include "frontend/interior/opstina-int.map"					//* Opstina int map (vw > 5 | interior 5)
+#include "frontend/interior/flecca-bank.map"					//* Flecca bank map
+#include "frontend/interior/garaza.map"							//* Garaza mapa (vw > 2 | interior 2)
+#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map (vw > 3 | interior 3)
+#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa (vw > 6 | interior 6)
+#include "frontend/interior/login_map.map"						//* Login Soba Mapa
+#include "frontend/interior/bizcent-int.map"					//* Biz centar interior (vw > 4 | interior 4)
+#include "frontend/interior/hotel-int.map"						//* Hotel interior (vw > 7 | interior 7)
+#include "frontend/interior/login-new.map"						//* Login interior novi Ogy (vw > 8 | interior 8)
 
 //--------------------------------------------------------------------------------------------------------- Temp
-#include "frontend/end/do-not-look.pwn"
+#include "frontend/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Jobs
-#include "backend/jobs/job_main.pwn" 							//* Dinamicni poslovi - Credits : job-framework
+#include "backend/jobs/job_main.job" 							//* Dinamicni poslovi - Credits : job-framework
 
 //-------------------------------------------------------------------------------------------------------- XMAS
-#include "backend/xmas/winter.pwn"
-#include "backend/xmas/snowballing.pwn"
+#include "backend/xmas/winter.script"
+#include "backend/xmas/snowballing.script"
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/jobs/end/do-not-look.pwn"
+#include "backend/jobs/end/do-not-look.temp"
 
 //--------------------------------------------------------------------------------------------------------Important for all systems
-#include "backend/staff/staff.pwn"								//* Staff script
-#include "backend/staff/spanel.pwn"								//* Staff Panel Dynamic Stuff
+#include "backend/staff/staff.script"								//* Staff script
+#include "backend/staff/spanel.script"								//* Staff Panel Dynamic Stuff
 
 //-------------------------------------------------------------------------------------------------------- Stocks
-#include "backend/stocks/chat.pwn"								//* Chat Stock
-#include "backend/stocks/db.pwn"								//* Database Stock Cuvanja
-#include "backend/stocks/vehicle.pwn"							//* Vehicle Stock Provere
-#include "backend/stocks/variable.pwn"							//* Variable stock rest
-#include "backend/stocks/textdraw.stock"						//* TextDraw Stocks
+#include "backend/stocks/chat.stock"								//* Chat Stock
+#include "backend/stocks/db.stock"									//* Database Stock Cuvanja
+#include "backend/stocks/variable.stock"							//* Variable stock rest
+#include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/clickplayertd.pwn"						//* OnPlayerClickPlayerTextdraw
+#include "backend/assets/clickplayertd.asset"						//* OnPlayerClickPlayerTextdraw
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "temp/end/do-not-look.pwn"
+#include "temp/end/do-not-look.temp"

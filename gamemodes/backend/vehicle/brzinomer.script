@@ -30,23 +30,11 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-
-//
-//
-
 hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 {
     new vehicle = GetPlayerVehicleID( playerid );
     new string[32];
     if( newstate == PLAYER_STATE_DRIVER ) {
-
-        foreach(new v : iter_Vehicles) {
-
-            if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) {
-
-                printf("%d Vlasnik vozila - %d Vozilo ID", eVehicle[v][vOwner], eVehicle[v][vID]);
-            }
-        }
 
         if( !IsVehicleBicycle(vehicle)) {
 
@@ -59,9 +47,16 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
             format( string, sizeof( string ), "%s", ReturnVehicleModelName(GetVehicleModel(vehicle)));
             PlayerTextDrawSetString( playerid, speed_TD[playerid][8], string );
 
+
             new miles[ 64 ];
             format( miles, sizeof( miles ), "%dkm", eVehicle[vehicle][vRangeKM]);
             PlayerTextDrawSetString(playerid, speed_TD[playerid][7], miles);
+
+            new fuel[ 64 ];
+            format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(vehicle), eVehicle[vehicle][vFuel]);
+            PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
+
+
         }
     }
     else if( newstate == PLAYER_STATE_ONFOOT ) {
@@ -87,6 +82,9 @@ ptask BrzinomerUpdate[1000](playerid)
 					eVehicle[ vehicle ][ vRange ] = 0;
                     printf("%d - Nova kilometraza, %d - Novi metri", eVehicle[vehicle][vRangeKM], eVehicle[vehicle][vRange]);
 				}
+                new fuel[ 64 ];
+                format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(vehicle), eVehicle[vehicle][vFuel]);
+                PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
             }
 
             foreach(new v : iter_Vehicles) 
@@ -106,16 +104,18 @@ ptask BrzinomerUpdate[1000](playerid)
                         format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vOwner` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vOwner]);
                         mysql_tquery(SQL, query);
                     }
+                    new miles[ 64 ];
+                    format( miles, sizeof( miles ), "%dkm", eVehicle[v][vRangeKM]);
+                    PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
+                    new fuel[ 64 ];
+                    format( fuel, sizeof( fuel ), "%s - %dL", GetVehicleFuelType(v), eVehicle[v][vFuel]);
+                    PlayerTextDrawSetString(playerid, speed_TD[playerid][6], fuel);
                 }
             }
 
             new string[ 32 ];
             format( string, sizeof( string ), "%d", GetSpeed( playerid ) );
             PlayerTextDrawSetString( playerid, speed_TD[playerid][2], string );
-
-            new miles[ 64 ];
-            format( miles, sizeof( miles ), "%dkm", eVehicle[vehicle][vRangeKM]);
-            PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
 
         }
 

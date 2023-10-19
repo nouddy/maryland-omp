@@ -11,7 +11,7 @@
         "*.csso": "pawn",
         "*.temp": "pawn",
         "*.asset": "pawn",
-        "*entrance": "pawn"
+        "*core": "pawn"
     },
     "files.encoding": "windows1252",
     "vscord.app.whitelist": [

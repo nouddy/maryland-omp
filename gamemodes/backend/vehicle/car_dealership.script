@@ -896,6 +896,11 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
 
+        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Petrol"); }
+        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Diesel"); }
+        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Metan"); }
+        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Electric"); }
+
         if(IsValidVehicle(temp_Vehicle[playerid])) {
 
             DestroyVehicle(temp_Vehicle[playerid]);
@@ -923,6 +928,11 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         new tmp_string[64];
         format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
+
+        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Petrol"); }
+        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Diesel"); }
+        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Metan"); }
+        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Electric"); }
 
         PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
     }

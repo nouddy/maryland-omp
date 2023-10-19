@@ -28,6 +28,7 @@ enum {
 
 	FUEL_TYPE_PETROL = 1,
 	FUEL_TYPE_DIESEL,
+	FUEL_TYPE_METAN,
 	FUEL_TYPE_ELECTRIC
 }
 
@@ -56,6 +57,10 @@ new eVehicle[MAX_CARS][e_VEHICLE_DATA],
 	pvVehicle[MAX_CARS],
 
 	Iterator:iter_Vehicles<MAX_CARS>;
+
+
+#include "backend/stocks/vehicle.stock"								//* Vehicle Stock Provere
+
 
 forward LoadVehicleData();
 public LoadVehicleData() {
@@ -170,17 +175,22 @@ YCMD:createvehicle(playerid, params[], help) {
 	eVehicle[id][vRangeKM] = 0;
 
 	eVehicle[id][vFuel] = 100;
-	eVehicle[id][vFuelType] = FUEL_TYPE_PETROL;
+
+	if(PetroleumVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_PETROL; }
+	else if(DieselVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_DIESEL; }
+	else if(MetanVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_METAN; }
+	else if(ElectricVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_ELECTRIC; }
+
 	eVehicle[id][vAlarm] = false;
 
 	new q[666];
 
 	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
-								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vAlarm`) \
-									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '0')",
+								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`) \
+									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0')",
 									eVehicle[id][vModel], eVehicle[id][vColor][0], eVehicle[id][vColor][1],
 									eVehicle[id][vPlate], eVehicle[id][vPos][0], eVehicle[id][vPos][1],
-									eVehicle[id][vPos][2], eVehicle[id][vPos][3]);
+									eVehicle[id][vPos][2], eVehicle[id][vPos][3], eVehicle[id][vFuelType]);
 	mysql_tquery(SQL, q, "CreateVehicleData", "d", id);
 
 	return 1;

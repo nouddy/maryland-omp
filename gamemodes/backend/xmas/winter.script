@@ -19,11 +19,19 @@ enum E_WINTER_PLAYER_SETTINGS {
 };
 new WinterPlayerSettings[MAX_PLAYERS][E_WINTER_PLAYER_SETTINGS];
 
+hook OnGameModeInit() {
+	
+	print("xmas/xmas.script loaded");
+
+	return (true);
+}
 
 hook OnPlayerConnect(playerid)
 {
 	if (IsPlayerNPC(playerid)) return false;
-	
+
+	StopAudioStreamForPlayer(playerid);
+
 	Streamer_ToggleIdleUpdate(playerid, true);
 	SetSnowMapForPlayer(playerid, false);
 	new query[128];
@@ -1323,4 +1331,44 @@ public sql_LoadPlayerWinterSettings(playerid) {
 		mysql_query(SQL, query);
 	}
 	return true;
+}
+
+//------------------- Commands
+YCMD:xmasmusic(playerid, params[], help)
+{
+	PlayRandomXmasSong(playerid);
+    SendClientMessage(playerid, -1, ""c_server"xmas » "c_white"Pustio si pesmu!");
+	return (true);
+}
+
+YCMD:stopmusic(playerid, params[], help)
+{
+	StopAudioStreamForPlayer(playerid);
+    SendClientMessage(playerid, -1, ""c_server"xmas » "c_white"Ugasio si muziku!");
+	return (true);
+}
+
+PlayRandomXmasSong(playerid)
+{
+	new i = random(4);
+	switch(i)
+	{
+	    case 0:
+	    {
+	        PlayAudioStreamForPlayer(playerid, "http://mp3.ecsmedia.pl/track/music/00/00/04/40/65351932/1/6_30.mp3");
+	    }
+	    case 1:
+	    {
+            PlayAudioStreamForPlayer(playerid, "http://a.tumblr.com/tumblr_lvt3rdshTe1r7b27vo1.mp3");
+	    }
+	    case 2:
+	    {
+            PlayAudioStreamForPlayer(playerid, "http://www.panicstream.com/streams/temp/xmas/ultimate/1-02%20-%20Jingle%20Bell%20Rock.mp3");
+	    }
+	    case 3:
+	    {
+            PlayAudioStreamForPlayer(playerid, "http://www.turnbacktogod.com/wp-content/uploads/2008/12/rockin-around-the-christmas-tree.mp3");
+	    }
+	}
+	return (true);
 }

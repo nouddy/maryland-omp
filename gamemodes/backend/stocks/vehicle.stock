@@ -17,7 +17,6 @@
  *  @Module         stocks
  */
 
-#include <ysilib\YSI_Coding\y_hooks>
 
 new stock g_arrVehicleNames[][] = {
     "Landstalker", "Bravura", "Buffalo", "Linerunner", "Perrenial", "Sentinel", "Dumper", "Firetruck", "Trashmaster",
@@ -44,12 +43,6 @@ new stock g_arrVehicleNames[][] = {
     "Boxville", "Tiller", "Utility Trailer"
 };
 
-hook OnGameModeInit()
-{
-	print("stocks/vehicle.stock loaded");
-
-	return 1;
-}
 stock IsVehicleBicycle(m)
 {
     if (m == 481 || m == 509 || m == 510) return true;
@@ -83,4 +76,62 @@ ReturnVehicleModelName(model)
 
     format(name, sizeof(name), g_arrVehicleNames[model - 400]);
     return name;
+}
+
+bool:DieselVehicle(vehicle) {
+	switch(GetVehicleModel(vehicle)) {
+
+        case 413, 414, 418, 423, 440, 442, 455, 456, 457, 458, 459, 466, 467, 470,
+		474, 478, 483, 400, 403, 406, 407, 408, 409, 415, 416, 424, 427, 428, 
+		431, 433, 437, 443, 444, 449, 479, 480, 482, 489, 490, 494, 495, 496, 
+		502, 503, 507, 514, 515, 518, 524, 528, 535, 536, 544, 554, 555, 556, 557, 
+        560, 562, 567, 568, 575, 576, 579, 580, 582, 596, 597, 598, 599: return true;
+	}
+	return false;
+}
+
+bool:PetroleumVehicle(vehicle) {
+	switch(GetVehicleModel(vehicle) ) {
+
+		case 401, 402, 404, 405, 410, 412, 419, 434, 436, 438, 439, 420, 421,
+		422, 426, 445, 448, 461, 462, 463, 468, 471, 475, 481, 491, 492, 504,
+		505, 509, 516, 521, 522, 523, 526, 527, 529, 530, 533, 534, 540, 551,
+		485, 486, 498, 499, 500, 508, 510, 517, 525, 531, 532, 546, 547, 550, 
+		552, 573, 574, 578, 588, 589, 600, 601, 609, 542, 543, 545, 549, 558, 
+		561, 565, 566, 571, 572, 581, 583, 585, 586, 603, 604, 605: return true;
+	}
+	return false;
+}
+
+bool:MetanVehicle(vehicle) {
+	switch(GetVehicleModel(vehicle) ) {
+
+		case 411, 429, 506, 541: return true;
+	}
+	return false;
+}
+
+bool:ElectricVehicle(vehicle) {
+	switch(GetVehicleModel(vehicle) ) {
+
+		case 451, 477, 559, 587, 602: return true;
+	}
+	return false;
+}
+
+stock GetVehicleFuelType(vehicle) {
+
+	new fueltypeName[14] = "Fuel Type";
+	
+	if(eVehicle[vehicle][vID] != 0) {
+
+    	if(eVehicle[vehicle][vFuelType] == 1) fueltypeName = "Petrol";
+    	else if(eVehicle[vehicle][vFuelType] == 2) fueltypeName = "Diesel";
+    	else if(eVehicle[vehicle][vFuelType] == 3) fueltypeName = "Metan";
+        else if(eVehicle[vehicle][vFuelType] == 4) fueltypeName = "Electric";
+    	else fueltypeName = "Petrol";
+    }
+    else fueltypeName = "Petrol";
+    
+	return fueltypeName;
 }

@@ -1,2 +1,2 @@
-[10/19/2023 12:18:48 AM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
-[10/19/2023 12:18:55 AM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
+[10/19/2023 12:45:55 PM] [plugins/mysql] mysql_tquery: callback error: callback "Job_LoadVehicleData" does not exist
+[10/19/2023 12:46:23 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
