@@ -35,7 +35,7 @@ hook OnGameModeInit() {
 
 stock PlayerTextDraw_FixTextSize(const playerid, PlayerText:text) {
 
-    PlayerTextDrawTextSize(playerid, PlayerText:text, 300, 5);
+    PlayerTextDrawTextSize(playerid, PlayerText:text, 200, 5);
 }
 
 stock PlayerTextDraw_SwitchMode(const playerid, PlayerText:text, const option, const bool: set) {
