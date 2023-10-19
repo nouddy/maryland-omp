@@ -79,7 +79,7 @@ ReturnVehicleModelName(model)
 }
 
 bool:DieselVehicle(vehicle) {
-	switch(GetVehicleModel(vehicle)) {
+	switch(vehicle) {
 
         case 413, 414, 418, 423, 440, 442, 455, 456, 457, 458, 459, 466, 467, 470,
 		474, 478, 483, 400, 403, 406, 407, 408, 409, 415, 416, 424, 427, 428, 
@@ -91,7 +91,7 @@ bool:DieselVehicle(vehicle) {
 }
 
 bool:PetroleumVehicle(vehicle) {
-	switch(GetVehicleModel(vehicle) ) {
+	switch(vehicle) {
 
 		case 401, 402, 404, 405, 410, 412, 419, 434, 436, 438, 439, 420, 421,
 		422, 426, 445, 448, 461, 462, 463, 468, 471, 475, 481, 491, 492, 504,
@@ -104,7 +104,7 @@ bool:PetroleumVehicle(vehicle) {
 }
 
 bool:MetanVehicle(vehicle) {
-	switch(GetVehicleModel(vehicle) ) {
+	switch(vehicle) {
 
 		case 411, 429, 506, 541: return true;
 	}
@@ -112,7 +112,7 @@ bool:MetanVehicle(vehicle) {
 }
 
 bool:ElectricVehicle(vehicle) {
-	switch(GetVehicleModel(vehicle) ) {
+	switch(vehicle) {
 
 		case 451, 477, 559, 587, 602: return true;
 	}

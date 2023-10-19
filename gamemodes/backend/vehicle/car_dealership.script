@@ -21,7 +21,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-new sz_MarylandModels[][] = {
+new sz_MarylandModels[] = {
 
     // Low Class Vehicles
 
@@ -864,7 +864,7 @@ YCMD:catalogue(playerid, params[], help)
             InterpolateCameraPos(playerid, 965.256958, -1704.411865, 15.187615, 964.599182, -1695.346191, 15.187615, 3500);
             InterpolateCameraLookAt(playerid, 970.190490, -1703.935180, 14.529376, 969.156066, -1693.405761, 14.502281, 3500);
 
-            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[0][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
         }
     }
 
@@ -890,21 +890,24 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
             e_CHOSEN_MODEL[playerid] = 0;
         }
 
-        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]]);
 
         new tmp_string[64];
-        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
+        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
 
-        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Petrol"); }
-        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Diesel"); }
-        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Metan"); }
-        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Electric"); }
+        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "PETROL"); }
+        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "DIESEL"); }
+        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "METAN"); }
+        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "ELECTRIC"); }
+        else PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "NEPOZNATO");
+
+        PlayerTextDrawShow(playerid, dealership_TD[playerid][57]);
 
         if(IsValidVehicle(temp_Vehicle[playerid])) {
 
             DestroyVehicle(temp_Vehicle[playerid]);
-            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
         }
     }
 
@@ -922,19 +925,22 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         if(IsValidVehicle(temp_Vehicle[playerid])) {
 
             DestroyVehicle(temp_Vehicle[playerid]);
-            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
         }
 
         new tmp_string[64];
-        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]));
+        format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
 
-        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Petrol"); }
-        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Diesel"); }
-        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Metan"); }
-        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "Electric"); }
+        if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "PETROL"); }
+        else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "DIESEL"); }
+        else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "METAN"); }
+        else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "ELECTRIC"); }
+        else PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "NEPOZNATO");
 
-        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0]);
+        PlayerTextDrawShow(playerid, dealership_TD[playerid][57]);
+
+        PlayerTextDraw_UpdateModel(playerid, dealership_TD[playerid][27], sz_MarylandModels[e_CHOSEN_MODEL[playerid]]);
     }
 
     else if(playertextid == dealership_TD[playerid][24]) {
@@ -980,7 +986,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 7, 7, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 7, 7, 1500);
             }
 
         }
@@ -995,7 +1001,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 16, 16, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 16, 16, 1500);
             }   
 
         }
@@ -1009,7 +1015,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 6, 6, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 6, 6, 1500);
             } 
             
         }
@@ -1023,7 +1029,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 142, 142, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 142, 142, 1500);
             } 
             
         }
@@ -1037,7 +1043,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 211, 211, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 211, 211, 1500);
             } 
             
         }
@@ -1052,7 +1058,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
             if(IsValidVehicle(temp_Vehicle[playerid])) {
 
                 DestroyVehicle(temp_Vehicle[playerid]);
-                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][0], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+                temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
             } 
         }
     }
