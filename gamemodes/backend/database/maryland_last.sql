@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2023 at 12:52 PM
+-- Generation Time: Oct 20, 2023 at 04:26 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `players` (
 --
 
 INSERT INTO `players` (`ID`, `Username`, `Password`, `Level`, `Novac`, `Skin`, `Godine`, `Staff`, `LastLogin`, `RegisterDate`, `Drzava`, `Pol`, `Email`, `Objekat0`, `Objekat1`) VALUES
-(1, 'Silent', 297206591, 1, 4000, 250, 21, 4, '19/10/2023 - 12:46', '16/10/2023 - 18:48', 'Maryland', 'Musko', 'vostic@gmail.com', -1, -1),
+(1, 'Silent', 297206591, 1, 7550, 250, 21, 4, '20/10/2023 - 16:08', '16/10/2023 - 18:48', 'Maryland', 'Musko', 'vostic@gmail.com', -1, -1),
 (2, 'Silent_Developer', 297206591, 1, 2000, 250, 21, 0, 'NEMA', '16/10/2023 - 18:55', 'Maryland', 'Musko', 'Vostica@gmail.com', -1, -1),
 (3, 'Silent_Developera', 297206591, 1, 2000, 250, 21, 0, 'NEMA', '16/10/2023 - 19:02', 'Maryland', 'Musko', 'Vostica@gmail.com', -1, -1),
 (4, 'Silent_Developeraa', 293602177, 1, 2000, 29, 21, 4, '16/10/2023 - 19:07', '16/10/2023 - 19:07', 'Maryland', 'Musko', 'Vostic@gmail.com', 1, -1);
@@ -483,6 +483,10 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `vFuel` int(11) NOT NULL DEFAULT 100,
   `vFuelType` int(11) NOT NULL DEFAULT 1,
   `vAlarm` tinyint(4) NOT NULL DEFAULT 0,
+  `vXenon` tinyint(4) NOT NULL DEFAULT 0,
+  `vLock` tinyint(4) NOT NULL DEFAULT 0,
+  `vNitro` tinyint(4) NOT NULL DEFAULT 0,
+  `vState` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`vID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 COMMIT;

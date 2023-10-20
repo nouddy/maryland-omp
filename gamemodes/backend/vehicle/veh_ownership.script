@@ -32,6 +32,13 @@ enum {
 	FUEL_TYPE_ELECTRIC
 }
 
+enum {
+
+	VEHICLE_STATE_MARYLAND = 1,
+	VEHICLE_STATE_EGYPT,
+	VEHICLE_STATE_ITALY
+}
+
 enum e_VEHICLE_DATA {
 
 	vID,
@@ -48,8 +55,14 @@ enum e_VEHICLE_DATA {
 	vRangeKM,
  
 	vFuel,
-	vFuelType,		
-	bool:vAlarm
+	vFuelType,
+
+	bool:vAlarm,
+	bool:vXenon,
+	bool:vLock,
+	bool:vNitro,
+
+	vState
 
 }
 
@@ -91,7 +104,13 @@ public LoadVehicleData() {
 
 			cache_get_value_name_int(i, "vFuel", eVehicle[i][vFuel]);
 			cache_get_value_name_int(i, "vFuelType", eVehicle[i][vFuelType]);
+
 			cache_get_value_name_bool(i, "vAlarm", eVehicle[i][vAlarm]);
+			cache_get_value_name_bool(i, "vXenon", eVehicle[i][vXenon]);
+			cache_get_value_name_bool(i, "vLock", eVehicle[i][vLock]);
+			cache_get_value_name_bool(i, "vNitro", eVehicle[i][vNitro]);
+
+			cache_get_value_name_int(i, "vState", eVehicle[i][vState]);
 
 			pvVehicle[i] = CreateVehicle(eVehicle[i][vModel], eVehicle[i][vPos][0], eVehicle[i][vPos][1], eVehicle[i][vPos][2], eVehicle[i][vPos][3], eVehicle[i][vColor][0], eVehicle[i][vColor][1], 1500, true);
 
@@ -183,14 +202,26 @@ YCMD:createvehicle(playerid, params[], help) {
 
 	eVehicle[id][vAlarm] = false;
 
+	if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
+
+		eVehicle[id][vState] = VEHICLE_STATE_ITALY;
+	}
+	else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
+
+		eVehicle[id][vState] = VEHICLE_STATE_EGYPT;
+	}
+	else eVehicle[id][vState] = VEHICLE_STATE_MARYLAND;
+
+
 	new q[666];
 
 	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
-								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`) \
-									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0')",
+								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, \
+									`vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) \
+									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0', '0', '0', '0', '%d')",
 									eVehicle[id][vModel], eVehicle[id][vColor][0], eVehicle[id][vColor][1],
 									eVehicle[id][vPlate], eVehicle[id][vPos][0], eVehicle[id][vPos][1],
-									eVehicle[id][vPos][2], eVehicle[id][vPos][3], eVehicle[id][vFuelType]);
+									eVehicle[id][vPos][2], eVehicle[id][vPos][3], eVehicle[id][vFuelType], eVehicle[id][vState]);
 	mysql_tquery(SQL, q, "CreateVehicleData", "d", id);
 
 	return 1;

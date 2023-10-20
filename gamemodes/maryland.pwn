@@ -538,8 +538,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/documentation/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Vehicle
-#include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/veh_ownership.script"						//* Vehicle ownership
+#include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 #include "backend/vehicle/brzinomer.script"							//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd

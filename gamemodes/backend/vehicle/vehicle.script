@@ -31,7 +31,7 @@ hook OnVehicleSpawn(vehicleid)
 	new bool:engine, bool:lights, bool:alarm, bool:doors, bool:bonnet, bool:boot, bool:objective;
     GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
 
-    if (IsVehicleBicycle(GetVehicleModel(vehicleid)))
+    if(IsVehicleBicycle(GetVehicleModel(vehicleid)))
     {
         SetVehicleParamsEx(vehicleid, true, false, false, doors, bonnet, boot, objective);
     }

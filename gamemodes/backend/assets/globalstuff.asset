@@ -31,9 +31,17 @@
 #define SendInfoMessage(%0,%1) \
 	va_SendClientMessage(%0, x_server, "» » MARYLAND: {FFFFFF}"%1)
 
+new italy_Area1, italy_Area2, egypt_Area1, egypt_Area2;
+
 hook OnGameModeInit()
 {
 	print("assets/globalstuff.asset loaded");
+
+    italy_Area1 = CreateDynamicRectangle(-2160, -893, -1320, 1575, -1, -1, -1);
+    italy_Area2 = CreateDynamicRectangle(-3000, -884.5, -2156, 2539.5, -1, -1, -1);
+    
+    egypt_Area1 = CreateDynamicRectangle(-863, 575, 3001, 1703, -1, -1, -1);
+    egypt_Area2 = CreateDynamicRectangle(-2096, 1700, 3000, 3000, -1, -1, -1);
 
 	return 1;
 }

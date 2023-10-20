@@ -43,20 +43,6 @@ new stock g_arrVehicleNames[][] = {
     "Chevrolet SV", "Tiller", "Utility Trailer"
 };
 
-stock IsVehicleBicycle(m)
-{
-    if (m == 481 || m == 509 || m == 510) return true;
-    
-    return false;
-}
-
-stock IsVehicleDrone(m)
-{
-    if (m == 465) return true;
-    
-    return false;
-}
-
 stock GetVehicleSpeed(vehicleid)
 {
 	new Float:xPos[3];
@@ -77,6 +63,40 @@ ReturnVehicleModelName(model)
     format(name, sizeof(name), g_arrVehicleNames[model - 400]);
     return name;
 }
+
+//* Model type
+
+//* Bicikle
+bool:IsVehicleBicycle(vehicle) {
+
+	switch(vehicle) {
+
+		case 481, 509, 510: return true;
+	}
+	return false;
+}
+
+//* Prikolice
+bool:IsVehicleTrailer(vehicle) {
+
+	switch(vehicle) {
+
+		case 435, 450, 584, 591, 606, 607, 610, 611: return true;
+	}
+	return false;
+}
+
+//* Dron
+bool:IsVehicleDrone(vehicle)
+{
+	switch(vehicle) {
+
+		case 465: return true;
+	}
+	return false;
+}
+
+//* Fuel type
 
 bool:DieselVehicle(vehicle) {
 	switch(vehicle) {
@@ -119,6 +139,9 @@ bool:ElectricVehicle(vehicle) {
 	return false;
 }
 
+
+//* Get Info
+
 stock GetVehicleFuelType(vehicle) {
 
 	new fueltypeName[14] = "Fuel Type";
@@ -129,9 +152,25 @@ stock GetVehicleFuelType(vehicle) {
     	else if(eVehicle[vehicle][vFuelType] == 2) fueltypeName = "Diesel";
     	else if(eVehicle[vehicle][vFuelType] == 3) fueltypeName = "Metan";
         else if(eVehicle[vehicle][vFuelType] == 4) fueltypeName = "Electric";
-    	else fueltypeName = "Petrol";
+    	else fueltypeName = "Undefined";
     }
-    else fueltypeName = "Petrol";
+    else fueltypeName = "Undefined";
     
 	return fueltypeName;
+}
+
+stock GetVehicleState(vehicle) {
+
+	new vehicleState[30] = "Vehicle State";
+	
+	if(eVehicle[vehicle][vID] != 0) {
+
+    	if(eVehicle[vehicle][vState] == 1) vehicleState = "Maryland";
+    	else if(eVehicle[vehicle][vState] == 2) vehicleState = "Egypt";
+    	else if(eVehicle[vehicle][vState] == 3) vehicleState = "Little Italy";
+    	else vehicleState = "Maryland";
+    }
+    else vehicleState = "Maryland";
+    
+	return vehicleState;
 }

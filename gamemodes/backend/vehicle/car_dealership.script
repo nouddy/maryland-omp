@@ -94,6 +94,8 @@ static temp_Vehicle[MAX_PLAYERS] = INVALID_VEHICLE_ID;
 static dealership_Vehicle[5];
 static Text3D:dealership_VehicleLabel[5];
 
+static vehicleBought[MAX_PLAYERS];
+
 agronom Dealership_StreamVehicle(id, playerid) {
 
     eVehicle[id][vID] = cache_insert_id();
@@ -104,7 +106,7 @@ agronom Dealership_StreamVehicle(id, playerid) {
 
 	SetVehicleNumberPlate(pvVehicle[id], plate_string);
 
-    SetPlayerCheckpoint(playerid, eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2], 3.45);
+    vehicleBought[playerid] = CreateDynamicCP(eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2], 3.45, -1, -1, playerid, 70.0);
     SendClientMessage(playerid, x_red, "Dealership // "c_white"Uspjesno ste kupili vozilo, oznaceno vam je crvenim markerom na lokaciji!");
 
     TogglePlayerControllable(playerid, true);
@@ -114,6 +116,18 @@ agronom Dealership_StreamVehicle(id, playerid) {
 
 	Iter_Add(iter_Vehicles, id);
 }
+
+hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
+{
+
+    if(checkpointid == vehicleBought[playerid])
+    {
+        DestroyDynamicCP(vehicleBought[playerid]);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 
 hook OnGameModeInit()
 {
@@ -726,7 +740,7 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
         PlayerTextDrawFont(playerid, dealership_TD[playerid][57], TEXT_DRAW_FONT_1);
         PlayerTextDrawSetProportional(playerid, dealership_TD[playerid][57], true);
 
-        dealership_TD[playerid][58] = CreatePlayerTextDraw(playerid, 609.666442, 240.192550, "15.000$");
+        dealership_TD[playerid][58] = CreatePlayerTextDraw(playerid, 609.666442, 240.192550, "11300$");
         PlayerTextDrawLetterSize(playerid, dealership_TD[playerid][58], 0.151666, 0.703998);
         PlayerTextDrawAlignment(playerid, dealership_TD[playerid][58], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColour(playerid, dealership_TD[playerid][58], -1);
@@ -935,11 +949,15 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
 
+        new vprice[64];
+        format(vprice, sizeof vprice, "%d$", sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Price]);
+        PlayerTextDrawSetString(playerid, dealership_TD[playerid][58], vprice);
+
         if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "PETROL"); }
         else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "DIESEL"); }
         else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "METAN"); }
         else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "ELECTRIC"); }
-        else PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "NEPOZNATO");
+        else if(IsVehicleBicycle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "EKO VEHICLE"); }
 
         PlayerTextDrawShow(playerid, dealership_TD[playerid][57]);
 
@@ -971,11 +989,15 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         format(tmp_string, sizeof tmp_string, "%s", ReturnVehicleModelName(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model]));
         PlayerTextDrawSetString(playerid, dealership_TD[playerid][30], tmp_string);
 
+        new vprice[64];
+        format(vprice, sizeof vprice, "%d$", sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Price]);
+        PlayerTextDrawSetString(playerid, dealership_TD[playerid][58], vprice);
+
         if(PetroleumVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "PETROL"); }
         else if(DieselVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "DIESEL"); }
         else if(MetanVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "METAN"); }
         else if(ElectricVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) { PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "ELECTRIC"); }
-        else PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "NEPOZNATO");
+        else PlayerTextDrawSetString(playerid, dealership_TD[playerid][57], "EKO VEHICLE");
 
         PlayerTextDrawShow(playerid, dealership_TD[playerid][57]);
 
@@ -1008,6 +1030,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
     else if(playertextid == dealership_TD[playerid][44]) {
 
         // Alarm
+        if(IsVehicleBicycle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) return SendClientMessage(playerid, x_red, "error \187; "c_white"Ne mozes ugraditi alarm u biciklo..");
 
         Dialog_Show(playerid, "dealership_Alarm", DIALOG_STYLE_MSGBOX, ""c_server"[?] >> "c_white"Alarm", "Da li zelite ugraditi alarm u vase novo vozilo\nZa cenu od %d$", "Da", "Ne", DEALERSHIP_ALARM_PRICE);
     }
@@ -1015,21 +1038,21 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
     else if(playertextid == dealership_TD[playerid][45]) {
 
         // Xenon
-
+        if(IsVehicleBicycle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) return SendClientMessage(playerid, x_red, "error \187; "c_white"Ne mozes ugraditi xenon u biciklo..");
         Dialog_Show(playerid, "dealership_Xenon", DIALOG_STYLE_MSGBOX, ""c_server"[?] >> "c_white"Xenon", "Da li zelite ugraditi Xenon Svetla u vase novo vozilo\nZa cenu od %d$", "Da", "Ne", DEALERSHIP_XENON_PRICE);
     }
 
     else if(playertextid == dealership_TD[playerid][46]) {
 
         // Custom Plates
-
+        if(IsVehicleBicycle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) return SendClientMessage(playerid, x_red, "error \187; "c_white"Ne mozes staviti privatne tablice na biciklo..");
         Dialog_Show(playerid, "dealership_Plates", DIALOG_STYLE_MSGBOX, ""c_server"[?] >> "c_white"Custom Plate", "Da li zelite ugraditi Custom Tablice u vase novo vozilo\nZa cenu od %d$", "Da", "Ne", DEALERSHIP_PLATE_PRICE);
     }
 
     else if(playertextid == dealership_TD[playerid][47]) {
 
         // Nitrous
-    
+        if(IsVehicleBicycle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model])) return SendClientMessage(playerid, x_red, "error \187; "c_white"Ne mozes ugraditi nitro u biciklo..");
         Dialog_Show(playerid, "dealership_Nitrous", DIALOG_STYLE_MSGBOX, ""c_server"[?] >> "c_white"Nitrous", "Da li zelite ugraditi Nitro Gas u vase novo vozilo\nZa cenu od %d$", "Da", "Ne", DEALERSHIP_NITRO_PRICE);
     }
 
@@ -1044,7 +1067,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         else if(e_CHOSEN_XENON[playerid]) { final_price[playerid]+= DEALERSHIP_XENON_PRICE; }
         else if(e_CUSTOM_PLATE[playerid]) { final_price[playerid]+= DEALERSHIP_PLATE_PRICE; }
 
-        new q[ 420 ];
+        VosticGiveMoney(playerid, -final_price[playerid]);
+
+        new q[ 666 ];
 
         new id = Iter_Free(iter_Vehicles);
 
@@ -1070,13 +1095,24 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         else if(MetanVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_METAN; }
         else if(ElectricVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_ELECTRIC; }
 
+        if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
+
+            eVehicle[id][vState] = VEHICLE_STATE_ITALY;
+        }
+        else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
+
+            eVehicle[id][vState] = VEHICLE_STATE_EGYPT;
+        }
+        else eVehicle[id][vState] = VEHICLE_STATE_MARYLAND;
+
         mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
-								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`) \
-									VALUES ('%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '%d', '100', '0', '0', '100', '%d', '%d')",
+								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, \
+                                    `vLock`, `vNitro`, `vState`) \
+									VALUES ('%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '%d', '100', '0', '0', '100', '%d', '%d', '%d', '0', '%d', '%d')",
                                     PlayerInfo[playerid][SQLID], eVehicle[id][vModel], eVehicle[id][vColor][0], 
                                     eVehicle[id][vColor][1], eVehicle[id][vPlate], eVehicle[id][vPos][0],
                                     eVehicle[id][vPos][1], eVehicle[id][vPos][2], eVehicle[id][vPos][3], 
-                                    eVehicle[id][vRegDate], eVehicle[id][vFuelType], e_CHOSEN_ALARM[playerid]);
+                                    eVehicle[id][vRegDate], eVehicle[id][vFuelType], e_CHOSEN_ALARM[playerid], e_CHOSEN_XENON[playerid], e_CHOSEN_NITRO[playerid], eVehicle[id][vState]);
 	    mysql_tquery(SQL, q, "Dealership_StreamVehicle", "dd", id, playerid);
     }
 
