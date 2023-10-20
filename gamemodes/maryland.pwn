@@ -567,10 +567,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/property/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Business
-#include "backend/business/biz.script"								//* Firme tek zapocete soo
+#include "backend/real_estate/re_centar.script"								//* Business Centar
 
 //-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/business/end/do-not-look.temp"
+#include "backend/real_estate/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Benches
 #include "backend/benches/klupe_ogy.script"						//* Klupe

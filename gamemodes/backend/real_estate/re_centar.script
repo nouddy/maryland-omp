@@ -1,0 +1,89 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Silent
+ *  @Date           20th Oct 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           re_centar.script
+ *  @Module         real estate
+*/
+
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+#define MAX_BUSINESS_CENTER (1000)
+
+#define INVALID_BUSINESS_CENTER (-1)
+
+#define MAX_BCENTER_NAME (64)
+
+#define BUSINESS_CENTER_PRICE (120000)
+
+#define BUSINESS_INTERIOR_1_PRICE (65000)
+#define BUSINESS_INTERIOR_2_PRICE (94000)
+
+#define BUSINESS_INTERIOR_SAFE_PRICE (5500)
+#define BUSINESS_INTERIOR_WARDROBE_PRICE (2000)
+#define BUSINESS_INTERIOR_ARMORY_PRICE (7000)
+
+
+new Text3D:re_BCenter_Label,
+    Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
+    Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
+    Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
+
+
+new Iter:iter_BCenters<MAX_BUSINESS_CENTER>
+
+//? Agent Type in Business Center
+enum {
+    re_BUSINESS_AGENT_MALE = 1,
+    re_BUSINESS_AGENT_FEMALE
+}
+
+
+enum RE_BUSINESS_CENTER_DATA {
+
+    re_BCenterID,
+    re_BCenterOwner,
+    re_BCenterName[MAX_BCENTER_NAME],
+    
+    re_BCenterInterior,
+    re_BCenterVirtualWorld,
+
+    re_BCenterType,
+    Float:re_BCenterInt[3],
+
+    bool:re_BCenterLocked,
+
+    bool:re_BCenterSafe,
+    Float:re_BCenterSafePos[3],
+
+    bool:re_BCenterWardrobe,
+    Float:re_BCenterWardrobePos[3],
+
+    bool:re_BCenterArmory,
+    Float:re_BCenterArmoryPos[3]
+
+    re_BCenterAgentType,
+    Float:re_AgentPos[4]
+
+}
+
+new BCenterData[MAX_BUSINESS_CENTER][RE_BUSINESS_CENTER_DATA];
+
+hook OnGameModeInit()
+{
+    print("real_estate/re_centar.script loaded");
+
+    mysql_tquery(SQL, "SELECT * FROM `re_centar`", "BCenter_Load", "");
+}
