@@ -24,7 +24,7 @@
 
 #define INVALID_BUSINESS_CENTER (-1)
 
-#define MAX_BCENTER_NAME (64)
+#define MAX_BCENTER_NAME (21)             //* Max Teksta koji moze da stane na objektu koji se mora stringovati
 
 #define BUSINESS_CENTER_PRICE (120000)
 
@@ -42,7 +42,7 @@ new Text3D:re_BCenter_Label,
     Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
 
 
-new Iter:iter_BCenters<MAX_BUSINESS_CENTER>
+new Iterator:iter_BCenters<MAX_BUSINESS_CENTER>;
 
 //? Agent Type in Business Center
 enum {
@@ -72,7 +72,7 @@ enum RE_BUSINESS_CENTER_DATA {
     Float:re_BCenterWardrobePos[3],
 
     bool:re_BCenterArmory,
-    Float:re_BCenterArmoryPos[3]
+    Float:re_BCenterArmoryPos[3],
 
     re_BCenterAgentType,
     Float:re_AgentPos[4]
@@ -86,4 +86,104 @@ hook OnGameModeInit()
     print("real_estate/re_centar.script loaded");
 
     mysql_tquery(SQL, "SELECT * FROM `re_centar`", "BCenter_Load", "");
+}
+
+hook OnPlayerLoaded(playerid) {
+
+    if(PlayerProperty[playerid][BCenter] != 0)
+    {
+        re_BCenter_Label = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 0.00, 0.00, 0.00, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+    }
+    else re_BCenter_Label = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za kupovinu '/buybizcenter'", -1, 0.00, 0.00, 0.00, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+agronom BCenter_Load()
+{
+    if(!cache_num_rows())
+        return print("\n[Business Centers]: 0 business centers loaded.\n");
+
+    new rows = cache_num_rows();
+
+    for (new i = 0; i < rows; i ++) if(i < MAX_BUSINESS_CENTER)
+    {
+
+        cache_get_value_name_int(i, "re_BCenterID",BCenterData[i][re_BCenterID]);
+        cache_get_value_name_int(i, "re_BCenterOwner",BCenterData[i][re_BCenterOwner]);
+
+        cache_get_value_name(i, "re_BCenterName", BCenterData[i][re_BCenterName], MAX_BCENTER_NAME);
+
+        cache_get_value_name_int(i, "re_BCenterInterior",BCenterData[i][re_BCenterInterior]);
+        cache_get_value_name_int(i, "re_BCenterVirtualWorld",BCenterData[i][re_BCenterVirtualWorld]);
+
+        cache_get_value_name_int(i, "re_BCenterType",BCenterData[i][re_BCenterType]);
+
+        cache_get_value_name_float(i, "re_BCenterIntX",BCenterData[i][re_BCenterInt][0]);
+        cache_get_value_name_float(i, "re_BCenterIntY",BCenterData[i][re_BCenterInt][1]);
+        cache_get_value_name_float(i, "re_BCenterIntZ",BCenterData[i][re_BCenterInt][2]);
+
+        cache_get_value_name_bool(i, "re_BCenterLocked",BCenterData[i][re_BCenterLocked]);
+
+        cache_get_value_name_bool(i, "re_BCenterSafe",BCenterData[i][re_BCenterSafe]);
+        cache_get_value_name_float(i, "re_BCenterSafePosX",BCenterData[i][re_BCenterSafePos][0]);
+        cache_get_value_name_float(i, "re_BCenterSafePosY",BCenterData[i][re_BCenterSafePos][1]);
+        cache_get_value_name_float(i, "re_BCenterSafePosZ",BCenterData[i][re_BCenterSafePos][2]);
+
+        cache_get_value_name_bool(i, "re_BCenterWardrobe",BCenterData[i][re_BCenterWardrobe]);
+        cache_get_value_name_float(i, "re_BCenterWardrobePosX",BCenterData[i][re_BCenterWardrobePos][0]);
+        cache_get_value_name_float(i, "re_BCenterWardrobePosY",BCenterData[i][re_BCenterWardrobePos][1]);
+        cache_get_value_name_float(i, "re_BCenterWardrobePosZ",BCenterData[i][re_BCenterWardrobePos][2]);
+
+        cache_get_value_name_bool(i, "re_BCenterArmory",BCenterData[i][re_BCenterArmory]);
+        cache_get_value_name_float(i, "re_BCenterArmoryPosX",BCenterData[i][re_BCenterArmoryPos][0]);
+        cache_get_value_name_float(i, "re_BCenterArmoryPosY",BCenterData[i][re_BCenterArmoryPos][1]);
+        cache_get_value_name_float(i, "re_BCenterArmoryPosZ",BCenterData[i][re_BCenterArmoryPos][2]);
+
+        cache_get_value_name_int(i, "re_BCenterAgentType",BCenterData[i][re_BCenterAgentType]);
+        cache_get_value_name_float(i, "re_AgentPosX",BCenterData[i][re_AgentPos][0]);
+        cache_get_value_name_float(i, "re_AgentPosY",BCenterData[i][re_AgentPos][1]);
+        cache_get_value_name_float(i, "re_AgentPosZ",BCenterData[i][re_AgentPos][2]);
+        cache_get_value_name_float(i, "re_AgentPosA",BCenterData[i][re_AgentPos][3]);
+
+		Iter_Add(iter_BCenters, i);
+
+		printf("backend/real_estate/re_centar.script loaded(%d) business centers", rows);
+    }
+    return (true);
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+	if(newkeys & KEY_SECONDARY_ATTACK)
+	{
+		foreach(new i : iter_BCenters) {
+
+			if(IsPlayerInRangeOfPoint(playerid, 3.5, 1658.5809,-1343.2560, 17.4960) && GetPlayerVirtualWorld(playerid) == 0) {
+
+				if(!BCenterData[i][re_BCenterLocked]) {
+
+					SetPlayerPos(playerid, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]);
+					SetPlayerInterior(playerid, BCenterData[i][re_BCenterInterior]);
+					SetPlayerVirtualWorld(playerid, BCenterData[i][re_BCenterVirtualWorld]);
+
+					UcitajIgracuObjekte(playerid);
+				}
+
+				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
+			}
+
+			else if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]) && GetPlayerVirtualWorld(playerid) != 0) {
+
+				SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
+				SetPlayerInterior(playerid, 0);
+				SetPlayerVirtualWorld(playerid, 0);
+
+				UcitajIgracuObjekte(playerid);
+			}
+		}
+	}
+
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }

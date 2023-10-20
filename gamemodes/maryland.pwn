@@ -567,6 +567,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/property/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Business
+#include "backend/property/pproperty.script"
 #include "backend/real_estate/re_centar.script"								//* Business Centar
 
 //-------------------------------------------------------------------------------------------------------- Temp

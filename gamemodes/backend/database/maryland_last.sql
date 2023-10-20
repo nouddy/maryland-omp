@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2023 at 04:26 PM
+-- Generation Time: Oct 20, 2023 at 10:36 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -428,7 +428,8 @@ INSERT INTO `player_finance` (`finance_id`, `BankAccount`, `BankMoney`, `BankPin
 
 CREATE TABLE IF NOT EXISTS `player_property` (
   `player_id` int(11) NOT NULL,
-  `HouseID` int(11) NOT NULL,
+  `BCenter` int(11) NOT NULL DEFAULT 0,
+  `HouseID` int(11) NOT NULL DEFAULT -1,
   UNIQUE KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -436,8 +437,45 @@ CREATE TABLE IF NOT EXISTS `player_property` (
 -- Dumping data for table `player_property`
 --
 
-INSERT INTO `player_property` (`player_id`, `HouseID`) VALUES
-(1, -1);
+INSERT INTO `player_property` (`player_id`, `BCenter`, `HouseID`) VALUES
+(1, 0, -1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `re_centar`
+--
+
+CREATE TABLE IF NOT EXISTS `re_centar` (
+  `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT,
+  `re_BCenterOwner` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterName` varchar(21) NOT NULL DEFAULT 'Nepoznato',
+  `re_BCenterInterior` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterVirtualWorld` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterType` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterIntX` float NOT NULL DEFAULT 0,
+  `re_BCenterIntY` float NOT NULL DEFAULT 0,
+  `re_BCenterIntZ` float NOT NULL DEFAULT 0,
+  `re_BCenterLocked` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterSafe` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterSafePosX` float NOT NULL DEFAULT 0,
+  `re_BCenterSafePosY` float NOT NULL DEFAULT 0,
+  `re_BCenterSafePosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobe` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosX` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosY` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterArmory` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosX` float NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosY` float NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterAgentType` int(11) NOT NULL DEFAULT 0,
+  `re_AgentPosX` float NOT NULL DEFAULT 0,
+  `re_AgentPosY` float NOT NULL DEFAULT 0,
+  `re_AgentPosZ` float NOT NULL DEFAULT 0,
+  `re_AgentPosA` float NOT NULL DEFAULT 0,
+  PRIMARY KEY (`re_BCenterID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

@@ -56,28 +56,6 @@ new house_ID[MAX_HOUSES],
 
 	   house_Created[MAX_HOUSES];
 
-forward LoadPlayerProperty(playerid);
-public LoadPlayerProperty(playerid) {
-
-	new rows = cache_num_rows();
-	if(!rows) 
-    {
-    	new q[420];
-     	mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_property` (player_id, HouseID) \ 
-            VALUES('%d', '-1')", PlayerInfo[playerid][SQLID]);
-        mysql_tquery(SQL, q);
-		printf("Za igraca SQLID (%d) je napravljena tabela `player_property`", PlayerInfo[playerid][SQLID]);
-    }
-	else {
-
-		cache_get_value_name_int(0, "HouseID", player_House[playerid]);
-		printf("House %d is loaded for player  %s ? ", player_House[playerid], ReturnPlayerName(playerid));
-	}
-
-	return (true);
-}
-
 forward House_LoadData();
 public House_LoadData() {
 
@@ -225,15 +203,6 @@ hook OnGameModeInit() {
 	mysql_tquery(SQL, "SELECT * FROM `houses`", "House_LoadData");
 
 	print("backend/property/houses.script * loaded...");
-
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-hook OnPlayerLoaded(playerid) {
-
-	new query[120];
-	mysql_format(SQL, query, sizeof query, "SELECT * FROM player_property WHERE player_id = '%d'", PlayerInfo[playerid][SQLID]);
-	mysql_tquery(SQL, query, "LoadPlayerProperty", "i", playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }

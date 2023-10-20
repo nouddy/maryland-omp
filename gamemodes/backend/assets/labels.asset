@@ -125,23 +125,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             SetPlayerPos(playerid, 1676.1896,-1634.7426,14.2265);
             SetCameraBehindPlayer(playerid);
         }
-        // Biz Centar
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1658.5809,-1343.2560,17.4960) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // biz centar ulaz
-        {
-            UcitajIgracuObjekte(playerid);
-            SetPlayerInterior(playerid, 4);
-            SetPlayerVirtualWorld(playerid, 4);
-            SetPlayerPos(playerid, 1825.2643,-1286.4944,131.7544);
-            SetCameraBehindPlayer(playerid);
-        }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1825.2643,-1286.4944,131.7544)) // biz centar izlaz
-        {
-            UcitajIgracuObjekte(playerid);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 1658.5809,-1343.2560,17.4960);
-            SetCameraBehindPlayer(playerid);
-        }
         // Hotel Interior
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1785.1909,-1296.4972,13.3967) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Hotel ulaz
         {
