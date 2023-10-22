@@ -8,7 +8,8 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Vostic & Ogy_ & Ferid Olsun
+ *  @Author         Silent & Nodi
+ *  @Github         (github.com/reals1lent) & (github.com/DinoWETT)
  *  @Date           19th Sep 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
@@ -20,11 +21,25 @@
 
 
  /*
-	* Kad se seti OGY imas sledeci zadatak.
-	? Da fixas ulaz i izlaz iz kuca jer si s ovim script za entrance kuce pojebao.
-	? Firme da zavrsis do kraja jer nisu zavrsene ne rade kako treba i da vratis ikonice za firme koje su bile.
-	? Da zavrsis vehicle ownership salone i ono sto sam ti pricao da treba da zavrsis.
-	? Bank system da dovrsis koji si ostavio na pola jer nemam predstavu sta si hteo da radis.
+		? TO DO LIST FOR REWORK:
+
+		* Izmeniti zones.inc po gradovima koji pripadaju serveru.
+		* Izbaciti Ogy-jev notify system postoji pwn fajl toga i zameniti stock sa stockom od notify.inc
+		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
+		* Izmeniti boje, dodati jos boja i potrpati ih u colors.inc
+		* Napraviti inc za makroe, macroes.inc i includati odmah ispod svih drugih inc na vrh skripte (PRESSED, RELEASED etc..)
+		* Sve komande prebaciti na engleski, dok ispis i nase komentare u skripti pisati na nasem jeziku. (Mesati jekavicu i klasican srpski zbog igraca)
+		* Pisati normalne komentare bez onog crnac kurac itd.
+		* Izmeniti svaku mapu i postaviti svakoj mapi vw na -1 a interijer staviti zaseban i svakoj mapi dati drugi int 1,2,3... (Odnosi se na mape interijera)
+		* Takodje sve sto se tice baze reworkati da sve u bazi bude na englesko sto se tice imenovanja (Lozinka ~ Password)
+		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
+		* Srediti help komand za svaku komandu koja ima dodatne parametre.
+		* Pregledati kod izbaciti nepotrebne stvari i uraditi ponegde bolje ukoliko je moguce
+		* Dodati provere za death i uraditi custom dmg.
+		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
+		* Rename sve funkcije i variable u skripti sa srpskog na engleski.
+
+
  */
 
 #define YSI_NO_HEAP_MALLOC
@@ -33,7 +48,6 @@
 
 #include <open.mp>
 #include <a_mysql>
-//#include <weapon-config>  										// Ne radi trenutno na open.mp
 #include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>
 #include <ysilib\YSI_Coding\y_timers>
@@ -49,7 +63,6 @@
 #include <notify>
 #include <markerplus>
 #include <animated-textdraw>
-#include <DialogCenter>
 #include <crashdetect>
 #include <colandreas>
 #include <marylandFix>
@@ -90,8 +103,8 @@ main()
     print("-                                     -");
 	print(" Founder : Ogy");
 	print(" Version : 1.0 - Maryland");
-	print(" Developer : Silent & DinoWETT");
-	print(" Credits : daddyDOT, realnaith");
+	print(" Developer : Silent & Nodi");
+	print(" Credits : daddyDOT");
 	print("-                                     -");
 	print("> Gamemode Starting...");
 	print(">> Maryland Gamemode Started");
@@ -702,15 +715,15 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/egypt_pumpa.map"					//* Egypt Pumpa
 
 //------------------------------------------------------------------------------------------------------------------- Interiors
-#include "frontend/interior/opstina-int.map"					//* Opstina int map (vw > 5 | interior 5)
+#include "frontend/interior/opstina-int.map"					//* Opstina int map (interior 5)
 #include "frontend/interior/flecca-bank.map"					//* Flecca bank map
-#include "frontend/interior/garaza.map"							//* Garaza mapa (vw > 2 | interior 2)
-#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map (vw > 3 | interior 3)
-#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa (vw > 6 | interior 6)
+#include "frontend/interior/garaza.map"							//* Garaza mapa (interior 2)
+#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map (interior 3)
+#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa (interior 6)
 #include "frontend/interior/login_map.map"						//* Login Soba Mapa
-#include "frontend/interior/bizcent-int.map"					//* Biz centar interior (vw > 4 | interior 4)
-#include "frontend/interior/hotel-int.map"						//* Hotel interior (vw > 7 | interior 7)
-#include "frontend/interior/login-new.map"						//* Login interior novi Ogy (vw > 8 | interior 8)
+#include "frontend/interior/bizcent-int.map"					//* Biz centar interior (interior 4)
+#include "frontend/interior/hotel-int.map"						//* Hotel interior (interior 7)
+#include "frontend/interior/login-new.map"						//* Login interior novi Ogy (interior 8)
 
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
