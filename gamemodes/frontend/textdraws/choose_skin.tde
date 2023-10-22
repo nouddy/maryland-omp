@@ -1,0 +1,141 @@
+/***
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Vostic & Ogy_
+ *  @Date           05th May 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           globalvariable.asset
+ *  @Module         assets
+ */
+
+
+
+
+stock IzborSkinaTextDraws(playerid, bool:show)
+{
+    if(show == true)
+    {
+        for(new i; i < 9; i++) 
+        {
+            PlayerTextDrawHide( playerid, ChooseSkin_PTD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, ChooseSkin_PTD[ playerid ][ i ] );
+            ChooseSkin_PTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+
+        ChooseSkin_PTD[playerid][0] = CreatePlayerTextDraw(playerid, 544.333190, 354.940734, "ld_spac:white");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][0], 67.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][0], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][0], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][0], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][0], false);
+
+        ChooseSkin_PTD[playerid][1] = CreatePlayerTextDraw(playerid, 535.599975, 351.751800, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][1], 18.000000, 18.240005);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][1], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][1], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][1], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][1], false);
+
+        ChooseSkin_PTD[playerid][2] = CreatePlayerTextDraw(playerid, 600.933349, 351.751800, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][2], 18.000000, 18.240005);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][2], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][2], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][2], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][2], false);
+
+        ChooseSkin_PTD[playerid][3] = CreatePlayerTextDraw(playerid, 569.666503, 347.059204, "");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][3], 16.000000, 26.000000);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][3], -1);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][3], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][3], -256);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][3], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][3], false);
+        PlayerTextDrawSetSelectable(playerid, ChooseSkin_PTD[playerid][3], true);
+        PlayerTextDrawSetPreviewModel(playerid, ChooseSkin_PTD[playerid][3], 18968);
+        PlayerTextDrawSetPreviewRot(playerid, ChooseSkin_PTD[playerid][3], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        ChooseSkin_PTD[playerid][4] = CreatePlayerTextDraw(playerid, 543.999877, 383.977813, "ld_spac:white");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][4], 67.000000, 12.000000);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][4], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][4], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][4], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][4], false);
+
+        ChooseSkin_PTD[playerid][5] = CreatePlayerTextDraw(playerid, 535.266662, 380.788879, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][5], 18.000000, 18.240005);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][5], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][5], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][5], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][5], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][5], false);
+
+        ChooseSkin_PTD[playerid][6] = CreatePlayerTextDraw(playerid, 600.600036, 380.788879, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][6], 18.000000, 18.240005);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][6], 255);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][6], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][6], 255);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][6], false);
+
+        ChooseSkin_PTD[playerid][7] = CreatePlayerTextDraw(playerid, 569.333190, 376.096282, "");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][7], 16.000000, 26.000000);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][7], -1);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][7], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][7], -256);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][7], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][7], false);
+        PlayerTextDrawSetSelectable(playerid, ChooseSkin_PTD[playerid][7], true);
+        PlayerTextDrawSetPreviewModel(playerid, ChooseSkin_PTD[playerid][7], 19025);
+        PlayerTextDrawSetPreviewRot(playerid, ChooseSkin_PTD[playerid][7], 0.000000, 360.000000, 90.000000, 1.000000);
+
+        ChooseSkin_PTD[playerid][8] = CreatePlayerTextDraw(playerid, 569.666503, 403.474334, "");
+        PlayerTextDrawTextSize(playerid, ChooseSkin_PTD[playerid][8], 23.000000, 29.000000);
+        PlayerTextDrawAlignment(playerid, ChooseSkin_PTD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, ChooseSkin_PTD[playerid][8], -1);
+        PlayerTextDrawSetShadow(playerid, ChooseSkin_PTD[playerid][8], 0);
+        PlayerTextDrawBackgroundColour(playerid, ChooseSkin_PTD[playerid][8], -256);
+        PlayerTextDrawFont(playerid, ChooseSkin_PTD[playerid][8], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, ChooseSkin_PTD[playerid][8], false);
+        PlayerTextDrawSetSelectable(playerid, ChooseSkin_PTD[playerid][8], true);
+        PlayerTextDrawSetPreviewModel(playerid, ChooseSkin_PTD[playerid][8], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, ChooseSkin_PTD[playerid][8], 0.000000, 90.000000, 90.000000, 1.000000);
+
+
+        for(new izz = 0; izz < 9; izz++) { PlayerTextDrawShow(playerid, ChooseSkin_PTD[playerid][izz]); }
+
+        SelectTextDraw(playerid, x_ltorange);
+
+    }
+    else
+    {
+        for(new i; i < 9; i++) 
+        {
+            PlayerTextDrawHide( playerid, ChooseSkin_PTD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, ChooseSkin_PTD[ playerid ][ i ] );
+            ChooseSkin_PTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+        CancelSelectTextDraw(playerid);
+    }
+    return 1;
+}

@@ -144,7 +144,8 @@ stock Business_Type(biz) {
     return string;
 }
 
-private Business_LoadData() {
+forward Business_LoadData();
+public Business_LoadData() {
 
     new rows = cache_num_rows();
 

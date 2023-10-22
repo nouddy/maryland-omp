@@ -45,7 +45,7 @@ hook OnPlayerText(playerid, text[])
 YCMD:me(playerid, params[], help)
 {
 	new text[80];
-	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_blue,"KORISCENJE \187; "c_white"/me [Text]");
+	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/me [Text]");
 	new string[256];
  	format(string,sizeof(string), "* %s %s",ReturnPlayerName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_purple, string);
@@ -54,7 +54,7 @@ YCMD:me(playerid, params[], help)
 YCMD:do(playerid, params[], help)
 {
 	new text[80];
-	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_blue,"KORISCENJE \187; "c_white"/do [Text]");
+	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/do [Text]");
 	new string[256];
  	format(string,sizeof(string), "* %s (( %s ))",ReturnPlayerName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_purple, string);
@@ -63,7 +63,7 @@ YCMD:do(playerid, params[], help)
 YCMD:b(playerid, params[], help)
 {
 	new text[80];
-	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_blue,"KORISCENJE \187; "c_white"/b [Text]");
+	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/b [Text]");
 	new string[256];
  	format(string,sizeof(string), "{C0C0C0}(( [OOC] "c_white"%s kaze \187; %s {C0C0C0}))",ReturnPlayerName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_server, string);

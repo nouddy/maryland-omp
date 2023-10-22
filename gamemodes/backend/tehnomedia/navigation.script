@@ -21,20 +21,20 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 new 
-	strelica[MAX_PLAYERS],
+	arrow[MAX_PLAYERS],
 	pNavState[MAX_PLAYERS],
 	pNavID[MAX_PLAYERS],
 	pNavTimer[MAX_PLAYERS]
 ;
 
-enum Navigacija {
+enum Navigation {
     NAV_NAME[32],
     Float:NAV_X,
     Float:NAV_Y,
     Float:NAV_Z
 };
 
-new const NavData[][Navigacija] = {
+new const NavData[][Navigation] = {
 	{"Maryland Opstina", 1533.0863,-1682.4469,13.3828}, // {"Ime Lokacije", X, Y, Z}
 	{"Tehnomedia", 1685.7739,-1628.6365,13.3828},
 	{"Maryland Park", 1871.1927,-1168.0505,23.6607}
@@ -52,7 +52,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	if(pNavState[playerid])
 	{
 		KillTimer(pNavTimer[playerid]);
-		DestroyObject(strelica[playerid]);
+		DestroyObject(arrow[playerid]);
 		DisablePlayerCheckpoint(playerid);
 		pNavState[playerid] = 0;
 	}
@@ -61,7 +61,7 @@ hook OnPlayerDisconnect(playerid, reason)
 
 YCMD:gps(playerid, params[], help)
 {
-    if(PlayerElectronic[playerid][eNavigacijaItem] == 0) return SendClientMessage(playerid, x_red, "Navigacija » "c_white"Nemas navigaciju svrati do tehnomedie da je kupis!");
+    if(PlayerElectronic[playerid][eGPSItem] == 0) return SendClientMessage(playerid, x_red, "Navigacija » "c_white"Nemas navigaciju svrati do tehnomedie da je kupis!");
 	if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, x_red, "Navigacija » "c_white"Moras biti u vozilu da koristis navigaciju!");
 	static string[sizeof(NavData) * 64];
 
@@ -72,7 +72,7 @@ YCMD:gps(playerid, params[], help)
 			format(string, sizeof string, "%s"c_server"» "c_white"%s\n", string, NavData[i][NAV_NAME]);
 		}
 	} 
-	Dialog_Show(playerid, "dialog_navigacija", DIALOG_STYLE_LIST, "Navigacija » Lokacije", string, "Odaberi", "Izlaz");
+	Dialog_Show(playerid, "dialog_gpson", DIALOG_STYLE_LIST, "Navigacija » Lokacije", string, "Odaberi", "Izlaz");
 	return (true);
 }
 
@@ -81,7 +81,7 @@ YCMD:gpsoff(playerid, params[], help)
 	if(pNavState[playerid])
 	{
 		KillTimer(pNavTimer[playerid]);
-		DestroyObject(strelica[playerid]);
+		DestroyObject(arrow[playerid]);
 		PlayerPlaySound(playerid,1137,0.0,0.0,0.0);
 		DisablePlayerCheckpoint(playerid);
 		pNavState[playerid] = 0;
@@ -95,7 +95,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	if(pNavState[playerid])
 	{
 		KillTimer(pNavTimer[playerid]);
-		DestroyObject(strelica[playerid]);	
+		DestroyObject(arrow[playerid]);	
 		PlayerPlaySound(playerid,1150,0.0,0.0,0.0);
 		DisablePlayerCheckpoint(playerid);
 		pNavState[playerid] = 0;
@@ -104,7 +104,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 	return (true);
 }
 
-Dialog: dialog_navigacija(const playerid, response, listitem, string: inputtext[])
+Dialog: dialog_gpson(const playerid, response, listitem, string: inputtext[])
 {
 	if(response)
 	{
@@ -115,11 +115,11 @@ Dialog: dialog_navigacija(const playerid, response, listitem, string: inputtext[
 		format(str, 128, "Navigacija » "c_white" Destinacija postavljena na "c_server2"%s", NavData[pNavID[playerid]][NAV_NAME]);
 		SendClientMessage(playerid, x_server, str);
 		SendClientMessage(playerid, x_server, "Navigacija » "c_white" Mozes kucati "c_server2"/gpsoff "c_white"da ugasis navigaciju.");
-		if(IsValidObject(strelica[playerid])) DestroyObject(strelica[playerid]);
-		strelica[playerid] = CreateObject(19134, 0, 0, 0, 0, 0, 0);
-		Refresh(playerid);
+		if(IsValidObject(arrow[playerid])) DestroyObject(arrow[playerid]);
+		arrow[playerid] = CreateObject(19134, 0, 0, 0, 0, 0, 0);
+		RefreshGPS(playerid);
 		KillTimer(pNavTimer[playerid]);
-		pNavTimer[playerid] = SetTimerEx("Refresh", 100, true, "d", playerid);
+		pNavTimer[playerid] = SetTimerEx("RefreshGPS", 100, true, "d", playerid);
 		PlayerPlaySound(playerid,1139,0.0,0.0,0.0);
 		pNavState[playerid] = 1;
 	}
@@ -153,8 +153,7 @@ stock Float:PointAngle(playerid, Float:xa, Float:ya, Float:xb, Float:yb) // Don'
 	return floatadd(angle, -carangle);
 }
 
-forward Refresh(playerid);
-public Refresh(playerid)
+private RefreshGPS(playerid)
 {
 	new Float:pos[3], Float:pPos[3];
 	pPos[0] = NavData[pNavID[playerid]][NAV_X];
@@ -162,11 +161,11 @@ public Refresh(playerid)
 	pPos[2] = NavData[pNavID[playerid]][NAV_Z];
 	GetVehiclePos(GetPlayerVehicleID(playerid), pos[0], pos[1], pos[2]);
 	new Float:rot = PointAngle(playerid, pos[0], pos[1], pPos[0], pPos[1]);
-	AttachObjectToVehicle(strelica[playerid], GetPlayerVehicleID(playerid), 0.000000, 0.000000, 1.399998, 0.000000, 90.0, rot + 180);
+	AttachObjectToVehicle(arrow[playerid], GetPlayerVehicleID(playerid), 0.000000, 0.000000, 1.399998, 0.000000, 90.0, rot + 180);
 	if(IsPlayerInRangeOfPoint(playerid, 10.0, pPos[0], pPos[1], pPos[2]))
 	{
 		KillTimer(pNavTimer[playerid]);
-		DestroyObject(strelica[playerid]);
+		DestroyObject(arrow[playerid]);
 		DisablePlayerCheckpoint(playerid);
 		PlayerPlaySound(playerid,1137,0.0,0.0,0.0);
 		pNavState[playerid] = 0;

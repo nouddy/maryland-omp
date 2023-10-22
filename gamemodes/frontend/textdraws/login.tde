@@ -852,8 +852,8 @@ stock CreateLoginTextDraws(playerid)
 	return 1;
 }
 
-forward PrikaziLoginTDs(playerid, bool:show);
-public PrikaziLoginTDs(playerid, bool:show)
+forward ShowLoginTDForPlayer(playerid, bool:show);
+public ShowLoginTDForPlayer(playerid, bool:show)
 {
 	if(show == true)
 	{

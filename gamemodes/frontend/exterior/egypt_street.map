@@ -1,0 +1,202 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Ogy
+ *  @Date           27th May 2023
+ *  @Weburl         weburl
+ *  @Project        maryland_project
+ *
+ *  @File           egypt_ulica.map
+ *  @Module         modules
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+hook OnGameModeInit()
+{
+	print("exterior/egypt_ulica.map loaded");
+
+    static eGlavna;
+    eGlavna = Maryland_CreateDynamicObject(8828, 2057.389892, 988.375000, 8.742190, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 4992, "airportdetail", "hedge2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8612, 2042.380004, 982.625000, 7.351560, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 10, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(9115, 2072.449951, 982.625000, 7.351560, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 10, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(9116, 2072.379882, 1203.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 1, -1, "none", "none", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 8, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 12, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8611, 2042.380004, 1203.209960, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, -1, "none", "none", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 4, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 9, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 10, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8610, 2057.379882, 1403.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 10, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 12, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(9117, 2057.379882, 1403.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 8, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 12, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 13, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(9118, 2059.879882, 1603.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, -1, "none", "none", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 10, 7429, "vgwstdirtyrd", "vegasdirtypaveblend2", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 11, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 12, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8825, 2057.389892, 1602.579956, 10.531294, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 4992, "airportdetail", "hedge2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8609, 2059.879882, 1603.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 5, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 8, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 9, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7954, 2117.300048, 1827.699951, 10.468793, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 4992, "airportdetail", "hedge2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7634, 2117.379882, 1843.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 4, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 6, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(9119, 2089.889892, 1743.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 5, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(8440, 2064.879882, 1743.050048, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 1, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 4, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 5, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7631, 2137.379882, 1957.699951, 9.812500, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 4, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7945, 2134.860107, 2057.699951, 9.789054, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 1, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 2, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 4, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 5, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7952, 2137.199951, 2079.909912, 10.531294, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 4992, "airportdetail", "hedge2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7632, 2137.389892, 2163.229980, 9.796875, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 5, 7420, "vgnglfcrse1", "seabed", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 7, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7043, 2188.830078, 2320.899902, 9.750000, 0.000000, 0.000000, -29.999988, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7633, 2077.389892, 2303.199951, 9.742190, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7987, "vgssroads", "blendpavement2_256", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 2, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    SetDynamicObjectMaterial(eGlavna, 3, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7334, 2250.110107, 2363.689941, 9.757804, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7335, 2226.520019, 2283.229980, 9.757804, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7953, 2137.199951, 1935.560058, 10.468794, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 4992, "airportdetail", "hedge2", 0x00000000);
+    eGlavna = Maryland_CreateDynamicObject(7057, 2228.770019, 2443.840087, 9.750000, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+    SetDynamicObjectMaterial(eGlavna, 0, 7987, "vgssroads", "blendpavement2_256", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(eGlavna, 1, 7429, "vgwstdirtyrd", "vegasdirtypaveblend1", 0x00000000);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    eGlavna = Maryland_CreateDynamicObject(3509, 2057.520019, 1403.380004, 9.804690, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
+
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    RemoveBuildingForPlayer(playerid, 8828, 2057.389, 988.375, 8.742, 0.250);
+    RemoveBuildingForPlayer(playerid, 8612, 2042.380, 982.625, 7.351, 0.250);
+    RemoveBuildingForPlayer(playerid, 8779, 2042.380, 982.625, 7.351, 0.250);
+    RemoveBuildingForPlayer(playerid, 9115, 2072.449, 982.625, 7.351, 0.250);
+    RemoveBuildingForPlayer(playerid, 9161, 2072.449, 982.625, 7.351, 0.250);
+    RemoveBuildingForPlayer(playerid, 9116, 2072.379, 1203.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9156, 2072.379, 1203.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8611, 2042.380, 1203.209, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8917, 2042.380, 1203.209, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8610, 2057.379, 1403.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8918, 2057.379, 1403.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 3509, 2057.520, 1403.380, 9.804, 0.250);
+    RemoveBuildingForPlayer(playerid, 9117, 2057.379, 1403.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9148, 2057.379, 1403.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9118, 2059.879, 1603.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9149, 2059.879, 1603.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8825, 2057.389, 1602.579, 10.531, 0.250);
+    RemoveBuildingForPlayer(playerid, 8609, 2059.879, 1603.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8919, 2059.879, 1603.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 7954, 2117.300, 1827.699, 10.468, 0.250);
+    RemoveBuildingForPlayer(playerid, 7634, 2117.379, 1843.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 7775, 2117.379, 1843.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9119, 2089.889, 1743.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 9155, 2089.889, 1743.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8440, 2064.879, 1743.050, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 8920, 2064.879, 1743.050, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 7631, 2137.379, 1957.699, 9.812, 0.250);
+    RemoveBuildingForPlayer(playerid, 7744, 2137.379, 1957.699, 9.812, 0.250);
+    RemoveBuildingForPlayer(playerid, 7945, 2134.860, 2057.699, 9.789, 0.250);
+    RemoveBuildingForPlayer(playerid, 7946, 2134.860, 2057.699, 9.789, 0.250);
+    RemoveBuildingForPlayer(playerid, 7952, 2137.199, 2079.909, 10.531, 0.250);
+    RemoveBuildingForPlayer(playerid, 7632, 2137.389, 2163.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 7745, 2137.389, 2163.229, 9.796, 0.250);
+    RemoveBuildingForPlayer(playerid, 7043, 2188.830, 2320.899, 9.750, 0.250);
+    RemoveBuildingForPlayer(playerid, 7059, 2188.830, 2320.899, 9.750, 0.250);
+    RemoveBuildingForPlayer(playerid, 7633, 2077.389, 2303.199, 9.742, 0.250);
+    RemoveBuildingForPlayer(playerid, 7764, 2077.389, 2303.199, 9.742, 0.250);
+    RemoveBuildingForPlayer(playerid, 7334, 2250.110, 2363.689, 9.757, 0.250);
+    RemoveBuildingForPlayer(playerid, 7340, 2250.110, 2363.689, 9.757, 0.250);
+    RemoveBuildingForPlayer(playerid, 7335, 2226.520, 2283.229, 9.757, 0.250);
+    RemoveBuildingForPlayer(playerid, 7341, 2226.520, 2283.229, 9.757, 0.250);
+    RemoveBuildingForPlayer(playerid, 7953, 2137.199, 1935.560, 10.468, 0.250);
+    RemoveBuildingForPlayer(playerid, 7057, 2228.770, 2443.840, 9.750, 0.250);
+    RemoveBuildingForPlayer(playerid, 7126, 2228.770, 2443.840, 9.750, 0.250);
+
+	return 1;
+}

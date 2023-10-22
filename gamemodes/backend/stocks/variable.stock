@@ -26,21 +26,20 @@ hook OnGameModeInit()
 	return 1;
 }
 
-ResetujVariable(playerid)
+ResetVariables(playerid)
 {
     // Main register
     PlayerInfo[playerid][SQLID] = 0;
     PlayerInfo[playerid][Level] = 1;
     PlayerInfo[playerid][Staff] = 0;
-    PlayerInfo[playerid][pBiznisID] = -1;
     // Documents of player
     PlayerDocuments[playerid][pNationalID] = 0;
     PlayerDocuments[playerid][pPassport] = 0;
-    PlayerDocuments[playerid][pDriveLicence] = 0;
-    PlayerDocuments[playerid][pMotoLicence] = 0;
-    PlayerDocuments[playerid][pBoatLicence] = 0;
-    PlayerDocuments[playerid][pGunLicence] = 0;
-    PlayerDocuments[playerid][pZivotnoOsiguranje] = -1;
+    PlayerDocuments[playerid][pDriveLicense] = 0;
+    PlayerDocuments[playerid][pMotoLicense] = 0;
+    PlayerDocuments[playerid][pBoatLicense] = 0;
+    PlayerDocuments[playerid][pGunLicense] = 0;
+    PlayerDocuments[playerid][pLifeInsurance] = -1;
     // Finance of player
     // PlayerFinance[playerid][pBankAccount] = 0;
     // PlayerFinance[playerid][pBankMoney] = 0;
@@ -48,7 +47,7 @@ ResetujVariable(playerid)
     // Safe zone
     InSafeZone[playerid] = false;
     //Customs Vrata itd
-    IspredCustomsa[playerid] = false;
+    InFrontOfService[playerid] = false;
     // House Script
     player_House[playerid] = -1;
 

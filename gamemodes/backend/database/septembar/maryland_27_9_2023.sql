@@ -307,7 +307,7 @@ CREATE TABLE `metros` (
   `metroX` float NOT NULL,
   `metroY` float NOT NULL,
   `metroZ` float NOT NULL,
-  `metroRuta` int(11) NOT NULL DEFAULT 1,
+  `MetroRoute` int(11) NOT NULL DEFAULT 1,
   `metroInt` int(11) NOT NULL DEFAULT 0,
   `metroVw` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -316,7 +316,7 @@ CREATE TABLE `metros` (
 -- Dumping data for table `metros`
 --
 
-INSERT INTO `metros` (`metroID`, `metroX`, `metroY`, `metroZ`, `metroRuta`, `metroInt`, `metroVw`) VALUES
+INSERT INTO `metros` (`metroID`, `metroX`, `metroY`, `metroZ`, `MetroRoute`, `metroInt`, `metroVw`) VALUES
 (1, 1076.06, -1076.9, 27.3969, 2, 0, 0);
 
 -- --------------------------------------------------------
@@ -330,14 +330,14 @@ CREATE TABLE `players` (
   `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
   `Password` int(11) NOT NULL,
   `Level` int(11) NOT NULL DEFAULT 1,
-  `Novac` int(11) NOT NULL DEFAULT 2000,
+  `Money` int(11) NOT NULL DEFAULT 2000,
   `Skin` int(11) NOT NULL DEFAULT 29,
-  `Godine` int(11) NOT NULL,
+  `Age` int(11) NOT NULL,
   `Staff` int(11) NOT NULL DEFAULT 0,
   `LastLogin` varchar(50) NOT NULL DEFAULT 'NEMA',
   `RegisterDate` varchar(50) NOT NULL DEFAULT 'NEMA',
-  `Drzava` varchar(50) NOT NULL DEFAULT 'Srbija',
-  `Pol` varchar(10) NOT NULL DEFAULT 'Nema',
+  `State` varchar(50) NOT NULL DEFAULT 'Srbija',
+  `Sex` varchar(10) NOT NULL DEFAULT 'Nema',
   `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
   `Objekat0` tinyint(4) NOT NULL DEFAULT -1,
   `Objekat1` tinyint(4) NOT NULL DEFAULT -1
@@ -351,18 +351,18 @@ CREATE TABLE `players` (
 
 CREATE TABLE `player_crypto` (
   `crypto_id` int(11) NOT NULL,
-  `KolicinaBTC` float DEFAULT NULL,
-  `KolicinaETH` float DEFAULT NULL,
-  `KolicinaLTC` float DEFAULT NULL,
-  `KolicinaUSDT` float DEFAULT NULL,
-  `KolicinaDOT` float DEFAULT NULL
+  `AmountBTC` float DEFAULT NULL,
+  `AmountETH` float DEFAULT NULL,
+  `AmountLTC` float DEFAULT NULL,
+  `AmountUSDT` float DEFAULT NULL,
+  `AmountDOT` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_crypto`
 --
 
-INSERT INTO `player_crypto` (`crypto_id`, `KolicinaBTC`, `KolicinaETH`, `KolicinaLTC`, `KolicinaUSDT`, `KolicinaDOT`) VALUES
+INSERT INTO `player_crypto` (`crypto_id`, `AmountBTC`, `AmountETH`, `AmountLTC`, `AmountUSDT`, `AmountDOT`) VALUES
 (1, 0, 0, 0, 0, 0),
 (3, 0, 0, 0, 0, 0),
 (4, 0, 0, 0, 0, 0),
@@ -387,19 +387,19 @@ CREATE TABLE `player_documents` (
   `player_id` int(11) NOT NULL,
   `NationalID` int(11) NOT NULL,
   `Passport` int(11) NOT NULL,
-  `VoziloLicence` int(11) NOT NULL,
-  `MotoLicence` int(11) NOT NULL,
-  `BrodLicence` int(11) NOT NULL,
-  `OruzjeLicence` int(11) NOT NULL,
-  `ZivotnoOsiguranje` tinyint(4) NOT NULL,
-  `ZivotnoTraje` datetime NOT NULL DEFAULT current_timestamp()
+  `DriveLicense` int(11) NOT NULL,
+  `MotoLicense` int(11) NOT NULL,
+  `BoatLicense` int(11) NOT NULL,
+  `GunLicense` int(11) NOT NULL,
+  `LifeInsurance` tinyint(4) NOT NULL,
+  `LifeInsuranceValidUntil` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_documents`
 --
 
-INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLicence`, `MotoLicence`, `BrodLicence`, `OruzjeLicence`, `ZivotnoOsiguranje`, `ZivotnoTraje`) VALUES
+INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `DriveLicense`, `MotoLicense`, `BoatLicense`, `GunLicense`, `LifeInsurance`, `LifeInsuranceValidUntil`) VALUES
 (1, 1, 1, 0, 0, 0, 0, 0, '2023-09-26 20:27:19'),
 (3, 1, 0, 0, 0, 0, 0, 0, '2023-09-26 20:27:19'),
 (4, 0, 0, 0, 0, 0, 0, 0, '2023-09-26 20:27:19'),
@@ -423,7 +423,7 @@ INSERT INTO `player_documents` (`player_id`, `NationalID`, `Passport`, `VoziloLi
 CREATE TABLE `player_electronic` (
   `player_id` int(11) NOT NULL,
   `Dron` tinyint(4) NOT NULL DEFAULT 0,
-  `Baterije` int(11) NOT NULL DEFAULT 0,
+  `Battery` int(11) NOT NULL DEFAULT 0,
   `Navigacija` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -431,7 +431,7 @@ CREATE TABLE `player_electronic` (
 -- Dumping data for table `player_electronic`
 --
 
-INSERT INTO `player_electronic` (`player_id`, `Dron`, `Baterije`, `Navigacija`) VALUES
+INSERT INTO `player_electronic` (`player_id`, `Dron`, `Battery`, `Navigacija`) VALUES
 (1, 1, 0, 0),
 (3, 0, 0, 0),
 (4, 0, 0, 0),

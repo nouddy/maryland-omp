@@ -20,7 +20,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 new bool:loaded = true;
-#define MAX_SAFEZONA 			(50)
+#define MAX_SAFEZONES 			(50)
 /*
      ___                 _      
     (  _)               ( )     
@@ -29,8 +29,8 @@ new bool:loaded = true;
     /___\ \_/ /_\/_\/__)/_\ /__)
                                 
 */
-new SafeZonaKreira[MAX_PLAYERS],
-	SafeZonaKreiraID[MAX_PLAYERS];
+new PlayerCreateSafeZone[MAX_PLAYERS],
+	PlayerCreateSafeZoneID[MAX_PLAYERS];
 
 
 /*
@@ -56,8 +56,8 @@ enum S_Safe {
 	Float:safePickupY,
 	Float:safePickupZ
 };
-new SafeZone[MAX_SAFEZONA][S_Safe];
-new Iterator:SafeZone<MAX_SAFEZONA>;
+new SafeZone[MAX_SAFEZONES][S_Safe];
+new Iterator:SafeZone<MAX_SAFEZONES>;
 new Float:CreatingPos[MAX_PLAYERS][4];
 new bool:InSafeZone[MAX_PLAYERS];
 
@@ -91,7 +91,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 	if(newkeys & KEY_FIRE)
 	{
-		if(SafeZonaKreira[playerid] == 1)
+		if(PlayerCreateSafeZone[playerid] == 1)
 		{
 			new Float:Pozicija[3];
 			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
@@ -100,15 +100,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 			CreatingPos[playerid][1] = Pozicija[1];
 
 			SendClientMessage(playerid, x_server,"Sada odredjujes drugu stranu, idi u skroz diagonalnu stranu!");
-			SafeZonaKreira[playerid]++;
+			PlayerCreateSafeZone[playerid]++;
 		}
-		else if(SafeZonaKreira[playerid] == 2)
+		else if(PlayerCreateSafeZone[playerid] == 2)
 		{
 			new Float:Pozicija[4];
 			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
 			GetPlayerFacingAngle(playerid, Pozicija[3]);
 
-			new id = SafeZonaKreiraID[ playerid ];
+			new id = PlayerCreateSafeZoneID[ playerid ];
 			CreatingPos[playerid][2] = Pozicija[0];
 			CreatingPos[playerid][3] = Pozicija[1];
 
@@ -132,12 +132,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 			    SafeZone[ id ][ safeMaxY ] = CreatingPos[ playerid ][ 3 ];
 				SafeZone[ id ][ safeMinY ] = CreatingPos[ playerid ][ 1 ];
 			}
-			SafeZonaKreira[playerid]++;
+			PlayerCreateSafeZone[playerid]++;
 			SendClientMessage(playerid, x_server,"Sada postavljas poziciju labela za napravljenu safe zonu.");
 		}
-		else if(SafeZonaKreira[playerid] == 3)
+		else if(PlayerCreateSafeZone[playerid] == 3)
 		{
-			new id = SafeZonaKreiraID[ playerid ];
+			new id = PlayerCreateSafeZoneID[ playerid ];
 			new Float:Pozicija[3];
 			GetPlayerPos(playerid, Pozicija[0],Pozicija[1],Pozicija[2]);
 			Iter_Add(SafeZone, id);
@@ -156,8 +156,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 			mysql_pquery(SQL, q, "SafeZonaID", "i", id);
 		    safeZoneLabel(id);
 		    SaveSafeZone(id);
-		    SafeZonaKreira[playerid] = 0;
-		    SafeZonaKreiraID[playerid] = -1;
+		    PlayerCreateSafeZone[playerid] = 0;
+		    PlayerCreateSafeZoneID[playerid] = -1;
 		    SendClientMessage(playerid, x_server, "Uspesno si napravio safe zonu.");
 		}
 
@@ -266,3 +266,30 @@ public safeZoneLabel(id)
     /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
 
 */
+hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
+
+	foreach(new s : SafeZone)
+	{
+		if(areaid == SafeZone[s][safeID]) 
+		{
+            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "SAFE");
+			InSafeZone[playerid] = true;
+		}
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
+
+	foreach(new i : SafeZone)
+	{
+		if(areaid == SafeZone[i][safeID]) 
+		{
+            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "UNSAFE");
+			InSafeZone[playerid] = false;
+		}
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}

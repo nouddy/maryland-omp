@@ -21,7 +21,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 new CustomsDoorsArea, CustomsDoors;
-new bool:IspredCustomsa[MAX_PLAYERS];
+new bool:InFrontOfService[MAX_PLAYERS];
 
 const
 	doorsModel = 17951,
@@ -65,7 +65,7 @@ YCMD:fixengine(playerid, params[], help)
 	SetTimerEx("service", 4000, false, "i", playerid);
     TogglePlayerControllable(playerid, false);
     SetVehicleHealth(GetPlayerVehicleID(playerid), 1000);
-    VosticGiveMoney(playerid, -400);
+    GiveMoneyEx(playerid, -400);
     //ApplyActorAnimation(mehanicar1, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
 	notification.Show(playerid, "SERVIS", "Uspesno ste popravili motor vozila!", "!", BOXCOLOR_GREEN);
 
@@ -81,14 +81,14 @@ YCMD:fullrepair(playerid, params[], help)
 	SetTimerEx("service", 4000, false, "i", playerid);
     TogglePlayerControllable(playerid, false);
     RepairVehicle(GetPlayerVehicleID(playerid));
-    VosticGiveMoney(playerid, -800);
+    GiveMoneyEx(playerid, -800);
     //ApplyActorAnimation(mehanicar2, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
     notification.Show(playerid, "SERVIS", "Uspesno ste popravili vozilo!", "!", BOXCOLOR_GREEN);
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-YCMD:probnetablice(playerid, params[], help)
+YCMD:testplates(playerid, params[], help)
 {
 
 	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
@@ -100,7 +100,7 @@ YCMD:probnetablice(playerid, params[], help)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-YCMD:tehnickipregled(playerid, params[], help)
+YCMD:tinspect(playerid, params[], help)
 {
 
 	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
@@ -108,6 +108,28 @@ YCMD:tehnickipregled(playerid, params[], help)
 
     notification.Show(playerid, "SERVIS", "Ova funkcija jos nije dodata", "!", BOXCOLOR_RED);
 
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
+
+	if(areaid == CustomsDoorsArea)
+	{
+        MoveObject(CustomsDoors, customsDoorOpenX, customsDoorOpenY, customsDoorOpenZ, 1.0, -0.499, 90.000, 0.000);
+		InFrontOfService[playerid] = true;
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
+
+	if(areaid == CustomsDoorsArea)
+	{
+        MoveObject(CustomsDoors, customsDoorX, customsDoorY, customsDoorZ,  1.0, 0.000, 0.000, 0.000);
+		InFrontOfService[playerid] = false;
+	}
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }

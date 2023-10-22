@@ -61,18 +61,18 @@ hook OnPlayerExitVehicle(playerid, vehicleid)
     return 1;
 }
 
-timer dronunisti[30000](playerid)
+timer dronedestroy[30000](playerid)
 {
-	if(PlayerElectronic[playerid][eBaterijaItem] > 0)
+	if(PlayerElectronic[playerid][eBatteryItem] > 0)
 	{
-		PlayerElectronic[playerid][eBaterijaItem]--;
+		PlayerElectronic[playerid][eBatteryItem]--;
 		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Ispraznila ti se jedna baterija nastavi da se vozis ili kucaj '/dron' da prekines voznju.");
 
         SaveElectronic(playerid);SavePlayer(playerid);
 
-		defer dronunisti(playerid);
+		defer dronedestroy(playerid);
 	}
-	else if(PlayerElectronic[playerid][eBaterijaItem] == 0)
+	else if(PlayerElectronic[playerid][eBatteryItem] == 0)
 	{
 		DestroyVehicle(Drone[playerid]);
 		Drone[playerid] = INVALID_PLAYER_ID;
@@ -87,7 +87,7 @@ timer dronunisti[30000](playerid)
 YCMD:dron(playerid, params[], help)
 {
 	if(PlayerElectronic[playerid][eDronItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje » "c_white"Nemas dron, kupi ga u gigatronu!");
-	if(PlayerElectronic[playerid][eBaterijaItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje » "c_white"Nemas baterije kupi ih u gigatronu ili prodavnici!");
+	if(PlayerElectronic[playerid][eBatteryItem] == 0) return SendClientMessage(playerid, x_red, "koriscenje » "c_white"Nemas Battery kupi ih u gigatronu ili prodavnici!");
 
     new Float:x, Float:y, Float:z;
 
@@ -112,7 +112,7 @@ YCMD:dron(playerid, params[], help)
 		}
 
 		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Pokrenuo si dron na svakih 3 minuta ti se potrosi jedna baterija.");
-		defer dronunisti(playerid);
+		defer dronedestroy(playerid);
 	}
 	else
 	{

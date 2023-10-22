@@ -181,7 +181,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			}
 			case 1:
 			{
-				new id = Iter_Free(iter_Klupa);
+				new id = Iter_Free(iter_Bench);
 			    if(NadjiNajblizuKlupu(id)) // ako zelis smanji radius na 0.5 mada mislim da nepotrebno
 			        return  SendClientMessage(playerid, 0xFF0000FF, "[Greska]: {ffffff}U blizini je nadjena najbliza klupa, pomerite se malo");
 
@@ -326,7 +326,7 @@ Dialog:dialog_odabirstanice(const playerid, response, listitem, string:inputtext
 		GetPlayerPos(playerid, metroInfo[id][MetroX], metroInfo[id][MetroY], metroInfo[id][MetroZ]);
 
 
-		metroInfo[id][MetroRutaID] = idmetroa;
+		metroInfo[id][MetroRouteID] = idmetroa;
 
 		sql_createmetro(id);
 
@@ -351,8 +351,8 @@ Dialog:dialog_safezona(const playerid, response, listitem, string:inputtext[])
 		if(id == -1) 
 			return SendClientMessage(playerid, x_server, "Prekoracen je limit vaseg iteratora.");
 
-		SafeZonaKreiraID[playerid] = id;
-		SafeZonaKreira[playerid] = 1;
+		PlayerCreateSafeZoneID[playerid] = id;
+		PlayerCreateSafeZone[playerid] = 1;
 
 		SafeZone[id][safeColor] = boja;
 
@@ -448,11 +448,11 @@ Dialog:dialog_izmenistanicu(const playerid, response, listitem, string:inputtext
 		new id = NearestMetro(playerid);
 		switch(listitem)
 		{
-			case 0: metroInfo[id][MetroRutaID] = 1;
-			case 1: metroInfo[id][MetroRutaID] = 2;
-			case 2: metroInfo[id][MetroRutaID] = 3;
-			case 3: metroInfo[id][MetroRutaID] = 4;
-			case 4: metroInfo[id][MetroRutaID] = 5;
+			case 0: metroInfo[id][MetroRouteID] = 1;
+			case 1: metroInfo[id][MetroRouteID] = 2;
+			case 2: metroInfo[id][MetroRouteID] = 3;
+			case 3: metroInfo[id][MetroRouteID] = 4;
+			case 4: metroInfo[id][MetroRouteID] = 5;
 		}
 		va_SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Promenili ste rutu metroa id: %d",id);
 	}
@@ -505,10 +505,10 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
     			DestroyDynamic3DTextLabel(SeatDownInfo[i][seat_label]);
 
 				static q[120];
-				mysql_format(SQL, q, 120, "DELETE FROM `klupe` WHERE `seat_ID` = '%d'", SeatDownInfo[i][seat_SQLID]);
+				mysql_format(SQL, q, 120, "DELETE FROM `benches` WHERE `seat_ID` = '%d'", SeatDownInfo[i][seat_SQLID]);
 				mysql_tquery(SQL, q);
 
-				Iter_Remove(iter_Klupa, i);
+				Iter_Remove(iter_Bench, i);
 
 	            va_SendClientMessage(playerid, 0x0086E3FF, "[Klupe] > {ffffff}Obrisali ste klupu pod id(%d).",i);
 			}

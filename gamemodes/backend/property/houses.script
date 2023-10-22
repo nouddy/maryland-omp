@@ -223,7 +223,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 					SetPlayerInterior(playerid, house_Int[i]);
 					SetPlayerVirtualWorld(playerid, house_ID[i]);
 
-					UcitajIgracuObjekte(playerid);
+					LoadObjectsForPlayer(playerid);
 				}
 
 				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
@@ -235,7 +235,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 				SetPlayerInterior(playerid, 0);
 				SetPlayerVirtualWorld(playerid, 0);
 
-				UcitajIgracuObjekte(playerid);
+				LoadObjectsForPlayer(playerid);
 			}
 		}
 	}
@@ -268,7 +268,7 @@ YCMD:buyhouse(playerid, params[], help) {
 
 	new query[200];
 
-	VosticGiveMoney(playerid, -house_Price[ID]);
+	GiveMoneyEx(playerid, -house_Price[ID]);
 
 	SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kupili kucu!");
 

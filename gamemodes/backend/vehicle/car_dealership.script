@@ -1067,7 +1067,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         else if(e_CHOSEN_XENON[playerid]) { final_price[playerid]+= DEALERSHIP_XENON_PRICE; }
         else if(e_CUSTOM_PLATE[playerid]) { final_price[playerid]+= DEALERSHIP_PLATE_PRICE; }
 
-        VosticGiveMoney(playerid, -final_price[playerid]);
+        GiveMoneyEx(playerid, -final_price[playerid]);
 
         new q[ 666 ];
 

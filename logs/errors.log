@@ -1,1 +1,2 @@
-[10/22/2023 8:15:52 AM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent'": Table 'maryland.winter_settings' doesn't exist
+[10/22/2023 9:32:32 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `re_business`": Table 'maryland.re_business' doesn't exist
+[10/22/2023 9:32:38 PM] [plugins/mysql] error #1146 while executing query "SELECT * FROM `winter_settings` WHERE `username` = 'Silent_Developer'": Table 'maryland.winter_settings' doesn't exist

@@ -182,7 +182,7 @@ Dialog: dialog_deposit(const playerid, response, listitem, string: inputtext[])
 
 	ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
-	VosticGiveMoney(playerid, -strval(inputtext));
+	GiveMoneyEx(playerid, -strval(inputtext));
 
 	SaveFinance(playerid);
 
@@ -211,7 +211,7 @@ Dialog: dialog_withdraw(const playerid, response, listitem, string: inputtext[])
 
 	ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 	
-	VosticGiveMoney(playerid, strval(inputtext));	
+	GiveMoneyEx(playerid, strval(inputtext));	
 
 	SaveFinance(playerid);
 

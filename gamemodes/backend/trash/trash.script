@@ -35,7 +35,7 @@
 */
 
 new bool:creatingContainer[MAX_PLAYERS],
-	bool:ogy_finishedzz = true,
+	bool:script_loadedzz = true,
 	EditContainer[MAX_PLAYERS];
 /*
      ____                        
@@ -75,7 +75,7 @@ timer trash_StartSearch[6500](playerid) {
 
 		case 1: {
 
-			VosticGiveMoney(playerid, money);
+			GiveMoneyEx(playerid, money);
 			va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste pronasli : %d novca u kontejneru", money);
 		}
 
@@ -101,7 +101,7 @@ timer trash_StartSearch[6500](playerid) {
 
 hook OnGameModeInit()
 {
-	if(ogy_finishedzz)
+	if(script_loadedzz)
     {
         print("trash/trash.script loaded");  
     }

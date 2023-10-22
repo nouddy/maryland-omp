@@ -27,7 +27,7 @@ hook OnGameModeInit()
     return 1;
 }
 
-YCMD:baklja(playerid, params[],help)
+YCMD:torch(playerid, params[],help)
 {    
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 1)) 
     {
@@ -41,7 +41,7 @@ YCMD:baklja(playerid, params[],help)
     return 1;
 }
 
-YCMD:pancir(playerid, params[],help)
+YCMD:armor(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 2)) 
     {
@@ -55,7 +55,7 @@ YCMD:pancir(playerid, params[],help)
     return 1;
 }
 
-YCMD:cigara(playerid, params[],help)
+YCMD:cigar(playerid, params[],help)
 {
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_SMOKE_CIGGY);
 
@@ -76,7 +76,7 @@ YCMD:moneybag(playerid, params[],help)
     return 1;
 }
 
-YCMD:papagaj(playerid, params[],help)
+YCMD:parrot(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 4)) 
     {
@@ -103,7 +103,7 @@ YCMD:katana(playerid, params[],help)
     return 1;
 }
 
-YCMD:testera(playerid, params[],help)
+YCMD:bucksaw(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 6)) 
     {
@@ -116,7 +116,7 @@ YCMD:testera(playerid, params[],help)
     return 1;
 }
 
-YCMD:pojas(playerid, params[],help)
+YCMD:belt(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 7)) 
     {
@@ -129,7 +129,7 @@ YCMD:pojas(playerid, params[],help)
     return 1;
 }
 
-YCMD:maska(playerid, params[],help)
+YCMD:mask(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 8)) 
     {
@@ -142,7 +142,7 @@ YCMD:maska(playerid, params[],help)
     return 1;
 }
 
-YCMD:kaciga(playerid, params[],help)
+YCMD:helmet(playerid, params[],help)
 {
     if (!IsPlayerAttachedObjectSlotUsed(playerid, 9)) 
     {

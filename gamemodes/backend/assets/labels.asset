@@ -35,10 +35,10 @@ hook OnGameModeInit()
 CreatePickupsAnd3Ds()
 {
 
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/izvadilicnu'", -2334.3879,1244.1754,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/dajotkaz'", -2334.6438,1249.9271,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/izvadipasos'", -2334.7085,1255.7548,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/donirajdrzavi'\n'/dozvolazarad'", -2334.6843,1261.4663,-31.6301, -1, -1, 1239, 2.0); //licna
+    Create3DandP(""c_server"[ Salter ]\n"c_white"'/getidcard'", -2334.3879,1244.1754,-31.6301, -1, -1, 1239, 2.0); //licna
+    Create3DandP(""c_server"[ Salter ]\n"c_white"'/quitjob'", -2334.6438,1249.9271,-31.6301, -1, -1, 1239, 2.0); //licna
+    Create3DandP(""c_server"[ Salter ]\n"c_white"'/getpassport'", -2334.7085,1255.7548,-31.6301, -1, -1, 1239, 2.0); //licna
+    Create3DandP(""c_server"[ Salter ]\n"c_white"'/donatetostate'\n'/dozvolazarad'", -2334.6843,1261.4663,-31.6301, -1, -1, 1239, 2.0); //licna
 
     // //? Salteri
     //CreateDynamic3DTextLabel(""c_server"[ Blagajna ]\n"c_white"'/blagajna'\n'/balans'\n'/promenipinkod'", 0x0059FFAA, 1689.8605,-1455.4658,13.5597+0.3, 2.0, -1, -1, 0, -1, -1, -1, 20.0);
@@ -67,13 +67,11 @@ CreatePickupsAnd3Ds()
     Create3DandP(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1105.6414,-1193.0107,19.6612, -1, -1, 1080, 6.0); // tune car 2
     Create3DandP(""c_server"[ Pay 'n spray ]\n"c_server"» "c_white"'/paintjob'", 1107.7605,-1185.3486,18.3704, -1, -1, 365, 6.0); // farbanje vozila
     Create3DandP(""c_server"[ Plates ]\n"c_server"» "c_white"'/buyplates'", 1085.3119,-1184.1718,21.9630, -1, -1, 19792, 6.0); // Kupovina tablica
-    Create3DandP(""c_server"[ Technical Review ]\n"c_server"» "c_white"'/treview'", 1104.7944,-1248.6990,15.8231, -1, -1, 19627, 6.0); // Tehnicki Pregled
-    Create3DandP(""c_server"[ Technical Review ]\n"c_server"» "c_white"'/treview'", 1090.3774,-1248.8459,15.8271, -1, -1, 19627, 6.0); // Tehnicki Pregled
+    Create3DandP(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1104.7944,-1248.6990,15.8231, -1, -1, 19627, 6.0); // Tehnicki Pregled
+    Create3DandP(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1090.3774,-1248.8459,15.8271, -1, -1, 19627, 6.0); // Tehnicki Pregled
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
-
-//? Ulazi i i izlazi
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
@@ -81,7 +79,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     {
         if(IsPlayerInRangeOfPoint(playerid, 3.0, 1482.6442,-1805.5509,18.7957) || IsPlayerInRangeOfPoint(playerid, 3.0, 1451.9034,-1805.8535,13.5661)) //OpstinaLS
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 5);
             SetPlayerVirtualWorld(playerid, 5);
             SetPlayerPos(playerid, -2304.2190,1253.0327,-31.6301);
@@ -89,15 +87,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, -2304.2190,1253.0327,-31.6301)) //OpstinaLS Izlaz
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1482.6442,-1805.5509,18.7957);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1424.9067,1587.1135,19.1489) && GetPlayerVirtualWorld(playerid) == 6 && GetPlayerInterior(playerid) == 6)
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1424.9067,1587.1135,19.1489) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 6)
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 838.5801,-1345.9092,7.1788);
@@ -105,21 +103,21 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 838.5801,-1345.9092,7.1788) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0)
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 6);
-            SetPlayerVirtualWorld(playerid, 6);
+            SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1424.9067,1587.1135,19.1489);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1676.1896,-1634.7426,14.2265) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Tehnomedia ulaz
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerPos(playerid, 1674.1040, -1634.8239, 14.2263);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1674.1040, -1634.8239, 14.2263)) // Tehnomedia ulaz
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1676.1896,-1634.7426,14.2265);
@@ -128,15 +126,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         // Hotel Interior
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1785.1909,-1296.4972,13.3967) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Hotel ulaz
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 7);
-            SetPlayerVirtualWorld(playerid, 7);
+            SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1786.6508,-1300.3116,54.9062);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1786.6508,-1300.3116,54.9062)) // Hotel izlaz
         {
-            UcitajIgracuObjekte(playerid);
+            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1785.1909,-1296.4972,13.3967);

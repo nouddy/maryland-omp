@@ -215,7 +215,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 					SetPlayerInterior(playerid, BCenterData[i][re_BCenterInterior]);
 					SetPlayerVirtualWorld(playerid, BCenterData[i][re_BCenterVirtualWorld]);
 
-					UcitajIgracuObjekte(playerid);
+					LoadObjectsForPlayer(playerid);
 				}
 
 				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
@@ -227,7 +227,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 				SetPlayerInterior(playerid, 0);
 				SetPlayerVirtualWorld(playerid, 0);
 
-				UcitajIgracuObjekte(playerid);
+				LoadObjectsForPlayer(playerid);
 			}
 		}
 	}
@@ -375,7 +375,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
 	    SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
 
-        VosticGiveMoney(playerid, -final_Price[playerid]);
+        GiveMoneyEx(playerid, -final_Price[playerid]);
 
     }
     else {
@@ -433,7 +433,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
 	    SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
 
-        VosticGiveMoney(playerid, -final_Price[playerid]);
+        GiveMoneyEx(playerid, -final_Price[playerid]);
 
 
     }

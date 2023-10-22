@@ -88,14 +88,14 @@ stock formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
 //* Cuvanje naloga na Registeru
 stock SavePlayer(playerid)
 {
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Novac` = '%d',`Skin` = '%d',`Godine` = '%d', `Staff` = '%d', `Objekat0` = '%d', `Objekat1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
+		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Money` = '%d',`Skin` = '%d',`Age` = '%d', `Staff` = '%d', `Object0` = '%d', `Object1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
 			PlayerInfo[playerid][Level],
 			GetPlayerMoney(playerid),
 			PlayerInfo[playerid][Skin],
-			PlayerInfo[playerid][Godine],
+			PlayerInfo[playerid][Age],
             PlayerInfo[playerid][Staff],
             PlayerInfo[playerid][AttachedObject][0],
             PlayerInfo[playerid][AttachedObject][1],
@@ -109,16 +109,16 @@ stock SavePlayer(playerid)
 //* Save sve u vezi dokumenata
 stock SaveDocuments(playerid)
 {
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`VoziloLicence` = '%d',`MotoLicence` = '%d', `BrodLicence` = '%d', `OruzjeLicence` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `player_id` = '%d'",
             PlayerDocuments[playerid][pNationalID],
             PlayerDocuments[playerid][pPassport],
-            PlayerDocuments[playerid][pDriveLicence],
-            PlayerDocuments[playerid][pMotoLicence],
-            PlayerDocuments[playerid][pBoatLicence],
-            PlayerDocuments[playerid][pGunLicence],
+            PlayerDocuments[playerid][pDriveLicense],
+            PlayerDocuments[playerid][pMotoLicense],
+            PlayerDocuments[playerid][pBoatLicense],
+            PlayerDocuments[playerid][pGunLicense],
             PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL,query);      
     }
@@ -128,13 +128,13 @@ stock SaveDocuments(playerid)
 //* Save sve u vezi elektronike
 stock SaveElectronic(playerid)
 {
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Baterije` = '%d',`Navigacija` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `player_id` = '%d'",
             PlayerElectronic[playerid][eDronItem],
-            PlayerElectronic[playerid][eBaterijaItem],
-            PlayerElectronic[playerid][eNavigacijaItem],
+            PlayerElectronic[playerid][eBatteryItem],
+            PlayerElectronic[playerid][eGPSItem],
             PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL,query);      
     }
@@ -145,7 +145,7 @@ stock SaveElectronic(playerid)
 stock SaveFinance(playerid)
 {
 
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_finance` SET `BankAccount` = '%d',`BankMoney` = '%d',`BankPin` = '%d' WHERE `finance_id` = '%d'",
@@ -162,7 +162,7 @@ stock SaveFinance(playerid)
 //* Save sve u vezi property
 stock SavePropForPlayer(playerid)
 {
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `player_id` = '%d'",
@@ -178,10 +178,10 @@ stock SavePropForPlayer(playerid)
 
 stock SaveCryptoPlayer(playerid)
 {
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `KolicinaBTC` = '%f',`KolicinaETH` = '%f',`KolicinaDOT` = '%f',`KolicinaUSDT` = '%f', `KolicinaLTC` = '%f' WHERE `crypto_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `AmountBTC` = '%f',`AmountETH` = '%f',`AmountDOT` = '%f',`AmountUSDT` = '%f', `AmountLTC` = '%f' WHERE `crypto_id` = '%d'",
             PlayerCrypto[playerid][countBTC],
             PlayerCrypto[playerid][countXRP],
             PlayerCrypto[playerid][countDOT],
@@ -207,22 +207,22 @@ ReturnDate()
 }
 
 //* Save Novca
-VosticGiveMoney(playerid, novac)
+GiveMoneyEx(playerid, novac)
 {
-	PlayerInfo[playerid][Novac] += novac;
+	PlayerInfo[playerid][Money] += novac;
 	ResetPlayerMoney(playerid);
-	GivePlayerMoney(playerid, PlayerInfo[playerid][Novac]);
+	GivePlayerMoney(playerid, PlayerInfo[playerid][Money]);
 
-    if(IgracUlogovan[playerid] == true)
+    if(PlayerLogged[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Novac` = '%d' WHERE `ID` = '%d'",
-            PlayerInfo[playerid][Novac],
+		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Money` = '%d' WHERE `ID` = '%d'",
+            PlayerInfo[playerid][Money],
 			PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL,query);        
     }
 
-	return PlayerInfo[playerid][Novac];
+	return PlayerInfo[playerid][Money];
 }
 
 stock GetPlayerSQLID(playerid)

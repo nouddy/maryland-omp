@@ -22,14 +22,11 @@
 
  /* 
 		? TO DO LIST FOR REWORK:
+		! Srediti login/reg do kraja i izmeniti ostatak funckija na engleski i dialoge, takodje izbaciti visak dialoga jer postoji...
+		! Bazu koju sam ja pushao dodati u nju sta fali (business, re_centar itd jer nisi pushao bazu zadnju kalega.)
 
 		* Izmeniti zones.inc po gradovima koji pripadaju serveru.
 		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
-		* Izmeniti boje, dodati jos boja i potrpati ih u colors.inc // gdje si planirao ovaj colors.inc 
-		* Napraviti inc za makroe, macroes.inc i includati odmah ispod svih drugih inc na vrh skripte (PRESSED, RELEASED etc..)
-		* Sve komande prebaciti na engleski, dok ispis i nase komentare u skripti pisati na nasem jeziku. (Mesati jekavicu i klasican srpski zbog igraca)
-		* Izmeniti svaku mapu i postaviti svakoj mapi vw na -1 a interijer staviti zaseban i svakoj mapi dati drugi int 1,2,3... (Odnosi se na mape interijera)
-		* Takodje sve sto se tice baze reworkati da sve u bazi bude na englesko sto se tice imenovanja (Lozinka ~ Password)
 		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
 		* Srediti help komand za svaku komandu koja ima dodatne parametre.
 		* Pregledati kod izbaciti nepotrebne stvari i uraditi ponegde bolje ukoliko je moguce
@@ -66,6 +63,7 @@
 #include <marylandFix>
 #include <walking_styles>
 #include <colors>
+#include <macroes>
 
 
 main()
@@ -80,23 +78,6 @@ main()
 	print(">> Maryland Gamemode Started");
     print("-                                     -");
 }
-
-#define PRESSED(%0) \
-    (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
-
-#define randomEx(%0,%1) random((%1 - %0 + 1)) + %0
-
-#define HOLDING(%0) \
-	((newkeys & (%0)) == (%0))
-
-#define RELEASED(%0) \
-	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
-
-
-#define private%0(%1)  forward%0(%1); \
-                        public%0(%1)
-
-
 
 public OnGameModeInit()
 {
@@ -194,24 +175,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 {
 	return 0;
 }
-
-/*
-
-hook function SetPlayerInterior(playerid, interiorid) {
-
-	printf("DEVLOG - %d INT", interiorid);
-
-	return continue(playerid, interiorid);
-}
-
-hook function SetPlayerVirtualWorld(playerid, worldid) {
-
-	printf("DEVLOG - %d VW", worldid);
-
-	return continue(playerid, worldid);
-}
-
-*/
 
 public OnPlayerUpdate(playerid)
 {
@@ -439,10 +402,20 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	return 1;
 }
 
-// public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
-// {
-// 	return 1;
-// }
+public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+ {
+ 	return 1;
+ }
+
+public OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid)
+{
+	return 1;
+}
+
+public OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid)
+{
+	return 1;
+}
 
 public OnTrailerUpdate(playerid, vehicleid)
 {
@@ -524,7 +497,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/veh_ownership.script"						//* Vehicle ownership
 #include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
-#include "backend/vehicle/brzinomer.script"							//* Brzinomer
+#include "backend/vehicle/speedometer.script"						//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
 
 //-------------------------------------------------------------------------------------------------------- Temp
@@ -551,14 +524,14 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Business
 #include "backend/property/pproperty.script"
-#include "backend/real_estate/re_centar.script"								//* Business Centar
-#include "backend/real_estate/re_business.script"						   //* Bizovi
+#include "backend/real_estate/re_centar.script"						//* Business Centar
+#include "backend/real_estate/re_business.script"					//* Bizovi
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/real_estate/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Benches
-#include "backend/benches/klupe_ogy.script"						//* Klupe
+#include "backend/benches/benches.script"							//* Klupe
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/benches/end/do-not-look.temp"
@@ -572,7 +545,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Factions Section
 
 //-------------------------------------------------------------------------------------------------------- State Factions
-#include "backend/factions/state/faction_police.script"			//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+#include "backend/factions/state/faction_police.script"				//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.script"					//* Bunker
@@ -587,8 +560,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Messages
 
-#include "backend/messages/chat.script"							//* Chat
-#include "backend/messages/random_poruke.script"					//* Random poruke
+#include "backend/messages/chat.script"								//* Chat
+#include "backend/messages/random_messages.script"					//* Random poruke
 #include "backend/messages/custom_tags.script"						//* Custom tags iznad glave bez health bara i armora
 
 //-------------------------------------------------------------------------------------------------------- Temp
@@ -610,95 +583,91 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Metros
 
-#include "backend/metros/metros.script"							//* Metro System
+#include "backend/metros/metros.script"								//* Metro System
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/metros/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Trashs
 
-#include "backend/trash/trash.script"							//* Kontejner system
+#include "backend/trash/trash.script"								//* Kontejner system
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/trash/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/labels.asset"							//* Labeli
-#include "backend/assets/custom_markers.asset"					//* Markeri
-
-//-------------------------------------------------------------------------------------------------------- Crossover > Koristi se kad je 31 characters hook truncated
-#include "backend/crossover/DynamicArea.script"					//* Dynamic Area Crossover
-//-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/crossover/end/do-not-look.temp"
-
+#include "backend/assets/labels.asset"								//* Labeli
+#include "backend/assets/custom_markers.asset"						//* Markeri
 //-------------------------------------------------------------------------------------------------------- Frontend
 
 //-------------------------------------------------------------------------------------------------------- Textdraws
-#include "frontend/textdraws/main.tde"							//* Glavni tdovi
-#include "frontend/textdraws/login.tde"							//* Login tdovi
-#include "frontend/textdraws/register.tde"						//* Register tdovi
-#include "frontend/textdraws/izborskina.tde"					//* Izborskina tdovi na registeru
+#include "frontend/textdraws/main.tde"								//* Glavni tdovi
+#include "frontend/textdraws/login.tde"								//* Login tdovi
+#include "frontend/textdraws/register.tde"							//* Register tdovi
+#include "frontend/textdraws/choose_skin.tde"						//* Izborskina tdovi na registeru
+#include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
 
 //-------------------------------------------------------------------------------------------------------- Exteriors
-#include "frontend/exterior/starbucks.map"						//* Starbucks map 
-#include "frontend/exterior/opstina.map"						//* Opstina map
-#include "frontend/exterior/glavnaulica.map"					//* Glavna ulica map
-#include "frontend/exterior/crnotrziste.map"					//* Crno trziste map
-#include "frontend/exterior/tehnomedia.map"						//* Tehnomedia map Ogy
-#include "frontend/exterior/spawn.map"							//* Spawn Mapa
-#include "frontend/exterior/izborskina.map"						//* Izbor skina mapa
-#include "frontend/exterior/glenpark.map"						//* Glen park map
-#include "frontend/exterior/maryland-pd.map"					//* MLPD Mapa Ext
-#include "frontend/exterior/bolnica-ext.map"					//* Bolnica ext Mapa
-#include "frontend/exterior/hotel-ext.map"						//* Hotel Mapa
-#include "frontend/exterior/customs.map"						//* Customs Mapa
-#include "frontend/exterior/shopping-center.map"				//* Shopping Center Mapa
-#include "frontend/exterior/bizcent-ext.map"					//* Shopping Center Mapa
-#include "frontend/exterior/centar_park.map"					//* Center Park Mapa
-#include "frontend/exterior/binance_ext.map"					//* Binance Exterior Mapa
-#include "frontend/exterior/poligon-as.map"						//* Auto Skola Poligon Mapa (vw > 1 | interior -1)
-#include "frontend/exterior/croswellas.map"						//* Auto Salon Croswell
-#include "frontend/exterior/birorada.map"						//* Biro Rada
-#include "frontend/exterior/italy-granica.map"					//* Granica Maryland-Italy
-#include "frontend/exterior/ml-gym.map"							//* ML Gym Map
-#include "frontend/exterior/ls-ukrasi.map"						//* ML Ukrasi po gradu
-#include "frontend/exterior/ml-busvozac.map"					//* ML Bus Station
-#include "frontend/exterior/ml-zlatara.map"						//* ML Zlatara
-#include "frontend/exterior/gov_ext.map"						//* Goverment
-#include "frontend/exterior/plaza_map.map"						//* Plaza
-#include "frontend/exterior/pizzeria.map"						//* Pizzeria
-#include "frontend/exterior/driving_school.map"					//* Driving_School
-#include "frontend/exterior/vinewood_map.map"					//* VineWood
-#include "frontend/exterior/bank_ml.map"						//* Banka Maryland
+#include "frontend/exterior/starbucks.map"							//* Starbucks map 
+#include "frontend/exterior/cityhall.map"							//* Opstina map
+#include "frontend/exterior/main_street.map"						//* Glavna ulica map
+#include "frontend/exterior/blackmarket.map"						//* Crno trziste map
+#include "frontend/exterior/tehnomedia.map"							//* Tehnomedia map Ogy
+#include "frontend/exterior/spawn.map"								//* Spawn Mapa
+#include "frontend/exterior/choose_skin.map"						//* Izbor skina mapa
+#include "frontend/exterior/glenpark.map"							//* Glen park map
+#include "frontend/exterior/maryland-pd.map"						//* MLPD Mapa Ext
+#include "frontend/exterior/hospital-ext.map"						//* Bolnica ext Mapa
+#include "frontend/exterior/hotel-ext.map"							//* Hotel Mapa
+#include "frontend/exterior/customs.map"							//* Customs Mapa
+#include "frontend/exterior/shopping-center.map"					//* Shopping Center Mapa
+#include "frontend/exterior/bizcent-ext.map"						//* Shopping Center Mapa
+#include "frontend/exterior/centar_park.map"						//* Center Park Mapa
+#include "frontend/exterior/binance_ext.map"						//* Binance Exterior Mapa
+#include "frontend/exterior/croswellas.map"							//* Auto Salon Croswell
+#include "frontend/exterior/employment_office.map"					//* Biro Rada
+#include "frontend/exterior/italy-border.map"						//* Granica Maryland-Italy
+#include "frontend/exterior/ml-gym.map"								//* ML Gym Map
+#include "frontend/exterior/ls-decorations.map"						//* ML Ukrasi po gradu
+#include "frontend/exterior/ml_bus_driver.map"						//* ML Bus Station
+#include "frontend/exterior/ml_jewelry.map"							//* ML Zlatara
+#include "frontend/exterior/gov_ext.map"							//* Goverment
+#include "frontend/exterior/beach.map"								//* Plaza
+#include "frontend/exterior/pizzeria.map"							//* Pizzeria
+#include "frontend/exterior/driving_school.map"						//* Driving_School
+#include "frontend/exterior/vinewood_map.map"						//* VineWood
+#include "frontend/exterior/bank_ml.map"							//* Banka Maryland
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
-#include "frontend/exterior/italy_zicara.map"					//* Zicara u Italy (SF)
+#include "frontend/exterior/italy_zipline.map"						//* Zicara u Italy (SF)
 
 //-------------------------------------------------------------------------------------------------------- Egypt Exteriors
 
-#include "frontend/exterior/zeleznicka-egypt.map"				//* Zeleznicka u Egypt (LV)
-#include "frontend/exterior/egypt_centar.map"					//* Egypt Centar (PD - OPSTINA)
-#include "frontend/exterior/egypt_hotel.map"					//* Egypt Hotel
-#include "frontend/exterior/egypt_ulica.map"					//* Egypt Glavna Ulica
-#include "frontend/exterior/egypt_ukrasi.map"					//* Egypt Ukrasi
-#include "frontend/exterior/egypt_pumpa.map"					//* Egypt Pumpa
+#include "frontend/exterior/trainstation_egypt.map"					//* Zeleznicka u Egypt (LV)
+#include "frontend/exterior/egypt_centar.map"						//* Egypt Centar (PD - OPSTINA)
+#include "frontend/exterior/egypt_hotel.map"						//* Egypt Hotel
+#include "frontend/exterior/egypt_street.map"						//* Egypt Glavna Ulica
+#include "frontend/exterior/egypt_decorations.map"					//* Egypt Ukrasi
+#include "frontend/exterior/egypt_pump.map"							//* Egypt Pumpa
 
 //------------------------------------------------------------------------------------------------------------------- Interiors
-#include "frontend/interior/opstina-int.map"					//* Opstina int map (interior 5)
-#include "frontend/interior/flecca-bank.map"					//* Flecca bank map
-#include "frontend/interior/garaza.map"							//* Garaza mapa (interior 2)
-#include "frontend/interior/kanalizacija.map"					//* Kanalizacija map (interior 3)
-#include "frontend/interior/spawn-int.map"						//* Spawn Int Mapa (interior 6)
-#include "frontend/interior/login_map.map"						//* Login Soba Mapa
-#include "frontend/interior/bizcent-int.map"					//* Biz centar interior (interior 4)
-#include "frontend/interior/hotel-int.map"						//* Hotel interior (interior 7)
-#include "frontend/interior/login-new.map"						//* Login interior novi Ogy (interior 8)
+#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
+#include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
+#include "frontend/interior/sewers.map"								//* Kanalizacija map (interior 3)
+#include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
+#include "frontend/interior/cityhall_int.map"						//* Opstina int map (interior 5)
+#include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
+#include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
+#include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (interior 8)
+#include "frontend/interior/flecca-bank.map"						//* Flecca bank map
+#include "frontend/interior/login_map.map"							//* Login Soba Mapa
+
 
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Jobs
-//#include "backend/jobs/job_main.job" 							//* Dinamicni poslovi - Credits : job-framework
+//#include "backend/jobs/job_main.job" 								//* Dinamicni poslovi - Credits : job-framework
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"
@@ -716,9 +685,5 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
 #include "backend/stocks/variable.stock"							//* Variable stock rest
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
-
-//-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/clickplayertd.asset"						//* OnPlayerClickPlayerTextdraw
-
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"

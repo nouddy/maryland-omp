@@ -30,13 +30,13 @@
 
 */
 
-new OpstinaUlazIzlaz[2],
-    SpawnUlazIzlaz[2],
-    TehnomediaMarker[2],
+new CittyHallEnterExit[2],
+    SpawnEntExit[2],
+    TehnomediaMark[2],
     PDTest[1],
     BizCenter[2],
     hotel[2],
-    BankaMarker[1];
+    BankMark[1];
 /*
       _   _                   _          
      | | | |   ___     ___   | | __  ___ 
@@ -64,17 +64,17 @@ hook OnGameModeInit()
 forward CreateMarkers();
 public CreateMarkers()
 {
-    OpstinaUlazIzlaz[0] = CreateMarker(random(5),true,1482.6442,-1805.5509,18.7957-1.0,0, 0);
+    CittyHallEnterExit[0] = CreateMarker(random(5),true,1482.6442,-1805.5509,18.7957-1.0,0, 0);
 
     //
-    SpawnUlazIzlaz[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 6, 6);
-    SpawnUlazIzlaz[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 0, 0);
+    SpawnEntExit[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 0, 6);
+    SpawnEntExit[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 0, 0);
     //
-    TehnomediaMarker[0] = CreateMarker(random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
-    TehnomediaMarker[1] = CreateMarker(random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);
+    TehnomediaMark[0] = CreateMarker(random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
+    TehnomediaMark[1] = CreateMarker(random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);
     //
     //
-    BankaMarker[0] = CreateMarker(random(5),false,1689.8605,-1455.4658,13.5597-0.9, 0, 0);
+    BankMark[0] = CreateMarker(random(5),false,1689.8605,-1455.4658,13.5597-0.9, 0, 0);
     //
     PDTest[0] = CreateMarker(random(5),false,330.7832,-1509.9639,36.0391-0.9, 0, 0);
     //
