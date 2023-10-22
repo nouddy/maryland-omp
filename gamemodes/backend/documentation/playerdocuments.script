@@ -93,7 +93,7 @@ YCMD:izvadipasos(playerid, params[], help)
         PlayerDocuments[playerid][pPassport] = 1;
         VosticGiveMoney(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
-        notification.Show(playerid, "OPSTINA", "Uspesno si izvadio pasos!", "!", BOXCOLOR_GREEN);
+        notification.Show(playerid, "OPSTINA", "Uspesno si izvadio pasos!", "!", BOXCOLOR_GREEN); // Jesi alahami
 
         SaveDocuments(playerid);
     }

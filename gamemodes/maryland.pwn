@@ -20,16 +20,14 @@
 
 
 
- /*
+ /* 
 		? TO DO LIST FOR REWORK:
 
 		* Izmeniti zones.inc po gradovima koji pripadaju serveru.
-		* Izbaciti Ogy-jev notify system postoji pwn fajl toga i zameniti stock sa stockom od notify.inc
 		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
-		* Izmeniti boje, dodati jos boja i potrpati ih u colors.inc
+		* Izmeniti boje, dodati jos boja i potrpati ih u colors.inc // gdje si planirao ovaj colors.inc 
 		* Napraviti inc za makroe, macroes.inc i includati odmah ispod svih drugih inc na vrh skripte (PRESSED, RELEASED etc..)
 		* Sve komande prebaciti na engleski, dok ispis i nase komentare u skripti pisati na nasem jeziku. (Mesati jekavicu i klasican srpski zbog igraca)
-		* Pisati normalne komentare bez onog crnac kurac itd.
 		* Izmeniti svaku mapu i postaviti svakoj mapi vw na -1 a interijer staviti zaseban i svakoj mapi dati drugi int 1,2,3... (Odnosi se na mape interijera)
 		* Takodje sve sto se tice baze reworkati da sve u bazi bude na englesko sto se tice imenovanja (Lozinka ~ Password)
 		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
@@ -67,35 +65,7 @@
 #include <colandreas>
 #include <marylandFix>
 #include <walking_styles>
-
-
-#define     c_server        "{8dc9f3}"
-#define     c_server2       "{c092de}"
-#define     c_red           "{ff1100}"
-#define     c_blue          "{0099cc}"
-#define     c_white         "{ffffff}"
-#define     c_yellow        "{f2ff00}"
-#define     c_green         "{009933}"
-#define     c_pink          "{ff00bb}"
-#define     c_ltblue        "{00f2ff}"
-#define     c_orange        "{ffa200}"
-#define     c_greey         "{787878}"
-#define     c_purple        "{C2A2DA}"
-#define 	c_ltorange		"{EB8C6C}"
-
-#define     x_server     0x8DC9F3FF
-#define     x_server2    0xC092DEFF
-#define     x_red        0xFF1100AA 
-#define     x_blue       0x0099CCAA 
-#define     x_white      0xffffffAA
-#define     x_yellow     0xf2ff00AA
-#define     x_green      0x009933AA
-#define     x_pink       0xff00bbAA
-#define     x_ltblue     0x00f2ffAA
-#define     x_orange     0xffa200AA
-#define     x_greey      0x787878AA
-#define     x_purple     0xC2A2DAAA 
-#define 	x_ltorange	 0xEB8C6CFF
+#include <colors>
 
 
 main()
@@ -123,7 +93,7 @@ main()
 	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 
 
-#define agronom%0(%1)  forward%0(%1); \
+#define private%0(%1)  forward%0(%1); \
                         public%0(%1)
 
 
@@ -619,7 +589,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 #include "backend/messages/chat.script"							//* Chat
 #include "backend/messages/random_poruke.script"					//* Random poruke
-#include "backend/messages/notifikacije.script"					//* Notifikacije
 #include "backend/messages/custom_tags.script"						//* Custom tags iznad glave bez health bara i armora
 
 //-------------------------------------------------------------------------------------------------------- Temp

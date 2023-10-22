@@ -1,5 +1,5 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define agronom%0(%1)  forward%0(%1); \
+#define private%0(%1)  forward%0(%1); \
                         public%0(%1)

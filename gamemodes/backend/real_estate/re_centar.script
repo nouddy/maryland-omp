@@ -117,7 +117,7 @@ hook OnPlayerLoaded(playerid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-agronom BCenter_Create(id, playerid) {
+private BCenter_Create(id, playerid) {
 
     BCenterData[id][re_BCenterID] = cache_insert_id();
 
@@ -137,7 +137,7 @@ agronom BCenter_Create(id, playerid) {
     return 1;
 }
 
-agronom BCenter_Load()
+private BCenter_Load()
 {
     if(!cache_num_rows())
         return print("\n[Business Centers]: 0 business centers loaded.\n");

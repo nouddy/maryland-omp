@@ -96,7 +96,7 @@ static Text3D:dealership_VehicleLabel[5];
 
 static vehicleBought[MAX_PLAYERS];
 
-agronom Dealership_StreamVehicle(id, playerid) {
+private Dealership_StreamVehicle(id, playerid) {
 
     eVehicle[id][vID] = cache_insert_id();
 	pvVehicle[id] = CreateVehicle(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+4.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true);
@@ -141,11 +141,11 @@ hook OnGameModeInit()
     dealership_Vehicle[3] = AddStaticVehicle(541,961.5135,-1721.8722,13.7301,269.7008,0,0); // cmrlj4
     dealership_Vehicle[4] = AddStaticVehicle(522,974.2634,-1722.9049,13.7694,89.6863,0,0); // cmrlj5
 
-    dealership_VehicleLabel[0] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.5083, -1693.0735, 13.7107, 3.50, 0);
-    dealership_VehicleLabel[1] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.6058, -1712.5038, 13.6952, 3.50, 0);
-    dealership_VehicleLabel[2] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 973.5029, -1712.8794, 13.6544, 3.50, 0);
-    dealership_VehicleLabel[3] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 961.5135, -1721.8722, 13.7301, 3.50, 0);
-    dealership_VehicleLabel[4] = Create3DTextLabel(""c_greey" \187; Exhibition Vehicle", -1, 974.2634, -1722.9049, 13.7694, 3.50, 0);
+    dealership_VehicleLabel[0] = Create3DTextLabel(""c_grey" \187; Exhibition Vehicle", -1, 961.5083, -1693.0735, 13.7107, 3.50, 0);
+    dealership_VehicleLabel[1] = Create3DTextLabel(""c_grey" \187; Exhibition Vehicle", -1, 961.6058, -1712.5038, 13.6952, 3.50, 0);
+    dealership_VehicleLabel[2] = Create3DTextLabel(""c_grey" \187; Exhibition Vehicle", -1, 973.5029, -1712.8794, 13.6544, 3.50, 0);
+    dealership_VehicleLabel[3] = Create3DTextLabel(""c_grey" \187; Exhibition Vehicle", -1, 961.5135, -1721.8722, 13.7301, 3.50, 0);
+    dealership_VehicleLabel[4] = Create3DTextLabel(""c_grey" \187; Exhibition Vehicle", -1, 974.2634, -1722.9049, 13.7694, 3.50, 0);
 
     for(new i = 0; i < sizeof dealership_Vehicle; i++) {
 

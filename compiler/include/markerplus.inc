@@ -20,9 +20,9 @@
 
 static const COLOR_ARRAY[] =
 {
-    0x00000000, // bela nije ni za kurac  == default
+    0x00000000,
     0xFF33FFFF, // plava  = klasicna
-    0xFFCC00FF,  // NIJE NI ZA KURAC
+    0xFFCC00FF,  
     0xEB8C6CFF, // OGY OMILJENA / LJUBICASTA 
     0xFFFF66CC, // roze
     0xFF333333,

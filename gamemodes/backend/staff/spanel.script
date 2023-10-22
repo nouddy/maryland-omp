@@ -52,7 +52,7 @@ YCMD:spanel(playerid, params[], help)
     }
 
 	if(!IsPlayerAdmin(playerid))
-		return SendPlayerNotify(playerid, "Greska", "Samo RCON moze ovo", 1);
+		return notification.Show(playerid, "GRESKA", "Samo RCON Admin moze ovo!", "!", BOXCOLOR_RED);
 	
 	Dialog_Show(playerid, "dialog_spanel", DIALOG_STYLE_LIST,
 		"Owner Panel",
@@ -71,12 +71,12 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
-				SendPlayerNotify(playerid, "Greska", "Trenutno nije u funkciji", 1);
+				notification.Show(playerid, "GRESKA", "Trenutno nije u funkciji!", "!", BOXCOLOR_RED);
 				//notification.Show(playerid, "GRESKA", "Trenutno nije u funkciji", "!", BOXCOLOR_RED);
 			}
 			case 1:
 			{
-				SendPlayerNotify(playerid, "Greska", "Trenutno nije u funkciji", 1);
+				notification.Show(playerid, "GRESKA", "Trenutno nije u funkciji!", "!", BOXCOLOR_RED);
 			}
 			case 2:
 			{
@@ -120,56 +120,48 @@ Dialog: dialog_vreme(const playerid, response, listitem, string: inputtext[])
 			case 0:
 			{
 				SetWorldTime(2);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na noc!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na noc!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na noc!", "!", BOXCOLOR_GREEN);
+			
 			}
 			case 1:
 			{
 				SetWorldTime(14);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na dan!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na dan!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na dan!", "!", BOXCOLOR_GREEN);
 			}
 			case 2:
 			{
 				SetWeather(6);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na suncano!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na suncano!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na suncano!", "!", BOXCOLOR_GREEN);
 			}
 			case 3:
 			{
 				SetWeather(16);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na kisovito!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na kisovito!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na kisovito!", "!", BOXCOLOR_GREEN);
 			}
 			case 4:
 			{
 				SetWeather(8);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na oluju!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na oluju!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na oluju!", "!", BOXCOLOR_GREEN);
 			}
 			case 5:
 			{
 				SetWeather(9);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na maglu!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na maglu!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na maglu!", "!", BOXCOLOR_GREEN);
 			}
 			case 6:
 			{
 				SetWeather(19);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na pescanu oluju!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na pescanu oluju!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na pescanu oluju!", "!", BOXCOLOR_GREEN);
 			}
 			case 7:
 			{
 				SetWeather(20);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na toxic!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na toxic!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na toxic!", "!", BOXCOLOR_GREEN);
 			}
 			case 8:
 			{
 				SetWeather(-1337);
-				//notification.Show(playerid, "Uspesno", "Postavio si vreme na draw distance!", "!", BOXCOLOR_GREEN);
-				SendPlayerNotify(playerid, "Uspesno", "Postavio si vreme na draw distance!", 3);
+				notification.Show(playerid, "Uspesno", "Postavio si vreme na draw distance!", "!", BOXCOLOR_GREEN);
 			}
 		}
 	}

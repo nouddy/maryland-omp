@@ -78,7 +78,7 @@ YCMD:sduty(playerid, params[], help)
     }
 
 	if(!PlayerInfo[playerid][Staff])
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!.", "!", BOXCOLOR_RED);
 
 	if(StaffDuty[playerid] == false)
  	{
@@ -105,10 +105,10 @@ YCMD:sc(playerid, const string: params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!.", "!", BOXCOLOR_RED);
 
 	if (isnull(params))
-		return SendPlayerNotify(playerid, "Koriscenje", "/sc [text]", 2);
+		return notification.Show(playerid, "Koriscenje", "/sc [Tekst]", "?", BOXCOLOR_BLUE);
 
 	static tmp_str[128];
 
@@ -130,7 +130,7 @@ YCMD:sveh(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new Float:x, Float:y, Float:z;
 
@@ -139,12 +139,12 @@ YCMD:sveh(playerid, params[], help)
 	if (stfveh[playerid] == INVALID_VEHICLE_ID) 
 	{
 		if (isnull(params))
-		return SendPlayerNotify(playerid, "Greska", "Null parametri", 1);
+		return notification.Show(playerid, "Greska", "Null parametri!", "1", BOXCOLOR_RED);
 
 		new modelid = strval(params);
 
 		if (400 > modelid > 611)
-			return SendPlayerNotify(playerid, "Greska", "Invalid model vozila 400 - 611", 1);
+			return notification.Show(playerid, "Greska", "Invalid model vozila | 400 - 611 |", "!", BOXCOLOR_RED);
 
 		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z+2.0, 0.0, 1, 0, -1);
 
@@ -165,7 +165,7 @@ YCMD:sveh(playerid, params[], help)
 	    {
 	        SetVehicleParamsEx(vehicleid, false, false, false, doors, bonnet, boot, objective);
 	    }
-		SendPlayerNotify(playerid, "Uspesno", "Stvorili ste staff vozilo.", 3);
+		notification.Show(playerid, "Info", "Uspjesno ste stvorili staff vozilo!", "!", BOXCOLOR_GREEN);
 	}
 	else 
 	{
@@ -186,7 +186,7 @@ YCMD:goto(playerid, params[],help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new giveplayerid, giveplayer[MAX_PLAYER_NAME];
 
@@ -221,7 +221,7 @@ YCMD:cc(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "/sc [Tekst]", "?", BOXCOLOR_BLUE);
 
 	for(new cc; cc < 110; cc++)
 	{
@@ -248,7 +248,7 @@ YCMD:fv(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new vehicleid = GetPlayerVehicleID(playerid);
 
@@ -269,7 +269,7 @@ YCMD:gethere(playerid, const params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new targetid = INVALID_PLAYER_ID;
 
@@ -312,7 +312,7 @@ YCMD:nitro(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	AddVehicleComponent(GetPlayerVehicleID(playerid), 1010);
 
@@ -329,7 +329,7 @@ YCMD:jetpack(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
 
@@ -347,7 +347,7 @@ YCMD:setskin(playerid, const string: params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	static
 		targetid,
@@ -384,7 +384,7 @@ YCMD:xgoto(playerid, params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new Float:x, Float:y, Float:z;
 
@@ -415,7 +415,7 @@ YCMD:setint(const playerid, params[], help)
         return 1;
     }
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new id,int;
 	if(sscanf(params, "ii", id, int)) return SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}/setint id igraca id interior");
@@ -431,7 +431,7 @@ YCMD:setint(const playerid, params[], help)
 YCMD:setvw(const playerid, params[], help)
 {
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 	
 	new id,vw;
 	if(sscanf(params, "ii", id, vw)) return SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}/setvw id igraca id interior");
@@ -452,7 +452,7 @@ YCMD:setstaff(playerid, const string: params[], help)
     }
 
 	if(!IsPlayerAdmin(playerid))
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	static
 		targetid,
@@ -497,7 +497,7 @@ YCMD:setstaff(playerid, const string: params[], help)
 YCMD:restart(playerid, const string: params[], help)
 {
 	if(!IsPlayerAdmin(playerid))
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	SendRconCommand("gmx");
 
@@ -513,7 +513,7 @@ YCMD:slap(playerid, const params[], help)
     }
 
 	if (PlayerInfo[playerid][Staff] < 1)
-		return SendPlayerNotify(playerid, "Greska", "Samo staff moze ovo", 1);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new targetid;
 

@@ -235,7 +235,7 @@ timer Spawn_Player[1500](playerid)
 	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
 	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
 
-	SendPlayerNotify(playerid, "Uspesno", "Dobrodosao nazad na Maryland", 3);
+	notification.Show(playerid, "Maryland", "Dobro Dosli na Maryland!", "!", BOXCOLOR_GREEN);
 	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
 		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
