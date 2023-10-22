@@ -225,7 +225,7 @@ VosticGiveMoney(playerid, novac)
 	return PlayerInfo[playerid][Novac];
 }
 
-GetPlayerSQLID(playerid)
+stock GetPlayerSQLID(playerid)
 {
 	return (PlayerInfo[playerid][SQLID]);
 }

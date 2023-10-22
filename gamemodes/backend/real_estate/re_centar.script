@@ -36,7 +36,7 @@
 #define BUSINESS_INTERIOR_ARMORY_PRICE (7000)
 
 
-new Text3D:re_BCenter_Label,
+new Text3D:re_BCenter_Label[MAX_PLAYERS],
     Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
@@ -80,6 +80,14 @@ enum RE_BUSINESS_CENTER_DATA {
 }
 
 new BCenterData[MAX_BUSINESS_CENTER][RE_BUSINESS_CENTER_DATA];
+new BCenterActor[MAX_BUSINESS_CENTER];
+
+new e_CHOSEN_INTERIOR[MAX_PLAYERS],
+    bool:e_CHOSEN_SAFE[MAX_PLAYERS],
+    bool:e_CHOSEN_WARDROBE[MAX_PLAYERS],
+    bool:e_CHOSEN_ARMORY[MAX_PLAYERS];
+
+new re_CenterSign[MAX_BUSINESS_CENTER];
 
 hook OnGameModeInit()
 {
@@ -88,15 +96,45 @@ hook OnGameModeInit()
     mysql_tquery(SQL, "SELECT * FROM `re_centar`", "BCenter_Load", "");
 }
 
+hook OnPlayerConnect(playerid) {
+
+    e_CHOSEN_INTERIOR[playerid] = 0;
+    e_CHOSEN_SAFE[playerid] = false;
+    e_CHOSEN_WARDROBE[playerid] = false;
+    e_CHOSEN_ARMORY[playerid] = false;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerLoaded(playerid) {
 
     if(PlayerProperty[playerid][BCenter] != 0)
     {
-        re_BCenter_Label = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 0.00, 0.00, 0.00, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+        re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
     }
-    else re_BCenter_Label = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za kupovinu '/buybizcenter'", -1, 0.00, 0.00, 0.00, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+    else re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za kupovinu '/buybizcenter'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+agronom BCenter_Create(id, playerid) {
+
+    BCenterData[id][re_BCenterID] = cache_insert_id();
+
+    PlayerProperty[playerid][BCenter] = BCenterData[id][re_BCenterID];
+
+    SendClientMessage(playerid, x_server, "[BUSINESS CENTER] >> "c_white"Uspjesno ste kupili bizniz centar!");
+
+    BCenterActor[id] = CreateDynamicActor(BCenterData[id][re_BCenterAgentType], BCenterData[id][re_AgentPos][0], BCenterData[id][re_AgentPos][1], BCenterData[id][re_AgentPos][2], BCenterData[id][re_AgentPos][3], 1, 100.0, BCenterData[id][re_BCenterVirtualWorld], 4, -1);
+
+    if(IsValidDynamic3DTextLabel(re_BCenter_Label[playerid]))
+    {
+        DestroyDynamic3DTextLabel(re_BCenter_Label[playerid]);
+        re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+    }
+    Iter_Add(iter_BCenters, id);
+
+    return 1;
 }
 
 agronom BCenter_Load()
@@ -146,6 +184,16 @@ agronom BCenter_Load()
         cache_get_value_name_float(i, "re_AgentPosZ",BCenterData[i][re_AgentPos][2]);
         cache_get_value_name_float(i, "re_AgentPosA",BCenterData[i][re_AgentPos][3]);
 
+        re_CenterSign[i] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[i][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+        SetDynamicObjectMaterial(re_CenterSign[i], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
+
+        new firm_name[MAX_BCENTER_NAME];
+        format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[i][re_BCenterName]);
+
+	    SetDynamicObjectMaterialText(re_CenterSign[i], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        BCenterActor[i] = CreateDynamicActor(BCenterData[i][re_BCenterAgentType], BCenterData[i][re_AgentPos][0], BCenterData[i][re_AgentPos][1], BCenterData[i][re_AgentPos][2], BCenterData[i][re_AgentPos][3], 1, 100.0, BCenterData[i][re_BCenterVirtualWorld], 4, -1);
+
 		Iter_Add(iter_BCenters, i);
 
 		printf("backend/real_estate/re_centar.script loaded(%d) business centers", rows);
@@ -184,6 +232,209 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 		}
 	}
 
-
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:buybizcenter(playerid, params[], help) 
+{
+
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, 1658.5809,-1343.2560, 17.4960)) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Ne nalazite se u blizini bizniz centra!");
+
+    if(PlayerProperty[playerid][BCenter] != 0) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Vec posjedujete bizniz centar!");
+
+    if(GetPlayerMoney(playerid) < BUSINESS_CENTER_PRICE) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Nemate dovoljno novca!");    
+
+    Dialog_Show(playerid, "re_BCenterBuy", DIALOG_STYLE_LIST, "Business Center", "[ 1 ] >> Classic Interior\n[ 2 ] >> Premium Interior", "Odaberi", "Odustani");
+
+    return 1;
+}
+
+Dialog:re_BCenterBuy(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    new tmp_int = listitem+1;
+
+    e_CHOSEN_INTERIOR[playerid] = tmp_int;
+    
+    Dialog_Show(playerid, "re_BCenterSafe", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti sef za vas business center.\nSef je jedna od dodatnih stvari koja vam omogucava shranjivanje novca i ostalih stvari.\n \
+                                                                                    Cijena sefa bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_SAFE_PRICE);
+
+    return 1;
+}
+
+Dialog:re_BCenterSafe(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        Dialog_Show(playerid, "re_BCenterWardrobe", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti garderober za vas business center.\nGarderober je jedna od dodatnih stvari koja vam omogucava shranjivanje odjece i ostalih stvari.\n \
+                                                                                    Cijena garderobera bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_WARDROBE_PRICE);
+
+    }
+
+    e_CHOSEN_SAFE[playerid] = true;
+    
+    Dialog_Show(playerid, "re_BCenterWardrobe", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti garderober za vas business center.\nGarderober je jedna od dodatnih stvari koja vam omogucava shranjivanje odjece i ostalih stvari.\n \
+                                                                                    Cijena garderobera bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_WARDROBE_PRICE);
+
+    return 1;
+}
+
+Dialog:re_BCenterWardrobe(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        Dialog_Show(playerid, "re_BCenterArmory", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti oruzaonicu za vas business center.\nOruzaonica je jedna od dodatnih stvari koja vam omogucava skladistenje oruzja.\n\
+                                                                                    Cijena oruzaonice bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_ARMORY_PRICE);
+
+    }
+
+    e_CHOSEN_WARDROBE[playerid] = true;
+    
+    Dialog_Show(playerid, "re_BCenterArmory", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti oruzaonicu za vas business center.\nOruzaonica je jedna od dodatnih stvari koja vam omogucava skladistenje oruzja.\n\
+                                                                                    Cijena oruzaonice bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_ARMORY_PRICE);
+
+    return 1;
+}
+
+Dialog:re_BCenterArmory(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        //  Kupovina;
+
+        Dialog_Show(playerid, "re_BCenterAgent", DIALOG_STYLE_MSGBOX, "Business Center - Agent", "Djeluju?i kao osobni asistent u vodjenju vase organizacije, pomocnik nudi ciljeve i povratne informacije tijekom kupnje i prodaje cargoa.\n\
+                                                                       Takodjer vam moze pomoci oko vasih firmi koji ce biti u sklopu bizniz centra, i uvijek gledaju da vam pomognu.\n\nOdaberi svog asistenta", ">> Muski", ">> Zenski");
+    }
+    else {
+
+        Dialog_Show(playerid, "re_BCenterAgent", DIALOG_STYLE_MSGBOX, "Business Center - Agent", "Djelujuci kao osobni asistent u vodjenju vase organizacije, pomocnik nudi ciljeve i povratne informacije tijekom kupnje i prodaje cargoa.\n\
+                                                                       Takodjer vam moze pomoci oko vasih firmi koji ce biti u sklopu bizniz centra, i uvijek gledaju da vam pomognu.\n\nOdaberi svog asistenta", ">> Muski", ">> Zenski");
+        e_CHOSEN_ARMORY[playerid] = true;
+
+    }
+
+    return 1;
+}
+
+Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        
+        new bID = Iter_Free(iter_BCenters);
+
+        new final_Price[MAX_PLAYERS];
+
+        final_Price[playerid] = BUSINESS_CENTER_PRICE;
+
+        if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
+        if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
+        if(e_CHOSEN_INTERIOR[playerid] > 1) { final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; }
+        if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
+
+
+        BCenterData[bID][re_BCenterInterior] = 4;
+        BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
+        BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
+
+        BCenterData[bID][re_BCenterLocked] = false;
+
+        BCenterData[bID][re_BCenterType] = e_CHOSEN_INTERIOR[playerid];
+
+        BCenterData[bID][re_BCenterInt][0] = 1826.0618;
+        BCenterData[bID][re_BCenterInt][1] = -1286.3246;
+        BCenterData[bID][re_BCenterInt][2] = 131.7544;
+        
+        BCenterData[bID][re_AgentPos][0] = 1827.9590;
+        BCenterData[bID][re_AgentPos][1] = -1302.5916;
+        BCenterData[bID][re_AgentPos][2] = 131.7394;
+        BCenterData[bID][re_AgentPos][3] = 3.5893;
+
+        BCenterData[bID][re_BCenterAgentType] = 150;
+
+        new q[789];
+
+        mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterWardrobe`, \ 
+                                        `re_BCenterArmory`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
+                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f')", 
+                                        BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
+                                        e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],
+                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], e_CHOSEN_WARDROBE[playerid],
+                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
+                                        BCenterData[bID][re_AgentPos][2], BCenterData[bID][re_AgentPos][3]); 
+        mysql_tquery(SQL, q, "BCenter_Create", "dd", bID, playerid);
+
+        re_CenterSign[bID] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[bID][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+        SetDynamicObjectMaterial(re_CenterSign[bID], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
+
+        new firm_name[MAX_BCENTER_NAME];
+        format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
+
+	    SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        VosticGiveMoney(playerid, -final_Price[playerid]);
+
+    }
+    else {
+
+
+        new bID = Iter_Free(iter_BCenters);
+
+        new final_Price[MAX_PLAYERS];
+
+        final_Price[playerid] = BUSINESS_CENTER_PRICE;
+
+        if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
+        if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
+        if(e_CHOSEN_INTERIOR[playerid] > 1) { final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; }
+        if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
+
+
+        BCenterData[bID][re_BCenterInterior] = 4;
+        BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
+        BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
+
+        BCenterData[bID][re_BCenterLocked] = false;
+
+        BCenterData[bID][re_BCenterType] = e_CHOSEN_INTERIOR[playerid];
+
+        BCenterData[bID][re_BCenterInt][0] = 1826.0618;
+        BCenterData[bID][re_BCenterInt][1] = -1286.3246;
+        BCenterData[bID][re_BCenterInt][2] = 131.7544;
+        
+        BCenterData[bID][re_AgentPos][0] = 1827.9590;
+        BCenterData[bID][re_AgentPos][1] = -1302.5916;
+        BCenterData[bID][re_AgentPos][2] = 131.7394;
+        BCenterData[bID][re_AgentPos][3] = 3.5893;
+
+        BCenterData[bID][re_BCenterAgentType] = 147;
+
+        new q[789];
+
+        mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterWardrobe`, \ 
+                                        `re_BCenterArmory`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
+                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f')", 
+                                        BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
+                                        e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],
+                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], e_CHOSEN_WARDROBE[playerid],
+                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
+                                        BCenterData[bID][re_AgentPos][2], BCenterData[bID][re_AgentPos][3]); 
+        mysql_tquery(SQL, q, "BCenter_Create", "dd", bID, playerid);
+
+        re_CenterSign[bID] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[bID][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+        SetDynamicObjectMaterial(re_CenterSign[bID], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
+
+        new firm_name[MAX_BCENTER_NAME];
+        format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
+
+	    SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        VosticGiveMoney(playerid, -final_Price[playerid]);
+
+
+    }
 }

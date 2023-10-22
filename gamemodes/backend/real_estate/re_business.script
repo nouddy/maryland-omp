@@ -1,0 +1,294 @@
+/*
+*
+*  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+*  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+*  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+*  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+*  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+*  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+*  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+*
+*  @Author         Nodi
+*  @Date           20th October 2023
+*  @Weburl         https://maryland-ogc.com
+*  @Project        maryland_project
+*
+*  @File           re_business.pwn
+*  @Module         real_estate
+*/
+
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+//*             >> [ DEFINES ] <<
+
+#define MAX_BUSINESS                            (600)
+#define INVALID_BUSINESS_ID                     (-1)
+
+#define MAX_BUSINESS_NAME_LEN                   (64)
+
+#define BUSINESS_TYPE_MARKET                    (1)
+#define BUSINESS_TYPE_PHARMACY                  (2)
+#define BUSINESS_TYPE_TECH_SHOP                 (3)
+#define BUSINESS_TYPE_KIOSK                     (4)
+#define BUSINESS_TYPE_CAFFE_BAR                 (5)
+#define BUSINESS_TYPE_RESTAURANT                (6)
+#define BUSINESS_TYPE_AMMUNATION                (7)
+#define BUSINESS_TYPE_SEX_SHOP                  (8)
+#define BUSINESS_TYPE_HOTEL                     (9)
+#define BUSINESS_TYPE_AGRICULTURAL_STORE        (10)
+#define BUSINESS_TYPE_PETROL_STATION            (11)
+
+
+//*             >> [ SKINS ] <<
+
+#define MARKET_ACTOR_SKIN                       (20)
+#define PHARMACY_ACTOR_SKIN                     (93)
+#define TECH_SHOP_ACTOR_SKIN                    (289)
+#define CAFFE_BAR_ACTOR_SKIN                    (11)
+#define RESTAURANT_ACTOR_SKIN                   (155)
+#define AMMUNATION_ACTOR_SKIN                   (179)
+#define SEX_SHOP_ACTOR_SKIN                     (178)
+#define HOTEL_ACTOR_SKIN                        (216)
+#define AGRICULTURAL_STORE_ACTOR_SKIN           (158)
+
+enum e_BUSINESS_DATA {
+
+    bID,
+    bOwner,
+    bName[MAX_BUSINESS_NAME_LEN],
+
+    bool:bLocked,
+    bType,
+    bPrice,
+    bLevel,
+
+    Float:bEntrance[3],
+    Float:bExit[3],
+    Float:bInteract[3],
+
+    bActorSkin,
+    Float:bActorPos[4],
+
+    bProducts,
+    bInt,
+    bVW
+}
+
+new re_BusinessData[MAX_BUSINESS][e_BUSINESS_DATA];
+
+new Text3D:re_BusinessLabel[MAX_BUSINESS][2],
+           re_BusinessPickup[MAX_BUSINESS],
+           Iterator:iter_Business<MAX_BUSINESS>;
+
+#define MAX_PRODUCT_NAME_LEN                (32)
+
+enum e_PRODUCT_DATA {
+
+    productName[MAX_PRODUCT_NAME_LEN],
+    productBusiness,
+    Float:productPrice
+}
+
+new const sz_Products[][e_PRODUCT_DATA] = {
+
+    { "Pizza",      BUSINESS_TYPE_MARKET,       2.0 },
+    { "Upaljac",    BUSINESS_TYPE_MARKET,       1.5 },
+    { "Sok",        BUSINESS_TYPE_MARKET,       2.5 },
+    { "Cokoladica", BUSINESS_TYPE_MARKET,       2.5 }
+};
+
+enum e_BUSINESS_INTERIORS {
+
+    Float:interiorPos[3],
+    InteriorID
+}
+
+
+new business_Interiors[11][e_BUSINESS_INTERIORS] = {
+
+    { { 6.08, -28.89, 1003.54     },    10 },
+    { { 6.08, -28.89, 1003.54     },    10 },
+    { { -2240.10,136.97,1035.41   },    6  },
+    { { 0.00, 0.00, 0.00            },    0  },
+    { { 501.95,-70.56,998.75      },    11 },
+    { { 442.12,-52.47,999.71      },    6  },
+    { { 297.14,-109.87,1001.51    },    6  },
+    { { -100.26,-22.93,1000.71    },    3  },
+    { { 2217.28,-1150.53,1025.79  },    15 },
+    { { 6.08, -28.89, 1003.54     },    10 },
+    { { 663.05,-573.62,16.33      },    0  }
+
+};
+
+stock Business_Type(biz) {
+
+    new string[64];
+
+    switch(re_BusinessData[biz][bType]) {
+
+        case BUSINESS_TYPE_MARKET:                      { string = "24/7 Market"; }
+        case BUSINESS_TYPE_PHARMACY:                    { string = "Apoteka"; }
+        case BUSINESS_TYPE_TECH_SHOP:                   { string = "Prodavnica Elektronike"; }
+        case BUSINESS_TYPE_KIOSK:                       { string = "Kiosk"; }
+        case BUSINESS_TYPE_CAFFE_BAR:                   { string = "Kafic"; }
+        case BUSINESS_TYPE_RESTAURANT:                  { string = "Restoran"; }
+        case BUSINESS_TYPE_AMMUNATION:                  { string = "Oruzaonica"; }
+        case BUSINESS_TYPE_SEX_SHOP:                    { string = "Sex Shop"; }
+        case BUSINESS_TYPE_HOTEL:                       { string = "Hotel"; }
+        case BUSINESS_TYPE_AGRICULTURAL_STORE:          { string = "Poljoprivredna Apoteka"; }
+        case BUSINESS_TYPE_PETROL_STATION:              { string = "Benziska Pumpa"; }
+        default:                                        { string = "[Undefined]"; }
+        
+    }
+    return string;
+}
+
+agronom Business_LoadData() {
+
+    new rows = cache_num_rows();
+
+    if(!rows)
+        return print("Nije moguce ucitati tabelu `re_business` [ PRAZNO ]");
+
+    else {
+
+        for(new i = 0; i < rows; i++) {
+
+            cache_get_value_name_int(i, "bID", re_BusinessData[i][bID]);
+            cache_get_value_name_int(i, "bOwner", re_BusinessData[i][bOwner]);
+            cache_get_value_name(i, "bName", re_BusinessData[i][bName], MAX_BUSINESS_NAME_LEN);
+
+            cache_get_value_name_bool(i, "bLocked", re_BusinessData[i][bLocked]);
+            cache_get_value_name_int(i, "bType", re_BusinessData[i][bType]);
+            cache_get_value_name_int(i, "bPrice", re_BusinessData[i][bPrice]);
+            cache_get_value_name_int(i, "bLevel", re_BusinessData[i][bLevel]);
+
+            cache_get_value_name_float(i, "bEnterX", re_BusinessData[i][bEntrance][0]);
+            cache_get_value_name_float(i, "bEnterY", re_BusinessData[i][bEntrance][1]);
+            cache_get_value_name_float(i, "bEnterZ", re_BusinessData[i][bEntrance][2]);
+
+            cache_get_value_name_float(i, "bExitX", re_BusinessData[i][bExit][0]);
+            cache_get_value_name_float(i, "bExitY", re_BusinessData[i][bExit][1]);
+            cache_get_value_name_float(i, "bExitZ", re_BusinessData[i][bExit][2]);
+
+            cache_get_value_name_float(i, "bInteractX", re_BusinessData[i][bInteract][0]);
+            cache_get_value_name_float(i, "bInteractY", re_BusinessData[i][bInteract][1]);
+            cache_get_value_name_float(i, "bInteractZ", re_BusinessData[i][bInteract][2]);
+
+            cache_get_value_name_int(i, "bActorSkin", re_BusinessData[i][bActorSkin]);
+
+            cache_get_value_name_float(i, "bActorX", re_BusinessData[i][bActorPos][0]);
+            cache_get_value_name_float(i, "bActorY", re_BusinessData[i][bActorPos][1]);
+            cache_get_value_name_float(i, "bActorZ", re_BusinessData[i][bActorPos][2]);
+            cache_get_value_name_float(i, "bActorA", re_BusinessData[i][bActorPos][3]);
+
+            cache_get_value_name_int(i, "bProducts", re_BusinessData[i][bProducts]);
+            cache_get_value_name_int(i, "bInt", re_BusinessData[i][bInt]);
+            cache_get_value_name_int(i, "bVW", re_BusinessData[i][bVW]);
+
+            new tmp_string[422]; 
+
+            if(re_BusinessData[i][bOwner] < 1) { format(tmp_string, sizeof tmp_string, ""c_server"[ "c_white"%s"c_server" ]\n"c_white"Za ulazak pritisnite 'F'", re_BusinessData[i][bName]);}
+            else format(tmp_string, sizeof tmp_string, ""c_server"[ "c_white"%s"c_server" ]\n"c_white"\187; %s\n Cjena \187; %d", re_BusinessData[i][bName], Business_Type(i), formatInt(re_BusinessData[i][bPrice]));
+
+            re_BusinessLabel[i][1] = Create3DTextLabel(tmp_string, -1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2], 3.50, 0);
+            // re_BusinessLabel[i][1] = Create3DTextLabel(interact_string, -1, re_BusinessData[i][bInteract][0], re_BusinessData[i][bInteract][1], re_BusinessData[i][bInteract][2], 3.50, 0);
+
+            re_BusinessPickup[i] = CreatePickup(19134, 1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2]);
+
+            Iter_Add(iter_Business, i);
+
+        }
+    }
+
+    return 1;
+}
+
+agronom mysql_AddBusiness(id) {
+
+    re_BusinessData[id][bID] = cache_insert_id();
+
+    new tmp_string[422]; 
+
+    format(tmp_string, sizeof tmp_string, ""c_server"[ "c_white"%s"c_server" ]\n"c_white"Za ulazak pritisnite 'F'", re_BusinessData[id][bName]);
+
+    re_BusinessLabel[id][1] = Create3DTextLabel(tmp_string, -1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2], 3.50, 0);
+    re_BusinessPickup[id] = CreatePickup(19134, 1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2]);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeInit() {
+
+    print("real_estate/re_business.script loaded");
+
+    mysql_tquery(SQL, "SELECT * FROM `re_business`", "Business_LoadData", "");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:createbusiness(playerid, params[], help) 
+{
+    if(!IsPlayerAdmin(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Samo RCON Admini!");
+
+    if(help)
+    {
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"1(Market) 2(Apoteka) 3(Prodavnica Elektronike) 4(Kiosk) 5(Kafic)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"6(Restroan) 7(Oruzaonica) 8(Sex Shop) 9(Hotel) 10(Poljoprivredna Apoteka)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"11(Benziska Pumpa)");
+
+        SendClientMessage(playerid, -1, ""c_server"[KIOSK] >> "c_white"Da sacuvate poziciju kioska /saveinteract");
+
+        return (true);
+    }
+
+    new blvl, btip, bprice, bname[MAX_BUSINESS_NAME_LEN];
+
+    if(sscanf(params, "s[64]ddd", bname, blvl, btip, bprice))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/createbusiness [Ime] [Level] [Tip] [Cijena]");
+
+    if(btip < BUSINESS_TYPE_MARKET || btip > BUSINESS_TYPE_PETROL_STATION)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Unijeli ste pogresan tip biznisa, '/createbusiness help'");
+
+    
+    new id = Iter_Free(iter_Business);
+
+    re_BusinessData[id][bType] = btip;
+
+    new namestring[MAX_BUSINESS_NAME_LEN];
+    format(namestring, sizeof namestring, "%s", bname);
+
+    re_BusinessData[id][bName] = namestring;
+    re_BusinessData[id][bLocked] = true;
+    re_BusinessData[id][bPrice] = bprice;
+    re_BusinessData[id][bLevel] = blvl;
+
+    new Float:pPos[3];
+
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    re_BusinessData[id][bEntrance][0] = pPos[0];
+    re_BusinessData[id][bEntrance][1] = pPos[1];
+    re_BusinessData[id][bEntrance][2] = pPos[2];
+
+    re_BusinessData[id][bExit][0] = business_Interiors[btip-1][interiorPos][0];
+    re_BusinessData[id][bExit][1] = business_Interiors[btip-1][interiorPos][1];
+    re_BusinessData[id][bExit][2] = business_Interiors[btip-1][interiorPos][2];
+
+    re_BusinessData[id][bInt] = business_Interiors[btip-1][InteriorID];
+    re_BusinessData[id][bVW] = id+1;
+
+    new q[420];
+
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInt`, `bVW`) \
+                                    VALUES ('%e', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%d')", 
+                                    re_BusinessData[id][bName], re_BusinessData[id][bType], re_BusinessData[id][bLevel],
+                                    re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2],
+                                    re_BusinessData[id][bExit][0], re_BusinessData[id][bExit][1], re_BusinessData[id][bExit][2], 
+                                    re_BusinessData[id][bInt], re_BusinessData[id][bVW]);
+    mysql_tquery(SQL, q, "mysql_AddBusiness", "d", id);
+
+    return 1;
+}

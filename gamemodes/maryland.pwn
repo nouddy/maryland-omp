@@ -569,6 +569,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Business
 #include "backend/property/pproperty.script"
 #include "backend/real_estate/re_centar.script"								//* Business Centar
+#include "backend/real_estate/re_business.script"						   //* Bizovi
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/real_estate/end/do-not-look.temp"
@@ -715,7 +716,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Jobs
-#include "backend/jobs/job_main.job" 							//* Dinamicni poslovi - Credits : job-framework
+//#include "backend/jobs/job_main.job" 							//* Dinamicni poslovi - Credits : job-framework
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"

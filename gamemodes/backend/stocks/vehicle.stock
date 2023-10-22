@@ -77,7 +77,7 @@ bool:IsVehicleBicycle(vehicle) {
 }
 
 //* Prikolice
-bool:IsVehicleTrailer(vehicle) {
+stock bool:IsVehicleTrailer(vehicle) {
 
 	switch(vehicle) {
 

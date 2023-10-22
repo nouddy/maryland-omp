@@ -52,6 +52,10 @@ ResetujVariable(playerid)
     // House Script
     player_House[playerid] = -1;
 
+    // Business Centre
+
+    PlayerProperty[playerid][BCenter] = 0;
+
     for(new i = 0; i < 2; i++)
     {
         PlayerInfo[playerid][AttachedObject][i] = -1;
