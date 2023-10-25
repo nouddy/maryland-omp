@@ -105,11 +105,6 @@ public OnGameModeInit()
 
 	SnowMap_Init();
 
-	new vehicle = CreateVehicle(562, 1282.8285,1566.7600,100.9567, 90.0, 3, 3, 1500);
-	SetVehicleVirtualWorld(vehicle, 1);
-
-	printf("VEHICLE VW - %d", GetVehicleVirtualWorld(vehicle));
-
 	return 1;
 }
 
@@ -499,6 +494,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 #include "backend/vehicle/speedometer.script"						//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
+#include "backend/vehicle/driving_school.script"						//* Polaganje za dozvole.
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.temp"
@@ -658,7 +654,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/cityhall_int.map"						//* Opstina int map (interior 5)
 #include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
 #include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
-#include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (interior 8)
+#include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map
 #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 

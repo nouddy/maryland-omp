@@ -1,0 +1,73 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Silent
+ *  @Date           25th Oct 2023
+ *  @Weburl         weburl
+ *  @Project        maryland_project
+ *
+ *  @File           driving_school.script
+ *  @Module         script
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+new polygonCars[6];
+new Text3D:drivingSchool_Label[6];
+
+new ds_Actor[2];
+new Text3D:ds_ActorLabel[2];
+
+hook OnGameModeInit() {
+
+    print("vehicle/driving_school.script loaded");
+
+    polygonCars[0] = CreateVehicle(410, 1269.8265, 1580.0533, 100.7322, 193.9722, 2, 2, 1500);
+
+    polygonCars[1] = CreateVehicle(436, 1278.7849, 1580.4147, 100.7326, 195.5830, 2, 2, 1500);
+
+    polygonCars[2] = CreateVehicle(410, 1283.8812, 1579.9028, 100.7317, 172.7709, 2, 2, 1500);
+
+    polygonCars[3] = CreateVehicle(527, 1288.8995, 1579.7443, 100.7319, 189.2478, 2, 2, 1500);
+
+    polygonCars[4] = CreateVehicle(547, 1294.3339, 1579.4042, 100.7320, 173.8911, 2, 2, 1500);
+
+    polygonCars[5] = CreateVehicle(589, 1274.2537, 1579.9689, 100.6148, 174.2193, 2, 2, 1500);
+
+
+    drivingSchool_Label[0] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1269.8265, 1580.0533, 100.7322, 4.50, 0);
+    drivingSchool_Label[1] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1278.7849, 1580.4147, 100.7326, 4.50, 0);
+    drivingSchool_Label[2] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1283.8812, 1579.9028, 100.7317, 4.50, 0);
+    drivingSchool_Label[3] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1288.8995, 1579.7443, 100.7319, 4.50, 0);
+    drivingSchool_Label[4] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1294.3339, 1579.4042, 100.7320, 4.50, 0);
+    drivingSchool_Label[5] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1274.2537, 1579.9689, 100.6148, 4.50, 0);
+ 
+    for(new i = 0; i < sizeof polygonCars; i++) {
+
+        SetVehicleVirtualWorld(polygonCars[i], 8);
+        Attach3DTextLabelToVehicle(drivingSchool_Label[i], polygonCars[i], 0.0, 0.0, 0.0);
+        SetVehicleNumberPlate(polygonCars[i], "Driving School");
+    }
+
+    //Actor settings
+
+    ds_Actor[0] = CreateActor(210, 1297.4860, 1567.2146, 100.9826, 117.6921);
+    SetActorVirtualWorld(ds_Actor[0], 8);
+    SetActorInvulnerable(ds_Actor[0], true);
+
+    ds_Actor[1] = CreateActor(280, 1359.7982, 1458.7490, 100.9826, 182.0095);
+    SetActorVirtualWorld(ds_Actor[1], 8);
+    SetActorInvulnerable(ds_Actor[1], true);
+
+    ds_ActorLabel[0] = Create3DTextLabel(""c_server" » "c_grey"Jorge Melow "c_server"«\n"c_server" » "c_grey"Driving School Instructor "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za pomoc. "c_server"«", -1, 1297.4860, 1567.2146, 100.9826, 4.50, 8);
+    ds_ActorLabel[1] = Create3DTextLabel(""c_server" » "c_grey"Felipe Braum "c_server"«\n"c_server" » "c_grey"Driving School Policeman "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za pomoc. "c_server"«", -1, 1359.7982, 1458.7490, 100.9826, 4.50, 8);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
