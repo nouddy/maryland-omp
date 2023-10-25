@@ -36,7 +36,7 @@
 #define BUSINESS_INTERIOR_ARMORY_PRICE (7000)
 
 
-new Text3D:re_BCenter_Label[MAX_PLAYERS],
+new PlayerText3D:re_BCenter_Label[MAX_PLAYERS],
     Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
@@ -85,7 +85,9 @@ new BCenterActor[MAX_BUSINESS_CENTER];
 new e_CHOSEN_INTERIOR[MAX_PLAYERS],
     bool:e_CHOSEN_SAFE[MAX_PLAYERS],
     bool:e_CHOSEN_WARDROBE[MAX_PLAYERS],
-    bool:e_CHOSEN_ARMORY[MAX_PLAYERS];
+    bool:e_CHOSEN_ARMORY[MAX_PLAYERS],
+    e_IN_BUSINESS_CENTRE[MAX_PLAYERS],
+    e_BUZZER_ID[MAX_PLAYERS];
 
 new re_CenterSign[MAX_BUSINESS_CENTER];
 
@@ -102,17 +104,13 @@ hook OnPlayerConnect(playerid) {
     e_CHOSEN_SAFE[playerid] = false;
     e_CHOSEN_WARDROBE[playerid] = false;
     e_CHOSEN_ARMORY[playerid] = false;
+    e_IN_BUSINESS_CENTRE[playerid] = false;
+    e_BUZZER_ID[playerid] = INVALID_PLAYER_ID;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerLoaded(playerid) {
-
-    if(PlayerProperty[playerid][BCenter] != 0)
-    {
-        re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
-    }
-    else re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za kupovinu '/buybizcenter'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -127,12 +125,43 @@ private BCenter_Create(id, playerid) {
 
     BCenterActor[id] = CreateDynamicActor(BCenterData[id][re_BCenterAgentType], BCenterData[id][re_AgentPos][0], BCenterData[id][re_AgentPos][1], BCenterData[id][re_AgentPos][2], BCenterData[id][re_AgentPos][3], 1, 100.0, BCenterData[id][re_BCenterVirtualWorld], 4, -1);
 
-    if(IsValidDynamic3DTextLabel(re_BCenter_Label[playerid]))
+    SavePropForPlayer(playerid);
+
+    if(IsValidPlayer3DTextLabel(playerid, re_BCenter_Label[playerid]))
     {
-        DestroyDynamic3DTextLabel(re_BCenter_Label[playerid]);
-        re_BCenter_Label[playerid] = CreateDynamic3DTextLabel(""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, playerid);
+       UpdatePlayer3DTextLabelText(playerid, PlayerText3D:re_BCenter_Label[playerid], -1, ""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'");
     }
+
+    SetCameraBehindPlayer(playerid);
+    SetPlayerInterior(playerid, 0);
+
     Iter_Add(iter_BCenters, id);
+
+    SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
+    SetPlayerInterior(playerid, 0);
+    SetPlayerVirtualWorld(playerid, 0);
+
+    return 1;
+}
+
+private PreloadBusinessCentreLabels(playerid) {
+
+    printf("BCenter = %d", PlayerProperty[playerid][BCenter] );
+
+    if(PlayerProperty[playerid][BCenter] != 0)
+    {
+        re_BCenter_Label[playerid] = CreatePlayer3DTextLabel(playerid, ""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID);  
+    }
+    else re_BCenter_Label[playerid] = CreatePlayer3DTextLabel(playerid, ""c_server"\187; "c_white"Business Center\n"c_server"\187; "c_white"Za kupovinu '/buybizcenter'", -1, 1658.5809,-1343.2560, 17.4960, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID);
+
+    return 1;
+}
+
+private BCenter_BuzzCEO(playerid) {
+
+    notification.Show(playerid, "Info", "Netko vam zvoni na vrata Business Centra!\nDa primite osobu /accept", "+", BOXCOLOR_GREEN);
+
+    PlayerPlaySound(playerid, 20801, 0.0,0.0,0.0);
 
     return 1;
 }
@@ -184,13 +213,29 @@ private BCenter_Load()
         cache_get_value_name_float(i, "re_AgentPosZ",BCenterData[i][re_AgentPos][2]);
         cache_get_value_name_float(i, "re_AgentPosA",BCenterData[i][re_AgentPos][3]);
 
-        re_CenterSign[i] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[i][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
-        SetDynamicObjectMaterial(re_CenterSign[i], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
+        if(BCenterData[i][re_BCenterType] == 1) {
 
-        new firm_name[MAX_BCENTER_NAME];
-        format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[i][re_BCenterName]);
+            re_CenterSign[i] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[i][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(re_CenterSign[i], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
 
-	    SetDynamicObjectMaterialText(re_CenterSign[i], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
+            new firm_name[MAX_BCENTER_NAME];
+            format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[i][re_BCenterName]);
+
+            SetDynamicObjectMaterialText(re_CenterSign[i], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        }
+
+        else {
+
+            re_CenterSign[i] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+
+            new firm_name[MAX_BCENTER_NAME];
+            format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[i][re_BCenterName]);
+
+            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        }
 
         BCenterActor[i] = CreateDynamicActor(BCenterData[i][re_BCenterAgentType], BCenterData[i][re_AgentPos][0], BCenterData[i][re_AgentPos][1], BCenterData[i][re_AgentPos][2], BCenterData[i][re_AgentPos][3], 1, 100.0, BCenterData[i][re_BCenterVirtualWorld], 4, -1);
 
@@ -207,32 +252,95 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	{
 		foreach(new i : iter_BCenters) {
 
-			if(IsPlayerInRangeOfPoint(playerid, 3.5, 1658.5809,-1343.2560, 17.4960) && GetPlayerVirtualWorld(playerid) == 0) {
+            if(BCenterData[i][re_BCenterID] == PlayerProperty[playerid][BCenter]) {
 
-				if(!BCenterData[i][re_BCenterLocked]) {
+                if(IsPlayerInRangeOfPoint(playerid, 3.5, 1658.5809,-1343.2560, 17.4960) && GetPlayerVirtualWorld(playerid) == 0) {
 
-					SetPlayerPos(playerid, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]);
-					SetPlayerInterior(playerid, BCenterData[i][re_BCenterInterior]);
-					SetPlayerVirtualWorld(playerid, BCenterData[i][re_BCenterVirtualWorld]);
 
-					LoadObjectsForPlayer(playerid);
-				}
+                    SetPlayerPos(playerid, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]);
+                    SetPlayerInterior(playerid, BCenterData[i][re_BCenterInterior]);
+                    SetPlayerVirtualWorld(playerid, BCenterData[i][re_BCenterVirtualWorld]);
 
-				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
-			}
+                    e_IN_BUSINESS_CENTRE[playerid] = true;
 
-			else if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]) && GetPlayerVirtualWorld(playerid) != 0) {
+                    LoadObjectsForPlayer(playerid);
 
-				SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
-				SetPlayerInterior(playerid, 0);
-				SetPlayerVirtualWorld(playerid, 0);
+                }
+            }
 
-				LoadObjectsForPlayer(playerid);
-			}
-		}
+            if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]) && GetPlayerVirtualWorld(playerid) != 0) {
+
+                SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
+                SetPlayerInterior(playerid, 0);
+                SetPlayerVirtualWorld(playerid, 0);
+
+                e_IN_BUSINESS_CENTRE[playerid] = false;
+
+                LoadObjectsForPlayer(playerid);
+            }
+        }
 	}
-
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:ceolist(playerid, params[], help) 
+{
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, 1658.5809,-1343.2560, 17.4960)) return notification.Show(playerid, "GRESKA", "Morate biti na lokaciji business centra!", "!", BOXCOLOR_RED);
+
+    foreach(new i : Player) {
+
+        if(e_IN_BUSINESS_CENTRE[i]) {
+
+            SendClientMessage(playerid, x_server, "[C.E.O. LIST] >> "c_white"ID %d | Name %s", i, ReturnPlayerName(i));
+        }
+    }
+    return 1;
+}
+
+YCMD:buzz(playerid, params[], help) 
+{
+    
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, 1658.5809,-1343.2560, 17.4960)) return notification.Show(playerid, "GRESKA", "Morate biti na lokaciji business centra!", "!", BOXCOLOR_RED);
+
+    if(GetPlayerVirtualWorld(playerid) > 0) return notification.Show(playerid, "GRESKA", "Morate biti kod business centra!", "!", BOXCOLOR_RED);
+
+    new target;
+
+    if(sscanf(params, "u", target)) return notification.Show(playerid, "USAGE", "/buzz [ID Igraca]", "?", BOXCOLOR_BLUE);
+
+    if(target == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Krivi ID Igraca!", "!", BOXCOLOR_RED);
+    if(!IsPlayerConnected(target)) return notification.Show(playerid, "GRESKA", "Krivi ID Igraca!", "!", BOXCOLOR_RED);
+    if(!e_IN_BUSINESS_CENTRE[target]) return notification.Show(playerid, "GRESKA", "Ta osoba nije u business centru!", "!", BOXCOLOR_RED);
+
+    BCenter_BuzzCEO(target);
+
+    e_BUZZER_ID[target] = playerid;
+
+    return 1;
+}
+
+YCMD:accept(playerid, params[], help) 
+{
+    
+    if(!e_IN_BUSINESS_CENTRE[playerid]) return notification.Show(playerid, "GRESKA", "Niste u svom business centru!", "!", BOXCOLOR_RED);
+
+    if(e_BUZZER_ID[playerid] == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Niko vam nije pozvonio!", "!", BOXCOLOR_RED); 
+
+    if(!IsPlayerInRangeOfPoint(e_BUZZER_ID[playerid], 3.50, 1658.5809,-1343.2560, 17.4960)) return notification.Show(playerid, "GRESKA", "Osoba se je udaljila od business centra!", "!", BOXCOLOR_RED); 
+
+    foreach(new i : iter_BCenters) {
+
+        if(BCenterData[i][re_BCenterID] == PlayerProperty[playerid][BCenter]) {
+
+            SetPlayerPos(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]);
+            SetPlayerInterior(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterInterior]);
+            SetPlayerVirtualWorld(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterVirtualWorld]);
+
+            LoadObjectsForPlayer(e_BUZZER_ID[playerid]);
+        }
+    }
+
+    return 1;
 }
 
 YCMD:buybizcenter(playerid, params[], help) 
@@ -246,6 +354,17 @@ YCMD:buybizcenter(playerid, params[], help)
 
     Dialog_Show(playerid, "re_BCenterBuy", DIALOG_STYLE_LIST, "Business Center", "[ 1 ] >> Classic Interior\n[ 2 ] >> Premium Interior", "Odaberi", "Odustani");
 
+    SendClientMessage(playerid, x_server, "[BUSINESS CENTER] >> "c_white"Trenutni tip interijera koji vam se pokazuje je classic interior!");
+
+    InterpolateCameraPos(playerid, 1820.831665, -1300.146362, 133.082626, 1820.036865, -1315.851806, 133.117080, 3500);
+    InterpolateCameraLookAt(playerid, 1824.780761, -1303.204833, 132.859619, 1824.758422, -1314.229980, 132.839447, 3500);
+
+    SetPlayerPos(playerid, 1826.0618, -1286.3246, 131.7544);
+
+    SetPlayerInterior(playerid, 4);
+
+    TogglePlayerControllable(playerid, false);
+
     return 1;
 }
 
@@ -258,6 +377,16 @@ Dialog:re_BCenterBuy(const playerid, response, listitem, string:inputtext[]) {
 
     e_CHOSEN_INTERIOR[playerid] = tmp_int;
     
+    if(tmp_int == 2) {
+
+        SetPlayerInterior(playerid, 9);
+
+        InterpolateCameraPos(playerid, 2264.891601, 2171.936279, 104.577667, 2272.053955, 2176.708496, 104.864067, 3500);
+        InterpolateCameraLookAt(playerid, 2269.884521, 2172.005615, 104.834159, 2276.337646, 2174.149414, 104.546661, 3500);
+
+        SetPlayerPos(playerid, 2277.1470,2199.6155,103.9314);
+    }
+
     Dialog_Show(playerid, "re_BCenterSafe", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti sef za vas business center.\nSef je jedna od dodatnih stvari koja vam omogucava shranjivanje novca i ostalih stvari.\n \
                                                                                     Cijena sefa bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_SAFE_PRICE);
 
@@ -331,11 +460,9 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
         if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
-        if(e_CHOSEN_INTERIOR[playerid] > 1) { final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; }
+
         if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
 
-
-        BCenterData[bID][re_BCenterInterior] = 4;
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
 
@@ -343,14 +470,43 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         BCenterData[bID][re_BCenterType] = e_CHOSEN_INTERIOR[playerid];
 
-        BCenterData[bID][re_BCenterInt][0] = 1826.0618;
-        BCenterData[bID][re_BCenterInt][1] = -1286.3246;
-        BCenterData[bID][re_BCenterInt][2] = 131.7544;
-        
-        BCenterData[bID][re_AgentPos][0] = 1827.9590;
-        BCenterData[bID][re_AgentPos][1] = -1302.5916;
-        BCenterData[bID][re_AgentPos][2] = 131.7394;
-        BCenterData[bID][re_AgentPos][3] = 3.5893;
+        if(e_CHOSEN_INTERIOR[playerid] > 1) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; 
+
+            BCenterData[bID][re_BCenterInt][0] = 2277.1470;
+            BCenterData[bID][re_BCenterInt][1] = 2199.6155;
+            BCenterData[bID][re_BCenterInt][2] = 103.9314;   
+
+            BCenterData[bID][re_AgentPos][0] = 2279.2021;
+            BCenterData[bID][re_AgentPos][1] = 2183.5583;
+            BCenterData[bID][re_AgentPos][2] = 103.9164;
+            BCenterData[bID][re_AgentPos][3] = 0.2942;
+
+            BCenterData[bID][re_BCenterInterior] = 9;
+
+            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+
+            new firm_name[MAX_BCENTER_NAME];
+            format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
+
+            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+        }
+        else {
+
+            BCenterData[bID][re_BCenterInt][0] = 1826.0618;
+            BCenterData[bID][re_BCenterInt][1] = -1286.3246;
+            BCenterData[bID][re_BCenterInt][2] = 131.7544;
+
+            BCenterData[bID][re_BCenterInterior] = 4;
+
+            BCenterData[bID][re_AgentPos][0] = 1827.9590;
+            BCenterData[bID][re_AgentPos][1] = -1302.5916;
+            BCenterData[bID][re_AgentPos][2] = 131.7394;
+            BCenterData[bID][re_AgentPos][3] = 3.5893;
+
+        }
 
         BCenterData[bID][re_BCenterAgentType] = 150;
 
@@ -367,14 +523,6 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
                                         BCenterData[bID][re_AgentPos][2], BCenterData[bID][re_AgentPos][3]); 
         mysql_tquery(SQL, q, "BCenter_Create", "dd", bID, playerid);
 
-        re_CenterSign[bID] = Maryland_CreateDynamicObject(19483, 1827.880371, -1304.439941, 132.574478, 0.000000, 0.000000, 90.000000, BCenterData[bID][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
-        SetDynamicObjectMaterial(re_CenterSign[bID], 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
-
-        new firm_name[MAX_BCENTER_NAME];
-        format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
-
-	    SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 50, 1, 0xFFFFFFFF, 0x00000000, 1);
-
         GiveMoneyEx(playerid, -final_Price[playerid]);
 
     }
@@ -389,11 +537,9 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
         if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
-        if(e_CHOSEN_INTERIOR[playerid] > 1) { final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; }
         if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
 
 
-        BCenterData[bID][re_BCenterInterior] = 4;
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
 
@@ -401,14 +547,44 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         BCenterData[bID][re_BCenterType] = e_CHOSEN_INTERIOR[playerid];
 
-        BCenterData[bID][re_BCenterInt][0] = 1826.0618;
-        BCenterData[bID][re_BCenterInt][1] = -1286.3246;
-        BCenterData[bID][re_BCenterInt][2] = 131.7544;
-        
-        BCenterData[bID][re_AgentPos][0] = 1827.9590;
-        BCenterData[bID][re_AgentPos][1] = -1302.5916;
-        BCenterData[bID][re_AgentPos][2] = 131.7394;
-        BCenterData[bID][re_AgentPos][3] = 3.5893;
+        if(e_CHOSEN_INTERIOR[playerid] > 1) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_2_PRICE; 
+
+            BCenterData[bID][re_BCenterInt][0] = 2277.1470;
+            BCenterData[bID][re_BCenterInt][1] = 2199.6155;
+            BCenterData[bID][re_BCenterInt][2] = 103.9314;   
+
+            BCenterData[bID][re_AgentPos][0] = 2279.2021;
+            BCenterData[bID][re_AgentPos][1] = 2183.5583;
+            BCenterData[bID][re_AgentPos][2] = 103.9164;
+            BCenterData[bID][re_AgentPos][3] = 0.2942;
+
+            BCenterData[bID][re_BCenterInterior] = 9;
+
+            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+
+            new firm_name[MAX_BCENTER_NAME];
+            format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
+
+            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+        }
+        else {
+
+            BCenterData[bID][re_BCenterInt][0] = 1826.0618;
+            BCenterData[bID][re_BCenterInt][1] = -1286.3246;
+            BCenterData[bID][re_BCenterInt][2] = 131.7544;
+
+            BCenterData[bID][re_BCenterInterior] = 4;
+
+            BCenterData[bID][re_AgentPos][0] = 1827.9590;
+            BCenterData[bID][re_AgentPos][1] = -1302.5916;
+            BCenterData[bID][re_AgentPos][2] = 131.7394;
+            BCenterData[bID][re_AgentPos][3] = 3.5893;
+
+        }
 
         BCenterData[bID][re_BCenterAgentType] = 147;
 

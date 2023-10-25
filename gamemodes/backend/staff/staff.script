@@ -533,3 +533,25 @@ YCMD:slap(playerid, const params[], help)
 
 	return 1;
 }
+
+YCMD:givemoney(playerid, params[], help) 
+{
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda da date novac igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (PlayerInfo[playerid][Staff] < 1)
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+	new targetid, cash;
+
+	if(sscanf(params, "ud", targetid, cash)) return notification.Show(playerid, "KORISCENJE", "/givemoney [id] [cash]", "?", BOXCOLOR_BLUE);
+
+	if(targetid == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru", "!", BOXCOLOR_RED);
+
+	GiveMoneyEx(playerid, cash);
+
+	return 1;
+}

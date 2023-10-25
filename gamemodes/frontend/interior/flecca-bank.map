@@ -4,6 +4,8 @@ hook OnGameModeInit()
 {
     print("frontend/flecca-bank.map loaded");
     
+	
+
 	static fleccamuay;
 	fleccamuay = Maryland_CreateDynamicObject(19325, 1693.373046, -1450.887329, 14.295684, 0.000000, 0.000000, 90.000000, -1, -1, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(fleccamuay, 0, -1, "none", "none", 0xFF333333);

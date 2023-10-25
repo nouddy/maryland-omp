@@ -52,5 +52,9 @@ public LoadPlayerProperty(playerid)
     {
 		cache_get_value_name_int(0, "HouseID", player_House[playerid]);
         cache_get_value_name_int(0, "BCenter", PlayerProperty[playerid][BCenter]);
+
+        printf("Feridov BCenter ID = %d", PlayerProperty[playerid][BCenter]);
+
+        PreloadBusinessCentreLabels(playerid);
     }
 }

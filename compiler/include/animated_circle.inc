@@ -100,7 +100,7 @@ stock CreateTD(playerid, text[], color, slot, Float:x_pos, Float:y_pos)
 	TD_Circle_Data[playerid][cTextDraw][slot] = CreatePlayerTextDraw(playerid, x_pos, y_pos, text);
 	if(TD_Circle_Data[playerid][cTextDraw][slot] == PlayerText:INVALID_TEXT_DRAW)
 		return false;
-	PlayerTextDrawFont(playerid,			TD_Circle_Data[playerid][cTextDraw][slot],			1);
+	PlayerTextDrawFont(playerid, TD_Circle_Data[playerid][cTextDraw][slot], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid,		TD_Circle_Data[playerid][cTextDraw][slot],	 0.5, 1.0);
 	PlayerTextDrawColor(playerid,			TD_Circle_Data[playerid][cTextDraw][slot],		color);
 	PlayerTextDrawSetOutline(playerid,		TD_Circle_Data[playerid][cTextDraw][slot],			0);

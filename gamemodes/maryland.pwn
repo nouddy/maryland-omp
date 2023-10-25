@@ -61,6 +61,7 @@
 #include <crashdetect>
 #include <colandreas>
 #include <marylandFix>
+#include <progress2>
 #include <walking_styles>
 #include <colors>
 #include <macroes>
@@ -78,6 +79,7 @@ main()
 	print(">> Maryland Gamemode Started");
     print("-                                     -");
 }
+
 
 public OnGameModeInit()
 {
@@ -123,11 +125,13 @@ public OnGameModeExit()
 
 public OnPlayerConnect(playerid)
 {
+
 	return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason)
 {
+
 	return 1;
 }
 
@@ -655,6 +659,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
 #include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
+#include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map
 #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 

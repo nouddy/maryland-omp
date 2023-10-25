@@ -192,7 +192,7 @@ public timer_WalkAnimation(playerid)
         {
             if(temp_index_anim == indexes_animations[i])
             {   
-                Walking_gsTimer[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION,false,"d",playerid);
+                Walking_gsTimer[playerid] = SetTimerEx("timer_WalkAnimation",TIME_UPDATE_ANIMATION, false,"d",playerid);
                 return true;
             }
         }

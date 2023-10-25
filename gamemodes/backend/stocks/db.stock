@@ -166,7 +166,7 @@ stock SavePropForPlayer(playerid)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `player_id` = '%d'",
-            PlayerProperty[playerid][BCenter]
+            PlayerProperty[playerid][BCenter],
             player_House[playerid],
             PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL,query);      
