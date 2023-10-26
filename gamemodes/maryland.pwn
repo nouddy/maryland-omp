@@ -33,6 +33,7 @@
 		* Dodati provere za death i uraditi custom dmg.
 		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
 		* Rename sve funkcije i variable u skripti sa srpskog na engleski.
+		* Dodaat github webhook za info
 
 
  */
