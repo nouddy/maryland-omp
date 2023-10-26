@@ -565,7 +565,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
         new q[1400];
 
         mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
-                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ` `re_BCenterWardrobe`, \
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, \
                                         `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
                                         `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
                                         VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
@@ -693,7 +693,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
         new q[1400];
 
         mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
-                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ` `re_BCenterWardrobe`, \
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, \
                                         `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
                                         `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
                                         VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
