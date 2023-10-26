@@ -717,6 +717,5 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         GiveMoneyEx(playerid, -final_Price[playerid]);
 
-
     }
 }

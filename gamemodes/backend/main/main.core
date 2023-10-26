@@ -318,10 +318,11 @@ public OnPlayerFirstStream(playerid)
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
-	if(PRESSED(KEY_YES)) {
 
-		if(e_REGISTERING_PROGRESS[playerid]) {		
+	if(e_REGISTERING_PROGRESS[playerid]) {		
 			
+		if(PRESSED(KEY_YES)) {
+
 			new Float:x, Float:y, Float:z;
 			//BACK
 			GetDynamicObjectPos(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], x, y, z);
@@ -351,11 +352,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 			ApplyAnimation(playerid,"PED",NameAnimations[e_CHOSEN_WALK[playerid]],4.1,true,true,true,true,1);
 		}
-	}
 
-	if(PRESSED(KEY_NO)) {
-
-		if(e_REGISTERING_PROGRESS[playerid]){
+		if(PRESSED(KEY_NO)) {
 
 			if(e_SELECTED_OBJ[playerid] > -1) {
 				switch(e_SELECTED_OBJ[playerid]) {
@@ -436,11 +434,10 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 			}
 		}
 	}
-
 	return 1;
 }
 
-//
+// -
 
 Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 
