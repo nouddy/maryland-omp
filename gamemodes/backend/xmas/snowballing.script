@@ -15,8 +15,6 @@ hook OnPlayerConnect(playerid) {
 
 	PlayerCreatedSnowBall[playerid] = false;
 
-	print("OnPlayerConnect - snowballing");
-
 	return true;
 }
 
@@ -25,11 +23,10 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 	if (PRESSED( KEY_CROUCH) )
 	{
 
-		print("Crnci - Key Crouch");
+		if(GetPlayerVirtualWorld(playerid) != 0) return false;
 
 		if (!PlayerCreatedSnowBall[playerid])
 		{
-			print("Ferid Musliman - KeyStateChange TRUE");
 
 			new Float:tx, Float:ty, Float:tz, index;
 			GetPlayerPos(playerid, tx, ty, tz);
@@ -38,7 +35,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 				SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pravite grudvu sacekajte malo..");
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, true, false, false, false, false);
 				SetTimerEx("MakeSnowBall", 1500, false, "i", playerid);
-				print("MakeSnowBall");
 			}
 			else {
 				if (!WinterPlayerSettings[playerid][p_map])
@@ -116,7 +112,6 @@ PushPlayerSnowBall(playerid)
 			MoveDynamicObject(objectid, end_Pos[0], end_Pos[1], end_Pos[2], 15.0);
 		}
 
-		printf(" DEBUG: Ferid CA_RayCastLine [%d]", test);
 
 		SnowBallData[id][sb_status] = 1;
 		SnowBallData[id][sb_exists] = true;

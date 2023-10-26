@@ -171,7 +171,7 @@ hook OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Float
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
-	if(newkeys & KEY_NO)
+	if(newkeys & KEY_CROUCH)
 	{
 		new id = GetNearestContainer(playerid);
 
