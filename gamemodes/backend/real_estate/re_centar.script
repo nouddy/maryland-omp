@@ -141,6 +141,9 @@ private BCenter_Create(id, playerid) {
     SetPlayerInterior(playerid, 0);
     SetPlayerVirtualWorld(playerid, 0);
 
+    re_BCenter_ArmoryLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterArmoryPos][0], BCenterData[id][re_BCenterArmoryPos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
+    re_BCenter_WardrobeLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterWardrobePos][0], BCenterData[id][re_BCenterWardrobePos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
+
     return 1;
 }
 
@@ -227,13 +230,16 @@ private BCenter_Load()
 
         else {
 
-            re_CenterSign[i] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+            re_CenterSign[i] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, BCenterData[i][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(re_CenterSign[i], 0, 19063, "xmasorbs", "sphere", 0x00000000);
 
             new firm_name[MAX_BCENTER_NAME];
             format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[i][re_BCenterName]);
 
-            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+            SetDynamicObjectMaterialText(re_CenterSign[i], 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+
+            re_BCenter_ArmoryLabel[i] = Create3DTextLabel(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[i][re_BCenterArmoryPos][0], BCenterData[i][re_BCenterArmoryPos][1], BCenterData[i][re_BCenterArmoryPos][2], 3.50, BCenterData[i][re_BCenterVirtualWorld]);
+            re_BCenter_WardrobeLabel[i] = Create3DTextLabel(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[i][re_BCenterWardrobePos][0], BCenterData[i][re_BCenterWardrobePos][1], BCenterData[i][re_BCenterArmoryPos][2], 3.50, BCenterData[i][re_BCenterVirtualWorld]);
 
         }
 
@@ -458,10 +464,56 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         final_Price[playerid] = BUSINESS_CENTER_PRICE;
 
-        if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
-        if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
+        if(e_CHOSEN_WARDROBE[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; 
 
-        if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
+            BCenterData[bID][re_BCenterWardrobePos][0] = 2262.1335;
+            BCenterData[bID][re_BCenterWardrobePos][1] = 2178.2866;
+            BCenterData[bID][re_BCenterWardrobePos][2] = 103.9164;
+
+        }
+
+        else {
+
+            BCenterData[bID][re_BCenterWardrobePos][0] = 0.00;
+            BCenterData[bID][re_BCenterWardrobePos][1] = 0.00;
+            BCenterData[bID][re_BCenterWardrobePos][2] = 0.00;
+        }
+
+        if(e_CHOSEN_SAFE[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; 
+            
+            BCenterData[bID][re_BCenterSafePos][0] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][1] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][2] = 0.00;
+
+        }
+        else {
+
+            BCenterData[bID][re_BCenterSafePos][0] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][1] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][2] = 0.00;
+
+        }
+
+        if(e_CHOSEN_ARMORY[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; 
+
+            BCenterData[bID][re_BCenterArmoryPos][0] = 2295.5103;
+            BCenterData[bID][re_BCenterArmoryPos][1] = 2176.3320;
+            BCenterData[bID][re_BCenterArmoryPos][2] = 103.9064;            
+
+        } 
+        else {
+
+            BCenterData[bID][re_BCenterArmoryPos][0] = 0.00;
+            BCenterData[bID][re_BCenterArmoryPos][1] = 0.00;
+            BCenterData[bID][re_BCenterArmoryPos][2] = 0.00;
+
+        }
 
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
@@ -485,13 +537,13 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
             BCenterData[bID][re_BCenterInterior] = 9;
 
-            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, BCenterData[bID][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(re_CenterSign[bID], 0, 19063, "xmasorbs", "sphere", 0x00000000);
 
             new firm_name[MAX_BCENTER_NAME];
             format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
 
-            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+            SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
         }
         else {
 
@@ -510,16 +562,20 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         BCenterData[bID][re_BCenterAgentType] = 150;
 
-        new q[789];
+        new q[1400];
 
         mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
-                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterWardrobe`, \ 
-                                        `re_BCenterArmory`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
-                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f')", 
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ` `re_BCenterWardrobe`, \
+                                        `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
+                                        `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
+                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
                                         BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
                                         e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],
-                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], e_CHOSEN_WARDROBE[playerid],
-                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
+                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], BCenterData[bID][re_BCenterSafePos][0],
+                                        BCenterData[bID][re_BCenterSafePos][1], BCenterData[bID][re_BCenterSafePos][2], e_CHOSEN_WARDROBE[playerid], BCenterData[bID][re_BCenterWardrobePos][0],
+                                        BCenterData[bID][re_BCenterWardrobePos][1], BCenterData[bID][re_BCenterWardrobePos][2],
+                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterArmoryPos][0], BCenterData[bID][re_BCenterArmoryPos][1], BCenterData[bID][re_BCenterArmoryPos][2], 
+                                        BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
                                         BCenterData[bID][re_AgentPos][2], BCenterData[bID][re_AgentPos][3]); 
         mysql_tquery(SQL, q, "BCenter_Create", "dd", bID, playerid);
 
@@ -535,10 +591,56 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         final_Price[playerid] = BUSINESS_CENTER_PRICE;
 
-        if(e_CHOSEN_WARDROBE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; }
-        if(e_CHOSEN_SAFE[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; }
-        if(e_CHOSEN_ARMORY[playerid]) { final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; }
+        if(e_CHOSEN_WARDROBE[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_WARDROBE_PRICE; 
 
+            BCenterData[bID][re_BCenterWardrobePos][0] = 2262.1335;
+            BCenterData[bID][re_BCenterWardrobePos][1] = 2178.2866;
+            BCenterData[bID][re_BCenterWardrobePos][2] = 103.9164;
+
+        }
+
+        else {
+
+            BCenterData[bID][re_BCenterWardrobePos][0] = 0.00;
+            BCenterData[bID][re_BCenterWardrobePos][1] = 0.00;
+            BCenterData[bID][re_BCenterWardrobePos][2] = 0.00;
+        }
+
+        if(e_CHOSEN_SAFE[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_SAFE_PRICE; 
+            
+            BCenterData[bID][re_BCenterSafePos][0] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][1] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][2] = 0.00;
+
+        }
+        else {
+
+            BCenterData[bID][re_BCenterSafePos][0] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][1] = 0.00;
+            BCenterData[bID][re_BCenterSafePos][2] = 0.00;
+
+        }
+
+        if(e_CHOSEN_ARMORY[playerid]) { 
+            
+            final_Price[playerid]+= BUSINESS_INTERIOR_ARMORY_PRICE; 
+
+            BCenterData[bID][re_BCenterArmoryPos][0] = 2295.5103;
+            BCenterData[bID][re_BCenterArmoryPos][1] = 2176.3320;
+            BCenterData[bID][re_BCenterArmoryPos][2] = 103.9064;            
+
+        } 
+        else {
+
+            BCenterData[bID][re_BCenterArmoryPos][0] = 0.00;
+            BCenterData[bID][re_BCenterArmoryPos][1] = 0.00;
+            BCenterData[bID][re_BCenterArmoryPos][2] = 0.00;
+
+        }
 
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
@@ -562,13 +664,13 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
             BCenterData[bID][re_BCenterInterior] = 9;
 
-            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, object_world, object_int, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(biz_lux, 0, 19063, "xmasorbs", "sphere", 0x00000000);
+            re_CenterSign[bID] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, BCenterData[bID][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(re_CenterSign[bID], 0, 19063, "xmasorbs", "sphere", 0x00000000);
 
             new firm_name[MAX_BCENTER_NAME];
             format(firm_name, sizeof firm_name, "{000000}%s", BCenterData[bID][re_BCenterName]);
 
-            SetDynamicObjectMaterialText(biz_lux, 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
+            SetDynamicObjectMaterialText(re_CenterSign[bID], 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
 
         }
         else {
@@ -588,16 +690,20 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         BCenterData[bID][re_BCenterAgentType] = 147;
 
-        new q[789];
+        new q[1400];
 
         mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
-                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterWardrobe`, \ 
-                                        `re_BCenterArmory`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
-                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f')", 
+                                        `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ` `re_BCenterWardrobe`, \
+                                        `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
+                                        `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
+                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
                                         BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
                                         e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],
-                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], e_CHOSEN_WARDROBE[playerid],
-                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
+                                        BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], BCenterData[bID][re_BCenterSafePos][0],
+                                        BCenterData[bID][re_BCenterSafePos][1], BCenterData[bID][re_BCenterSafePos][2], e_CHOSEN_WARDROBE[playerid], BCenterData[bID][re_BCenterWardrobePos][0],
+                                        BCenterData[bID][re_BCenterWardrobePos][1], BCenterData[bID][re_BCenterWardrobePos][2],
+                                        e_CHOSEN_ARMORY[playerid], BCenterData[bID][re_BCenterArmoryPos][0], BCenterData[bID][re_BCenterArmoryPos][1], BCenterData[bID][re_BCenterArmoryPos][2], 
+                                        BCenterData[bID][re_BCenterAgentType], BCenterData[bID][re_AgentPos][0], BCenterData[bID][re_AgentPos][1],
                                         BCenterData[bID][re_AgentPos][2], BCenterData[bID][re_AgentPos][3]); 
         mysql_tquery(SQL, q, "BCenter_Create", "dd", bID, playerid);
 
