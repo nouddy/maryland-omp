@@ -1,5 +1,7 @@
-# ignore ALL .log files
+# ignore ALL .amx files
+*.amx
+
 log.txt
-mysql.ini
 logs/
+mysql.ini
 omp_minidump.dmp
