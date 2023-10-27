@@ -49,7 +49,7 @@ new PlayerText:ChooseSkin_PTD[MAX_PLAYERS][9];
 
 
 
-new RegisterActor[MAX_PLAYERS];
+new stock RegisterActor[MAX_PLAYERS];
 
 new bool:RegisterSex[MAX_PLAYERS],
     bool:RegisterPass[MAX_PLAYERS],

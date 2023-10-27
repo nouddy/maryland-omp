@@ -90,7 +90,7 @@ enum e_PRODUCT_DATA {
     Float:productPrice
 }
 
-new const sz_Products[][e_PRODUCT_DATA] = {
+new stock const sz_Products[][e_PRODUCT_DATA] = {
 
     { "Pizza",      BUSINESS_TYPE_MARKET,       2.0 },
     { "Upaljac",    BUSINESS_TYPE_MARKET,       1.5 },

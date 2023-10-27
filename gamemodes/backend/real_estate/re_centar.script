@@ -37,10 +37,10 @@
 
 
 new PlayerText3D:re_BCenter_Label[MAX_PLAYERS],
-    Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
 
+new stock Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER];
 
 new Iterator:iter_BCenters<MAX_BUSINESS_CENTER>;
 
