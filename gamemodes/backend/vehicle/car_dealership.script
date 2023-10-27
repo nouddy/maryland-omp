@@ -96,7 +96,8 @@ static Text3D:dealership_VehicleLabel[5];
 
 static vehicleBought[MAX_PLAYERS];
 
-private Dealership_StreamVehicle(id, playerid) {
+forward Dealership_StreamVehicle(id, playerid);
+public Dealership_StreamVehicle(id, playerid) {
 
     eVehicle[id][vID] = cache_insert_id();
 	pvVehicle[id] = CreateVehicle(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+4.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true);
