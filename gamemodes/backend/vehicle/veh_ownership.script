@@ -43,6 +43,7 @@ enum e_VEHICLE_DATA {
 
 	vID,
 	vOwner,
+	vOwnerType,
 	vModel,
 	vColor[2], 
 	vPlate[MAX_PLATE_LEN],
@@ -86,6 +87,7 @@ public LoadVehicleData() {
 
 			cache_get_value_name_int(i, "vID", eVehicle[i][vID]);
 			cache_get_value_name_int(i, "vOwner", eVehicle[i][vOwner]);
+			cache_get_value_name_int(i, "vOwnerType", eVehicle[i][vOwnerType]);
 			cache_get_value_name_int(i, "vModel", eVehicle[i][vModel]);
 			cache_get_value_name_int(i, "Color1", eVehicle[i][vColor][0]);
 			cache_get_value_name_int(i, "Color2", eVehicle[i][vColor][1]);
@@ -121,7 +123,7 @@ public LoadVehicleData() {
 
 			Iter_Add(iter_Vehicles, i);
 
-			printf("LOADED : Vehicle %d * Owner %d * VehicleID %d", eVehicle[i][vID], eVehicle[i][vOwner], pvVehicle[i]);
+			//printf("LOADED : Vehicle %d * Owner %d * Owner Type %d * VehicleID %d", eVehicle[i][vID], eVehicle[i][vOwner], eVehicle[i][vOwnerType], pvVehicle[i]);
 
 		}
 
@@ -174,6 +176,7 @@ YCMD:createvehicle(playerid, params[], help) {
 	format(plate_str, sizeof plate_str, "N/A-00-12");
 
 	eVehicle[id][vOwner] = 0;
+	eVehicle[id][vOwnerType] = 0;
 	eVehicle[id][vModel] = model;
 	eVehicle[id][vColor][0] = color[0];
 	eVehicle[id][vColor][1] = color[1];
@@ -215,10 +218,12 @@ YCMD:createvehicle(playerid, params[], help) {
 
 	new q[666];
 
-	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
+	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vOwnerType`,`vModel`, `Color1`, `Color2`, `vPlate`, \
 								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, \
 									`vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) \
-									VALUES ('0', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0', '0', '0', '0', '%d')",
+									VALUES ('%d', '%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0', '0', '0', '0', '%d')",
+									eVehicle[id][vOwner],
+									eVehicle[id][vOwnerType],
 									eVehicle[id][vModel], eVehicle[id][vColor][0], eVehicle[id][vColor][1],
 									eVehicle[id][vPlate], eVehicle[id][vPos][0], eVehicle[id][vPos][1],
 									eVehicle[id][vPos][2], eVehicle[id][vPos][3], eVehicle[id][vFuelType], eVehicle[id][vState]);
