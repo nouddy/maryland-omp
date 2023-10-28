@@ -123,7 +123,7 @@ private BCenter_Create(id, playerid) {
 
     SendClientMessage(playerid, x_server, "[BUSINESS CENTER] >> "c_white"Uspjesno ste kupili bizniz centar!");
 
-    BCenterActor[id] = CreateDynamicActor(BCenterData[id][re_BCenterAgentType], BCenterData[id][re_AgentPos][0], BCenterData[id][re_AgentPos][1], BCenterData[id][re_AgentPos][2], BCenterData[id][re_AgentPos][3], 1, 100.0, BCenterData[id][re_BCenterVirtualWorld], BCenterData[id][re_BCenterInterior], -1);
+    BCenterActor[id] = CreateDynamicActor(BCenterData[id][re_BCenterAgentType], BCenterData[id][re_AgentPos][0], BCenterData[id][re_AgentPos][1], BCenterData[id][re_AgentPos][2], BCenterData[id][re_AgentPos][3], 1, 100.0, BCenterData[id][re_BCenterVirtualWorld], 4, -1);
 
     SavePropForPlayer(playerid);
 
@@ -243,7 +243,7 @@ private BCenter_Load()
 
         }
 
-        BCenterActor[i] = CreateDynamicActor(BCenterData[i][re_BCenterAgentType], BCenterData[i][re_AgentPos][0], BCenterData[i][re_AgentPos][1], BCenterData[i][re_AgentPos][2], BCenterData[i][re_AgentPos][3], 1, 100.0, BCenterData[i][re_BCenterVirtualWorld], BCenterData[i][re_BCenterInterior], -1);
+        BCenterActor[i] = CreateDynamicActor(BCenterData[i][re_BCenterAgentType], BCenterData[i][re_AgentPos][0], BCenterData[i][re_AgentPos][1], BCenterData[i][re_AgentPos][2], BCenterData[i][re_AgentPos][3], 1, 100.0, BCenterData[i][re_BCenterVirtualWorld], 4, -1);
 
 		Iter_Add(iter_BCenters, i);
 
@@ -515,17 +515,6 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         }
 
-        if(GetPlayerMoney(playerid) < final_Price[playerid]) {
-
-            SetCameraBehindPlayer(playerid);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-
-            SendClientMessage(playerid, x_server, "[BUSINESS CENTER] >> "c_white"Nemate dovoljno novca!");
-        }
-
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = PlayerInfo[playerid][SQLID];
 
@@ -651,17 +640,6 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
             BCenterData[bID][re_BCenterArmoryPos][1] = 0.00;
             BCenterData[bID][re_BCenterArmoryPos][2] = 0.00;
 
-        }
-
-        if(GetPlayerMoney(playerid) < final_Price[playerid]) {
-
-            SetCameraBehindPlayer(playerid);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-
-            SendClientMessage(playerid, x_server, "[BUSINESS CENTER] >> "c_white"Nemate dovoljno novca!");
         }
 
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;

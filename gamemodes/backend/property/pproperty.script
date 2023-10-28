@@ -47,9 +47,6 @@ public LoadPlayerProperty(playerid)
            "INSERT INTO `player_property` (player_id, BCenter, HouseID) \ 
             VALUES('%d', '0', '-1')", PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL, q);
-
-        PreloadBusinessCentreLabels(playerid);
-
     }
     else
     {
