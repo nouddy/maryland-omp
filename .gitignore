@@ -7,3 +7,4 @@ log.txt
 logs/
 mysql.ini
 omp_minidump.dmp
+*.amx

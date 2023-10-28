@@ -77,9 +77,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 
         if(newkeys & KEY_ACTION)
         {
-            if(IsVehicleBicycle(GetVehicleModel(veh)))
-                return true;
-
             new veh = GetPlayerVehicleID(playerid),
                 bool:engine,
                 bool:lights,
@@ -88,6 +85,9 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                 bool:bonnet,
                 bool:boot,
                 bool:objective;
+
+            if(IsVehicleBicycle(GetVehicleModel(veh)))
+                return true;
                    
             GetVehicleParamsEx(veh, engine, lights, alarm, doors, bonnet, boot, objective);
 

@@ -127,17 +127,32 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1785.1909,-1296.4972,13.3967) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Hotel ulaz
         {
             LoadObjectsForPlayer(playerid);
-            SetPlayerInterior(playerid, 7);
-            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 7);
             SetPlayerPos(playerid, 1786.6508,-1300.3116,54.9062);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1786.6508,-1300.3116,54.9062)) // Hotel izlaz
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1786.6508,-1300.3116,54.9062) && GetPlayerVirtualWorld(playerid) == 7) // Hotel izlaz
         {
             LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1785.1909,-1296.4972,13.3967);
+            SetCameraBehindPlayer(playerid);
+        }
+        // Bank H4RBOR Interior
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 978.1812, -1188.2797, 23.8752) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) //Ulaz
+        {
+            LoadObjectsForPlayer(playerid);
+            SetPlayerInterior(playerid, 10);
+            SetPlayerPos(playerid, 1201.1162, 2565.0740, -21.6386);
+            SetCameraBehindPlayer(playerid);
+        }
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerInterior(playerid) == 10) // izlaz
+        {
+            LoadObjectsForPlayer(playerid);
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 980.5701, -1190.3965, 23.8752);
             SetCameraBehindPlayer(playerid);
         }
     }
