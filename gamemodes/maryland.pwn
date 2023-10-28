@@ -25,7 +25,6 @@
 		! Srediti login/reg do kraja i izmeniti ostatak funckija na engleski i dialoge, takodje izbaciti visak dialoga jer postoji...
 		! Bazu koju sam ja pushao dodati u nju sta fali (business, re_centar itd jer nisi pushao bazu zadnju kalega.)
 
-		* Izmeniti zones.inc po gradovima koji pripadaju serveru.
 		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
 		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
 		* Srediti help komand za svaku komandu koja ima dodatne parametre.
@@ -33,7 +32,6 @@
 		* Dodati provere za death i uraditi custom dmg.
 		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
 		* Rename sve funkcije i variable u skripti sa srpskog na engleski.
-		* Dodaat github webhook za info
 
 
  */
@@ -661,6 +659,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
+#include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map
 #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 
