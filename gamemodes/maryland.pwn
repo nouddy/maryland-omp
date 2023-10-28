@@ -656,7 +656,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
 #include "frontend/interior/cityhall_int.map"						//* Opstina int map (interior 5)
 #include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
-#include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
+#include "frontend/interior/hotel-int.map"							//* Hotel interior (virtual world 7)
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
