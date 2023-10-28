@@ -139,6 +139,22 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             SetPlayerPos(playerid, 1785.1909,-1296.4972,13.3967);
             SetCameraBehindPlayer(playerid);
         }
+        // Bank H4RBOR Interior
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 978.1812, -1188.2797, 23.8752) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) //Ulaz
+        {
+            LoadObjectsForPlayer(playerid);
+            SetPlayerInterior(playerid, 10);
+            SetPlayerPos(playerid, 1201.1162, 2565.0740, -21.6386);
+            SetCameraBehindPlayer(playerid);
+        }
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerInterior(playerid) == 10) // izlaz
+        {
+            LoadObjectsForPlayer(playerid);
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 980.5701, -1190.3965, 23.8752);
+            SetCameraBehindPlayer(playerid);
+        }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
