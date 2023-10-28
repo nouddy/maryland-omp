@@ -39,6 +39,25 @@ enum {
 	VEHICLE_STATE_ITALY
 }
 
+enum OWNER_TYPE
+{
+	OWNER_TYPE_UNKNOWN,
+	OWNER_TYPE_PLAYER,
+	OWNER_TYPE_BUSINESS,
+	OWNER_TYPE_FACTION,
+	OWNER_TYPE_JOB,
+	OWNER_TYPE_PUBLIC,//Public transports (rent, buses for npc's, trains and such)
+}
+
+new OwnerTypeString[OWNER_TYPE][24] = {
+	"Unknown",
+	"Player",
+	"Business",
+	"Faction",
+	"Job",
+	"Public"
+};
+
 enum e_VEHICLE_DATA {
 
 	vID,
@@ -63,8 +82,10 @@ enum e_VEHICLE_DATA {
 	bool:vLock,
 	bool:vNitro,
 
-	vState
+	vState,
 
+	vGpsTracker,//Not a bool (Left possibility for different levels - Like update frequecy for position and such)
+	vMods[14],
 }
 
 new eVehicle[MAX_CARS][e_VEHICLE_DATA],
@@ -157,7 +178,7 @@ hook OnGameModeInit() {
 
 	mysql_tquery(SQL, "SELECT * FROM `vehicles`", "LoadVehicleData");
 
-	return 1;
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 YCMD:createvehicle(playerid, params[], help) {
@@ -231,11 +252,3 @@ YCMD:createvehicle(playerid, params[], help) {
 
 	return 1;
 }
-
-/*
-
-	? Note : ne uzimati nikakve ideje od nejtana;
-	? Note : ne uzimati nikakve IDEJE od NEJTANA v2;
-	? NOTE : NE UZIMATI NIKAKVE IDEJE OD NEJTANA v3!!!!!!!!!!!; ZAPAMTITI ZAOKRUZITI ISPRINTATI UOKVIRITI!
-
-*/

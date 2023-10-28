@@ -76,7 +76,7 @@ main()
 	print(" Developer : Silent & Nodi");
 	print(" Credits : daddyDOT");
 	print("-                                     -");
-	print("> Gamemode Starting...");
+	print("> Gamemode Sreturn Y_HOOKS_CONTINUE_RETURN_1();tarting...");
 	print(">> Maryland Gamemode Started");
     print("-                                     -");
 }
