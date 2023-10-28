@@ -9,7 +9,8 @@ hook OnGameModeInit()
 	SetDynamicObjectMaterialText(hotelext, 0, "«", 60, "Wingdings", 100, 0, 0xFFFFFFFF, 0x00000000, 1);
 	hotelext = Maryland_CreateDynamicObject(7666, 1835.934814, -1296.002563, 110.693824, 60.495578, -89.999984, -89.999938, 0, 0, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterialText(hotelext, 0, "«", 60, "Wingdings", 70, 0, 0xFFFFFFFF, 0x00000000, 1);
-	hotelext = Maryland_CreateDynamicObject(4587, 1803.089965, -1294.199951, 71.531303, 0.000000, 0.000000, 0.000000, 0, 0, -1, 300.00, 300.00); 
+	//CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, worldid = -1, interiorid = -1, playerid = -1, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, STREAMER_TAG_AREA areaid = STREAMER_TAG_AREA -1)
+	hotelext = Maryland_CreateDynamicObject(4587, 1803.089965, -1294.199951, 71.531303, 0.000000, 0.000000, 0.000000, -1, 0, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(hotelext, 0, 3897, "libertyhi", "wallmix64HV", 0xFFFFFFFF);
 	SetDynamicObjectMaterial(hotelext, 1, 14569, "traidman", "darkgrey_carpet_256", 0x00000000);
 	hotelext = Maryland_CreateDynamicObject(7666, 1835.934814, -1291.341430, 110.693824, 60.495578, -89.999984, -89.999938, 0, 0, -1, 300.00, 300.00); 

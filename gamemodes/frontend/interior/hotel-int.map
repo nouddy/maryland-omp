@@ -1361,6 +1361,9 @@ hook OnGameModeInit()
 	hotelint = Maryland_CreateDynamicObject(808, 1795.748168, -1305.259521, 55.372776, 0.000006, -0.000013, -91.200012, 7, -1, -1, 300.00, 300.00); 
 	hotelint = Maryland_CreateDynamicObject(808, 1796.242553, -1308.379028, 55.182773, -0.000012, -0.000013, -43.299930, 7, -1, -1, 300.00, 300.00); 
 
+	//Stakla od zgrade
+	hotelint = Maryland_CreateDynamicObject(4605, 1823.699951, -1291.239990, 7.312500, 0.000000, 0.000000, 0.000000, 7, 0, -1, 300.00, 300.00);
+
     return 1;
 }
 
