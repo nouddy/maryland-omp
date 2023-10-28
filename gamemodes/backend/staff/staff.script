@@ -69,6 +69,12 @@ hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+stock GetPlayerStaffLevel(playerid)
+{
+	if(!IsPlayerConnected(playerid)) return 0;
+	return PlayerInfo[playerid][Staff];
+}
+
 YCMD:sduty(playerid, params[], help)
 {
 	if(help)

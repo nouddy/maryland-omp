@@ -120,7 +120,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 
 */
 
-private Benches_Load()
+forward Benches_Load();
+public Benches_Load()
 {
     new iRows, id;
     iRows = cache_num_rows();

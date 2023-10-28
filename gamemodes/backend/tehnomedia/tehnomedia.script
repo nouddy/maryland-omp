@@ -43,7 +43,8 @@ hook OnPlayerLoaded(playerid)
 	return 1;
 }
 
-private SQL_ElectronicLoad(playerid)
+forward SQL_ElectronicLoad(playerid);
+public SQL_ElectronicLoad(playerid)
 {
     static rows;
     cache_get_row_count(rows);

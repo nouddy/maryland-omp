@@ -37,10 +37,10 @@
 
 
 new PlayerText3D:re_BCenter_Label[MAX_PLAYERS],
-    Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
     Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
 
+new stock Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER];
 
 new Iterator:iter_BCenters<MAX_BUSINESS_CENTER>;
 
@@ -115,7 +115,8 @@ hook OnPlayerLoaded(playerid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-private BCenter_Create(id, playerid) {
+forward BCenter_Create(id, playerid);
+public BCenter_Create(id, playerid) {
 
     BCenterData[id][re_BCenterID] = cache_insert_id();
 
@@ -147,7 +148,8 @@ private BCenter_Create(id, playerid) {
     return 1;
 }
 
-private PreloadBusinessCentreLabels(playerid) {
+forward PreloadBusinessCentreLabels(playerid);
+public PreloadBusinessCentreLabels(playerid) {
 
     printf("BCenter = %d", PlayerProperty[playerid][BCenter] );
 
@@ -159,8 +161,8 @@ private PreloadBusinessCentreLabels(playerid) {
 
     return 1;
 }
-
-private BCenter_BuzzCEO(playerid) {
+forward BCenter_BuzzCEO(playerid);
+public BCenter_BuzzCEO(playerid) {
 
     notification.Show(playerid, "Info", "Netko vam zvoni na vrata Business Centra!\nDa primite osobu /accept", "+", BOXCOLOR_GREEN);
 
@@ -169,7 +171,8 @@ private BCenter_BuzzCEO(playerid) {
     return 1;
 }
 
-private BCenter_Load()
+forward BCenter_Load();
+public BCenter_Load()
 {
     if(!cache_num_rows())
         return print("\n[Business Centers]: 0 business centers loaded.\n");

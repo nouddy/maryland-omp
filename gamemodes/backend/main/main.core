@@ -102,7 +102,9 @@ new Float:RandomSpawnCords[ 3 ][ 3 ] = {
 };
 
 //>>
-private SQL_AccountLoad(playerid)
+
+forward  SQL_AccountLoad(playerid);
+public SQL_AccountLoad(playerid)
 {
     static rows;
 	cache_get_row_count(rows);
@@ -128,12 +130,14 @@ private SQL_AccountLoad(playerid)
 	}
 }
 
-private OnPlayerLoaded(playerid)
+forward OnPlayerLoaded(playerid);
+public OnPlayerLoaded(playerid)
 {
 	return true;
 }
 
-private PlayerRegistered(playerid)
+forward PlayerRegistered(playerid);
+public PlayerRegistered(playerid)
 {
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
 
@@ -912,7 +916,8 @@ ptask LoadObjectsTimer[2000](playerid)
 }
 //
 
-private PlayerLogin(playerid)
+forward PlayerLogin(playerid);
+public PlayerLogin(playerid)
 {
 
 	TogglePlayerSpectating(playerid, true);
