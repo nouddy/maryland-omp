@@ -494,6 +494,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/documentation/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Vehicle
+#include "backend/vehicle/fuel.script"								//* Fuel script
 #include "backend/vehicle/veh_ownership.script"						//* Vehicle ownership
 #include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)

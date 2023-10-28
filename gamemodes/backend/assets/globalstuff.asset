@@ -48,9 +48,6 @@ new PlayerText:Register_PTD[MAX_PLAYERS][70];
 new PlayerText:ChooseSkin_PTD[MAX_PLAYERS][9];
 
 
-
-new RegisterActor[MAX_PLAYERS];
-
 new bool:RegisterSex[MAX_PLAYERS],
     bool:RegisterPass[MAX_PLAYERS],
     bool:RegisterAge[MAX_PLAYERS],
