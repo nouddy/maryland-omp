@@ -90,7 +90,7 @@ enum e_PRODUCT_DATA {
     Float:productPrice
 }
 
-new stock const sz_Products[][e_PRODUCT_DATA] = {
+new const sz_Products[][e_PRODUCT_DATA] = {
 
     { "Pizza",      BUSINESS_TYPE_MARKET,       2.0 },
     { "Upaljac",    BUSINESS_TYPE_MARKET,       1.5 },
@@ -206,8 +206,7 @@ public Business_LoadData() {
     return 1;
 }
 
-forward mysql_AddBusiness(id);
-public mysql_AddBusiness(id) {
+private mysql_AddBusiness(id) {
 
     re_BusinessData[id][bID] = cache_insert_id();
 

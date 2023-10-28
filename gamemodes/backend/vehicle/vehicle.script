@@ -44,7 +44,7 @@ hook OnVehicleSpawn(vehicleid)
         SetVehicleParamsEx(vehicleid, VEHICLE_PARAMS_OFF, false, false, doors, bonnet, boot, objective);
     }
 
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return 1;
 }
 
 hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
@@ -67,7 +67,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
             notification.Show(playerid, "Info", "Da upalis vozilo koristi tipku 'N'", "?", BOXCOLOR_BLUE);
         }
     }
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return 1;
 }
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
@@ -85,22 +85,30 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                 bool:bonnet,
                 bool:boot,
                 bool:objective;
-
+            
             if(IsVehicleBicycle(GetVehicleModel(veh)))
+            {
                 return true;
-                   
+            }
+            
             GetVehicleParamsEx(veh, engine, lights, alarm, doors, bonnet, boot, objective);
 
             if(engine == VEHICLE_PARAMS_OFF)
+            {
                 SetVehicleParamsEx(veh, VEHICLE_PARAMS_ON, lights, alarm, doors, bonnet, boot, objective);
+
+            }
             else
+            {
                 SetVehicleParamsEx(veh, VEHICLE_PARAMS_OFF, lights, alarm, doors, bonnet, boot, objective);
+                
+            }
 
             new str[60];
             format(str, sizeof(str),"%s si motor.", (engine == VEHICLE_PARAMS_OFF) ? "Upalio" : "Ugasio");
             notification.Show(playerid, "Info", str, "?", BOXCOLOR_BLUE);
 
-            return Y_HOOKS_BREAK_RETURN_1;
+            return true;
         }
         if(newkeys & KEY_YES)
         {
@@ -115,7 +123,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             
             if(IsVehicleBicycle(GetVehicleModel(veh)))
             {
-                return Y_HOOKS_BREAK_RETURN_1;
+                return true;
             }
             
             GetVehicleParamsEx(veh, engine, lights, alarm, doors, bonnet, boot, objective);
@@ -133,8 +141,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             format(str, sizeof(str),"%s si svetla.", (lights == VEHICLE_PARAMS_OFF) ? "Upalio" : "Ugasio");
             notification.Show(playerid, "Info", str, "?", BOXCOLOR_BLUE);
 
-            return Y_HOOKS_BREAK_RETURN_1;
+            return true;
         }
     }
-	return Y_HOOKS_CONTINUE_RETURN_1;
+	return 1;
 }

@@ -139,8 +139,7 @@ hook OnPlayerConnect(playerid)
 
 */
 
-forward LoadPlayerCrypto(playerid);
-public LoadPlayerCrypto(playerid)
+private LoadPlayerCrypto(playerid)
 {
     new rows;
     cache_get_row_count(rows);

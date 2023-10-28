@@ -590,7 +590,7 @@ stock CA_CreateObject_DC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry,
 <returns>
     -1 if the index is invalid
     -1 if the object doesn't exist
-    1 if the object was destroyed
+    1 or next interator index if the object was destroyed
 </returns>
 \**--------------------------------------------------------------------------**/
 stock CA_DestroyObject_DC(index)
@@ -600,13 +600,14 @@ stock CA_DestroyObject_DC(index)
 	#if defined _Y_ITERATE_LOCAL_VERSION
 		if(Iter_Contains(CA_Objects, index))
 		{
-			Iter_Remove(CA_Objects, index);
+			new next;
+			Iter_SafeRemove(CA_Objects, index, next);
 			if(CA_ObjectList[index][ObjectType] == OBJECT_TYPE_OBJECT) DestroyObject(CA_ObjectList[index][ObjectID]);
 			#if defined STREAMER_TYPE_OBJECT
 			else if(CA_ObjectList[index][ObjectType] == OBJECT_TYPE_DYNAMIC) DestroyDynamicObject(STREAMER_TAG_OBJECT:CA_ObjectList[index][ObjectID]);
 			#endif
 			CA_DestroyObject(CA_ObjectList[index][ColdAndreadsID]);
-			return 1;
+			return next;
 		}
 	#else
 	if(CA_ObjectList[index][ObjectUsed])

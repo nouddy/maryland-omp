@@ -327,7 +327,7 @@ stock SetPlayerProgressBarDirection(playerid, PlayerBar:barid, direction) {
 	Internal
 */
 
-stock _progress2_renderBar(playerid, barid)
+_progress2_renderBar(playerid, barid)
 {
 	if(!IsPlayerConnected(playerid)) {
 		return false;

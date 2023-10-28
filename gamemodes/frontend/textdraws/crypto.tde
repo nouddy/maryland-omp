@@ -20,8 +20,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-forward BuildCryptoTextDraws(playerid, bool:show);
-public BuildCryptoTextDraws(playerid, bool:show)
+private BuildCryptoTextDraws(playerid, bool:show)
 {
     if(show == true)
     {
