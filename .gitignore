@@ -1,5 +1,6 @@
 # ignore ALL .amx files
 *.amx
+*/*.amx
 
 crashdetect.txt
 log.txt
