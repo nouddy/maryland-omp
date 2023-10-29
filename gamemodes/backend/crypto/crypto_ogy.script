@@ -138,8 +138,8 @@ hook OnPlayerConnect(playerid)
      |_|      \__,_| |_| |_|  \___|  \__| |_|  \___/  |_| |_| |___/
 
 */
-
-private LoadPlayerCrypto(playerid)
+forward LoadPlayerCrypto(playerid);
+public LoadPlayerCrypto(playerid)
 {
     new rows;
     cache_get_row_count(rows);

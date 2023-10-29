@@ -125,7 +125,8 @@ YCMD:getlifeinsurance(playerid, params[], help)
 /*
     * Funkcije:
 */
-private SQL_AccountDocumentsLoad(playerid)
+forward SQL_AccountDocumentsLoad(playerid);
+public SQL_AccountDocumentsLoad(playerid)
 {
     static rows;
     cache_get_row_count(rows);
@@ -149,7 +150,8 @@ private SQL_AccountDocumentsLoad(playerid)
     }
 }
 
-private CheckLifeInsurance(playerid)
+forward CheckLifeInsurance(playerid);
+public CheckLifeInsurance(playerid)
 {
     new diff;
     cache_get_value_int(0, 0, diff);

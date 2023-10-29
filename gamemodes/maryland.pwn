@@ -33,7 +33,9 @@
 		* Dodati provere za death i uraditi custom dmg.
 		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
 		* Rename sve funkcije i variable u skripti sa srpskog na engleski.
-		* Dodaat github webhook za info
+		* Fali fuel sys koji je zapoceo Nodi
+		* Fali include progress novi sto je dodao vratio sam old
+		* Proveriti Build yaml i pawndisam u compiler folderu vljd je sve vraceno kako Bogu Spada.
 
 
  */
@@ -511,6 +513,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/crypto/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Finances
+#include "backend/finance/currency.pwn"									//* Currency
 //#include "backend/finance/bank_old.script"							//* Bankarstvo
 //#include "backend/finance/bank_ogy.script"							//* Bankarstvo
 
@@ -658,9 +661,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
 #include "frontend/interior/cityhall_int.map"						//* Opstina int map (interior 5)
 #include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
-#include "frontend/interior/hotel-int.map"							//* Hotel interior (interior 7)
+#include "frontend/interior/hotel-int.map"							//* Hotel interior (virtual world 7)
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
+#include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map
 #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 

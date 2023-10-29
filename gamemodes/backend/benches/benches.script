@@ -119,8 +119,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     /___\ \_/ /_^_\\___\ /_/    /___/ /_^_\ \_/  \(  
 
 */
-
-private Benches_Load()
+forward Benches_Load();
+public Benches_Load()
 {
     new iRows, id;
     iRows = cache_num_rows();

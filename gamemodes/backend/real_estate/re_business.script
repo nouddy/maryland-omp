@@ -206,7 +206,8 @@ public Business_LoadData() {
     return 1;
 }
 
-private mysql_AddBusiness(id) {
+forward mysql_AddBusiness(id);
+public mysql_AddBusiness(id) {
 
     re_BusinessData[id][bID] = cache_insert_id();
 

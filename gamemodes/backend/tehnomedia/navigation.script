@@ -153,7 +153,8 @@ stock Float:PointAngle(playerid, Float:xa, Float:ya, Float:xb, Float:yb) // Don'
 	return floatadd(angle, -carangle);
 }
 
-private RefreshGPS(playerid)
+forward RefreshGPS(playerid);
+public RefreshGPS(playerid)
 {
 	new Float:pos[3], Float:pPos[3];
 	pPos[0] = NavData[pNavID[playerid]][NAV_X];

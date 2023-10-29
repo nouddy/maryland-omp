@@ -1,2 +1,7 @@
-
+# ignore ALL .log files
+crashdetect.txt
+log.txt
+mysql.ini
+logs/
+omp_minidump.dmp
 *.amx
