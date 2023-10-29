@@ -140,7 +140,7 @@ public PlayerRegistered(playerid)
 {
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
 
-	SetSpawnInfo(playerid, 0, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
+	SetSpawnInfo(playerid, NO_TEAM, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 	SpawnPlayer(playerid);
 
 	SetPlayerInterior(playerid, 1);
@@ -234,7 +234,7 @@ timer Spawn_Player[1500](playerid)
 	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
 
 	notification.Show(playerid, "Maryland", "Dobro Dosli na Maryland!", "!", BOXCOLOR_GREEN);
-	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
+	SetSpawnInfo(playerid, NO_TEAM, PlayerInfo[playerid][Skin],
 		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
 
@@ -983,7 +983,7 @@ stock InitializeCharacter(playerid) {
 									PlayerInfo[playerid][State], PlayerInfo[playerid][Sex], PlayerInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
 
-	SetSpawnInfo(playerid, 0, PlayerInfo[playerid][Skin],
+	SetSpawnInfo(playerid, NO_TEAM, PlayerInfo[playerid][Skin],
 		1401.7791,1591.3466,12.0481, 90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
 
