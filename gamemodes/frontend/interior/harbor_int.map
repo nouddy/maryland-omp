@@ -4,7 +4,7 @@ hook OnGameModeInit() {
 
 	print("interior/harbor_int.map loaded");
 
-    static harborInt, object_world = -1, object_int = 10;
+    static harborInt, object_world = 10, object_int = 0;
 
     harborInt = Maryland_CreateDynamicObject(2010, 1311.126342, 2584.588378, -22.268243, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 3897, "libertyhi", "Newtreeb256", 0x00000000);
