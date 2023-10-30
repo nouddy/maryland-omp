@@ -19,11 +19,11 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-forward Create3DandP(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vVW, pickupid, Float:radius);
-public Create3DandP(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vVW, pickupid, Float:radius)
+forward CreateMarkerText(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vVW, Float:radius);
+public CreateMarkerText(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vVW, Float:radius)
 {
 	CreateDynamic3DTextLabel(text, 0x0059FFAA, vXU, vYU, vZU, radius, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, vVW, vInt, -1, 20.0);
-	CreateDynamicPickup(pickupid, 1, vXU, vYU, vZU, vVW, vInt);
+	CreateMarker(random(5), false, vXU, vYU, vZU-1.0, vVW, vInt);
 }
 
 hook OnGameModeInit()
@@ -35,40 +35,40 @@ hook OnGameModeInit()
 CreatePickupsAnd3Ds()
 {
 
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/getidcard'", -2334.3879,1244.1754,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/quitjob'", -2334.6438,1249.9271,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/getpassport'", -2334.7085,1255.7548,-31.6301, -1, -1, 1239, 2.0); //licna
-    Create3DandP(""c_server"[ Salter ]\n"c_white"'/donatetostate'\n'/dozvolazarad'", -2334.6843,1261.4663,-31.6301, -1, -1, 1239, 2.0); //licna
+    CreateMarkerText(""c_server"[ Salter ]\n"c_white"'/getidcard'", -2334.3879,1244.1754,-31.6301, -1, -1, 2.0); //licna
+    CreateMarkerText(""c_server"[ Salter ]\n"c_white"'/quitjob'", -2334.6438,1249.9271,-31.6301, -1, -1, 2.0); //licna
+    CreateMarkerText(""c_server"[ Salter ]\n"c_white"'/getpassport'", -2334.7085,1255.7548,-31.6301, -1, -1,  2.0); //licna
+    CreateMarkerText(""c_server"[ Salter ]\n"c_white"'/donatetostate'\n'/dozvolazarad'", -2334.6843,1261.4663,-31.6301, -1, -1, 2.0); //licna
 
     // //? Salteri
     //CreateDynamic3DTextLabel(""c_server"[ Blagajna ]\n"c_white"'/blagajna'\n'/balans'\n'/promenipinkod'", 0x0059FFAA, 1689.8605,-1455.4658,13.5597+0.3, 2.0, -1, -1, 0, -1, -1, -1, 20.0);
-    // Create3DandP(""c_server"[ Krediti ]\n"c_white"'/kredit'", 1814.0297,-1292.0894,22.2110, -1, -1, 1212, 2.0); //salter2 Banka
+    // CreateMarkerText(""c_server"[ Krediti ]\n"c_white"'/kredit'", 1814.0297,-1292.0894,22.2110, -1, -1, 1212, 2.0); //salter2 Banka
 
-    // Create3DandP(""c_server"[ Racun ]\n"c_white"'/otvoriracun'", 1830.4613,-1274.8739,22.2110, -1, -1, 1212, 2.0); //racun open Banka
-    // Create3DandP(""c_server"[ Hipoteka ]\n"c_white"'Y' za pogodnosti hipoteke", 1817.7439,-1276.0530,22.2110, -1, -1, 1239, 2.0); //Banka Hipoteka
+    // CreateMarkerText(""c_server"[ Racun ]\n"c_white"'/otvoriracun'", 1830.4613,-1274.8739,22.2110, -1, -1, 1212, 2.0); //racun open Banka
+    // CreateMarkerText(""c_server"[ Hipoteka ]\n"c_white"'Y' za pogodnosti hipoteke", 1817.7439,-1276.0530,22.2110, -1, -1, 1239, 2.0); //Banka Hipoteka
 
-    // Create3DandP(""c_server"[ Radno Vreme ]\n"c_white"'07-23'", 1792.5695,-1300.4518,13.4612, -1, -1, 1239, 2.0); //Banka Radno Vreme
-    // Create3DandP(""c_server"[ Flecca Bank ]\n"c_white"'/blagajna\n/otvoriracun'", 1690.1364,-1455.9438,13.5597, -1, -1, 1212, 2.0);
-    // Create3DandP(""c_server"[ Banka Garage ]\n"c_white"'Y' za ulaz", 1737.4447,-1327.2667,13.5718, -1, -1, 19133, 2.0); // Garaza Banka ulaz
+    // CreateMarkerText(""c_server"[ Radno Vreme ]\n"c_white"'07-23'", 1792.5695,-1300.4518,13.4612, -1, -1, 1239, 2.0); //Banka Radno Vreme
+    // CreateMarkerText(""c_server"[ Flecca Bank ]\n"c_white"'/blagajna\n/otvoriracun'", 1690.1364,-1455.9438,13.5597, -1, -1, 1212, 2.0);
+    // CreateMarkerText(""c_server"[ Banka Garage ]\n"c_white"'Y' za ulaz", 1737.4447,-1327.2667,13.5718, -1, -1, 19133, 2.0); // Garaza Banka ulaz
 
     // //! Prevoznik novca labeli
-    // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da se zaposlis", 1811.8564,-1308.6644,22.2110, -1, -1, 1210, 3.0); // Bankar zaposli se
-    // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da uzmes opremu", 1817.5474,-1311.2484,22.2156, -1, -1, 1275, 3.0); // Bankar oprema
+    // CreateMarkerText(""c_server"[ Bankar ]\n"c_white"'Y' da se zaposlis", 1811.8564,-1308.6644,22.2110, -1, -1, 1210, 3.0); // Bankar zaposli se
+    // CreateMarkerText(""c_server"[ Bankar ]\n"c_white"'Y' da uzmes opremu", 1817.5474,-1311.2484,22.2156, -1, -1, 1275, 3.0); // Bankar oprema
 
-    // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", -1980.0436,427.9458,24.7925, -1, -1, 1212, 3.0); // Bankar oprema
-    // Create3DandP(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", 2551.8596,2003.8356,10.8152, -1, -1, 1212, 3.0); // Bankar oprema
+    // CreateMarkerText(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", -1980.0436,427.9458,24.7925, -1, -1, 1212, 3.0); // Bankar oprema
+    // CreateMarkerText(""c_server"[ Bankar ]\n"c_white"'Y' da pokupis novac", 2551.8596,2003.8356,10.8152, -1, -1, 1212, 3.0); // Bankar oprema
 
-    Create3DandP(""c_server"Maryland © Community\n\n» Owners: {ffffff}Ogy & Lasee\n"c_server"» Developers: {ffffff}Vostic & Ogy_\n"c_server"» Mappers: {ffffff}Ogy\n\n"c_server"(c) copyright 2023", 1585.3817,-2327.9243,13.547+0.6, -1, -1, 18749, 6.0); //
+    CreateMarkerText(""c_server"Maryland © Community\n\n» Owners: {ffffff}Ogy & Lasee\n"c_server"» Developers: {ffffff}Vostic & Ogy_\n"c_server"» Mappers: {ffffff}Ogy\n\n"c_server"(c) copyright 2023", 1585.3817,-2327.9243,13.547+0.6, -1, -1, 6.0); //
 
     //? Maryland Customs
-    Create3DandP(""c_server"[ Repair ]\n"c_server"» "c_white"'/fixengine'\n"c_server"» "c_white"'/fullrepair'", 1088.2130,-1224.8868,18.3765, -1, -1, 19621, 6.0); // popravka motora i limarije
-    Create3DandP(""c_server"[ Service ]\n"c_server"» "c_white"'/changeoil'\n"c_server"» "c_white"'/carservice'", 1103.1528,-1224.9373,18.3765, -1, -1, 19621, 6.0); // provera ulja i servis
-    Create3DandP(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1114.1785,-1193.1130,19.6612, -1, -1, 1080, 6.0); // tune car 1
-    Create3DandP(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1105.6414,-1193.0107,19.6612, -1, -1, 1080, 6.0); // tune car 2
-    Create3DandP(""c_server"[ Pay 'n spray ]\n"c_server"» "c_white"'/paintjob'", 1107.7605,-1185.3486,18.3704, -1, -1, 365, 6.0); // farbanje vozila
-    Create3DandP(""c_server"[ Plates ]\n"c_server"» "c_white"'/buyplates'", 1085.3119,-1184.1718,21.9630, -1, -1, 19792, 6.0); // Kupovina tablica
-    Create3DandP(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1104.7944,-1248.6990,15.8231, -1, -1, 19627, 6.0); // Tehnicki Pregled
-    Create3DandP(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1090.3774,-1248.8459,15.8271, -1, -1, 19627, 6.0); // Tehnicki Pregled
+    CreateMarkerText(""c_server"[ Repair ]\n"c_server"» "c_white"'/fixengine'\n"c_server"» "c_white"'/fullrepair'", 1088.2130,-1224.8868,18.3765, -1, -1, 6.0); // popravka motora i limarije
+    CreateMarkerText(""c_server"[ Service ]\n"c_server"» "c_white"'/changeoil'\n"c_server"» "c_white"'/carservice'", 1103.1528,-1224.9373,18.3765, -1, -1, 6.0); // provera ulja i servis
+    CreateMarkerText(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1114.1785,-1193.1130,19.6612, -1, -1, 6.0); // tune car 1
+    CreateMarkerText(""c_server"[ Tuning ]\n"c_server"» "c_white"'/tunecar'", 1105.6414,-1193.0107,19.6612, -1, -1, 6.0); // tune car 2
+    CreateMarkerText(""c_server"[ Pay 'n spray ]\n"c_server"» "c_white"'/paintjob'", 1107.7605,-1185.3486,18.3704, -1, -1, 6.0); // farbanje vozila
+    CreateMarkerText(""c_server"[ Plates ]\n"c_server"» "c_white"'/buyplates'", 1085.3119,-1184.1718,21.9630, -1, -1, 6.0); // Kupovina tablica
+    CreateMarkerText(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1104.7944,-1248.6990,15.8231, -1, -1, 6.0); // Tehnicki Pregled
+    CreateMarkerText(""c_server"[ Technical Inspection ]\n"c_server"» "c_white"'/tinspect'", 1090.3774,-1248.8459,15.8271, -1, -1, 6.0); // Tehnicki Pregled
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
