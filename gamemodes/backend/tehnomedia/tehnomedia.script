@@ -52,7 +52,7 @@ public SQL_ElectronicLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_electronic` (player_id, Dron, Battery, Navigacija) \ 
+           "INSERT INTO `player_electronic` (player_id, Dron, Battery, GPS) \ 
             VALUES('%d', '0', '0', '0')", PlayerInfo[playerid][SQLID]);
         mysql_tquery(SQL, q);
     }
