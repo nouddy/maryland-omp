@@ -37,7 +37,7 @@ new bool:LoadingObjects[MAX_PLAYERS],
 
 new PlayerText:Login_TD[MAX_PLAYERS][85];
 
-new e_CHARACTER_OBJ[4],
+new e_CHARACTER_OBJ[MAX_PLAYERS][4],
 	e_SELECTED_OBJ[MAX_PLAYERS],
 	bool:e_WALK_STYLE[MAX_PLAYERS],
 	e_CHOSEN_WALK[MAX_PLAYERS],
@@ -165,14 +165,14 @@ public PlayerRegistered(playerid)
 
 	ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
 
-	e_CHARACTER_OBJ[0] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.825523, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00);
-	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[0], 0, "{FFFFFF}SEX", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
-	e_CHARACTER_OBJ[1] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.355529, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[1], 0, "{FFFFFF}WALK STYLE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
-	e_CHARACTER_OBJ[2] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.895565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[2], 0, "{FFFFFF}STATE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
-	e_CHARACTER_OBJ[3] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.415565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[3], 0, "{FFFFFF}ATTACHMENTS", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[playerid][0] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.825523, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00);
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][0], 0, "{FFFFFF}SEX", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[playerid][1] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.355529, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][1], 0, "{FFFFFF}WALK STYLE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[playerid][2] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.895565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][2], 0, "{FFFFFF}STATE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+	e_CHARACTER_OBJ[playerid][3] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.415565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+	SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][3], 0, "{FFFFFF}ATTACHMENTS", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
 
 	e_REGISTERING_PROGRESS[playerid] = true;
 
@@ -338,8 +338,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 				e_SELECTED_OBJ[playerid] = 0;
 			}
 
-			GetDynamicObjectPos(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], x, y, z);
-			MoveDynamicObject(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]],  //back
+			GetDynamicObjectPos(e_CHARACTER_OBJ[playerid][e_SELECTED_OBJ[playerid]], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[playerid][e_SELECTED_OBJ[playerid]],  //back
 			x, y+0.30, z, 
 			1.0,
 			0.000000, 0.000000, -13.500000);
@@ -351,8 +351,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 			}
 
 			//FORWARD
-			GetDynamicObjectPos(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]], x, y, z);
-			MoveDynamicObject(e_CHARACTER_OBJ[e_SELECTED_OBJ[playerid]],  //forward
+			GetDynamicObjectPos(e_CHARACTER_OBJ[playerid][e_SELECTED_OBJ[playerid]], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[playerid][e_SELECTED_OBJ[playerid]],  //forward
 			x, y-0.30, z, 
 			1.0,
 			0.000000, 0.000000, -13.500000);
@@ -416,14 +416,14 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 			new Float:x, Float:y, Float:z;
 			//BACK
-			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
-			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			GetDynamicObjectPos(e_CHARACTER_OBJ[playerid][1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[playerid][1],  //back
 			x, y+0.30, z, 
 			1.0,
 			0.000000, 0.000000, -13.500000);  //back
 
-			GetDynamicObjectPos(e_CHARACTER_OBJ[1], x, y, z);
-			MoveDynamicObject(e_CHARACTER_OBJ[1],  //back
+			GetDynamicObjectPos(e_CHARACTER_OBJ[playerid][1], x, y, z);
+			MoveDynamicObject(e_CHARACTER_OBJ[playerid][1],  //back
 			x, y+0.30, z, 
 			1.0,
 			0.000000, 0.000000, -13.500000);

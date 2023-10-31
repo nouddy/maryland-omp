@@ -1,1 +1,0 @@
-[10/29/2023 7:58:39 PM] [plugins/mysql] error #1054 while executing query "INSERT INTO `player_electronic` (player_id, Dron, Battery, Navigacija) VALUES('5', '0', '0', '0')": Unknown column 'Navigacija' in 'field list'
