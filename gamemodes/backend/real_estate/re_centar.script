@@ -20,6 +20,8 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+// @NOTE: Za sad su koordinate sefa, armourya i wardroba za default interior na 0.00 dok ogy ne izmjeni mapu.
+
 #define MAX_BUSINESS_CENTER (1000)
 
 #define INVALID_BUSINESS_CENTER (-1)
@@ -290,6 +292,33 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             }
         }
 	}
+
+    if(PRESSED(KEY_NO)) {
+
+        foreach(new i : iter_BCenters) 
+        {
+
+            if(BCenterData[i][re_BCenterID] == PlayerProperty[playerid][BCenter]) 
+            {
+
+                if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterSafePos][0], BCenterData[i][re_BCenterSafePos][1], BCenterData[i][re_BCenterSafePos][2]) && GetPlayerVirtualWorld(playerid) == BCenterData[i][re_BCenterVirtualWorld]) {
+
+                    Dialog_Show(playerid, "re_BCenterSafe", DIALOG_STYLE_LIST, "Business Center - Safe", ">> Informacije\n>> Ostavi\n>> Uzmi", "Odaberi", "Odustani");
+                }
+
+                else if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterArmoryPos][0], BCenterData[i][re_BCenterArmoryPos][1], BCenterData[i][re_BCenterArmoryPos][2]) && GetPlayerVirtualWorld(playerid) == BCenterData[i][re_BCenterVirtualWorld]) {
+
+                    Dialog_Show(playerid, "re_BCenterArmory", DIALOG_STYLE_LIST, "Business Center - Armory", ">> Stanje\n>> Ostavi\n>> Uzmi", "Odaberi", "Odustani");
+                }
+
+                else if(IsPlayerInRangeOfPoint(playerid, 3.5, BCenterData[i][re_BCenterWardrobePos][0], BCenterData[i][re_BCenterWardrobePos][1], BCenterData[i][re_BCenterWardrobePos][2]) && GetPlayerVirtualWorld(playerid) == BCenterData[i][re_BCenterVirtualWorld]) {
+
+                    Dialog_Show(playerid, "re_BCenterWardrobe", DIALOG_STYLE_LIST, "Business Center - Wardrobe", ">> Informacije\n>> Promjeni Garderobu", "Odaberi", "Odustani");
+                }
+            }
+        }
+    }
+
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 

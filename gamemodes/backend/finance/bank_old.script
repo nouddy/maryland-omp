@@ -248,8 +248,8 @@ Dialog: dialog_transfer(const playerid, response, listitem, string: inputtext[])
     SaveFinance(playerid); SaveFinance(id);
 	PlayerPlaySound( playerid, 1052, 0.0, 0.0, 0.0);
 
-	SendClientMessageEx(playerid, x_green, "TRANSFER: "c_white"Poslao si %d$ na %s-ov racun.", cashdeposit, ReturnPlayerName( id ), id );
-	SendClientMessageEx(id, x_green, "TRANSFER: "c_white"Primio si %d$ na svoj racun od %s.", cashdeposit, ReturnPlayerName( playerid ), playerid );
+	SendClientMessage(playerid, x_green, "TRANSFER: "c_white"Poslao si %d$ na %s-ov racun.", cashdeposit, ReturnPlayerName( id ), id );
+	SendClientMessage(id, x_green, "TRANSFER: "c_white"Primio si %d$ na svoj racun od %s.", cashdeposit, ReturnPlayerName( playerid ), playerid );
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }

@@ -561,3 +561,20 @@ YCMD:givemoney(playerid, params[], help)
 
 	return 1;
 }
+
+@cmd() help(playerid, params[], help)
+{
+	if (help)
+	{
+		SendClientMessage(playerid, -1, "Iskoristi `/help <komanda>` da dobijete informacije o komandi.");
+	}
+	else if (IsNull(params))
+	{
+		SendClientMessage(playerid, -1, "Unesite validnu komandu.");
+	}
+	else
+	{
+		Command_ReProcess(playerid, params, true);
+	}
+	return 1;
+}

@@ -26,6 +26,9 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+//      >> [ VARIABLES ] <<
+
+new bool:PlayerHasLifeInsurance[MAX_PLAYERS];
 
 //>>
 enum PlayerDocumentsz
@@ -39,6 +42,13 @@ enum PlayerDocumentsz
     pLifeInsurance
 }
 new PlayerDocuments[MAX_PLAYERS][PlayerDocumentsz];
+
+hook OnPlayerConnect(playerid) {
+
+    PlayerHasLifeInsurance[playerid] = false;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
 
 hook OnPlayerLoaded(playerid)
 {   

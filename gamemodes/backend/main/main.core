@@ -230,15 +230,11 @@ timer Spawn_Player[1500](playerid)
 	SetPlayerVirtualWorld(playerid, 0);
 	SetPlayerInterior(playerid, 6);
 
-	printf("DEVLOG - Interior %d", GetPlayerInterior(playerid));
-	printf("DEVLOG - VW %d", GetPlayerVirtualWorld(playerid));
-
 	notification.Show(playerid, "Maryland", "Dobro Dosli na Maryland!", "!", BOXCOLOR_GREEN);
+	
 	SetSpawnInfo(playerid, NO_TEAM, PlayerInfo[playerid][Skin],
 		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
-
-	printf("DEVLOG - POS : %f %f %f", RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ] );
 
 	if(LoginTDShown[playerid])
 	{
@@ -246,19 +242,14 @@ timer Spawn_Player[1500](playerid)
 		LoginTDShown[playerid] = false;
 	}
 
-	//
 	CallLocalFunction("OnPlayerFirstStream", "d", playerid);		// Kada se igrac prvi put spawnuje ocitavanja.
-	//
+
 	LoadObjectsForPlayer(playerid);
 	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
 	ResetPlayerMoney(playerid);
 	GiveMoneyEx(playerid, PlayerInfo[playerid][Money]);
 	SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
 	PlayerLogged[playerid] = true;
-
-	//SpawnPlayer(playerid);
-	//SetCameraBehindPlayer(playerid);
-
 
 	TogglePlayerSpectating(playerid, false);
 
@@ -272,42 +263,19 @@ timer Spawn_Player[1500](playerid)
 	mysql_tquery(SQL, q);
 	//
 
-	for(new i=0; i< 30; i++)
-	{
-		TextDrawShowForPlayer(playerid, MarylandLogo[i]);
-	}
+	Logo_ShowTextDraw(playerid, true);
 
-	for(new i=0; i< 40; i++)
-	{
-		TextDrawShowForPlayer(playerid, Global_TD[i]);
-	}
+	ToggleGlobalTextDraw(playerid, true);
 
-	//
-	for(new i=0; i< 8; i++)
-	{
-		PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-	}
-	//! Ime Igraca
+	TogglePlayerTextDraw(playerid, true);
+
 	static pname[25];
 	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
 	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
-	// //! Banka Igraca
-	// static stringic[ 40 ];
-
-	// if(player_BankAccount[playerid] == 0) {
-	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid], "Nemate Racun" );
-	// }
-	// else {
-	//     format(stringic, sizeof(stringic), "%d$", player_BankMoney[playerid]);
-	//     PlayerTextDrawSetString(playerid, BankaIgraca[playerid],stringic);
-	// }
-	// PlayerTextDrawShow(playerid, BankaIgraca[playerid]);
-
-	//!skin provera
-	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
+
 	return (true);
 }
 
@@ -1023,28 +991,17 @@ stock InitializeCharacter(playerid) {
 		}
 	}
 
-	for(new i=0; i< 30; i++)
-	{
-		TextDrawShowForPlayer(playerid, MarylandLogo[i]);
-	}
+	Logo_ShowTextDraw(playerid, true);
 
-	for(new i=0; i< 40; i++)
-	{
-		TextDrawShowForPlayer(playerid, Global_TD[i]);
-	}
+	TogglePlayerTextDraw(playerid, true);
 
-	for(new i=0; i< 8; i++)
-	{
-		PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-	}
+	ToggleGlobalTextDraw(playerid, true);
 
 	static pname[25];
 	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
 	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
-	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][0], PlayerInfo[playerid][Skin]);
-	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
 
 	return 1;
 }

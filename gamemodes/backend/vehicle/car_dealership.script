@@ -897,7 +897,7 @@ YCMD:catalogue(playerid, params[], help)
     Get3DTextLabelPos(dealership_Catalogue, lb_Pos[0], lb_Pos[1], lb_Pos[2]);
 
     if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
-        return SendClientMessageEx(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
+        return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
     
     if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
 
