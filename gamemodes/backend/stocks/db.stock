@@ -222,7 +222,7 @@ GiveMoneyEx(playerid, novac)
 		mysql_tquery(SQL,query);        
     }
 
-	return PlayerInfo[playerid][Money];
+	return 1;
 }
 
 stock GetPlayerSQLID(playerid)

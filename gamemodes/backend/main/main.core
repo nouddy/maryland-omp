@@ -215,6 +215,11 @@ hook OnPlayerConnect(playerid)
 	return 1;
 }
 
+hook OnPlayerRequestSpawn(playerid) {
+
+	return Y_HOOKS_CONTINUE_RETURN_0;
+}
+
 hook OnPlayerDisconnect(playerid, reason)
 {
 	PlayerLogged[playerid] = false;
@@ -223,7 +228,8 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-timer Spawn_Player[1500](playerid)
+forward Spawn_Player(playerid);
+public Spawn_Player(playerid)
 {
 	new rand = random( sizeof( RandomSpawnCords ) );
 
@@ -247,7 +253,7 @@ timer Spawn_Player[1500](playerid)
 	LoadObjectsForPlayer(playerid);
 	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
 	ResetPlayerMoney(playerid);
-	GiveMoneyEx(playerid, PlayerInfo[playerid][Money]);
+	GivePlayerMoney(playerid, PlayerInfo[playerid][Money]);
 	SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
 	PlayerLogged[playerid] = true;
 
@@ -290,8 +296,6 @@ public OnPlayerFirstStream(playerid)
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 	if(PRESSED(KEY_YES)) {
-
-		print("Key YES");
 
 		if(e_REGISTERING_PROGRESS[playerid]) {		
 			
@@ -759,7 +763,7 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 		if(udb_hash(inputtext) == PlayerInfo[playerid][Password])
 		{
 			if(PlayerLogged[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Maryland \187; "c_white"Vec si ulogovan");
-			defer Spawn_Player(playerid);
+			SetTimerEx("Spawn_Player", 1500, false, "d", playerid);
 		}
 		else
 		{

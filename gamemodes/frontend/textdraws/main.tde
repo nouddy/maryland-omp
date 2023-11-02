@@ -115,7 +115,7 @@ stock TogglePlayerTextDraw(playerid, const bool:option) {
 
         // 406.000610, 410.940673
 
-        Player_TDs[playerid][0] = CreatePlayerTextDraw(playerid, 406.000610-30.0, 410.940673, "");
+        Player_TDs[playerid][0] = CreatePlayerTextDraw(playerid, 406.000610, 410.940673, "");
         PlayerTextDrawTextSize(playerid, Player_TDs[playerid][0], 42.000000, 47.000000);
         PlayerTextDrawAlignment(playerid, Player_TDs[playerid][0], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, Player_TDs[playerid][0], -1);

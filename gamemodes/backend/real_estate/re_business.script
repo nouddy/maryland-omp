@@ -79,6 +79,7 @@ new re_BusinessData[MAX_BUSINESS][e_BUSINESS_DATA];
 
 new Text3D:re_BusinessLabel[MAX_BUSINESS][2],
            re_BusinessPickup[MAX_BUSINESS],
+           re_BusinessActor[MAX_BUSINESS],
            Iterator:iter_Business<MAX_BUSINESS>;
 
 #define MAX_PRODUCT_NAME_LEN                (32)
@@ -98,6 +99,27 @@ new const sz_Products[][e_PRODUCT_DATA] = {
     { "Cokoladica", BUSINESS_TYPE_MARKET,       2.5 }
 };
 
+enum e_ACTOR_POSITION {
+
+    Float:actorPos[4],
+    e_ACTOR_SKIN
+}
+
+new business_ActorPositions[11][e_ACTOR_POSITION] = {
+
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { -2235.5803,128.5862,1035.4141,359.4457  },  TECH_SHOP_ACTOR_SKIN        },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 288.1739,-111.5127,1001.5156,1.0589     },  AMMUNATION_ACTOR_SKIN       },
+    { { -103.9977,-24.2055,1000.7188,1.0590     },  SEX_SHOP_ACTOR_SKIN         },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           },
+    { { 2.0187,-30.7018,1003.5494,0.4327        },  MARKET_ACTOR_SKIN           }
+
+};
 
 enum e_BUSINESS_INTERACTION_POSITION {
 
@@ -106,15 +128,15 @@ enum e_BUSINESS_INTERACTION_POSITION {
 
 new business_InteractPositions[11][e_BUSINESS_INTERACTION_POSITION] = {
 
+    { { 2.0635,-29.0144,1003.5494         },   },
     { { 6.08, -28.89, 1003.54             },   },
-    { { 6.08, -28.89, 1003.54             },   },
-    { { -2240.10,136.97,1035.41           },   },
+    { { -2237.1211,130.1769,1035.4141     },   },
     { { 0.00, 0.00, 0.00                  },   },
     { { 501.95,-70.56,998.75              },   },
     { { 442.12,-52.47,999.71              },   },
-    { { 297.14,-109.87,1001.51            },   },
+    { { 288.2584,-109.7821,1001.5156      },   },
     { { -103.7301, -22.6792, 1000.7188    },   },
-    { { 2217.28,-1150.53,1025.79          },   },
+    { { 2217.3774,-1146.4989,1025.7969    },   },
     { { 6.08, -28.89, 1003.54             },   },
     { { 663.05,-573.62,16.33              },   }
 
@@ -139,6 +161,56 @@ new business_Interiors[11][e_BUSINESS_INTERIORS] = {
     { { 2217.28,-1150.53,1025.79  },    15 },
     { { 6.08, -28.89, 1003.54     },    10 },
     { { 663.05,-573.62,16.33      },    0  }
+
+};
+
+//      >> [ AMMUNATION ] <<
+
+#define MAX_WEAPON_LEN      (32)
+
+enum e_AMMUNATION_WEAPON {
+
+    weaponID,
+    weaponModel,
+    weaponPrice,
+    weaponName[MAX_WEAPON_LEN]
+}
+
+new ammunation_WeaponPickup[MAX_PLAYERS],
+    ammunation_ChosenWeapon[MAX_PLAYERS];
+
+new ammunation_ItemList[16][e_AMMUNATION_WEAPON] = {
+
+    //      >> [ MELE ]  <<
+
+    { WEAPON_KNIFE, 335, 100, "Knife" },
+    { WEAPON_BAT, 336, 150, "Baseball Bat"},
+    { WEAPON_BRASSKNUCKLE, 331, 150, "Brass Knuckle"},
+
+    //      >> [ PISTOLS ]  <<
+
+    { WEAPON_DEAGLE, 348, 700, "Desert Deagle" },
+    { WEAPON_COLT45, 346, 450, "Colt 45"},
+    { WEAPON_SILENCED, 347, 450, "Silenced Pistol"},
+
+    //      >> [ SHOTGUNS ]  <<
+
+    { WEAPON_SHOTGUN, 349, 650, "Shotgun" },
+    { WEAPON_SAWEDOFF, 350, 700, "Sawn-off Shotgun"},
+    { WEAPON_SHOTGSPA, 351, 820, "Combat Shotgun" },
+
+    //      >> [ SMG-S ]  <<
+
+    { WEAPON_UZI, 352, 600, "UZI" },
+    { WEAPON_MP5, 353, 520, "MP-5"},
+    { WEAPON_TEC9, 372, 400, "TEC-9" },
+
+    //      >> [ RIFLES ]  <<
+
+    { WEAPON_AK47, 355, 1000, "AK-47" },
+    { WEAPON_M4, 356, 1200, "M4"},
+    { WEAPON_RIFLE, 357, 1400, "Rifle" },
+    { WEAPON_SNIPER, 358, 2350, "Sniper Rifle" }
 
 };
 
@@ -217,6 +289,9 @@ public Business_LoadData() {
             re_BusinessLabel[i][0] = Create3DTextLabel(tmp_string, -1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2], 3.50, 0);
             re_BusinessLabel[i][1] = Create3DTextLabel(""c_server" » "c_grey"Za kupovinu pritisnite 'N' "c_server"«", -1, re_BusinessData[i][bInteract][0], re_BusinessData[i][bInteract][1], re_BusinessData[i][bInteract][2], 3.50, re_BusinessData[i][bVW]);
 
+            re_BusinessActor[i] = CreateActor(re_BusinessData[i][bActorSkin], re_BusinessData[i][bActorPos][0], re_BusinessData[i][bActorPos][1], re_BusinessData[i][bActorPos][2], re_BusinessData[i][bActorPos][3]);
+            SetActorVirtualWorld(re_BusinessActor[i],  re_BusinessData[i][bVW]);
+
             re_BusinessPickup[i] = CreatePickup(19134, 1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2]);
 
             Iter_Add(iter_Business, i);
@@ -237,7 +312,10 @@ public mysql_AddBusiness(id) {
     format(tmp_string, sizeof tmp_string, ""c_server"[ "c_white"%s"c_server" ]\n"c_white"Za ulazak pritisnite 'F'", re_BusinessData[id][bName]);
 
     re_BusinessLabel[id][0] = Create3DTextLabel(tmp_string, -1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2], 3.50, 0);
-    re_BusinessLabel[id][1] = Create3DTextLabel(""c_server" » "c_grey"Za kupovinu proizvoda pritisnite 'N' "c_server"«", -1, re_BusinessData[id][bInteract][0], re_BusinessData[id][bInteract][1], re_BusinessData[id][bInteract][2], 3.50, re_BusinessData[id][bVW]);
+    re_BusinessLabel[id][1] = Create3DTextLabel(""c_server" » "c_grey"Za kupovinu pritisnite 'N'' "c_server"«", -1, re_BusinessData[id][bInteract][0], re_BusinessData[id][bInteract][1], re_BusinessData[id][bInteract][2], 3.50, re_BusinessData[id][bVW]);
+
+    re_BusinessActor[id] = CreateActor(re_BusinessData[id][bActorSkin], re_BusinessData[id][bActorPos][0], re_BusinessData[id][bActorPos][1], re_BusinessData[id][bActorPos][2], re_BusinessData[id][bActorPos][3]);
+    SetActorVirtualWorld(re_BusinessActor[id],  re_BusinessData[id][bVW]);
 
     re_BusinessPickup[id] = CreatePickup(19134, 1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2]);
 
@@ -276,6 +354,39 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 SetPlayerPos(playerid, re_BusinessData[j][bEntrance][0], re_BusinessData[j][bEntrance][1], re_BusinessData[j][bEntrance][2]);
                 SetPlayerInterior(playerid, 0);
                 SetPlayerVirtualWorld(playerid, 0);
+            }
+        }
+    }
+    if(PRESSED( KEY_NO)) {
+
+        foreach(new j : iter_Business) {
+
+            if(IsPlayerInRangeOfPoint(playerid, 3.50, re_BusinessData[j][bInteract][0], re_BusinessData[j][bInteract][1], re_BusinessData[j][bInteract][2])) {
+
+                switch(re_BusinessData[j][bType]) {
+
+                    case BUSINESS_TYPE_MARKET:                      { SendClientMessage(playerid, -1, "24/7 Market"); }
+                    case BUSINESS_TYPE_PHARMACY:                     { SendClientMessage(playerid, -1, "Apoteka"); }
+                    case BUSINESS_TYPE_TECH_SHOP:                    { SendClientMessage(playerid, -1, "Prodavnica Elektronike"); }
+                    case BUSINESS_TYPE_KIOSK:                        { SendClientMessage(playerid, -1, "Kiosk"); }
+                    case BUSINESS_TYPE_CAFFE_BAR:                    { SendClientMessage(playerid, -1, "Kafic"); }
+                    case BUSINESS_TYPE_RESTAURANT:                   { SendClientMessage(playerid, -1, "Restoran"); }
+                    case BUSINESS_TYPE_AMMUNATION: { 
+                        
+                        InterpolateCameraPos(playerid, 290.104217, -106.266616, 1002.462890, 285.482757, -109.900611, 1002.524475, 3500);
+                        InterpolateCameraLookAt(playerid, 288.338989, -110.925163, 1002.036437, 290.104766, -111.746047, 1002.043518, 3500);
+
+                        new WeaponID = ammunation_ChosenWeapon[playerid];
+
+                        ammunation_WeaponPickup[playerid] = CreatePlayerPickup(playerid, ammunation_ItemList[WeaponID][weaponModel], 1, 290.6817,-110.6698,1002.5266, GetPlayerVirtualWorld(playerid));
+                        SendClientMessage(playerid, x_green, ">> Chosen Weapon - %s", ammunation_ItemList[WeaponID][weaponName]);
+                        
+                    }
+                    case BUSINESS_TYPE_SEX_SHOP:                     { SendClientMessage(playerid, -1, "Sex Shop"); }
+                    case BUSINESS_TYPE_HOTEL:                        { SendClientMessage(playerid, -1, "Hotel"); }
+                    case BUSINESS_TYPE_AGRICULTURAL_STORE:           { SendClientMessage(playerid, -1, "Poljoprivredna Apoteka"); }
+                    case BUSINESS_TYPE_PETROL_STATION:               { SendClientMessage(playerid, -1, "Benziska Pumpa"); }
+                }
             }
         }
     }
@@ -338,14 +449,25 @@ YCMD:createbusiness(playerid, params[], help)
     re_BusinessData[id][bInteract][1] = business_InteractPositions[btip-1][interactPos][1];
     re_BusinessData[id][bInteract][2] = business_InteractPositions[btip-1][interactPos][2];
 
-    new q[420];
+    re_BusinessData[id][bActorSkin] = business_ActorPositions[btip-1][e_ACTOR_SKIN];
 
-    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, `bInt`, `bVW`) \
-                                    VALUES ('%e', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%d')", 
+    re_BusinessData[id][bActorPos][0] = business_ActorPositions[btip-1][actorPos][0];
+    re_BusinessData[id][bActorPos][1] = business_ActorPositions[btip-1][actorPos][1];
+    re_BusinessData[id][bActorPos][2] = business_ActorPositions[btip-1][actorPos][2];
+    re_BusinessData[id][bActorPos][3] = business_ActorPositions[btip-1][actorPos][3];
+
+
+    new q[660];
+
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
+                                    `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bInt`, `bVW`)
+                                    VALUES ('%e', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
                                     re_BusinessData[id][bName], re_BusinessData[id][bType], re_BusinessData[id][bLevel],
                                     re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2],
                                     re_BusinessData[id][bExit][0], re_BusinessData[id][bExit][1], re_BusinessData[id][bExit][2],
                                     re_BusinessData[id][bInteract][0], re_BusinessData[id][bInteract][1], re_BusinessData[id][bInteract][2],
+                                    re_BusinessData[id][bActorSkin], re_BusinessData[id][bActorPos][0], re_BusinessData[id][bActorPos][1],
+                                    re_BusinessData[id][bActorPos][2], re_BusinessData[id][bActorPos][3],
                                     re_BusinessData[id][bInt], re_BusinessData[id][bVW]);
     mysql_tquery(SQL, q, "mysql_AddBusiness", "d", id);
 
