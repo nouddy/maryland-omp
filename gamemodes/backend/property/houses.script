@@ -207,7 +207,6 @@ hook OnGameModeInit() {
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-// * SONDERLAND
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
@@ -262,20 +261,21 @@ YCMD:buyhouse(playerid, params[], help) {
 
 	player_House[playerid] = ID;
 
-	house_Owner[ID] = PlayerInfo[playerid][SQLID];
+	house_Owner[ID] = GetCharacterSQLID(playerid);
 
 	house_Locked[ID] = false;
 
 	new query[200];
 
-	GiveMoneyEx(playerid, -house_Price[ID]);
+	// - Dodati kada se odradi player_currency
+	//GiveMoneyEx(playerid, -house_Price[ID]);
 
 	SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kupili kucu!");
 
-	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `player_id` = '%d'", house_ID[ID], PlayerInfo[playerid][SQLID]);
+	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `character_id` = '%d'", house_ID[ID], GetCharacterSQLID(playerid));
 	mysql_tquery(SQL, query);
 
-	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `PID` = '%d' WHERE `ID` = '%d'", PlayerInfo[playerid][SQLID], house_ID[ID]);
+	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `character_id` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ID]);
 	mysql_tquery(SQL, query);
 
 	House_UpdateLabel(house_ID[ID], 1);

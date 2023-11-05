@@ -50,21 +50,21 @@ hook OnPlayerConnect(playerid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerLoaded(playerid)
+hook OnCharacterLoaded(playerid)
 {   
     new q[120];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE player_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE character_id = '%d' LIMIT 1", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_AccountDocumentsLoad", "i", playerid);
 
 	return 1;
 }
 
-hook OnPlayerFirstStream(playerid)
+hook OnCharacterFirstStream(playerid)
 {
 	if(PlayerDocuments[playerid][pLifeInsurance] != -1)
 	{
 		new string[128];
-		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(LifeInsuranceValidUntil,CURRENT_DATE), LifeInsuranceValidUntil from `player_documents` where `player_id`='%i'", PlayerInfo[playerid][SQLID]);
+		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(LifeInsuranceValidUntil,CURRENT_DATE), LifeInsuranceValidUntil from `player_documents` where `character_id`='%i'", GetCharacterSQLID(playerid));
 		mysql_tquery(SQL, string, "CheckLifeInsurance", "i", playerid);
 	}
 
@@ -81,7 +81,8 @@ YCMD:getidcard(playerid, params[], help)
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
 
         PlayerDocuments[playerid][pNationalID] = 1;
-        GiveMoneyEx(playerid, -200);
+        // - Dodati kada se odradi player_currency
+        // GiveMoneyEx(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
         notification.Show(playerid, "OPSTINA", "Uspesno si izvadio licnu kartu!", "!", BOXCOLOR_GREEN);
 
@@ -101,7 +102,9 @@ YCMD:getpassport(playerid, params[], help)
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
 
         PlayerDocuments[playerid][pPassport] = 1;
-        GiveMoneyEx(playerid, -200);
+        
+        // - Dodati kada se odradi player_currency
+        // GiveMoneyEx(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
         notification.Show(playerid, "OPSTINA", "Uspesno si izvadio pasos!", "!", BOXCOLOR_GREEN); // Jesi alahami
 
@@ -121,7 +124,8 @@ YCMD:getlifeinsurance(playerid, params[], help)
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
 
         PlayerDocuments[playerid][pLifeInsurance] = 1;
-        GiveMoneyEx(playerid, -200);
+        // - Dodati kada se odradi player_currency
+        // GiveMoneyEx(playerid, -200);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
         notification.Show(playerid, "OPSTINA", "Uspesno si izvadio zivotno osiguranje!", "!", BOXCOLOR_GREEN);
 
@@ -144,8 +148,8 @@ public SQL_AccountDocumentsLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_documents` (player_id, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense, LifeInsurance) \ 
-            VALUES('%d', '0', '0', '0', '0', '0', '0', '-1')", PlayerInfo[playerid][SQLID]);
+           "INSERT INTO `player_documents` (character_id, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense, LifeInsurance) \ 
+            VALUES('%d', '0', '0', '0', '0', '0', '0', '-1')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
     else 

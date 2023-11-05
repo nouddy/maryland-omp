@@ -30,7 +30,6 @@ ResetVariables(playerid)
 {
     // Main register
     PlayerInfo[playerid][SQLID] = 0;
-    PlayerInfo[playerid][Level] = 1;
     PlayerInfo[playerid][Staff] = 0;
     // Documents of player
     PlayerDocuments[playerid][pNationalID] = 0;
@@ -55,10 +54,6 @@ ResetVariables(playerid)
 
     PlayerProperty[playerid][BCenter] = 0;
 
-    for(new i = 0; i < 2; i++)
-    {
-        PlayerInfo[playerid][AttachedObject][i] = -1;
-    }
 
 }
 

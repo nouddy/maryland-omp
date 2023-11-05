@@ -633,7 +633,8 @@ Bank_ShowLogs(playerid)
 forward OnBankAccountCreated(playerid, pass[]);
 public OnBankAccountCreated(playerid, pass[])
 {
-    GiveMoneyEx(playerid, -ACCOUNT_PRICE);
+    // - Dodati kada se odradi player_currency
+    //GiveMoneyEx(playerid, -ACCOUNT_PRICE);
     
     new id = cache_insert_id(), string[64];
     SendBankMessage(playerid, "Uspesno ste napravili vas bankovni racun!");
@@ -686,7 +687,8 @@ public OnBankAccountDeposit(playerid, amount)
         format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno depozitovano {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
         
-        GiveMoneyEx(playerid, -amount);
+        // - Dodati kada se odradi player_currency
+        //GiveMoneyEx(playerid, -amount);
         Bank_SaveLog(playerid, TYPE_DEPOSIT, CurrentAccountID[playerid], -1, amount);
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
@@ -704,7 +706,8 @@ public OnBankAccountWithdraw(playerid, amount)
         format(string, sizeof(string), "[ML-BANKA]: {FFFFFF}Uspesno podignuto {2ECC71}%s.", formatInt(amount));
         SendClientMessage(playerid, 0x3498DBFF, string);
 
-        GiveMoneyEx(playerid, amount);
+        // - Dodati kada se odradi player_currency
+        //GiveMoneyEx(playerid, amount);
         Bank_SaveLog(playerid, TYPE_WITHDRAW, CurrentAccountID[playerid], -1, amount);
     }else{
         SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Neuspesna transakcija.");
@@ -768,7 +771,9 @@ forward OnBankAccountDeleted(playerid, id, amount);
 public OnBankAccountDeleted(playerid, id, amount)
 {
     if(cache_affected_rows() > 0) {
-        GiveMoneyEx(playerid, amount);
+        
+        // - Dodati kada se odradi player_currency
+        // GiveMoneyEx(playerid, amount);
         
         foreach(new i : Player)
         {

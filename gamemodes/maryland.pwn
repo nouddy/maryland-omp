@@ -693,3 +693,21 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
+
+/*
+
+* TODO:
+
+	- Odraditi attach objekta koji se ne cuva nigdje(za karaktera!)
+	- Odraditi GivePLayerMoney za karaktera kada se odradit player_currency.
+	- Osposobiti kripto i dodati ga u player_currency.
+	- Karakter Level insertovati u bazu i cuvanje.
+	- Uraditi OnPlayerDeath provere
+	- Odraditi TD-ove za karaktera
+	- Popraviti karakterizacijske objekte pri Y/N da se ne odaljavaju daleko
+	- Zamjeniti login mape!
+	- Odraditi redesign databaze za sve stvari.
+	- Odraditi functions.stock gdje ce se kreirati funkcije koje ce se koristiti!
+	-
+
+*/

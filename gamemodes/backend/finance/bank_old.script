@@ -38,7 +38,7 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerLoaded(playerid)
+hook OnCharacterLoaded(playerid)
 {
     new q[128];
 	mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_finance WHERE finance_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
@@ -182,7 +182,8 @@ Dialog: dialog_deposit(const playerid, response, listitem, string: inputtext[])
 
 	ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
-	GiveMoneyEx(playerid, -strval(inputtext));
+	// - Dodati kada se odradi player_currency
+	//GiveMoneyEx(playerid, -strval(inputtext));
 
 	SaveFinance(playerid);
 
@@ -211,7 +212,8 @@ Dialog: dialog_withdraw(const playerid, response, listitem, string: inputtext[])
 
 	ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 	
-	GiveMoneyEx(playerid, strval(inputtext));	
+	// - Dodati kada se odradi player_currency
+	//GiveMoneyEx(playerid, strval(inputtext));	
 
 	SaveFinance(playerid);
 

@@ -1068,13 +1068,14 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         else if(e_CHOSEN_XENON[playerid]) { final_price[playerid]+= DEALERSHIP_XENON_PRICE; }
         else if(e_CUSTOM_PLATE[playerid]) { final_price[playerid]+= DEALERSHIP_PLATE_PRICE; }
 
-        GiveMoneyEx(playerid, -final_price[playerid]);
+        // - Dodati kada se odradi player_currency
+        // GiveMoneyEx(playerid, -final_price[playerid]);
 
         new q[ 666 ];
 
         new id = Iter_Free(iter_Vehicles);
 
-        eVehicle[id][vOwner] = PlayerInfo[playerid][SQLID];
+        eVehicle[id][vOwner] = GetCharacterSQLID(playerid);
 
         eVehicle[id][vModel] = sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model];
         eVehicle[id][vColor][0] = eVehicle[id][vColor][1] = e_CHOSEN_COLOUR[playerid];
@@ -1110,7 +1111,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, \
                                     `vLock`, `vNitro`, `vState`) \
 									VALUES ('%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '%d', '100', '0', '0', '100', '%d', '%d', '%d', '0', '%d', '%d')",
-                                    PlayerInfo[playerid][SQLID], eVehicle[id][vModel], eVehicle[id][vColor][0], 
+                                    GetCharacterSQLID(playerid), eVehicle[id][vModel], eVehicle[id][vColor][0], 
                                     eVehicle[id][vColor][1], eVehicle[id][vPlate], eVehicle[id][vPos][0],
                                     eVehicle[id][vPos][1], eVehicle[id][vPos][2], eVehicle[id][vPos][3], 
                                     eVehicle[id][vRegDate], eVehicle[id][vFuelType], e_CHOSEN_ALARM[playerid], e_CHOSEN_XENON[playerid], e_CHOSEN_NITRO[playerid], eVehicle[id][vState]);

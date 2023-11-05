@@ -43,9 +43,8 @@ new e_CHARACTER_OBJ[MAX_PLAYERS][4],
 	e_CHOSEN_WALK[MAX_PLAYERS],
 	e_CHOSEN_ATTACH[MAX_PLAYERS],
 	e_CHOSEN_SEX[MAX_PLAYERS],
-	e_CHOSEN_STATE[MAX_PLAYERS];
-
-//  new Menu:e_Character[2];
+	e_CHOSEN_STATE[MAX_PLAYERS],
+	bool:e_NEW_CHARACTER[MAX_PLAYERS];
 
 enum e_PLAYER_FITNESS {
 
@@ -80,16 +79,12 @@ enum PlayerInformation
 	Username[MAX_PLAYER_NAME],
 	Password,
 	Level,
-	Money,
-	Skin,
 	Age,
 	Staff,
 	LastLogin[50],
 	RegisterDate[50],
 	Email[50],
-	State[50],
-	Sex[10],
-	AttachedObject[2]
+	Sex[10]
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 
@@ -99,6 +94,48 @@ new Float:RandomSpawnCords[ 3 ][ 3 ] = {
     { 1401.7791,1591.3466,12.0481 },
     { 1401.7791,1591.3466,12.0481 },
     { 1401.7791,1591.3466,12.0481 }
+};
+
+//		>> [ CHARACTERS ] <<
+
+enum e_CHARACTER_DATA {
+
+	SQLID,
+	AccountID,
+	Username[MAX_PLAYER_NAME],
+	Sex[10],
+	State[50],
+	Skin,
+	Money,
+	Level,
+	Float:lastPos[3]
+}
+
+new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
+
+enum e_LOGIN_DATA {
+
+	Float:player_Position[3],
+	Float:camera_Position[6],
+	Float:camera_LookAt[6],
+	anim_Lib[20],
+	anim_Name[20]
+}
+
+new login_Info[3][e_LOGIN_DATA] = {
+
+	//		>> [ WATCHING TV ] <<
+
+	{ {-1632.3691, 1054.3009, 53.7197}, { -1630.258056, 1046.897338, 55.456192, -1638.548828, 1056.112426, 55.281448 }, { -1629.922363, 1041.916992, 55.745094, -1634.393188, 1053.394165, 54.696849 }, "ped", "SEAT_idle" },
+	
+	//		>> [ USING LAPTOP ] <<
+
+	{ {-1641.0555,1049.3169,54.1497}, { -1629.691040, 1048.095703, 56.109050, -1638.830810, 1053.515136, 54.982887 }, { -1629.613403, 1043.104736, 55.818943, -1641.529541, 1049.351440, 54.366065 }, "INT_OFFICE", "OFF_Sit_Type_Loop" },
+
+	//		>> [ AQUARIUM ] <<
+
+	{ {-1626.4513,1044.0294,54.1497}, { -1630.180175, 1046.474731, 55.887516, -1631.097167, 1044.415161, 55.440597 }, { -1629.843994, 1041.486450, 55.821113, -1626.215820, 1043.827026, 54.531620 }, "GHETTO_DB", "GDB_Car_SMO" }
+
 };
 
 //>>
@@ -115,30 +152,182 @@ public SQL_AccountLoad(playerid)
 	{
 		cache_get_value_name_int(0, "ID", PlayerInfo[playerid][SQLID]);
 		cache_get_value_name_int(0, "Password", PlayerInfo[playerid][Password]);
-		cache_get_value_name_int(0, "Level", PlayerInfo[playerid][Level]);
-		cache_get_value_name_int(0, "Money", PlayerInfo[playerid][Money]);
-		cache_get_value_name_int(0, "Skin", PlayerInfo[playerid][Skin]);
 		cache_get_value_name_int(0, "Age", PlayerInfo[playerid][Age]);
 		cache_get_value_name_int(0, "Staff", PlayerInfo[playerid][Staff]);
 
 		CreateLoginTextDraws(playerid);
 
 		PlayerLogin(playerid);	
-
-		CallLocalFunction("OnPlayerLoaded", "d", playerid);		// Kada se igrac konekta i ocita usera da mu ucita ostalo da se ne pomesa SQLID
+		// Kada se igrac konekta i ocita usera da mu ucita ostalo da se ne pomesa SQLID
 	}
 }
 
-forward OnPlayerLoaded(playerid);
-public OnPlayerLoaded(playerid)
+forward Character_InsertData(playerid);
+public Character_InsertData(playerid) {
+
+	CharacterInfo[playerid][SQLID] = cache_insert_id();
+
+	SendClientMessage(playerid, x_green, ">> %d | Username: %s", CharacterInfo[playerid][SQLID], CharacterInfo[playerid][Username]);
+
+	return true;
+}
+
+forward Character_Select(playerid);
+public Character_Select(playerid) {
+
+	new tmp_str[64], tmp_dialog[512], charID, charName[24];
+	new rows = cache_num_rows();
+
+	format(tmp_str, sizeof(tmp_str), "Character ID\tName\n");
+	strcat(tmp_dialog, tmp_str, sizeof(tmp_dialog));
+
+	for(new i = 0; i < rows; i++) {
+
+		cache_get_value_name_int(i, "character_id", charID);
+		cache_get_value_name(i, "cName", charName, 24);
+
+		format(tmp_str, sizeof(tmp_str), "(%d) >> \t%s\n", charID, charName);
+		strcat(tmp_dialog, tmp_str, sizeof(tmp_dialog));
+	}
+
+	if(rows < 3) {
+
+		format(tmp_str, sizeof(tmp_str), "\tNapravi Novog Karaktera\t\n");
+		strcat(tmp_dialog, tmp_str, sizeof(tmp_dialog));
+	}
+
+	Dialog_Show(playerid, "character_Choose", DIALOG_STYLE_TABLIST_HEADERS, ">> Characters", tmp_dialog, "Potvrdi", "Izadji");
+
+	return true;
+}
+
+stock Character_SelectData(playerid, id) {
+
+	if(id > 0) {
+
+		CharacterInfo[playerid][SQLID] = id;
+
+		new q[128];
+		
+		mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `characters` WHERE `character_id` = '%d' LIMIT 1", id);
+		mysql_tquery(MySQL:SQL, q, "Character_LoadData", "i", playerid);
+	}
+	else {
+
+		e_NEW_CHARACTER[playerid] = true;
+		e_REGISTERING_PROGRESS[playerid] = true;
+		e_SELECTED_OBJ[playerid] = -1;
+
+		e_CHOSEN_ATTACH[playerid] = false;
+		e_CHOSEN_SEX[playerid] = false;
+		e_CHOSEN_STATE[playerid] = false;
+		e_CHOSEN_WALK[playerid] = false;
+
+		printf("e_NEW_CHARACTER is equal to %i", e_NEW_CHARACTER[playerid]);
+		printf("e_NEW_CHARACTER is equal to %i", e_REGISTERING_PROGRESS[playerid]);
+
+		Dialog_Show(playerid, "character_UserName", DIALOG_STYLE_INPUT, "Character - Name", "Unesite ime vaseg zeljenog karaktera\nIme mora biti formata (Ime_Prezime)!", "Unesi", "Odustani");
+
+		print("Character_SelectData - else");
+
+	}
+
+	return true;
+}
+
+forward Character_LoadData(playerid, id);
+public Character_LoadData(playerid, id) {
+
+	cache_get_value_name_int(0, "character_id", CharacterInfo[playerid][SQLID]);
+	cache_get_value_name_int(0, "account_id", CharacterInfo[playerid][AccountID]);
+
+	cache_get_value_name(id, "cName", CharacterInfo[playerid][Username], MAX_PLAYER_NAME);
+	cache_get_value_name(id, "cSex", CharacterInfo[playerid][Sex], 10);
+	cache_get_value_name(id, "cState", CharacterInfo[playerid][State], 50);
+
+	cache_get_value_name_int(0, "cSkin", CharacterInfo[playerid][Skin]);
+	cache_get_value_name_int(0, "cMoney", CharacterInfo[playerid][Money]);
+
+	cache_get_value_name_float(0, "cLastX", CharacterInfo[playerid][lastPos][0]);
+	cache_get_value_name_float(0, "cLastY", CharacterInfo[playerid][lastPos][1]);
+	cache_get_value_name_float(0, "cLastZ", CharacterInfo[playerid][lastPos][2]);
+
+	SetTimerEx("Spawn_Character", 1500, false, "d", playerid);
+
+	e_NEW_CHARACTER[playerid] = false;
+	e_REGISTERING_PROGRESS[playerid] = false;
+
+	CallLocalFunction("OnCharacterLoaded", "d", playerid);	
+
+	return true;
+}
+
+forward Spawn_Character(playerid);
+public Spawn_Character(playerid)
+{
+
+	SetPlayerVirtualWorld(playerid, 0);
+	SetPlayerInterior(playerid, 0);
+
+	notification.Show(playerid, "Maryland", "Dobro Dosli na Maryland!", "!", BOXCOLOR_GREEN);
+	
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin],
+		CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
+	);
+
+	if(LoginTDShown[playerid])
+	{
+		ShowLoginTDForPlayer(playerid, false);
+		LoginTDShown[playerid] = false;
+	}
+
+	CallLocalFunction("OnCharacterFirstStream", "d", playerid);		// Kada se igrac prvi put spawnuje ocitavanja.
+
+	LoadObjectsForPlayer(playerid);
+	SetPlayerScore(playerid, CharacterInfo[playerid][Level]);
+	ResetPlayerMoney(playerid);
+	GivePlayerMoney(playerid, CharacterInfo[playerid][Money]);
+	SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
+	PlayerLogged[playerid] = true;
+
+	TogglePlayerSpectating(playerid, false);
+
+	SetCameraBehindPlayer(playerid);
+
+	DestroyDynamicActor(LoginActor[playerid]);
+
+	//
+	static q[ 120 ];
+	mysql_format(SQL, q, sizeof(q), "UPDATE `accounts` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
+	mysql_tquery(SQL, q);
+	//
+
+	Logo_ShowTextDraw(playerid, true);
+
+	TogglePlayerTextDraw(playerid, true);
+
+	ToggleGlobalTextDraw(playerid, true);
+
+	static pname[25];
+	format(pname, sizeof(pname), "%s", CharacterInfo[playerid][Username]);
+	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
+	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+	return (true);
+}
+
+forward OnCharacterLoaded(playerid);
+public OnCharacterLoaded(playerid)
 {
 	return true;
 }
 
-forward PlayerRegistered(playerid);
-public PlayerRegistered(playerid)
+forward CharacterCreate(playerid);
+public CharacterCreate(playerid)
 {
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
+
+	CharacterInfo[playerid][AccountID] = PlayerInfo[playerid][SQLID];
 
 	SetSpawnInfo(playerid, NO_TEAM, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 	SpawnPlayer(playerid);
@@ -149,17 +338,7 @@ public PlayerRegistered(playerid)
 	InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
 	InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
 
-	printf("DEVLOG - %d - VW", GetPlayerVirtualWorld(playerid));
-	printf("DEVLOG - %d - INT", GetPlayerInterior(playerid));
-
-
 	SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
-
-	// e_Character[0] = CreateMenu("Character", 1, 30.0, 150.0, 190.0, 180.0);
-	// AddMenuItem(e_Character[0], 0, "Sex");
-	// AddMenuItem(e_Character[0], 0, "Walking Style");
-	// AddMenuItem(e_Character[0], 0, "Attachment");
-	// AddMenuItem(e_Character[0], 0, "State");
 
 	TogglePlayerControllable(playerid, false);
 
@@ -176,11 +355,13 @@ public PlayerRegistered(playerid)
 
 	e_REGISTERING_PROGRESS[playerid] = true;
 
-	va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Dobro dosli %s na karakterizaciju vaseg karaktera.", ReturnPlayerName(playerid));
+	va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Dobro dosli %s na kreaciju vaseg karaktera.", ReturnPlayerName(playerid));
 	va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Izabrane opcije se cuvaju na vas nalog i nece se moci mijenjati, izuzetak je skin.");
 
 	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da listate ponudjene opcije karakterizacije pritisnite 'Y'.");
 	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'N'.");
+
+	Dialog_Show(playerid, "character_UserName", DIALOG_STYLE_INPUT, "Character - Name", "Unesite ime vaseg zeljenog karaktera\nIme mora biti formata (Ime_Prezime)!", "Unesi", "Odustani");
 
 	return 1;
 
@@ -206,10 +387,12 @@ hook OnPlayerConnect(playerid)
 	LoadingObjects[playerid] = false;
 	LoginTDShown[playerid] = false;
 
+	e_NEW_CHARACTER[playerid] = false;
+	e_REGISTERING_PROGRESS[playerid] = false;
 	e_SELECTED_OBJ[playerid] = -1;
 
 	new query[120];
-	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `players` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
+	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `accounts` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountLoad", "i", playerid);
 
 	return 1;
@@ -225,6 +408,25 @@ hook OnPlayerDisconnect(playerid, reason)
 	PlayerLogged[playerid] = false;
 	LoginTDShown[playerid] = false;
 
+	if(!e_REGISTERING_PROGRESS[playerid]) {
+
+		new Float:pPos[3];
+	
+		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+	
+		CharacterInfo[playerid][lastPos][0] = pPos[0];
+		CharacterInfo[playerid][lastPos][1] = pPos[1];
+		CharacterInfo[playerid][lastPos][2] = pPos[2];
+
+		new q[260];
+
+		mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `characters` SET `cLastX` = '%f', `cLastY` = '%f', `cLastZ` = '%f' WHERE `character_id` = '%d'",
+											 CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], 
+											 CharacterInfo[playerid][lastPos][2],  GetCharacterSQLID(playerid));
+		mysql_tquery(MySQL:SQL, q);
+
+	}
+
 	return 1;
 }
 
@@ -238,7 +440,7 @@ public Spawn_Player(playerid)
 
 	notification.Show(playerid, "Maryland", "Dobro Dosli na Maryland!", "!", BOXCOLOR_GREEN);
 	
-	SetSpawnInfo(playerid, NO_TEAM, PlayerInfo[playerid][Skin],
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin],
 		RandomSpawnCords[ rand ][ 0 ], RandomSpawnCords[ rand ][ 1 ], RandomSpawnCords[ rand ][ 2 ],90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
 
@@ -248,13 +450,14 @@ public Spawn_Player(playerid)
 		LoginTDShown[playerid] = false;
 	}
 
-	CallLocalFunction("OnPlayerFirstStream", "d", playerid);		// Kada se igrac prvi put spawnuje ocitavanja.
+	CallLocalFunction("OnCharacterFirstStream", "d", playerid);		// Kada se igrac prvi put spawnuje ocitavanja.
 
 	LoadObjectsForPlayer(playerid);
-	SetPlayerScore(playerid, PlayerInfo[playerid][Level]);
+	SetPlayerScore(playerid, CharacterInfo[playerid][Level]);
 	ResetPlayerMoney(playerid);
-	GivePlayerMoney(playerid, PlayerInfo[playerid][Money]);
-	SetPlayerSkin(playerid, PlayerInfo[playerid][Skin]);
+	// - Dodati novac preko character_currency tabele 
+	// GivePlayerMoney(playerid, CharacterInfo[playerid][Money]);
+	SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
 	PlayerLogged[playerid] = true;
 
 	TogglePlayerSpectating(playerid, false);
@@ -265,29 +468,26 @@ public Spawn_Player(playerid)
 
 	//
 	static q[ 120 ];
-	mysql_format(SQL, q, sizeof(q), "UPDATE `players` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
+	mysql_format(SQL, q, sizeof(q), "UPDATE `accounts` SET `LastLogin` = '%s' WHERE `Username` = '%e'  LIMIT 1",ReturnDate(), ReturnPlayerName(playerid));
 	mysql_tquery(SQL, q);
 	//
 
 	Logo_ShowTextDraw(playerid, true);
 
-	ToggleGlobalTextDraw(playerid, true);
-
 	TogglePlayerTextDraw(playerid, true);
 
+	ToggleGlobalTextDraw(playerid, true);
+
 	static pname[25];
-	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+	format(pname, sizeof(pname), "%s", CharacterInfo[playerid][Username]);
 	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
-
-	PlayerTextDrawShow(playerid, Player_TDs[playerid][0]);
-
 	return (true);
 }
 
 //---------------------------
-forward OnPlayerFirstStream(playerid);
-public OnPlayerFirstStream(playerid)
+forward OnCharacterFirstStream(playerid);
+public OnCharacterFirstStream(playerid)
 {
 	return (true);
 }
@@ -298,7 +498,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	if(PRESSED(KEY_YES)) {
 
 		if(e_REGISTERING_PROGRESS[playerid]) {		
-			
 			
 			print("e_REGISTERING_PROGRESS = 'true'");
 
@@ -346,10 +545,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 					// SEX
 					Dialog_Show(playerid, "dialog_cSex", DIALOG_STYLE_LIST, "[C] >> Izaberite Spol", "1 - Musko\n2 - Zensko", "Odaberi", "Odustani");
 				}
+
 				case 1: {
 					e_WALK_STYLE[playerid] = true;
 					e_SELECTED_OBJ[playerid] = -1;
 					e_REGISTERING_PROGRESS[playerid] = false;
+					e_CHOSEN_WALK[playerid] = -1;
 					InterpolateCameraPos(playerid, -1632.764404, 1049.438110, 54.365573, -1628.767578, 1043.836669, 54.668064, 3500);
 					InterpolateCameraLookAt(playerid, -1634.203002, 1054.138671, 53.451564, -1624.815795, 1046.898559, 54.760597, 3500);
 					SetPlayerPos(playerid, -1624.8284,1046.9875,54.1497);
@@ -418,10 +619,84 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 			}
 		}
 	}
-	return 1;
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 // -
+
+Dialog:character_UserName(const playerid, response, listitem, string: inputtext[]) {
+
+	if(!response) 
+		return Kick(playerid);
+
+	new name[MAX_PLAYER_NAME];
+
+	if(sscanf(inputtext, "s[24]", name))
+		return Dialog_Show(playerid, "character_UserName", DIALOG_STYLE_INPUT, "Character - Name", "Unesite ime vaseg zeljenog karaktera\nIme mora biti formata (Ime_Prezime)!", "Unesi", "Odustani");
+
+	strmid( CharacterInfo[playerid][Username], inputtext, 0, strlen( inputtext ), MAX_PLAYER_NAME );
+
+	printf("New Character is equal to %i", e_NEW_CHARACTER[playerid]);
+
+	if(e_NEW_CHARACTER[playerid]) {
+
+		printf("if(e_new_character)");
+
+		SetSpawnInfo(playerid, NO_TEAM, 24, -1633.8126,1054.2955,53.7197,187.4477, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
+		TogglePlayerSpectating(playerid, false);
+
+		ShowLoginTDForPlayer(playerid, false);
+
+		SetPlayerInterior(playerid, 1);
+		SetPlayerVirtualWorld(playerid, playerid+1);
+
+		InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
+		InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
+
+		// SetPlayerPos(playerid, -1633.8126,1054.2955,53.7197);
+
+		TogglePlayerControllable(playerid, false);
+
+		ApplyAnimation(playerid, "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, true, true, true, 0);
+
+		e_CHARACTER_OBJ[playerid][0] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.825523, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00);
+		SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][0], 0, "{FFFFFF}SEX", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+		e_CHARACTER_OBJ[playerid][1] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 54.355529, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+		SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][1], 0, "{FFFFFF}WALK STYLE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+		e_CHARACTER_OBJ[playerid][2] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.895565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+		SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][2], 0, "{FFFFFF}STATE", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+		e_CHARACTER_OBJ[playerid][3] = CreateDynamicObject(2659, -1631.104858, 1055.017333, 53.415565, 0.000000, 0.000000, -13.500000, -1, -1, playerid, 300.00, 300.00); 
+		SetDynamicObjectMaterialText(e_CHARACTER_OBJ[playerid][3], 0, "{FFFFFF}ATTACHMENTS", 80, "Ariel", 40, 1, 0x00000000, 0x00000000, 1);
+
+		va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Dobro dosli %s na kreaciju vaseg karaktera.", ReturnPlayerName(playerid));
+		va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Izabrane opcije se cuvaju na vas nalog i nece se moci mijenjati, izuzetak je skin.");
+
+		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da listate ponudjene opcije karakterizacije pritisnite 'Y'.");
+		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Da odaberete oznacenu mogucnost pritsnite 'N'.");
+
+
+	}
+
+	return 1;
+}
+
+Dialog:character_Choose(const playerid, response, listitem, string: inputtext[]) {
+
+	if(!response) 
+		return Kick(playerid);
+
+	if(response) {
+
+		new C_ID[6];
+        strmid(C_ID, inputtext, strfind(inputtext, "(") + 1,  strfind(inputtext, ")"));
+
+		printf("LISTITEM - %d", listitem);
+
+        Character_SelectData(playerid, strval(C_ID));
+	}
+
+	return 1;
+}
 
 Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 
@@ -433,8 +708,6 @@ Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 		case 0: {
 
 			e_CHOSEN_ATTACH[playerid] = true;
-
-			PlayerInfo[playerid][AttachedObject][0] = 1;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
 			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
@@ -449,7 +722,7 @@ Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 
 			e_CHOSEN_ATTACH[playerid] = true;
 
-			PlayerInfo[playerid][AttachedObject][0] = 2;
+			// PlayerInfo[playerid][AttachedObject][0] = 2;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
 			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
@@ -464,7 +737,7 @@ Dialog:dialog_cAttach(const playerid, response, listitem, string: inputtext[]) {
 
 			e_CHOSEN_ATTACH[playerid] = true;
 
-			PlayerInfo[playerid][AttachedObject][0] = 3;
+			// PlayerInfo[playerid][AttachedObject][0] = 3;
 
 			InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
 			InterpolateCameraLookAt(playerid, -1633.738037, 1054.931762, 53.635402, -1633.218627, 1055.101928, 53.312225, 3500);
@@ -491,9 +764,9 @@ Dialog:dialog_cState(playerid, response, listitem, string: inputtext[]) {
 
 		switch(listitem) {
 
-			case 0: { strmid( PlayerInfo[ playerid ][ State ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
-			case 1: { strmid( PlayerInfo[ playerid ][ State ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
-			case 2: { strmid( PlayerInfo[ playerid ][ State ], "Egypt", 0, strlen( "Egypt"), 50 ); }
+			case 0: { strmid( CharacterInfo[ playerid ][ State ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
+			case 1: { strmid( CharacterInfo[ playerid ][ State ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
+			case 2: { strmid( CharacterInfo[ playerid ][ State ], "Egypt", 0, strlen( "Egypt"), 50 ); }
 		}
 
 		InterpolateCameraPos(playerid, -1634.438232, 1049.981079, 53.645912, -1636.803100, 1051.892333, 54.672554, 3500);
@@ -543,12 +816,10 @@ Dialog: dialog_regpassword(playerid, response, listitem, string: inputtext[])
 
 		CreatePlayerRegister(playerid, false);
 		new query[550];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Money`, `Age`, `RegisterDate`, `Email`, `State`, `Sex`) \ 
-			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][State],PlayerInfo[playerid][Sex] );
-		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
-
-		
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `Age`, `RegisterDate`, `Email`, `Sex`) \ 
+			VALUES ('%e', '%d', '%d', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email], PlayerInfo[playerid][Sex] );
+		mysql_tquery(SQL, query, "CharacterCreate", "i", playerid);
 
 		Registered[playerid] = true;
 	}
@@ -582,10 +853,10 @@ Dialog: dialog_regages(const playerid, response, listitem, string: inputtext[])
 
 		CreatePlayerRegister(playerid, false);
 		new query[550];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Money`, `Age`, `RegisterDate`, `Email`, `State`, `Sex`) \ 
-			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][State],PlayerInfo[playerid][Sex] );
-		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `Age`, `RegisterDate`, `Email`, `Sex`) \ 
+			VALUES ('%e', '%d', '%d', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email], PlayerInfo[playerid][Sex] );
+		mysql_tquery(SQL, query, "CharacterCreate", "i", playerid);
 
 
 		Registered[playerid] = true;
@@ -625,10 +896,10 @@ Dialog:dialog_reggmail(const playerid, response, listitem , string: inputtext[])
 
 		CreatePlayerRegister(playerid, false);
 		new query[550];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Money`, `Age`, `RegisterDate`, `Email`, `State`, `Sex`) \ 
-			VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][State],PlayerInfo[playerid][Sex] );
-		mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+		mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `Age`, `RegisterDate`, `Email`, `Sex`) \ 
+			VALUES ('%e', '%d', '%d', '%e', '%e', '%e')", 
+			ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email], PlayerInfo[playerid][Sex] );
+		mysql_tquery(SQL, query, "CharacterCreate", "i", playerid);
 
 		Registered[playerid] = true;
 	}
@@ -644,9 +915,9 @@ Dialog:dialog_regState(const playerid, response, listitem, string: inputtext[])
 	{
 		switch(listitem)
 		{
-			case 0: { strmid( PlayerInfo[ playerid ][ State ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
-			case 1: { strmid( PlayerInfo[ playerid ][ State ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
-			case 2: { strmid( PlayerInfo[ playerid ][ State ], "Egypt", 0, strlen( "Egypt"), 50 ); }
+			case 0: { strmid( CharacterInfo[ playerid ][ State ], "Maryland", 0, strlen( "Maryland" ), 50 ); }
+			case 1: { strmid( CharacterInfo[ playerid ][ State ], "Little Italy", 0, strlen( "Little Italy"), 50 ); }
+			case 2: { strmid( CharacterInfo[ playerid ][ State ], "Egypt", 0, strlen( "Egypt"), 50 ); }
 		}
 		RegisterState[playerid] = true;
 		SendClientMessage(playerid, x_ltorange, "> Odabrali ste vasu drzavu.");
@@ -659,10 +930,10 @@ Dialog:dialog_regState(const playerid, response, listitem, string: inputtext[])
 
 			CreatePlayerRegister(playerid, false);
 			new query[550];
-			mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Money`, `Age`, `RegisterDate`, `Email`, `State`, `Sex`) \ 
-				VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][State],PlayerInfo[playerid][Sex] );
-			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+			mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `Age`, `RegisterDate`, `Email`, `Sex`) \ 
+				VALUES ('%e', '%d', '%d', '%e', '%e', '%e')", 
+				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email], PlayerInfo[playerid][Sex] );
+			mysql_tquery(SQL, query, "CharacterCreate", "i", playerid);
 
 			Registered[playerid] = true;
 		}
@@ -678,17 +949,17 @@ Dialog:dialog_cSex(const playerid, response, listitem, string: inputtext[]) {
 
 
 	new odabir = listitem+1;
-	strmid( PlayerInfo[ playerid ][ Sex ], (odabir == 1 ? ("Musko") : ("Zensko")), 0, strlen( (odabir == 1 ? ("Musko") : ("Zensko")) ), 50 );
+	strmid( CharacterInfo[ playerid ][ Sex ], (odabir == 1 ? ("Musko") : ("Zensko")), 0, strlen( (odabir == 1 ? ("Musko") : ("Zensko")) ), 50 );
 
 
 	if(odabir == 1){
 
-		PlayerInfo[playerid][Skin] = 29;
+		CharacterInfo[playerid][Skin] = 29;
 		SetPlayerSkin(playerid, 29);
 	}
 	else if(odabir == 2){
 		
-		PlayerInfo[playerid][Skin] = 12;
+		CharacterInfo[playerid][Skin] = 12;
 
 		SetPlayerSkin(playerid, 12);
 
@@ -727,8 +998,8 @@ Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 
 		RegisterSex[playerid] = true;
 
-		if(odabir == 1){PlayerInfo[playerid][Skin] = 250;}
-		else if(odabir == 2){PlayerInfo[playerid][Skin] = 191;}
+		if(odabir == 1){CharacterInfo[playerid][Skin] = 250;}
+		else if(odabir == 2){CharacterInfo[playerid][Skin] = 191;}
 
 		SendClientMessage(playerid, x_ltorange, "> Odabrali ste vas Sex.");
 
@@ -740,10 +1011,10 @@ Dialog:dialog_regpol(const playerid, response, listitem, string: inputtext[])
 
 			CreatePlayerRegister(playerid, false);
 			new query[550];
-			mysql_format(SQL, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `Skin`, `Level`, `Money`, `Age`, `RegisterDate`, `Email`, `State`, `Sex`) \ 
-				VALUES ('%e', '%d', '%d', '1', '2000', '%d', '%e', '%e', '%e', '%e')", 
-				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Skin], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email],PlayerInfo[playerid][State],PlayerInfo[playerid][Sex] );
-			mysql_tquery(SQL, query, "PlayerRegistered", "i", playerid);
+			mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `Age`, `RegisterDate`, `Email`, `Sex`) \ 
+				VALUES ('%e', '%d', '%d', '%e', '%e', '%e')", 
+				ReturnPlayerName(playerid), PlayerInfo[playerid][Password], PlayerInfo[playerid][Age], ReturnDate(), PlayerInfo[playerid][Email], PlayerInfo[playerid][Sex] );
+			mysql_tquery(SQL, query, "CharacterCreate", "i", playerid);
 
 
 			Registered[playerid] = true;
@@ -763,7 +1034,10 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 		if(udb_hash(inputtext) == PlayerInfo[playerid][Password])
 		{
 			if(PlayerLogged[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Maryland \187; "c_white"Vec si ulogovan");
-			SetTimerEx("Spawn_Player", 1500, false, "d", playerid);
+		
+			new q[128];
+			mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `characters` WHERE `account_id` = '%d' LIMIT 3", GetPlayerSQLID(playerid));
+			mysql_tquery(MySQL:SQL, q, "Character_Select", "d", playerid);
 		}
 		else
 		{
@@ -796,74 +1070,7 @@ Dialog: dialog_login(const playerid, response, listitem, string: inputtext[])
 
 	return 1;
 }
-Dialog:dialog_obrisiobjekte(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return Kick(playerid);
 
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0:
-			{
-				if(PlayerInfo[playerid][AttachedObject][0] == -1)
-					return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
-
-				PlayerInfo[playerid][AttachedObject][0] = -1;
-
-				RemovePlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][0]);
-
-				SavePlayer(playerid);
-
-				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Uspesno ste obrisali ovaj objekat.");
-			}
-			case 1:
-			{
-				if(PlayerInfo[playerid][AttachedObject][1] == -1)
-					return SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Ovde nemate nista.");
-
-				RemovePlayerAttachedObject(playerid, PlayerInfo[playerid][AttachedObject][1]);
-
-				PlayerInfo[playerid][AttachedObject][1] = -1;
-
-				SavePlayer(playerid);
-
-				SendClientMessage(playerid, 0x8D9BFFFF, "[Dodan objekat]: {ffffff}Uspesno ste obrisali ovaj objekat.");
-			}
-		}
-	}
-	return (true);
-}
-
-Dialog:dialog_cryptofaq(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0:
-			{
-				cryptofaqDialog(playerid, 1);
-			}
-			case 1:
-			{
-				cryptofaqDialog(playerid, 2);
-			}
-			case 2:
-			{
-				cryptofaqDialog(playerid, 3);
-			}
-			case 3:
-			{
-				cryptofaqDialog(playerid, 4);
-			}
-		}
-	}
-	return (true);
-}
 //
 stock LoadObjectsForPlayer( playerid ) {
 
@@ -892,14 +1099,15 @@ public PlayerLogin(playerid)
 
 	TogglePlayerSpectating(playerid, true);
 	SetPlayerInterior(playerid, 1);
-	SetPlayerVirtualWorld( playerid, playerid+1 );
+	SetPlayerVirtualWorld( playerid, 0 );
+
 	SetPlayerPos(playerid,633.7927,-1765.8979,19.4339);
 	SetPlayerFacingAngle(playerid,176.0717);
 
 	InterpolateCameraPos(playerid, 628.761047, -1764.393554, 19.677539, 628.761047, -1764.393554, 19.677539, 1000);
 	InterpolateCameraLookAt(playerid, 629.909790, -1769.228637, 19.127872, 629.909790, -1769.228637, 19.127872, 1000);
 
-	LoginActor[playerid] = CreateActor(PlayerInfo[playerid][Skin], 632.1260,-1769.9631,18.9629,169.9771);
+	LoginActor[playerid] = CreateActor(289, 632.1260,-1769.9631,18.9629,169.9771);
 	SetActorVirtualWorld(LoginActor[playerid], playerid+1);
 	ApplyActorAnimation(LoginActor[playerid], "INT_OFFICE", "OFF_SIT_TYPE_LOOP", 4.1, true, false, false, false, 0); 
 
@@ -950,16 +1158,24 @@ stock InitializeCharacter(playerid) {
 
 	*/
 
-	new q[260];
-	mysql_format(SQL, q, sizeof q, "UPDATE `players` SET `State` = '%e', `Sex` = '%e' WHERE `ID` = '%d'", 
-									PlayerInfo[playerid][State], PlayerInfo[playerid][Sex], PlayerInfo[playerid][SQLID]);
-	mysql_tquery(SQL, q);
+	new q[660];
 
-	SetSpawnInfo(playerid, NO_TEAM, PlayerInfo[playerid][Skin],
+	mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `characters` (`account_id`, `cName`, `cSex`, `cState`, `cSkin`, `cMoney`) \
+										 VALUES ('%i', '%e', '%e', '%e', '%i', '900')",
+										 GetPlayerSQLID(playerid), CharacterInfo[playerid][Username], CharacterInfo[playerid][Sex],
+										 CharacterInfo[playerid][State], CharacterInfo[playerid][Skin]);
+	mysql_tquery(MySQL:SQL, q, "Character_InsertData", "d", playerid);
+
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin],
 		1401.7791,1591.3466,12.0481, 90.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0
 	);
 
-	PlayerInfo[playerid][Level] = 1;
+	for(new i = 0; i < sizeof e_CHARACTER_OBJ[]; i++) {
+
+		DestroyDynamicObject(e_CHARACTER_OBJ[playerid][i]);
+	}
+
+	CharacterInfo[playerid][Level] = 1;
     PlayerLogged[playerid] = true;
 
 	SavePlayer(playerid);
@@ -969,40 +1185,19 @@ stock InitializeCharacter(playerid) {
 
 	SpawnPlayer(playerid);
 
-	GiveMoneyEx(playerid, 2000);
+	// GivePlayerMoney(playerid, 900);
 
 	SetPlayerVirtualWorld(playerid, 0);
 	SetPlayerInterior(playerid, 6);
 
+	// Logo_ShowTextDraw(playerid, true);
 
+	// TogglePlayerTextDraw(playerid, true);
 
-	switch(PlayerInfo[playerid][AttachedObject][0]) {
-
-		case 1: {
-
-			SetPlayerAttachedObject(playerid, 1, 19042, 5, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
-		}
-
-		case 2: {
-
-			SetPlayerAttachedObject(playerid, 3, 18951, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
-
-		}
-
-		case 3: {
-
-			SetPlayerAttachedObject(playerid, 2, 19023, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000);
-		}
-	}
-
-	Logo_ShowTextDraw(playerid, true);
-
-	TogglePlayerTextDraw(playerid, true);
-
-	ToggleGlobalTextDraw(playerid, true);
+	// ToggleGlobalTextDraw(playerid, true);
 
 	static pname[25];
-	format(pname, sizeof(pname), "%s", ReturnPlayerName(playerid));
+	format(pname, sizeof(pname), "%s", CharacterInfo[playerid][Username]);
 	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], pname);
 	PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 

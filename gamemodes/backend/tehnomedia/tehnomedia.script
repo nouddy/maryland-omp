@@ -34,10 +34,10 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerLoaded(playerid)
+hook OnCharacterLoaded(playerid)
 {   
     new q[120];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_electronic WHERE player_id = '%d'", PlayerInfo[playerid][SQLID]);
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_electronic WHERE character_id = '%d'", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_ElectronicLoad", "i", playerid);
 
 	return 1;
@@ -52,8 +52,8 @@ public SQL_ElectronicLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_electronic` (player_id, Dron, Battery, GPS) \ 
-            VALUES('%d', '0', '0', '0')", PlayerInfo[playerid][SQLID]);
+           "INSERT INTO `player_electronic` (character_id, Dron, Battery, GPS) \ 
+            VALUES('%d', '0', '0', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
     else 
@@ -101,7 +101,8 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
                 if(GetPlayerMoney(playerid) < 700) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Nemate dovoljno novca!");
 
                 PlayerElectronic[playerid][eDronItem] = 1;
-                GiveMoneyEx(playerid, -700);
+                // - Dodati kada se odradi player_currency
+                //GiveMoneyEx(playerid, -700);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Dobili ste dron (/dron)!");
@@ -116,8 +117,8 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
                 if(GetPlayerMoney(playerid) < 150) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Nemate dovoljno novca!");
 
                 PlayerElectronic[playerid][eBatteryItem]++;
-
-                GiveMoneyEx(playerid, -150);
+                // - Dodati kada se odradi player_currency
+                // GiveMoneyEx(playerid, -150);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste Battery!");
@@ -133,7 +134,8 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
 
                 PlayerElectronic[playerid][eGPSItem] = 1;
 
-                GiveMoneyEx(playerid, -300);
+                // - Dodati kada se odradi player_currency
+                // GiveMoneyEx(playerid, -300);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste navigaciju!");

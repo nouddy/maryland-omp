@@ -50,14 +50,14 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		else
 			SetTimerEx("OnWinterEffectPlayer", 1500, false, "i", playerid);
 	}	
-	return true;
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerDisconnect(playerid, reason) 
 {
 	SetSnowFallingForPlayer(playerid, false);
 	Streamer_ToggleIdleUpdate(playerid, false);
-	return true;
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 // STOCKS
@@ -1304,7 +1304,7 @@ Dialog:wintersettings(playerid, response, listitem, const inputtext[])
 
 SaveWinterPlayerSettings(playerid) {
 	new query[160];
-	mysql_format(SQL, query, sizeof(query), "UPDATE `winter_settings` SET `map` = '%b', `breath` = '%b', `fallsnow` = '%b' WHERE `username` = '%s'", 
+	mysql_format(SQL, query, sizeof(query), "UPDATE `winter_settings` SET `map` = '%d', `breath` = '%d', `fallsnow` = '%d' WHERE `username` = '%s'", 
 		WinterPlayerSettings[playerid][p_map],
 		WinterPlayerSettings[playerid][p_breath],
 		WinterPlayerSettings[playerid][p_fallsnow],

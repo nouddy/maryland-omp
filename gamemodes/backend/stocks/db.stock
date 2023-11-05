@@ -91,14 +91,9 @@ stock SavePlayer(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Level` = '%d',`Money` = '%d',`Skin` = '%d',`Age` = '%d', `Staff` = '%d', `Object0` = '%d', `Object1` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
-			PlayerInfo[playerid][Level],
-			GetPlayerMoney(playerid),
-			PlayerInfo[playerid][Skin],
+		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts` SET `Age` = '%d', `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
 			PlayerInfo[playerid][Age],
             PlayerInfo[playerid][Staff],
-            PlayerInfo[playerid][AttachedObject][0],
-            PlayerInfo[playerid][AttachedObject][1],
             ReturnDate(),
 			PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL,query);        
@@ -112,14 +107,14 @@ stock SaveDocuments(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `character_id` = '%d'",
             PlayerDocuments[playerid][pNationalID],
             PlayerDocuments[playerid][pPassport],
             PlayerDocuments[playerid][pDriveLicense],
             PlayerDocuments[playerid][pMotoLicense],
             PlayerDocuments[playerid][pBoatLicense],
             PlayerDocuments[playerid][pGunLicense],
-            PlayerInfo[playerid][SQLID]);
+            GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }
 
@@ -131,11 +126,11 @@ stock SaveElectronic(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `character_id` = '%d'",
             PlayerElectronic[playerid][eDronItem],
             PlayerElectronic[playerid][eBatteryItem],
             PlayerElectronic[playerid][eGPSItem],
-            PlayerInfo[playerid][SQLID]);
+            GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }
 
@@ -152,7 +147,7 @@ stock SaveFinance(playerid)
             PlayerFinance[playerid][pBankAccount],
             PlayerFinance[playerid][pBankMoney],
             PlayerFinance[playerid][pBankPin],
-            PlayerInfo[playerid][SQLID]);
+            GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }
 
@@ -165,10 +160,10 @@ stock SavePropForPlayer(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `player_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `character_id` = '%d'",
             PlayerProperty[playerid][BCenter],
             player_House[playerid],
-            PlayerInfo[playerid][SQLID]);
+            GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }
 
@@ -181,13 +176,13 @@ stock SaveCryptoPlayer(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `AmountBTC` = '%f',`AmountETH` = '%f',`AmountDOT` = '%f',`AmountUSDT` = '%f', `AmountLTC` = '%f' WHERE `crypto_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `AmountBTC` = '%f',`AmountETH` = '%f',`AmountDOT` = '%f',`AmountUSDT` = '%f', `AmountLTC` = '%f' WHERE `character_id` = '%d'",
             PlayerCrypto[playerid][countBTC],
             PlayerCrypto[playerid][countXRP],
             PlayerCrypto[playerid][countDOT],
             PlayerCrypto[playerid][countUSDT],
             PlayerCrypto[playerid][countLTC],
-            PlayerInfo[playerid][SQLID]);
+            GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);        
     }
 
@@ -206,8 +201,8 @@ ReturnDate()
     return date;
 }
 
-//* Save Novca
-GiveMoneyEx(playerid, novac)
+/*
+stock GiveMoneyEx(playerid, novac)
 {
 	PlayerInfo[playerid][Money] += novac;
 	ResetPlayerMoney(playerid);
@@ -216,7 +211,7 @@ GiveMoneyEx(playerid, novac)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `players` SET `Money` = '%d' WHERE `ID` = '%d'",
+		mysql_format(SQL,query,sizeof(query),"UPDATE `` SET `Money` = '%d' WHERE `ID` = '%d'",
             PlayerInfo[playerid][Money],
 			PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL,query);        
@@ -225,9 +220,16 @@ GiveMoneyEx(playerid, novac)
 	return 1;
 }
 
+*/
+
 stock GetPlayerSQLID(playerid)
 {
 	return (PlayerInfo[playerid][SQLID]);
+}
+
+stock GetCharacterSQLID(playerid)
+{
+	return (CharacterInfo[playerid][SQLID]);
 }
 
 FormatNumber(number, const prefix[] = "$")

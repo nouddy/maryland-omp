@@ -115,10 +115,10 @@ hook OnGameModeInit()
     return 1;
 }
 
-hook OnPlayerLoaded(playerid)
+hook OnCharacterLoaded(playerid)
 {
     new q[150];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_crypto WHERE crypto_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_crypto WHERE character_id = '%d' LIMIT 1", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "LoadPlayerCrypto", "i", playerid);
     return true;
 }
@@ -147,8 +147,8 @@ public LoadPlayerCrypto(playerid)
     {  
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_crypto` (crypto_id, AmountBTC, AmountETH, AmountLTC, AmountDOT, AmountUSDT) \ 
-            VALUES('%d', '0', '0', '0', '0', '0')", PlayerInfo[playerid][SQLID]);
+           "INSERT INTO `player_crypto` (character_id, AmountBTC, AmountETH, AmountLTC, AmountDOT, AmountUSDT) \ 
+            VALUES('%d', '0', '0', '0', '0', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
     else

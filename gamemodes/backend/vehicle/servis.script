@@ -65,7 +65,9 @@ YCMD:fixengine(playerid, params[], help)
 	SetTimerEx("service", 4000, false, "i", playerid);
     TogglePlayerControllable(playerid, false);
     SetVehicleHealth(GetPlayerVehicleID(playerid), 1000);
-    GiveMoneyEx(playerid, -400);
+    
+	// - Dodati kada se odradi player_currency
+	// GiveMoneyEx(playerid, -400);
     //ApplyActorAnimation(mehanicar1, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
 	notification.Show(playerid, "SERVIS", "Uspesno ste popravili motor vozila!", "!", BOXCOLOR_GREEN);
 
@@ -81,7 +83,9 @@ YCMD:fullrepair(playerid, params[], help)
 	SetTimerEx("service", 4000, false, "i", playerid);
     TogglePlayerControllable(playerid, false);
     RepairVehicle(GetPlayerVehicleID(playerid));
-    GiveMoneyEx(playerid, -800);
+    
+	// - Dodati kada se odradi player_currency
+	// GiveMoneyEx(playerid, -800);
     //ApplyActorAnimation(mehanicar2, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
     notification.Show(playerid, "SERVIS", "Uspesno ste popravili vozilo!", "!", BOXCOLOR_GREEN);
 	

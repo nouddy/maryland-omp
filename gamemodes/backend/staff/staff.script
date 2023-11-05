@@ -370,12 +370,12 @@ YCMD:setskin(playerid, const string: params[], help)
 
 	SetPlayerSkin(targetid, skinid);
 
-	PlayerInfo[targetid][Skin] = skinid;
+	CharacterInfo[targetid][Skin] = skinid;
 
 	SavePlayer(targetid);
 
 	PlayerTextDrawHide(targetid, Player_TDs[targetid][0]);
-	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][0], PlayerInfo[targetid][Skin]);
+	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][0], CharacterInfo[targetid][Skin]);
     PlayerTextDrawShow(targetid, Player_TDs[targetid][0]);
 
     return 1;
@@ -557,7 +557,8 @@ YCMD:givemoney(playerid, params[], help)
 
 	if(targetid == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru", "!", BOXCOLOR_RED);
 
-	GiveMoneyEx(playerid, cash);
+	// - Dodati kada se odradi player_currency
+	// GiveMoneyEx(playerid, cash);
 
 	return 1;
 }

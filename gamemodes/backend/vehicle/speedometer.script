@@ -89,7 +89,7 @@ ptask BrzinomerUpdate[1000](playerid)
 
             foreach(new v : iter_Vehicles) 
             {
-                if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) 
+                if(eVehicle[v][vOwner] == GetCharacterSQLID(playerid)) 
                 {
                     if(!IsPlayerInVehicle(playerid, pvVehicle[v])) return false;
                     
@@ -145,7 +145,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 
         if(vehicleid == pvVehicle[v]) {
 
-            if(eVehicle[v][vOwner] != PlayerInfo[playerid][SQLID]) {
+            if(eVehicle[v][vOwner] != GetCharacterSQLID(playerid)) {
 
                 ClearAnimations(playerid);
                 SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate kljuceve ovog vozila!");
@@ -161,7 +161,7 @@ hook OnPlayerExitVehicle(playerid, vehicleid) {
     foreach(new v : iter_Vehicles) 
     {
 
-        if(eVehicle[v][vOwner] == PlayerInfo[playerid][SQLID]) 
+        if(eVehicle[v][vOwner] == GetCharacterSQLID(playerid)) 
         {
             new query[350];
 

@@ -172,6 +172,7 @@ enum e_AMMUNATION_WEAPON {
 
     weaponID,
     weaponModel,
+    weaponMag,
     weaponPrice,
     weaponName[MAX_WEAPON_LEN]
 }
@@ -183,34 +184,34 @@ new ammunation_ItemList[16][e_AMMUNATION_WEAPON] = {
 
     //      >> [ MELE ]  <<
 
-    { WEAPON_KNIFE, 335, 100, "Knife" },
-    { WEAPON_BAT, 336, 150, "Baseball Bat"},
-    { WEAPON_BRASSKNUCKLE, 331, 150, "Brass Knuckle"},
+    { WEAPON_KNIFE, 335, 100, 1, "Knife" },
+    { WEAPON_BAT, 336, 150, 1, "Baseball Bat"},
+    { WEAPON_BRASSKNUCKLE, 331, 150, 1, "Brass Knuckle"},
 
     //      >> [ PISTOLS ]  <<
 
-    { WEAPON_DEAGLE, 348, 700, "Desert Deagle" },
-    { WEAPON_COLT45, 346, 450, "Colt 45"},
-    { WEAPON_SILENCED, 347, 450, "Silenced Pistol"},
+    { WEAPON_DEAGLE, 348, 700, 30, "Desert Deagle" },
+    { WEAPON_COLT45, 346, 450, 40, "Colt 45"},
+    { WEAPON_SILENCED, 347, 450, 40, "Silenced Pistol"},
 
     //      >> [ SHOTGUNS ]  <<
 
-    { WEAPON_SHOTGUN, 349, 650, "Shotgun" },
-    { WEAPON_SAWEDOFF, 350, 700, "Sawn-off Shotgun"},
-    { WEAPON_SHOTGSPA, 351, 820, "Combat Shotgun" },
+    { WEAPON_SHOTGUN, 349, 650, 30, "Shotgun" },
+    { WEAPON_SAWEDOFF, 350, 700, 30, "Sawn-off Shotgun"},
+    { WEAPON_SHOTGSPA, 351, 820, 35, "Combat Shotgun" },
 
     //      >> [ SMG-S ]  <<
 
-    { WEAPON_UZI, 352, 600, "UZI" },
-    { WEAPON_MP5, 353, 520, "MP-5"},
-    { WEAPON_TEC9, 372, 400, "TEC-9" },
+    { WEAPON_UZI, 352, 600, 70, "UZI" },
+    { WEAPON_MP5, 353, 520, 70, "MP-5"},
+    { WEAPON_TEC9, 372, 400, 65, "TEC-9" },
 
     //      >> [ RIFLES ]  <<
 
-    { WEAPON_AK47, 355, 1000, "AK-47" },
-    { WEAPON_M4, 356, 1200, "M4"},
-    { WEAPON_RIFLE, 357, 1400, "Rifle" },
-    { WEAPON_SNIPER, 358, 2350, "Sniper Rifle" }
+    { WEAPON_AK47, 355, 1000, 120, "AK-47" },
+    { WEAPON_M4, 356, 1200, 120, "M4"},
+    { WEAPON_RIFLE, 357, 1400, 30, "Rifle" },
+    { WEAPON_SNIPER, 358, 2350, 30, "Sniper Rifle" }
 
 };
 
@@ -235,6 +236,16 @@ stock Business_Type(biz) {
         
     }
     return string;
+}
+
+stock GetNearestBusiness(playerid) {
+
+    foreach(new j : iter_Business) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, re_BusinessData[j][bEntrance][0], re_BusinessData[j][bEntrance][1], re_BusinessData[j][bEntrance][2]))
+            return j;
+    }
+    return INVALID_BUSINESS_ID;
 }
 
 forward Business_LoadData();
@@ -333,6 +344,13 @@ hook OnGameModeInit() {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerConnect(playerid) {
+
+    ammunation_ChosenWeapon[playerid] = -1;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
     if(PRESSED( KEY_SECONDARY_ATTACK)) {
@@ -365,7 +383,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                 switch(re_BusinessData[j][bType]) {
 
-                    case BUSINESS_TYPE_MARKET:                      { SendClientMessage(playerid, -1, "24/7 Market"); }
+                    case BUSINESS_TYPE_MARKET:                       { SendClientMessage(playerid, -1, "24/7 Market"); }
                     case BUSINESS_TYPE_PHARMACY:                     { SendClientMessage(playerid, -1, "Apoteka"); }
                     case BUSINESS_TYPE_TECH_SHOP:                    { SendClientMessage(playerid, -1, "Prodavnica Elektronike"); }
                     case BUSINESS_TYPE_KIOSK:                        { SendClientMessage(playerid, -1, "Kiosk"); }
@@ -375,6 +393,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         
                         InterpolateCameraPos(playerid, 290.104217, -106.266616, 1002.462890, 285.482757, -109.900611, 1002.524475, 3500);
                         InterpolateCameraLookAt(playerid, 288.338989, -110.925163, 1002.036437, 290.104766, -111.746047, 1002.043518, 3500);
+
+                        ammunation_ChosenWeapon[playerid] = 0;
 
                         new WeaponID = ammunation_ChosenWeapon[playerid];
 
@@ -404,6 +424,7 @@ YCMD:createbusiness(playerid, params[], help)
 		SendClientMessage(playerid, -1, ""c_server"help // "c_white"6(Restroan) 7(Oruzaonica) 8(Sex Shop) 9(Hotel) 10(Poljoprivredna Apoteka)");
 		SendClientMessage(playerid, -1, ""c_server"help // "c_white"11(Benziska Pumpa)");
 
+        SendClientMessage(playerid, -1, " ");
         SendClientMessage(playerid, -1, ""c_server"[KIOSK] >> "c_white"Da sacuvate poziciju kioska /saveinteract");
 
         return (true);
@@ -459,9 +480,9 @@ YCMD:createbusiness(playerid, params[], help)
 
     new q[660];
 
-    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
                                     `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bInt`, `bVW`)
-                                    VALUES ('%e', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
+                                    VALUES ('%e', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
                                     re_BusinessData[id][bName], re_BusinessData[id][bType], re_BusinessData[id][bLevel],
                                     re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2],
                                     re_BusinessData[id][bExit][0], re_BusinessData[id][bExit][1], re_BusinessData[id][bExit][2],
@@ -473,6 +494,51 @@ YCMD:createbusiness(playerid, params[], help)
 
     return 1;
 }
+
+YCMD:buybusiness(playerid, params[], help) 
+{
+
+    new BID = GetNearestBusiness(playerid);
+
+    if(PlayerProperty[playerid][BusinessID] > 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec posjedujete firmu!");    
+
+    if(BID == INVALID_BUSINESS_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se blizu firme!");    
+
+    if(re_BusinessData[BID][bOwner] > 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ova firma nije na prodaju!");    
+
+    if(GetPlayerMoney2(playerid, MONEY_TYPE_DOLLAR) < re_BusinessData[BID][bPrice])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca kako biste kupili ovu firmu!!");    
+
+    if(GetPlayerScore(playerid) < re_BusinessData[BID][bLevel])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljan level kako biste kupili ovu firmu!");    
+
+    re_BusinessData[BID][bOwner] = CharacterInfo[playerid][SQLID];
+    re_BusinessData[BID][bLocked] = false;
+    
+    PlayerProperty[playerid][BusinessID] = re_BusinessData[BID][bID];
+
+    new q[120];
+
+    //      >> [ BUSINESS QUERY ] <<
+
+    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `re_business` SET `bOwner` = '%i', `bLocked` = '%i' WHERE `bID` = '%d'",
+                                        CharacterInfo[playerid][SQLID], re_BusinessData[BID][bLocked], re_BusinessData[BID][bID]);
+    mysql_tquery(MySQL:SQL, q);
+
+    //      >> [ PROPERTY QUERY ] <<
+
+    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `player_property` SET `BusinessID` = '%i' WHERE `character_id` = '%d'",
+                                         re_BusinessData[BID][bID], GetCharacterSQLID(playerid));
+    mysql_tquery(MySQL:SQL, q);
+
+    SendClientMessage(playerid, x_green, "[BUSINESS] >> "c_white"Uspjesno ste kupili firmu!");
+
+    return 1;
+}
+
 YCMD:firma(playerid, params[], help) = business;
 YCMD:business(playerid, params[], help) {
 
