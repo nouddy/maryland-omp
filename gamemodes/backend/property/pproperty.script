@@ -31,7 +31,7 @@ new PlayerProperty[MAX_PLAYERS][p_PROPERTY_DATA];
 hook OnCharacterLoaded(playerid)
 {
     new q[150];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_property WHERE character_id = '%d' LIMIT 1", GetCharacterSQLID(playerid));
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_property WHERE character_id = '%d' LIMIT 1", PlayerInfo[playerid][SQLID]);
     mysql_tquery(SQL, q, "LoadPlayerProperty", "i", playerid);
     return true;
 }

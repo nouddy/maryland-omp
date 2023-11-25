@@ -125,6 +125,7 @@ new
 
 */
 
+
 hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
     if(clickedid == BankLoginTD[42])

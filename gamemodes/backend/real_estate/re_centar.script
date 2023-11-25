@@ -277,6 +277,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                     LoadObjectsForPlayer(playerid);
 
+                    return Y_HOOKS_BREAK_RETURN_1;
+
                 }
             }
 
@@ -289,6 +291,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 e_IN_BUSINESS_CENTRE[playerid] = false;
 
                 LoadObjectsForPlayer(playerid);
+
+                return Y_HOOKS_BREAK_RETURN_1;
             }
         }
 	}
@@ -316,6 +320,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     Dialog_Show(playerid, "re_BCenterWardrobe", DIALOG_STYLE_LIST, "Business Center - Wardrobe", ">> Informacije\n>> Promjeni Garderobu", "Odaberi", "Odustani");
                 }
             }
+            break;
         }
     }
 
@@ -331,6 +336,7 @@ YCMD:ceolist(playerid, params[], help)
         if(e_IN_BUSINESS_CENTRE[i]) {
 
             SendClientMessage(playerid, x_server, "[C.E.O. LIST] >> "c_white"ID %d | Name %s", i, ReturnPlayerName(i));
+            break;
         }
     }
     return 1;
@@ -376,6 +382,8 @@ YCMD:accept(playerid, params[], help)
             SetPlayerVirtualWorld(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterVirtualWorld]);
 
             LoadObjectsForPlayer(e_BUZZER_ID[playerid]);
+
+            break;
         }
     }
 

@@ -22,6 +22,17 @@
 new polygonCars[6];
 new Text3D:drivingSchool_Label[6];
 
+new Text3D:drivingSchool_LabelEntrance;
+new Text3D:drivingSchool_TestLabel;
+new PlayerText:drivingSchool_PTD[MAX_PLAYERS][85];
+
+new bool:drivingSchool_Shown[MAX_PLAYERS];
+
+new drivingSchool_Answers[MAX_PLAYERS][8];
+
+new bool:e_CHOSEN_DOWN[MAX_PLAYERS],
+    bool:e_CHOSEN_UP[MAX_PLAYERS];
+
 new ds_Actor[2];
 new Text3D:ds_ActorLabel[2];
 
@@ -49,6 +60,9 @@ hook OnGameModeInit() {
     drivingSchool_Label[4] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1294.3339, 1579.4042, 100.7320, 4.50, 0);
     drivingSchool_Label[5] = Create3DTextLabel(""c_server" » "c_grey"Driving School "c_server"«", -1, 1274.2537, 1579.9689, 100.6148, 4.50, 0);
  
+    drivingSchool_LabelEntrance = Create3DTextLabel(""c_server" \187; "c_grey"Driving School "c_server"\171;", -1, 2519.9512,-1525.8448,24.0428, 4.50, 0);
+    drivingSchool_TestLabel = Create3DTextLabel(""c_server" \187; "c_grey"Driving School Test "c_server"\171;\n"c_server" \187;"c_grey"Pritisni 'Y' za test. "c_server"\171;", -1, 1428.5536,1546.4618,10.8503, 4.50, 0);
+
     for(new i = 0; i < sizeof polygonCars; i++) {
 
         SetVehicleVirtualWorld(polygonCars[i], 8);
@@ -69,5 +83,982 @@ hook OnGameModeInit() {
     ds_ActorLabel[0] = Create3DTextLabel(""c_server" » "c_grey"Jorge Melow "c_server"«\n"c_server" » "c_grey"Driving School Instructor "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za pomoc. "c_server"«", -1, 1297.4860, 1567.2146, 100.9826, 4.50, 8);
     ds_ActorLabel[1] = Create3DTextLabel(""c_server" » "c_grey"Felipe Braum "c_server"«\n"c_server" » "c_grey"Driving School Policeman "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za pomoc. "c_server"«", -1, 1359.7982, 1458.7490, 100.9826, 4.50, 8);
 
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    return Y_HOOKS_BREAK_RETURN_1;
+}
+
+stock DrivingSchool_DisplayInterface(playerid, const bool:option) {
+
+    if(option) {
+
+        for(new i = 0; i < 85; i++) {
+
+            if(drivingSchool_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
+            PlayerTextDrawDestroy(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
+
+            drivingSchool_PTD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        }
+
+        drivingSchool_PTD[playerid][0] = CreatePlayerTextDraw(playerid, -496.666717, 624.570556, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][0], 1673.000000, -1007.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][0], 926435071);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][0], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][0], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][0], false);
+
+        drivingSchool_PTD[playerid][1] = CreatePlayerTextDraw(playerid, -673.000122, 606.733581, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][1], 1673.000000, -1007.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][1], 926435071);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][1], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][1], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][1], false);
+
+        drivingSchool_PTD[playerid][2] = CreatePlayerTextDraw(playerid, 191.999862, 733.251892, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][2], 1673.000000, -1007.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][2], 926435071);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][2], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][2], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][2], false);
+
+        drivingSchool_PTD[playerid][3] = CreatePlayerTextDraw(playerid, 223.333282, 84.066688, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][3], 191.000000, 312.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][3], -1916144641);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][3], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][3], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][3], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][3], false);
+
+        drivingSchool_PTD[playerid][4] = CreatePlayerTextDraw(playerid, 223.333282, 84.566680, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][4], 191.000000, 311.069091);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][4], 539506175);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][4], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][4], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][4], false);
+
+        drivingSchool_PTD[playerid][5] = CreatePlayerTextDraw(playerid, 525.399841, 213.003738, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][5], 19.000000, -24.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][5], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][5], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][5], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][5], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][5], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][5], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][5], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][6] = CreatePlayerTextDraw(playerid, 527.400085, 168.288955, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][6], 18.000000, 49.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][6], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][6], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][6], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][6], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][6], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][6], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][6], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][7] = CreatePlayerTextDraw(playerid, 527.200012, 211.003768, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][7], 17.000000, -20.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][7], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][7], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][7], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][7], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][7], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][7], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][7], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][8] = CreatePlayerTextDraw(playerid, 528.366394, 205.644424, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][8], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][8], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][8], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][8], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][8], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][8], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][8], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][8], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][9] = CreatePlayerTextDraw(playerid, 527.566467, 210.577713, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][9], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][9], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][9], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][9], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][9], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][9], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][9], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][9], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][10] = CreatePlayerTextDraw(playerid, 527.999755, 208.703659, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][10], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][10], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][10], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][10], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][10], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][10], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][10], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][10], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][10], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][11] = CreatePlayerTextDraw(playerid, 529.833190, 210.744491, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][11], 12.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][11], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][11], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][11], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][11], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][11], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][11], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][11], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][11], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][12] = CreatePlayerTextDraw(playerid, 529.633361, 181.722366, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][12], 25.000000, 44.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][12], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][12], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][12], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][12], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][12], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][12], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][12], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][12], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][13] = CreatePlayerTextDraw(playerid, 540.099914, 213.218582, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][13], 19.000000, -24.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][13], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][13], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][13], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][13], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][13], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][13], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][13], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][13], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][14] = CreatePlayerTextDraw(playerid, 539.000122, 168.288955, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][14], 18.000000, 49.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][14], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][14], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][14], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][14], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][14], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][14], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][14], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][14], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][15] = CreatePlayerTextDraw(playerid, 539.966674, 211.977920, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][15], 17.000000, -20.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][15], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][15], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][15], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][15], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][15], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][15],false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][15], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][15], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][16] = CreatePlayerTextDraw(playerid, 535.366271, 205.514785, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][16], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][16], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][16], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][16], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][16], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][16], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][16], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][16], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][16], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][17] = CreatePlayerTextDraw(playerid, 536.466308, 209.655441, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][17], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][17], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][17], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][17], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][17], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][17], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][17], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][17], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][17], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][18] = CreatePlayerTextDraw(playerid, 535.066345, 209.025802, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][18], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][18], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][18], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][18], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][18], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][18], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][18], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][18], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][19] = CreatePlayerTextDraw(playerid, 518.799926, 217.177871, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][19], 45.000000, -18.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][19], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][19], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][19], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][19], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][19], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][19], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][19], 2965);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][19], 90.000000, 0.000000, 90.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][20] = CreatePlayerTextDraw(playerid, 510.166595, 195.022323, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][20], 46.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][20], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][20], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][20], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][20], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][20], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][20], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][20], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][20], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][21] = CreatePlayerTextDraw(playerid, 527.966735, 194.892684, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][21], 46.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][21], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][21], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][21], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][21], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][21], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][21], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][21], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][21], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][22] = CreatePlayerTextDraw(playerid, 494.733184, 179.344589, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][22], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][22], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][22], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][22], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][22], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][22], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][22], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][22], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][22], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][23] = CreatePlayerTextDraw(playerid, 501.133575, 179.344589, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][23], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][23], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][23], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][23], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][23], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][23], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][23], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][23], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][23], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][24] = CreatePlayerTextDraw(playerid, 497.933685, 177.400100, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][24], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][24], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][24], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][24], false);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][24], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][24], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][24], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][24], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][24], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][25] = CreatePlayerTextDraw(playerid, 535.400085, 210.896286, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][25], 14.000000, 2.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][25], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][25], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][25], false);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][25], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][25], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][25], false);
+
+        drivingSchool_PTD[playerid][26] = CreatePlayerTextDraw(playerid, 525.900085, 202.489059, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][26], 28.000000, 19.160003);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][26], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][26], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][26], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][26], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][26], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][26], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][26], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][26], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][27] = CreatePlayerTextDraw(playerid, 530.700378, 202.489059, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][27], 28.000000, 19.160003);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][27], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][27], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][27], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][27], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][27], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][27], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][28] = CreatePlayerTextDraw(playerid, 518.799926, 217.177871, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][28], 45.000000, -18.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][28], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][28], -120);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][28], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][28], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][28], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][28], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][28], 2965);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][28], 90.000000, 0.000000, 90.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][29] = CreatePlayerTextDraw(playerid, 521.200195, 262.033538, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][29], 42.000000, -93.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][29], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][29], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][29], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][29], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][29], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][29], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][29], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][29], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][30] = CreatePlayerTextDraw(playerid, 521.166870, 166.444503, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][30], 42.000000, 83.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][30], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][30], -1064116481);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][30], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][30], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][30], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][30], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][30], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][30], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][31] = CreatePlayerTextDraw(playerid, 537.333251, 199.003829, "V");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][31], 0.352665, 1.890370);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][31], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][31], -188);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][31], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][31], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][31], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][31], true);
+
+        drivingSchool_PTD[playerid][32] = CreatePlayerTextDraw(playerid, 537.733581, 224.888977, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][32], 9.000000, -21.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][32], -188);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][32], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][32], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][32], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][32], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][32], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][32], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][33] = CreatePlayerTextDraw(playerid, 537.900329, 189.440780, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][33], 8.709993, 33.400100);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][33], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][33], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][33], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][33], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][33], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][33], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][33], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][33], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][34] = CreatePlayerTextDraw(playerid, 538.200317, 198.940658, "");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][34], 8.000000, 18.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][34], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][34], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][34], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][34], -256);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][34], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][34], false);
+        PlayerTextDrawSetPreviewModel(playerid, drivingSchool_PTD[playerid][34], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, drivingSchool_PTD[playerid][34], 180.000000, 0.000000, 0.000000, 1.000000);
+
+        drivingSchool_PTD[playerid][35] = CreatePlayerTextDraw(playerid, 540.333435, 225.674087, "DRIVING_SCHOOL");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][35], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][35], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][35], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][35], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][35], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][35], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][35], true);
+
+        drivingSchool_PTD[playerid][36] = CreatePlayerTextDraw(playerid, 543.333435, 240.192581, "ASSIGNMENT");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][36], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][36], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][36], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][36], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][36], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][36], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][36], true);
+
+        drivingSchool_PTD[playerid][37] = CreatePlayerTextDraw(playerid, 108.666671, 167.185150, "III");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][37], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][37], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][37], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][37], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][37], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][37], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][37], true);
+
+        drivingSchool_PTD[playerid][38] = CreatePlayerTextDraw(playerid, 108.666770, 147.688827, "GRESKE");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][38], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][38], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][38], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][38], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][38], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][38], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][38], true);
+
+        drivingSchool_PTD[playerid][39] = CreatePlayerTextDraw(playerid, 108.666770, 303.598327, "ANSWERED");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][39], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][39], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][39], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][39], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][39], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][39], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][39], true);
+
+        drivingSchool_PTD[playerid][40] = CreatePlayerTextDraw(playerid, 108.666770, 320.899383, "IIIIIIIIIIII");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][40], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][40], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][40], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][40], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][40], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][40], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][40], true);
+
+        drivingSchool_PTD[playerid][41] = CreatePlayerTextDraw(playerid, 224.000030, 84.896263, "loadsc3:loadsc3");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][41], 190.000000, 310.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][41], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][41], -65789);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][41], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][41], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][41], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][41], false);
+
+        // Selectable Colour -1916144641
+
+        drivingSchool_PTD[playerid][42] = CreatePlayerTextDraw(playerid, 229.333251, 111.029693, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][42], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][42], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][42], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][42], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][42], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][42], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][42], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][42], true);
+
+        drivingSchool_PTD[playerid][43] = CreatePlayerTextDraw(playerid, 229.333251, 125.429473, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][43], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][43], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][43], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][43], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][43], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][43], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][43], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][43], true);
+
+        drivingSchool_PTD[playerid][44] = CreatePlayerTextDraw(playerid, 229.333251, 149.130722, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][44], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][44], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][44], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][44], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][44], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][44], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][44], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][44], true);
+
+        drivingSchool_PTD[playerid][45] = CreatePlayerTextDraw(playerid, 229.333251, 162.431533, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][45], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][45], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][45], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][45], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][45], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][45], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][45], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][45], true);
+
+        drivingSchool_PTD[playerid][46] = CreatePlayerTextDraw(playerid, 229.333251, 182.732772, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][46], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][46], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][46], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][46], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][46], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][46], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][46], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][46], true);
+
+        drivingSchool_PTD[playerid][47] = CreatePlayerTextDraw(playerid, 229.333251, 196.233596, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][47], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][47], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][47], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][47], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][47], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][47], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][47], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][47], true);
+
+        drivingSchool_PTD[playerid][48] = CreatePlayerTextDraw(playerid, 229.333251, 216.434829, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][48], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][48], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][48], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][48], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][48], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][48], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][48], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][48], true);
+
+        drivingSchool_PTD[playerid][49] = CreatePlayerTextDraw(playerid, 229.333251, 229.235610, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][49], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][49], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][49], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][49], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][49], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][49], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][49], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][49], true);
+
+        drivingSchool_PTD[playerid][50] = CreatePlayerTextDraw(playerid, 229.333251, 249.636856, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][50], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][50], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][50], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][50], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][50], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][50], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][50], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][50], true);
+
+        drivingSchool_PTD[playerid][51] = CreatePlayerTextDraw(playerid, 229.333251, 262.437622, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][51], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][51], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][51], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][51], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][51], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][51], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][51], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][51], true);
+
+
+        drivingSchool_PTD[playerid][52] = CreatePlayerTextDraw(playerid, 229.333251, 284.038940, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][52], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][52], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][52], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][52], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][52], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][52], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][52], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][52], true);
+
+        drivingSchool_PTD[playerid][53] = CreatePlayerTextDraw(playerid, 229.333251, 298.139801, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][53], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][53], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][53], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][53], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][53], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][53], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][53], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][53], true);
+
+        drivingSchool_PTD[playerid][54] = CreatePlayerTextDraw(playerid, 229.333251, 318.041015, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][54], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][54], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][54], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][54], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][54], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][54], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][54], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][54], true);
+
+        drivingSchool_PTD[playerid][55] = CreatePlayerTextDraw(playerid, 229.333251, 331.841857, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][55], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][55], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][55], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][55], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][55], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][55], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][55], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][55], true);
+
+        drivingSchool_PTD[playerid][56] = CreatePlayerTextDraw(playerid, 229.333251, 354.043212, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][56], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][56], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][56], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][56], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][56], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][56], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][56], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][56], true);
+
+        drivingSchool_PTD[playerid][57] = CreatePlayerTextDraw(playerid, 229.333251, 367.744049, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][57], 6.000000, 8.000000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][57], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][57], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][57], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][57], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][57], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][57], false);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][57], true);
+
+        drivingSchool_PTD[playerid][58] = CreatePlayerTextDraw(playerid, 240.333450, 112.014755, "Stacu_i_sacekacu_zeleno_svjetlo");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][58], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][58], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][58], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][58], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][58], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][58], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][58], true);
+
+        drivingSchool_PTD[playerid][59] = CreatePlayerTextDraw(playerid, 240.333450, 126.714530, "sacekacu_zuto_i_dacu_gas");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][59], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][59], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][59], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][59], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][59], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][59], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][59], true);
+
+        drivingSchool_PTD[playerid][60] = CreatePlayerTextDraw(playerid, 240.333450, 150.815902, "stacu_izaci_iz_vozila_i_pruziti_pomoc_i_nazvati_hitnu");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][60], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][60], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][60], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][60], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][60], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][60], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][60], true);
+
+        drivingSchool_PTD[playerid][61] = CreatePlayerTextDraw(playerid, 240.333450, 163.316665, "nazvacu_hitnu_pomoc_i_nastaviti_dalje");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][61], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][61], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][61], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][61], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][61], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][61], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][61], true);
+
+        drivingSchool_PTD[playerid][62] = CreatePlayerTextDraw(playerid, 240.333450, 184.017929, "policajca");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][62], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][62], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][62], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][62], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][62], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][62], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][62], true);
+
+        drivingSchool_PTD[playerid][63] = CreatePlayerTextDraw(playerid, 240.333450, 196.618698, "semafor");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][63], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][63], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][63], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][63], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][63], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][63], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][63], true);
+
+        drivingSchool_PTD[playerid][64] = CreatePlayerTextDraw(playerid, 240.333450, 218.020004, "pesacki_prelaz");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][64], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][64], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][64], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][64], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][64], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][64], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][64], true);
+
+        drivingSchool_PTD[playerid][65] = CreatePlayerTextDraw(playerid, 240.333450, 230.420761, "gazela");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][65], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][65], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][65], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][65], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][65], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][65], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][65], true);
+
+        drivingSchool_PTD[playerid][66] = CreatePlayerTextDraw(playerid, 240.333450, 250.621994, "30_KM/H");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][66], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][66], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][66], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][66], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][66], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][66], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][66], true);
+
+        drivingSchool_PTD[playerid][67] = CreatePlayerTextDraw(playerid, 240.333450, 263.322753, "80_KM/H");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][67], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][67], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][67], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][67], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][67], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][67], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][67], true);
+
+        drivingSchool_PTD[playerid][68] = CreatePlayerTextDraw(playerid, 240.333450, 285.224090, "110_KM/H");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][68], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][68], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][68], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][68], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][68], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][68], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][68], true);
+
+        drivingSchool_PTD[playerid][69] = CreatePlayerTextDraw(playerid, 240.333450, 299.024932, "130_KM/H");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][69], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][69], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][69], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][69], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][69], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][69], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][69], true);
+
+        drivingSchool_PTD[playerid][70] = CreatePlayerTextDraw(playerid, 240.333450, 319.226165, "Ne_sme_imati");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][70], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][70], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][70], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][70], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][70], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][70], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][70], true);
+
+        drivingSchool_PTD[playerid][71] = CreatePlayerTextDraw(playerid, 240.333450, 332.526977, "sme_imati_u_malim_kolicinama");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][71], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][71], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][71], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][71], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][71], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][71], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][71], true);
+
+        drivingSchool_PTD[playerid][72] = CreatePlayerTextDraw(playerid, 240.333450, 355.228363, "od_23h_do_6h");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][72], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][72], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][72], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][72], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][72], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][72], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][72], true);
+
+        drivingSchool_PTD[playerid][73] = CreatePlayerTextDraw(playerid, 240.333450, 368.429168, "od_00h_do_6h");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][73], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][73], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][73], -1);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][73], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][73], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][73], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][73], true);
+
+        drivingSchool_PTD[playerid][74] = CreatePlayerTextDraw(playerid, 316.333526, 93.599166, "kada_je_na_semaforu_crveno_svetlo_sta_ces_uraditi?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][74], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][74], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][74], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][74], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][74], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][74], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][74], true);
+
+        drivingSchool_PTD[playerid][75] = CreatePlayerTextDraw(playerid, 318.667022, 136.513534, "kada_vidis_povredjenog_na_cesti_sta_ces_ciniti?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][75], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][75], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][75], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][75], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][75], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][75], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][75], true);
+
+        drivingSchool_PTD[playerid][76] = CreatePlayerTextDraw(playerid, 317.333709, 173.846862, "na_raskrsnici_sa_policajcem_i_semaforom_koga_slusas?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][76], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][76], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][76], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][76], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][76], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][76], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][76], true);
+
+        drivingSchool_PTD[playerid][77] = CreatePlayerTextDraw(playerid, 316.666900, 206.202423, "kako_se_zove_obelezno_mjesto_za_prelazak_ulice");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][77], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][77], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][77], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][77], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][77], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][77], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][77], true);
+
+        drivingSchool_PTD[playerid][78] = CreatePlayerTextDraw(playerid, 319.000274, 239.387573, "u_zoni_skole_koja_je_maksimalna_brzina_kojom_se_smes_kretati?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][78], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][78], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][78], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][78], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][78], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][78], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][78], true);
+
+        drivingSchool_PTD[playerid][79] = CreatePlayerTextDraw(playerid, 317.000244, 274.646972, "vozac_s_probnom_vozackom_se_autoputem_sme_kretati_brzinom_do?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][79], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][79], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][79], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][79], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][79], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][79], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][79], true);
+
+        drivingSchool_PTD[playerid][80] = CreatePlayerTextDraw(playerid, 316.333587, 308.661773, "vozac_s_probnom_dozvolom_koliko_sme_imati_alkohola_u_krvi?");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][80], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][80], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][80], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][80], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][80], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][80], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][80], true);
+
+        drivingSchool_PTD[playerid][81] = CreatePlayerTextDraw(playerid, 320.000183, 343.991424, "vozac_s_probnom_dozvolom_ne_sme_upravljati_motornim_vozilom_u_periodu:");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][81], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][81], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][81], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][81], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][81], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][81], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][81], true);
+
+        drivingSchool_PTD[playerid][82] = CreatePlayerTextDraw(playerid, 284.666595, 379.414703, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][82], 54.000000, 0.240000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][82], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][82], -138);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][82], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][82], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][82], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][82], false);
+
+        drivingSchool_PTD[playerid][83] = CreatePlayerTextDraw(playerid, 284.666595, 390.515380, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, drivingSchool_PTD[playerid][83], 54.000000, 0.240000);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][83], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][83], -138);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][83], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][83], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][83], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][83], false);
+
+        drivingSchool_PTD[playerid][84] = CreatePlayerTextDraw(playerid, 312.000061, 382.154296, "predaj_test");
+        PlayerTextDrawLetterSize(playerid, drivingSchool_PTD[playerid][84], 0.096666, 0.616888);
+        PlayerTextDrawAlignment(playerid, drivingSchool_PTD[playerid][84], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][84], -129);
+        PlayerTextDrawSetShadow(playerid, drivingSchool_PTD[playerid][84], 0);
+        PlayerTextDrawBackgroundColour(playerid, drivingSchool_PTD[playerid][84], 255);
+        PlayerTextDrawFont(playerid, drivingSchool_PTD[playerid][84], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, drivingSchool_PTD[playerid][84], true);
+        PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][84], true);
+
+        drivingSchool_Shown[playerid] = true;
+
+        for(new i = 0; i < 85; i++) {
+
+            PlayerTextDrawShow(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
+        }
+
+        SelectTextDraw(playerid, -1916144641);
+    }
+    else {
+
+        for(new i = 0; i < 85; i++) {
+
+            PlayerTextDrawHide(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
+            PlayerTextDrawDestroy(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
+
+            drivingSchool_PTD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        }
+
+        CancelSelectTextDraw(playerid);
+
+        drivingSchool_Shown[playerid] = false;
+    }
+}
+
+hook OnGameModeExit() {
+
+    if(IsValid3DTextLabel(drivingSchool_LabelEntrance)) {
+
+        Delete3DTextLabel(drivingSchool_LabelEntrance);
+    }
+
+    if(IsValid3DTextLabel(drivingSchool_TestLabel)) {
+
+        Delete3DTextLabel(drivingSchool_TestLabel);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED( KEY_SECONDARY_ATTACK)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, 2519.9512,-1525.8448,24.0428) && GetPlayerVirtualWorld(playerid) == 0) {
+
+            SetPlayerPos(playerid, 1424.2428,1555.2067,10.8503);
+            SetPlayerInterior(playerid, 16);
+        }
+        else if(IsPlayerInRangeOfPoint(playerid, 3.50, 1424.2428,1555.2067,10.8503) && GetPlayerInterior(playerid) == 16) {
+
+            SetPlayerPos(playerid, 2519.9512,-1525.8448,24.0428);
+            SetPlayerInterior(playerid, 0);
+        }
+    }
+
+    if(PRESSED( KEY_YES)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, 1428.5536,1546.4618,10.8503)) {
+
+            DrivingSchool_DisplayInterface(playerid, true);
+        }
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+forward DrivingSchool_SelectAnswers(playerid, answer);
+public DrivingSchool_SelectAnswers(playerid, answer) {
+
+    new tmp_answer = 1+(floatround((answer)/2, floatround_ceil));
+
+    if(drivingSchool_Answers[playerid][tmp_answer-1] != 0) {
+
+        SendClientMessage(playerid, -1, "Na ovo pitanje ste vec odgovorili!");
+        return true;
+    }
+
+    if((answer+1)%2 != 0) {
+
+        SendClientMessage(playerid, -1, "Gornji Odgovor!");
+        SendClientMessage(playerid, -1, "Br. Pitanja %d", tmp_answer);
+
+        drivingSchool_Answers[playerid][tmp_answer-1] = 1;
+
+    }
+    else {
+
+        SendClientMessage(playerid, -1, "Donji Odgovor");
+        SendClientMessage(playerid, -1, "Br. Pitanja %d", tmp_answer);
+
+        drivingSchool_Answers[playerid][tmp_answer-1] = 2;
+    }
+
+    PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][answer+41], false);
+    PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][answer+42], false);
+    PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][answer+41]);
+    PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][answer+42]);
+    
+    return 1;
+}
+
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
+
+    if(!drivingSchool_Shown[playerid]) return Y_HOOKS_CONTINUE_RETURN_1;
+
+    for(new i = 42; i < 58; i++) {
+
+        if(playertextid == drivingSchool_PTD[playerid][i]) {
+
+            CallLocalFunction("DrivingSchool_SelectAnswers", "dd", playerid, i-42);
+
+            PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][i], -1916144641);
+            PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][i]);
+        }
+    }
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

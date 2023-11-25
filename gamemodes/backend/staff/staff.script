@@ -24,6 +24,7 @@ static
 
 new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
 
+
 hook OnGameModeInit()
 {
 	print("staff/staff.script loaded");
@@ -33,7 +34,6 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-	stfveh[playerid] = INVALID_VEHICLE_ID;
 
 	return 1;
 }
@@ -559,6 +559,39 @@ YCMD:givemoney(playerid, params[], help)
 
 	// - Dodati kada se odradi player_currency
 	// GiveMoneyEx(playerid, cash);
+
+	return 1;
+}
+
+
+YCMD:givegun(playerid, const params[], help) {
+
+	if(help)
+    {
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"1(Brass Knuckles) 2(Golf Club) 3(Nite Stick) 4(Knife) 5(Baseball Bat)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"6(Shovel) 7(Pool Cue) 10-13(Dildo) 14(Flowers) 15(Cane)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"22(Pistol) 23(Silence Pistol) 24(Desert Eagle) 25(Shot Gun) 29(MP5)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"30(AK47) 31(M4) 33(Country Rifle) 34(Sniper Rifle) 41(Spray Can)");
+		SendClientMessage(playerid, -1, ""c_server"help // "c_white"42(Fire Extinguisher) 43(Camera) 46(Parachute)");
+        return (true);
+    }
+
+	new targetid, gun, ammo;
+	if(sscanf( params, "uii", targetid, gun, ammo)) return SendClientMessage(playerid, 0xAFAFAFAA, "/givegun [ ID/Deo imena ] [weaponid(eg. 46 = Parachute)] [ammo]");
+	if(gun < 1 || gun > 46 )
+	{ SendClientMessage(playerid, x_red, "Krivi WeaponID!"); return 1; }
+	if( ammo <1 || ammo > 999 )
+	{ SendClientMessage(playerid, x_red, "Ne moze ispod 1 ili 999 metaka!"); return 1; }
+
+	if(IsPlayerConnected(targetid)) {
+
+	    if(targetid != INVALID_PLAYER_ID) {
+		
+			GivePlayerWeapon(targetid, WEAPON:gun, ammo);
+			va_SendClientMessage(targetid, x_red, "Admin %s ti je dao oruzje.", ReturnPlayerName(playerid));
+			va_SendClientMessage(playerid, x_red, "Dao si oruzje igracu %s.", ReturnPlayerName(targetid));
+		}
+	}
 
 	return 1;
 }

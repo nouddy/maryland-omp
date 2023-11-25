@@ -37,6 +37,648 @@ new bool:IgracSeRegistruje[MAX_PLAYERS];
      \____||__/  \___/ |___/ /_/|_|\___|
 
 */
+
+new PlayerText:secondRegister_TD[MAX_PLAYERS][59];
+
+stock CreatePlayerRegister(playerid, bool:show)
+{
+    if(show == true)
+    {
+        for(new i; i < sizeof secondRegister_TD[]; i++) 
+        {
+            PlayerTextDrawHide( playerid, secondRegister_TD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, secondRegister_TD[ playerid ][ i ] );
+            secondRegister_TD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+
+        secondRegister_TD[playerid][0] = CreatePlayerTextDraw(playerid, -244.333190, 21.429613, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][0], 1186.000000, 566.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][0], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][0], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][0], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][0], false);
+
+        secondRegister_TD[playerid][1] = CreatePlayerTextDraw(playerid, -328.666656, 386.881469, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][1], 1188.000000, -848.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][1], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][1], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][1], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][1], false);
+
+        secondRegister_TD[playerid][2] = CreatePlayerTextDraw(playerid, -87.999969, 354.525939, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][2], 1188.000000, -848.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][2], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][2], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][2], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][2], false);
+
+        secondRegister_TD[playerid][3] = CreatePlayerTextDraw(playerid, -562.333190, 354.525939, "particle:lamp_shad_64");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][3], 1188.000000, -848.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][3], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][3], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][3], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][3], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][3], false);
+
+        secondRegister_TD[playerid][4] = CreatePlayerTextDraw(playerid, 124.333396, 157.989013, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][4], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][4], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][4], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][4], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][4], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][4], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][4], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][4], 169.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][5] = CreatePlayerTextDraw(playerid, 85.833343, 234.940368, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][5], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][5], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][5], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][5], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][5], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][5], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][5], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][5], 169.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][6] = CreatePlayerTextDraw(playerid, 410.500305, 235.143905, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][6], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][6], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][6], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][6], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][6], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][6], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][6], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][6], 202.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][7] = CreatePlayerTextDraw(playerid, 447.100189, 157.814376, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][7], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][7], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][7], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][7], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][7], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][7], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][7], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][7], 202.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][8] = CreatePlayerTextDraw(playerid, 214.000152, 158.018478, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][8], 233.000000, 115.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][8], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][8], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][8], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][8], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][8], false);
+
+        secondRegister_TD[playerid][9] = CreatePlayerTextDraw(playerid, 147.999969, 246.374023, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][9], 272.000000, 78.739944);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][9], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][9], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][9], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][9], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][9], false);
+
+        secondRegister_TD[playerid][10] = CreatePlayerTextDraw(playerid, 445.400238, 157.814376, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][10], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][10], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][10], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][10], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][10], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][10], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][10], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][10], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][10], 202.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][11] = CreatePlayerTextDraw(playerid, 409.033477, 235.143920, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][11], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][11], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][11], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][11], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][11], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][11], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][11], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][11], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][11], 202.000000, 297.000000, 0.000000, 0.400000);
+
+        secondRegister_TD[playerid][12] = CreatePlayerTextDraw(playerid, 112.733070, 235.403778, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][12], 19.000000, -24.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][12], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][12], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][12], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][12], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][12], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][12], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][12], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][12], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][13] = CreatePlayerTextDraw(playerid, 114.733314, 190.688995, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][13], 18.000000, 49.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][13], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][13], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][13], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][13], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][13], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][13], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][13], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][13], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][14] = CreatePlayerTextDraw(playerid, 114.533241, 233.403808, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][14], 17.000000, -20.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][14], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][14], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][14], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][14], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][14], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][14], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][14], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][14], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][15] = CreatePlayerTextDraw(playerid, 115.699623, 228.044448, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][15], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][15], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][15], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][15], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][15], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][15], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][15], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][15], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][15], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][16] = CreatePlayerTextDraw(playerid, 114.899696, 232.977752, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][16], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][16], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][16], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][16], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][16], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][16], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][16], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][16], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][16], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][17] = CreatePlayerTextDraw(playerid, 115.332984, 231.103698, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][17], 20.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][17], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][17], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][17], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][17], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][17], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][17], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][17], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][17], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][18] = CreatePlayerTextDraw(playerid, 117.166481, 233.144531, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][18], 12.000000, -14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][18], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][18], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][18], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][18], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][18], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][18], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][18], 0.000000, 15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][19] = CreatePlayerTextDraw(playerid, 116.966651, 204.122360, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][19], 25.000000, 44.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][19], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][19], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][19], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][19], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][19], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][19], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][19], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][19], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][20] = CreatePlayerTextDraw(playerid, 127.433151, 235.618621, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][20], 19.000000, -24.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][20], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][20], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][20], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][20], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][20], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][20], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][20], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][20], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][21] = CreatePlayerTextDraw(playerid, 126.333374, 190.688980, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][21], 18.000000, 49.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][21], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][21], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][21], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][21], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][21], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][21], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][21], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][21], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][22] = CreatePlayerTextDraw(playerid, 127.299919, 234.377975, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][22], 17.000000, -20.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][22], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][22], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][22], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][22], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][22], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][22], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][22], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][22], 0.000000, -15.000000, -1.000000, 1.000000);
+
+        secondRegister_TD[playerid][23] = CreatePlayerTextDraw(playerid, 122.699562, 227.914810, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][23], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][23], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][23], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][23], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][23], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][23], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][23], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][23], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][23], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        secondRegister_TD[playerid][24] = CreatePlayerTextDraw(playerid, 123.799537, 232.055465, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][24], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][24], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][24], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][24], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][24], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][24], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][24], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][24], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][24], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        secondRegister_TD[playerid][25] = CreatePlayerTextDraw(playerid, 122.399604, 231.425842, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][25], 21.000000, -13.060001);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][25], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][25], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][25], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][25], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][25], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][25], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][25], 1318);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][25], 0.000000, 15.000000, 180.000000, 1.000000);
+
+        secondRegister_TD[playerid][26] = CreatePlayerTextDraw(playerid, 106.133117, 239.577911, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][26], 45.000000, -18.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][26], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][26], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][26], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][26], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][26], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][26], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][26], 2965);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][26], 90.000000, 0.000000, 90.000000, 1.000000);
+
+        secondRegister_TD[playerid][27] = CreatePlayerTextDraw(playerid, 97.499946, 217.422332, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][27], 46.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][27], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][27], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][27], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][27], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][27], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][27], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][28] = CreatePlayerTextDraw(playerid, 115.299964, 217.292724, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][28], 46.000000, 32.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][28], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][28], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][28], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][28], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][28], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][28], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][28], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][28], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][29] = CreatePlayerTextDraw(playerid, 82.066558, 201.744567, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][29], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][29], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][29], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][29], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][29], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][29], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][29], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][29], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][29], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][30] = CreatePlayerTextDraw(playerid, 88.466918, 201.744567, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][30], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][30], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][30], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][30], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][30], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][30], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][30], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][30], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][30], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][31] = CreatePlayerTextDraw(playerid, 85.267028, 199.800079, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][31], 88.000000, 58.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][31], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][31], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][31], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][31], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][31], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][31], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][31], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][31], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][32] = CreatePlayerTextDraw(playerid, 122.733314, 233.296325, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][32], 14.000000, 2.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][32], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][32], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][32], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][32], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][32], false);
+
+        secondRegister_TD[playerid][33] = CreatePlayerTextDraw(playerid, 113.233314, 224.889068, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][33], 28.000000, 19.160003);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][33], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][33], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][33], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][33], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][33], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][33], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][33], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][33], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][34] = CreatePlayerTextDraw(playerid, 118.033668, 224.889068, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][34], 28.000000, 19.160003);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][34], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][34], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][34], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][34], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][34], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][34], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][34], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][34], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][35] = CreatePlayerTextDraw(playerid, 106.133117, 239.577911, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][35], 45.000000, -18.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][35], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][35], -120);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][35], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][35], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][35], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][35], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][35], 2965);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][35], 90.000000, 0.000000, 90.000000, 1.000000);
+
+        secondRegister_TD[playerid][36] = CreatePlayerTextDraw(playerid, 108.533363, 284.433349, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][36], 42.000000, -93.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][36], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][36], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][36], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][36], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][36], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][36], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][36], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][36], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][37] = CreatePlayerTextDraw(playerid, 108.500038, 188.844528, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][37], 42.000000, 83.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][37], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][37], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][37], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][37], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][37], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][37], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][37], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][37], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][38] = CreatePlayerTextDraw(playerid, 124.666473, 221.403839, "V");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][38], 0.352665, 1.890370);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][38], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][38], -188);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][38], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][38], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][38], TEXT_DRAW_FONT_2);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][38], true);
+
+        secondRegister_TD[playerid][39] = CreatePlayerTextDraw(playerid, 125.066802, 247.289016, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][39], 9.000000, -21.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][39], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][39], -188);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][39], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][39], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][39], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][39], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][39], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][39], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][40] = CreatePlayerTextDraw(playerid, 125.233551, 211.840820, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][40], 8.709993, 33.400100);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][40], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][40], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][40], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][40], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][40], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][40], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][40], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][40], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][41] = CreatePlayerTextDraw(playerid, 125.533546, 221.340698, "");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][41], 8.000000, 18.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][41], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][41], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][41], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][41], -256);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][41], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][41], false);
+        PlayerTextDrawSetPreviewModel(playerid, secondRegister_TD[playerid][41], 19177);
+        PlayerTextDrawSetPreviewRot(playerid, secondRegister_TD[playerid][41], 180.000000, 0.000000, 0.000000, 1.000000);
+
+        secondRegister_TD[playerid][42] = CreatePlayerTextDraw(playerid, 328.333526, 14.533424, "MARYLAND");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][42], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][42], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][42], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][42], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][42], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][42], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][42], true);
+
+        secondRegister_TD[playerid][43] = CreatePlayerTextDraw(playerid, 328.000335, 27.807495, "REGISTER_YOUR_ACCOUNT");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][43], 0.130666, 0.517333);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][43], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][43], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][43], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][43], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][43], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][43], true);
+
+        secondRegister_TD[playerid][44] = CreatePlayerTextDraw(playerid, 204.333297, 169.933319, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][44], 11.000000, 11.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][44], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][44], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][44], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][44], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][44], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][44], false);
+
+        secondRegister_TD[playerid][45] = CreatePlayerTextDraw(playerid, 200.666641, 179.888885, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][45], 18.000000, 6.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][45], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][45], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][45], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][45], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][45], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][45], false);
+
+        secondRegister_TD[playerid][46] = CreatePlayerTextDraw(playerid, 184.000198, 267.414764, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][46], 9.000000, 11.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][46], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][46], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][46], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][46], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][46], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][46], false);
+
+        secondRegister_TD[playerid][47] = CreatePlayerTextDraw(playerid, 181.366729, 260.918731, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][47], 14.000000, 13.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][47], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][47], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][47], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][47], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][47], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][47], false);
+
+        secondRegister_TD[playerid][48] = CreatePlayerTextDraw(playerid, 182.800064, 262.644866, "ld_beat:chit");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][48], 11.000000, 10.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][48], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][48], 910118399);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][48], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][48], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][48], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][48], false);
+
+        secondRegister_TD[playerid][49] = CreatePlayerTextDraw(playerid, 183.800186, 269.114868, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][49], 9.000000, 2.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][49], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][49], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][49], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][49], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][49], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][49], false);
+
+        secondRegister_TD[playerid][50] = CreatePlayerTextDraw(playerid, 236.666687, 171.592575, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][50], 1.000000, 14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][50], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][50], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][50], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][50], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][50], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][50], false);
+
+        secondRegister_TD[playerid][51] = CreatePlayerTextDraw(playerid, 213.333358, 264.925903, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][51], 1.000000, 14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][51], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][51], 2023217663);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][51], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][51], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][51], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][51], false);
+
+        secondRegister_TD[playerid][52] = CreatePlayerTextDraw(playerid, 237.633285, 171.477813, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][52], 149.000000, 14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][52], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][52], 1213292799);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][52], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][52], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][52], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][52], false);
+
+        secondRegister_TD[playerid][53] = CreatePlayerTextDraw(playerid, 214.066619, 264.811126, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][53], 149.000000, 14.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][53], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][53], 1213292799);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][53], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][53], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][53], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][53], false);
+
+        secondRegister_TD[playerid][54] = CreatePlayerTextDraw(playerid, 240.666625, 175.896286, "T_Y_P_E__E_M_A_I_L_._._.");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][54], 0.135000, 0.571259);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][54], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][54], -199);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][54], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][54], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][54], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][54], true);
+        PlayerTextDrawSetSelectable(playerid, secondRegister_TD[playerid][54], true);
+
+        secondRegister_TD[playerid][55] = CreatePlayerTextDraw(playerid, 215.999954, 269.229644, "T_Y_P_E__P_A_S_S_W_O_R_D_._._.");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][55], 0.135000, 0.571259);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][55], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][55], -199);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][55], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][55], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][55], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][55], true);
+        PlayerTextDrawSetSelectable(playerid, secondRegister_TD[playerid][55], true);
+
+        secondRegister_TD[playerid][56] = CreatePlayerTextDraw(playerid, 444.333251, 228.162963, "C_O_N_F_I_R_M");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][56], 0.135000, 0.571259);
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][56], 38, 13);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][56], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][56], -199);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][56], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][56], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][56], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][56], true);
+        PlayerTextDrawSetSelectable(playerid, secondRegister_TD[playerid][56], true);
+
+        secondRegister_TD[playerid][57] = CreatePlayerTextDraw(playerid, 425.666595, 236.303710, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, secondRegister_TD[playerid][57], 38.000000, -1.000000);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][57], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][57], -185);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][57], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][57], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][57], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][57], true);
+
+        secondRegister_TD[playerid][58] = CreatePlayerTextDraw(playerid, 328.333221, 435.985137, "ALL_RIGHTS_RESERVED");
+        PlayerTextDrawLetterSize(playerid, secondRegister_TD[playerid][58], 0.136999, 0.562963);
+        PlayerTextDrawAlignment(playerid, secondRegister_TD[playerid][58], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, secondRegister_TD[playerid][58], -1);
+        PlayerTextDrawSetShadow(playerid, secondRegister_TD[playerid][58], 0);
+        PlayerTextDrawBackgroundColour(playerid, secondRegister_TD[playerid][58], 255);
+        PlayerTextDrawFont(playerid, secondRegister_TD[playerid][58], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, secondRegister_TD[playerid][58], true);
+        PlayerTextDrawSetSelectable(playerid, secondRegister_TD[playerid][58], false);
+
+        for(new i = 0; i < sizeof secondRegister_TD[]; i++ ) {
+
+            PlayerTextDrawShow(playerid, secondRegister_TD[playerid][i]);
+        }
+
+        SelectTextDraw(playerid, 0x737BE1FF);
+    }
+
+    else {
+
+        for(new i; i < sizeof secondRegister_TD[]; i++) 
+        {
+            PlayerTextDrawHide( playerid, secondRegister_TD[ playerid ][ i ] );
+            PlayerTextDrawDestroy( playerid, secondRegister_TD[ playerid ][ i ] );
+            secondRegister_TD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
+        }
+
+        CancelSelectTextDraw(playerid);
+
+    }
+    return (true);
+}
+
+/*
 stock CreatePlayerRegister(playerid, bool:show)
 {
     if(show == true)
@@ -789,9 +1431,11 @@ stock CreatePlayerRegister(playerid, bool:show)
     return (true);
 }
 
+*/
+
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 {
-    if(playertextid == Register_PTD[playerid][59])
+    if(playertextid == secondRegister_TD[playerid][55])
 	{
 		if(RegisterPass[playerid])
 			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
@@ -802,7 +1446,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 					"Potvrdi", "Izlaz", ReturnPlayerName(playerid)
 				);		
 	}
-	else if(playertextid == Register_PTD[playerid][58]) // email
+	else if(playertextid == secondRegister_TD[playerid][54]) // email
 	{
 		if(RegisterEmail[playerid])
 			return SendClientMessage(playerid, x_ltorange, "> Vec ste popunili ovo polje.");
@@ -851,7 +1495,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 			"Musko\nZensko",
 			"Unesi", "Izlaz"
 			);
-
 	}
+
+    else if(playertextid == secondRegister_TD[playerid][56]) {
+
+        if(RegisterEmail[playerid] && RegisterPass[playerid]) {
+
+            Spawn_PlayerFromRegister(playerid);
+        }
+
+        else { SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste popunili sva polja!"); }
+
+    }
+
+    // 55 54 56
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

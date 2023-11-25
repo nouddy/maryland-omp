@@ -474,7 +474,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //* Bitno jako da bude medju prvima
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
-
+#include "backend/finance/currency.pwn"									//* Currency
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 						//* ProxDetector
@@ -500,6 +500,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 #include "backend/vehicle/speedometer.script"						//* Brzinomer
+#include "backend/vehicle/fuel.pwn"						//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
 #include "backend/vehicle/driving_school.script"						//* Polaganje za dozvole.
 
@@ -513,7 +514,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/crypto/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Finances
-#include "backend/finance/currency.pwn"									//* Currency
 //#include "backend/finance/bank_old.script"							//* Bankarstvo
 //#include "backend/finance/bank_ogy.script"							//* Bankarstvo
 
@@ -553,9 +553,14 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.script"					//* Bunker
+#include "backend/factions/illegal/faction.pwn"					    //* Core
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.temp"
+
+//-------------------------------------------------------------------------------------------------------- Robbery
+#include "backend/robbery/cash-register.pwn"
+#include "backend/robbery/house-burglary.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Safe Zone
 #include "backend/safezone/safezone.script"
@@ -655,7 +660,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/egypt_pump.map"							//* Egypt Pumpa
 
 //------------------------------------------------------------------------------------------------------------------- Interiors
-#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
+//#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
 #include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
 #include "frontend/interior/sewers.map"								//* Kanalizacija map (interior 3)
 #include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
@@ -665,8 +670,16 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
-#include "frontend/interior/flecca-bank.map"						//* Flecca bank map
-#include "frontend/interior/login_map.map"							//* Login Soba Mapa
+#include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
+#include "frontend/interior/login_map.map"							//* Login Soba Mapa 
+#include "frontend/interior/levis-int.map"							//* Levis (12)
+#include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
+#include "frontend/exterior/train_tut.map"						    //* Egypt Hotel (14)
+#include "frontend/interior/house-int.map"						    //* House Int (15)
+#include "frontend/interior/driving-school-int.map"					//* Driving_School (16)
+#include "frontend/interior/mob_int.map"						    //* Mob Int (17)
+#include "frontend/interior/7eleven_int.map"						//* Market 7/Eleven Int (18)
+#include "frontend/interior/shopping-centre.map"				    //* Shopping Centre (19)
 
 
 //--------------------------------------------------------------------------------------------------------- Temp

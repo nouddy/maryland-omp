@@ -28,7 +28,7 @@ enum {
 
 hook OnGameModeInit() {
 
-    Debug_Print0("[ferid] - textdraw.stock * import - maryland.pwn");
+    Debug_Print0("[dbg] - textdraw.stock * import - maryland.pwn");
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -45,7 +45,7 @@ stock PlayerTextDraw_SwitchMode(const playerid, PlayerText:text, const option, c
         PlayerTextDrawSetProportional(playerid, PlayerText:text, set);
     }
 
-    else if(option -- e_OPTION_SELECTABLE) {
+    else if(option == e_OPTION_SELECTABLE) {
 
         PlayerTextDrawSetSelectable(playerid, PlayerText:text, set);
     }
