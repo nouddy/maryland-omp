@@ -50334,3 +50334,1853 @@ Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
 [2023-11-30T20:29:27+0100] [Info] [connection] incoming connection: 127.0.0.1:53565 id: 0
 [2023-11-30T20:29:27+0100] [Info] [join] Frosty has joined the server (0:127.0.0.1)
 [2023-11-30T20:29:40+0100] [Info] [part] Frosty has left the server (0:1)
+Starting open.mp server (1.1.0.2612) from commit 8829f9f600c36b972b1fc021198bd649afb13fb0
+Loading component Actors.dll
+	Successfully loaded component Actors (1.1.0.2612) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.1.0.2612) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.1.0.2612) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.1.0.2612) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.1.0.2612) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.1.0.2612) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.1.0.2612) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.1.0.2612) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.1.0.2612) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.1.0.2612) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.1.0.2612) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.1.0.2612) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.1.0.2612) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.1.0.2612) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.1.0.2612) with UID cf304faa363dd971
+Loading component Recordings.dll
+	Successfully loaded component Recordings (1.1.0.2612) with UID 871144d399f5f613
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.1.0.2612) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.1.0.2612) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.1.0.2612) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.1.0.2612) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.1.0.2612) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.1.0.2612) with UID 3f1f62ee9e22ab19
+Loaded 23 component(s) from D:\Mods\maryland\components
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info]  ===============================
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info]      sscanf component loaded.   
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info]          Version: 2.13.8
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info]  ===============================
+[2023-11-30T20:48:57+0100] [Info] 
+[2023-11-30T20:48:57+0100] [Info] Loading plugin: crashdetect
+[2023-11-30T20:48:57+0100] [Info]   CrashDetect plugin 4.22-1-gcd608b6
+[2023-11-30T20:48:57+0100] [Info] Loading plugin: streamer
+[2023-11-30T20:48:57+0100] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-11-30T20:48:57+0100] [Info] Loading plugin: mysql
+[2023-11-30T20:48:57+0100] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-11-30T20:48:57+0100] [Info] Loading plugin: ColAndreas
+[2023-11-30T20:48:57+0100] [Info] *********************
+[2023-11-30T20:48:57+0100] [Info] ** Created By:     **
+[2023-11-30T20:48:57+0100] [Info] ** [uL]Chris42O    **
+[2023-11-30T20:48:57+0100] [Info] ** [uL]Slice       **
+[2023-11-30T20:48:57+0100] [Info] ** [uL]Pottus      **
+[2023-11-30T20:48:57+0100] [Info] *********************
+[2023-11-30T20:48:59+0100] [Info] Loaded collision data.
+[2023-11-30T20:48:59+0100] [Info] *********************
+[2023-11-30T20:48:59+0100] [Info]   ColAndreas Loaded
+[2023-11-30T20:48:59+0100] [Info]    v1.4.0
+[2023-11-30T20:48:59+0100] [Info] *********************
+[2023-11-30T20:48:59+0100] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-11-30T20:48:59+0100] [Info]  
+[2023-11-30T20:48:59+0100] [Info]  
+[2023-11-30T20:48:59+0100] [Info]          ==============================================================
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T20:48:59+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T20:48:59+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T20:48:59+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T20:48:59+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:48:59+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T20:48:59+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T20:48:59+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T20:48:59+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T20:48:59+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          |                                                            |
+[2023-11-30T20:48:59+0100] [Info]          ==============================================================
+[2023-11-30T20:48:59+0100] [Info]  
+[2023-11-30T20:48:59+0100] [Info]  
+[2023-11-30T20:48:59+0100] [Info]  ========================================== 
+[2023-11-30T20:48:59+0100] [Info]  |                                        | 
+[2023-11-30T20:48:59+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T20:48:59+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T20:48:59+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T20:48:59+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T20:48:59+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T20:48:59+0100] [Info]  |                                        | 
+[2023-11-30T20:48:59+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T20:48:59+0100] [Info]  |                                        | 
+[2023-11-30T20:48:59+0100] [Info]  |             Please wait...             | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  |             Done in 408ms!             | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  ========================================== 
+[2023-11-30T20:49:00+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T20:49:00+0100] [Info]  | Started:     30 Nov 2023 - 20:48:59    | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T20:49:00+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T20:49:00+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T20:49:00+0100] [Info]  | Built:       30 Nov 2023 - 20:48:24    | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T20:49:00+0100] [Info]  | Master:      1                         | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T20:49:00+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T20:49:00+0100] [Info]  |                                        | 
+[2023-11-30T20:49:00+0100] [Info]  ========================================== 
+[2023-11-30T20:49:00+0100] [Info]  
+[2023-11-30T20:49:00+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:49:00+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:49:00+0100] [Info] [debug] #0 00007a04 in ?? (0, 249, 71139848, 1598650688) in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 71139880, 1598650688) in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T20:49:00+0100] [Info]  
+[2023-11-30T20:49:00+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T20:49:00+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T20:49:00+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T20:49:00+0100] [Info] assets/anims.asset loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T20:49:00+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T20:49:00+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T20:49:00+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T20:49:00+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:49:00+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:49:00+0100] [Info] [debug] #0 00041b78 in ?? (562, 1148215432, -992763302, 1096507143, 1132939274, 0, 0) in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #1 0009a4fc in ?? () in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #2 0001d1bc in public OnScriptInit@E () in <unknown>
+[2023-11-30T20:49:00+0100] [Info] [debug] #3 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:49:00+0100] [Info] [debug] #4 00004978 in ?? () in <unknown>
+[2023-11-30T20:49:00+0100] [Info] vehicle/driving_school.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T20:49:00+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] benches/benches.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] attachments/attach.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T20:49:00+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T20:49:00+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] messages/chat.script loaded
+[2023-11-30T20:49:00+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T20:49:00+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] npcs/actor.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T20:49:00+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T20:49:00+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T20:49:00+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T20:49:00+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] metros/metros.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] trash/trash.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] assets/labels.asset loaded
+[2023-11-30T20:49:00+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/main.tde loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/customs.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T20:49:00+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T20:49:00+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T20:49:00+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T20:49:00+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T20:49:00+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T20:49:00+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] staff/staff.script loaded
+[2023-11-30T20:49:00+0100] [Info] staff/spanel.script loaded
+[2023-11-30T20:49:00+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T20:49:00+0100] [Info] stocks/db.stock loaded
+[2023-11-30T20:49:00+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T20:49:00+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] Loading Map.
+[2023-11-30T20:49:00+0100] [Info] Loaded Map.                             
+[2023-11-30T20:49:00+0100] [Info] Initializing snow map...
+[2023-11-30T20:49:00+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T20:49:00+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info]  Founder : Ogy
+[2023-11-30T20:49:00+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T20:49:00+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T20:49:00+0100] [Info]  Credits : daddyDOT
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] > Gamemode Starting...
+[2023-11-30T20:49:00+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T20:49:00+0100] [Info] -                                     -
+[2023-11-30T20:49:00+0100] [Info] Legacy Network started on port 7777
+[2023-11-30T20:49:00+0100] [Info] Could not load table `houses`...
+[2023-11-30T20:49:00+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T20:49:00+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T20:49:00+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T20:49:00+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T20:49:00+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T20:49:00+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T20:49:00+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+[2023-11-30T20:49:10+0100] [Info] Couldn't announce legacy network to open.mp list.
+[2023-11-30T20:49:10+0100] [Info] 	[Server Error] Status: 406
+[2023-11-30T20:49:10+0100] [Info] 	[Server Error] Message: {"error":"failed to query server: socket read timed out"}
+[2023-11-30T20:49:10+0100] [Info] This won't affect the server's behaviour.
+[2023-11-30T20:49:24+0100] [Info] [connection] incoming connection: 127.0.0.1:53588 id: 0
+[2023-11-30T20:49:24+0100] [Info] [join] Silentus has joined the server (0:127.0.0.1)
+[2023-11-30T20:49:31+0100] [Warning] Invalid dialog ID -1 used.  Use `HidePlayerDialog()`.
+[2023-11-30T20:50:12+0100] [Info] DEBUG: Player_TDs[playerid][0] model is equal to : 119
+[2023-11-30T20:50:12+0100] [Info] DEBUG: Player_TDs[playerid][0] position is equal to : 406.000610 410.940673
+[2023-11-30T20:50:14+0100] [Info] [debug]
+[2023-11-30T20:50:14+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:50:14+0100] [Info] [debug]
+[2023-11-30T20:50:14+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:50:14+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:50:14+0100] [Info] [debug]
+[2023-11-30T20:50:14+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:50:14+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:50:14+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:50:14+0100] [Info] [debug] #0 0007a3f4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:50:14+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:50:14+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:50:14+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:50:15+0100] [Info] [debug]
+[2023-11-30T20:50:15+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:50:15+0100] [Info] [debug]
+[2023-11-30T20:50:15+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:50:15+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:50:15+0100] [Info] [debug]
+[2023-11-30T20:50:15+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:50:15+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:50:15+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:50:15+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:50:15+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:50:15+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:50:15+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:50:18+0100] [Info] [debug]
+[2023-11-30T20:50:18+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:50:18+0100] [Info] [debug]
+[2023-11-30T20:50:18+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:50:18+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:50:18+0100] [Info] [debug]
+[2023-11-30T20:50:18+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:50:18+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:50:18+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:50:18+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, -128, -128) in <unknown>
+[2023-11-30T20:50:18+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, -128, -128) in <unknown>
+[2023-11-30T20:50:18+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:50:18+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:50:23+0100] [Info] [debug]
+[2023-11-30T20:50:23+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:50:23+0100] [Info] [debug]
+[2023-11-30T20:50:23+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:50:23+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:50:23+0100] [Info] [debug]
+[2023-11-30T20:50:23+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:50:23+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:50:23+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:50:23+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, -128, -128) in <unknown>
+[2023-11-30T20:50:23+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, -128, -128) in <unknown>
+[2023-11-30T20:50:23+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:50:23+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:52:49+0100] [Info] [debug]
+[2023-11-30T20:52:49+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:52:49+0100] [Info] [debug]
+[2023-11-30T20:52:49+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:52:49+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:52:49+0100] [Info] [debug]
+[2023-11-30T20:52:49+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:52:49+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:52:49+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:52:49+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:49+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:49+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:52:49+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:52:53+0100] [Info] [debug]
+[2023-11-30T20:52:53+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:52:53+0100] [Info] [debug]
+[2023-11-30T20:52:53+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:52:53+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:52:53+0100] [Info] [debug]
+[2023-11-30T20:52:53+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:52:53+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:52:53+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:52:53+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:53+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:53+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:52:53+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:52:55+0100] [Info] [debug]
+[2023-11-30T20:52:55+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:52:55+0100] [Info] [debug]
+[2023-11-30T20:52:55+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:52:55+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:52:55+0100] [Info] [debug]
+[2023-11-30T20:52:55+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:52:55+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:52:55+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:52:55+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:55+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:55+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:52:55+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:52:57+0100] [Info] [debug]
+[2023-11-30T20:52:57+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:52:57+0100] [Info] [debug]
+[2023-11-30T20:52:57+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:52:57+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:52:57+0100] [Info] [debug]
+[2023-11-30T20:52:57+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:52:57+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:52:57+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:52:57+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, -128) in <unknown>
+[2023-11-30T20:52:57+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, -128) in <unknown>
+[2023-11-30T20:52:57+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:52:57+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:52:59+0100] [Info] [debug]
+[2023-11-30T20:52:59+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:52:59+0100] [Info] [debug]
+[2023-11-30T20:52:59+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:52:59+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:52:59+0100] [Info] [debug]
+[2023-11-30T20:52:59+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:52:59+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:52:59+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:52:59+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:59+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:52:59+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:52:59+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:53:00+0100] [Info] [debug]
+[2023-11-30T20:53:00+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:53:00+0100] [Info] [debug]
+[2023-11-30T20:53:00+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:53:00+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:53:00+0100] [Info] [debug]
+[2023-11-30T20:53:00+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:53:00+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:53:00+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:53:00+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:53:00+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:53:00+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:53:00+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+[2023-11-30T20:53:19+0100] [Info] [debug]
+[2023-11-30T20:53:19+0100] [Info] [debug] Parameter count corrections:
+[2023-11-30T20:53:19+0100] [Info] [debug]
+[2023-11-30T20:53:19+0100] [Info] [debug] The 1st mangled arguments (e.g. `<1073741823 arguments>`) below should read `<7 arguments>`
+[2023-11-30T20:53:19+0100] [Info] [debug] Parameter count loop detected.
+[2023-11-30T20:53:19+0100] [Info] [debug]
+[2023-11-30T20:53:19+0100] [Info] [debug] Run time error 4: "Array index out of bounds"
+[2023-11-30T20:53:19+0100] [Info] [debug]  Attempted to read/write array element at negative index -1
+[2023-11-30T20:53:19+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:53:19+0100] [Info] [debug] #0 00079ff4 in ?? (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:53:19+0100] [Info] [debug] #1 0001fee4 in public OnPlayerKeysUpdate (0, 0, 0, -128, 0, 0, 0) in <unknown>
+[2023-11-30T20:53:19+0100] [Info] [debug] #2 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:53:19+0100] [Info] [debug] #3 000754f8 in public UpdatePlayerKeys (0) in <unknown>
+Starting open.mp server (1.1.0.2612) from commit 8829f9f600c36b972b1fc021198bd649afb13fb0
+Loading component Actors.dll
+	Successfully loaded component Actors (1.1.0.2612) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.1.0.2612) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.1.0.2612) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.1.0.2612) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.1.0.2612) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.1.0.2612) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.1.0.2612) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.1.0.2612) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.1.0.2612) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.1.0.2612) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.1.0.2612) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.1.0.2612) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.1.0.2612) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.1.0.2612) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.1.0.2612) with UID cf304faa363dd971
+Loading component Recordings.dll
+	Successfully loaded component Recordings (1.1.0.2612) with UID 871144d399f5f613
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.1.0.2612) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.1.0.2612) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.1.0.2612) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.1.0.2612) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.1.0.2612) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.1.0.2612) with UID 3f1f62ee9e22ab19
+Loaded 23 component(s) from D:\Mods\maryland\components
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info]  ===============================
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info]      sscanf component loaded.   
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info]          Version: 2.13.8
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info]  ===============================
+[2023-11-30T20:55:28+0100] [Info] 
+[2023-11-30T20:55:28+0100] [Info] Loading plugin: crashdetect
+[2023-11-30T20:55:28+0100] [Info]   CrashDetect plugin 4.22-1-gcd608b6
+[2023-11-30T20:55:28+0100] [Info] Loading plugin: streamer
+[2023-11-30T20:55:28+0100] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-11-30T20:55:28+0100] [Info] Loading plugin: mysql
+[2023-11-30T20:55:28+0100] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-11-30T20:55:28+0100] [Info] Loading plugin: ColAndreas
+[2023-11-30T20:55:28+0100] [Info] *********************
+[2023-11-30T20:55:28+0100] [Info] ** Created By:     **
+[2023-11-30T20:55:28+0100] [Info] ** [uL]Chris42O    **
+[2023-11-30T20:55:28+0100] [Info] ** [uL]Slice       **
+[2023-11-30T20:55:28+0100] [Info] ** [uL]Pottus      **
+[2023-11-30T20:55:28+0100] [Info] *********************
+[2023-11-30T20:55:30+0100] [Info] Loaded collision data.
+[2023-11-30T20:55:30+0100] [Info] *********************
+[2023-11-30T20:55:30+0100] [Info]   ColAndreas Loaded
+[2023-11-30T20:55:30+0100] [Info]    v1.4.0
+[2023-11-30T20:55:30+0100] [Info] *********************
+[2023-11-30T20:55:31+0100] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info]          ==============================================================
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T20:55:31+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T20:55:31+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T20:55:31+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T20:55:31+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:55:31+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T20:55:31+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T20:55:31+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T20:55:31+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T20:55:31+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          |                                                            |
+[2023-11-30T20:55:31+0100] [Info]          ==============================================================
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info]  ========================================== 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T20:55:31+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T20:55:31+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T20:55:31+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T20:55:31+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  |             Please wait...             | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  |             Done in 395ms!             | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  ========================================== 
+[2023-11-30T20:55:31+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T20:55:31+0100] [Info]  | Started:     30 Nov 2023 - 20:55:31    | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T20:55:31+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T20:55:31+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T20:55:31+0100] [Info]  | Built:       30 Nov 2023 - 20:54:33    | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T20:55:31+0100] [Info]  | Master:      1                         | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T20:55:31+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T20:55:31+0100] [Info]  |                                        | 
+[2023-11-30T20:55:31+0100] [Info]  ========================================== 
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:55:31+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:55:31+0100] [Info] [debug] #0 00007a04 in ?? (0, 249, 71139848, 1598650688) in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 71139880, 1598650688) in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T20:55:31+0100] [Info]  
+[2023-11-30T20:55:31+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T20:55:31+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T20:55:31+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T20:55:31+0100] [Info] assets/anims.asset loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T20:55:31+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T20:55:31+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T20:55:31+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T20:55:31+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:55:31+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:55:31+0100] [Info] [debug] #0 00041b78 in ?? (562, 1148215432, -992763302, 1096507143, 1132939274, 0, 0) in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #1 0009a4fc in ?? () in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #2 0001d1bc in public OnScriptInit@E () in <unknown>
+[2023-11-30T20:55:31+0100] [Info] [debug] #3 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:55:31+0100] [Info] [debug] #4 00004978 in ?? () in <unknown>
+[2023-11-30T20:55:31+0100] [Info] vehicle/driving_school.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T20:55:31+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] benches/benches.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] attachments/attach.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T20:55:31+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T20:55:31+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] messages/chat.script loaded
+[2023-11-30T20:55:31+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T20:55:31+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] npcs/actor.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T20:55:31+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T20:55:31+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T20:55:31+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T20:55:31+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] metros/metros.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] trash/trash.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] assets/labels.asset loaded
+[2023-11-30T20:55:31+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/main.tde loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/customs.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T20:55:31+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T20:55:31+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T20:55:31+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T20:55:31+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T20:55:31+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T20:55:31+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] staff/staff.script loaded
+[2023-11-30T20:55:31+0100] [Info] staff/spanel.script loaded
+[2023-11-30T20:55:31+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T20:55:31+0100] [Info] stocks/db.stock loaded
+[2023-11-30T20:55:31+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T20:55:31+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] Loading Map.
+[2023-11-30T20:55:31+0100] [Info] Loaded Map.                             
+[2023-11-30T20:55:31+0100] [Info] Initializing snow map...
+[2023-11-30T20:55:31+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T20:55:31+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info]  Founder : Ogy
+[2023-11-30T20:55:31+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T20:55:31+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T20:55:31+0100] [Info]  Credits : daddyDOT
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] > Gamemode Starting...
+[2023-11-30T20:55:31+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T20:55:31+0100] [Info] -                                     -
+[2023-11-30T20:55:31+0100] [Info] Legacy Network started on port 7777
+[2023-11-30T20:55:31+0100] [Info] Could not load table `houses`...
+[2023-11-30T20:55:31+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T20:55:31+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T20:55:31+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T20:55:31+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T20:55:31+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T20:55:31+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T20:55:31+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+[2023-11-30T20:55:37+0100] [Info] [connection] incoming connection: 127.0.0.1:57867 id: 0
+[2023-11-30T20:55:37+0100] [Info] [join] Silentus has joined the server (0:127.0.0.1)
+[2023-11-30T20:55:42+0100] [Info] Couldn't announce legacy network to open.mp list.
+[2023-11-30T20:55:42+0100] [Info] 	[Server Error] Status: 406
+[2023-11-30T20:55:42+0100] [Info] 	[Server Error] Message: {"error":"failed to query server: socket read timed out"}
+[2023-11-30T20:55:42+0100] [Info] This won't affect the server's behaviour.
+[2023-11-30T20:55:43+0100] [Warning] Invalid dialog ID -1 used.  Use `HidePlayerDialog()`.
+[2023-11-30T20:55:45+0100] [Info] DEBUG: Player_TDs[playerid][0] model is equal to : 119
+[2023-11-30T20:55:45+0100] [Info] DEBUG: Player_TDs[playerid][0] position is equal to : 406.000610 410.940673
+[2023-11-30T20:57:22+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:57:22+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:57:22+0100] [Info] [debug] #0 00138654 in ?? () in <unknown>
+[2023-11-30T20:57:22+0100] [Info] [debug] #1 00138de0 in ?? () in <unknown>
+[2023-11-30T20:57:22+0100] [Info] [debug] #2 0001ce94 in public ScriptInit_OnGameModeExit () in <unknown>
+[2023-11-30T20:57:22+0100] [Info] [debug] #3 00004a3c in public OnGameModeExit () in <unknown>
+[2023-11-30T20:57:34+0100] [Info]  
+[2023-11-30T20:57:34+0100] [Info]  
+[2023-11-30T20:57:34+0100] [Info]          ==============================================================
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T20:57:34+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T20:57:34+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T20:57:34+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T20:57:34+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T20:57:34+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T20:57:34+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T20:57:34+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T20:57:34+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T20:57:34+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          |                                                            |
+[2023-11-30T20:57:34+0100] [Info]          ==============================================================
+[2023-11-30T20:57:34+0100] [Info]  
+[2023-11-30T20:57:34+0100] [Info]  
+[2023-11-30T20:57:34+0100] [Info]  ========================================== 
+[2023-11-30T20:57:34+0100] [Info]  |                                        | 
+[2023-11-30T20:57:34+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T20:57:34+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T20:57:34+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T20:57:34+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T20:57:34+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T20:57:34+0100] [Info]  |                                        | 
+[2023-11-30T20:57:34+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T20:57:34+0100] [Info]  |                                        | 
+[2023-11-30T20:57:34+0100] [Info]  |             Please wait...             | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  |             Done in 392ms!             | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  ========================================== 
+[2023-11-30T20:57:35+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T20:57:35+0100] [Info]  | Started:     30 Nov 2023 - 20:57:34    | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T20:57:35+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T20:57:35+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T20:57:35+0100] [Info]  | Built:       30 Nov 2023 - 20:57:13    | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T20:57:35+0100] [Info]  | Master:      1                         | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T20:57:35+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T20:57:35+0100] [Info]  |                                        | 
+[2023-11-30T20:57:35+0100] [Info]  ========================================== 
+[2023-11-30T20:57:35+0100] [Info]  
+[2023-11-30T20:57:35+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:57:35+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:57:35+0100] [Info] [debug] #0 00007678 in ?? (0, 0, 71139848, 1598650688) in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 71139880, 1598650688) in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T20:57:35+0100] [Info]  
+[2023-11-30T20:57:35+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T20:57:35+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T20:57:35+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T20:57:35+0100] [Info] assets/anims.asset loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] assets/labels.asset loaded
+[2023-11-30T20:57:35+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T20:57:35+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:57:35+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:57:35+0100] [Info] [debug] #0 0006412c in ?? (2, 0, 1154582033, -993241149, 1096104280, 0, 0, 0) in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #1 0008c83c in public CreateMarkers () in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #2 0008c528 in ?? () in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #3 0001d0cc in public OnScriptInit@E () in <unknown>
+[2023-11-30T20:57:35+0100] [Info] [debug] #4 native CallLocalFunction () in Pawn.dll
+[2023-11-30T20:57:35+0100] [Info] [debug] #5 00004978 in ?? () in <unknown>
+[2023-11-30T20:57:35+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T20:57:35+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T20:57:35+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T20:57:35+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T20:57:35+0100] [Info] vehicle/driving_school.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T20:57:35+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] benches/benches.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] attachments/attach.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T20:57:35+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T20:57:35+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] messages/chat.script loaded
+[2023-11-30T20:57:35+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T20:57:35+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] npcs/actor.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T20:57:35+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T20:57:35+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T20:57:35+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T20:57:35+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] metros/metros.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] trash/trash.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] frontend/main.tde loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/customs.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T20:57:35+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T20:57:35+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T20:57:35+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T20:57:35+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T20:57:35+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T20:57:35+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] staff/staff.script loaded
+[2023-11-30T20:57:35+0100] [Info] staff/spanel.script loaded
+[2023-11-30T20:57:35+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T20:57:35+0100] [Info] stocks/db.stock loaded
+[2023-11-30T20:57:35+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T20:57:35+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] Tried to reload Map.
+[2023-11-30T20:57:35+0100] [Info] Initializing snow map...
+[2023-11-30T20:57:35+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T20:57:35+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info]  Founder : Ogy
+[2023-11-30T20:57:35+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T20:57:35+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T20:57:35+0100] [Info]  Credits : daddyDOT
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] > Gamemode Starting...
+[2023-11-30T20:57:35+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T20:57:35+0100] [Info] -                                     -
+[2023-11-30T20:57:35+0100] [Info] Could not load table `houses`...
+[2023-11-30T20:57:35+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T20:57:35+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T20:57:35+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T20:57:35+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T20:57:35+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T20:57:35+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T20:57:35+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+[2023-11-30T20:57:44+0100] [Info] DEBUG: Player_TDs[playerid][0] model is equal to : 119
+[2023-11-30T20:57:44+0100] [Info] DEBUG: Player_TDs[playerid][0] position is equal to : 406.000610 410.940673
+[2023-11-30T20:58:06+0100] [Warning] RCON (In-Game): Player #0 (Silentus) has logged in.
+[2023-11-30T20:58:09+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T20:58:09+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T20:58:09+0100] [Info] [debug] #0 000016dc in ?? (1089470464, 1) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #1 0005fc2c in ?? (0, 0, 0, 0) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #2 0005f7e8 in ?? (0, 71096264, 71095612, 71096284, 1098776575) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #3 006b4d40 in ?? (0, 41116452, 0) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #4 0004e054 in ?? (0, 71123532, 0) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #5 00053a7c in ?? (0, 71123532) in <unknown>
+[2023-11-30T20:58:09+0100] [Info] [debug] #6 0001e788 in public OnPlayerCommandText (0, 71123532) in <unknown>
+[2023-11-30T20:59:31+0100] [Info] [part] Silentus has left the server (0:1)
+Starting open.mp server (1.1.0.2612) from commit 8829f9f600c36b972b1fc021198bd649afb13fb0
+Loading component Actors.dll
+	Successfully loaded component Actors (1.1.0.2612) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.1.0.2612) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.1.0.2612) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.1.0.2612) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.1.0.2612) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.1.0.2612) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.1.0.2612) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.1.0.2612) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.1.0.2612) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.1.0.2612) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.1.0.2612) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.1.0.2612) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.1.0.2612) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.1.0.2612) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.1.0.2612) with UID cf304faa363dd971
+Loading component Recordings.dll
+	Successfully loaded component Recordings (1.1.0.2612) with UID 871144d399f5f613
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.1.0.2612) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.1.0.2612) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.1.0.2612) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.1.0.2612) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.1.0.2612) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.1.0.2612) with UID 3f1f62ee9e22ab19
+Loaded 23 component(s) from D:\Mods\maryland\components
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info]  ===============================
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info]      sscanf component loaded.   
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info]          Version: 2.13.8
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info]  ===============================
+[2023-11-30T21:07:43+0100] [Info] 
+[2023-11-30T21:07:43+0100] [Info] Loading plugin: crashdetect
+[2023-11-30T21:07:43+0100] [Info]   CrashDetect plugin 4.22-1-gcd608b6
+[2023-11-30T21:07:43+0100] [Info] Loading plugin: streamer
+[2023-11-30T21:07:43+0100] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-11-30T21:07:43+0100] [Info] Loading plugin: mysql
+[2023-11-30T21:07:43+0100] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-11-30T21:07:43+0100] [Info] Loading plugin: ColAndreas
+[2023-11-30T21:07:43+0100] [Info] *********************
+[2023-11-30T21:07:43+0100] [Info] ** Created By:     **
+[2023-11-30T21:07:43+0100] [Info] ** [uL]Chris42O    **
+[2023-11-30T21:07:43+0100] [Info] ** [uL]Slice       **
+[2023-11-30T21:07:43+0100] [Info] ** [uL]Pottus      **
+[2023-11-30T21:07:43+0100] [Info] *********************
+[2023-11-30T21:07:45+0100] [Info] Loaded collision data.
+[2023-11-30T21:07:45+0100] [Info] *********************
+[2023-11-30T21:07:45+0100] [Info]   ColAndreas Loaded
+[2023-11-30T21:07:45+0100] [Info]    v1.4.0
+[2023-11-30T21:07:45+0100] [Info] *********************
+[2023-11-30T21:07:46+0100] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info]          ==============================================================
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T21:07:46+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T21:07:46+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T21:07:46+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T21:07:46+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:07:46+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T21:07:46+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T21:07:46+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T21:07:46+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T21:07:46+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          |                                                            |
+[2023-11-30T21:07:46+0100] [Info]          ==============================================================
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info]  ========================================== 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T21:07:46+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T21:07:46+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T21:07:46+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T21:07:46+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  |             Please wait...             | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  |             Done in 411ms!             | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  ========================================== 
+[2023-11-30T21:07:46+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T21:07:46+0100] [Info]  | Started:     30 Nov 2023 - 21:07:46    | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T21:07:46+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T21:07:46+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T21:07:46+0100] [Info]  | Built:       30 Nov 2023 - 21:07:31    | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T21:07:46+0100] [Info]  | Master:      1                         | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T21:07:46+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T21:07:46+0100] [Info]  |                                        | 
+[2023-11-30T21:07:46+0100] [Info]  ========================================== 
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:07:46+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:07:46+0100] [Info] [debug] #0 00007a04 in ?? (0, 284, 70747252, 1598650688) in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 70747284, 1598650688) in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T21:07:46+0100] [Info]  
+[2023-11-30T21:07:46+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T21:07:46+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T21:07:46+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T21:07:46+0100] [Info] assets/anims.asset loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] assets/labels.asset loaded
+[2023-11-30T21:07:46+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T21:07:46+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:07:46+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:07:46+0100] [Info] [debug] #0 0006418c in ?? (3, 0, 1152523524, 1153852322, 1100086719, 0, 6, 0) in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #1 0008c6b8 in public CreateMarkers () in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #2 0008c528 in ?? () in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #3 0001d0a4 in public OnScriptInit@E () in <unknown>
+[2023-11-30T21:07:46+0100] [Info] [debug] #4 native CallLocalFunction () in Pawn.dll
+[2023-11-30T21:07:46+0100] [Info] [debug] #5 00004978 in ?? () in <unknown>
+[2023-11-30T21:07:46+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T21:07:46+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T21:07:46+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T21:07:46+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T21:07:46+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] benches/benches.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] attachments/attach.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T21:07:46+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T21:07:46+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] messages/chat.script loaded
+[2023-11-30T21:07:46+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T21:07:46+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] npcs/actor.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T21:07:46+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T21:07:46+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T21:07:46+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T21:07:46+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] metros/metros.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] trash/trash.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] frontend/main.tde loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/customs.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T21:07:46+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T21:07:46+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T21:07:46+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T21:07:46+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T21:07:46+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T21:07:46+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] staff/staff.script loaded
+[2023-11-30T21:07:46+0100] [Info] staff/spanel.script loaded
+[2023-11-30T21:07:46+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T21:07:46+0100] [Info] stocks/db.stock loaded
+[2023-11-30T21:07:46+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T21:07:46+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] Loading Map.
+[2023-11-30T21:07:46+0100] [Info] Loaded Map.                             
+[2023-11-30T21:07:46+0100] [Info] Initializing snow map...
+[2023-11-30T21:07:46+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T21:07:46+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info]  Founder : Ogy
+[2023-11-30T21:07:46+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T21:07:46+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T21:07:46+0100] [Info]  Credits : daddyDOT
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] > Gamemode Starting...
+[2023-11-30T21:07:46+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T21:07:46+0100] [Info] -                                     -
+[2023-11-30T21:07:46+0100] [Info] Legacy Network started on port 7777
+[2023-11-30T21:07:46+0100] [Info] Could not load table `houses`...
+[2023-11-30T21:07:46+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T21:07:46+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T21:07:46+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T21:07:46+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T21:07:46+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T21:07:46+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T21:07:46+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+[2023-11-30T21:07:57+0100] [Info] Couldn't announce legacy network to open.mp list.
+[2023-11-30T21:07:57+0100] [Info] 	[Server Error] Status: 406
+[2023-11-30T21:07:57+0100] [Info] 	[Server Error] Message: {"error":"failed to query server: socket read timed out"}
+[2023-11-30T21:07:57+0100] [Info] This won't affect the server's behaviour.
+[2023-11-30T21:08:38+0100] [Info] [connection] incoming connection: 127.0.0.1:57655 id: 0
+[2023-11-30T21:08:38+0100] [Info] [join] Silentus has joined the server (0:127.0.0.1)
+[2023-11-30T21:08:48+0100] [Warning] Invalid dialog ID -1 used.  Use `HidePlayerDialog()`.
+[2023-11-30T21:08:51+0100] [Info] DEBUG: Player_TDs[playerid][0] model is equal to : 119
+[2023-11-30T21:08:51+0100] [Info] DEBUG: Player_TDs[playerid][0] position is equal to : 406.000610 410.940673
+[2023-11-30T21:09:47+0100] [Warning] RCON (In-Game): Player #0 (Silentus) has logged in.
+[2023-11-30T21:10:35+0100] [Info] [part] Silentus has left the server (0:1)
+Starting open.mp server (1.1.0.2612) from commit 8829f9f600c36b972b1fc021198bd649afb13fb0
+Loading component Actors.dll
+	Successfully loaded component Actors (1.1.0.2612) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.1.0.2612) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.1.0.2612) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.1.0.2612) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.1.0.2612) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.1.0.2612) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.1.0.2612) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.1.0.2612) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.1.0.2612) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.1.0.2612) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.1.0.2612) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.1.0.2612) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.1.0.2612) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.1.0.2612) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.1.0.2612) with UID cf304faa363dd971
+Loading component Recordings.dll
+	Successfully loaded component Recordings (1.1.0.2612) with UID 871144d399f5f613
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.1.0.2612) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.1.0.2612) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.1.0.2612) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.1.0.2612) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.1.0.2612) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.1.0.2612) with UID 3f1f62ee9e22ab19
+Loaded 23 component(s) from D:\Mods\maryland\components
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info]  ===============================
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info]      sscanf component loaded.   
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info]          Version: 2.13.8
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info]  ===============================
+[2023-11-30T21:13:46+0100] [Info] 
+[2023-11-30T21:13:46+0100] [Info] Loading plugin: crashdetect
+[2023-11-30T21:13:46+0100] [Info]   CrashDetect plugin 4.22-1-gcd608b6
+[2023-11-30T21:13:46+0100] [Info] Loading plugin: streamer
+[2023-11-30T21:13:46+0100] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-11-30T21:13:46+0100] [Info] Loading plugin: mysql
+[2023-11-30T21:13:46+0100] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-11-30T21:13:46+0100] [Info] Loading plugin: ColAndreas
+[2023-11-30T21:13:46+0100] [Info] *********************
+[2023-11-30T21:13:46+0100] [Info] ** Created By:     **
+[2023-11-30T21:13:46+0100] [Info] ** [uL]Chris42O    **
+[2023-11-30T21:13:46+0100] [Info] ** [uL]Slice       **
+[2023-11-30T21:13:46+0100] [Info] ** [uL]Pottus      **
+[2023-11-30T21:13:46+0100] [Info] *********************
+[2023-11-30T21:13:49+0100] [Info] Loaded collision data.
+[2023-11-30T21:13:49+0100] [Info] *********************
+[2023-11-30T21:13:49+0100] [Info]   ColAndreas Loaded
+[2023-11-30T21:13:49+0100] [Info]    v1.4.0
+[2023-11-30T21:13:49+0100] [Info] *********************
+[2023-11-30T21:13:49+0100] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info]          ==============================================================
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T21:13:49+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T21:13:49+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T21:13:49+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T21:13:49+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:13:49+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T21:13:49+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T21:13:49+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T21:13:49+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T21:13:49+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          |                                                            |
+[2023-11-30T21:13:49+0100] [Info]          ==============================================================
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info]  ========================================== 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T21:13:49+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T21:13:49+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T21:13:49+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T21:13:49+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  |             Please wait...             | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  |             Done in 407ms!             | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  ========================================== 
+[2023-11-30T21:13:49+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T21:13:49+0100] [Info]  | Started:     30 Nov 2023 - 21:13:49    | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T21:13:49+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T21:13:49+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T21:13:49+0100] [Info]  | Built:       30 Nov 2023 - 21:13:28    | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T21:13:49+0100] [Info]  | Master:      1                         | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T21:13:49+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T21:13:49+0100] [Info]  |                                        | 
+[2023-11-30T21:13:49+0100] [Info]  ========================================== 
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:13:49+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:13:49+0100] [Info] [debug] #0 00007a04 in ?? (0, 249, 71139848, 1598650688) in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 71139880, 1598650688) in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T21:13:49+0100] [Info]  
+[2023-11-30T21:13:49+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T21:13:49+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T21:13:49+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T21:13:49+0100] [Info] assets/anims.asset loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] assets/labels.asset loaded
+[2023-11-30T21:13:49+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:13:49+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:13:49+0100] [Info] [debug] #0 0008ab68 in public Create3DandP (64940236, 1149765329, -996598687, 1100153618, -1, -1, 19621, 1086324736) in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #1 0008b0d0 in ?? () in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #2 0008ade0 in ?? () in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #3 0001d0a4 in public OnScriptInit@E () in <unknown>
+[2023-11-30T21:13:49+0100] [Info] [debug] #4 native CallLocalFunction () in Pawn.dll
+[2023-11-30T21:13:49+0100] [Info] [debug] #5 00004978 in ?? () in <unknown>
+[2023-11-30T21:13:49+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T21:13:49+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T21:13:49+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T21:13:49+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T21:13:49+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T21:13:49+0100] [Info] vehicle/driving_school.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T21:13:49+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] benches/benches.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] attachments/attach.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T21:13:49+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T21:13:49+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] messages/chat.script loaded
+[2023-11-30T21:13:49+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T21:13:49+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] npcs/actor.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T21:13:49+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T21:13:49+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T21:13:49+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T21:13:49+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] metros/metros.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] trash/trash.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] frontend/main.tde loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/customs.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T21:13:49+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T21:13:49+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T21:13:49+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T21:13:49+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T21:13:49+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T21:13:49+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] staff/staff.script loaded
+[2023-11-30T21:13:49+0100] [Info] staff/spanel.script loaded
+[2023-11-30T21:13:49+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T21:13:49+0100] [Info] stocks/db.stock loaded
+[2023-11-30T21:13:49+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T21:13:49+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] Loading Map.
+[2023-11-30T21:13:49+0100] [Info] Loaded Map.                             
+[2023-11-30T21:13:49+0100] [Info] Initializing snow map...
+[2023-11-30T21:13:49+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T21:13:49+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info]  Founder : Ogy
+[2023-11-30T21:13:49+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T21:13:49+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T21:13:49+0100] [Info]  Credits : daddyDOT
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] > Gamemode Starting...
+[2023-11-30T21:13:49+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T21:13:49+0100] [Info] -                                     -
+[2023-11-30T21:13:49+0100] [Info] Legacy Network started on port 7777
+[2023-11-30T21:13:49+0100] [Info] Could not load table `houses`...
+[2023-11-30T21:13:49+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T21:13:49+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T21:13:49+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T21:13:49+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T21:13:49+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T21:13:49+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T21:13:49+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+Starting open.mp server (1.1.0.2612) from commit 8829f9f600c36b972b1fc021198bd649afb13fb0
+Loading component Actors.dll
+	Successfully loaded component Actors (1.1.0.2612) with UID c81ca021eae2ad5c
+Loading component Checkpoints.dll
+	Successfully loaded component Checkpoints (1.1.0.2612) with UID 44a937350d611dde
+Loading component Classes.dll
+	Successfully loaded component Classes (1.1.0.2612) with UID 8cfb3183976da208
+Loading component Console.dll
+	Successfully loaded component Console (1.1.0.2612) with UID bfa24e49d0c95ee4
+Loading component CustomModels.dll
+	Successfully loaded component CustomModels (1.1.0.2612) with UID 15e3cb1e7c77ffff
+Loading component Databases.dll
+	Successfully loaded component Databases (1.1.0.2612) with UID 80092e7eb5821a96
+Loading component Dialogs.dll
+	Successfully loaded component Dialogs (1.1.0.2612) with UID 44a111350d611dde
+Loading component Fixes.dll
+	Successfully loaded component Fixes (1.1.0.2612) with UID b5c615eff0329ff7
+Loading component GangZones.dll
+	Successfully loaded component GangZones (1.1.0.2612) with UID b3351d11ee8d8056
+Loading component LegacyConfig.dll
+	Successfully loaded component LegacyConfig (1.1.0.2612) with UID 24ef6216838f9ffc
+Loading component LegacyNetwork.dll
+	Successfully loaded component RakNetLegacyNetwork (1.1.0.2612) with UID ea9799fd79cf8442
+Loading component Menus.dll
+	Successfully loaded component Menus (1.1.0.2612) with UID 621e219eb97ee0b2
+Loading component Objects.dll
+	Successfully loaded component Objects (1.1.0.2612) with UID 59f8415f72da6160
+Loading component Pawn.dll
+	Successfully loaded component Pawn (1.1.0.2612) with UID 78906cd9f19c36a6
+Loading component Pickups.dll
+	Successfully loaded component Pickups (1.1.0.2612) with UID cf304faa363dd971
+Loading component Recordings.dll
+	Successfully loaded component Recordings (1.1.0.2612) with UID 871144d399f5f613
+Loading component sscanf.dll
+	Successfully loaded component sscanf (2.13.8.0) with UID a1e7c01e55caa1f2
+Loading component TextDraws.dll
+	Successfully loaded component TextDraws (1.1.0.2612) with UID 9b5dc2b1d15c992a
+Loading component TextLabels.dll
+	Successfully loaded component TextLabels (1.1.0.2612) with UID a0c57ea80a009742
+Loading component Timers.dll
+	Successfully loaded component Timers (1.1.0.2612) with UID 2ad8124c5ea257a3
+Loading component Unicode.dll
+	Successfully loaded component Unicode (1.1.0.2612) with UID 8ffb446f8353922b
+Loading component Variables.dll
+	Successfully loaded component Variables (1.1.0.2612) with UID 75e121848bc01fa2
+Loading component Vehicles.dll
+	Successfully loaded component Vehicles (1.1.0.2612) with UID 3f1f62ee9e22ab19
+Loaded 23 component(s) from D:\Mods\maryland\components
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info]  ===============================
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info]      sscanf component loaded.   
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info]          Version: 2.13.8
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info]    (c) 2022 Alex "Y_Less" Cole  
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info]  ===============================
+[2023-11-30T21:20:47+0100] [Info] 
+[2023-11-30T21:20:47+0100] [Info] Loading plugin: crashdetect
+[2023-11-30T21:20:47+0100] [Info]   CrashDetect plugin 4.22-1-gcd608b6
+[2023-11-30T21:20:47+0100] [Info] Loading plugin: streamer
+[2023-11-30T21:20:47+0100] [Info] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[2023-11-30T21:20:47+0100] [Info] Loading plugin: mysql
+[2023-11-30T21:20:47+0100] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[2023-11-30T21:20:47+0100] [Info] Loading plugin: ColAndreas
+[2023-11-30T21:20:47+0100] [Info] *********************
+[2023-11-30T21:20:47+0100] [Info] ** Created By:     **
+[2023-11-30T21:20:47+0100] [Info] ** [uL]Chris42O    **
+[2023-11-30T21:20:47+0100] [Info] ** [uL]Slice       **
+[2023-11-30T21:20:47+0100] [Info] ** [uL]Pottus      **
+[2023-11-30T21:20:47+0100] [Info] *********************
+[2023-11-30T21:20:49+0100] [Info] Loaded collision data.
+[2023-11-30T21:20:49+0100] [Info] *********************
+[2023-11-30T21:20:49+0100] [Info]   ColAndreas Loaded
+[2023-11-30T21:20:49+0100] [Info]    v1.4.0
+[2023-11-30T21:20:49+0100] [Info] *********************
+[2023-11-30T21:20:50+0100] [Info] *** Streamer Plugin: The plugin version (0x295) is older than the include file version (0x296) for this script. The plugin might need to be updated to the latest version.
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info]          ==============================================================
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[2023-11-30T21:20:50+0100] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[2023-11-30T21:20:50+0100] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[2023-11-30T21:20:50+0100] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[2023-11-30T21:20:50+0100] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[2023-11-30T21:20:50+0100] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[2023-11-30T21:20:50+0100] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[2023-11-30T21:20:50+0100] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[2023-11-30T21:20:50+0100] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          |                      (c) 2021 MPL v1.1                     |
+[2023-11-30T21:20:50+0100] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          |                                                            |
+[2023-11-30T21:20:50+0100] [Info]          ==============================================================
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info]  ========================================== 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  |   Generating code, this may take a     | 
+[2023-11-30T21:20:50+0100] [Info]  |  little bit of time.  Note that this   | 
+[2023-11-30T21:20:50+0100] [Info]  |  code generation works best with the   | 
+[2023-11-30T21:20:50+0100] [Info]  |     JIT plugin, which you are not      | 
+[2023-11-30T21:20:50+0100] [Info]  |     currently using.  Get it here:     | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  |       https://git.io/jit-plugin        | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  |             Please wait...             | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  |             Done in 418ms!             | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  ========================================== 
+[2023-11-30T21:20:50+0100] [Info] *** YSI Info: Script ID: 1
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  | Server:      open.mp 1.1.0.2612 (W)    | 
+[2023-11-30T21:20:50+0100] [Info]  | Started:     30 Nov 2023 - 21:20:50    | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  | Compiler:    3.10.11 (Windows)         | 
+[2023-11-30T21:20:50+0100] [Info]  | Includes:    open.mp v037030           | 
+[2023-11-30T21:20:50+0100] [Info]  | Codepage:    <none>                    | 
+[2023-11-30T21:20:50+0100] [Info]  | Built:       30 Nov 2023 - 21:20:17    | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  | YSI:         v05.08.4329               | 
+[2023-11-30T21:20:50+0100] [Info]  | Master:      1                         | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  | JIT:         <none>                    | 
+[2023-11-30T21:20:50+0100] [Info]  | Crashdetect: <found>                   | 
+[2023-11-30T21:20:50+0100] [Info]  |                                        | 
+[2023-11-30T21:20:50+0100] [Info]  ========================================== 
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:20:50+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:20:50+0100] [Info] [debug] #0 00007a04 in ?? (0, 249, 71139848, 1598650688) in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #1 00007b5c in ?? (0, 0, 71139880, 1598650688) in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #2 0000c458 in ?? () in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #3 000048a4 in ?? () in <unknown>
+[2023-11-30T21:20:50+0100] [Info]  
+[2023-11-30T21:20:50+0100] [Info] [MYSQL] Connected to database succesfully
+[2023-11-30T21:20:50+0100] [Info] assets/globalstuff.asset loaded
+[2023-11-30T21:20:50+0100] [Info] assets/proxdetect.asset loaded
+[2023-11-30T21:20:50+0100] [Info] assets/anims.asset loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] assets/labels.asset loaded
+[2023-11-30T21:20:50+0100] [Info] [debug] Long callback execution detected (hang or performance issue)
+[2023-11-30T21:20:50+0100] [Info] [debug] AMX backtrace:
+[2023-11-30T21:20:50+0100] [Info] [debug] #0 0008ab68 in public Create3DandP (64940236, 1149765329, -996598687, 1100153618, -1, -1, 19621, 1086324736) in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #1 0008b0d0 in ?? () in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #2 0008ade0 in ?? () in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #3 0001d0a4 in public OnScriptInit@E () in <unknown>
+[2023-11-30T21:20:50+0100] [Info] [debug] #4 native CallLocalFunction () in Pawn.dll
+[2023-11-30T21:20:50+0100] [Info] [debug] #5 00004978 in ?? () in <unknown>
+[2023-11-30T21:20:50+0100] [Info] backend/asset/custom_markers.asset loaded
+[2023-11-30T21:20:50+0100] [Info] documentation/playerdocuments.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] vehicle/vehicle.script loaded
+[2023-11-30T21:20:50+0100] [Info] vehicle/servis.script loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/speed_TD.tde loaded
+[2023-11-30T21:20:50+0100] [Info] backend/vehicle/fuel.pwn loaded
+[2023-11-30T21:20:50+0100] [Info] backend/vehicles/car_dealership.pwn loaded
+[2023-11-30T21:20:50+0100] [Info] vehicle/driving_school.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] backend/property/houses.script * loaded...
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] real_estate/re_centar.script loaded
+[2023-11-30T21:20:50+0100] [Info] real_estate/re_business.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] benches/benches.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] attachments/attach.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] backend/faction_police.script loaded
+[2023-11-30T21:20:50+0100] [Info] factions/illegal/bunker.script loaded
+[2023-11-30T21:20:50+0100] [Info] factions/faction.pwn > Dev Progress Loaded.
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] safezone/safezone.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] messages/chat.script loaded
+[2023-11-30T21:20:50+0100] [Info] messages/random_poruke.script loaded
+[2023-11-30T21:20:50+0100] [Info] messages/custom_tags.script loaded.
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] npcs/actor.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] tehnomedia/tehnomedia.script loaded
+[2023-11-30T21:20:50+0100] [Info] tehnomedia/drone.script loaded
+[2023-11-30T21:20:50+0100] [Info] tehnomedia/navigation.script loaded
+[2023-11-30T21:20:50+0100] [Info] tehnomedia/playerlocation.script loaded
+[2023-11-30T21:20:50+0100] [Warning] Gangzone Y co-ordinates -1115.00 and -1213.00 out of order, inverting.
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] metros/metros.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] trash/trash.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] frontend/main.tde loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/starbucks.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/glavnaulica.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/crnotrziste.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/tehnomedia.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/spawn.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/izborskina.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/glenpark.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/maryland-pd.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/bolnica-ext.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/hotel-ext.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/customs.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/shopping-center.map loaded
+[2023-11-30T21:20:50+0100] [Info] name/bizcent-ext.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/centar_park.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/binance_ext.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/croswellas.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/birorada.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/italy-granica.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/ml-gym.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/ls-ukrasi.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/ml-busvozac.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/opstina.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/gov_ext.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/bank_ml.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/italy_zicara.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/zeleznicka-egypt.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/egypt_centar.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/egypt_hotel.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/egypt_ulica.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/egypt_ukrasi.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/egypt_pumpa.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/login-new.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/garaza.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/kanalizacija.map loaded
+[2023-11-30T21:20:50+0100] [Info] interior/bizcent-int.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/opstina-int.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/spawn_int.map loaded
+[2023-11-30T21:20:50+0100] [Info] interior/hotel-int.map loaded
+[2023-11-30T21:20:50+0100] [Info] exterior/poligon-as.map loaded
+[2023-11-30T21:20:50+0100] [Info] interior/harbor_int.map loaded
+[2023-11-30T21:20:50+0100] [Info] frontend/flecca-bank.map loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] xmas/xmas.script loaded
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] staff/staff.script loaded
+[2023-11-30T21:20:50+0100] [Info] staff/spanel.script loaded
+[2023-11-30T21:20:50+0100] [Info] stocks/chat.stock loaded
+[2023-11-30T21:20:50+0100] [Info] stocks/db.stock loaded
+[2023-11-30T21:20:50+0100] [Info] stocks/variable.stock loaded
+[2023-11-30T21:20:50+0100] [Info] [dbg] - textdraw.stock * import - maryland.pwn
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] Loading Map.
+[2023-11-30T21:20:50+0100] [Info] Loaded Map.                             
+[2023-11-30T21:20:50+0100] [Info] Initializing snow map...
+[2023-11-30T21:20:50+0100] [Info] Map snow is successfuly initialized with 1073 created objects
+[2023-11-30T21:20:50+0100] [Info] [2.0.3] Walking styles loaded 
+Created by Ben Jackster | Forked  by Mergevos | Fixed by MaximWizard
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info]  Founder : Ogy
+[2023-11-30T21:20:50+0100] [Info]  Version : 1.0 - Maryland
+[2023-11-30T21:20:50+0100] [Info]  Developer : Silent & Nodi
+[2023-11-30T21:20:50+0100] [Info]  Credits : daddyDOT
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] > Gamemode Starting...
+[2023-11-30T21:20:50+0100] [Info] >> Maryland Gamemode Started
+[2023-11-30T21:20:50+0100] [Info] -                                     -
+[2023-11-30T21:20:50+0100] [Info] Legacy Network started on port 7777
+[2023-11-30T21:20:50+0100] [Info] Could not load table `houses`...
+[2023-11-30T21:20:50+0100] [Info] 
+[Business Centers]: 0 business centers loaded.
+
+[2023-11-30T21:20:50+0100] [Info] Nije moguce ucitati tabelu `re_business` [ PRAZNO ]
+[2023-11-30T21:20:50+0100] [Info] backend/benches.script loaded(0) seats
+[2023-11-30T21:20:50+0100] [Info] 
+[State Factions]: 0 factions ucitano.
+
+[2023-11-30T21:20:50+0100] [Info] Ucitavanje Safe Zona(0)... Uspesno
+[2023-11-30T21:20:50+0100] [Info] Ucitavanje Metro Stanica(0)... Uspesno
+[2023-11-30T21:20:50+0100] [Info] Ucitavanje Kontejnera(0)... Uspesno
+[2023-11-30T21:21:01+0100] [Info] Couldn't announce legacy network to open.mp list.
+[2023-11-30T21:21:01+0100] [Info] 	[Server Error] Status: 406
+[2023-11-30T21:21:01+0100] [Info] 	[Server Error] Message: {"error":"failed to query server: socket read timed out"}
+[2023-11-30T21:21:01+0100] [Info] This won't affect the server's behaviour.
+[2023-11-30T21:21:13+0100] [Info] [connection] incoming connection: 127.0.0.1:65241 id: 0
+[2023-11-30T21:21:13+0100] [Info] [join] Silentus has joined the server (0:127.0.0.1)
+[2023-11-30T21:21:23+0100] [Warning] Invalid dialog ID -1 used.  Use `HidePlayerDialog()`.
+[2023-11-30T21:21:24+0100] [Info] DEBUG: Player_TDs[playerid][0] model is equal to : 119
+[2023-11-30T21:21:24+0100] [Info] DEBUG: Player_TDs[playerid][0] position is equal to : 406.000610 410.940673
+[2023-11-30T21:21:39+0100] [Warning] RCON (In-Game): Player #0 (Silentus) has logged in.
+[2023-11-30T21:22:08+0100] [Info] [part] Silentus has left the server (0:1)
