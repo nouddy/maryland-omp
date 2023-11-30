@@ -1501,7 +1501,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
 
         if(RegisterEmail[playerid] && RegisterPass[playerid]) {
 
-            Spawn_PlayerFromRegister(playerid);
+            //Spawn_PlayerFromRegister(playerid);
         }
 
         else { SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste popunili sva polja!"); }

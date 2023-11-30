@@ -1,0 +1,2 @@
+[30/11/2023 16:34:51] [plugins/mysql] error #1054 while executing query "SELECT * FROM `faction_members` WHERE `ID` = '1'": Unknown column 'ID' in 'where clause'
+[30/11/2023 16:34:51] [log-core] exception 0XC0000005 (ACCESS_VIOLATION) from Vectored Exception Handler catched; shutting log-core down
