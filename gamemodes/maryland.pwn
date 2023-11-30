@@ -617,6 +617,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 #include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
 
+/*
 //-------------------------------------------------------------------------------------------------------- Exteriors
 #include "frontend/exterior/starbucks.map"							//* Starbucks map 
 #include "frontend/exterior/cityhall.map"							//* Opstina map
@@ -659,7 +660,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/egypt_street.map"						//* Egypt Glavna Ulica
 #include "frontend/exterior/egypt_decorations.map"					//* Egypt Ukrasi
 #include "frontend/exterior/egypt_pump.map"							//* Egypt Pumpa
-
+*/
 //------------------------------------------------------------------------------------------------------------------- Interiors
 #include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
 #include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
@@ -673,6 +674,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
 // #include "frontend/interior/login_map.map"							//* Login Soba Mapa
+/*
 #include "frontend/interior/levis-int.map"							//* Levis (12)
 #include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
 #include "frontend/exterior/train_tut.map"						    //* Egypt Hotel (14)
@@ -685,7 +687,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
-
+*/
 //-------------------------------------------------------------------------------------------------------- Jobs
 //#include "backend/jobs/job_main.job" 								//* Dinamicni poslovi - Credits : job-framework
 

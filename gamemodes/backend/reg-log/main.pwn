@@ -186,7 +186,7 @@ new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 
 
 hook OnPlayerConnect(playerid)
-{
+{	
 	pLoginAttempts[playerid] = 0;
 	pSelectionType[playerid] = INVALID_PLAYER_SELECTION;
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_CONNECTED;
@@ -562,6 +562,7 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	
 	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
+	TogglePlayerTextDraw(playerid, true);
 	SpawnPlayer(playerid);
 
 	return 1;
@@ -864,10 +865,20 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	SetPlayerInterior(playerid, 6);
 					
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
+	TogglePlayerTextDraw(playerid, true);
 	SpawnPlayer(playerid);
 	return;
 }
 
+/*
+hook OnPlayerSpawned(playerid)
+{
+	if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
+		TogglePlayerTextDraw(playerid, true);
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+*/
 hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 {
 	if(pSelectionType[playerid] == PLAYER_SELECTION_SKIN) 

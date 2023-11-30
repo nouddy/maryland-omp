@@ -27,7 +27,7 @@ stock IzborSkinaTextDraws(playerid, bool:show)
         for(new i; i < 9; i++) 
         {
             PlayerTextDrawHide( playerid, ChooseSkin_PTD[ playerid ][ i ] );
-            PlayerTextDrawDestroy( playerid, ChooseSkin_PTD[ playerid ][ i ] );
+            ( playerid, ChooseSkin_PTD[ playerid ][ i ] );
             ChooseSkin_PTD[ playerid ][ i ] = PlayerText:INVALID_TEXT_DRAW;
         }
 

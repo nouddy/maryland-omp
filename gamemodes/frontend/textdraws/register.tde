@@ -761,7 +761,7 @@ stock ResetPlayerRegisterTextDraw(playerid)
 {
     for(new i = 0; i < sizeof(pRegisterTD[]); i++)
     { 
-        PlayerTextDrawDestroy(playerid, pRegisterTD[playerid][i]);
+        //PlayerTextDrawDestroy(playerid, pRegisterTD[playerid][i]);
         pRegisterTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
 }

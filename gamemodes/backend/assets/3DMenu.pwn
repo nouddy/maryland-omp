@@ -76,10 +76,18 @@ stock Create3DMenu(Float:x,Float:y,Float:z,Float:rotation,boxes,playerid)
 	            }
 			}			
 			MenuInfo[i][IsExist] = true;
+
+			Streamer_UpdateEx(playerid, x, y, z);
+			SetTimerEx("Delay3DMenuUpdate", 1000, false, "dfff", playerid, x, y, z);
 			return i;
 		}
 	}
 	return INVALID_3D_MENU;
+}
+forward Delay3DMenuUpdate(playerid, Float:x,Float:y,Float:z);
+public Delay3DMenuUpdate(playerid, Float:x,Float:y,Float:z)
+{
+	Streamer_UpdateEx(playerid, x, y, z);
 }
 
 stock bool:SetBoxText(MenuID,box, const text[],materialsize, const fontface[],fontsize,bold,fontcolor,backcolor,textalignment)

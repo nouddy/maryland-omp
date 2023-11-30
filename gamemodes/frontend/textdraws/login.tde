@@ -887,7 +887,7 @@ stock ResetPlayerLoginTextDraw(playerid)
 {
     for(new i = 0; i < sizeof(pLoginTD[]); i++)
     {
-        PlayerTextDrawDestroy(playerid, pLoginTD[playerid][i]);
+        //PlayerTextDrawDestroy(playerid, pLoginTD[playerid][i]);
         pLoginTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
 }
