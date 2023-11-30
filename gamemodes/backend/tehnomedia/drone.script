@@ -68,7 +68,8 @@ timer dronedestroy[30000](playerid)
 		PlayerElectronic[playerid][eBatteryItem]--;
 		SendClientMessage(playerid, -1, ""c_server"koriscenje » "c_white"Ispraznila ti se jedna baterija nastavi da se vozis ili kucaj '/dron' da prekines voznju.");
 
-        SaveElectronic(playerid);SavePlayer(playerid);
+        SaveElectronic(playerid);
+		SavePlayer(playerid);
 
 		defer dronedestroy(playerid);
 	}

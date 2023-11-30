@@ -221,8 +221,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 					SetPlayerPos(playerid, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2]);
 					SetPlayerInterior(playerid, house_Int[i]);
 					SetPlayerVirtualWorld(playerid, house_ID[i]);
-
-					LoadObjectsForPlayer(playerid);
 				}
 
 				else return GameTextForPlayer(playerid, "~R~LOCKED!", 4000, 3);
@@ -233,8 +231,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 				SetPlayerPos(playerid, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]);
 				SetPlayerInterior(playerid, 0);
 				SetPlayerVirtualWorld(playerid, 0);
-
-				LoadObjectsForPlayer(playerid);
 			}
 		}
 	}

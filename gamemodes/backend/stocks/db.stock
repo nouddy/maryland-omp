@@ -91,8 +91,7 @@ stock SavePlayer(playerid)
     if(PlayerLogged[playerid] == true)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts` SET `Age` = '%d', `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
-			PlayerInfo[playerid][Age],
+		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts`, `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
             PlayerInfo[playerid][Staff],
             ReturnDate(),
 			PlayerInfo[playerid][SQLID]);

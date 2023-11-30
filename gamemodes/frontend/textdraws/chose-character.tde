@@ -1,0 +1,499 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+static PlayerText:CharacterSelectMainTDs[MAX_PLAYERS][4];
+static PlayerText:CharacterSelectCharacter[MAX_PLAYERS][3][19];
+static CharacterSelectButton[MAX_PLAYERS][3][eCharacterCreateButton];
+
+
+
+
+hook OnPlayerConnect(playerid)
+{
+    ResetPlayerChoseCharacterTextDraw(playerid);
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+{
+    //Check if player is on character creation, if not continue
+    if(CharacterSelectMainTDs[playerid][0] == INVALID_PLAYER_TEXT_DRAW ) return Y_HOOKS_CONTINUE_RETURN_1;
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+            if(CharacterSelectButton[playerid][i][eCharacterCreateButton:j] == _:playertextid)
+            {
+                CallLocalFunction("OnPlayerClickCharacterSelectTextDraw", "ddd", playerid, i, j);
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock ResetPlayerChoseCharacterTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(CharacterSelectMainTDs[]); i++)
+        CharacterSelectMainTDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+
+    for(new characterid = 0; characterid < sizeof(CharacterSelectCharacter[]); characterid++)
+        for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+            CharacterSelectCharacter[playerid][characterid][i] = INVALID_PLAYER_TEXT_DRAW;
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+            CharacterSelectButton[playerid][i][eCharacterCreateButton:j] = _:INVALID_PLAYER_TEXT_DRAW;
+}
+
+
+stock DestroyPlayerChoseCharacterTextDraw(playerid, characterid)
+{
+    for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+    {
+        if(CharacterSelectCharacter[playerid][characterid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, CharacterSelectCharacter[playerid][characterid][i]);
+        CharacterSelectCharacter[playerid][characterid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[][]); i++)
+    {
+        if(CharacterSelectButton[playerid][characterid][eCharacterCreateButton:i] == _:INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, PlayerText:CharacterSelectButton[playerid][characterid][eCharacterCreateButton:i]);
+        CharacterSelectButton[playerid][characterid][eCharacterCreateButton:i] = _:INVALID_PLAYER_TEXT_DRAW;
+    }
+}
+
+
+stock DestroyPlayerChoseCharacterTextDraws(playerid)
+{
+    for(new i = 0; i < sizeof(CharacterSelectMainTDs[]); i++)
+    {
+        if(CharacterSelectMainTDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, CharacterSelectMainTDs[playerid][i]);
+        CharacterSelectMainTDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    for(new characterid = 0; characterid < sizeof(CharacterSelectCharacter[]); characterid++)
+    {
+        DestroyPlayerChoseCharacterTextDraw(playerid, characterid);        
+    }
+    
+
+    /*
+    for(new characterid = 0; characterid < sizeof(CharacterSelectCharacter[]); characterid++)
+    {
+        for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+        {
+            if(CharacterSelectCharacter[playerid][characterid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawDestroy(playerid, CharacterSelectCharacter[playerid][characterid][i]);
+            CharacterSelectCharacter[playerid][characterid][i] = INVALID_PLAYER_TEXT_DRAW;
+        }
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+    {
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+        {
+            if(CharacterSelectButton[playerid][i][eCharacterCreateButton:j] == _:INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawDestroy(playerid, PlayerText:CharacterSelectButton[playerid][i][eCharacterCreateButton:j]);
+            CharacterSelectButton[playerid][i][eCharacterCreateButton:j] = _:INVALID_PLAYER_TEXT_DRAW;
+        }
+    }
+    */
+}
+
+stock ShowPlayerChoseCharacterTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(CharacterSelectMainTDs[]); i++)
+    {
+        if( CharacterSelectMainTDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawShow(playerid, CharacterSelectMainTDs[playerid][i]);
+    }
+        
+    for(new characterid = 0; characterid < sizeof(CharacterSelectCharacter[]); characterid++)
+    {
+        for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+        {
+            if( CharacterSelectCharacter[playerid][characterid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawShow(playerid, CharacterSelectCharacter[playerid][characterid][i]);
+        }
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+    {
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+        {
+            if(CharacterSelectButton[playerid][i][eCharacterCreateButton:j] == _:INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawShow(playerid, PlayerText:CharacterSelectButton[playerid][i][eCharacterCreateButton:j]);
+        }
+    }
+}
+
+stock HidePlayerChoseCharacterTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(CharacterSelectMainTDs[]); i++)
+    {
+        if( CharacterSelectMainTDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawHide(playerid, CharacterSelectMainTDs[playerid][i]);
+    }
+
+    for(new characterid = 0; characterid < sizeof(CharacterSelectCharacter[]); characterid++)
+    {
+        for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+        {
+            if( CharacterSelectCharacter[playerid][characterid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawHide(playerid, CharacterSelectCharacter[playerid][characterid][i]);
+        }
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+    {
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+        {
+            if(CharacterSelectButton[playerid][i][eCharacterCreateButton:j] = _:INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawHide(playerid, PlayerText:CharacterSelectButton[playerid][i][eCharacterCreateButton:j]);
+        }
+    }
+}
+
+stock CreatePlayerChoseCharacterTextDraw(playerid, characterid, skin = -1, const characterName[] = "", eGender:gender = GENDER_MALE, age = 0, const job[] = "", const stateName[] = "", lastLogin = 0)
+{
+    //Kosa crta
+    CharacterSelectCharacter[playerid][characterid][0] = CreatePlayerTextDraw(playerid, 142.933364 + (174.36 * characterid), 248.333343, "");//X += 174.36
+    PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][0], 57.000000, 106.000000);
+    PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][0], 910778367);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][0], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][0], -256);
+    PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][0], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][0], false);
+    PlayerTextDrawSetPreviewModel(playerid, CharacterSelectCharacter[playerid][characterid][0], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, CharacterSelectCharacter[playerid][characterid][0], 188.000000, 158.000000, 360.000000, 0.400000);
+
+    //Kosa crta
+    CharacterSelectCharacter[playerid][characterid][1] = CreatePlayerTextDraw(playerid, 86.333328 + (174.36 * characterid), 248.333343, "");// += 174.32
+    PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][1], 57.000000, 106.000000);
+    PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][1], 910778367);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][1], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][1], -256);
+    PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][1], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][1], false);
+    PlayerTextDrawSetPreviewModel(playerid, CharacterSelectCharacter[playerid][characterid][1], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, CharacterSelectCharacter[playerid][characterid][1], 188.000000, 202.000000, 360.000000, 0.400000);
+
+    CharacterSelectCharacter[playerid][characterid][2] = CreatePlayerTextDraw(playerid, 86.333328 + (174.36 * characterid), 160.133392, "LD_SPAC:white");
+    PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][2], 113.620132, 91.000000);
+    PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][2], 910778367);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][2], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][2], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][2], false);
+
+    new tmpStr[128];
+    for(new i = 0; i < sizeof(tmpStr) && i < characterid+1; i++)
+    {
+        tmpStr[i] = ']';
+    }
+
+    CharacterSelectCharacter[playerid][characterid][3] = CreatePlayerTextDraw(playerid, 144.333358 + (174.36 * characterid), 146.859298, tmpStr);
+    PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][3], 0.179333, 0.757925);
+    PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][3], TEXT_DRAW_ALIGN_CENTRE);
+    PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][3], -1);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][3], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][3], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][3], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][3], true);
+
+
+    if(skin != -1)
+    {
+        //Skin
+        CharacterSelectCharacter[playerid][characterid][4] = CreatePlayerTextDraw(playerid, 98.333305 + (174.36 * characterid), 170.348144, "");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][4], 90.000000, 90.000000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][4], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][4], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][4], -256);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][4], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][4], false);
+        PlayerTextDrawSetPreviewModel(playerid, CharacterSelectCharacter[playerid][characterid][4], skin);
+        PlayerTextDrawSetPreviewRot(playerid, CharacterSelectCharacter[playerid][characterid][4], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        //Preko skina ispod texta
+        CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER] = CreatePlayerTextDraw(playerid, 116.333236 + (174.36 * characterid), 190.244400, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 55.000000, 77.000000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 910778367);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], false);
+
+        //Krug za skin
+        CharacterSelectCharacter[playerid][characterid][6] = CreatePlayerTextDraw(playerid, 132.100021 + (174.36 * characterid), 172.122238, "");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][6], 23.000000, 22.000000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][6], -196);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][6], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][6], -256);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][6], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][6], false);
+        PlayerTextDrawSetPreviewModel(playerid, CharacterSelectCharacter[playerid][characterid][6], 1316);
+        PlayerTextDrawSetPreviewRot(playerid, CharacterSelectCharacter[playerid][characterid][6], 90.000000, 0.000000, 0.000000, 1.000000);
+
+
+
+        format(tmpStr, sizeof(tmpStr), "#_%s", age);
+        CharacterSelectCharacter[playerid][characterid][7] = CreatePlayerTextDraw(playerid, 143.666595 + (174.36 * characterid), 196.222198, characterName);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][7], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][7], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][7], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][7], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][7], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][7], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][7], true);
+
+        format(tmpStr, sizeof(tmpStr), "-_%s", GetGenderString(gender));
+        CharacterSelectCharacter[playerid][characterid][8] = CreatePlayerTextDraw(playerid, 142.666534 + (174.36 * characterid), 213.229614, tmpStr);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][8], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][8], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][8], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][8], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][8], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][8], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][8], true);
+
+        //Age
+        format(tmpStr, sizeof(tmpStr), "-_Age: %d", age);
+        CharacterSelectCharacter[playerid][characterid][9] = CreatePlayerTextDraw(playerid, 142.666549 + (174.36 * characterid), 221.525909, tmpStr);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][9], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][9], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][9], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][9], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][9], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][9], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][9], true);
+
+        //Employment/job
+        format(tmpStr, sizeof(tmpStr), "-_ %s", job);
+        CharacterSelectCharacter[playerid][characterid][10] = CreatePlayerTextDraw(playerid, 141.999893 + (174.36 * characterid), 230.651840, tmpStr);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][10], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][10], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][10], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][10], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][10], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][10], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][10], true);
+
+        //State
+        format(tmpStr, sizeof(tmpStr), "-_State: %s", stateName);        
+        CharacterSelectCharacter[playerid][characterid][11] = CreatePlayerTextDraw(playerid, 141.333267 + (174.36 * characterid), 240.607376, tmpStr);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][11], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][11], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][11], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][11], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][11], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][11], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][11], true);
+
+
+        new year, month, day, hour, minute, second;
+        if(lastLogin != 0)
+        {
+            // printf("Last login timestamp %d | %d-%d-%d  %d:%d:%d", lastLogin, year, month, day, hour, minute, second);
+            cvttimestamp(lastLogin, year, month, day, hour, minute, second);
+            format(tmpStr, sizeof(tmpStr), "-_Last_Login:_%d-%d-%d__%d:%d:%d", year, month, day, hour, minute, second); 
+        }
+        else tmpStr = "-_Last_Login:_Never";
+        CharacterSelectCharacter[playerid][characterid][12] = CreatePlayerTextDraw(playerid, 140.999923 + (174.36 * characterid), 250.977737, tmpStr);
+        PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][12], 0.130999, 0.608592);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][12], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][12], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][12], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][12], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][12], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][12], true);
+
+
+        CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER] = CreatePlayerTextDraw(playerid, 142.666671 + (174.36 * characterid), 277.525787, "CHOOSE");
+        PlayerTextDrawLetterSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], 0.149000, 0.770370);
+        PlayerTextDrawAlignment(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], true);
+        PlayerTextDrawSetSelectable(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], true);
+        PlayerTextDrawTextSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CHOSE_CHARACTER], 5.0, 40.0);
+
+
+        CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER] = CreatePlayerTextDraw(playerid, 142.666610 + (174.36 * characterid), 295.777679, "DELETE");
+        PlayerTextDrawLetterSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], 0.149000, 0.770370);
+        PlayerTextDrawAlignment(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], true);
+        PlayerTextDrawSetSelectable(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], true);
+        PlayerTextDrawTextSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_DELETE_CHARACTER], 5.0, 40.0);
+
+
+        CharacterSelectCharacter[playerid][characterid][15] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 287.325988, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][15], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][15], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][15], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][15], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][15], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][15], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][15], false);
+
+        CharacterSelectCharacter[playerid][characterid][16] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 275.296295, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][16], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][16], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][16], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][16], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][16], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][16], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][16], false);
+
+        CharacterSelectCharacter[playerid][characterid][17] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 292.718444, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][17], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][17], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][17], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][17], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][17], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][17], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][17], false);
+
+        CharacterSelectCharacter[playerid][characterid][18] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 305.577789, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][18], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][18], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][18], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][18], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][18], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][18], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][18], false);
+    
+    }
+    else
+    {
+/*
+        CharacterSelectCharacter[playerid][characterid][17] = CreatePlayerTextDraw(playerid, 468.333160, 190.429626, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][17], 55.000000, 77.000000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][17], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][17], 910778367);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][17], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][17], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][17], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][17], false);
+*/
+
+
+
+
+        //Quesation mark as there is no skin
+        //CharacterSelectCharacter[playerid][characterid][4] = CreatePlayerTextDraw(playerid, 479.333190, 215.562957, "");
+        CharacterSelectCharacter[playerid][characterid][4] = CreatePlayerTextDraw(playerid, 122.61 + (174.36 * characterid), 215.562957, "");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][4], 41.000000, 36.000000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][4], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][4], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][4], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][4], -256);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][4], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][4], false);
+        PlayerTextDrawSetPreviewModel(playerid, CharacterSelectCharacter[playerid][characterid][4], 18631);
+        PlayerTextDrawSetPreviewRot(playerid, CharacterSelectCharacter[playerid][characterid][4], 0.000000, 0.000000, 0.000000, 1.000000);
+
+
+
+
+        //Create Button
+        CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER] = CreatePlayerTextDraw(playerid, 142.666671 + (174.36 * characterid), 277.525787, "CREATE");
+        PlayerTextDrawLetterSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 0.149000, 0.770370);
+        PlayerTextDrawAlignment(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], -1);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], true);
+        PlayerTextDrawSetSelectable(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], true);
+        PlayerTextDrawTextSize(playerid, CharacterSelectButton[playerid][characterid][BUTTON_CREATE_CHARACTER], 5.0, 40.0);
+
+
+
+        CharacterSelectCharacter[playerid][characterid][6] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 275.296295, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][6], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][6], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][6], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][6], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][6], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][6], false);
+
+        CharacterSelectCharacter[playerid][characterid][7] = CreatePlayerTextDraw(playerid, 125.333328 + (174.36 * characterid), 287.325988, "LD_SPAC:white");
+        PlayerTextDrawTextSize(playerid, CharacterSelectCharacter[playerid][characterid][7], 34.000000, -0.540000);
+        PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][7], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][7], -164);
+        PlayerTextDrawSetShadow(playerid, CharacterSelectCharacter[playerid][characterid][7], false);
+        PlayerTextDrawBackgroundColour(playerid, CharacterSelectCharacter[playerid][characterid][7], 255);
+        PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][7], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][7], false);
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectCharacter[][]); i++)
+    {
+        if(CharacterSelectCharacter[playerid][characterid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawShow(playerid, CharacterSelectCharacter[playerid][characterid][i]);
+    }
+
+    for(new i = 0; i < sizeof(CharacterSelectButton[]); i++)
+    {
+        for(new j = 0; j < sizeof(CharacterSelectButton[][]); j++)
+        {
+            if(CharacterSelectButton[playerid][i][eCharacterCreateButton:j] == _:INVALID_PLAYER_TEXT_DRAW) continue;
+            PlayerTextDrawShow(playerid, PlayerText:CharacterSelectButton[playerid][i][eCharacterCreateButton:j]);
+        }
+    }
+}
+
+
+stock CreatePlayerChoseCharacterMainTextDraw(playerid)
+{
+
+    CharacterSelectMainTDs[playerid][0] = CreatePlayerTextDraw(playerid, -325.000091, 42.585174, "particle:lamp_shad_64");
+    PlayerTextDrawTextSize(playerid, CharacterSelectMainTDs[playerid][0], 1349.000000, 619.000000);
+    PlayerTextDrawAlignment(playerid, CharacterSelectMainTDs[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, CharacterSelectMainTDs[playerid][0], 2040126719);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectMainTDs[playerid][0], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectMainTDs[playerid][0], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectMainTDs[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectMainTDs[playerid][0], false);
+
+    CharacterSelectMainTDs[playerid][1] = CreatePlayerTextDraw(playerid, -327.000091, 448.274200, "particle:lamp_shad_64");
+    PlayerTextDrawTextSize(playerid, CharacterSelectMainTDs[playerid][1], 1323.000000, -819.000000);
+    PlayerTextDrawAlignment(playerid, CharacterSelectMainTDs[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, CharacterSelectMainTDs[playerid][1], 1872545535);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectMainTDs[playerid][1], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectMainTDs[playerid][1], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectMainTDs[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectMainTDs[playerid][1], false);
+
+
+    CharacterSelectMainTDs[playerid][2] = CreatePlayerTextDraw(playerid, 317.333190, 426.029754, "M_A_R_Y_L_A_N_D");
+    PlayerTextDrawLetterSize(playerid, CharacterSelectMainTDs[playerid][2], 0.130999, 0.608592);
+    PlayerTextDrawAlignment(playerid, CharacterSelectMainTDs[playerid][2], TEXT_DRAW_ALIGN_CENTRE);
+    PlayerTextDrawColour(playerid, CharacterSelectMainTDs[playerid][2], -1);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectMainTDs[playerid][2], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectMainTDs[playerid][2], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectMainTDs[playerid][2], TEXT_DRAW_FONT_1);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectMainTDs[playerid][2], true);
+
+    CharacterSelectMainTDs[playerid][3] = CreatePlayerTextDraw(playerid, 315.666473, 433.496429, "CHOOSE_YOUR_CHARACTER");
+    PlayerTextDrawLetterSize(playerid, CharacterSelectMainTDs[playerid][3], 0.130999, 0.608592);
+    PlayerTextDrawAlignment(playerid, CharacterSelectMainTDs[playerid][3], TEXT_DRAW_ALIGN_CENTRE);
+    PlayerTextDrawColour(playerid, CharacterSelectMainTDs[playerid][3], -1);
+    PlayerTextDrawSetShadow(playerid, CharacterSelectMainTDs[playerid][3], false);
+    PlayerTextDrawBackgroundColour(playerid, CharacterSelectMainTDs[playerid][3], 255);
+    PlayerTextDrawFont(playerid, CharacterSelectMainTDs[playerid][3], TEXT_DRAW_FONT_1);
+    PlayerTextDrawSetProportional(playerid, CharacterSelectMainTDs[playerid][3], true);
+}

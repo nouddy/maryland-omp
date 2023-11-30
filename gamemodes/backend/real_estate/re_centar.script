@@ -275,8 +275,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                     e_IN_BUSINESS_CENTRE[playerid] = true;
 
-                    LoadObjectsForPlayer(playerid);
-
                     return Y_HOOKS_BREAK_RETURN_1;
 
                 }
@@ -289,8 +287,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 SetPlayerVirtualWorld(playerid, 0);
 
                 e_IN_BUSINESS_CENTRE[playerid] = false;
-
-                LoadObjectsForPlayer(playerid);
 
                 return Y_HOOKS_BREAK_RETURN_1;
             }
@@ -380,8 +376,6 @@ YCMD:accept(playerid, params[], help)
             SetPlayerPos(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterInt][0], BCenterData[i][re_BCenterInt][1], BCenterData[i][re_BCenterInt][2]);
             SetPlayerInterior(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterInterior]);
             SetPlayerVirtualWorld(e_BUZZER_ID[playerid], BCenterData[i][re_BCenterVirtualWorld]);
-
-            LoadObjectsForPlayer(e_BUZZER_ID[playerid]);
 
             break;
         }

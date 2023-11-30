@@ -79,7 +79,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     {
         if(IsPlayerInRangeOfPoint(playerid, 3.0, 1482.6442,-1805.5509,18.7957) || IsPlayerInRangeOfPoint(playerid, 3.0, 1451.9034,-1805.8535,13.5661)) //OpstinaLS
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 5);
             SetPlayerVirtualWorld(playerid, 5);
             SetPlayerPos(playerid, -2304.2190,1253.0327,-31.6301);
@@ -87,7 +86,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, -2304.2190,1253.0327,-31.6301)) //OpstinaLS Izlaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1482.6442,-1805.5509,18.7957);
@@ -95,7 +93,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1424.9067,1587.1135,19.1489) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 6)
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 838.5801,-1345.9092,7.1788);
@@ -103,7 +100,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 838.5801,-1345.9092,7.1788) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0)
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 6);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1424.9067,1587.1135,19.1489);
@@ -111,13 +107,11 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1676.1896,-1634.7426,14.2265) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Tehnomedia ulaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerPos(playerid, 1674.1040, -1634.8239, 14.2263);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1674.1040, -1634.8239, 14.2263)) // Tehnomedia ulaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1676.1896,-1634.7426,14.2265);
@@ -126,14 +120,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         // Hotel Interior
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1785.1909,-1296.4972,13.3967) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Hotel ulaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerVirtualWorld(playerid, 7);
             SetPlayerPos(playerid, 1786.6508,-1300.3116,54.9062);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1786.6508,-1300.3116,54.9062) && GetPlayerVirtualWorld(playerid) == 7) // Hotel izlaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 1785.1909,-1296.4972,13.3967);
@@ -142,14 +134,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         // Bank H4RBOR Interior
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 978.1812, -1188.2797, 23.8752) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) //Ulaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerVirtualWorld(playerid, 10);
             SetPlayerPos(playerid, 1201.1162, 2565.0740, -21.6386);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerVirtualWorld(playerid) == 10) // izlaz
         {
-            LoadObjectsForPlayer(playerid);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 980.5701, -1190.3965, 23.8752);

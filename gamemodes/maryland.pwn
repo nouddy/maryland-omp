@@ -485,10 +485,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/end/do-not-look.temp" 
 
 //-------------------------------------------------------------------------------------------------------- Main
-#include "backend/main/main.core"								//* Log/Reg
-
-//-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/main/end/do-not-look.temp"
+#include "backend/reg-log/main.pwn"								//* Register and login
 
 //-------------------------------------------------------------------------------------------------------- Documentation
 #include "backend/documentation/playerdocuments.script"			//* Dokumenta
@@ -501,9 +498,9 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/vehicle.script"							//* Vozila paljenje gasenje itd
 #include "backend/vehicle/servis.script"							//* -- prebacen u sql (ceka se mapa i da se doda probne table tehnicki i te finese)
 #include "backend/vehicle/speedometer.script"						//* Brzinomer
-#include "backend/vehicle/fuel.pwn"						//* Brzinomer
+#include "backend/vehicle/fuel.pwn"									//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
-#include "backend/vehicle/driving_school.script"						//* Polaganje za dozvole.
+#include "backend/vehicle/driving_school.script"					//* Polaganje za dozvole.
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.temp"
@@ -612,9 +609,12 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Textdraws
 #include "frontend/textdraws/main.tde"								//* Glavni tdovi
-#include "frontend/textdraws/login.tde"								//* Login tdovi
+
 #include "frontend/textdraws/register.tde"							//* Register tdovi
-#include "frontend/textdraws/choose_skin.tde"						//* Izborskina tdovi na registeru
+#include "frontend/textdraws/login.tde"								//* Login tdovi
+
+#include "frontend/textdraws/chose-character.tde"					//* Create or chose character TextDraws
+
 #include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
 
 //-------------------------------------------------------------------------------------------------------- Exteriors
@@ -661,7 +661,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/egypt_pump.map"							//* Egypt Pumpa
 
 //------------------------------------------------------------------------------------------------------------------- Interiors
-//#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
+#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
 #include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
 #include "frontend/interior/sewers.map"								//* Kanalizacija map (interior 3)
 #include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
@@ -672,7 +672,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
-#include "frontend/interior/login_map.map"							//* Login Soba Mapa 
+// #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 #include "frontend/interior/levis-int.map"							//* Levis (12)
 #include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
 #include "frontend/exterior/train_tut.map"						    //* Egypt Hotel (14)

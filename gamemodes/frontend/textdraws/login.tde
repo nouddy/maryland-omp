@@ -1,875 +1,893 @@
 
-stock CreateLoginTextDraws(playerid)
+
+new static PlayerText:pLoginTD[MAX_PLAYERS][85];
+
+stock CreatePlayerLoginTextDraws(playerid)
 {
-    Login_TD[playerid][0] = CreatePlayerTextDraw(playerid, 223.166671, 77.966613, "ld_spac:white");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][0], 190.980010, 240.538604);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][0], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][0], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][0], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][0], false);
-
-    Login_TD[playerid][1] = CreatePlayerTextDraw(playerid, 220.666595, 310.855499, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][1], 15.000000, 17.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][1], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][1], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][1], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][1], false);
-
-    Login_TD[playerid][2] = CreatePlayerTextDraw(playerid, 401.666534, 310.855499, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][2], 15.000000, 17.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][2], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][2], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][2], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][2], false);
-
-    Login_TD[playerid][3] = CreatePlayerTextDraw(playerid, 401.666473, 69.848190, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][3], 15.000000, 17.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][3], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][3], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][3], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][3], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][3], false);
-
-    Login_TD[playerid][4] = CreatePlayerTextDraw(playerid, 220.333114, 69.848190, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][4], 15.000000, 17.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][4], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][4], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][4], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][4], false);
-
-    Login_TD[playerid][5] = CreatePlayerTextDraw(playerid, 227.833312, 72.774032, "ld_spac:white");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][5], 181.000000, 252.279846);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][5], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][5], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][5], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][5], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][5], false);
-
-    Login_TD[playerid][6] = CreatePlayerTextDraw(playerid, 227.666702, 102.733322, "splash1:splash1");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][6], 182.000000, 87.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][6], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][6], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][6], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][6], false);
-
-    Login_TD[playerid][7] = CreatePlayerTextDraw(playerid, 295.333251, 271.088836, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][7], 61.000000, 53.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][7], -30);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][7], 0xFFFFFF00);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][7], 0);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][7], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][7], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][7], 17030);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][7], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][8] = CreatePlayerTextDraw(playerid, 227.433227, 102.818511, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][8], 102.000000, 87.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][8], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][8], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][8], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][8], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][8], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][8], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][8], 170.000000, 64.000000, 0.000000, 0.400000);
-
-    Login_TD[playerid][9] = CreatePlayerTextDraw(playerid, 331.766723, 102.818511, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][9], 102.000000, 87.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][9], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][9], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][9], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][9], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][9], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][9], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][9], 98.000000, 64.000000, 0.000000, 0.400000);
-
-    Login_TD[playerid][10] = CreatePlayerTextDraw(playerid, 325.099975, 98.670303, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][10], 90.000000, 104.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][10], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][10], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][10], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][10], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][10], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][10], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][10], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][10], 360.000000, 64.000000, 0.000000, 0.300000);
-
-    Login_TD[playerid][11] = CreatePlayerTextDraw(playerid, 283.766601, 98.670303, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][11], 90.000000, 104.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][11], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][11], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][11], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][11], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][11], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][11], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][11], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][11], 360.000000, 64.000000, 0.000000, 0.300000);
-
-    Login_TD[playerid][12] = CreatePlayerTextDraw(playerid, 240.766632, 98.670288, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][12], 76.000000, 80.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][12], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][12], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][12], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][12], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][12], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][12], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][12], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][12], 360.000000, 64.000000, 0.000000, 0.300000);
-
-    Login_TD[playerid][13] = CreatePlayerTextDraw(playerid, 397.433135, 99.499893, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][13], 16.000000, 38.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][13], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][13], 404497663);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][13], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][13], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][13], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][13], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][13], 1316);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][13], 360.000000, 64.000000, 0.000000, 0.400000);
-
-    Login_TD[playerid][14] = CreatePlayerTextDraw(playerid, 227.333358, 251.651794, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][14], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][14], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][14], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][14], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][14], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][14], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][14], false);
-
-    Login_TD[playerid][15] = CreatePlayerTextDraw(playerid, 231.667083, 102.059310, "L");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][15], 0.127330, 0.703998);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][15], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][15], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][15], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][15], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][15], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][15], true);
-
-    Login_TD[playerid][16] = CreatePlayerTextDraw(playerid, 278.333740, 273.548156, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][16], 43.000000, 53.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][16], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][16], -48);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][16], 0xFFFFFF00);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][16], 0);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][16], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][16], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][16], 17030);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][16], 360.000000, 360.000000, 90.000000, 1.000000);
-
-    Login_TD[playerid][17] = CreatePlayerTextDraw(playerid, 294.333282, 316.933197, "all_rights_reserved");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][17], 0.094999, 0.554665);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][17], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][17], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][17], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][17], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][17], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][17], true);
-
-    Login_TD[playerid][18] = CreatePlayerTextDraw(playerid, 311.999969, 311.955444, "2023");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][18], 0.094999, 0.554665);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][18], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][18], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][18], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][18], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][18], true);
-
-    Login_TD[playerid][19] = CreatePlayerTextDraw(playerid, 240.667129, 119.896461, "O");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][19], 0.127330, 0.703998);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][19], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][19], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][19], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][19], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][19], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][19], true);
-
-    Login_TD[playerid][20] = CreatePlayerTextDraw(playerid, 252.333694, 139.807556, "G");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][20], 0.127330, 0.703998);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][20], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][20], -4);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][20], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][20], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][20], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][20], true);
-
-    Login_TD[playerid][21] = CreatePlayerTextDraw(playerid, 264.666961, 160.133483, "I");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][21], 0.127330, 0.703998);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][21], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][21], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][21], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][21], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][21], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][21], true);
-
-    Login_TD[playerid][22] = CreatePlayerTextDraw(playerid, 273.333679, 178.800125, "N");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][22], 0.127330, 0.703998);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][22], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][22], -6);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][22], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][22], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][22], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][22], true);
-
-    Login_TD[playerid][23] = CreatePlayerTextDraw(playerid, 300.399810, 303.848266, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][23], 19.000000, -24.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][23], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][23], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][23], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][23], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][23], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][23], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][23], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][23], 0.000000, 15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][24] = CreatePlayerTextDraw(playerid, 302.400054, 259.133361, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][24], 18.000000, 49.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][24], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][24], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][24], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][24], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][24], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][24], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][24], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][24], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][25] = CreatePlayerTextDraw(playerid, 302.199981, 301.848297, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][25], 17.000000, -20.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][25], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][25], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][25], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][25], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][25], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][25], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][25], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][25], 0.000000, 15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][26] = CreatePlayerTextDraw(playerid, 303.366363, 296.488952, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][26], 20.000000, -14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][26], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][26], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][26], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][26], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][26], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][26], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][26], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][26], 0.000000, -15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][27] = CreatePlayerTextDraw(playerid, 302.566436, 301.422241, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][27], 20.000000, -14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][27], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][27], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][27], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][27], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][27], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][27], 0.000000, -15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][28] = CreatePlayerTextDraw(playerid, 302.999725, 299.548187, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][28], 20.000000, -14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][28], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][28], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][28], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][28], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][28], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][28], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][28], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][28], 0.000000, -15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][29] = CreatePlayerTextDraw(playerid, 304.833160, 301.589019, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][29], 12.000000, -14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][29], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][29], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][29], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][29], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][29], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][29], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][29], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][29], 0.000000, 15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][30] = CreatePlayerTextDraw(playerid, 304.633331, 272.566802, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][30], 25.000000, 44.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][30], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][30], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][30], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][30], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][30], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][30], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][30], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][30], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][31] = CreatePlayerTextDraw(playerid, 315.099822, 304.063110, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][31], 19.000000, -24.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][31], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][31], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][31], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][31], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][31], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][31], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][31], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][31], 0.000000, -15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][32] = CreatePlayerTextDraw(playerid, 314.000030, 259.133361, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][32], 18.000000, 49.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][32], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][32], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][32], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][32], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][32], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][32], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][32], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][33] = CreatePlayerTextDraw(playerid, 314.966583, 302.822448, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][33], 17.000000, -20.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][33], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][33], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][33], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][33], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][33], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][33], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][33], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][33], 0.000000, -15.000000, -1.000000, 1.000000);
-
-    Login_TD[playerid][34] = CreatePlayerTextDraw(playerid, 310.366241, 296.359313, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][34], 21.000000, -13.060001);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][34], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][34], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][34], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][34], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][34], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][34], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][34], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][34], 0.000000, 15.000000, 180.000000, 1.000000);
-
-    Login_TD[playerid][35] = CreatePlayerTextDraw(playerid, 311.466217, 300.499969, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][35], 21.000000, -13.060001);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][35], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][35], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][35], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][35], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][35], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][35], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][35], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][35], 0.000000, 15.000000, 180.000000, 1.000000);
-
-    Login_TD[playerid][36] = CreatePlayerTextDraw(playerid, 310.066314, 299.870330, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][36], 21.000000, -13.060001);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][36], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][36], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][36], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][36], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][36], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][36], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][36], 1318);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][36], 0.000000, 15.000000, 180.000000, 1.000000);
-
-    Login_TD[playerid][37] = CreatePlayerTextDraw(playerid, 293.799865, 308.022399, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][37], 45.000000, -18.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][37], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][37], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][37], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][37], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][37], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][37], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][37], 2965);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][37], 90.000000, 0.000000, 90.000000, 1.000000);
-
-    Login_TD[playerid][38] = CreatePlayerTextDraw(playerid, 285.166687, 285.866821, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][38], 46.000000, 32.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][38], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][38], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][38], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][38], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][38], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][38], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][38], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][38], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][39] = CreatePlayerTextDraw(playerid, 302.966705, 285.737182, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][39], 46.000000, 32.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][39], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][39], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][39], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][39], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][39], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][39], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][39], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][39], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][40] = CreatePlayerTextDraw(playerid, 269.733245, 270.189025, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][40], 88.000000, 58.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][40], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][40], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][40], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][40], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][40], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][40], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][40], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][40], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][41] = CreatePlayerTextDraw(playerid, 276.133666, 270.189025, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][41], 88.000000, 58.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][41], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][41], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][41], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][41], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][41], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][41], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][41], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][41], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][42] = CreatePlayerTextDraw(playerid, 272.933776, 268.244537, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][42], 88.000000, 58.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][42], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][42], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][42], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][42], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][42], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][42], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][42], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][42], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][43] = CreatePlayerTextDraw(playerid, 310.399993, 301.740814, "LD_SPAC:white");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][43], 14.000000, 2.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][43], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][43], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][43], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][43], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][43], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][43], false);
-
-    Login_TD[playerid][44] = CreatePlayerTextDraw(playerid, 300.900054, 293.333587, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][44], 28.000000, 19.160003);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][44], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][44], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][44], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][44], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][44], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][44], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][44], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][44], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][45] = CreatePlayerTextDraw(playerid, 305.700347, 293.333587, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][45], 28.000000, 19.160003);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][45], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][45], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][45], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][45], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][45], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][45], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][45], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][45], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][46] = CreatePlayerTextDraw(playerid, 293.799865, 308.022399, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][46], 45.000000, -18.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][46], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][46], -120);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][46], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][46], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][46], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][46], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][46], 2965);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][46], 90.000000, 0.000000, 90.000000, 1.000000);
-
-    Login_TD[playerid][47] = CreatePlayerTextDraw(playerid, 296.200103, 352.877899, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][47], 42.000000, -93.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][47], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][47], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][47], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][47], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][47], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][47], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][47], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][47], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][48] = CreatePlayerTextDraw(playerid, 296.166778, 257.288909, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][48], 42.000000, 83.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][48], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][48], -1064116481);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][48], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][48], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][48], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][48], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][48], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][48], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][49] = CreatePlayerTextDraw(playerid, 312.333160, 289.848327, "V");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][49], 0.352665, 1.890370);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][49], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][49], -188);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][49], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][49], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][49], TEXT_DRAW_FONT_2);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][49], true);
-
-    Login_TD[playerid][50] = CreatePlayerTextDraw(playerid, 312.733489, 315.733520, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][50], 9.000000, -21.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][50], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][50], -188);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][50], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][50], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][50], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][50], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][50], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][50], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][51] = CreatePlayerTextDraw(playerid, 312.900238, 280.285308, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][51], 8.709993, 33.400100);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][51], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][51], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][51], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][51], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][51], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][51], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][51], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][51], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][52] = CreatePlayerTextDraw(playerid, 313.200225, 289.785186, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][52], 8.000000, 18.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][52], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][52], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][52], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][52], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][52], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][52], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][52], 19177);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][52], 180.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][53] = CreatePlayerTextDraw(playerid, 257.666656, 262.437011, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][53], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][53], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][53], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][53], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][53], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][53], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][53], false);
-
-    Login_TD[playerid][54] = CreatePlayerTextDraw(playerid, 274.333374, 264.511047, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][54], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][54], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][54], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][54], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][54], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][54], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][54], false);
-
-    Login_TD[playerid][55] = CreatePlayerTextDraw(playerid, 301.333404, 251.651794, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][55], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][55], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][55], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][55], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][55], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][55], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][55], false);
-
-    Login_TD[playerid][56] = CreatePlayerTextDraw(playerid, 326.666748, 251.651794, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][56], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][56], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][56], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][56], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][56], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][56], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][56], false);
-
-    Login_TD[playerid][57] = CreatePlayerTextDraw(playerid, 353.666778, 257.044433, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][57], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][57], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][57], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][57], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][57], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][57], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][57], false);
-
-    Login_TD[playerid][58] = CreatePlayerTextDraw(playerid, 379.000091, 251.651794, "ld_shtr:fstar");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][58], 28.000000, 34.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][58], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][58], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][58], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][58], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][58], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][58], false);
-
-    Login_TD[playerid][59] = CreatePlayerTextDraw(playerid, 229.333404, 265.340759, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][59], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][59], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][59], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][59], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][59], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][59], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][59], false);
-
-    Login_TD[playerid][60] = CreatePlayerTextDraw(playerid, 249.333282, 265.340789, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][60], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][60], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][60], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][60], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][60], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][60], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][60], false);
-
-    Login_TD[playerid][61] = CreatePlayerTextDraw(playerid, 307.333190, 265.340789, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][61], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][61], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][61], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][61], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][61], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][61], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][61], false);
-
-    Login_TD[playerid][62] = CreatePlayerTextDraw(playerid, 368.999816, 265.340789, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][62], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][62], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][62], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][62], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][62], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][62], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][62], false);
-
-    Login_TD[playerid][63] = CreatePlayerTextDraw(playerid, 355.999755, 261.192718, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][63], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][63], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][63], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][63], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][63], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][63], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][63], false);
-
-    Login_TD[playerid][64] = CreatePlayerTextDraw(playerid, 299.333038, 269.903839, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][64], 39.000000, -22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][64], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][64], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][64], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][64], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][64], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][64], false);
-
-    Login_TD[playerid][65] = CreatePlayerTextDraw(playerid, 221.333404, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][65], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][65], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][65], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][65], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][65], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][65], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][65], false);
-
-    Login_TD[playerid][66] = CreatePlayerTextDraw(playerid, 239.666732, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][66], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][66], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][66], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][66], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][66], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][66], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][66], false);
-
-    Login_TD[playerid][67] = CreatePlayerTextDraw(playerid, 261.666717, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][67], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][67], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][67], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][67], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][67], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][67], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][67], false);
-
-    Login_TD[playerid][68] = CreatePlayerTextDraw(playerid, 287.666748, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][68], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][68], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][68], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][68], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][68], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][68], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][68], false);
-
-    Login_TD[playerid][69] = CreatePlayerTextDraw(playerid, 312.333465, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][69], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][69], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][69], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][69], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][69], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][69], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][69], false);
-
-    Login_TD[playerid][70] = CreatePlayerTextDraw(playerid, 326.333465, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][70], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][70], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][70], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][70], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][70], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][70], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][70], false);
-
-    Login_TD[playerid][71] = CreatePlayerTextDraw(playerid, 350.666839, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][71], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][71], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][71], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][71], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][71], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][71], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][71], false);
-
-    Login_TD[playerid][72] = CreatePlayerTextDraw(playerid, 368.000152, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][72], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][72], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][72], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][72], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][72], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][72], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][72], false);
-
-    Login_TD[playerid][73] = CreatePlayerTextDraw(playerid, 374.333435, 311.385284, "particle:cloudmasked");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][73], 44.000000, 13.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][73], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][73], -128);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][73], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][73], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][73], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][73], false);
-
-    Login_TD[playerid][74] = CreatePlayerTextDraw(playerid, 243.000045, 283.592620, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][74], 18.000000, 20.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][74], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][74], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][74], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][74], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][74], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][74], false);
-
-    Login_TD[playerid][75] = CreatePlayerTextDraw(playerid, 245.333374, 291.059234, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][75], 32.000000, 16.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][75], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][75], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][75], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][75], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][75], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][75], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][75], 19622);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][75], 0.000000, 154.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][76] = CreatePlayerTextDraw(playerid, 226.666732, 291.888854, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][76], 32.000000, 16.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][76], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][76], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][76], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][76], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][76], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][76], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][76], 19622);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][76], 0.000000, 208.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][77] = CreatePlayerTextDraw(playerid, 237.333389, 294.377899, "ld_beat:chit");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][77], 29.000000, 28.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][77], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][77], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][77], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][77], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][77], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][77], false);
-
-    Login_TD[playerid][78] = CreatePlayerTextDraw(playerid, 250.999969, 286.651855, "._.");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][78], 0.139666, 0.728888);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][78], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][78], 255);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][78], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][78], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][78], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][78], true);
-
-    Login_TD[playerid][79] = CreatePlayerTextDraw(playerid, 252.999969, 297.437042, "/");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][79], 0.175666, -0.411851);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][79], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][79], -5963521);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][79], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][79], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][79], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][79], true);
-
-    Login_TD[playerid][80] = CreatePlayerTextDraw(playerid, 236.000045, 270.733306, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][80], 29.000000, 22.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][80], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][80], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][80], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][80], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][80], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][80], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][80], 11718);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][80], 0.000000, 191.000000, -60.000000, 1.000000);
-
-    Login_TD[playerid][81] = CreatePlayerTextDraw(playerid, 251.333282, 299.925903, ".~n~.~n~.");
-    PlayerTextDrawLetterSize(playerid, Login_TD[playerid][81], 0.127666, 0.558814);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][81], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][81], 255);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][81], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][81], 255);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][81], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][81], true);
-
-    Login_TD[playerid][82] = CreatePlayerTextDraw(playerid, 370.000152, 264.510986, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][82], 60.000000, 60.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][82], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][82], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][82], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][82], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][82], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][82], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][82], 19076);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][82], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][83] = CreatePlayerTextDraw(playerid, 380.333587, 304.748168, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][83], 13.000000, 14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][83], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][83], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][83], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][83], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][83], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][83], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][83], 19054);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][83], 0.000000, 0.000000, 0.000000, 1.000000);
-
-    Login_TD[playerid][84] = CreatePlayerTextDraw(playerid, 389.000274, 309.725952, "");
-    PlayerTextDrawTextSize(playerid, Login_TD[playerid][84], 13.000000, 14.000000);
-    PlayerTextDrawAlignment(playerid, Login_TD[playerid][84], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, Login_TD[playerid][84], -1);
-    PlayerTextDrawSetShadow(playerid, Login_TD[playerid][84], 0);
-    PlayerTextDrawBackgroundColour(playerid, Login_TD[playerid][84], -256);
-    PlayerTextDrawFont(playerid, Login_TD[playerid][84], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, Login_TD[playerid][84], false);
-    PlayerTextDrawSetPreviewModel(playerid, Login_TD[playerid][84], 19054);
-    PlayerTextDrawSetPreviewRot(playerid, Login_TD[playerid][84], 0.000000, 0.000000, 0.000000, 1.000000);
+    pLoginTD[playerid][0] = CreatePlayerTextDraw(playerid, 223.166671, 77.966613, "ld_spac:white");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][0], 190.980010, 240.538604);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][0], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][0], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][0], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][0], false);
+
+    pLoginTD[playerid][1] = CreatePlayerTextDraw(playerid, 220.666595, 310.855499, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][1], 15.000000, 17.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][1], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][1], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][1], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][1], false);
+
+    pLoginTD[playerid][2] = CreatePlayerTextDraw(playerid, 401.666534, 310.855499, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][2], 15.000000, 17.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][2], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][2], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][2], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][2], false);
+
+    pLoginTD[playerid][3] = CreatePlayerTextDraw(playerid, 401.666473, 69.848190, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][3], 15.000000, 17.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][3], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][3], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][3], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][3], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][3], false);
+
+    pLoginTD[playerid][4] = CreatePlayerTextDraw(playerid, 220.333114, 69.848190, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][4], 15.000000, 17.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][4], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][4], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][4], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][4], false);
+
+    pLoginTD[playerid][5] = CreatePlayerTextDraw(playerid, 227.833312, 72.774032, "ld_spac:white");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][5], 181.000000, 252.279846);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][5], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][5], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][5], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][5], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][5], false);
+
+    pLoginTD[playerid][6] = CreatePlayerTextDraw(playerid, 227.666702, 102.733322, "splash1:splash1");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][6], 182.000000, 87.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][6], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][6], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][6], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][6], false);
+
+    pLoginTD[playerid][7] = CreatePlayerTextDraw(playerid, 295.333251, 271.088836, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][7], 61.000000, 53.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][7], -30);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][7], 0xFFFFFF00);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][7], 0);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][7], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][7], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][7], 17030);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][7], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][8] = CreatePlayerTextDraw(playerid, 227.433227, 102.818511, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][8], 102.000000, 87.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][8], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][8], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][8], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][8], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][8], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][8], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][8], 170.000000, 64.000000, 0.000000, 0.400000);
+
+    pLoginTD[playerid][9] = CreatePlayerTextDraw(playerid, 331.766723, 102.818511, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][9], 102.000000, 87.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][9], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][9], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][9], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][9], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][9], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][9], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][9], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][9], 98.000000, 64.000000, 0.000000, 0.400000);
+
+    pLoginTD[playerid][10] = CreatePlayerTextDraw(playerid, 325.099975, 98.670303, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][10], 90.000000, 104.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][10], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][10], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][10], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][10], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][10], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][10], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][10], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][10], 360.000000, 64.000000, 0.000000, 0.300000);
+
+    pLoginTD[playerid][11] = CreatePlayerTextDraw(playerid, 283.766601, 98.670303, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][11], 90.000000, 104.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][11], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][11], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][11], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][11], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][11], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][11], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][11], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][11], 360.000000, 64.000000, 0.000000, 0.300000);
+
+    pLoginTD[playerid][12] = CreatePlayerTextDraw(playerid, 240.766632, 98.670288, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][12], 76.000000, 80.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][12], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][12], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][12], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][12], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][12], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][12], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][12], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][12], 360.000000, 64.000000, 0.000000, 0.300000);
+
+    pLoginTD[playerid][13] = CreatePlayerTextDraw(playerid, 397.433135, 99.499893, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][13], 16.000000, 38.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][13], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][13], 404497663);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][13], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][13], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][13], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][13], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][13], 1316);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][13], 360.000000, 64.000000, 0.000000, 0.400000);
+
+    pLoginTD[playerid][14] = CreatePlayerTextDraw(playerid, 227.333358, 251.651794, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][14], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][14], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][14], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][14], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][14], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][14], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][14], false);
+
+    pLoginTD[playerid][15] = CreatePlayerTextDraw(playerid, 231.667083, 102.059310, "L");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][15], 0.127330, 0.703998);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][15], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][15], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][15], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][15], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][15], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][15], true);
+
+    pLoginTD[playerid][16] = CreatePlayerTextDraw(playerid, 278.333740, 273.548156, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][16], 43.000000, 53.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][16], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][16], -48);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][16], 0xFFFFFF00);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][16], 0);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][16], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][16], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][16], 17030);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][16], 360.000000, 360.000000, 90.000000, 1.000000);
+
+    pLoginTD[playerid][17] = CreatePlayerTextDraw(playerid, 294.333282, 316.933197, "all_rights_reserved");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][17], 0.094999, 0.554665);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][17], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][17], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][17], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][17], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][17], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][17], true);
+
+    pLoginTD[playerid][18] = CreatePlayerTextDraw(playerid, 311.999969, 311.955444, "2023");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][18], 0.094999, 0.554665);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][18], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][18], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][18], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][18], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][18], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][18], true);
+
+    pLoginTD[playerid][19] = CreatePlayerTextDraw(playerid, 240.667129, 119.896461, "O");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][19], 0.127330, 0.703998);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][19], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][19], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][19], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][19], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][19], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][19], true);
+
+    pLoginTD[playerid][20] = CreatePlayerTextDraw(playerid, 252.333694, 139.807556, "G");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][20], 0.127330, 0.703998);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][20], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][20], -4);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][20], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][20], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][20], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][20], true);
+
+    pLoginTD[playerid][21] = CreatePlayerTextDraw(playerid, 264.666961, 160.133483, "I");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][21], 0.127330, 0.703998);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][21], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][21], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][21], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][21], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][21], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][21], true);
+
+    pLoginTD[playerid][22] = CreatePlayerTextDraw(playerid, 273.333679, 178.800125, "N");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][22], 0.127330, 0.703998);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][22], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][22], -6);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][22], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][22], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][22], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][22], true);
+
+    pLoginTD[playerid][23] = CreatePlayerTextDraw(playerid, 300.399810, 303.848266, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][23], 19.000000, -24.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][23], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][23], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][23], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][23], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][23], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][23], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][23], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][23], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][24] = CreatePlayerTextDraw(playerid, 302.400054, 259.133361, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][24], 18.000000, 49.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][24], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][24], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][24], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][24], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][24], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][24], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][24], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][24], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][25] = CreatePlayerTextDraw(playerid, 302.199981, 301.848297, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][25], 17.000000, -20.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][25], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][25], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][25], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][25], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][25], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][25], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][25], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][25], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][26] = CreatePlayerTextDraw(playerid, 303.366363, 296.488952, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][26], 20.000000, -14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][26], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][26], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][26], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][26], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][26], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][26], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][26], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][26], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][27] = CreatePlayerTextDraw(playerid, 302.566436, 301.422241, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][27], 20.000000, -14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][27], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][27], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][27], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][27], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][27], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][27], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][27], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][27], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][28] = CreatePlayerTextDraw(playerid, 302.999725, 299.548187, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][28], 20.000000, -14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][28], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][28], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][28], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][28], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][28], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][28], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][28], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][28], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][29] = CreatePlayerTextDraw(playerid, 304.833160, 301.589019, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][29], 12.000000, -14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][29], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][29], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][29], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][29], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][29], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][29], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][29], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][29], 0.000000, 15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][30] = CreatePlayerTextDraw(playerid, 304.633331, 272.566802, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][30], 25.000000, 44.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][30], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][30], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][30], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][30], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][30], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][30], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][30], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][30], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][31] = CreatePlayerTextDraw(playerid, 315.099822, 304.063110, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][31], 19.000000, -24.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][31], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][31], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][31], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][31], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][31], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][31], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][31], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][31], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][32] = CreatePlayerTextDraw(playerid, 314.000030, 259.133361, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][32], 18.000000, 49.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][32], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][32], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][32], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][32], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][32], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][32], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][32], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][32], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][33] = CreatePlayerTextDraw(playerid, 314.966583, 302.822448, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][33], 17.000000, -20.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][33], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][33], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][33], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][33], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][33], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][33], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][33], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][33], 0.000000, -15.000000, -1.000000, 1.000000);
+
+    pLoginTD[playerid][34] = CreatePlayerTextDraw(playerid, 310.366241, 296.359313, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][34], 21.000000, -13.060001);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][34], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][34], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][34], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][34], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][34], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][34], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][34], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][34], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    pLoginTD[playerid][35] = CreatePlayerTextDraw(playerid, 311.466217, 300.499969, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][35], 21.000000, -13.060001);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][35], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][35], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][35], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][35], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][35], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][35], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][35], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][35], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    pLoginTD[playerid][36] = CreatePlayerTextDraw(playerid, 310.066314, 299.870330, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][36], 21.000000, -13.060001);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][36], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][36], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][36], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][36], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][36], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][36], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][36], 1318);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][36], 0.000000, 15.000000, 180.000000, 1.000000);
+
+    pLoginTD[playerid][37] = CreatePlayerTextDraw(playerid, 293.799865, 308.022399, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][37], 45.000000, -18.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][37], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][37], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][37], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][37], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][37], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][37], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][37], 2965);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][37], 90.000000, 0.000000, 90.000000, 1.000000);
+
+    pLoginTD[playerid][38] = CreatePlayerTextDraw(playerid, 285.166687, 285.866821, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][38], 46.000000, 32.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][38], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][38], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][38], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][38], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][38], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][38], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][38], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][38], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][39] = CreatePlayerTextDraw(playerid, 302.966705, 285.737182, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][39], 46.000000, 32.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][39], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][39], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][39], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][39], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][39], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][39], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][39], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][39], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][40] = CreatePlayerTextDraw(playerid, 269.733245, 270.189025, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][40], 88.000000, 58.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][40], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][40], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][40], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][40], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][40], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][40], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][40], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][40], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][41] = CreatePlayerTextDraw(playerid, 276.133666, 270.189025, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][41], 88.000000, 58.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][41], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][41], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][41], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][41], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][41], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][41], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][41], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][41], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][42] = CreatePlayerTextDraw(playerid, 272.933776, 268.244537, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][42], 88.000000, 58.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][42], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][42], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][42], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][42], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][42], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][42], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][42], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][42], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][43] = CreatePlayerTextDraw(playerid, 310.399993, 301.740814, "LD_SPAC:white");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][43], 14.000000, 2.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][43], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][43], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][43], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][43], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][43], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][43], false);
+
+    pLoginTD[playerid][44] = CreatePlayerTextDraw(playerid, 300.900054, 293.333587, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][44], 28.000000, 19.160003);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][44], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][44], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][44], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][44], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][44], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][44], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][44], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][44], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][45] = CreatePlayerTextDraw(playerid, 305.700347, 293.333587, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][45], 28.000000, 19.160003);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][45], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][45], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][45], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][45], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][45], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][45], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][45], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][45], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][46] = CreatePlayerTextDraw(playerid, 293.799865, 308.022399, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][46], 45.000000, -18.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][46], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][46], -120);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][46], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][46], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][46], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][46], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][46], 2965);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][46], 90.000000, 0.000000, 90.000000, 1.000000);
+
+    pLoginTD[playerid][47] = CreatePlayerTextDraw(playerid, 296.200103, 352.877899, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][47], 42.000000, -93.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][47], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][47], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][47], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][47], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][47], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][47], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][47], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][47], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][48] = CreatePlayerTextDraw(playerid, 296.166778, 257.288909, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][48], 42.000000, 83.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][48], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][48], -1064116481);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][48], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][48], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][48], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][48], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][48], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][48], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][49] = CreatePlayerTextDraw(playerid, 312.333160, 289.848327, "V");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][49], 0.352665, 1.890370);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][49], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][49], -188);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][49], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][49], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][49], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][49], true);
+
+    pLoginTD[playerid][50] = CreatePlayerTextDraw(playerid, 312.733489, 315.733520, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][50], 9.000000, -21.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][50], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][50], -188);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][50], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][50], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][50], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][50], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][50], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][50], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][51] = CreatePlayerTextDraw(playerid, 312.900238, 280.285308, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][51], 8.709993, 33.400100);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][51], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][51], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][51], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][51], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][51], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][51], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][51], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][51], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][52] = CreatePlayerTextDraw(playerid, 313.200225, 289.785186, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][52], 8.000000, 18.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][52], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][52], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][52], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][52], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][52], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][52], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][52], 19177);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][52], 180.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][53] = CreatePlayerTextDraw(playerid, 257.666656, 262.437011, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][53], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][53], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][53], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][53], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][53], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][53], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][53], false);
+
+    pLoginTD[playerid][54] = CreatePlayerTextDraw(playerid, 274.333374, 264.511047, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][54], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][54], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][54], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][54], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][54], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][54], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][54], false);
+
+    pLoginTD[playerid][55] = CreatePlayerTextDraw(playerid, 301.333404, 251.651794, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][55], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][55], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][55], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][55], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][55], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][55], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][55], false);
+
+    pLoginTD[playerid][56] = CreatePlayerTextDraw(playerid, 326.666748, 251.651794, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][56], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][56], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][56], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][56], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][56], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][56], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][56], false);
+
+    pLoginTD[playerid][57] = CreatePlayerTextDraw(playerid, 353.666778, 257.044433, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][57], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][57], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][57], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][57], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][57], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][57], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][57], false);
+
+    pLoginTD[playerid][58] = CreatePlayerTextDraw(playerid, 379.000091, 251.651794, "ld_shtr:fstar");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][58], 28.000000, 34.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][58], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][58], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][58], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][58], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][58], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][58], false);
+
+    pLoginTD[playerid][59] = CreatePlayerTextDraw(playerid, 229.333404, 265.340759, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][59], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][59], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][59], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][59], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][59], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][59], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][59], false);
+
+    pLoginTD[playerid][60] = CreatePlayerTextDraw(playerid, 249.333282, 265.340789, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][60], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][60], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][60], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][60], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][60], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][60], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][60], false);
+
+    pLoginTD[playerid][61] = CreatePlayerTextDraw(playerid, 307.333190, 265.340789, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][61], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][61], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][61], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][61], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][61], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][61], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][61], false);
+
+    pLoginTD[playerid][62] = CreatePlayerTextDraw(playerid, 368.999816, 265.340789, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][62], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][62], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][62], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][62], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][62], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][62], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][62], false);
+
+    pLoginTD[playerid][63] = CreatePlayerTextDraw(playerid, 355.999755, 261.192718, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][63], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][63], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][63], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][63], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][63], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][63], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][63], false);
+
+    pLoginTD[playerid][64] = CreatePlayerTextDraw(playerid, 299.333038, 269.903839, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][64], 39.000000, -22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][64], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][64], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][64], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][64], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][64], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][64], false);
+
+    pLoginTD[playerid][65] = CreatePlayerTextDraw(playerid, 221.333404, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][65], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][65], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][65], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][65], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][65], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][65], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][65], false);
+
+    pLoginTD[playerid][66] = CreatePlayerTextDraw(playerid, 239.666732, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][66], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][66], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][66], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][66], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][66], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][66], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][66], false);
+
+    pLoginTD[playerid][67] = CreatePlayerTextDraw(playerid, 261.666717, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][67], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][67], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][67], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][67], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][67], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][67], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][67], false);
+
+    pLoginTD[playerid][68] = CreatePlayerTextDraw(playerid, 287.666748, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][68], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][68], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][68], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][68], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][68], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][68], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][68], false);
+
+    pLoginTD[playerid][69] = CreatePlayerTextDraw(playerid, 312.333465, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][69], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][69], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][69], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][69], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][69], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][69], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][69], false);
+
+    pLoginTD[playerid][70] = CreatePlayerTextDraw(playerid, 326.333465, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][70], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][70], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][70], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][70], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][70], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][70], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][70], false);
+
+    pLoginTD[playerid][71] = CreatePlayerTextDraw(playerid, 350.666839, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][71], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][71], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][71], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][71], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][71], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][71], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][71], false);
+
+    pLoginTD[playerid][72] = CreatePlayerTextDraw(playerid, 368.000152, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][72], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][72], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][72], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][72], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][72], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][72], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][72], false);
+
+    pLoginTD[playerid][73] = CreatePlayerTextDraw(playerid, 374.333435, 311.385284, "particle:cloudmasked");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][73], 44.000000, 13.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][73], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][73], -128);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][73], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][73], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][73], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][73], false);
+
+    pLoginTD[playerid][74] = CreatePlayerTextDraw(playerid, 243.000045, 283.592620, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][74], 18.000000, 20.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][74], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][74], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][74], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][74], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][74], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][74], false);
+
+    pLoginTD[playerid][75] = CreatePlayerTextDraw(playerid, 245.333374, 291.059234, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][75], 32.000000, 16.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][75], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][75], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][75], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][75], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][75], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][75], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][75], 19622);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][75], 0.000000, 154.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][76] = CreatePlayerTextDraw(playerid, 226.666732, 291.888854, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][76], 32.000000, 16.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][76], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][76], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][76], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][76], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][76], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][76], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][76], 19622);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][76], 0.000000, 208.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][77] = CreatePlayerTextDraw(playerid, 237.333389, 294.377899, "ld_beat:chit");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][77], 29.000000, 28.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][77], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][77], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][77], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][77], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][77], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][77], false);
+
+    pLoginTD[playerid][78] = CreatePlayerTextDraw(playerid, 250.999969, 286.651855, "._.");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][78], 0.139666, 0.728888);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][78], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][78], 255);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][78], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][78], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][78], TEXT_DRAW_FONT_1);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][78], true);
+
+    pLoginTD[playerid][79] = CreatePlayerTextDraw(playerid, 252.999969, 297.437042, "/");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][79], 0.175666, -0.411851);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][79], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][79], -5963521);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][79], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][79], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][79], TEXT_DRAW_FONT_1);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][79], true);
+
+    pLoginTD[playerid][80] = CreatePlayerTextDraw(playerid, 236.000045, 270.733306, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][80], 29.000000, 22.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][80], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][80], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][80], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][80], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][80], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][80], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][80], 11718);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][80], 0.000000, 191.000000, -60.000000, 1.000000);
+
+    pLoginTD[playerid][81] = CreatePlayerTextDraw(playerid, 251.333282, 299.925903, ".~n~.~n~.");
+    PlayerTextDrawLetterSize(playerid, pLoginTD[playerid][81], 0.127666, 0.558814);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][81], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][81], 255);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][81], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][81], 255);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][81], TEXT_DRAW_FONT_1);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][81], true);
+
+    pLoginTD[playerid][82] = CreatePlayerTextDraw(playerid, 370.000152, 264.510986, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][82], 60.000000, 60.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][82], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][82], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][82], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][82], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][82], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][82], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][82], 19076);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][82], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][83] = CreatePlayerTextDraw(playerid, 380.333587, 304.748168, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][83], 13.000000, 14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][83], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][83], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][83], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][83], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][83], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][83], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][83], 19054);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][83], 0.000000, 0.000000, 0.000000, 1.000000);
+
+    pLoginTD[playerid][84] = CreatePlayerTextDraw(playerid, 389.000274, 309.725952, "");
+    PlayerTextDrawTextSize(playerid, pLoginTD[playerid][84], 13.000000, 14.000000);
+    PlayerTextDrawAlignment(playerid, pLoginTD[playerid][84], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, pLoginTD[playerid][84], -1);
+    PlayerTextDrawSetShadow(playerid, pLoginTD[playerid][84], 0);
+    PlayerTextDrawBackgroundColour(playerid, pLoginTD[playerid][84], -256);
+    PlayerTextDrawFont(playerid, pLoginTD[playerid][84], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawSetProportional(playerid, pLoginTD[playerid][84], false);
+    PlayerTextDrawSetPreviewModel(playerid, pLoginTD[playerid][84], 19054);
+    PlayerTextDrawSetPreviewRot(playerid, pLoginTD[playerid][84], 0.000000, 0.000000, 0.000000, 1.000000);
 	return 1;
 }
 
-forward ShowLoginTDForPlayer(playerid, bool:show);
-public ShowLoginTDForPlayer(playerid, bool:show)
+stock DestroyPlayerLoginTextDraws(playerid)
 {
-	if(show == true)
-	{
-		for(new tds = 0; tds < 85; tds++)
-		{
-			PlayerTextDrawShow(playerid, Login_TD[playerid][tds]);
-		}
-	}
-	else
-	{
-		for(new tds = 0; tds < 85; tds++)
-		{
-			PlayerTextDrawHide(playerid, Login_TD[playerid][tds]);
-            PlayerTextDrawDestroy(playerid, Login_TD[playerid][tds]);
-            Login_TD[playerid][tds] = INVALID_PLAYER_TEXT_DRAW;
-        }
-	}
-	return 1;
+    for(new i = 0; i < sizeof(pLoginTD[]); i++)
+    {
+        if(pLoginTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, pLoginTD[playerid][i]);
+        pLoginTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+}
+
+stock ShowPlayerLoginTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(pLoginTD[]); i++)
+    {
+        if(pLoginTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawShow(playerid, pLoginTD[playerid][i]);
+    }
+}
+
+stock HidePlayerLoginTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(pLoginTD[]); i++)
+    {
+        if(pLoginTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawHide(playerid, pLoginTD[playerid][i]);
+    }
+}
+
+stock ResetPlayerLoginTextDraw(playerid)
+{
+    for(new i = 0; i < sizeof(pLoginTD[]); i++)
+    {
+        PlayerTextDrawDestroy(playerid, pLoginTD[playerid][i]);
+        pLoginTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
 }
