@@ -67,8 +67,8 @@ public CreateMarkers()
     CittyHallEnterExit[0] = CreateMarker(random(5),true,1482.6442,-1805.5509,18.7957-1.0,0, 0);
 
     //
-    SpawnEntExit[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 0, 6);
-    SpawnEntExit[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 0, 0);
+    SpawnEntExit[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 6, 6);
+    SpawnEntExit[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 6, 0);
     //
     TehnomediaMark[0] = CreateMarker(random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
     TehnomediaMark[1] = CreateMarker(random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);

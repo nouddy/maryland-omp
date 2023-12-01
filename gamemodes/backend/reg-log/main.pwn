@@ -203,8 +203,14 @@ hook OnPlayerConnect(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+
 hook OnPlayerDisconnect(playerid, reason)
 {
+	new q[120];
+
+	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cMoney` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), CharacterInfo[playerid][SQLID]);
+	mysql_tquery(SQL, q);
+
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_UNKNOWN;
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -286,7 +292,6 @@ Dialog: PlayerLoginDialog(const playerid, response, listitem, string: inputtext[
 
 		if(strcmp(inputtext, PlayerInfo[playerid][Password]) == 0 && strlen(inputtext) == strlen(PlayerInfo[playerid][Password]))
 		{
-			if(PlayerLogged[playerid] == true) return SendClientMessage(playerid, -1, ""c_server"Maryland \187; "c_white"Vec si ulogovan");
 		
 			new q[128];
 			mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `characters` WHERE `account_id` = '%d' LIMIT 3", GetPlayerSQLID(playerid));
@@ -565,6 +570,8 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	TogglePlayerTextDraw(playerid, true);
 	SpawnPlayer(playerid);
 
+
+
 	return 1;
 }
 
@@ -720,6 +727,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 		CharacterInfo[playerid][Skin] = CharacterDefaultSkins[CharacterInfo[playerid][Gender]][pTmpSkinIDX[playerid]];
 
 		SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
+
+		printf("(OnPlayerSelect3DMenuBox) - Selection type : GENDER");
+		printf("(OnPlayerSelect3DMenuBox) - Selected Gender : %d", CharacterInfo[playerid][Gender]);
 
 		Destroy3DMenuDelayed(MenuID);
 		CreateCharacterSetupMenu(playerid);

@@ -77,10 +77,10 @@ stock formatInt(intVariable, iThousandSeparator = ',', iCurrencyChar = '$')
 //* Cuvanje naloga na Registeru
 stock SavePlayer(playerid)
 {
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts`, `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
+		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts` SET `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
             PlayerInfo[playerid][Staff],
             ReturnDate(),
 			PlayerInfo[playerid][SQLID]);
@@ -92,7 +92,7 @@ stock SavePlayer(playerid)
 //* Save sve u vezi dokumenata
 stock SaveDocuments(playerid)
 {
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `character_id` = '%d'",
@@ -111,7 +111,7 @@ stock SaveDocuments(playerid)
 //* Save sve u vezi elektronike
 stock SaveElectronic(playerid)
 {
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `character_id` = '%d'",
@@ -128,7 +128,7 @@ stock SaveElectronic(playerid)
 stock SaveFinance(playerid)
 {
 
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_finance` SET `BankAccount` = '%d',`BankMoney` = '%d',`BankPin` = '%d' WHERE `finance_id` = '%d'",
@@ -145,7 +145,7 @@ stock SaveFinance(playerid)
 //* Save sve u vezi property
 stock SavePropForPlayer(playerid)
 {
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `character_id` = '%d'",
@@ -161,7 +161,7 @@ stock SavePropForPlayer(playerid)
 
 stock SaveCryptoPlayer(playerid)
 {
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
         mysql_format(SQL,query,sizeof(query),"UPDATE `player_crypto` SET `AmountBTC` = '%f',`AmountETH` = '%f',`AmountDOT` = '%f',`AmountUSDT` = '%f', `AmountLTC` = '%f' WHERE `character_id` = '%d'",
@@ -196,7 +196,7 @@ stock GiveMoneyEx(playerid, novac)
 	ResetPlayerMoney(playerid);
 	GivePlayerMoney(playerid, PlayerInfo[playerid][Money]);
 
-    if(PlayerLogged[playerid] == true)
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
 		mysql_format(SQL,query,sizeof(query),"UPDATE `` SET `Money` = '%d' WHERE `ID` = '%d'",
