@@ -201,13 +201,8 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	if(p3DMenu[playerid] != INVALID_3D_MENU)
-	{
-		Destroy3DMenu(p3DMenu[playerid]);
-		p3DMenu[playerid] = INVALID_3D_MENU;		
-	}
-
-
+	Destroy3DMenu(p3DMenu[playerid]);
+	p3DMenu[playerid] = INVALID_3D_MENU;
 
 	new q[120];
 	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cMoney` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), CharacterInfo[playerid][SQLID]);
@@ -559,6 +554,10 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	}
 
 	DestroyPlayerChoseCharacterTextDraws(playerid);
+	
+	Destroy3DMenu(p3DMenu[playerid]);
+	p3DMenu[playerid] = INVALID_3D_MENU;
+
 	CancelSelectTextDraw(playerid);
 
 	TogglePlayerSpectating(playerid, false);
@@ -571,11 +570,10 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	
 	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
+
+
 	TogglePlayerTextDraw(playerid, true);
 	SpawnPlayer(playerid);
-
-
-
 	return 1;
 }
 
