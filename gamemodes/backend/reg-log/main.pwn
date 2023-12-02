@@ -569,10 +569,12 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	
 	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
+
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
-
-
+	Logo_ShowTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
+	TogglePlayerTextDraw(playerid, true);
+	
 	SpawnPlayer(playerid);
 	return 1;
 }
@@ -832,7 +834,7 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 
 				new rand = random(sizeof(RandomSpawnCords));
 				SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], RandomSpawnCords[rand][0], RandomSpawnCords[rand][1], RandomSpawnCords[rand][2], RandomSpawnCords[rand][3]);
-
+				
 				new query[512];
 				mysql_format(SQL, query, sizeof(query), "INSERT INTO 	`characters` SET `account_id` = %d,\
 																		`cName` = '%e',\
@@ -876,7 +878,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 					
 	SetPlayerVirtualWorld(playerid, 6);
 	SetPlayerInterior(playerid, 6);
-					
+
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	Logo_ShowTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
@@ -964,6 +966,7 @@ ResetPlayerRegLogVars(playerid)
 	p3DMenu[playerid] = INVALID_3D_MENU;
 
 	pCharacterIDX[playerid] = 0;
+	pTmpSkinIDX[playerid] = 0;
 	pSelectionType[playerid] = INVALID_PLAYER_SELECTION;
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_CONNECTED;
 

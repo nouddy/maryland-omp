@@ -132,13 +132,16 @@ hook OnScriptExit()
 hook OnPlayerConnect(playerid)
 {
     SelectedMenu[playerid] = INVALID_3D_MENU;
-	SelectedBox[playerid] = INVALID_3D_MENU;
+	SelectedBox[playerid] = 0;
 }
 
 hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdown, KEY:leftright, KEY:oldleftright)
 {
 	if(SelectedMenu[playerid] == INVALID_3D_MENU) return Y_HOOKS_CONTINUE_RETURN_1;
 	new MenuID = SelectedMenu[playerid];
+
+	if(SelectedBox[playerid] < 0)
+		SelectedBox[playerid] = 0;
 
 	new Float:x,Float:y,Float:z;
 	if(updown == KEY_DOWN && oldupdown != KEY_DOWN)
@@ -186,8 +189,8 @@ stock bool:CancelSelect3DMenu(playerid,MenuID)
 	new Float:x,Float:y,Float:z;
  	GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
 	MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x-MenuInfo[MenuID][AddingX],y-MenuInfo[MenuID][AddingY],z, 1.0);
-	SelectedMenu[playerid] = false;
-	SelectedBox[playerid] = false;
+	SelectedMenu[playerid] = INVALID_3D_MENU;
+	SelectedBox[playerid] = 0;
 	return true;
 }
 
