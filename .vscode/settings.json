@@ -1,21 +1,3 @@
 {
-    "files.associations": {
-        "*.pwn": "pawn",
-        "*.inc": "pawn",
-        "*.tde": "pawn",
-        "*.aio": "pawn",
-        "*.map": "pawn",
-        "*.job": "pawn",
-        "*.script": "pawn",
-        "*.stock": "pawn",
-        "*.csso": "pawn",
-        "*.temp": "pawn",
-        "*.asset": "pawn",
-        "*core": "pawn"
-    },
-    "files.encoding": "windows1252",
-    "vscord.app.whitelist": [
-        "1047020192863096862"
-    ],
-    "vscord.enabled": true
+"isGitignoreExtActive": true,
 }

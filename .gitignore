@@ -1,7 +1,3 @@
-# ignore ALL .log files
-*.log
-crashdetect.txt
-log.txt
-mysql.ini
-**/logs/
-omp_minidump.dmp
+
+/logs
+/log.txt
