@@ -187,12 +187,7 @@ new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 
 hook OnPlayerConnect(playerid)
 {	
-	pLoginAttempts[playerid] = 0;
-	pSelectionType[playerid] = INVALID_PLAYER_SELECTION;
-	pConnectState[playerid] = PLAYER_CONNECT_STATE_CONNECTED;
-	pCharacterIDX[playerid] = -1;
-
-	CharacterInfo[playerid][Skin] = 22;
+	ResetPlayerRegLogVars(playerid);
 
 	ResetPlayerRegisterTextDraw(playerid);
 	ResetPlayerLoginTextDraw(playerid);
@@ -206,10 +201,19 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	new q[120];
+	if(p3DMenu[playerid] != INVALID_3D_MENU)
+	{
+		Destroy3DMenu(p3DMenu[playerid]);
+		p3DMenu[playerid] = INVALID_3D_MENU;		
+	}
 
+
+
+	new q[120];
 	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cMoney` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), CharacterInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
+
+	ResetPlayerRegLogVars(playerid);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_UNKNOWN;
 	return Y_HOOKS_CONTINUE_RETURN_1;
@@ -876,7 +880,10 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	SetPlayerInterior(playerid, 6);
 					
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
+	Logo_ShowTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
+	TogglePlayerTextDraw(playerid, true);
+
 	SpawnPlayer(playerid);
 	return;
 }
@@ -949,4 +956,32 @@ hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	return Y_HOOKS_BREAK_RETURN_1;
+}
+
+ResetPlayerRegLogVars(playerid)
+{
+	pLoginAttempts[playerid] = 0;
+	pRegisterMail[playerid][0] = '\0';
+	pRegisterPassword[playerid][0] = '\0';
+	p3DMenu[playerid] = INVALID_3D_MENU;
+
+	pCharacterIDX[playerid] = 0;
+	pSelectionType[playerid] = INVALID_PLAYER_SELECTION;
+	pConnectState[playerid] = PLAYER_CONNECT_STATE_CONNECTED;
+
+	CharacterInfo[playerid][Skin] = 22;
+
+	CharacterInfo[playerid][SQLID] = 0;
+	CharacterInfo[playerid][Name][0] = '\0';
+	CharacterInfo[playerid][Gender] = GENDER_MALE;
+	CharacterInfo[playerid][Skin] = 0;
+	CharacterInfo[playerid][Age] = 0;
+	CharacterInfo[playerid][WalkStyle] = 0;
+	CharacterInfo[playerid][State] = 0;
+	CharacterInfo[playerid][Money] = 0;
+	CharacterInfo[playerid][Level] = 0;
+	CharacterInfo[playerid][Job] = 0;
+	CharacterInfo[playerid][lastPos][0] = 0.0;
+	CharacterInfo[playerid][lastPos][1] = 0.0;
+	CharacterInfo[playerid][lastPos][2] = 0.0;
 }
