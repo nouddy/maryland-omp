@@ -80,15 +80,15 @@ stock SavePlayer(playerid)
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts` SET `Staff` = '%d', `LastLogin` = '%e' WHERE `ID` = '%d'",
+		mysql_format(SQL,query,sizeof(query),"UPDATE `accounts` SET `Staff` = '%d' WHERE `ID` = '%d'",
             PlayerInfo[playerid][Staff],
-            ReturnDate(),
 			PlayerInfo[playerid][SQLID]);
 		mysql_tquery(SQL,query);        
     }
 
     return true;
 }
+
 //* Save sve u vezi dokumenata
 stock SaveDocuments(playerid)
 {

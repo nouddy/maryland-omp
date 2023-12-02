@@ -73,7 +73,8 @@ Dialog: dialog_kartica(const playerid, response, listitem, string: inputtext[])
 
 				SendClientMessage(playerid, x_server, "BANKA >> "c_white"Dobio si 100$ novcane pomoci od predsednika Los Santosa!");
 
-				SaveFinance(playerid);SavePlayer(playerid);
+				SaveFinance(playerid);
+				SavePlayer(playerid);
 			}
 			case 1:
 			{
@@ -88,7 +89,8 @@ Dialog: dialog_kartica(const playerid, response, listitem, string: inputtext[])
 
 				SendClientMessage(playerid, x_server, "BANKA >> "c_white"Dobio si 100$ novcane pomoci od predsednika Los Santosa!");
 
-				SaveFinance(playerid);SavePlayer(playerid);
+				SaveFinance(playerid);
+				SavePlayer(playerid);
 			}
 			case 2:
 			{

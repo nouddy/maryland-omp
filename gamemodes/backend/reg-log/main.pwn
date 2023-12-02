@@ -155,7 +155,7 @@ enum PlayerInformation
 	Username[MAX_PLAYER_NAME],
 	Password[144],
 	Staff,
-	LastLogin[50],
+	LastLogin,
 	RegisterDate[50],
 	Email[50],
 }
@@ -838,7 +838,7 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		`cGender` = %d,\
 																		`cAge` = %d,\
 																		`cState` = %d,\
-																		`cLastLogin` = CURRENT_TIMESTAMP,\
+																		`cLastLogin` = %d,\
 																		cLastX = %f,\
 																		cLastY = %f,\
 																		cLastZ = %f", 
@@ -848,6 +848,7 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		CharacterInfo[playerid][Gender],
 																		CharacterInfo[playerid][Age],
 																		CharacterInfo[playerid][State],
+																		gettime(),
 																		RandomSpawnCords[rand][0], RandomSpawnCords[rand][1], RandomSpawnCords[rand][2]);																		
 				mysql_tquery(SQL, query, "SQL_InsertPlayerCharacter", "ii", playerid, pCharacterIDX[playerid]);
 			}
