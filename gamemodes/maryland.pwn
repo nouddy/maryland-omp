@@ -648,6 +648,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/driving_school.map"						//* Driving_School
 #include "frontend/exterior/vinewood_map.map"						//* VineWood
 #include "frontend/exterior/bank_ml.map"							//* Banka Maryland
+#include "frontend/exterior/vinewood-mall.map"					    //* VineWood Mall
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
 #include "frontend/exterior/italy_zipline.map"						//* Zicara u Italy (SF)
@@ -682,7 +683,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/driving-school-int.map"					//* Driving_School (16)
 #include "frontend/interior/mob_int.map"						    //* Mob Int (17)
 #include "frontend/interior/7eleven_int.map"						//* Market 7/Eleven Int (18)
-#include "frontend/interior/shopping-centre.map"				    //* Shopping Centre (19)
 
 
 //--------------------------------------------------------------------------------------------------------- Temp
