@@ -572,7 +572,7 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	Logo_ShowTextDraw(playerid, true);
-	TogglePlayerTextDraw(playerid, true);
+	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
 	
 	SpawnPlayer(playerid);
@@ -881,7 +881,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	Logo_ShowTextDraw(playerid, true);
-	TogglePlayerTextDraw(playerid, true);
+	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
 
 	SpawnPlayer(playerid);
