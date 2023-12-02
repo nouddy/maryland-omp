@@ -37,7 +37,7 @@ hook OnGameModeInit()
 hook OnCharacterLoaded(playerid)
 {   
     new q[120];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_electronic WHERE character_id = '%d'", GetCharacterSQLID(playerid));
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_electronic WHERE character_electronics = '%d'", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_ElectronicLoad", "i", playerid);
 
 	return 1;
@@ -52,7 +52,7 @@ public SQL_ElectronicLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_electronic` (character_id, Dron, Battery, GPS) \ 
+           "INSERT INTO `player_electronic` (character_electronics, Dron, Battery, GPS) \ 
             VALUES('%d', '0', '0', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }

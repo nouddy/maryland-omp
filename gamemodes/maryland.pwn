@@ -490,6 +490,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/labels.asset"								//* Labeli
 #include "backend/assets/custom_markers.asset"						//* Markeri
+#include "backend/assets/time.asset"						//* Time calculation
 //-------------------------------------------------------------------------------------------------------- Documentation
 #include "backend/documentation/playerdocuments.script"			//* Dokumenta
 
@@ -503,7 +504,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/speedometer.script"						//* Brzinomer
 #include "backend/vehicle/fuel.pwn"									//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
-#include "backend/vehicle/driving_school.script"					//* Dok se ne fixa ne paliti sjebe mape skroz.
+//#include "backend/vehicle/driving_school.script"					//* Dok se ne fixa ne paliti sjebe mape skroz.
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.temp"
@@ -688,7 +689,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Jobs
-//#include "backend/jobs/job_main.job" 								//* Dinamicni poslovi - Credits : job-framework
+//#include "backend/jobs/jobs.pwn"
+//#include "backend/jobs/bus-driver.job"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"

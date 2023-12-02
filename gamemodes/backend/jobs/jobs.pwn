@@ -1,7 +1,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define MAX_JOBS                 (2)
+#define MAX_JOBS                 (3)
 #define MAX_JOB_LEN              (32)
 
 #define INVALID_JOB_ID           (-1)
@@ -21,7 +21,8 @@ enum {
 enum {
 
     JOB_UNKNOWN = 0,
-    JOB_MECHANIC
+    JOB_MECHANIC,
+    JOB_BUS_DRIVER
 }
 
 enum e_JOB_DATA {
@@ -47,7 +48,8 @@ new playerJob[MAX_PLAYERS],
 new jobInfo[MAX_JOBS][e_JOB_DATA] = {
 
     {INVALID_JOB_ID, "UNDEFINED:", JOB_QUALIFICATION_NONE, {0.00, 0.00, 0.00}, {0.00, 0.00, 0.00}, 24, -1, INVALID_BUSINESS_ID, -1},
-    {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {0.00, 0.00, 0.00}, {0.00, 0.00, 0.00}, 24, 2500, INVALID_BUSINESS_ID, 10800}
+    {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {1088.4877,-1185.4963,21.9630}, {1103.1801,-1184.1455,18.3704}, 24, 2500, INVALID_BUSINESS_ID, 3},
+    {JOB_BUS_DRIVER, "Vozac Autobusa", JOB_QUALIFICATION_HIGH_SCHOOL, {0.00, 0.00, 0.00}, {0.00, 0.00, 0.00}, 253, 3500, INVALID_BUSINESS_ID, 2}
 };
 
 new Text3D:jobLabel[MAX_JOBS][2],
@@ -55,14 +57,14 @@ new Text3D:jobLabel[MAX_JOBS][2],
 
 new Iterator:iter_Jobs<MAX_JOBS>;
 
-stock Job_GetQualification(jobID) {
+stock Job_GetQualification(job) {
 
-    if(jobInfo[jobID][jobID] == INVALID_JOB_ID)
-        return SendClientMessage(playerid, x_green, ">> GRESKA: Ne postojeci posao!");
+    if(jobInfo[job][jobID] == INVALID_JOB_ID)
+        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"GRESKA: Ne postojeci posao!");
 
     new string[24];
 
-    switch(jobInfo[jobID][jobQualification]) {
+    switch(jobInfo[job][jobQualification]) {
 
         case JOB_QUALIFICATION_NONE: { string = "Nema"; }
         case JOB_QUALIFICATION_HIGH_SCHOOL: { string = "Srednja Skola"; }
@@ -73,17 +75,23 @@ stock Job_GetQualification(jobID) {
     return (string);
 }
 
-stock Job_SetPlayerJob(const playerid, .job) {
+stock Job_SetPlayerJob(const playerid, job) {
 
-    if(jobInfo[.job][jobID] == INVALID_JOB_ID)
-        return SendClientMessage(playerid, x_green, ">> GRESKA: Ne postojeci posao!");
+    if(job == INVALID_JOB_ID)
+    {
+        SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste dali otkaz!");
+        playerJob[playerid] = INVALID_JOB_ID;
+        playerUniform[playerid] = INVALID_JOB_ID;    
+    }
 
-    playerJob[playerid] = .job;
-    playerContract[playerid] = gettime()+jobInfo[.job][jobContract];
+    if(playerJob[playerid] != INVALID_JOB_ID) return 
+        SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Vec ste zaposleni!");
 
-    SendClientMessage(playerid, x_server, ">> Uspjesno ste se zaposlili kao %s", jobInfo[.job][jobName]);
-    SendClientMessage(playerid, x_server, ">> Ugovor posla traje : "c_white"%s", jobInfo[.job][jobCon]);
-    SendClientMessage(playerid, x_server, ">> Da vidite informacije o poslu /job");
+    playerContract[playerid] = gettime() + jobInfo[job][jobContract]*3600;
+
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste se zaposlili kao %s", jobInfo[job][jobName]);
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Ugovor posla traje : "c_white"%d sata", jobInfo[job][jobContract]);
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Da vidite informacije o poslu /job");
 
     return (true);
 }
@@ -91,7 +99,7 @@ stock Job_SetPlayerJob(const playerid, .job) {
 stock Job_GivePlayerSalary(playerid, salary, business = INVALID_BUSINESS_ID) {
 
     GivePlayerMoney(playerid, salary);
-    SendClientMessage(playerid, x_green, ">> Uspjesno ste zaradili %s$", salary);
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste zaradili %s$", salary);
 
     if(business != INVALID_BUSINESS_ID) {
 
@@ -107,15 +115,15 @@ stock Job_LoadData() {
     print("-                    -");
     print("");
 
-    for(new i = 0; i < sizeof jobInfo[]; i++) {
+    for(new i = 0; i < sizeof jobInfo; i++) {
 
         if(jobInfo[i][jobID] > INVALID_JOB_ID) {
 
-            jobPickup[i] = CreatePickup(1210, 1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 0);
-            jobLabel[i] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Take Job [ N ]"c_grey" \171;", -1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 3.50, 0, false, jobInfo[i][jobName]);
+            jobPickup[i][0] = CreatePickup(1210, 1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 0);
+            jobLabel[i][0] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Take Job [ N ]"c_grey" \171;", -1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 3.50, 0, false, jobInfo[i][jobName]);
         
-            jobPickup[i] = CreatePickup(1275, 1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 0);
-            jobLabel[i] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\187; \n\171; "c_white"Uniform [ N ]"c_grey" \171;", -1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 3.50, 0, false, jobInfo[i][jobName]);
+            jobPickup[i][1] = CreatePickup(1275, 1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 0);
+            jobLabel[i][1] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\187; \n\171; "c_white"Uniform [ N ]"c_grey" \171;", -1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 3.50, 0, false, jobInfo[i][jobName]);
 
             printf("[ JOB ] %s #LOADED", jobInfo[i][jobName]);
 
@@ -168,6 +176,28 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             job.SetPlayerJob(playerid, job);
 
         }
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, jobInfo[job][jobUniformPos][0], jobInfo[job][jobUniformPos][1], jobInfo[job][jobUniformPos][2])) {
+
+            if(playerJob[playerid] == job) {
+
+                if(playerUniform[playerid] == jobInfo[job][jobID]) {
+
+                    playerUniform[playerid] = INVALID_JOB_ID;
+
+                    SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
+                    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste skinuli uniformu!");
+                }
+
+                else {
+
+                    playerUniform[playerid] = jobInfo[job][jobID];
+
+                    SetPlayerSkin(playerid, jobInfo[job][jobUniform]);
+                    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste uzeli uniformu!");
+                }
+            }
+        }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -181,14 +211,14 @@ YCMD:jobs(playerid, params[], help)
 
         if(i == INVALID_JOB_ID) {
 
-            SendClientMessage(playerid, x_green, ">> Nema biznis nema pari!");
+            SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Nema biznis nema pari!");
             return ~1;
         }
 
         new dialogStrg[246];
-        format(dialogStrg, sizeof dialogStrg, ">> %d | %s\n", jobInfo[i][jobID], jobInfo[i][jobName]);
+        format(dialogStrg, sizeof dialogStrg, "[JOB] >> "c_white"%d | %s\n", jobInfo[i][jobID], jobInfo[i][jobName]);
 
-        Dialog_Show(playerid, "dialog_JobList", DIALOG_STYLE_LIST, ">> Jobs", dialogStrg, "OK", "");
+        Dialog_Show(playerid, "dialog_JobList", DIALOG_STYLE_LIST, ">> Poslovi", dialogStrg, "OK", "");
 
     }
 
@@ -199,10 +229,10 @@ YCMD:posao(playerid, params[], help) = job;
 YCMD:job(playerid, params[], help) {
 
     if(playerJob[playerid] == INVALID_JOB_ID) 
-        return SendClientMessage(playerid, x_green, ">> Niste zaposleni!");
+        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
 
-    Dialog_Show(playerid, "job-noreturn", DIALOG_STYLE_MSGBOX, ">> Job", ""c_white"Trenutni posao : "c_green"%s"c_white"\nUgovor "c_green"%s"c_white"\nDa pregledate dodatne komande za posao "c_green"/jobhelp",
-                                                                 "OK", "", jobInfo[playerJob[playerid]][jobName], jobInfo[playerJo[playerid]][jobContract]);
+    Dialog_Show(playerid, "job-noreturn", DIALOG_STYLE_MSGBOX, ">> Posao", ""c_white"Trenutni posao : "c_green"%s"c_white"\nUgovor "c_green"%s"c_white"\nDa pregledate dodatne komande za posao "c_green"/jobhelp",
+                                                                 "OK", "", jobInfo[playerJob[playerid]][jobName], jobInfo[playerJob[playerid]][jobContract]);
 
     return 1;
 }
@@ -210,47 +240,20 @@ YCMD:job(playerid, params[], help) {
 YCMD:jobhelp(playerid, params[], help) 
 {
     
-    iff(playerJob[playerid] == INVALID_JOB_ID) 
-        return SendClientMessage(playerid, x_green, ">> Niste zaposleni!");
+    if(playerJob[playerid] == INVALID_JOB_ID) 
+        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
 
     return 1;
 }
-
-YCMD:jobcontract(playerid, params[], help) 
+YCMD:ugovor(playerid, params[], help) = contract;
+YCMD:contract(playerid, params[], help) 
 {
+
+    new sTime[20];
+
+    GetRemainingTime(playerContract[playerid], sTime);
+
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Preostalo vrjeme do isteka ugovora %s", sTime);
     
-    new job;
-
-    if(sscanf(params, "d", job)) return SendClientMessage(playerid, x_green, ">> /jobcontract [jobID]");
-
-    .jobNow = Timestamp();
-
-    new before = .jobNow - ConvertToSeconds(TimeUnit:Hour, jobInfo[job][jobContract]);
-    SendClientMessage(playerid, x_green, ">> Contract : %s" ConvertToSeconds(TimeUnit:Hour, jobInfo[job][jobContract]));
-    SendClientMessage(playerid, x_green, ">> Contract Before : %s"before);
-
     return 1;
 }
-
-stock ConvertTime(vreme, bool:konvertuj_sate = false) 
-{
-
-    new string[11];
-    if (konvertuj_sate == false) // Ispisi sve u minutima i sekundama (npr 132:22)
-    {
-        new minuti, sekunde;
-        minuti = floatround(vreme/60);
-        sekunde = floatround(vreme - minuti*60);
-        format(string, sizeof string, "%02d:%02d", minuti, sekunde);
-    }
-    else { // Ispisi vreme u satima, minutima i sekundama (npr 02:12:22)
-        new sati, minuti, sekunde;
-        minuti = floatround(vreme/60);
-        sekunde = (vreme - minuti*60);
-        sati = minuti/60;
-        minuti -= sati*60;
-        format(string, sizeof string, "%02d:%02d:%02d", sati, minuti, sekunde);
-    }
-    return string;
-}
-

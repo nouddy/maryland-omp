@@ -1454,7 +1454,7 @@ YCMD:buybusiness(playerid, params[], help)
 
     //      >> [ PROPERTY QUERY ] <<
 
-    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `player_property` SET `BusinessID` = '%i' WHERE `character_id` = '%d'",
+    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `player_property` SET `BusinessID` = '%i' WHERE `bOwner` = '%d'",
                                          re_BusinessData[BID][bID], GetCharacterSQLID(playerid));
     mysql_tquery(MySQL:SQL, q);
 

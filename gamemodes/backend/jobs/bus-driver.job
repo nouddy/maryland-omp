@@ -1,0 +1,57 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Noddy_
+ *  @Date           1st December 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           bus-driver.pwn
+ *  @Module         jobs
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+new busDriver_Vehicle[4];
+
+enum e_ROUTE_DATA {
+
+    Float:route_Position[3],
+}
+
+new RouteInfo[][e_ROUTE_DATA] = {
+
+    { {1941.5576, -1935.9686, 13.0402} },
+    { {2110.8706, -1707.1532, 13.0475} },
+    { {2076.1069, -1242.7205, 23.5490} },
+    { {2006.8578, -1057.0656, 24.1792} },
+    { {1751.2178, -1158.2406, 23.3850} },
+    { {1339.5123, -1252.2383, 13.0405} },
+    { {1293.8795, -1612.1737, 13.0411} },
+    { {1776.8569, -1911.2544, 13.0616} }
+};
+
+hook OnGameModeInit() {
+
+    print("jobs/bus-driver.pwn loaded");
+
+    busDriver_Vehicle[0] = CreateVehicle(431,1796.4677,-1886.6450,13.5091,88.8008,0,0, 1500); 
+    busDriver_Vehicle[1] = CreateVehicle(431,1776.7648,-1909.7213,13.4973,179.7419,0,0, 1500); 
+    busDriver_Vehicle[2] = CreateVehicle(431,1791.2081,-1933.1820,13.5005,269.5514,0,0, 1500); 
+    busDriver_Vehicle[3] = CreateVehicle(431,1804.6656,-1916.3588,13.5049,359.7986,0,0, 1500); 
+
+    for(new i = 0; i < sizeof busDriver_Vehicle; i++) {
+
+        va_SetVehicleNumberPlate(busDriver_Vehicle[0], "ML-BS0%d", i);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+

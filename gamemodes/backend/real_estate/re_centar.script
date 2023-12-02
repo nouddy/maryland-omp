@@ -143,6 +143,7 @@ public BCenter_Create(id, playerid) {
     SetPlayerPos(playerid, 1658.5809, -1343.2560, 17.4960);
     SetPlayerInterior(playerid, 0);
     SetPlayerVirtualWorld(playerid, 0);
+    TogglePlayerControllable(playerid, true);
 
     re_BCenter_ArmoryLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterArmoryPos][0], BCenterData[id][re_BCenterArmoryPos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
     re_BCenter_WardrobeLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterWardrobePos][0], BCenterData[id][re_BCenterWardrobePos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
@@ -754,7 +755,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
         mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
                                         `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, \
                                         `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
-                                        `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
+                                        `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY`, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
                                         VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
                                         BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
                                         e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],

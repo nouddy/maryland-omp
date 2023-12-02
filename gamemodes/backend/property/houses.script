@@ -268,10 +268,10 @@ YCMD:buyhouse(playerid, params[], help) {
 
 	SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste kupili kucu!");
 
-	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `character_id` = '%d'", house_ID[ID], GetCharacterSQLID(playerid));
+	mysql_format(SQL, query, sizeof query, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `hOwner` = '%d'", house_ID[ID], GetCharacterSQLID(playerid));
 	mysql_tquery(SQL, query);
 
-	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `character_id` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ID]);
+	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `hOwner` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ID]);
 	mysql_tquery(SQL, query);
 
 	House_UpdateLabel(house_ID[ID], 1);

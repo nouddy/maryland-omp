@@ -3,4 +3,6 @@
 log.txt
 mysql.ini
 config.json
-config.json
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/extensions.json

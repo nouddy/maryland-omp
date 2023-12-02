@@ -95,7 +95,7 @@ stock SaveDocuments(playerid)
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `character_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_documents` SET `NationalID` = '%d',`Passport` = '%d',`DriveLicense` = '%d',`MotoLicense` = '%d', `BoatLicense` = '%d', `GunLicense` = '%d' WHERE `character_document` = '%d'",
             PlayerDocuments[playerid][pNationalID],
             PlayerDocuments[playerid][pPassport],
             PlayerDocuments[playerid][pDriveLicense],
@@ -114,7 +114,7 @@ stock SaveElectronic(playerid)
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `character_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `character_electronics` = '%d'",
             PlayerElectronic[playerid][eDronItem],
             PlayerElectronic[playerid][eBatteryItem],
             PlayerElectronic[playerid][eGPSItem],
@@ -148,7 +148,7 @@ stock SavePropForPlayer(playerid)
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `character_id` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d' WHERE `pOwner` = '%d'",
             PlayerProperty[playerid][BCenter],
             player_House[playerid],
             GetCharacterSQLID(playerid));
@@ -177,7 +177,7 @@ stock SaveCryptoPlayer(playerid)
     return true;
 }
 //* Vraca datum
-ReturnDate()
+stock ReturnDate()
 {
     static
         date[36];
@@ -241,4 +241,13 @@ FormatNumber(number, const prefix[] = "$")
 		strins(value, "-", 0);
 
 	return value;
+}
+
+stock ReturnCharacterName(character) {
+
+    new string[MAX_PLAYER_NAME];
+
+    format(string, sizeof string, "%s", CharacterInfo[character][Name]);
+
+    return string;
 }

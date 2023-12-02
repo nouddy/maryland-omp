@@ -53,7 +53,7 @@ hook OnPlayerConnect(playerid) {
 hook OnCharacterLoaded(playerid)
 {   
     new q[120];
-    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE character_id = '%d' LIMIT 1", GetCharacterSQLID(playerid));
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE character_document = '%d' LIMIT 1", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_AccountDocumentsLoad", "i", playerid);
 
 	return 1;
@@ -64,7 +64,7 @@ hook OnCharacterFirstStream(playerid)
 	if(PlayerDocuments[playerid][pLifeInsurance] != -1)
 	{
 		new string[128];
-		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(LifeInsuranceValidUntil,CURRENT_DATE), LifeInsuranceValidUntil from `player_documents` where `character_id`='%i'", GetCharacterSQLID(playerid));
+		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(LifeInsuranceValidUntil,CURRENT_DATE), LifeInsuranceValidUntil from `player_documents` where `character_document`='%i'", GetCharacterSQLID(playerid));
 		mysql_tquery(SQL, string, "CheckLifeInsurance", "i", playerid);
 	}
 
@@ -148,7 +148,7 @@ public SQL_AccountDocumentsLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_documents` (character_id, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense, LifeInsurance) \ 
+           "INSERT INTO `player_documents` (character_document, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense, LifeInsurance) \ 
             VALUES('%d', '0', '0', '0', '0', '0', '0', '-1')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }

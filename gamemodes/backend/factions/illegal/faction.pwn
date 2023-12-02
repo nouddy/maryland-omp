@@ -147,7 +147,7 @@ public Faction_InsertData(id, member) {
 
     new q[260];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`character_id`, `faction_id`, `faction_rank`, `faction_respekt`) \ 
+    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \ 
                                              VALUES('%d', '%d', '1', '1')", 
                                       member, FactionInfo[id][factionID]);
     mysql_tquery(MySQL:SQL, q);
@@ -163,7 +163,7 @@ public Member_LoadData(id) {
 
     else {
 
-        cache_get_value_name_int(0, "character_id", FactionMember[id][characterID]);
+        cache_get_value_name_int(0, "member_id", FactionMember[id][characterID]);
         cache_get_value_name_int(0, "faction_id", FactionMember[id][factionID]);
         cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
         cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
@@ -184,7 +184,7 @@ public Member_ShowList(playerid) {
         for(new i = 0; i < rows; i++) {
 
             new charID;
-            cache_get_value_name_int(i, "character_id", charID);
+            cache_get_value_name_int(i, "member_id", charID);
 
             format(dialogStr, sizeof dialogStr, ">> %d | << %d\n", i+1, charID);
         }
@@ -223,8 +223,8 @@ hook OnCharacterLoaded(playerid) {
 
     new q[120];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `ID` = '%d'", PlayerInfo[playerid][SQLID]);
-    mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d", PlayerInfo[playerid][SQLID]);
+    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `member_id` = '%d'",GetCharacterSQLID(playerid));
+    mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d",GetCharacterSQLID(playerid));
 
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -249,7 +249,7 @@ YCMD:loadmember(playerid, params[], help)
 {
     new q[120];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `character_id` = '1'");
+    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `member_id` = '1'");
     mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d", playerid);
 
     return 1;
@@ -263,7 +263,7 @@ YCMD:members(playerid, params[], help)
     new orgID = FactionMember[playerid][factionID];
     new sID = FactionInfo[orgID][factionID];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT `character_id` FROM `faction_members` WHERE `faction_id` = '%d'", sID);
+    mysql_format(MySQL:SQL, q, sizeof q, "SELECT `member_id` FROM `faction_members` WHERE `faction_id` = '%d'", sID);
     mysql_tquery(MySQL:SQL, q, "Member_ShowList", "d", playerid);
 
     return 1;
@@ -362,9 +362,9 @@ Dialog:dialog_factionName(playerid, response, listitem, string:inputtext[]) {
 
     new query[260];
 
-    mysql_format(MySQL:SQL, query, sizeof query, "INSERT INTO `faction_members` (`character_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
+    mysql_format(MySQL:SQL, query, sizeof query, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
                                              VALUES('%d', '%d', '7', '1')", 
-                                      PlayerInfo[playerid][SQLID], FactionInfo[fID][factionID]);
+                                     GetCharacterSQLID(playerid), FactionInfo[fID][factionID]);
     mysql_tquery(MySQL:SQL, query);
 
     return (true);

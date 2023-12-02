@@ -1,0 +1,51 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Noddy_
+ *  @Date           1st December 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           time.asset
+ *  @Module         asset
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+
+stock GetReadableTime(seconds, str[20])
+{
+    if (seconds < 3600)
+    {
+        // Ostalo manje od 1 sata
+        new mins = floatround(seconds/60.0, floatround_round);
+        format(str, sizeof str, "%i minuta", mins);
+    }
+    else if (seconds < 86400)
+    {
+        // Ostalo manje od 1 dan
+        new hours = floatround(seconds/3600.0, floatround_floor);
+        new mins = floatround((seconds - hours*3600)/60.0, floatround_round);
+        format(str, sizeof str, "%i sati, %i minuta", hours, mins);
+    }
+    else
+    {
+        // Vise od 1 dan
+        new days = floatround(seconds/86400.0, floatround_floor);
+        new hours = floatround((seconds - days*86400)/3600.0, floatround_round);
+        format(str, sizeof str, "%i dana, %i sati", days, hours);
+    }
+}
+
+stock GetRemainingTime(unixTimestamp, str[20])
+{
+    new remainingSeconds = unixTimestamp - gettime();
+    GetReadableTime(remainingSeconds, str);
+}

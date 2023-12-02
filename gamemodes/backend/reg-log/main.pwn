@@ -425,6 +425,8 @@ public SQL_InsertAccount(playerid)
 	}
 	ShowPlayerChoseCharacterTextDraw(playerid);
 	SelectTextDraw(playerid, TD_HOVER_COLOR);
+
+
 	return 1;
 }
 
@@ -575,7 +577,18 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
 	
+	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][0], GetPlayerSkin(playerid));
+	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], "%s", ReturnCharacterName(playerid));
+
+	CallLocalFunction("OnCharacterLoaded", "d", playerid);
+
 	SpawnPlayer(playerid);
+	return 1;
+}
+
+forward OnCharacterLoaded(playerid);
+public OnCharacterLoaded(playerid) {
+
 	return 1;
 }
 
@@ -601,6 +614,7 @@ public SQL_PlayerDeleteCharacter(playerid, characteridx)
 
 	DestroyPlayerChoseCharacterTextDraw(playerid, characteridx);
 	CreatePlayerChoseCharacterTextDraw(playerid, characteridx);
+
 	return 1;
 }
 
@@ -883,6 +897,11 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	Logo_ShowTextDraw(playerid, true);
 	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
+
+	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][0], GetPlayerSkin(playerid));
+	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], "%s", ReturnCharacterName(playerid));
+
+	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
 	SpawnPlayer(playerid);
 	return;
