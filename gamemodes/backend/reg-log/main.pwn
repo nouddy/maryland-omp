@@ -1009,13 +1009,18 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][lastPos][2] = 0.0;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
+hook OnPlayerSpawn(playerid) {
 
-	SetPlayerVirtualWorld(playerid, 6);
-	SetPlayerInterior(playerid, 6);
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1401.7791,1591.3466,12.0481)) {
+
+		SetPlayerVirtualWorld(playerid, 6);
+		SetPlayerInterior(playerid, 6);
+
+	}
+
 	
-	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
-	SpawnPlayer(playerid);
+	// SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
+	// SpawnPlayer(playerid);
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
