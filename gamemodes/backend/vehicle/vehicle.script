@@ -64,7 +64,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
     {
         if(engine == VEHICLE_PARAMS_OFF)
         {   
-            notification.Show(playerid, "Info", "Da upalis vozilo koristi tipku 'N'", "?", BOXCOLOR_BLUE);
+            notification.Show(playerid, "Info", "Da upalis vozilo koristi tipku 'CTRL', za svetla 'Y'.", "?", BOXCOLOR_BLUE);
         }
     }
 	return Y_HOOKS_CONTINUE_RETURN_1;
