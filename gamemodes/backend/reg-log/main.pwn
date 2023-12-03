@@ -228,7 +228,7 @@ public SQL_AccountCheck(playerid)
 	if(!rows)
 	{
 		pConnectState[playerid] = PLAYER_CONNECT_STATE_REGISTER;
-
+ 
 		CreatePlayerRegisterTextDraw(playerid);
 		ShowPlayerRegisterTextDraw(playerid);
 		SelectTextDraw(playerid, TD_HOVER_COLOR);
@@ -238,27 +238,30 @@ public SQL_AccountCheck(playerid)
 		cache_get_value_name_int(0, "ID", PlayerInfo[playerid][SQLID]);
 		cache_get_value_name(0, "Password", PlayerInfo[playerid][Password]);
 		cache_get_value_name_int(0, "Staff", PlayerInfo[playerid][Staff]);
-
+ 
 		pConnectState[playerid] = PLAYER_CONNECT_STATE_LOGIN;
-
+ 
 		CreatePlayerLoginTextDraws(playerid);
 		ShowPlayerLoginDialog(playerid);
 	}
+ 
+	SetPlayerInterior(playerid, 1);
+	SetPlayerVirtualWorld(playerid, playerid+1);
+ 
+	SetPlayerPos(playerid, CAM_START_POS+10.0);
+	SetPlayerFacingAngle(playerid,176.0717);
+ 
+	InterpolateCameraPos(playerid, CAM_START_POS, CAM_START_POS2, 1000);
+	InterpolateCameraLookAt(playerid, CAM_START_LOOKAT, CAM_START_LOOKAT, 1000);
+ 
+	Streamer_UpdateEx(playerid, CAM_START_POS);
 }
 
 stock ShowPlayerLoginDialog(playerid)
 {
-	SetPlayerInterior(playerid, 1);
-	SetPlayerVirtualWorld( playerid, MAX_PLAYERS+1);
-
-	SetPlayerPos(playerid,633.7927,-1765.8979,19.4339);
-	SetPlayerFacingAngle(playerid,176.0717);
-
-	InterpolateCameraPos(playerid, CAM_START_POS, CAM_START_POS2, 1000);
-	InterpolateCameraLookAt(playerid, CAM_START_LOOKAT, CAM_START_LOOKAT, 1000);
-
+ 
 	ShowPlayerLoginTextDraw(playerid);
-
+ 
 	new sDStrg[ 560 ],ip[50];
 	GetPlayerIp(playerid, ip, sizeof(ip));
 	format( sDStrg, sizeof( sDStrg ), "{ffffff}Dobro nam dosli nazad na "c_server"Mary"c_server2"Land Community.\n \n\
@@ -270,14 +273,14 @@ stock ShowPlayerLoginDialog(playerid)
 			\n\
 			Uzivajte igrajuci na nasem serveru!\n\
 			",ReturnPlayerName(playerid),ip);
-
-
+ 
+ 
 	Dialog_Show(playerid, "PlayerLoginDialog", DIALOG_STYLE_PASSWORD,
 			"Login Dialog",
 			sDStrg,
 			"Potvrdi", "Izlaz"
 	);
-
+ 
 	return 1;
 }
 
@@ -1004,4 +1007,15 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][lastPos][0] = 0.0;
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason) {
+
+	SetPlayerVirtualWorld(playerid, 6);
+	SetPlayerInterior(playerid, 6);
+	
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
+	SpawnPlayer(playerid);
+	
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
