@@ -64,25 +64,25 @@ hook OnGameModeInit()
 forward CreateMarkers();
 public CreateMarkers()
 {
-    CittyHallEnterExit[0] = CreateMarker(random(5),true,1482.6442,-1805.5509,18.7957-1.0,0, 0);
+    CittyHallEnterExit[0] = CreateMarker(1482.6442,-1805.5509,18.7957-0.9, 50.0, 0, 0);
 
     //
-    SpawnEntExit[0] = CreateMarker(random(5),false,1424.9067,1587.1135,19.1489-0.9, 6, 6);
-    SpawnEntExit[1] = CreateMarker(random(5),false,838.5801,-1345.9092,7.1788-0.9, 6, 0);
+    SpawnEntExit[0] = CreateMarker(1424.9067,1587.1135,19.1489-0.9, 50.0, 6, 6);
+    SpawnEntExit[1] = CreateMarker(838.5801,-1345.9092,7.1788-0.9, 50.0, 6, 0);
     //
-    TehnomediaMark[0] = CreateMarker(random(5),false,1676.1896,-1634.7426,14.2265-0.9, 0, 0);
-    TehnomediaMark[1] = CreateMarker(random(5),false,1671.4047,-1639.6481,14.2263-0.9, 0, 0);
+    TehnomediaMark[0] = CreateMarker(1676.1896,-1634.7426,14.2265-0.9, 50.0, 0, 0);
+    TehnomediaMark[1] = CreateMarker(1671.4047,-1639.6481,14.2263-0.9, 50.0, 0, 0);
     //
     //
-    BankMark[0] = CreateMarker(random(5),false, 978.1812, -1188.2797, 23.8752-0.9, 0, 0);
-    BankMark[1] = CreateMarker(random(5),false, 1201.1162, 2565.0740, -21.6386-0.9, 0, 0);
+    BankMark[0] = CreateMarker( 978.1812, -1188.2797, 23.8752-0.9, 50.0, 0, 0);
+    BankMark[1] = CreateMarker( 1201.1162, 2565.0740, -21.6386-0.9, 50.0, 0, 0);
     //
-    PDTest[0] = CreateMarker(random(5),false,330.7832,-1509.9639,36.0391-0.9, 0, 0);
+    PDTest[0] = CreateMarker(330.7832,-1509.9639,36.0391-0.9, 50.0, 0, 0);
     //
-    BizCenter[0] = CreateMarker(random(5),false,1658.5809,-1343.2560,17.4960-0.9, 0, 0);
-    BizCenter[1] = CreateMarker(random(5),false,1825.2643,-1286.4944,131.7544-0.9, 0, 0);
+    BizCenter[0] = CreateMarker(1658.5809,-1343.2560,17.4960-0.9, 50.0, 0, 0);
+    BizCenter[1] = CreateMarker(1825.2643,-1286.4944,131.7544-0.9, 50.0, 0, 0);
     //
-    hotel[0] = CreateMarker(random(5),false,1785.1909,-1296.4972,13.3967-0.9, 0, 0);
-    hotel[1] = CreateMarker(random(5),false,1786.6508,-1300.3116,54.9062-0.9, 0, 0);
+    hotel[0] = CreateMarker(1785.1909,-1296.4972,13.3967-0.9, 50.0, 0, 0);
+    hotel[1] = CreateMarker(1786.6508,-1300.3116,54.9062-0.9, 50.0, 0, 0);
     return (true);
 }

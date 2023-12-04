@@ -60,7 +60,7 @@
 #include <zones>
 #include <notify>
 #include <timestamp>
-#include <markerplus>
+//#include <markerplus>
 #include <animated-textdraw>
 #include <crashdetect>
 #include <colandreas>
@@ -475,6 +475,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //* Bitno jako da bude medju prvima
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
+#include "backend/assets/custommarkers.inc"						//* Custom markers
 #include "backend/finance/currency.pwn"									//* Currency
 
 //-------------------------------------------------------------------------------------------------------- Assets
