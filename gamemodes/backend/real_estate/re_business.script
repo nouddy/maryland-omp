@@ -1444,7 +1444,7 @@ YCMD:buybusiness(playerid, params[], help)
     
     PlayerProperty[playerid][BusinessID] = re_BusinessData[BID][bID];
 
-    new q[120];
+    new q[267];
 
     //      >> [ BUSINESS QUERY ] <<
 

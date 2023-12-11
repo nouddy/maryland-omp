@@ -32,6 +32,7 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
     cNametag[playerid] = CreateDynamic3DTextLabel("Loading nametag...", 0xFFFFFFFF, 0.0, 0.0, 0.1, CT_DISTANCE, .attachedplayer = playerid, .testlos = 1);
+    
     return 1;
 }
 
@@ -51,7 +52,7 @@ task SyncName[60000]() // OnPlayerUpdate causes lag
         {
             new nametag[128], playername[MAX_PLAYER_NAME];
             GetPlayerName(i, playername, sizeof(playername));
-            format(nametag, sizeof(nametag), "%s (%i)", playername, i);
+            format(nametag, sizeof(nametag), "%s (%i)", CharacterInfo[i][Name], i);
             UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, nametag);
         }
     }   

@@ -60,7 +60,6 @@
 #include <zones>
 #include <notify>
 #include <timestamp>
-//#include <markerplus>
 #include <animated-textdraw>
 #include <crashdetect>
 #include <colandreas>
@@ -489,7 +488,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/reg-log/main.pwn"								//* Register and login
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
-#include "backend/assets/labels.asset"								//* Labeli
 #include "backend/assets/custom_markers.asset"						//* Markeri
 #include "backend/assets/time.asset"						//* Time calculation
 //-------------------------------------------------------------------------------------------------------- Documentation
@@ -650,6 +648,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/exterior/vinewood_map.map"						//* VineWood
 #include "frontend/exterior/bank_ml.map"							//* Banka Maryland
 #include "frontend/exterior/vinewood_mall.map"					    //* VineWood Mall
+#include "frontend/exterior/rp-hood.map"					        //* Rp Hood
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
 #include "frontend/exterior/italy_zipline.map"						//* Zicara u Italy (SF)
@@ -684,14 +683,19 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/driving-school-int.map"					//* Driving_School (16)
 #include "frontend/interior/mob_int.map"						    //* Mob Int (17)
 #include "frontend/interior/7eleven_int.map"						//* Market 7/Eleven Int (18)
+#include "frontend/interior/train-int.map"						    //* Train Interior (19)
+#include "frontend/interior/bcenter-garage.map"						//* Business Centre Garage (20)
+#include "frontend/interior/jewlery_int.map"						//* Jewlery Int (21)
+#include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
+
 
 
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Jobs
-//#include "backend/jobs/jobs.pwn"
-//#include "backend/jobs/bus-driver.job"
+#include "backend/jobs/jobs.pwn"
+#include "backend/jobs/bus-driver.job"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"

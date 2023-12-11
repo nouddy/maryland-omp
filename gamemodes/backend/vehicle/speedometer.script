@@ -34,7 +34,7 @@ hook OnGameModeExit() {
 
     foreach(new v : iter_Vehicles) {
 
-        new query[120];
+        new query[267];
 
         format(query, sizeof(query), "UPDATE `vehicles` SET `vRange` = '%d', `vRangeKM` = '%d' WHERE `vID` = '%d'", eVehicle[v][vRange], eVehicle[v][vRangeKM], eVehicle[v][vID]);
         mysql_tquery(SQL, query);

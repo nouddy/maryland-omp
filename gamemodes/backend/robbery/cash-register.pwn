@@ -161,7 +161,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     FactionMember[playerid][factionRespect]++;
                     SendClientMessage(playerid, x_green, ">> Uspjesno ste dobili faction respect, trenutno imate "c_white"%d "c_green"respekata!", FactionMember[playerid][factionRespect]);
 
-                    new q[120];
+                    new q[267];
 
                     mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE character_id = '%d'", FactionMember[playerid][factionRespect], PlayerInfo[playerid][SQLID]);
                     mysql_tquery(MySQL:SQL, q);

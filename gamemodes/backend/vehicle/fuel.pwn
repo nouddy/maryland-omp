@@ -21,9 +21,7 @@
 
 new bool:fuel_IsActive[MAX_PLAYERS],
     fuel_Timer[MAX_PLAYERS],
-    fuel_Counter[MAX_PLAYERS];
-
-new PlayerBar:fuel_Bar[MAX_PLAYERS];
+    Float:fuel_Counter[MAX_PLAYERS];
 
 
 new PlayerText:Fuel_UI[MAX_PLAYERS][4];
@@ -38,15 +36,19 @@ hook OnGameModeInit()
 forward fuel_StartFueling(playerid);
 public fuel_StartFueling(playerid) {
 
-    if(fuel_Counter[playerid] > 100) {
+    if(fuel_Counter[playerid] > 80.0) {
 
         KillTimer(fuel_Timer[playerid]);   
-        DestroyPlayerProgressBar(playerid, fuel_Bar[playerid]);
+        Fuel_ShowInterface(playerid, false);
         return true;
     }
 
     fuel_Counter[playerid]++;
-    SetPlayerProgressBarValue(playerid, fuel_Bar[playerid], fuel_Counter[playerid]);
+    PlayerTextDrawTextSize(playerid, Fuel_UI[playerid][0], 5.000000, fuel_Counter[playerid]);
+    PlayerTextDrawShow(playerid,  Fuel_UI[playerid][0]);
+
+    new sipano = floatround(fuel_Counter[playerid], floatround_round);
+    PlayerTextDrawSetString(playerid, Fuel_UI[playerid][3], "sipano:_%dL", sipano);
 
     return (false);
 }
@@ -64,7 +66,7 @@ stock Fuel_ShowInterface(playerid, const bool:option) {
         }
 
         Fuel_UI[playerid][0] = CreatePlayerTextDraw(playerid, 114.532798, 373.551055, "LD_SPAC:white");
-        PlayerTextDrawTextSize(playerid, Fuel_UI[playerid][0], 5.000000, 1.000000);
+        PlayerTextDrawTextSize(playerid, Fuel_UI[playerid][0], 5.000000, 0.000000);
         PlayerTextDrawAlignment(playerid, Fuel_UI[playerid][0], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, Fuel_UI[playerid][0], -1);
         PlayerTextDrawSetShadow(playerid, Fuel_UI[playerid][0], 0);
@@ -90,7 +92,7 @@ stock Fuel_ShowInterface(playerid, const bool:option) {
         PlayerTextDrawFont(playerid, Fuel_UI[playerid][2], TEXT_DRAW_FONT_2);
         PlayerTextDrawSetProportional(playerid, Fuel_UI[playerid][2], true);
 
-        Fuel_UI[playerid][3] = CreatePlayerTextDraw(playerid, 123.000053, 407.844085, "sipano:_4L");
+        Fuel_UI[playerid][3] = CreatePlayerTextDraw(playerid, 123.000053, 407.844085, "sipano:_0L");
         PlayerTextDrawLetterSize(playerid, Fuel_UI[playerid][3], 0.115666, 0.517333);
         PlayerTextDrawAlignment(playerid, Fuel_UI[playerid][3], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, Fuel_UI[playerid][3], -1);
@@ -124,9 +126,7 @@ YCMD:fuel(playerid, params[], help) {
 
     fuel_Timer[playerid] = SetTimerEx("fuel_StartFueling", 100, true, "d", playerid);
 
-    fuel_Bar[playerid] = CreatePlayerProgressBar(playerid, 114.532798, 373.551055, 3, 50, 0xFF1C1CFF, 100.0, BAR_DIRECTION_UP);
-    ShowPlayerProgressBar(playerid, fuel_Bar[playerid]);
-    SetPlayerProgressBarValue(playerid, fuel_Bar[playerid], 0);
+    fuel_Counter[playerid] = 0.00;
 
     return 1;
 }

@@ -192,7 +192,7 @@ hook OnPlayerConnect(playerid)
 	ResetPlayerRegisterTextDraw(playerid);
 	ResetPlayerLoginTextDraw(playerid);
 
-	new query[120];
+	new query[267];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `accounts` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountCheck", "i", playerid);
 	return Y_HOOKS_CONTINUE_RETURN_1;
@@ -204,7 +204,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	Destroy3DMenu(p3DMenu[playerid]);
 	p3DMenu[playerid] = INVALID_3D_MENU;
 
-	new q[120];
+	new q[267];
 	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cMoney` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), CharacterInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
 
@@ -402,7 +402,7 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 
 		DestroyPlayerRegisterTextDraw(playerid);
 		
-		new query[120];
+		new query[267];
 		mysql_format(SQL, query, sizeof(query), "INSERT INTO `accounts` SET `Username` = '%e', `Password` = '%e', `Email` = '%e'", ReturnPlayerName(playerid), pRegisterPassword[playerid], pRegisterMail[playerid]);
 		mysql_tquery(SQL, query, "SQL_InsertAccount", "i", playerid);
 	}
@@ -936,7 +936,7 @@ hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 		if(leftright == KEY_LEFT)
 		{
 			pTmpSkinIDX[playerid]--;
-			if(pTmpSkinIDX[playerid] < 0) pTmpSkinIDX[playerid] = (sizeof(CharacterDefaultSkins[]));
+			if(pTmpSkinIDX[playerid] < 0) pTmpSkinIDX[playerid] = (sizeof(CharacterDefaultSkins[])-1);
 		}
 
 		if(leftright == KEY_RIGHT)

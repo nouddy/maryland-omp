@@ -213,7 +213,7 @@ hook OnGameModeInit() {
 
     FactionCreateLabels[0] = CreateDynamic3DTextLabel(""c_server" » "c_grey"Faction Create "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za kreiranje. "c_server"«", x_white, -776.4226, -1977.0199, 8.7799, 4.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 3, -1);
 
-    new q[120];
+    new q[267];
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `factions`", "Faction_LoadData");
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -221,7 +221,7 @@ hook OnGameModeInit() {
 
 hook OnCharacterLoaded(playerid) {
 
-    new q[120];
+    new q[267];
 
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `member_id` = '%d'",GetCharacterSQLID(playerid));
     mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d",GetCharacterSQLID(playerid));
@@ -247,7 +247,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
 YCMD:loadmember(playerid, params[], help) 
 {
-    new q[120];
+    new q[267];
 
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `member_id` = '1'");
     mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d", playerid);
@@ -258,7 +258,7 @@ YCMD:loadmember(playerid, params[], help)
 YCMD:members(playerid, params[], help) 
 {
     
-    new q[120];
+    new q[267];
 
     new orgID = FactionMember[playerid][factionID];
     new sID = FactionInfo[orgID][factionID];

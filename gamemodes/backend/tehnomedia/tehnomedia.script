@@ -36,7 +36,7 @@ hook OnGameModeInit()
 
 hook OnCharacterLoaded(playerid)
 {   
-    new q[120];
+    new q[267];
     mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_electronic WHERE character_electronics = '%d'", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_ElectronicLoad", "i", playerid);
 

@@ -96,6 +96,8 @@ static Text3D:dealership_VehicleLabel[5];
 
 static vehicleBought[MAX_PLAYERS];
 
+new bool:client_PossibleBuy;
+
 forward Dealership_StreamVehicle(id, playerid);
 public Dealership_StreamVehicle(id, playerid) {
 
@@ -864,6 +866,7 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
 
         dealership_UI[playerid] = true;
 
+        client_PossibleBuy = true;
 
     }
     else {
@@ -879,6 +882,7 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
         CancelSelectTextDraw(playerid);
 
         dealership_UI[playerid] = false;
+        client_PossibleBuy = false;
     }
     return 1;
 }
@@ -899,6 +903,9 @@ YCMD:catalogue(playerid, params[], help)
     if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
         return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
     
+    if(client_PossibleBuy)
+        return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Svi agenti su vec zauzeti sacekajte vas red!"); 
+
     if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
 
         Dealership_ShowInterface(playerid, false);

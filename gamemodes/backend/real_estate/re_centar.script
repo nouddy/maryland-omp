@@ -39,9 +39,9 @@
 
 
 new PlayerText3D:re_BCenter_Label[MAX_PLAYERS],
-    Text3D:re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
-    Text3D:re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
-    Text3D:re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
+    re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
+    re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
+    re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
 
 
 new Iterator:iter_BCenters<MAX_BUSINESS_CENTER>;
@@ -145,8 +145,8 @@ public BCenter_Create(id, playerid) {
     SetPlayerVirtualWorld(playerid, 0);
     TogglePlayerControllable(playerid, true);
 
-    re_BCenter_ArmoryLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterArmoryPos][0], BCenterData[id][re_BCenterArmoryPos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
-    re_BCenter_WardrobeLabel[id] = Create3DTextLabel(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[id][re_BCenterWardrobePos][0], BCenterData[id][re_BCenterWardrobePos][1], BCenterData[id][re_BCenterArmoryPos][2], 3.50, BCenterData[id][re_BCenterVirtualWorld]);
+    re_BCenter_ArmoryLabel[id] = CreateCustomMarker(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'",  BCenterData[id][re_BCenterArmoryPos][0], BCenterData[id][re_BCenterArmoryPos][1], BCenterData[id][re_BCenterArmoryPos][2],  BCenterData[id][re_BCenterInterior], BCenterData[id][re_BCenterVirtualWorld], 50.0);
+    re_BCenter_WardrobeLabel[id] = CreateCustomMarker(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'",  BCenterData[id][re_BCenterWardrobePos][0], BCenterData[id][re_BCenterWardrobePos][1], BCenterData[id][re_BCenterArmoryPos][2],  BCenterData[id][re_BCenterInterior], BCenterData[id][re_BCenterVirtualWorld], 50.0);
 
     return 1;
 }
@@ -245,17 +245,18 @@ public BCenter_Load()
 
             SetDynamicObjectMaterialText(re_CenterSign[i], 0, firm_name, 130, "Arial", 45, 1, 0xFFFFFFFF, 0x00000000, 1);
 
-            re_BCenter_ArmoryLabel[i] = Create3DTextLabel(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[i][re_BCenterArmoryPos][0], BCenterData[i][re_BCenterArmoryPos][1], BCenterData[i][re_BCenterArmoryPos][2], 3.50, BCenterData[i][re_BCenterVirtualWorld]);
-            re_BCenter_WardrobeLabel[i] = Create3DTextLabel(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", -1,  BCenterData[i][re_BCenterWardrobePos][0], BCenterData[i][re_BCenterWardrobePos][1], BCenterData[i][re_BCenterArmoryPos][2], 3.50, BCenterData[i][re_BCenterVirtualWorld]);
+            re_BCenter_ArmoryLabel[i] = CreateCustomMarker(""c_server"\187; "c_white"Oruzaonica\n"c_server"\187; "c_white"Za pristup pritisnite 'N'", BCenterData[i][re_BCenterArmoryPos][0], BCenterData[i][re_BCenterArmoryPos][1], BCenterData[i][re_BCenterArmoryPos][2], BCenterData[i][re_BCenterInterior], BCenterData[i][re_BCenterVirtualWorld], 50.0);
+            re_BCenter_WardrobeLabel[i] = CreateCustomMarker(""c_server"\187; "c_white"Garderober\n"c_server"\187; "c_white"Za pristup pritisnite 'N'",  BCenterData[i][re_BCenterWardrobePos][0], BCenterData[i][re_BCenterWardrobePos][1], BCenterData[i][re_BCenterArmoryPos][2], BCenterData[i][re_BCenterInterior], BCenterData[i][re_BCenterVirtualWorld], 50.0);
 
         }
 
         BCenterActor[i] = CreateDynamicActor(BCenterData[i][re_BCenterAgentType], BCenterData[i][re_AgentPos][0], BCenterData[i][re_AgentPos][1], BCenterData[i][re_AgentPos][2], BCenterData[i][re_AgentPos][3], 1, 100.0, BCenterData[i][re_BCenterVirtualWorld], BCenterData[i][re_BCenterInterior], -1);
 
 		Iter_Add(iter_BCenters, i);
-
-		printf("backend/real_estate/re_centar.script loaded(%d) business centers", rows);
     }
+
+    printf("[BUSINESS - CENTRE] Loaded %d", rows);
+
     return (true);
 }
 

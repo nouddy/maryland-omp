@@ -474,7 +474,7 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 				DestroyDynamicPickup(house_Pickup[id]);
 				DestroyDynamic3DTextLabel(house_Label[id]);
 
-				new q[120];
+				new q[267];
 
 				mysql_format(SQL, q, sizeof q, "DELETE FROM `houses` WHERE `ID`= '%d'", id);
 				mysql_tquery(SQL, q);
@@ -504,7 +504,7 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 
     			DestroyDynamic3DTextLabel(SeatDownInfo[i][seat_label]);
 
-				static q[120];
+				static q[267];
 				mysql_format(SQL, q, 120, "DELETE FROM `benches` WHERE `seat_ID` = '%d'", SeatDownInfo[i][seat_SQLID]);
 				mysql_tquery(SQL, q);
 

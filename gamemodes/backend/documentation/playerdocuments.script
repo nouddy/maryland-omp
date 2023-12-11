@@ -52,7 +52,7 @@ hook OnPlayerConnect(playerid) {
 
 hook OnCharacterLoaded(playerid)
 {   
-    new q[120];
+    new q[267];
     mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_documents WHERE character_document = '%d' LIMIT 1", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "SQL_AccountDocumentsLoad", "i", playerid);
 
