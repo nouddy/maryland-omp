@@ -8,8 +8,8 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Silent & Nodi
- *  @Github         (github.com/reals1lent) & (github.com/DinoWETT)
+ *  @Author         Vostic & Nodi
+ *  @Github         (github.com/vosticdev) & (github.com/DinoWETT)
  *  @Date           19th Sep 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
@@ -75,7 +75,7 @@ main()
     print("-                                     -");
 	print(" Founder : Ogy");
 	print(" Version : 1.0 - Maryland");
-	print(" Developer : Silent & Nodi");
+	print(" Developer : Vostic & Nodi");
 	print(" Credits : daddyDOT");
 	print("-                                     -");
 	print("> Gamemode Starting...");
