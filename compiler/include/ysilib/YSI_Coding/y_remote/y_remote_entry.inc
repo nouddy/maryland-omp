@@ -77,10 +77,24 @@ Optional plugins:
 */
 
 #include "..\..\YSI_Core\y_utils"
-#include "..\..\YSI_Server\y_thirdpartyinclude\y_codeparse"
+#include "..\..\YSI_Server\y_thirdpartyinclude\y3_codeparse"
 #include "y_remote_macros"
 
 #if defined YSI_TESTS
+	#if defined YSI_NO_TEST_WARNINGS
+		#pragma warning push
+		#pragma warning disable 203
+		#pragma warning disable 204
+		#pragma warning disable 213
+		#pragma warning disable 214
+		#pragma warning disable 219
+		#pragma warning disable 234
+		#pragma warning disable 239
+		#pragma warning disable 240
+	#endif
 	#include "y_remote_tests"
+	#if defined YSI_NO_TEST_WARNINGS
+		#pragma warning pop
+	#endif
 #endif
 

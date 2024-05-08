@@ -33,11 +33,17 @@
 #define HTTP_METHOD: __TAG(HTTP_METHOD):
 enum HTTP_METHOD:__HTTP_METHOD
 {
+	UNKNOWN_HTTP_METHOD                        = -1,
 	HTTP_GET                                   = 1,
 	HTTP_POST,
 	HTTP_HEAD
 }
 static stock HTTP_METHOD:_@HTTP_METHOD() { return __HTTP_METHOD; }
+
+#define UNKNOWN_HTTP_METHOD                    (HTTP_METHOD:-1)
+#define HTTP_GET                               (HTTP_METHOD:1)
+#define HTTP_POST                              (HTTP_METHOD:2)
+#define HTTP_HEAD                              (HTTP_METHOD:3)
 
 /// <p/>
 /**
@@ -51,6 +57,7 @@ static stock HTTP_METHOD:_@HTTP_METHOD() { return __HTTP_METHOD; }
 #define HTTP_ERROR: __TAG(HTTP_ERROR):
 enum HTTP_ERROR:__HTTP_ERROR
 {
+	UNKNOWN_HTTP_ERROR                         = -1,
 	HTTP_ERROR_BAD_HOST                        = 1,
 	HTTP_ERROR_NO_SOCKET,
 	HTTP_ERROR_CANT_CONNECT,
@@ -59,6 +66,14 @@ enum HTTP_ERROR:__HTTP_ERROR
 	HTTP_ERROR_MALFORMED_RESPONSE
 }
 static stock HTTP_ERROR:_@HTTP_ERROR() { return __HTTP_ERROR; }
+
+#define UNKNOWN_HTTP_ERROR                     (HTTP_ERROR:-1)
+#define HTTP_ERROR_BAD_HOST                    (HTTP_ERROR:1)
+#define HTTP_ERROR_NO_SOCKET                   (HTTP_ERROR:2)
+#define HTTP_ERROR_CANT_CONNECT                (HTTP_ERROR:3)
+#define HTTP_ERROR_CANT_WRITE                  (HTTP_ERROR:4)
+#define HTTP_ERROR_CONTENT_TOO_BIG             (HTTP_ERROR:5)
+#define HTTP_ERROR_MALFORMED_RESPONSE          (HTTP_ERROR:6)
 
 /*
                                                                            

@@ -37,9 +37,27 @@ const INVALID_TIMER                            = 0;
  * <summary>Weapons</summary>
  */
 #define WEAPON: __TAG(WEAPON):
-enum WEAPON:__WEAPON
+enum WEAPON:MAX_WEAPONS
 {
-	WEAPON_UNKNOWN                             = -1,
+	UNKNOWN_WEAPON                             = -1,
+	// Special `OnPlayerDeath` `reason` values.  NOT included in `MAX_WEAPONS`.
+	REASON_VEHICLE                             = 49,
+	REASON_HELICOPTER_BLADES                   = 50,
+	REASON_EXPLOSION                           = 51,
+	REASON_DROWN                               = 53,
+	REASON_COLLISION                           = 54,
+	REASON_SPLAT                               = 54,
+	REASON_CONNECT                             = 200,
+	REASON_DISCONNECT                          = 201,
+	REASON_SUICIDE                             = 255,
+
+	WEAPON_UNKNOWN                             = UNKNOWN_WEAPON,
+	WEAPON_VEHICLE                             = REASON_VEHICLE,
+	WEAPON_DROWN                               = REASON_DROWN,
+	WEAPON_COLLISION                           = REASON_COLLISION,
+	WEAPON_SPLAT                               = REASON_SPLAT,
+
+	// The main weapon types.  Done after the reasons so sizes are correct.
 	WEAPON_FIST                                =  0,
 	WEAPON_BRASSKNUCKLE                        =  1,
 	WEAPON_GOLFCLUB                            =  2,
@@ -85,15 +103,76 @@ enum WEAPON:__WEAPON
 	WEAPON_CAMERA                              = 43,
 	WEAPON_NIGHT_VISION_GOGGLES                = 44,
 	WEAPON_THERMAL_GOGGLES                     = 45,
-	WEAPON_PARACHUTE                           = 46,
-	WEAPON_VEHICLE                             = 49,
-	WEAPON_DROWN                               = 53,
-	WEAPON_COLLISION                           = 54,
-	WEAPON_SPLAT                               = WEAPON_COLLISION
+	WEAPON_PARACHUTE                           = 46
 }
-static stock WEAPON:_@WEAPON() { return __WEAPON; }
+static stock WEAPON:_@WEAPON() { return MAX_WEAPONS; }
 
-#define MAX_WEAPONS __WEAPON
+#define UNKNOWN_WEAPON                         (WEAPON:-1)
+
+// Special `OnPlayerDeath` `reason` values.  NOT included in `MAX_WEAPONS`.
+#define REASON_VEHICLE                         (WEAPON:49)
+#define REASON_HELICOPTER_BLADES               (WEAPON:50)
+#define REASON_EXPLOSION                       (WEAPON:51)
+#define REASON_DROWN                           (WEAPON:53)
+#define REASON_COLLISION                       (WEAPON:54)
+#define REASON_SPLAT                           (WEAPON:54)
+#define REASON_CONNECT                         (WEAPON:200)
+#define REASON_DISCONNECT                      (WEAPON:201)
+#define REASON_SUICIDE                         (WEAPON:255)
+
+// The main weapon types.
+#define WEAPON_FIST                            (WEAPON:0)
+#define WEAPON_BRASSKNUCKLE                    (WEAPON:1)
+#define WEAPON_GOLFCLUB                        (WEAPON:2)
+#define WEAPON_NITESTICK                       (WEAPON:3)
+#define WEAPON_NIGHTSTICK                      (WEAPON:3)
+#define WEAPON_KNIFE                           (WEAPON:4)
+#define WEAPON_BAT                             (WEAPON:5)
+#define WEAPON_SHOVEL                          (WEAPON:6)
+#define WEAPON_POOLSTICK                       (WEAPON:7)
+#define WEAPON_KATANA                          (WEAPON:8)
+#define WEAPON_CHAINSAW                        (WEAPON:9)
+#define WEAPON_DILDO                           (WEAPON:10)
+#define WEAPON_DILDO2                          (WEAPON:11)
+#define WEAPON_VIBRATOR                        (WEAPON:12)
+#define WEAPON_VIBRATOR2                       (WEAPON:13)
+#define WEAPON_FLOWER                          (WEAPON:14)
+#define WEAPON_CANE                            (WEAPON:15)
+#define WEAPON_GRENADE                         (WEAPON:16)
+#define WEAPON_TEARGAS                         (WEAPON:17)
+#define WEAPON_MOLTOV                          (WEAPON:18)
+#define WEAPON_MOLOTOV                         (WEAPON:18)
+#define WEAPON_COLT45                          (WEAPON:22)
+#define WEAPON_SILENCED                        (WEAPON:23)
+#define WEAPON_DEAGLE                          (WEAPON:24)
+#define WEAPON_SHOTGUN                         (WEAPON:25)
+#define WEAPON_SAWEDOFF                        (WEAPON:26)
+#define WEAPON_SHOTGSPA                        (WEAPON:27)
+#define WEAPON_UZI                             (WEAPON:28)
+#define WEAPON_MP5                             (WEAPON:29)
+#define WEAPON_AK47                            (WEAPON:30)
+#define WEAPON_M4                              (WEAPON:31)
+#define WEAPON_TEC9                            (WEAPON:32)
+#define WEAPON_RIFLE                           (WEAPON:33)
+#define WEAPON_SNIPER                          (WEAPON:34)
+#define WEAPON_ROCKETLAUNCHER                  (WEAPON:35)
+#define WEAPON_HEATSEEKER                      (WEAPON:36)
+#define WEAPON_FLAMETHROWER                    (WEAPON:37)
+#define WEAPON_MINIGUN                         (WEAPON:38)
+#define WEAPON_SATCHEL                         (WEAPON:39)
+#define WEAPON_BOMB                            (WEAPON:40)
+#define WEAPON_SPRAYCAN                        (WEAPON:41)
+#define WEAPON_FIREEXTINGUISHER                (WEAPON:42)
+#define WEAPON_CAMERA                          (WEAPON:43)
+#define WEAPON_NIGHT_VISION_GOGGLES            (WEAPON:44)
+#define WEAPON_THERMAL_GOGGLES                 (WEAPON:45)
+#define WEAPON_PARACHUTE                       (WEAPON:46)
+
+#define WEAPON_UNKNOWN UNKNOWN_WEAPON
+#define WEAPON_VEHICLE REASON_VEHICLE
+#define WEAPON_DROWN REASON_DROWN
+#define WEAPON_COLLISION REASON_COLLISION
+#define WEAPON_SPLAT REASON_SPLAT
 
 /// <p/>
 /**
@@ -101,9 +180,10 @@ static stock WEAPON:_@WEAPON() { return __WEAPON; }
  * <summary>Weapon Slots</summary>
  */
 #define WEAPON_SLOT: __TAG(WEAPON_SLOT):
-enum WEAPON_SLOT:__WEAPON_SLOT
+enum WEAPON_SLOT:MAX_WEAPON_SLOTS
 {
-	WEAPON_SLOT_UNKNOWN                        = -1,
+	UNKNOWN_WEAPON_SLOT                        = -1,
+	WEAPON_SLOT_UNKNOWN                        = UNKNOWN_WEAPON_SLOT,
 	WEAPON_SLOT_UNARMED                        =  0,
 	WEAPON_SLOT_MELEE                          =  1,
 	WEAPON_SLOT_PISTOL                         =  2,
@@ -118,9 +198,24 @@ enum WEAPON_SLOT:__WEAPON_SLOT
 	WEAPON_SLOT_GADGET                         = 11,
 	WEAPON_SLOT_DETONATOR                      = 12
 }
-static stock WEAPON_SLOT:_@WEAPON_SLOT() { return __WEAPON_SLOT; }
+static stock WEAPON_SLOT:_@WEAPON_SLOT() { return MAX_WEAPON_SLOTS; }
 
-#define MAX_WEAPON_SLOTS __WEAPON_SLOT
+#define UNKNOWN_WEAPON_SLOT                    (WEAPON_SLOT:-1)
+#define WEAPON_SLOT_UNARMED                    (WEAPON_SLOT:0)
+#define WEAPON_SLOT_MELEE                      (WEAPON_SLOT:1)
+#define WEAPON_SLOT_PISTOL                     (WEAPON_SLOT:2)
+#define WEAPON_SLOT_SHOTGUN                    (WEAPON_SLOT:3)
+#define WEAPON_SLOT_MACHINE_GUN                (WEAPON_SLOT:4)
+#define WEAPON_SLOT_ASSAULT_RIFLE              (WEAPON_SLOT:5)
+#define WEAPON_SLOT_LONG_RIFLE                 (WEAPON_SLOT:6)
+#define WEAPON_SLOT_ARTILLERY                  (WEAPON_SLOT:7)
+#define WEAPON_SLOT_EXPLOSIVES                 (WEAPON_SLOT:8)
+#define WEAPON_SLOT_EQUIPMENT                  (WEAPON_SLOT:9)
+#define WEAPON_SLOT_GIFT                       (WEAPON_SLOT:10)
+#define WEAPON_SLOT_GADGET                     (WEAPON_SLOT:11)
+#define WEAPON_SLOT_DETONATOR                  (WEAPON_SLOT:12)
+
+#define WEAPON_SLOT_UNKNOWN UNKNOWN_WEAPON_SLOT
 
 /// <p/>
 /**
@@ -130,12 +225,20 @@ static stock WEAPON_SLOT:_@WEAPON_SLOT() { return __WEAPON_SLOT; }
 #define PLAYER_MARKERS_MODE: __TAG(PLAYER_MARKERS_MODE):
 enum PLAYER_MARKERS_MODE:__PLAYER_MARKERS_MODE
 {
-	PLAYER_MARKERS_MODE_UNKNOWN                = -1,
+	UNKNOWN_PLAYER_MARKERS_MODE                = -1,
+	PLAYER_MARKERS_MODE_UNKNOWN                = UNKNOWN_PLAYER_MARKERS_MODE,
 	PLAYER_MARKERS_MODE_OFF                    =  0,
 	PLAYER_MARKERS_MODE_GLOBAL                 =  1,
 	PLAYER_MARKERS_MODE_STREAMED               =  2
 }
 static stock PLAYER_MARKERS_MODE:_@PLAYER_MARKERS_MODE() { return __PLAYER_MARKERS_MODE; }
+
+#define UNKNOWN_PLAYER_MARKERS_MODE            (PLAYER_MARKERS_MODE:-1)
+#define PLAYER_MARKERS_MODE_OFF                (PLAYER_MARKERS_MODE:0)
+#define PLAYER_MARKERS_MODE_GLOBAL             (PLAYER_MARKERS_MODE:1)
+#define PLAYER_MARKERS_MODE_STREAMED           (PLAYER_MARKERS_MODE:2)
+
+#define PLAYER_MARKERS_MODE_UNKNOWN UNKNOWN_PLAYER_MARKERS_MODE
 
 /*
                                                                                                                                     
@@ -152,7 +255,10 @@ static stock PLAYER_MARKERS_MODE:_@PLAYER_MARKERS_MODE() { return __PLAYER_MARKE
 
 */
 /*
-native #Pawn Utilities();
+native # Pawn Utilities();
+native Â Â Â Â Â Â Â Â PawnÂ Utilities(
+native Â Â Â Â Â ====================(
+native
 */
 
 /**
@@ -161,14 +267,24 @@ native #Pawn Utilities();
  * <param name="string">The string to print</param>
  * <seealso name="printf" />
  */
-#if defined _console_included
+#if defined __print
 	// Fixes a pawndoc bug - comments on `#ifdef`ed out functions are still put
 	// in the output, unattached to any function.  So make a function.
 	/* */ native __open_mp_unused_print(const string[]);
 	#define __open_mp_unused_print
+	#define print( __print(
+	#define _ALS_print
 #else
 	native print(const string[]);
 #endif
+
+/**
+ * <library>omp_core</library>
+ * <summary>Prints a string to the server console (not in-game chat) and logs (server_log.txt).</summary>
+ * <param name="string">The string to print</param>
+ * <seealso name="printf" />
+ */
+native Print(const string[]) = print;
 
 /**
  * <library>omp_core</library>
@@ -203,14 +319,44 @@ native #Pawn Utilities();
  * number of decimal places beeing shown of a float, you can add <b><c>.&lt;max number&gt;</c></b> between
  * the <b><c>%</c></b> and the <b><c>f</c></b>. (example: <b><c>%.2f</c></b>)</remarks>
  */
-#if defined _console_included
-	// Fixes a pawndoc bug - comments on `#ifdef`ed out functions are still put
-	// in the output, unattached to any function.  So make a function.
-	/* */ native __open_mp_unused_printf(const format[], OPEN_MP_TAGS:...);
-	#define __open_mp_unused_printf
-#else
-	native printf(const format[], OPEN_MP_TAGS:...);
-#endif
+native __printf(const format[], OPEN_MP_TAGS:...) = printf;
+#define printf( __printf(
+#define _ALS_printf
+
+/**
+ * <library>omp_core</library>
+ * <summary>Outputs a formatted string on the console (the server window, not the in-game chat).</summary>
+ * <param name="format">The format string</param>
+ * <param name="">Indefinite number of arguments of any tag</param>
+ * <seealso name="print" />
+ * <seealso name="format" />
+ * <remarks>The format string or its output should not exceed 1024 characters.  Anything beyond that
+ * length can lead to a server to crash.</remarks>
+ * <remarks>This function doesn't support <a href="#strpack">packed</a> strings.</remarks>
+ * <remarks>
+ *   <b>Format Specifiers:</b><br />
+ *   <ul>
+ *     <li><b><c>%i</c></b> - integer (whole number)</li>
+ *     <li><b><c>%d</c></b> - integer (whole number).</li>
+ *     <li><b><c>%s</c></b> - string</li>
+ *     <li><b><c>%f</c></b> - floating-point number (Float: tag)</li>
+ *     <li><b><c>%c</c></b> - ASCII character</li>
+ *     <li><b><c>%x</c></b> - hexadecimal number</li>
+ *     <li><b><c>%b</c></b> - binary number</li>
+ *     <li><b><c>%%</c></b> - literal <b><c>%</c></b></li>
+ *     <li><b><c>%q</c></b> - escape a text for SQLite. (Added in <b>0.3.7 R2</b>)</li>
+ *   </ul>
+ * </remarks>
+ * <remarks>The values for the placeholders follow in the exact same order as parameters in the call.
+ *  For example, <b><c>"I am %i years old"</c></b> - the <b><c>%i</c></b> will be replaced with an Integer
+ * variable, which is the person's age.</remarks>
+ * <remarks>You may optionally put a number between the <b><c>%</c></b> and the letter of the placeholder
+ * code.  This number indicates the field width; if the size of the parameter to print at the position
+ * of the placeholder is smaller than the field width, the field is expanded with spaces.  To cut the
+ * number of decimal places beeing shown of a float, you can add <b><c>.&lt;max number&gt;</c></b> between
+ * the <b><c>%</c></b> and the <b><c>f</c></b>. (example: <b><c>%.2f</c></b>)</remarks>
+ */
+native PrintF(const format[], OPEN_MP_TAGS:...) = printf;
 
 #if !defined _console_included
 	#define _console_included
@@ -253,6 +399,41 @@ native format(output[], len = sizeof (output), const format[], {Float, _}:...);
 
 /**
  * <library>omp_core</library>
+ * <summary>Formats a string to include variables and other strings inside it.</summary>
+ * <param name="output">The string to output the result to</param>
+ * <param name="len">The maximum length output can contain</param>
+ * <param name="format">The format string</param>
+ * <param name="">Indefinite number of arguments of any tag</param>
+ * <seealso name="print" />
+ * <seealso name="printf" />
+ * <remarks>This function doesn't support <a href="#strpack">packed strings</a>.</remarks>
+ * <remarks>
+ *   <b>Format Specifiers:</b><br />
+ *   <ul>
+ *     <li><b><c>%i</c></b> - integer (whole number)</li>
+ *     <li><b><c>%d</c></b> - integer (whole number).</li>
+ *     <li><b><c>%s</c></b> - string</li>
+ *     <li><b><c>%f</c></b> - floating-point number (Float: tag)</li>
+ *     <li><b><c>%c</c></b> - ASCII character</li>
+ *     <li><b><c>%x</c></b> - hexadecimal number</li>
+ *     <li><b><c>%b</c></b> - binary number</li>
+ *     <li><b><c>%%</c></b> - literal <b><c>%</c></b></li>
+ *     <li><b><c>%q</c></b> - escape a text for SQLite. (Added in <b>0.3.7 R2</b>)</li>
+ *   </ul>
+ * </remarks>
+ * <remarks>The values for the placeholders follow in the exact same order as parameters in the call.
+ *  For example, <b><c>"I am %i years old"</c></b> - the <b><c>%i</c></b> will be replaced with an Integer
+ * variable, which is the person's age.</remarks>
+ * <remarks>You may optionally put a number between the <b><c>%</c></b> and the letter of the placeholder
+ * code.  This number indicates the field width; if the size of the parameter to print at the position
+ * of the placeholder is smaller than the field width, the field is expanded with spaces.  To cut the
+ * number of decimal places beeing shown of a float, you can add <b><c>.&lt;max number&gt;</c></b> between
+ * the <b><c>%</c></b> and the <b><c>f</c></b>. (example: <b><c>%.2f</c></b>)</remarks>
+ */
+native Format(output[], len = sizeof (output), const format[], {Float, _}:...) = format;
+
+/**
+ * <library>omp_core</library>
  * <summary>Sets a 'timer' to call a function after some time.  Can be set to repeat.</summary>
  * <param name="functionName">Name of the function to call as a string.  This must be a public function
  * (forwarded).  A null string here will crash the server</param>
@@ -260,9 +441,6 @@ native format(output[], len = sizeof (output), const format[], {Float, _}:...);
  * <param name="repeating">Whether the timer should repeat or not</param>
  * <seealso name="SetTimerEx" />
  * <seealso name="KillTimer" />
- * <remarks>Timer intervals are not accurate (roughly 25% off).  There's a fix available
- * <a href="http://forum.sa-mp.com/showthread.php?t=289675">here</a>.
- * </remarks>
  * <remarks>Timer IDs are never used twice.  You can use <a href="#KillTimer">KillTimer</a> on a timer
  * ID and it won't matter if it's running or not. </remarks>
  * <remarks>The function that should be called must be public. </remarks>
@@ -285,9 +463,6 @@ native SetTimer(const functionName[], interval, bool:repeating);
  * <seealso name="KillTimer" />
  * <seealso name="CallLocalFunction" />
  * <seealso name="CallRemoteFunction" />
- * <remarks>Timer intervals are not accurate (roughly 25% off).  There's a fix available
- * <a href="http://forum.sa-mp.com/showthread.php?t=289675">here</a>.
- * </remarks>
  * <remarks>Timer IDs are never used twice.  You can use KillTimer() on a timer ID and it won't matter
  * if it's running or not. </remarks>
  * <remarks>The function that should be called must be public. </remarks>
@@ -448,7 +623,7 @@ native bool:SendPlayerMessageToAll(senderid, const format[], OPEN_MP_TAGS:...);
  * <summary>Adds a death to the 'killfeed' on the right-hand side of the screen for all players.</summary>
  * <param name="killer">The ID of the killer (can be <b><c>INVALID_PLAYER_ID</c></b>)</param>
  * <param name="killee">The ID of the player that died</param>
- * <param name="weapon">The <a href="http://wiki.sa-mp.com/wiki/Weapons">reason</a> (not always a weapon)
+ * <param name="weapon">The <a href="https://www.open.mp/docs/scripting/resources/weaponids">reason</a> (not always a weapon)
  * for the victim's death.  Special icons can also be used (<b><c>ICON_CONNECT</c></b> and <b><c>ICON_DISCONNECT</c></b>)</param>
  * <seealso name="SendDeathMessageToPlayer" />
  * <seealso name="OnPlayerDeath" />
@@ -535,7 +710,10 @@ native void:CreateExplosion(Float:x, Float:y, Float:z, type, Float:radius);
 */
 
 /*
-native #Maths();
+native # Maths();
+native Â Â Â Â Â Â Â Â Â Â Â Â Maths(
+native Â Â Â Â Â ====================(
+native
 */
 
 /**
@@ -562,12 +740,30 @@ native Float:asin(Float:value);
 
 /**
  * <library>omp_core</library>
+ * <summary>Get the inversed value of a sine in degrees.</summary>
+ * <param name="value">The sine for which to find the angle for</param>
+ * <seealso name="floatsin" />
+ * <returns>The angle in degrees.</returns>
+ */
+native Float:ASin(Float:value) = asin;
+
+/**
+ * <library>omp_core</library>
  * <summary>Get the inversed value of a cosine in degrees.</summary>
  * <param name="value">The cosine for which to find the angle for</param>
  * <seealso name="floatcos" />
  * <returns>The angle in degrees.</returns>
  */
 native Float:acos(Float:value);
+
+/**
+ * <library>omp_core</library>
+ * <summary>Get the inversed value of a cosine in degrees.</summary>
+ * <param name="value">The cosine for which to find the angle for</param>
+ * <seealso name="floatcos" />
+ * <returns>The angle in degrees.</returns>
+ */
+native Float:ACos(Float:value) = acos;
 
 /**
  * <library>omp_core</library>
@@ -581,6 +777,16 @@ native Float:atan(Float:value);
 
 /**
  * <library>omp_core</library>
+ * <summary>Get the inversed value of a tangent in degrees.</summary>
+ * <param name="value">The tangent for which to find the angle for</param>
+ * <seealso name="atan2" />
+ * <seealso name="floattan" />
+ * <returns>The angle in degrees.</returns>
+ */
+native Float:ATan(Float:value) = atan;
+
+/**
+ * <library>omp_core</library>
  * <summary>Get the multi-valued inversed value of a tangent in degrees.</summary>
  * <param name="y">y size</param>
  * <param name="x">x size</param>
@@ -589,6 +795,17 @@ native Float:atan(Float:value);
  * <returns>The angle in degrees.</returns>
  */
 native Float:atan2(Float:y, Float:x);
+
+/**
+ * <library>omp_core</library>
+ * <summary>Get the multi-valued inversed value of a tangent in degrees.</summary>
+ * <param name="y">y size</param>
+ * <param name="x">x size</param>
+ * <seealso name="atan" />
+ * <seealso name="floattan" />
+ * <returns>The angle in degrees.</returns>
+ */
+native Float:ATan2(Float:y, Float:x) = atan2;
 
 /*
                                                                                                                                                
@@ -606,7 +823,10 @@ native Float:atan2(Float:y, Float:x);
 */
 
 /*
-native #Server Config();
+native # Server Config();
+native Â Â Â Â Â Â Â Â ServerÂ Config(
+native Â Â Â Â Â ====================(
+native
 */
 
 /**
@@ -781,7 +1001,10 @@ forward E_SERVER_RULE_FLAGS:GetServerRuleFlags(const rule[]);
 */
 
 /*
-native #Client Config();
+native # Client Config();
+native Â Â Â Â Â Â Â Â ClientÂ Config(
+native Â Â Â Â Â ====================(
+native
 */
 
 /**
@@ -871,7 +1094,7 @@ native void:SetNameTagDrawDistance(Float:distance);
 /**
  * <library>omp_core</library>
  * <summary>Set the world weather for all players.</summary>
- * <param name="weatherid">The <a href="http://wiki.sa-mp.com/wiki/Weatherid">weather</a> to set</param>
+ * <param name="weatherid">The <a href="https://www.open.mp/docs/scripting/resources/weatherid">weather</a> to set</param>
  * <seealso name="SetPlayerWeather" />
  * <seealso name="SetGravity" />
  * <remarks>If <a href="#TogglePlayerClock">TogglePlayerClock</a> is enabled, weather will slowly change
@@ -1049,7 +1272,10 @@ native EnableZoneNames(bool:enable);
 */
 
 /*
-native #NPCs();
+native # NPCs();
+native Â Â Â Â Â Â Â Â Â Â Â Â Â NPCs(
+native Â Â Â Â Â ====================(
+native
 */
 
 /**
@@ -1083,40 +1309,24 @@ native ConnectNPC(const name[], const script[]);
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native Â Â Â Â Â Â Â Â Â Â Deprecated(
+native Â Â Â Â Â ====================(
+native
 */
 
-/**
- * <library>omp_core</library>
- * <summary>Gets the highest playerid currently in use on the server.</summary>
- * <seealso name="GetVehiclePoolSize" />
- * <seealso name="GetMaxPlayers" />
- * <returns>The highest playerid currently in use on the server or <b><c>0</c></b> if there are no connected
- * players.</returns>
- */
-#pragma deprecated This function is fundamentally broken.  See: open.mp/docs/scripting/functions/GetPlayerPoolSize
+// These three functions are like this for qawno.
+/*
 native GetPlayerPoolSize();
+*/
 
-/**
- * <library>omp_core</library>
- * <summary>Gets the highest vehicleid currently in use on the server.</summary>
- * <seealso name="GetPlayerPoolSize" />
- * <returns>The highest vehicleid currently in use on the server or <b><c>0</c></b> if there are no
- * created vehicles.</returns>
- */
-#pragma deprecated This function is fundamentally broken.  See: open.mp/docs/scripting/functions/GetVehiclePoolSize
+/*
 native GetVehiclePoolSize();
+*/
 
-/**
- * <library>omp_core</library>
- * <summary>Gets the highest actorid created on the server.</summary>
- * <seealso name="CreateActor" />
- * <seealso name="IsValidActor" />
- * <seealso name="SetActorHealth" />
- * <returns>The highest actorid created on the server or <b><c>0</c></b> if there are no created actors.</returns>
- */
-#pragma deprecated This function is fundamentally broken.  See: open.mp/docs/scripting/functions/GetActorPoolSize
+/*
 native GetActorPoolSize();
+*/
 
 /**
  * <library>omp_core</library>

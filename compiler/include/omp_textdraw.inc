@@ -75,14 +75,52 @@ const PlayerText:INVALID_PLAYER_TEXT_DRAW      = PlayerText:0xFFFF;
 #define TEXT_DRAW_FONT: __TAG(TEXT_DRAW_FONT):
 enum TEXT_DRAW_FONT:__TEXT_DRAW_FONT
 {
+	UNKNOWN_TEXT_DRAW_FONT                     = -1,
+	// Numbers.
 	TEXT_DRAW_FONT_0,
 	TEXT_DRAW_FONT_1,
 	TEXT_DRAW_FONT_2,
 	TEXT_DRAW_FONT_3,
 	TEXT_DRAW_FONT_SPRITE_DRAW,
-	TEXT_DRAW_FONT_MODEL_PREVIEW
+	TEXT_DRAW_FONT_MODEL_PREVIEW,
+	// From GTA.
+	TEXT_DRAW_FONT_BANK = 0,
+	TEXT_DRAW_FONT_STANDARD,
+	TEXT_DRAW_FONT_SPACEAGE,
+	TEXT_DRAW_FONT_HEADING,
+	// From open.mp.
+	TEXT_DRAW_FONT_BECKETT_REGULAR             = 0,
+	TEXT_DRAW_FONT_AHARONI_BOLD,
+	TEXT_DRAW_FONT_BANK_GOTHIC,
+	TEXT_DRAW_FONT_PRICEDOWN,
+	TEXT_DRAW_FONT_SPRITE,
+	TEXT_DRAW_FONT_PREVIEW
 }
 static stock TEXT_DRAW_FONT:_@TEXT_DRAW_FONT() { return __TEXT_DRAW_FONT; }
+
+#define UNKNOWN_TEXT_DRAW_FONT                 (TEXT_DRAW_FONT:-1)
+
+// Numbers.
+#define TEXT_DRAW_FONT_0                       (TEXT_DRAW_FONT:0)
+#define TEXT_DRAW_FONT_1                       (TEXT_DRAW_FONT:1)
+#define TEXT_DRAW_FONT_2                       (TEXT_DRAW_FONT:2)
+#define TEXT_DRAW_FONT_3                       (TEXT_DRAW_FONT:3)
+#define TEXT_DRAW_FONT_SPRITE_DRAW             (TEXT_DRAW_FONT:4)
+#define TEXT_DRAW_FONT_MODEL_PREVIEW           (TEXT_DRAW_FONT:5)
+
+// From GTA.
+#define TEXT_DRAW_FONT_BANK                    (TEXT_DRAW_FONT:0)
+#define TEXT_DRAW_FONT_STANDARD                (TEXT_DRAW_FONT:1)
+#define TEXT_DRAW_FONT_SPACEAGE                (TEXT_DRAW_FONT:2)
+#define TEXT_DRAW_FONT_HEADING                 (TEXT_DRAW_FONT:3)
+
+// From open.mp.
+#define TEXT_DRAW_FONT_BECKETT_REGULAR         (TEXT_DRAW_FONT:0)
+#define TEXT_DRAW_FONT_AHARONI_BOLD            (TEXT_DRAW_FONT:1)
+#define TEXT_DRAW_FONT_BANK_GOTHIC             (TEXT_DRAW_FONT:2)
+#define TEXT_DRAW_FONT_PRICEDOWN               (TEXT_DRAW_FONT:3)
+#define TEXT_DRAW_FONT_SPRITE                  (TEXT_DRAW_FONT:4)
+#define TEXT_DRAW_FONT_PREVIEW                 (TEXT_DRAW_FONT:5)
 
 /// <p/>
 /**
@@ -92,12 +130,19 @@ static stock TEXT_DRAW_FONT:_@TEXT_DRAW_FONT() { return __TEXT_DRAW_FONT; }
 #define TEXT_DRAW_ALIGN: __TAG(TEXT_DRAW_ALIGN):
 enum TEXT_DRAW_ALIGN:__TEXT_DRAW_ALIGN
 {
+	UNKNOWN_TEXT_DRAW_ALIGN                    = -1,
 	TEXT_DRAW_ALIGN_LEFT                       = 1,
 	TEXT_DRAW_ALIGN_CENTRE,
 	TEXT_DRAW_ALIGN_CENTER = TEXT_DRAW_ALIGN_CENTRE,
 	TEXT_DRAW_ALIGN_RIGHT
 }
 static stock TEXT_DRAW_ALIGN:_@TEXT_DRAW_ALIGN() { return __TEXT_DRAW_ALIGN; }
+
+#define UNKNOWN_TEXT_DRAW_ALIGN                (TEXT_DRAW_ALIGN:-1)
+#define TEXT_DRAW_ALIGN_LEFT                   (TEXT_DRAW_ALIGN:1)
+#define TEXT_DRAW_ALIGN_CENTRE                 (TEXT_DRAW_ALIGN:2)
+#define TEXT_DRAW_ALIGN_CENTER                 (TEXT_DRAW_ALIGN:2)
+#define TEXT_DRAW_ALIGN_RIGHT                  (TEXT_DRAW_ALIGN:3)
 
 /*
                                                                  
@@ -115,7 +160,10 @@ static stock TEXT_DRAW_ALIGN:_@TEXT_DRAW_ALIGN() { return __TEXT_DRAW_ALIGN; }
 */
 
 /*
-native #Global();
+native # Global();
+native              Global(
+native      ====================(
+native
 */
 
 /**
@@ -579,7 +627,10 @@ native bool:TextDrawSetStringForPlayer(Text:textid, playerid, const format[], OP
 */                                  
 
 /*
-native #Per-Player();
+native # Per-Player();
+native           Per-Player(
+native      ====================(
+native
 */
 
 /**
@@ -1242,7 +1293,10 @@ native bool:PlayerTextDrawGetPreviewRot(playerid, PlayerText:textid, &Float:rota
 */
 
 /*
-native #Selection();
+native # Selection();
+native           Selection(
+native      ====================(
+native
 */
 
 /**
@@ -1291,7 +1345,10 @@ native CancelSelectTextDraw(playerid);
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native           Deprecated(
+native      ====================(
+native
 */
 
 /**
@@ -1304,7 +1361,9 @@ native #Deprecated();
  * href="#TextDrawShowForPlayer">TextDrawShowForPlayer</a>) for the changes of this function to take
  * effect.</remarks>
  */
-#pragma deprecated Use `TextDrawColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawColour`
+#endif
 native bool:TextDrawColor(Text:textid, textColour);
 
 /**
@@ -1318,7 +1377,9 @@ native bool:TextDrawColor(Text:textid, textColour);
  * <a href="#TextDrawShowForAll">TextDrawShowForAll</a>
  * after modifying the textdraw and the change will be visible.</remarks>
  */
-#pragma deprecated Use `TextDrawBoxColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawBoxColour`
+#endif
 native bool:TextDrawBoxColor(Text:textid, boxColour);
 
 /**
@@ -1335,7 +1396,9 @@ native bool:TextDrawBoxColor(Text:textid, boxColour);
  * <a href="#TextDrawShowForAll">TextDrawShowForAll</a>
  * after modifying the textdraw and the change will be visible.</remarks>
  */
-#pragma deprecated Use `TextDrawBackgroundColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawBackgroundColour`
+#endif
 native bool:TextDrawBackgroundColor(Text:textid, backgroundColour);
 
 /**
@@ -1375,7 +1438,9 @@ native bool:TextDrawSetPreviewVehCol(Text:textid, colour1, colour2);
  * <remarks>You can also use Gametext colours in textdraws.</remarks>
  * <remarks>The textdraw must be re-shown to the player in order to update the colour.</remarks>
  */
-#pragma deprecated Use `PlayerTextDrawColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `PlayerTextDrawColour`
+#endif
 native bool:PlayerTextDrawColor(playerid, PlayerText:textid, textColour);
 
 /**
@@ -1400,7 +1465,9 @@ native bool:PlayerTextDrawColor(playerid, PlayerText:textid, textColour);
  * <seealso name="PlayerTextDrawShow" />
  * <seealso name="PlayerTextDrawHide" />
  */
-#pragma deprecated Use `PlayerTextDrawBoxColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `PlayerTextDrawBoxColour`
+#endif
 native bool:PlayerTextDrawBoxColor(playerid, PlayerText:textid, boxColour);
 
 /**
@@ -1428,7 +1495,9 @@ native bool:PlayerTextDrawBoxColor(playerid, PlayerText:textid, boxColour);
  * 0, the outline colour will match the colour used in <a href="#PlayerTextDrawBackgroundColor">PlayerTextDrawBackgroundColor</a>.
  *  Changing the value of colour seems to alter the colour used in <a href="#PlayerTextDrawColor">PlayerTextDrawColor</a></remarks>
  */
-#pragma deprecated Use `PlayerTextDrawBackgroundColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `PlayerTextDrawBackgroundColour`
+#endif
 native bool:PlayerTextDrawBackgroundColor(playerid, PlayerText:textid, backgroundColour);
 
 /**
@@ -1453,19 +1522,25 @@ native bool:PlayerTextDrawSetPreviewVehCol(playerid, PlayerText:textid, colour1,
 /**
  * <library>omp_textdraw</library>
  */
-#pragma deprecated Use `TextDrawGetColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawGetColour`
+#endif
 native TextDrawGetColor(Text:textid);
 
 /**
  * <library>omp_textdraw</library>
  */
-#pragma deprecated Use `TextDrawGetBoxColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawGetBoxColour`
+#endif
 native TextDrawGetBoxColor(Text:textid);
 
 /**
  * <library>omp_textdraw</library>
  */
-#pragma deprecated Use `TextDrawGetBackgroundColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `TextDrawGetBackgroundColour`
+#endif
 native TextDrawGetBackgroundColor(Text:textid);
 
 /**
@@ -1477,13 +1552,17 @@ native bool:TextDrawGetPreviewVehCol(Text:textid, &colour1, &colour2);
 /**
  * <library>omp_textdraw</library>
  */
-#pragma deprecated Use `PlayerTextDrawGetColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `PlayerTextDrawGetColour`
+#endif
 native PlayerTextDrawGetColor(playerid, PlayerText:textid);
 
 /**
  * <library>omp_textdraw</library>
  */
-#pragma deprecated Use `PlayerTextDrawGetBoxColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `PlayerTextDrawGetBoxColour`
+#endif
 native PlayerTextDrawGetBoxColor(playerid, PlayerText:textid);
 
 /**

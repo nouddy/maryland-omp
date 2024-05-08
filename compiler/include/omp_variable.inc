@@ -35,22 +35,41 @@
 #define PLAYER_VARTYPE: __TAG(VARTYPE):
 enum VARTYPE:__VARTYPE
 {
+	UNKNOWN_VARTYPE                            = -1,
+
 	VARTYPE_NONE,
 	VARTYPE_INT,
 	VARTYPE_STRING,
 	VARTYPE_FLOAT,
 
-	SERVER_VARTYPE_NONE = VARTYPE_NONE,
+	SERVER_VARTYPE_NONE                        = VARTYPE_NONE,
 	SERVER_VARTYPE_INT,
 	SERVER_VARTYPE_STRING,
 	SERVER_VARTYPE_FLOAT,
 
-	PLAYER_VARTYPE_NONE = VARTYPE_NONE,
+	PLAYER_VARTYPE_NONE                        = VARTYPE_NONE,
 	PLAYER_VARTYPE_INT,
 	PLAYER_VARTYPE_STRING,
 	PLAYER_VARTYPE_FLOAT
 }
 static stock VARTYPE:_@VARTYPE() { return __VARTYPE; }
+
+#define UNKNOWN_VARTYPE                        (VARTYPE:-1)
+
+#define VARTYPE_NONE                           (VARTYPE:0)
+#define VARTYPE_INT                            (VARTYPE:1)
+#define VARTYPE_STRING                         (VARTYPE:2)
+#define VARTYPE_FLOAT                          (VARTYPE:3)
+
+#define SERVER_VARTYPE_NONE                    (VARTYPE:0)
+#define SERVER_VARTYPE_INT                     (VARTYPE:1)
+#define SERVER_VARTYPE_STRING                  (VARTYPE:2)
+#define SERVER_VARTYPE_FLOAT                   (VARTYPE:3)
+
+#define PLAYER_VARTYPE_NONE                    (VARTYPE:0)
+#define PLAYER_VARTYPE_INT                     (VARTYPE:1)
+#define PLAYER_VARTYPE_STRING                  (VARTYPE:2)
+#define PLAYER_VARTYPE_FLOAT                   (VARTYPE:3)
 
 /*
                                                     
@@ -68,7 +87,10 @@ static stock VARTYPE:_@VARTYPE() { return __VARTYPE; }
 */
 
 /*
-native #Server Variables();
+native # Server Variables();
+native        Server Variables(
+native      ====================(
+native
 */
 
 /**
@@ -253,7 +275,10 @@ native VARTYPE:GetSVarType(const svar[]);
 */
 
 /*
-native #Player Variables();
+native # Player Variables();
+native        Player Variables(
+native      ====================(
+native
 */
 
 /**

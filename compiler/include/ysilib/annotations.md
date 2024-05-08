@@ -188,6 +188,8 @@ Optional named parameters:
 * `initial` - How long before the first call, if it is different to the normal call delay time.
 * `repeat` - Number of times to repeat, `0` for default (forever when called with `repeat` and once when called with `defer`).
 
+Side-note:  In default pawn there is a function called `settimer`, different to SA:MP/open.mp's `SetTimer`, which only takes a delay time, not a target function.  This can only call a single function, and that function is called `@timer()`.  Here `@` is used in its role as an alternative to `public` (the `@` remains part of the name, so `@timer()` is the same as `public @timer()` and all functions starting with `@` are always `public`).  In open.mp and any other uses of YSI `settimer` is not used, and neither is the `@` prefix for publics (with the notable exception of YSI internals, hence *y_hooks* for example currently using the function name prefix of `@yH_`).  Even if you wanted to write a function called `@timer()` the `@timer` annotation would most likely not conflict because of the double `()()` detected by the declaration `#define @timer(%3)%0(%1)`.
+
 ### `@remote()`
 
 A function maybe called in another script, like `CallRemoteFunction`, but without the need to manage specifier strings, and thus with compile-time checking of parameters.
@@ -288,7 +290,7 @@ We start with the macro, which almost always has the same pattern.  Bear in mind
 
 To make a timer we need two things - a timer function and a way to call the timer function.  The former is just a public function, the latter is some code that must be run when the mode starts.  There are many ways to get code to run at mode start, but the simplest is actually another annotation - `@init()`.  So we write a function with an `@init()` annotation to start the timer, and a second function with a normal `public` declaration as the code itself.  Note that because of the way `@init()` works we can actually give these two functions the same name, but that isn't always the case.  In short, we want the code above to become:
 
-```
+```pawn
 forward OneSecond();
 
 @init() OneSecond()
@@ -304,7 +306,7 @@ public OneSecond()
 
 To use the `.interval` syntax with this structure we can create a helper function that takes all the same parameters as we want to make available to users of the annotation, with all the correct names, and do everything in there instead:
 
-```
+```pawn
 @task__(const func__[], interval = 1000, bool:repeat = true, copies = 1)
 {
 	while (copies--)
@@ -349,4 +351,6 @@ Because `@task__` has three named parameters the annotation does too:
 ```
 
 Some annotations in YSI use a slightly more complex method for achieving this effect.  I'd like to pretend that some of this is because they're secretly doing more advanced things behind the scenes, but a lot of it is just because I hadn't come up with the helper/`@init()` method yet.
+
+To simplify another aspect of writing a decorator, i.e. analysing the function's parameters, there is now the [y_decorator library](https://github.com/pawn-lang/YSI-Includes/blob/5.x/YSI_Server/y_decorator/quick-start.md) which provides some basic code analysis for you.  For more advanced options you can use [code-parse.inc](https://github.com/Y-Less/code-parse.inc).
 

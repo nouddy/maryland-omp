@@ -43,8 +43,8 @@
 /**
  * <library>omp_menu</library>
  */
-const Menu:INVALID_MENU                        = Menu:0xFF;
-#define INVALID_MENU                           (Menu:255)
+const Menu:INVALID_MENU                        = Menu:-1;
+#define INVALID_MENU                           (Menu:-1)
 
 /*
                                                                            
@@ -259,7 +259,7 @@ native bool:IsMenuRowDisabled(Menu:menuid, row);
  * <library>omp_menu</library>
  * <summary>Get the number of active columns.</param>
  */
-native bool:GetMenuColumns(Menu:menuid);
+native GetMenuColumns(Menu:menuid);
 
 /**
  * <library>omp_menu</library>

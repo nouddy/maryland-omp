@@ -31,6 +31,7 @@
  */
 enum SQLITE_OPEN:__SQLITE_OPEN
 {
+	UNKNOWN_SQLITE_OPEN                        = -1,
 	SQLITE_OPEN_READONLY                       = 0x00000001,
 	SQLITE_OPEN_READWRITE                      = 0x00000002,
 	SQLITE_OPEN_CREATE                         = 0x00000004,
@@ -56,6 +57,30 @@ enum SQLITE_OPEN:__SQLITE_OPEN
 }
 static stock SQLITE_OPEN:_@SQLITE_OPEN() { return __SQLITE_OPEN; }
 
+#define UNKNOWN_SQLITE_OPEN                    (SQLITE_OPEN:-1)
+#define SQLITE_OPEN_READONLY                   (SQLITE_OPEN:0x00000001)
+#define SQLITE_OPEN_READWRITE                  (SQLITE_OPEN:0x00000002)
+#define SQLITE_OPEN_CREATE                     (SQLITE_OPEN:0x00000004)
+#define SQLITE_OPEN_DELETEONCLOSE              (SQLITE_OPEN:0x00000008) // Requires VFS.
+#define SQLITE_OPEN_EXCLUSIVE                  (SQLITE_OPEN:0x00000010) // Requires VFS.
+#define SQLITE_OPEN_AUTOPROXY                  (SQLITE_OPEN:0x00000020) // Requires VFS.
+#define SQLITE_OPEN_URI                        (SQLITE_OPEN:0x00000040)
+#define SQLITE_OPEN_MEMORY                     (SQLITE_OPEN:0x00000080)
+#define SQLITE_OPEN_MAIN_DB                    (SQLITE_OPEN:0x00000100) // Requires VFS.
+#define SQLITE_OPEN_TEMP_DB                    (SQLITE_OPEN:0x00000200) // Requires VFS.
+#define SQLITE_OPEN_TRANSIENT_DB               (SQLITE_OPEN:0x00000400) // Requires VFS.
+#define SQLITE_OPEN_MAIN_JOURNAL               (SQLITE_OPEN:0x00000800) // Requires VFS.
+#define SQLITE_OPEN_TEMP_JOURNAL               (SQLITE_OPEN:0x00001000) // Requires VFS.
+#define SQLITE_OPEN_SUBJOURNAL                 (SQLITE_OPEN:0x00002000) // Requires VFS.
+#define SQLITE_OPEN_SUPER_JOURNAL              (SQLITE_OPEN:0x00004000) // Requires VFS.
+#define SQLITE_OPEN_NOMUTEX                    (SQLITE_OPEN:0x00008000)
+#define SQLITE_OPEN_FULLMUTEX                  (SQLITE_OPEN:0x00010000)
+#define SQLITE_OPEN_SHAREDCACHE                (SQLITE_OPEN:0x00020000)
+#define SQLITE_OPEN_PRIVATECACHE               (SQLITE_OPEN:0x00040000)
+#define SQLITE_OPEN_WAL                        (SQLITE_OPEN:0x00080000) // Requires VFS.
+#define SQLITE_OPEN_NOFOLLOW                   (SQLITE_OPEN:0x01000000)
+#define SQLITE_OPEN_EXRESCODE                  (SQLITE_OPEN:0x02000000)
+
 /*
                                                                                                                         
     88b           d88                        88                                                 db         88888888ba   88  
@@ -72,7 +97,10 @@ static stock SQLITE_OPEN:_@SQLITE_OPEN() { return __SQLITE_OPEN; }
 */
 
 /*
-native #Modern API();
+native # Modern API();
+native           Modern API(
+native      ====================(
+native
 */
 
 /**
@@ -281,7 +309,10 @@ native DB_GetDatabaseResultSetCount();
 */
 
 /*
-native #Deprecated Legacy();
+native # Deprecated Legacy();
+native       Deprecated Legacy(
+native      ====================(
+native
 */
 
 /**
@@ -408,7 +439,10 @@ native db_debug_openresults() = DB_GetDatabaseResultSetCount;
 */
 
 /*
-native #Deprecated Compat();
+native # Deprecated Compat();
+native       Deprecated Compat(
+native      ====================(
+native
 */
 
 /**

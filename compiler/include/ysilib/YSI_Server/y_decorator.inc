@@ -1,14 +1,13 @@
-#if defined _INC_y_thirdparty_indirection
+#if defined _INC_y_decorator
 	#endinput
 #endif
-#define _INC_y_thirdparty_indirection
 
-/*+
+/**
  * <library
- *   name="y_thirdpartyinclude"
- *   version="1.0"
+ *   name="y_decorator"
+ *   version="0.1"
  *   license="(c) 2022 YSI contibutors, licensed under MPL 1.1"
- *   summary="Try and include all YSI dependencies, looking in as many places as needed."
+ *   summary="Simple helper for writing new decorators."
  * >
  *   <summary pawndoc="true">
  *     This library uses the enhanced <em>pawndoc.xsl</em> from
@@ -90,20 +89,22 @@ Optional plugins:
 	Me - sscanf2, fixes2, Whirlpool.
 */
 
-#tryinclude <indirection\indirection>
-#tryinclude <indirection-master\indirection>
-#tryinclude <indirection-master\indirection-master\indirection>
-#tryinclude "..\..\indirection\indirection"
-#tryinclude "..\..\indirection-master\indirection"
-#tryinclude "..\..\indirection-master\indirection-master\indirection"
-#tryinclude "..\..\..\indirection\indirection"
-#tryinclude "..\..\..\indirection-master\indirection"
-#tryinclude "..\..\..\indirection-master\indirection-master\indirection"
-#tryinclude "indirection"
-#tryinclude <indirection>
-#if !defined _INC_indirection
-	#error Download `github.com/Y-Less/indirection/archive/refs/heads/master.zip` and extract it to `include\`.
-#elseif !defined Indirect_IsValid
-	#error Re-download `github.com/Y-Less/indirection/archive/refs/heads/master.zip` and extract it to `include\`.
+#if !defined _INC_y_decorator
+	#tryinclude "y_decorator\y_decorator_entry"
+#endif
+#if !defined _INC_y_decorator
+	#tryinclude "YSI_Server\y_decorator\y_decorator_entry"
+#endif
+#if !defined _INC_y_decorator
+	#tryinclude "YSI\YSI_Server\y_decorator\y_decorator_entry"
+#endif
+#if !defined _INC_y_decorator
+	#tryinclude <YSI_Server\y_decorator\y_decorator_entry>
+#endif
+#if !defined _INC_y_decorator
+	#tryinclude <YSI\YSI_Server\y_decorator\y_decorator_entry>
+#endif
+#if !defined _INC_y_decorator
+	#error Could not find y_decorator
 #endif
 

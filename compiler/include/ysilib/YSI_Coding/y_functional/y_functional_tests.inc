@@ -265,5 +265,87 @@ static FUNC_FoldL_nested_Add(a, b)
 	ASSERT_EQ(ret, 99);
 }
 
+FUNC_NewLambda1(Func:f<ii>, a, b)
+{
+	return @.f(a, b);
+}
+
+#define FUNC_NewLambda1( @lambda(0, "ii") FUNC_NewLambda1(
+
+FUNC_NewLambda1_(a, b)
+{
+	return a * 2 + b * 2;
+}
+
+@test(.group = "y_functional") FUNC_NewLambda1()
+{
+	new ret;
+	ret = FUNC_NewLambda1({ _0 - _1 }, 100, 80);
+	ASSERT_EQ(ret, 20);
+	ret = FUNC_NewLambda1(&FUNC_NewLambda1_, 10, 66);
+	ASSERT_EQ(ret, 152);
+	inline const F(a, b)
+	{
+		@return b * 7 + a;
+	}
+	ret = FUNC_NewLambda1(using inline F, 2, 6);
+	ASSERT_EQ(ret, 44);
+}
+
+FUNC_NewLambda2(const string:s[], Func:f<ii>, d)
+{
+	return @.f(strval(s), d);
+}
+
+#define FUNC_NewLambda2( @lambda(1, "ii") FUNC_NewLambda2(
+
+FUNC_NewLambda2_(s, d)
+{
+	return s * 2 + d * 2;
+}
+
+@test(.group = "y_functional") FUNC_NewLambda2()
+{
+	new ret;
+	ret = FUNC_NewLambda2("100", { _0 - _1 }, 70);
+	ASSERT_EQ(ret, 30);
+	ret = FUNC_NewLambda2("15", &FUNC_NewLambda2_, 66);
+	ASSERT_EQ(ret, 162);
+	inline const F(s, d)
+	{
+		@return d * 7 + s;
+	}
+	ret = FUNC_NewLambda2("3", using inline F, 6);
+	ASSERT_EQ(ret, 45);
+}
+
+FUNC_NewLambda3(p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, const string:s[], Func:f<ii>, d)
+{
+	#pragma unused p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19
+	return @.f(strval(s), d);
+}
+
+#define FUNC_NewLambda3( @lambda(21, "ii") FUNC_NewLambda3(
+
+FUNC_NewLambda3_(s, d)
+{
+	return s * 2 + d * 2;
+}
+
+@test(.group = "y_functional") FUNC_NewLambda3()
+{
+	new ret;
+	ret = FUNC_NewLambda3(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "100", { _0 - _1 }, 70);
+	ASSERT_EQ(ret, 30);
+	ret = FUNC_NewLambda3(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "15", &FUNC_NewLambda3_, 66);
+	ASSERT_EQ(ret, 162);
+	inline const F(s, d)
+	{
+		@return d * 7 + s;
+	}
+	ret = FUNC_NewLambda3(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "3", using inline F, 6);
+	ASSERT_EQ(ret, 45);
+}
+
 #undef FUNC_CHECK_ARR
 

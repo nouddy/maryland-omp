@@ -162,6 +162,7 @@ forward bool:INI_FindCallback(const cb[]);
 	@INI_%0_%1(%2)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with integer value.</param>
  *//*------------------------------------------------------------------------**/
@@ -171,6 +172,7 @@ FUNC_PAWNDOC(INI_Int(const name[],&variable));
 	if (!strcmp((%1), name, true)) return %2 = strval(value)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with float value.</param>
  *//*------------------------------------------------------------------------**/
@@ -180,6 +182,7 @@ FUNC_PAWNDOC(INI_Float(const name[],&Float:variable));
 	if (!strcmp((%1), name, true)) return _:(%2 = floatstr(value))
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with hex value.</param>
  *//*------------------------------------------------------------------------**/
@@ -189,6 +192,7 @@ FUNC_PAWNDOC(INI_Hex(const name[],&variable));
 	if (!strcmp((%1), name, true)) return %2 = hexstr(value)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with binary value.</param>
  *//*------------------------------------------------------------------------**/
@@ -198,6 +202,7 @@ FUNC_PAWNDOC(INI_Bin(const name[],&variable));
 	if (!strcmp((%1), name, true)) return %2 = binstr(value)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with string value.</param>
  * <param name="len">Optional string length.</param>
@@ -215,6 +220,7 @@ FUNC_PAWNDOC(INI_String(const name[],variable[]));
 #define INI_CHECK_LEN:StrCpy(%0,%1,%2) StrCpy(%0,%2,%1)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="variable">Variable to fill with string value.</param>
  *//*------------------------------------------------------------------------**/
@@ -224,6 +230,7 @@ FUNC_PAWNDOC(INI_Bool(const name[],&bool:variable));
 	if (!strcmp((%1), name, true)) return %2 = BoolStr(value)
 
 /*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
  * <param name="name">Name of the INI key.</param>
  * <param name="">Variable to fill with array value.</param>
  *//*------------------------------------------------------------------------**/
@@ -254,7 +261,20 @@ FUNC_PAWNDOC(INI_Array(const name[],variable[]));
 
 #define INI_SkipWhitespace(%0,%1) while (IS_IN_RANGE(%0[%1], '\0' + 1, ' ' + 1)) ++%1
 
-static stock INI_WriteTag(File:file, const tag[], format[])
+/*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
+ * <summary>
+ *   INI_WriteTag(file, tag, inherits);
+ * </summary>
+ * <param name="file">The file to write to.</param>
+ * <param name="tag">The tag (<c>[tag]</c>) to write.</param>
+ * <param name="inherits">Optional parent tag (<c>: parent</c>).</param>
+ * <remarks>
+ *   Actually writes data to a file.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
+static stock INI_WriteTag(File:file, const tag[], inherits[])
 {
 	if (YSI_g_sTagNeeded)
 	{
@@ -262,11 +282,11 @@ static stock INI_WriteTag(File:file, const tag[], format[])
 		fwrite(file, "["),
 		fwrite(file, tag),
 		YSI_g_sTagNeeded = false;
-		if (format[0])
+		if (inherits[0])
 		{
 			fwrite(file, "] : "),
-			fwrite(file, format),
-			format[0] = '\0';
+			fwrite(file, inherits),
+			inherits[0] = '\0';
 		}
 		else
 		{
@@ -299,13 +319,17 @@ static stock INI_WriteTag(File:file, const tag[], format[])
 
 /*-------------------------------------------------------------------------*//**
  * <param name="fmt">The function name format.</param>
- * <param name="fileOrTag">The first parameter.</param>
- * <param name="tagOrFile">The second parameter.</param>
+ * <param name="fileOrTag">The first callback parameter.</param>
+ * <param name="tagOrFile">The second callback parameter.</param>
  * <returns>
  *   Was the function found?
  * </returns>
  * <remarks>
- *   Gets a callback given a partial function name and a tag name.
+ *   Gets a callback given a partial function name and a tag name.  Because
+ *   open.mp added parameter count checking for <c>format</c> and similar the
+ *   old trick used of simply passing all the parameters and not formatting some
+ *   of them broke.  Thus there are now several variations of this function for
+ *   different parameter counts.
  * </remarks>
  *//*------------------------------------------------------------------------**/
 
@@ -324,6 +348,22 @@ static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFil
 	return INI_FindCallback(cb);
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <param name="fmt">The function name format.</param>
+ * <param name="fileOrTag">The first callback parameter.</param>
+ * <param name="tagOrFile">The second callback parameter.</param>
+ * <returns>
+ *   Was the function found?
+ * </returns>
+ * <remarks>
+ *   Gets a callback given a partial function name and a tag name.  Because
+ *   open.mp added parameter count checking for <c>format</c> and similar the
+ *   old trick used of simply passing all the parameters and not formatting some
+ *   of them broke.  Thus there are now several variations of this function for
+ *   different parameter counts.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFile[]) <y_ini_get:y_ini_get_1>
 {
 	#pragma unused tagOrFile
@@ -339,6 +379,22 @@ static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFil
 	return INI_FindCallback(cb);
 }
 
+/*-------------------------------------------------------------------------*//**
+ * <param name="fmt">The function name format.</param>
+ * <param name="fileOrTag">The first callback parameter.</param>
+ * <param name="tagOrFile">The second callback parameter.</param>
+ * <returns>
+ *   Was the function found?
+ * </returns>
+ * <remarks>
+ *   Gets a callback given a partial function name and a tag name.  Because
+ *   open.mp added parameter count checking for <c>format</c> and similar the
+ *   old trick used of simply passing all the parameters and not formatting some
+ *   of them broke.  Thus there are now several variations of this function for
+ *   different parameter counts.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
+
 static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFile[]) <y_ini_get:y_ini_get_2>
 {
 	new
@@ -352,6 +408,22 @@ static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFil
 	Debug_Print5("INI_GetCallback<y_ini_get_2>: Find callback %s", cb);
 	return INI_FindCallback(cb);
 }
+
+/*-------------------------------------------------------------------------*//**
+ * <param name="fmt">The function name format.</param>
+ * <param name="fileOrTag">The first callback parameter.</param>
+ * <param name="tagOrFile">The second callback parameter.</param>
+ * <returns>
+ *   Was the function found?
+ * </returns>
+ * <remarks>
+ *   Gets a callback given a partial function name and a tag name.  Because
+ *   open.mp added parameter count checking for <c>format</c> and similar the
+ *   old trick used of simply passing all the parameters and not formatting some
+ *   of them broke.  Thus there are now several variations of this function for
+ *   different parameter counts.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFile[]) <y_ini_get:y_ini_get_n>
 {
@@ -372,6 +444,19 @@ static stock bool:INI_GetCallback(const fmt[], const fileOrTag[], const tagOrFil
     88 88       88  "Y888 `"Ybbd8"' 88         88       88 `"8bbdP"Y8 88  
 
 */
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
+ * <summary>
+ *   INI_GetTag(cur, tag);
+ * </summary>
+ * <param name="cur">The first known tag in the linked list.</param>
+ * <param name="tag">The tag name to find.</param>
+ * <remarks>
+ *   Tries to find a tag name in the linked list of known tags already seen in
+ *   the file.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 static stock Alloc:INI_GetTag(Alloc:cur, const tag[])
 {
@@ -401,6 +486,20 @@ static stock Alloc:INI_GetTag(Alloc:cur, const tag[])
 		return NO_ALLOC;
 	}
 }
+
+/*-------------------------------------------------------------------------*//**
+ * <library>y_ini</library>
+ * <summary>
+ *   INI_GetKey(cur, key, prev);
+ * </summary>
+ * <param name="cur">The first known key in the linked list.</param>
+ * <param name="key">The key to find.</param>
+ * <param name="prev">Return value for the previous key in the list.</param>
+ * <remarks>
+ *   Tries to find an entry key name in the linked list of known keys already
+ *   seen in the file.
+ * </remarks>
+ *//*------------------------------------------------------------------------**/
 
 static stock Alloc:INI_GetKey(Alloc:cur, const key[], &Alloc:prev)
 {
@@ -889,7 +988,7 @@ static stock bool:INI_SetTag_(INI:file, const tag[])
 stock INI:INI_Open(const filename[])
 {
 	Debug_Print3("INI:INI_Open called: \"%s\"", filename);
-	if (ftouch(filename) == -1)
+	if (YSI_ftouch__(filename) == -1)
 	{
 		Debug_Warning("INI_Open could not find or create file %s", filename);
 	}
@@ -1591,46 +1690,55 @@ INI_ReadFile_cont:
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_yyyy, y_ini:y_ini_reading_nyyy>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_yyy> called: %s, %s", key, value);
 	@.YSI_g_sCB_issss(YSI_g_sExtra, YSI_g_sFile, YSI_g_sTag, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_yyyn, y_ini:y_ini_reading_nyyn>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_yyn> called: %s, %s", key, value);
 	@.YSI_g_sCB_isss(YSI_g_sExtra, YSI_g_sTag, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_yyny, y_ini:y_ini_reading_nyny>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_yny> called: %s, %s", key, value);
 	@.YSI_g_sCB_isss(YSI_g_sExtra, YSI_g_sFile, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_yynn, y_ini:y_ini_reading_nynn>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_ynn> called: %s, %s", key, value);
 	@.YSI_g_sCB_iss(YSI_g_sExtra, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_ynyy, y_ini:y_ini_reading_nnyy>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_nyy> called: %s, %s", key, value);
 	@.YSI_g_sCB_ssss(YSI_g_sFile, YSI_g_sTag, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_ynyn, y_ini:y_ini_reading_nnyn>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_nyn> called: %s, %s", key, value);
 	@.YSI_g_sCB_sss(YSI_g_sTag, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_ynny, y_ini:y_ini_reading_nnny>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_nny> called: %s, %s", key, value);
 	@.YSI_g_sCB_sss(YSI_g_sFile, key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_reading_ynnn, y_ini:y_ini_reading_nnnn>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_reading_nnn> called: %s, %s", key, value);
 	@.YSI_g_sCB_ss(key, value);
 }
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_writing_slow>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_writing_slow> called: %s, %s", key, value);
 	// Used when reading.  Checks if the key is being overwritten, and if not
 	// writes it out to the new file.
 	INI_WriteTag(YSI_g_sCurrentFile, YSI_g_sTag, YSI_g_sFormat);
@@ -1647,15 +1755,21 @@ static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_writing_sl
 		// Not deleted.
 		if (INI_KeyListGetValue(mem))
 		{
+			Debug_Print6("INI_HandleEntry<y_ini:y_ini_writing_slow> updated");
 			INI_KeyListRemove(prev, mem),
 			INI_KeyListMakeWritable(mem),
 			fwrite(YSI_g_sCurrentFile, INI_KeyListGetKey(mem)),
 			// Remove this from the list.
 			free(mem);
 		}
+		else
+		{
+			Debug_Print6("INI_HandleEntry<y_ini:y_ini_writing_slow> deleted");
+		}
 	}
 	else
 	{
+		Debug_Print6("INI_HandleEntry<y_ini:y_ini_writing_slow> unchanged");
 		// Write the entry.
 		fwrite(YSI_g_sCurrentFile, key),
 		fwrite(YSI_g_sCurrentFile, "="),
@@ -1666,6 +1780,7 @@ static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_writing_sl
 
 static stock INI_HandleEntry(const key[], const value[]) <y_ini:y_ini_writing_fast>
 {
+	Debug_Print5("INI_HandleEntry<y_ini:y_ini_writing_fast> called: %s, %s", key, value);
 	// Nothing in the current tag is being overwritten, just dump this
 	// key/value pair straight to disk with no extra checks.
 	INI_WriteTag(YSI_g_sCurrentFile, YSI_g_sTag, YSI_g_sFormat);
@@ -1980,12 +2095,14 @@ static stock INI_Flush_(INI:file)
 		// You can't delete the no-tag tag.
 		if (INI_TagListGetEntries(YSI_g_sCurrentTag))
 		{
+			Debug_Print5("INI_Flush_: Writing slow");
 			// Slightly slower, as for every key we need to check if there is a
 			// new value being written.
 			state y_ini:y_ini_writing_slow;
 		}
 		else
 		{
+			Debug_Print5("INI_Flush_: Writing fast");
 			// Nothing to write, just copy all the existing data.
 			YSI_g_sCurrentTag = NO_ALLOC;
 		}

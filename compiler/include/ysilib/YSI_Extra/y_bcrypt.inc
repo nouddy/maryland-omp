@@ -1,8 +1,3 @@
-#if defined _INC_y_bcrypt
-	#endinput
-#endif
-#define _INC_y_bcrypt
-
 /*
 Legal:
 	Version: MPL 1.1
@@ -76,101 +71,22 @@ Optional plugins:
 	Me - sscanf2, fixes2, Whirlpool.
 */
 
-// Unify the two BCrypt plugins in to a single API.
-#if defined bcrypt_included
-	stock _YSI_gHashID = 0;
-
-	forward _YSI_BCryptCheckDone(extra, ptr);
-	forward _YSI_BCryptHashDone(extra, ptr, hashid);
-
-	native bool:_YSI_BCryptGetHash(hash[]) = bcrypt_get_hash;
-	native bool:_YSI_BCryptCheck(const password[], const hash[], const callback[], const format[], ...) = bcrypt_check;
-	native bool:_YSI_BCryptHash(const password[], cost, const callback[], const format[], ...) = bcrypt_hash;
-	native bool:_YSI_BCryptIsEqual() = bcrypt_is_equal;
-
-	// Fix the missing native.
-	stock bool:BCrypt_GetHash(hash[], size = sizeof (hash))
-	{
-		// The native doesn't take a size parameter, so check it here.
-		assert(size >= 61);
-		return _YSI_BCryptGetHash(hash);
-	}
-
-	#if __COMPILER_WARNING_SUPPRESSION
-		// On old compilers, only issue the warning at the call site.
-		#pragma warning push
-		#pragma warning disable 234
-	#endif
-
-	// Plus keep the original version for backwards-compatibility.
-	#pragma deprecated Use `BCrypt_GetHash`.
-	native bool:YSI_BCryptGetHash(hash[]) = bcrypt_get_hash;
-	#define YSI_BCryptGetHash(%0,%1) YSI_BCryptGetHash(%0)
-	#define _ALS_YSI_BCryptGetHash
-
-	#if __COMPILER_WARNING_SUPPRESSION
-		#pragma warning pop
-	#endif
-
-	public _YSI_BCryptCheckDone(extra, ptr)
-	{
-		// Call the original function.
-		new success = _YSI_BCryptIsEqual();
-		// See below for why this line is commented.  It IS passed, secretly.
-		//#emit PUSH.S       success
-		#pragma unused success
-		#emit PUSH.S       extra
-		#emit PUSH.C       __2_cells
-		#emit LCTRL        __cip
-		#emit ADD.C        __9_cells
-		#emit LCTRL        __jit_jump
-		#emit PUSH.pri
-		#emit LOAD.S.pri   ptr
-		#emit SCTRL        __cip
-		// Fun fact.  If we just got rid of `PUSH.S success` and added `RETN` right here, the code
-		// would still work because the `new` pushes the result on to the stack, then we push it a
-		// second time.
-		//
-		// ...So do it, and let the callee clean up for us.
-		#emit RETN
-	}
-
-	public _YSI_BCryptHashDone(extra, ptr, hashid)
-	{
-		// Call the original function.
-		#emit PUSH.S       hashid
-		#emit PUSH.S       extra
-		#emit PUSH.C       __2_cells
-		#emit LCTRL        __cip
-		#emit ADD.C        __9_cells
-		#emit LCTRL        __jit_jump
-		#emit PUSH.pri
-		#emit LOAD.S.pri   ptr
-		#emit SCTRL        __cip
-	}
-
-	stock bool:BCrypt_Check(extra, const callback[], const password[], const hash[])
-	{
-		new ptr;
-		return AMX_GetPublicPointer(0, ptr, callback, true) && _YSI_BCryptCheck(password, hash, "_YSI_BCryptCheckDone", "ii", extra, ptr);
-	}
-
-	stock BCrypt_Hash(extra, const callback[], const password[], cost)
-	{
-		new ptr;
-		return
-			++_YSI_gHashID,
-			AMX_GetPublicPointer(0, ptr, callback, true) && _YSI_BCryptHash(password, cost, "_YSI_BCryptHashDone", "iii", extra, ptr, _YSI_gHashID) ? _YSI_gHashID : 0;
-	}
-#elseif defined _samp_bcrypt_included
-	// I've never had to de-const a native before!
-	// Wait, that's not true - `GetPlayerName` is over-const!
-	native bool:BCrypt_GetHash(hash[], size = sizeof (hash)) = bcrypt_get_hash;
-	native bool:BCrypt_Check(extra, const callback[], const password[], const hash[]) = bcrypt_verify;
-	native bool:BCrypt_Hash(extra, const callback[], const password[], cost) = bcrypt_hash;
-#else
-	// We used to not have an error for this case, just gave undefined errors.  But now they must
-	// include it explicitly, so add a real error.
-	#error Please include either BCrypt plugin first.
+#if !defined _INC_y_bcrypt
+	#tryinclude "y_bcrypt\y_bcrypt_entry"
+#endif
+#if !defined _INC_y_bcrypt
+	#tryinclude "YSI_Extra\y_bcrypt\y_bcrypt_entry"
+#endif
+#if !defined _INC_y_bcrypt
+	#tryinclude "YSI\YSI_Extra\y_bcrypt\y_bcrypt_entry"
+#endif
+#if !defined _INC_y_bcrypt
+	#tryinclude <YSI_Extra\y_bcrypt\y_bcrypt_entry>
+#endif
+#if !defined _INC_y_bcrypt
+	#tryinclude <YSI\YSI_Extra\y_bcrypt\y_bcrypt_entry>
+#endif
+#if !defined _INC_y_bcrypt
+	#error Could not find y_bcrypt
 #endif
 

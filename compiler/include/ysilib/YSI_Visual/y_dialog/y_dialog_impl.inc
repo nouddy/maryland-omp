@@ -106,10 +106,10 @@ stock bool:Dialog_ShowCallback(playerid, {F@_@iiiis, F@_@iis}:callback, DIALOG_S
 {
 	BROADCAST_FUNC__ Dialog_Set(playerid, YSI_DIALOG_ID_1);
 	Indirect_Claim(callback),
-	Indirect_SetMeta(callback, tag),
+	Indirect_SetTag(callback, tag),
 	// Works tag-safely because the compile-time tag check uses `<iiiis>`.
 	YSI_g_sPlayerCallback[playerid] = callback;
-	return bool:Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_1, style, title, caption, button1, button2);
+	return bool:ShowPlayerDialog(playerid, YSI_DIALOG_ID_1, style, __const(title), __const(caption), __const(button1), __const(button2));
 }
 
 #if __COMPILER_WARNING_SUPPRESSION
@@ -130,7 +130,7 @@ stock bool:Dialog_Show(playerid, DIALOG_STYLE:style, const string:title[], const
 {
 	BROADCAST_FUNC__ Dialog_Set(playerid, YSI_DIALOG_ID_2);
 	YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_INVALID;
-	return bool:Dialog_ShowPlayerNative(playerid, YSI_DIALOG_ID_2, style, title, caption, button1, button2);
+	return bool:ShowPlayerDialog(playerid, YSI_DIALOG_ID_2, style, __const(title), __const(caption), __const(button1), __const(button2));
 }
 
 stock bool:Dialog_Hide(playerid)
@@ -140,7 +140,7 @@ stock bool:Dialog_Hide(playerid)
 		return bool:HidePlayerDialog(playerid);
 	#else
 		// This almost looks like a Windows API function call!
-		return bool:Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+		return bool:ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
 	#endif
 }
 
@@ -165,7 +165,7 @@ HOOK__ OnPlayerDisconnect(playerid, reason)
 		#if defined HidePlayerDialog
 			HidePlayerDialog(playerid);
 		#else
-			Dialog_ShowPlayerNative(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
+			ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, NULL, NULL, NULL, NULL);
 		#endif
 	}
 	return 1;
@@ -196,7 +196,7 @@ HOOK__ OnDialogResponse(p,d,r,l,i[])
 			// we don't free the memory for the callback prematurely.
 			BROADCAST_FUNC__ Dialog_Set(p, -1);
 			// Call the callback.
-			if (Indirect_GetMeta(callback) == _:tagof (F@_@iiiis:))
+			if (Indirect_GetTag(callback) == _:tagof (F@_@iiiis:))
 			{
 				Indirect_Call(_:callback, tagof (F@_@iiiis:), p, YSI_DIALOG_ID_1, r, l, IsNull(i) ? NULL : i);
 			}
@@ -223,7 +223,7 @@ stock bool:Dialog_ShowPlayerDialog(playerid, dialog, DIALOG_STYLE:style, const s
 	}
 	BROADCAST_FUNC__ Dialog_Set(playerid, dialog);
 	YSI_g_sPlayerCallback[playerid] = YSI_DIALOG_INVALID;
-	return bool:Dialog_ShowPlayerNative(playerid, dialog, style, title, caption, button1, button2);
+	return bool:ShowPlayerDialog(playerid, dialog, style, __const(title), __const(caption), __const(button1), __const(button2));
 }
 
 #if defined _ALS_ShowPlayerDialog

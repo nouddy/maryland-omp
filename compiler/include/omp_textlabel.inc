@@ -83,7 +83,10 @@ const PlayerText3D:INVALID_PLAYER_3DTEXT_ID    = PlayerText3D:0xFFFF;
 */
 
 /*
-native #Global();
+native # Global();
+native             Global(
+native      ====================(
+native
 */
 
 /**
@@ -109,7 +112,7 @@ native #Global();
  *   If the virtualWorld is set as <b><c>-1</c></b> the text will not appear.
  * </remarks>
  * <remarks>drawdistance seems to be a lot smaller when spectating.</remarks>
- * <remarks>Use <a href="http://wiki.sa-mp.com/wiki/Colors_List#Inline_colour_embedding">colour embedding</a>
+ * <remarks>Use <a href="https://www.open.mp/docs/scripting/resources/colorslist">colour embedding</a>
  * for multiple colours in the text.</remarks>
  * <returns>The ID of the newly created 3D Text Label, or <b><c>INVALID_3DTEXT_ID</c></b> if the 3D
  * Text Label limit (<b><c>MAX_3DTEXT_GLOBAL</c></b>) was reached.</returns>
@@ -265,7 +268,10 @@ native bool:Get3DTextLabelAttachedData(Text3D:textid, &parentPlayerid, &parentVe
 */                                  
 
 /*
-native #Per-Player();
+native # Per-Player();
+native           Per-Player(
+native      ====================(
+native
 */
 
 /**
@@ -432,19 +438,26 @@ native bool:SetPlayer3DTextLabelLOS(playerid, PlayerText3D:textid, bool:enable);
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native           Deprecated(
+native      ====================(
+native
 */
 
 /**
  * <library>omp_textlabel</library>
  */
-#pragma deprecated Use `Get3DTextLabelColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `Get3DTextLabelColour`
+#endif
 native Get3DTextLabelColor(Text3D:textid);
 
 /**
  * <library>omp_textlabel</library>
  */
-#pragma deprecated Use `GetPlayer3DTextLabelColour`
+#if !defined MIXED_SPELLINGS
+	#pragma deprecated Use `GetPlayer3DTextLabelColour`
+#endif
 native GetPlayer3DTextLabelColor(playerid, PlayerText3D:textid);
 
 /**

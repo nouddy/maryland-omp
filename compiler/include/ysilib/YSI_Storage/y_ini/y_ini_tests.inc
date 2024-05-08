@@ -961,15 +961,19 @@ public INI_PUB_Inl_(string:name[], string:value[])
 	if (f)
 	{
 		fread(f, str);
+		printf("Read file: %s", str);
 		StripNL(str);
 		ASSERT_SAME(str, "[tag_with_parent]");
 		fread(f, str);
+		printf("Read file: %s", str);
 		StripNL(str);
 		ASSERT_SAME(str, "value_four=Some_semi_colons");
 		fread(f, str);
+		printf("Read file: %s", str);
 		StripNL(str);
 		ASSERT_SAME(str, "value_three=Some\\;semi\\;colons");
 		fread(f, str);
+		printf("Read file: %s", str);
 		StripNL(str);
 		ASSERT_SAME(str, "");
 		fclose(f);

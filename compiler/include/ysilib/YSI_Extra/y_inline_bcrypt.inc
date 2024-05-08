@@ -1,8 +1,3 @@
-#if defined _INC_y_inline_bcrypt
-	#endinput
-#endif
-#define _INC_y_inline_bcrypt
-
 /*
 Legal:
 	Version: MPL 1.1
@@ -76,127 +71,22 @@ Optional plugins:
 	Me - sscanf2, fixes2, Whirlpool.
 */
 
-#if !defined _INC_y_inline
-	#tryinclude "..\YSI_Coding\y_inline\y_inline_entry"
+#if !defined _INC_y_inline_bcrypt
+	#tryinclude "y_inline_bcrypt\y_inline_bcrypt_entry"
 #endif
-#if !defined _INC_y_inline
-	#tryinclude "YSI_Coding\y_inline\y_inline_entry"
+#if !defined _INC_y_inline_bcrypt
+	#tryinclude "YSI_Extra\y_inline_bcrypt\y_inline_bcrypt_entry"
 #endif
-#if !defined _INC_y_inline
-	#tryinclude "YSI\YSI_Coding\y_inline\y_inline_entry"
+#if !defined _INC_y_inline_bcrypt
+	#tryinclude "YSI\YSI_Extra\y_inline_bcrypt\y_inline_bcrypt_entry"
 #endif
-#if !defined _INC_y_inline
-	#tryinclude <YSI_Coding\y_inline\y_inline_entry>
+#if !defined _INC_y_inline_bcrypt
+	#tryinclude <YSI_Extra\y_inline_bcrypt\y_inline_bcrypt_entry>
 #endif
-#if !defined _INC_y_inline
-	#tryinclude <YSI\YSI_Coding\y_inline\y_inline_entry>
+#if !defined _INC_y_inline_bcrypt
+	#tryinclude <YSI\YSI_Extra\y_inline_bcrypt\y_inline_bcrypt_entry>
 #endif
-#if !defined _INC_y_inline
-	#error Could not find y_inline
-#endif
-
-#if !defined _INC_y_bcrypt
-	#tryinclude ".\y_bcrypt"
-#endif
-#if !defined _INC_y_bcrypt
-	#tryinclude "YSI_Extra\y_bcrypt"
-#endif
-#if !defined _INC_y_bcrypt
-	#tryinclude "YSI\YSI_Extra\y_bcrypt"
-#endif
-#if !defined _INC_y_bcrypt
-	#tryinclude <YSI_Extra\y_bcrypt>
-#endif
-#if !defined _INC_y_bcrypt
-	#tryinclude <YSI\YSI_Extra\y_bcrypt>
-#endif
-#if !defined _INC_y_bcrypt
-	#error Could not find y_bcrypt
-#endif
-
-#if defined bcrypt_included
-	forward _Inline_BCryptCheckDone(Func:cb<i>);
-	forward _Inline_BCryptHashDone(Func:cb<si>, hashid);
-    
-	public _Inline_BCryptCheckDone(Func:cb<i>)
-	{
-		new ret = @.cb(_YSI_BCryptIsEqual());
-		Indirect_Release(cb);
-		return ret;
-	}
-    
-	public _Inline_BCryptHashDone(Func:cb<si>, hashid)
-	{
-		new hash[61];
-		_YSI_BCryptGetHash(hash),
-		hashid = @.cb(hash, hashid),
-		Indirect_Release(cb);
-		return hashid;
-	}
-    
-	stock bool:BCrypt_CheckInline(const password[], const hash[], Func:cb<i>)
-	{
-		if (_YSI_BCryptCheck(password, hash, "_Inline_BCryptCheckDone", "i", _:cb))
-		{
-			Indirect_Claim(cb);
-			return true;
-		}
-		return false;
-	}
-    
-	stock BCrypt_HashInline(const password[], cost = 12, {F@_@s, F@_@si}:cb) // Func:cb<s> | Func:cb<si>
-	{
-		if (_YSI_BCryptHash(password, cost, "_Inline_BCryptHashDone", "ii", _:cb, ++_YSI_gHashID))
-		{
-			Indirect_Claim(cb);
-			return _YSI_gHashID;
-		}
-		return 0;
-	}
-#elseif defined _samp_bcrypt_included
-	forward _Inline_BCryptCheckDone(Func:cb<i>, bool:success);
-	forward _Inline_BCryptHashDone(Func:cb<si>, hashid);
-
-	public _Inline_BCryptCheckDone(Func:cb<i>, bool:success)
-	{
-		new ret = @.cb(success);
-		Indirect_Release(cb);
-		return ret;
-	}
-
-	public _Inline_BCryptHashDone(Func:cb<si>, hashid)
-	{
-		new hash[61];
-		BCrypt_GetHash(hash),
-		hashid = @.cb(hash, hashid),
-		Indirect_Release(cb);
-		return hashid;
-	}
-
-	stock bool:BCrypt_CheckInline(const password[], const hash[], Func:cb<i>)
-	{
-		if (BCrypt_Check(_:cb, "_Inline_BCryptCheckDone", password, hash))
-		{
-			Indirect_Claim(cb);
-			return true;
-		}
-		return false;
-	}
-
-	stock BCrypt_HashInline(const password[], cost = 12, {F@_@s, F@_@si}:cb) // Func:cb<s> | Func:cb<si>
-	{
-		if ((cost = BCrypt_Hash(_:cb, "_Inline_BCryptHashDone", password, cost)))
-		{
-			Indirect_Claim(cb);
-			// Return the hashid.
-			return cost;
-		}
-		return 0;
-	}
-
-#else
-	// We used to not have an error for this case, just gave undefined errors.  But now they must
-	// include it explicitly, so add a real error.
-	#error Please include either BCrypt plugin first.
+#if !defined _INC_y_inline_bcrypt
+	#error Could not find y_inline_bcrypt
 #endif
 

@@ -46,6 +46,7 @@ const MAX_DIALOG                               = 32768;
 #define DIALOG_STYLE: __TAG(DIALOG_STYLE):
 enum DIALOG_STYLE:__DIALOG_STYLE
 {
+	UNKNOWN_DIALOG_STYLE                       = -1,
 	DIALOG_STYLE_MSGBOX,
 	DIALOG_STYLE_INPUT,
 	DIALOG_STYLE_LIST,
@@ -54,6 +55,14 @@ enum DIALOG_STYLE:__DIALOG_STYLE
 	DIALOG_STYLE_TABLIST_HEADERS
 }
 static stock DIALOG_STYLE:_@DIALOG_STYLE() { return __DIALOG_STYLE; }
+
+#define UNKNOWN_DIALOG_STYLE                   (DIALOG_STYLE:-1)
+#define DIALOG_STYLE_MSGBOX                    (DIALOG_STYLE:0)
+#define DIALOG_STYLE_INPUT                     (DIALOG_STYLE:1)
+#define DIALOG_STYLE_LIST                      (DIALOG_STYLE:2)
+#define DIALOG_STYLE_PASSWORD                  (DIALOG_STYLE:3)
+#define DIALOG_STYLE_TABLIST                   (DIALOG_STYLE:4)
+#define DIALOG_STYLE_TABLIST_HEADERS           (DIALOG_STYLE:5)
 
 /*
                                                                            
@@ -152,7 +161,10 @@ native GetPlayerDialogID(playerid);
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native           Deprecated(
+native      ====================(
+native
 */
 
 /**
@@ -203,7 +215,8 @@ native GetPlayerDialog(playerid) = GetPlayerDialogID;
  * <remarks>A player's dialog doesn't hide when the gamemode restarts, causing the server to print <c>"Warning:
  * PlayerDialogResponse PlayerId: 0 dialog ID doesn't match last sent dialog ID"</c> if a player responded
  * to this dialog after restart.</remarks>
- * <remarks>Parameters can contain different values, based on dialog's <a href="https://open.mp/docs/scripting/resources/dialogstyles">style</a>.
+ * <remarks>Parameters can contain different values, based on dialog's
+ * <a href="https://open.mp/docs/scripting/resources/dialogstyles">style</a>.
  * </remarks>
  * <returns>
  *   Returning <b><c>0</c></b> in this callback will pass the dialog to another script in case no matching

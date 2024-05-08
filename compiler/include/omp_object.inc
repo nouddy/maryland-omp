@@ -53,10 +53,15 @@ const INVALID_OBJECT_ID                        = 0xFFFF;
 #define SELECT_OBJECT: __TAG(SELECT_OBJECT):
 enum SELECT_OBJECT:__SELECT_OBJECT
 {
+	UNKNOWN_SELECT_OBJECT                      = -1,
 	SELECT_OBJECT_GLOBAL_OBJECT                = 1,
 	SELECT_OBJECT_PLAYER_OBJECT
 }
 static stock SELECT_OBJECT:_@SELECT_OBJECT() { return __SELECT_OBJECT; }
+
+#define UNKNOWN_SELECT_OBJECT                  (SELECT_OBJECT:-1)
+#define SELECT_OBJECT_GLOBAL_OBJECT            (SELECT_OBJECT:1)
+#define SELECT_OBJECT_PLAYER_OBJECT            (SELECT_OBJECT:2)
 
 /// <p/>
 /**
@@ -65,6 +70,7 @@ static stock SELECT_OBJECT:_@SELECT_OBJECT() { return __SELECT_OBJECT; }
 #define OBJECT_MATERIAL_SIZE: __TAG(OBJECT_MATERIAL_SIZE):
 enum OBJECT_MATERIAL_SIZE:__OBJECT_MATERIAL_SIZE (+= 10)
 {
+	UNKNOWN_OBJECT_MATERIAL_SIZE               = -1,
 	OBJECT_MATERIAL_SIZE_32x32                 = 10,
 	OBJECT_MATERIAL_SIZE_64x32,
 	OBJECT_MATERIAL_SIZE_64x64,
@@ -82,6 +88,22 @@ enum OBJECT_MATERIAL_SIZE:__OBJECT_MATERIAL_SIZE (+= 10)
 }
 static stock OBJECT_MATERIAL_SIZE:_@OBJECT_MATERIAL_SIZE() { return __OBJECT_MATERIAL_SIZE; }
 
+#define UNKNOWN_OBJECT_MATERIAL_SIZE           (OBJECT_MATERIAL_SIZE:-1)
+#define OBJECT_MATERIAL_SIZE_32x32             (OBJECT_MATERIAL_SIZE:10)
+#define OBJECT_MATERIAL_SIZE_64x32             (OBJECT_MATERIAL_SIZE:20)
+#define OBJECT_MATERIAL_SIZE_64x64             (OBJECT_MATERIAL_SIZE:30)
+#define OBJECT_MATERIAL_SIZE_128x32            (OBJECT_MATERIAL_SIZE:40)
+#define OBJECT_MATERIAL_SIZE_128x64            (OBJECT_MATERIAL_SIZE:50)
+#define OBJECT_MATERIAL_SIZE_128x128           (OBJECT_MATERIAL_SIZE:60)
+#define OBJECT_MATERIAL_SIZE_256x32            (OBJECT_MATERIAL_SIZE:70)
+#define OBJECT_MATERIAL_SIZE_256x64            (OBJECT_MATERIAL_SIZE:80)
+#define OBJECT_MATERIAL_SIZE_256x128           (OBJECT_MATERIAL_SIZE:90)
+#define OBJECT_MATERIAL_SIZE_256x256           (OBJECT_MATERIAL_SIZE:100)
+#define OBJECT_MATERIAL_SIZE_512x64            (OBJECT_MATERIAL_SIZE:110)
+#define OBJECT_MATERIAL_SIZE_512x128           (OBJECT_MATERIAL_SIZE:120)
+#define OBJECT_MATERIAL_SIZE_512x256           (OBJECT_MATERIAL_SIZE:130)
+#define OBJECT_MATERIAL_SIZE_512x512           (OBJECT_MATERIAL_SIZE:140)
+
 /// <p/>
 /**
  * <library>omp_object</library>
@@ -91,15 +113,26 @@ enum OBJECT_MATERIAL_TEXT_ALIGN:__OBJECT_MATERIAL_TEXT_ALIGN
 {
 	// First so we don't have trailing commas.
 #if __namemax > 31
-	OBJECT_MATERIAL_TEXT_ALIGN_CENTRE = 1,
-	OBJECT_MATERIAL_TEXT_ALIGN_CENTER = 1,
-	OBJECT_MATERIAL_TEXT_ALIGN_RIGHT  = 2,
+	UNKNOWN_OBJECT_MATERIAL_TEXT_ALIGN         = -1,
+	OBJECT_MATERIAL_TEXT_ALIGN_CENTRE          = 1,
+	OBJECT_MATERIAL_TEXT_ALIGN_CENTER          = 1,
+	OBJECT_MATERIAL_TEXT_ALIGN_RIGHT           = 2,
 #endif
-	OBJECT_MATERIAL_TEXT_ALIGN_LEFT   = 0,
-	OBJECT_MATERIAL_TEXT_ALIGN_CENT   = 1,
-	OBJECT_MATERIAL_TEXT_ALIGN_RIGT   = 2
+	OBJECT_MATERIAL_TEXT_ALIGN_LEFT            = 0,
+	OBJECT_MATERIAL_TEXT_ALIGN_CENT            = 1,
+	OBJECT_MATERIAL_TEXT_ALIGN_RIGT            = 2
 }
 static stock OBJECT_MATERIAL_TEXT_ALIGN:_@OBJECT_MATERIAL_TEXT_ALIGN() { return __OBJECT_MATERIAL_TEXT_ALIGN; }
+
+#if __namemax > 31
+#define UNKNOWN_OBJECT_MATERIAL_TEXT_ALIGN     (OBJECT_MATERIAL_TEXT_ALIGN:-1)
+#define OBJECT_MATERIAL_TEXT_ALIGN_CENTRE      (OBJECT_MATERIAL_TEXT_ALIGN:1)
+#define OBJECT_MATERIAL_TEXT_ALIGN_CENTER      (OBJECT_MATERIAL_TEXT_ALIGN:1)
+#define OBJECT_MATERIAL_TEXT_ALIGN_RIGHT       (OBJECT_MATERIAL_TEXT_ALIGN:2)
+#endif
+#define OBJECT_MATERIAL_TEXT_ALIGN_LEFT        (OBJECT_MATERIAL_TEXT_ALIGN:0)
+#define OBJECT_MATERIAL_TEXT_ALIGN_CENT        (OBJECT_MATERIAL_TEXT_ALIGN:1)
+#define OBJECT_MATERIAL_TEXT_ALIGN_RIGT        (OBJECT_MATERIAL_TEXT_ALIGN:2)
 
 /// <p/>
 /**
@@ -108,11 +141,17 @@ static stock OBJECT_MATERIAL_TEXT_ALIGN:_@OBJECT_MATERIAL_TEXT_ALIGN() { return 
 #define EDIT_RESPONSE: __TAG(EDIT_RESPONSE):
 enum EDIT_RESPONSE:__EDIT_RESPONSE
 {
+	UNKNOWN_EDIT_RESPONSE                      = -1,
 	EDIT_RESPONSE_CANCEL,
 	EDIT_RESPONSE_FINAL,
 	EDIT_RESPONSE_UPDATE
 }
 static stock EDIT_RESPONSE:_@EDIT_RESPONSE() { return __EDIT_RESPONSE; }
+
+#define UNKNOWN_EDIT_RESPONSE                  (EDIT_RESPONSE:-1)
+#define EDIT_RESPONSE_CANCEL                   (EDIT_RESPONSE:0)
+#define EDIT_RESPONSE_FINAL                    (EDIT_RESPONSE:1)
+#define EDIT_RESPONSE_UPDATE                   (EDIT_RESPONSE:2)
 
 /*
                                                                            
@@ -207,7 +246,10 @@ native bool:AttachPlayerObjectToObject(playerid, objectid, parentid, Float:offse
 */
 
 /*
-native #Global();
+native # Global();
+native             Global(
+native      ====================(
+native
 */
 
 /**
@@ -704,7 +746,10 @@ stock bool:HasObjectCameraCollision(objectid)
 */                                  
 
 /*
-native #Per-Player();
+native # Per-Player();
+native           Per-Player(
+native      ====================(
+native
 */
 
 /**
@@ -1167,7 +1212,10 @@ native bool:GetPlayerObjectMovingTargetRot(playerid, objectid, &Float:rotationX,
 */
 
 /*
-native #Attachments();
+native # Attachments();
+native          Attachments(
+native      ====================(
+native
 */
 
 /**
@@ -1295,7 +1343,10 @@ native EditAttachedObject(playerid, index);
 */
 
 /*
-native #DL();
+native # DL();
+native               DL(
+native      ====================(
+native
 */
 
 /**
@@ -1354,7 +1405,10 @@ native bool:IsValidCustomModel(modelid);
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native           Deprecated(
+native      ====================(
+native
 */
 
 /**
@@ -1560,7 +1614,7 @@ forward OnPlayerSelectObject(playerid, SELECT_OBJECT:type, objectid, modelid, Fl
  *   It is always called first in filterscripts.
  * </returns>
  */
-forward OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:response, Float:fX, Float:fY, Float:fZ, Float:rotationX, Float:rotationY, Float:rotationZ);
+forward OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ);
 
 /**
  * <summary>This callback is called when a player ends attached object edition mode.</summary>
@@ -1589,7 +1643,7 @@ forward OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:respo
  *   It is always called first in filterscripts.
  * </returns>
  */
-forward OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:rotationX, Float:rotationY, Float:rotationZ, Float:scaleX, Float:scaleY, Float:scaleZ);
+forward OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ);
 
 /**
  * <summary>This callback is called when an object is moved after <a href="#MoveObject">MoveObject</a>

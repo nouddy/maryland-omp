@@ -33,8 +33,9 @@
 #define CONNECTION_STATUS: __TAG(CONNECTION_STATUS):
 enum CONNECTION_STATUS:__CONNSTAT
 {
+	UNKNOWN_CONNECTION_STATUS                  = -1,
+	CONNECTION_STATUS_NO_ACTION                = 0,
 #if __namemax > 31
-	CONNECTION_STATUS_NO_ACTION,
 	CONNECTION_STATUS_DISCONNECT_ASAP,
 	CONNECTION_STATUS_DISCONNECT_ASAP_SILENTLY,
 	CONNECTION_STATUS_DISCONNECT_ON_NO_ACK,
@@ -42,9 +43,9 @@ enum CONNECTION_STATUS:__CONNSTAT
 	CONNECTION_STATUS_HANDLING_CONNECTION_REQUEST,
 	CONNECTION_STATUS_UNVERIFIED_SENDER,
 	CONNECTION_STATUS_SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET,
-	CONNECTION_STATUS_CONNECTED,
 #endif
-	CONNSTAT_NO_ACTION = 0,
+	CONNECTION_STATUS_CONNECTED                = 8,
+	CONNSTAT_NO_ACTION                         = 0,
 	CONNSTAT_DISCONNECT_ASAP,
 	CONNSTAT_DISCONNECT_ASAP_SILNT,
 	CONNSTAT_DISCONNECT_ON_NO_ACK,
@@ -56,6 +57,28 @@ enum CONNECTION_STATUS:__CONNSTAT
 }
 static stock CONNECTION_STATUS:_@CONNECTION_STATUS() { return __CONNSTAT; }
 
+#define UNKNOWN_CONNECTION_STATUS              (CONNECTION_STATUS:-1)
+#define CONNECTION_STATUS_NO_ACTION            (CONNECTION_STATUS:0)
+#if __namemax > 31
+#define CONNECTION_STATUS_DISCONNECT_ASAP      (CONNECTION_STATUS:1)
+#define CONNECTION_STATUS_DISCONNECT_ASAP_SILENTLY (CONNECTION_STATUS:2)
+#define CONNECTION_STATUS_DISCONNECT_ON_NO_ACK (CONNECTION_STATUS:3)
+#define CONNECTION_STATUS_REQUESTED_CONNECTION (CONNECTION_STATUS:4)
+#define CONNECTION_STATUS_HANDLING_CONNECTION_REQUEST (CONNECTION_STATUS:5)
+#define CONNECTION_STATUS_UNVERIFIED_SENDER    (CONNECTION_STATUS:6)
+#define CONNECTION_STATUS_SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET (CONNECTION_STATUS:7)
+#endif
+#define CONNECTION_STATUS_CONNECTED            (CONNECTION_STATUS:8)
+#define CONNSTAT_NO_ACTION                     (CONNECTION_STATUS:0)
+#define CONNSTAT_DISCONNECT_ASAP               (CONNECTION_STATUS:1)
+#define CONNSTAT_DISCONNECT_ASAP_SILNT         (CONNECTION_STATUS:2)
+#define CONNSTAT_DISCONNECT_ON_NO_ACK          (CONNECTION_STATUS:3)
+#define CONNSTAT_REQUESTED_CONNECTION          (CONNECTION_STATUS:4)
+#define CONNSTAT_HANDLING_CONN_REQ             (CONNECTION_STATUS:5)
+#define CONNSTAT_UNVERIFIED_SENDER             (CONNECTION_STATUS:6)
+#define CONNSTAT_SET_ENCRYPTION                (CONNECTION_STATUS:7)
+#define CONNSTAT_CONNECTED                     (CONNECTION_STATUS:8)
+
 /// <p/>
 /**
  * <library>omp_network</library>
@@ -64,11 +87,17 @@ static stock CONNECTION_STATUS:_@CONNECTION_STATUS() { return __CONNSTAT; }
 #define DOWNLOAD_REQUEST: __TAG(DOWNLOAD_REQUEST):
 enum DOWNLOAD_REQUEST:__DOWNLOAD_REQUEST
 {
+	UNKNOWN_DOWNLOAD_REQUEST                   = -1,
 	DOWNLOAD_REQUEST_EMPTY,
 	DOWNLOAD_REQUEST_MODEL_FILE,
 	DOWNLOAD_REQUEST_TEXTURE_FILE
 }
 static stock DOWNLOAD_REQUEST:_@DOWNLOAD_REQUEST() { return __DOWNLOAD_REQUEST; }
+
+#define UNKNOWN_DOWNLOAD_REQUEST               (DOWNLOAD_REQUEST:-1)
+#define DOWNLOAD_REQUEST_EMPTY                 (DOWNLOAD_REQUEST:0)
+#define DOWNLOAD_REQUEST_MODEL_FILE            (DOWNLOAD_REQUEST:1)
+#define DOWNLOAD_REQUEST_TEXTURE_FILE          (DOWNLOAD_REQUEST:2)
 
 /*
                                                                            
@@ -281,7 +310,10 @@ native SendClientCheck(playerid, type, memoryAddress, memoryOffset, byteCount);
 */
 
 /*
-native #Netstats();
+native # Netstats();
+native            Netstats(
+native      ====================(
+native
 */
 
 /**
@@ -418,8 +450,9 @@ native NetStats_MessagesRecvPerSecond(playerid);
  * 1.0% is outright bad.</remarks>
  * <remarks>This function has been found to be currently unreliable the output is not as expected when
  * compared to the client.  Therefore this function should not be used as a packet loss kicker. </remarks>
- * <remarks>A more accurate packetloss function can be found here: <a href="http://forum.sa-mp.com/showpost.php?p=2488911&amp;postcount=984">
- * http://forum.sa-mp.com/showpost.php?p=2488911&amp;postcount=984</a></remarks>
+ * <remarks>A more accurate packetloss function can be found here:
+ * <a href="https://sampforum.blast.hk/showthread.php?tid=281&pid=2488911#pid2488911">
+ * https://sampforum.blast.hk/showthread.php?tid=281&pid=2488911#pid2488911</a></remarks>
  * <returns>The percentage packet loss as a float. <b><c>0.0</c></b> if player not connected.</returns>
  */
 native Float:NetStats_PacketLossPercent(playerid);
@@ -495,7 +528,10 @@ native NetStats_GetIpPort(playerid, output[], size = sizeof (output));
 */
 
 /*
-native #Formatted();
+native # Formatted();
+native           Formatted(
+native      ====================(
+native
 */
 
 /**
@@ -577,7 +613,10 @@ native GetPlayerNetworkStats(playerid, output[], size = sizeof (output));
 */
 
 /*
-native #Deprecated();
+native # Deprecated();
+native           Deprecated(
+native      ====================(
+native
 */
 
 /**
@@ -651,8 +690,8 @@ forward OnRconLoginAttempt(ip[], password[], success);
 
 /**
  * <summary>This callback is called when a player finishes downloading custom models.  For more information
- * on how to add custom models to your server, see <a href="http://forum.sa-mp.com/showthread.php?t=644105">the
- * release thread</a> and <a href="http://forum.sa-mp.com/showthread.php?t=644123">this tutorial</a>.</summary>
+ * on how to add custom models to your server, see <a href="https://sampforum.blast.hk/showthread.php?tid=644105">the
+ * release thread</a> and <a href="https://sampforum.blast.hk/showthread.php?tid=644123">this tutorial</a>.</summary>
  * <param name="playerid">The ID of the player that finished downloading custom models</param>
  * <param name="virtualworld">The ID of the virtual world the player finished downloading custom models
  * for</param>
