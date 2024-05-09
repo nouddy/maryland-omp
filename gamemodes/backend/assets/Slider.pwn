@@ -84,7 +84,7 @@ stock SetPlayerSliderText(playerid, const text[])
 hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdown, KEY:leftright, KEY:oldleftright)
 {    
     if(!pSliderInfo[playerid][sliderPlayerSelecting]) return Y_HOOKS_CONTINUE_RETURN_1;
-    if(leftright == KEY_LEFT && oldleftright != KEY_LEFT)
+    if(leftright == KEY:KEY_LEFT && oldleftright != KEY:KEY_LEFT)
     {
         SetDynamicObjectMaterialText(pSliderInfo[playerid][sliderObjectLeft], 0, "<<", pSliderInfo[playerid][sliderObjectMaterialSize], "Ariel", 22, 0, 0xCCCCCCFFF, 0x00000000, 1);
         CallLocalFunction("OnPlayerSlectedSlider", "iii", playerid, leftright, false);
@@ -93,7 +93,7 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
         return Y_HOOKS_BREAK_RETURN_1;
     }
     
-    if(leftright == KEY_RIGHT && oldleftright != KEY_RIGHT)
+    if(leftright == KEY:KEY_RIGHT && oldleftright != KEY:KEY_RIGHT)
     {
         SetDynamicObjectMaterialText(pSliderInfo[playerid][sliderObjectRight], 0, ">>", pSliderInfo[playerid][sliderObjectMaterialSize], "Ariel", 22, 0, 0xCCCCCCFF, 0x00000000, 1);
         CallLocalFunction("OnPlayerSlectedSlider", "iii", playerid, leftright, false);
@@ -113,11 +113,11 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 forward RestoreSliderColor(playerid, KEY:leftright);
 public RestoreSliderColor(playerid, KEY:leftright)
 {
-    if(leftright == KEY_LEFT)
+    if(leftright == KEY:KEY_LEFT)
     {
         SetDynamicObjectMaterialText(pSliderInfo[playerid][sliderObjectLeft], 0, "<<", pSliderInfo[playerid][sliderObjectMaterialSize], "Ariel", 22, 0, 0xFFFFFFFF, 0x00000000, 1);
     }
-    else if(leftright == KEY_RIGHT)
+    else if(leftright == KEY:KEY_RIGHT)
     {
         SetDynamicObjectMaterialText(pSliderInfo[playerid][sliderObjectRight], 0, ">>", pSliderInfo[playerid][sliderObjectMaterialSize], "Ariel", 22, 0, 0xFFFFFFFF, 0x00000000, 1);
     }

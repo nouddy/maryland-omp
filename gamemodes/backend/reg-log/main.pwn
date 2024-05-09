@@ -933,13 +933,13 @@ hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 			return Y_HOOKS_BREAK_RETURN_1;
 		}
 
-		if(leftright == KEY_LEFT)
+		if(leftright == KEY:KEY_LEFT)
 		{
 			pTmpSkinIDX[playerid]--;
 			if(pTmpSkinIDX[playerid] < 0) pTmpSkinIDX[playerid] = (sizeof(CharacterDefaultSkins[])-1);
 		}
 
-		if(leftright == KEY_RIGHT)
+		if(leftright == KEY:KEY_RIGHT)
 		{
 			pTmpSkinIDX[playerid]++;
 			if(pTmpSkinIDX[playerid] >= sizeof(CharacterDefaultSkins[])) pTmpSkinIDX[playerid] = 0;
@@ -959,14 +959,14 @@ hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 		}
 
 
-		if(leftright == KEY_LEFT)
+		if(leftright == KEY:KEY_LEFT)
 		{
 			CharacterInfo[playerid][WalkStyle]--;
 			if(CharacterInfo[playerid][WalkStyle] < 0) 
 				CharacterInfo[playerid][WalkStyle] = (sizeof(NameAnimations)-1);
 		}
 
-		if(leftright == KEY_RIGHT)
+		if(leftright == KEY:KEY_RIGHT)
 		{
 			CharacterInfo[playerid][WalkStyle]++;
 			if(CharacterInfo[playerid][WalkStyle] >= sizeof(NameAnimations))

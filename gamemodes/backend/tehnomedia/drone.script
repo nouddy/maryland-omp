@@ -44,7 +44,7 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
  
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
     DestroyVehicle(Drone[playerid]);
 	Drone[playerid] = INVALID_PLAYER_ID;

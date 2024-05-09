@@ -58,7 +58,7 @@ hook OnPlayerDisconnect(playerid, reason) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
+hook OnPlayerDeath(playerid, killerid, WEAPON:reason) {
 
     if(burglary_CoolDown[playerid] < gettime()) {
 

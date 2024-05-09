@@ -144,7 +144,7 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 		SelectedBox[playerid] = 0;
 
 	new Float:x,Float:y,Float:z;
-	if(updown == KEY_DOWN && oldupdown != KEY_DOWN)
+	if(updown == KEY:KEY_DOWN && oldupdown != KEY:KEY_DOWN)
 	{
 		//SendClientMessage(playerid, -1, "Debug: Menu Down");
 
@@ -157,7 +157,7 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x+MenuInfo[MenuID][AddingX],y+MenuInfo[MenuID][AddingY],z, 1.0);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
-	else if(updown == KEY_UP && oldupdown != KEY_UP)
+	else if(updown == KEY:KEY_UP && oldupdown != KEY:KEY_UP)
 	{
 		//SendClientMessage(playerid, -1, "Debug: Menu UP");
 
@@ -170,7 +170,7 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x+MenuInfo[MenuID][AddingX],y+MenuInfo[MenuID][AddingY],z, 1.0);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
-	else if(keys == KEY_NO || keys == KEY_UP) 
+	else if(keys == KEY:KEY_NO || keys == KEY:KEY_UP) 
 	{
 		CallLocalFunction("OnPlayerChange3DMenuBox","idd",playerid,MenuID,SelectedBox[playerid]);
 		return Y_HOOKS_BREAK_RETURN_1;
