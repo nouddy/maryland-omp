@@ -19,6 +19,18 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+new vehicleFuel[MAX_VEHICLES],
+    bool:vehicleLocked[MAX_VEHICLES],
+    vehicleFuelType[MAX_VEHICLES];
+
+enum {
+
+    VEHICLE_FUEL_TYPE_DIESEL = 1,
+    VEHICLE_FUEL_TYPE_PETROL,
+    VEHICLE_FUEL_TYPE_ELECTRIC,
+    VEHICLE_FUEL_TYPE_METAN
+}
+
 hook OnGameModeInit()
 {
 	print("vehicle/vehicle.script loaded");
@@ -138,3 +150,38 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     }
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+// CreateVehicle(modelid, Float:spawnX, Float:spawnY, Float:spawnZ, Float:angle, colour1, colour2, respawnDelay, bool:addSiren = false);
+
+stock CreateVehicleEx(modelid, Float:spawnX, Float:spawnY, Float:spawnZ, Float:angle, colour1, colour2, respawnDelay, bool:addSiren = false, const bool:locked = true, fuel = 100, fuelType = VEHICLE_FUEL_TYPE_DIESEL) {
+
+    new vehicleID = CreateVehicle(modelid, Float:spawnX, Float:spawnY, Float:spawnZ, Float:angle, colour1, colour2, respawnDelay, bool:addSiren);
+    vehicleFuel[vehicleID] = fuel;
+    vehicleLocked[vehicleID] = locked;
+    vehicleFuelType[vehicleID] = fuelType;
+
+    return (vehicleID);
+}
+
+stock IsVehicleLocked(vehicle) {
+
+    if(vehicleLocked[vehicle]) return true;
+    else return (false);
+}
+
+stock GetVehicleFuel(vehicle) return vehicleFuel[vehicle];
+
+stock ReturnVehicleFuelType(vehicle) {
+
+    new fuelType[24];
+
+    switch(vehicleFuelType[vehicle]) {
+
+        case VEHICLE_FUEL_TYPE_DIESEL:      { fuelType = "Diesel"; }
+        case VEHICLE_FUEL_TYPE_PETROL:      { fuelType = "Petrol"; }
+        case VEHICLE_FUEL_TYPE_ELECTRIC:    { fuelType = "Electric"; }
+        case VEHICLE_FUEL_TYPE_METAN:       { fuelType = "Metane"; }
+    }
+    return (fuelType);
+}
+

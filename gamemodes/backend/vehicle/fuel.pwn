@@ -21,7 +21,8 @@
 
 new bool:fuel_IsActive[MAX_PLAYERS],
     fuel_Timer[MAX_PLAYERS],
-    Float:fuel_Counter[MAX_PLAYERS];
+    Float:fuel_Counter[MAX_PLAYERS],
+    fuelingVehicle[MAX_PLAYERS];
 
 
 new PlayerText:Fuel_UI[MAX_PLAYERS][4];
@@ -36,19 +37,28 @@ hook OnGameModeInit()
 forward fuel_StartFueling(playerid);
 public fuel_StartFueling(playerid) {
 
-    if(fuel_Counter[playerid] > 80.0) {
+
+    if(vehicleFuel[fuelingVehicle[playerid]] == 100 ) {
 
         KillTimer(fuel_Timer[playerid]);   
         Fuel_ShowInterface(playerid, false);
+        vehicleFuel[fuelingVehicle[playerid]] = 100;
+        SendClientMessage(playerid, x_server, "FUEL > "c_white"Napunjeno 100L");
         return true;
     }
+    else {
 
-    fuel_Counter[playerid]++;
-    PlayerTextDrawTextSize(playerid, Fuel_UI[playerid][0], 5.000000, fuel_Counter[playerid]);
-    PlayerTextDrawShow(playerid,  Fuel_UI[playerid][0]);
+        fuel_Counter[playerid]++;
+        vehicleFuel[fuelingVehicle[playerid]] += floatround(fuel_Counter[playerid], floatround_round);
+        PlayerTextDrawTextSize(playerid, Fuel_UI[playerid][0], 5.000000, fuel_Counter[playerid]);
+        PlayerTextDrawShow(playerid,  Fuel_UI[playerid][0]);
 
-    new sipano = floatround(fuel_Counter[playerid], floatround_round);
-    PlayerTextDrawSetString(playerid, Fuel_UI[playerid][3], "sipano:_%dL", sipano);
+        GivePlayerMoney2(playerid, -3);
+
+        new sipano = floatround(fuel_Counter[playerid], floatround_round);
+        PlayerTextDrawSetString(playerid, Fuel_UI[playerid][3], "sipano:_%dL", sipano);
+
+    }
 
     return (false);
 }
@@ -124,9 +134,21 @@ YCMD:fuel(playerid, params[], help) {
 
     Fuel_ShowInterface(playerid, true);
 
-    fuel_Timer[playerid] = SetTimerEx("fuel_StartFueling", 100, true, "d", playerid);
+    new vehicle = GetPlayerVehicleID(playerid);
 
+    if(GetVehicleFuel(vehicle) == 100) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vozilo je puno gorivom!");
+
+    fuel_Timer[playerid] = SetTimerEx("fuel_StartFueling", 100, true, "d", playerid);
     fuel_Counter[playerid] = 0.00;
+    fuelingVehicle[playerid] = vehicle;
+
+    return 1;
+}
+
+YCMD:vehiclefuel(playerid, params[], help) 
+{   
+    new vehicle = GetPlayerVehicleID(playerid);
+    SendClientMessage(playerid, x_server, "FUEL > "c_white"%dL", GetVehicleFuel(vehicle));
 
     return 1;
 }

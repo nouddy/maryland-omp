@@ -272,7 +272,7 @@ hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 	{
 		if(areaid == SafeZone[s][safeID]) 
 		{
-            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "SAFE");
+            TextDrawSetStringForPlayer(Global_TD[77], playerid, "SAFE");
 			InSafeZone[playerid] = true;
 		}
 	}
@@ -286,7 +286,7 @@ hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 	{
 		if(areaid == SafeZone[i][safeID]) 
 		{
-            PlayerTextDrawSetString(playerid, Player_TDs[playerid][7], "UNSAFE");
+            TextDrawSetStringForPlayer(Global_TD[77], playerid, "UNSAFE");
 			InSafeZone[playerid] = false;
 		}
 	}

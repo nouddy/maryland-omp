@@ -68,15 +68,16 @@
 #include <walking_styles>
 #include <colors>
 #include <macroes>
+#include <maryland-tp>
 
 
 main()
 {
     print("-                                     -");
-	print(" Founder : Ogy");
+	print(" Founder : Vostic");
 	print(" Version : 1.0 - Maryland");
 	print(" Developer : Vostic & Nodi");
-	print(" Credits : daddyDOT");
+	print(" Credits : daddyDOT, Ogy, Frosty");
 	print("-                                     -");
 	print("> Gamemode Starting...");
 	print(">> Maryland Gamemode Started");

@@ -34,9 +34,9 @@ hook OnGameModeInit()
     return 1;
 }
 
-ptask RandomMessagesTimer[7000](playerid)
+task RandomMessagesTimer[7000]()
 {
-	CreateTextdrawAnimation(playerid, Player_TDs[playerid][6], 55, "~w~", RandomMessageTD[ random( sizeof( RandomMessageTD ) ) ] );
+	CreateTextdrawAnimation(Global_TD[56], 55, "~w~", RandomMessageTD[ random( sizeof( RandomMessageTD ) ) ] );
 	
 	return 1;
 }

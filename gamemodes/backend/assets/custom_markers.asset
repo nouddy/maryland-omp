@@ -117,18 +117,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             SetPlayerPos(playerid, 1482.6442,-1805.5509,18.7957);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1424.9067,1587.1135,19.1489) && GetPlayerVirtualWorld(playerid) == 6 && GetPlayerInterior(playerid) == 6)
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1424.9067,1587.1135,19.1489) && GetPlayerVirtualWorld(playerid) == 6 && GetPlayerInterior(playerid) == 6) // Izlaz iz Spawna
         {
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 838.5801,-1345.9092,7.1788);
+            SetPlayerCompensatedPosEx(playerid, 838.5801,-1345.9092,7.1788, 0, 0, 5000);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 838.5801,-1345.9092,7.1788) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0)
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 838.5801,-1345.9092,7.1788) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Ulaz u Spawn
         {
-            SetPlayerInterior(playerid, 6);
-            SetPlayerVirtualWorld(playerid, 6);
             SetPlayerPos(playerid, 1424.9067,1587.1135,19.1489);
+            SetPlayerCompensatedPosEx(playerid, 1424.9067,1587.1135,19.1489, 6, 6, 5000);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1676.1896,-1634.7426,14.2265) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Tehnomedia ulaz

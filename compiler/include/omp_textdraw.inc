@@ -1516,7 +1516,6 @@ native bool:PlayerTextDrawBackgroundColor(playerid, PlayerText:textid, backgroun
  * <remarks>The textdraw MUST use the font <b><c>TEXT_DRAW_FONT_MODEL_PREVIEW</c></b> and be showing
  * a vehicle in order for this function to have effect.</remarks>
  */
-#pragma deprecated Use `PlayerTextDrawSetPreviewVehicleColours`
 native bool:PlayerTextDrawSetPreviewVehCol(playerid, PlayerText:textid, colour1, colour2);
 
 /**

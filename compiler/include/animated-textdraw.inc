@@ -50,7 +50,7 @@ enum E_ANIM_DATA
 }
 static AnimData[MAX_ANIM_DATA][E_ANIM_DATA];
 
-forward OnTextdrawAnimationFinish(playerid, PlayerText:textdraw);
+forward OnTextdrawAnimationFinish(Text:textdraw);
 
 static FindFreeAnimDataID()
 {
@@ -62,7 +62,7 @@ static FindFreeAnimDataID()
 	return -1;
 }
 
-stock CreateTextdrawAnimation(playerid, PlayerText:textdraw, frame, const color[], string[])
+stock CreateTextdrawAnimation(Text:textdraw, frame, const color[], string[])
 {
 	new id = FindFreeAnimDataID();
 	if (id == -1) return 1;
@@ -79,14 +79,14 @@ stock CreateTextdrawAnimation(playerid, PlayerText:textdraw, frame, const color[
 	format (AnimData[id][data_color], 4, "%s", color);
 	format (AnimData[id][data_color_1], 15, "%s~h~~h~~h~", color);
 	format (AnimData[id][data_color_2], 15, "%s~h~~h~", color);
-	PlayerTextDrawSetString(playerid, textdraw, "");
+	TextDrawSetString(textdraw, "");
 
-	SetTimerEx("UpdateTextdrawAnimation", frame, false, "iii", playerid, _:textdraw, id);
+	SetTimerEx("UpdateTextdrawAnimation", frame, false, "ii", _:textdraw, id);
 	return 1;
 }
 
-forward UpdateTextdrawAnimation(playerid, PlayerText:textdraw, id);
-public UpdateTextdrawAnimation(playerid, PlayerText:textdraw, id)
+forward UpdateTextdrawAnimation(Text:textdraw, id);
+public UpdateTextdrawAnimation(Text:textdraw, id)
 {
 	new tmp[MAX_ANIM_STRING];
 	new len = strlen(AnimData[id][data_string]);
@@ -105,13 +105,13 @@ public UpdateTextdrawAnimation(playerid, PlayerText:textdraw, id)
 			strins(tmp, AnimData[id][data_color_1], idx + strlen(AnimData[id][data_color_2]) - 1);
 		}
 
-		SetTimerEx("UpdateTextdrawAnimation", AnimData[id][data_frame], false, "iii", playerid, _:textdraw, id);
+		SetTimerEx("UpdateTextdrawAnimation", AnimData[id][data_frame], false, "ii", _:textdraw, id);
 	} else {
 		format (AnimData[id][data_string], MAX_ANIM_STRING, "");
-		CallRemoteFunction("OnTextdrawAnimationFinish", "ii", playerid, _:textdraw);
+		CallRemoteFunction("OnTextdrawAnimationFinish", "i", _:textdraw);
 	}
 
 	strins(tmp, AnimData[id][data_color], 0);
-	PlayerTextDrawSetString(playerid, textdraw, tmp);
+	TextDrawSetString(textdraw, tmp);
 	return 1;
 }

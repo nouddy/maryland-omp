@@ -171,7 +171,7 @@ YCMD:sveh(playerid, params[], help)
 		if (400 > modelid > 611)
 			return notification.Show(playerid, "Greska", "Invalid model vozila | 400 - 611 |", "!", BOXCOLOR_RED);
 
-		new vehicleid = stfveh[playerid] = CreateVehicle(modelid, x, y, z+2.0, 0.0, 1, 0, -1);
+		new vehicleid = stfveh[playerid] = CreateVehicleEx(modelid, x, y, z+2.0, 0.0, 1, 0, -1, false, false, 50);
 
 		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(playerid));
 		SetVehicleNumberPlate(vehicleid, "STAFF");
@@ -393,9 +393,9 @@ YCMD:setskin(playerid, const string: params[], help)
 
 	SavePlayer(targetid);
 
-	PlayerTextDrawHide(targetid, Player_TDs[targetid][0]);
-	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][0], CharacterInfo[targetid][Skin]);
-    PlayerTextDrawShow(targetid, Player_TDs[targetid][0]);
+	PlayerTextDrawHide(targetid, Player_TDs[targetid][1]);
+	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][1], CharacterInfo[targetid][Skin]);
+    PlayerTextDrawShow(targetid, Player_TDs[targetid][1]);
 
     return 1;
 }

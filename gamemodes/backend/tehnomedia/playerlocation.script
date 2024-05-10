@@ -122,7 +122,7 @@ hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 
     new i = Streamer_GetIntData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID);
 
-    PlayerTextDrawSetString(playerid, Player_TDs[playerid][4], eZones[i][e_ZONE_NAME]);
+    PlayerTextDrawSetString(playerid, Player_TDs[playerid][5], eZones[i][e_ZONE_NAME]);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -131,7 +131,7 @@ hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 
     if (!IsPlayerInAnyDynamicArea(playerid))
 	{
-		PlayerTextDrawSetString(playerid, Player_TDs[playerid][4], "Nepoznato");
+		PlayerTextDrawSetString(playerid, Player_TDs[playerid][5], "Nepoznato");
     }
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;

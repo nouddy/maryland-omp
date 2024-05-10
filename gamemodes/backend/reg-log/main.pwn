@@ -546,7 +546,7 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	new rows = cache_num_rows();
 
 	for(new i = 0; i < rows; i++) {
-		cache_get_value_name(i, "cName", CharacterInfo[playerid][Skin], MAX_PLAYER_NAME);
+		cache_get_value_name(i, "cName", CharacterInfo[playerid][Name], MAX_PLAYER_NAME);
 		cache_get_value_name_int(i, "cSkin", CharacterInfo[playerid][Skin]);
 		cache_get_value_name_int(i, "cGender",CharacterInfo[playerid][Gender]);
 		cache_get_value_name_int(i, "cAge", CharacterInfo[playerid][Age]);
@@ -576,14 +576,17 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
-	Logo_ShowTextDraw(playerid, true);
 	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
-	
-	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][0], GetPlayerSkin(playerid));
-	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], "%s", ReturnCharacterName(playerid));
+
+	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
+
+	for(new j = 0; j < 12; j++) {
+
+		SetPlayerSkillLevel(playerid, WEAPONSKILL:j, MAX_WEAPONSKILLS);
+	}
 
 	SpawnPlayer(playerid);
 	return 1;
@@ -897,12 +900,11 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	SetPlayerInterior(playerid, 6);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
-	Logo_ShowTextDraw(playerid, true);
 	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
 
-	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][0], GetPlayerSkin(playerid));
-	PlayerTextDrawSetString(playerid, Player_TDs[playerid][1], "%s", ReturnCharacterName(playerid));
+	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
+	//PlayerTextDrawSetString(playerid, Player_TDs[playerid][0], "Test Name");
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
