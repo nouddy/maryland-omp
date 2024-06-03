@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Feb 22, 2024 at 06:01 PM
--- Server version: 8.0.31
--- PHP Version: 8.0.26
+-- Host: 127.0.0.1
+-- Generation Time: May 10, 2024 at 08:09 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,17 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `accounts`
 --
 
-DROP TABLE IF EXISTS `accounts`;
-CREATE TABLE IF NOT EXISTS `accounts` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `Username` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Ime_Prezime',
-  `Password` varchar(144) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Staff` int NOT NULL DEFAULT '0',
-  `LastLogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `RegisterDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '@gmail.com',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `accounts` (
+  `ID` int(11) NOT NULL,
+  `Username` varchar(25) NOT NULL DEFAULT 'Ime_Prezime',
+  `Password` varchar(144) NOT NULL,
+  `Staff` int(11) NOT NULL DEFAULT 0,
+  `LastLogin` timestamp NOT NULL DEFAULT current_timestamp(),
+  `RegisterDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `Email` varchar(50) NOT NULL DEFAULT '@gmail.com'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `accounts`
@@ -61,14 +59,12 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 -- Table structure for table `benches`
 --
 
-DROP TABLE IF EXISTS `benches`;
-CREATE TABLE IF NOT EXISTS `benches` (
-  `seat_ID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `benches` (
+  `seat_ID` int(11) NOT NULL,
   `seat_x` float NOT NULL,
   `seat_y` float NOT NULL,
   `seat_z` float NOT NULL,
-  `seat_a` float NOT NULL,
-  PRIMARY KEY (`seat_ID`)
+  `seat_a` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -77,19 +73,17 @@ CREATE TABLE IF NOT EXISTS `benches` (
 -- Table structure for table `cash_registers`
 --
 
-DROP TABLE IF EXISTS `cash_registers`;
-CREATE TABLE IF NOT EXISTS `cash_registers` (
-  `registerID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cash_registers` (
+  `registerID` int(11) NOT NULL,
   `posX` float NOT NULL,
   `posY` float NOT NULL,
   `posZ` float NOT NULL,
   `rotX` float NOT NULL,
   `rotY` float NOT NULL,
   `rotZ` float NOT NULL,
-  `Interior` int NOT NULL,
-  `VW` int NOT NULL,
-  PRIMARY KEY (`registerID`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `Interior` int(11) NOT NULL,
+  `VW` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `cash_registers`
@@ -107,24 +101,22 @@ INSERT INTO `cash_registers` (`registerID`, `posX`, `posY`, `posZ`, `rotX`, `rot
 -- Table structure for table `characters`
 --
 
-DROP TABLE IF EXISTS `characters`;
-CREATE TABLE IF NOT EXISTS `characters` (
-  `character_id` int NOT NULL AUTO_INCREMENT,
-  `account_id` int NOT NULL,
-  `cName` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cSkin` int NOT NULL,
-  `cGender` int NOT NULL DEFAULT '0',
-  `cAge` int NOT NULL DEFAULT '18',
-  `cJob` int NOT NULL DEFAULT '0',
-  `cState` int NOT NULL DEFAULT '0',
-  `cMoney` int NOT NULL DEFAULT '0',
-  `cLevel` int NOT NULL DEFAULT '0',
-  `cLastLogin` int NOT NULL,
-  `cLastX` float NOT NULL DEFAULT '0',
-  `cLastY` float NOT NULL DEFAULT '0',
-  `cLastZ` float NOT NULL DEFAULT '0',
-  PRIMARY KEY (`character_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `characters` (
+  `character_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `cName` varchar(24) NOT NULL,
+  `cSkin` int(11) NOT NULL,
+  `cGender` int(11) NOT NULL DEFAULT 0,
+  `cAge` int(11) NOT NULL DEFAULT 18,
+  `cJob` int(11) NOT NULL DEFAULT 0,
+  `cState` int(11) NOT NULL DEFAULT 0,
+  `cMoney` int(11) NOT NULL DEFAULT 0,
+  `cLevel` int(11) NOT NULL DEFAULT 0,
+  `cLastLogin` int(11) NOT NULL,
+  `cLastX` float NOT NULL DEFAULT 0,
+  `cLastY` float NOT NULL DEFAULT 0,
+  `cLastZ` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `characters`
@@ -139,7 +131,7 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 1701607678, 1401.78, 1591.35, 12.0481),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 1701611624, 1401.78, 1591.35, 12.0481),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 0, 0, 1701621495, 1401.78, 1591.35, 12.0481),
-(11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 0, 0, 1702238719, 1401.78, 1591.35, 12.0481),
+(11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 5700, 0, 1702238719, 1401.78, 1591.35, 12.0481),
 (12, 13, 'Howard_Picketina', 12, 1, 0, 0, 2, 100000000, 0, 1706641971, 1401.78, 1591.35, 12.0481);
 
 -- --------------------------------------------------------
@@ -148,18 +140,16 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 -- Table structure for table `containers`
 --
 
-DROP TABLE IF EXISTS `containers`;
-CREATE TABLE IF NOT EXISTS `containers` (
-  `conID` int NOT NULL AUTO_INCREMENT,
-  `con_x` float DEFAULT '0',
-  `con_y` float DEFAULT '0',
-  `con_z` float DEFAULT '0',
-  `con_rx` float DEFAULT '0',
-  `con_ry` float DEFAULT '0',
-  `con_rz` float DEFAULT '0',
-  `con_jnumber` mediumint DEFAULT '0',
-  PRIMARY KEY (`conID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `containers` (
+  `conID` int(11) NOT NULL,
+  `con_x` float DEFAULT 0,
+  `con_y` float DEFAULT 0,
+  `con_z` float DEFAULT 0,
+  `con_rx` float DEFAULT 0,
+  `con_ry` float DEFAULT 0,
+  `con_rz` float DEFAULT 0,
+  `con_jnumber` mediumint(9) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -167,20 +157,18 @@ CREATE TABLE IF NOT EXISTS `containers` (
 -- Table structure for table `factions`
 --
 
-DROP TABLE IF EXISTS `factions`;
-CREATE TABLE IF NOT EXISTS `factions` (
-  `factionID` int NOT NULL AUTO_INCREMENT,
-  `factionName` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `factionType` int NOT NULL,
-  `factionBoss` int NOT NULL,
-  `factionRightHand` int NOT NULL,
-  `factionAreaX` float NOT NULL DEFAULT '0',
-  `factionAreaY` float NOT NULL DEFAULT '0',
-  `factionAreaZ` float NOT NULL DEFAULT '0',
-  `factionInterior` int NOT NULL DEFAULT '0',
-  `factionVirutalWorld` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`factionID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `factions` (
+  `factionID` int(11) NOT NULL,
+  `factionName` varchar(30) NOT NULL,
+  `factionType` int(11) NOT NULL,
+  `factionBoss` int(11) NOT NULL,
+  `factionRightHand` int(11) NOT NULL,
+  `factionAreaX` float NOT NULL DEFAULT 0,
+  `factionAreaY` float NOT NULL DEFAULT 0,
+  `factionAreaZ` float NOT NULL DEFAULT 0,
+  `factionInterior` int(11) NOT NULL DEFAULT 0,
+  `factionVirutalWorld` int(11) NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `factions`
@@ -195,12 +183,11 @@ INSERT INTO `factions` (`factionID`, `factionName`, `factionType`, `factionBoss`
 -- Table structure for table `faction_members`
 --
 
-DROP TABLE IF EXISTS `faction_members`;
-CREATE TABLE IF NOT EXISTS `faction_members` (
-  `member_id` int NOT NULL,
-  `faction_id` int NOT NULL,
-  `faction_rank` int NOT NULL,
-  `faction_respekt` int NOT NULL
+CREATE TABLE `faction_members` (
+  `member_id` int(11) NOT NULL,
+  `faction_id` int(11) NOT NULL,
+  `faction_rank` int(11) NOT NULL,
+  `faction_respekt` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -217,40 +204,38 @@ INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `facti
 -- Table structure for table `faction_police`
 --
 
-DROP TABLE IF EXISTS `faction_police`;
-CREATE TABLE IF NOT EXISTS `faction_police` (
-  `fPoliceID` int NOT NULL AUTO_INCREMENT,
-  `fPoliceName` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Police',
-  `fPoliceShortName` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PD',
-  `fPoliceAdress` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Nepoznata',
-  `fPoliceState` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fPoliceBoss` int NOT NULL,
-  `fPoliceType` int NOT NULL DEFAULT '0',
-  `fPoliceX` float NOT NULL DEFAULT '0',
-  `fPoliceY` float NOT NULL DEFAULT '0',
-  `fPoliceZ` float NOT NULL DEFAULT '0',
-  `fPoliceExitX` float NOT NULL DEFAULT '246.66',
-  `fPoliceExitY` float NOT NULL DEFAULT '65.8',
-  `fPoliceExitZ` float NOT NULL DEFAULT '1003.64',
-  `fPoliceInt` int NOT NULL DEFAULT '6',
-  `fPoliceVault` int NOT NULL DEFAULT '0',
-  `fPoliceMoney` int NOT NULL DEFAULT '0',
-  `fPoliceDirtMoney` int NOT NULL DEFAULT '0',
-  `fConfiscatedDrugs` int NOT NULL DEFAULT '0',
-  `fDutyPointX` float NOT NULL DEFAULT '0',
-  `fDutyPointY` float NOT NULL DEFAULT '0',
-  `fDutyPointZ` float NOT NULL DEFAULT '0',
-  `fEquipmentX` float NOT NULL DEFAULT '0',
-  `fEquipmentY` float NOT NULL DEFAULT '0',
-  `fEquipmentZ` float NOT NULL DEFAULT '0',
-  `fPoliceRank1` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Rank',
-  `fPoliceRank2` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Rank',
-  `fPoliceRank3` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Rank',
-  `fPoliceSkins1` int NOT NULL DEFAULT '1',
-  `fPoliceSkins2` int NOT NULL DEFAULT '1',
-  `fPoliceSkins3` int NOT NULL DEFAULT '1',
-  `fPoliceSkins4` int NOT NULL DEFAULT '1',
-  PRIMARY KEY (`fPoliceID`)
+CREATE TABLE `faction_police` (
+  `fPoliceID` int(11) NOT NULL,
+  `fPoliceName` varchar(60) NOT NULL DEFAULT 'Police',
+  `fPoliceShortName` varchar(30) NOT NULL DEFAULT 'PD',
+  `fPoliceAdress` varchar(35) NOT NULL DEFAULT 'Nepoznata',
+  `fPoliceState` varchar(30) NOT NULL,
+  `fPoliceBoss` int(11) NOT NULL,
+  `fPoliceType` int(11) NOT NULL DEFAULT 0,
+  `fPoliceX` float NOT NULL DEFAULT 0,
+  `fPoliceY` float NOT NULL DEFAULT 0,
+  `fPoliceZ` float NOT NULL DEFAULT 0,
+  `fPoliceExitX` float NOT NULL DEFAULT 246.66,
+  `fPoliceExitY` float NOT NULL DEFAULT 65.8,
+  `fPoliceExitZ` float NOT NULL DEFAULT 1003.64,
+  `fPoliceInt` int(11) NOT NULL DEFAULT 6,
+  `fPoliceVault` int(11) NOT NULL DEFAULT 0,
+  `fPoliceMoney` int(11) NOT NULL DEFAULT 0,
+  `fPoliceDirtMoney` int(11) NOT NULL DEFAULT 0,
+  `fConfiscatedDrugs` int(11) NOT NULL DEFAULT 0,
+  `fDutyPointX` float NOT NULL DEFAULT 0,
+  `fDutyPointY` float NOT NULL DEFAULT 0,
+  `fDutyPointZ` float NOT NULL DEFAULT 0,
+  `fEquipmentX` float NOT NULL DEFAULT 0,
+  `fEquipmentY` float NOT NULL DEFAULT 0,
+  `fEquipmentZ` float NOT NULL DEFAULT 0,
+  `fPoliceRank1` varchar(32) NOT NULL DEFAULT 'Rank',
+  `fPoliceRank2` varchar(32) NOT NULL DEFAULT 'Rank',
+  `fPoliceRank3` varchar(32) NOT NULL DEFAULT 'Rank',
+  `fPoliceSkins1` int(11) NOT NULL DEFAULT 1,
+  `fPoliceSkins2` int(11) NOT NULL DEFAULT 1,
+  `fPoliceSkins3` int(11) NOT NULL DEFAULT 1,
+  `fPoliceSkins4` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -259,13 +244,12 @@ CREATE TABLE IF NOT EXISTS `faction_police` (
 -- Table structure for table `houses`
 --
 
-DROP TABLE IF EXISTS `houses`;
-CREATE TABLE IF NOT EXISTS `houses` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `hOwner` int NOT NULL,
-  `Price` int NOT NULL,
-  `Type` int NOT NULL,
-  `Adress` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `houses` (
+  `ID` int(11) NOT NULL,
+  `hOwner` int(11) NOT NULL,
+  `Price` int(11) NOT NULL,
+  `Type` int(11) NOT NULL,
+  `Adress` varchar(50) NOT NULL,
   `Locked` tinyint(1) NOT NULL,
   `PosX` float NOT NULL,
   `PosY` float NOT NULL,
@@ -274,19 +258,17 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `ExitY` float NOT NULL,
   `ExitZ` float NOT NULL,
   `Safe` tinyint(1) NOT NULL,
-  `Money` int NOT NULL,
-  `Weed` int NOT NULL,
-  `Cocaine` int NOT NULL,
-  `Extazy` int NOT NULL,
+  `Money` int(11) NOT NULL,
+  `Weed` int(11) NOT NULL,
+  `Cocaine` int(11) NOT NULL,
+  `Extazy` int(11) NOT NULL,
   `WardX` float NOT NULL,
   `WardY` float NOT NULL,
   `WardZ` float NOT NULL,
   `FridgeX` float NOT NULL,
   `FridgeY` float NOT NULL,
   `FridgeZ` float NOT NULL,
-  `Int` int NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `hCharacterID` (`hOwner`)
+  `Int` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -295,20 +277,18 @@ CREATE TABLE IF NOT EXISTS `houses` (
 -- Table structure for table `jobs`
 --
 
-DROP TABLE IF EXISTS `jobs`;
-CREATE TABLE IF NOT EXISTS `jobs` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Salary` int NOT NULL,
-  `Uniform` int NOT NULL,
+CREATE TABLE `jobs` (
+  `ID` int(11) NOT NULL,
+  `Name` varchar(32) NOT NULL,
+  `Salary` int(11) NOT NULL,
+  `Uniform` int(11) NOT NULL,
   `UniformX` float NOT NULL,
   `UniformY` float NOT NULL,
   `UnifromZ` float NOT NULL,
   `PositionX` float NOT NULL,
   `PositionY` float NOT NULL,
   `PositionZ` float NOT NULL,
-  `Interior` int NOT NULL,
-  PRIMARY KEY (`ID`)
+  `Interior` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -317,16 +297,14 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 -- Table structure for table `metros`
 --
 
-DROP TABLE IF EXISTS `metros`;
-CREATE TABLE IF NOT EXISTS `metros` (
-  `metroID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `metros` (
+  `metroID` int(11) NOT NULL,
   `metroX` float NOT NULL,
   `metroY` float NOT NULL,
   `metroZ` float NOT NULL,
-  `MetroRoute` int NOT NULL DEFAULT '1',
-  `metroInt` int NOT NULL DEFAULT '0',
-  `metroVw` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`metroID`)
+  `MetroRoute` int(11) NOT NULL DEFAULT 1,
+  `metroInt` int(11) NOT NULL DEFAULT 0,
+  `metroVw` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -335,15 +313,13 @@ CREATE TABLE IF NOT EXISTS `metros` (
 -- Table structure for table `player_crypto`
 --
 
-DROP TABLE IF EXISTS `player_crypto`;
-CREATE TABLE IF NOT EXISTS `player_crypto` (
-  `character_id` int NOT NULL,
+CREATE TABLE `player_crypto` (
+  `character_id` int(11) NOT NULL,
   `AmountBTC` float DEFAULT NULL,
   `AmountETH` float DEFAULT NULL,
   `AmountLTC` float DEFAULT NULL,
   `AmountUSDT` float DEFAULT NULL,
-  `AmountDOT` float DEFAULT NULL,
-  UNIQUE KEY `crypto_id` (`character_id`)
+  `AmountDOT` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -369,18 +345,16 @@ INSERT INTO `player_crypto` (`character_id`, `AmountBTC`, `AmountETH`, `AmountLT
 -- Table structure for table `player_documents`
 --
 
-DROP TABLE IF EXISTS `player_documents`;
-CREATE TABLE IF NOT EXISTS `player_documents` (
-  `character_document` int NOT NULL,
-  `NationalID` int NOT NULL,
-  `Passport` int NOT NULL,
-  `DriveLicense` int NOT NULL,
-  `MotoLicense` int NOT NULL,
-  `BoatLicense` int NOT NULL,
-  `GunLicense` int NOT NULL,
-  `LifeInsurance` tinyint NOT NULL DEFAULT '-1',
-  `LifeInsuranceValidUntil` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY `player_id` (`character_document`)
+CREATE TABLE `player_documents` (
+  `character_document` int(11) NOT NULL,
+  `NationalID` int(11) NOT NULL,
+  `Passport` int(11) NOT NULL,
+  `DriveLicense` int(11) NOT NULL,
+  `MotoLicense` int(11) NOT NULL,
+  `BoatLicense` int(11) NOT NULL,
+  `GunLicense` int(11) NOT NULL,
+  `LifeInsurance` tinyint(4) NOT NULL DEFAULT -1,
+  `LifeInsuranceValidUntil` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -405,13 +379,11 @@ INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, 
 -- Table structure for table `player_electronic`
 --
 
-DROP TABLE IF EXISTS `player_electronic`;
-CREATE TABLE IF NOT EXISTS `player_electronic` (
-  `character_electronics` int NOT NULL,
-  `Dron` tinyint NOT NULL DEFAULT '0',
-  `Battery` int NOT NULL DEFAULT '0',
-  `GPS` tinyint NOT NULL DEFAULT '0',
-  UNIQUE KEY `player_id` (`character_electronics`)
+CREATE TABLE `player_electronic` (
+  `character_electronics` int(11) NOT NULL,
+  `Dron` tinyint(4) NOT NULL DEFAULT 0,
+  `Battery` int(11) NOT NULL DEFAULT 0,
+  `GPS` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -436,13 +408,11 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 -- Table structure for table `player_property`
 --
 
-DROP TABLE IF EXISTS `player_property`;
-CREATE TABLE IF NOT EXISTS `player_property` (
-  `pOwner` int NOT NULL,
-  `BCenter` int NOT NULL DEFAULT '0',
-  `HouseID` int NOT NULL DEFAULT '-1',
-  `BusinessID` int NOT NULL,
-  UNIQUE KEY `player_id` (`pOwner`)
+CREATE TABLE `player_property` (
+  `pOwner` int(11) NOT NULL,
+  `BCenter` int(11) NOT NULL DEFAULT 0,
+  `HouseID` int(11) NOT NULL DEFAULT -1,
+  `BusinessID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -467,34 +437,32 @@ INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VAL
 -- Table structure for table `re_business`
 --
 
-DROP TABLE IF EXISTS `re_business`;
-CREATE TABLE IF NOT EXISTS `re_business` (
-  `bID` int NOT NULL AUTO_INCREMENT,
-  `bOwner` int NOT NULL DEFAULT '0',
-  `bName` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Undefined',
-  `bLocked` int NOT NULL DEFAULT '1',
-  `bType` int NOT NULL DEFAULT '1',
-  `bPrice` int NOT NULL DEFAULT '250000',
-  `bLevel` int NOT NULL DEFAULT '3',
+CREATE TABLE `re_business` (
+  `bID` int(11) NOT NULL,
+  `bOwner` int(11) NOT NULL DEFAULT 0,
+  `bName` varchar(64) NOT NULL DEFAULT 'Undefined',
+  `bLocked` int(11) NOT NULL DEFAULT 1,
+  `bType` int(11) NOT NULL DEFAULT 1,
+  `bPrice` int(11) NOT NULL DEFAULT 250000,
+  `bLevel` int(11) NOT NULL DEFAULT 3,
   `bEnterX` float NOT NULL,
   `bEnterY` float NOT NULL,
   `bEnterZ` float NOT NULL,
   `bExitX` float NOT NULL,
   `bExitY` float NOT NULL,
   `bExitZ` float NOT NULL,
-  `bInteractX` float NOT NULL DEFAULT '0',
-  `bInteractY` float NOT NULL DEFAULT '0',
-  `bInteractZ` float NOT NULL DEFAULT '0',
-  `bActorSkin` int NOT NULL DEFAULT '24',
-  `bActorX` int NOT NULL DEFAULT '0',
-  `bActorY` int NOT NULL DEFAULT '0',
-  `bActorZ` int NOT NULL DEFAULT '0',
-  `bActorA` int NOT NULL DEFAULT '0',
-  `bProducts` int NOT NULL DEFAULT '100',
-  `bInt` int NOT NULL,
-  `bVW` int NOT NULL,
-  PRIMARY KEY (`bID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `bInteractX` float NOT NULL DEFAULT 0,
+  `bInteractY` float NOT NULL DEFAULT 0,
+  `bInteractZ` float NOT NULL DEFAULT 0,
+  `bActorSkin` int(11) NOT NULL DEFAULT 24,
+  `bActorX` int(11) NOT NULL DEFAULT 0,
+  `bActorY` int(11) NOT NULL DEFAULT 0,
+  `bActorZ` int(11) NOT NULL DEFAULT 0,
+  `bActorA` int(11) NOT NULL DEFAULT 0,
+  `bProducts` int(11) NOT NULL DEFAULT 100,
+  `bInt` int(11) NOT NULL,
+  `bVW` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `re_business`
@@ -513,38 +481,35 @@ INSERT INTO `re_business` (`bID`, `bOwner`, `bName`, `bLocked`, `bType`, `bPrice
 -- Table structure for table `re_centar`
 --
 
-DROP TABLE IF EXISTS `re_centar`;
-CREATE TABLE IF NOT EXISTS `re_centar` (
-  `re_BCenterID` int NOT NULL AUTO_INCREMENT,
-  `re_BCenterOwner` int NOT NULL DEFAULT '0',
-  `re_BCenterName` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Nepoznato',
-  `re_BCenterInterior` int NOT NULL DEFAULT '0',
-  `re_BCenterVirtualWorld` int NOT NULL DEFAULT '0',
-  `re_BCenterType` int NOT NULL DEFAULT '0',
-  `re_BCenterIntX` float NOT NULL DEFAULT '0',
-  `re_BCenterIntY` float NOT NULL DEFAULT '0',
-  `re_BCenterIntZ` float NOT NULL DEFAULT '0',
-  `re_BCenterLocked` tinyint NOT NULL DEFAULT '0',
-  `re_BCenterSafe` tinyint NOT NULL DEFAULT '0',
-  `re_BCenterSafePosX` float NOT NULL DEFAULT '0',
-  `re_BCenterSafePosY` float NOT NULL DEFAULT '0',
-  `re_BCenterSafePosZ` float NOT NULL DEFAULT '0',
-  `re_BCenterWardrobe` tinyint NOT NULL DEFAULT '0',
-  `re_BCenterWardrobePosX` float NOT NULL DEFAULT '0',
-  `re_BCenterWardrobePosY` float NOT NULL DEFAULT '0',
-  `re_BCenterWardrobePosZ` float NOT NULL DEFAULT '0',
-  `re_BCenterArmory` tinyint NOT NULL DEFAULT '0',
-  `re_BCenterArmoryPosX` float NOT NULL DEFAULT '0',
-  `re_BCenterArmoryPosY` float NOT NULL DEFAULT '0',
-  `re_BCenterArmoryPosZ` float NOT NULL DEFAULT '0',
-  `re_BCenterAgentType` int NOT NULL DEFAULT '0',
-  `re_AgentPosX` float NOT NULL DEFAULT '0',
-  `re_AgentPosY` float NOT NULL DEFAULT '0',
-  `re_AgentPosZ` float NOT NULL DEFAULT '0',
-  `re_AgentPosA` float NOT NULL DEFAULT '0',
-  PRIMARY KEY (`re_BCenterID`),
-  KEY `BCenterCharacter` (`re_BCenterOwner`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `re_centar` (
+  `re_BCenterID` int(11) NOT NULL,
+  `re_BCenterOwner` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterName` varchar(21) NOT NULL DEFAULT 'Nepoznato',
+  `re_BCenterInterior` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterVirtualWorld` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterType` int(11) NOT NULL DEFAULT 0,
+  `re_BCenterIntX` float NOT NULL DEFAULT 0,
+  `re_BCenterIntY` float NOT NULL DEFAULT 0,
+  `re_BCenterIntZ` float NOT NULL DEFAULT 0,
+  `re_BCenterLocked` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterSafe` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterSafePosX` float NOT NULL DEFAULT 0,
+  `re_BCenterSafePosY` float NOT NULL DEFAULT 0,
+  `re_BCenterSafePosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobe` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosX` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosY` float NOT NULL DEFAULT 0,
+  `re_BCenterWardrobePosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterArmory` tinyint(4) NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosX` float NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosY` float NOT NULL DEFAULT 0,
+  `re_BCenterArmoryPosZ` float NOT NULL DEFAULT 0,
+  `re_BCenterAgentType` int(11) NOT NULL DEFAULT 0,
+  `re_AgentPosX` float NOT NULL DEFAULT 0,
+  `re_AgentPosY` float NOT NULL DEFAULT 0,
+  `re_AgentPosZ` float NOT NULL DEFAULT 0,
+  `re_AgentPosA` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `re_centar`
@@ -561,19 +526,17 @@ INSERT INTO `re_centar` (`re_BCenterID`, `re_BCenterOwner`, `re_BCenterName`, `r
 -- Table structure for table `safezones`
 --
 
-DROP TABLE IF EXISTS `safezones`;
-CREATE TABLE IF NOT EXISTS `safezones` (
-  `safeSQLID` int NOT NULL AUTO_INCREMENT,
-  `MinX` float NOT NULL DEFAULT '0',
-  `MinY` float NOT NULL DEFAULT '0',
-  `MaxX` float NOT NULL DEFAULT '0',
-  `MaxY` float NOT NULL DEFAULT '0',
-  `Radius` float NOT NULL DEFAULT '0',
-  `Color` int NOT NULL DEFAULT '0',
-  `PickupX` float NOT NULL DEFAULT '0',
-  `PickupY` float NOT NULL DEFAULT '0',
-  `PickupZ` float NOT NULL DEFAULT '0',
-  PRIMARY KEY (`safeSQLID`)
+CREATE TABLE `safezones` (
+  `safeSQLID` int(11) NOT NULL,
+  `MinX` float NOT NULL DEFAULT 0,
+  `MinY` float NOT NULL DEFAULT 0,
+  `MaxX` float NOT NULL DEFAULT 0,
+  `MaxY` float NOT NULL DEFAULT 0,
+  `Radius` float NOT NULL DEFAULT 0,
+  `Color` int(11) NOT NULL DEFAULT 0,
+  `PickupX` float NOT NULL DEFAULT 0,
+  `PickupY` float NOT NULL DEFAULT 0,
+  `PickupZ` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -582,32 +545,29 @@ CREATE TABLE IF NOT EXISTS `safezones` (
 -- Table structure for table `vehicles`
 --
 
-DROP TABLE IF EXISTS `vehicles`;
-CREATE TABLE IF NOT EXISTS `vehicles` (
-  `vID` int NOT NULL AUTO_INCREMENT,
-  `vOwner` int NOT NULL DEFAULT '0',
-  `vModel` int NOT NULL DEFAULT '0',
-  `Color1` int NOT NULL DEFAULT '0',
-  `Color2` int NOT NULL DEFAULT '0',
-  `vPlate` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'UNREGISTERED-00',
+CREATE TABLE `vehicles` (
+  `vID` int(11) NOT NULL,
+  `vOwner` int(11) NOT NULL DEFAULT 0,
+  `vModel` int(11) NOT NULL DEFAULT 0,
+  `Color1` int(11) NOT NULL DEFAULT 0,
+  `Color2` int(11) NOT NULL DEFAULT 0,
+  `vPlate` varchar(32) NOT NULL DEFAULT 'UNREGISTERED-00',
   `vPosX` float NOT NULL,
   `vPosY` float NOT NULL,
   `vPosZ` float NOT NULL,
   `vPosA` float NOT NULL,
-  `vRegDate` int NOT NULL DEFAULT '0',
-  `vOil` int NOT NULL DEFAULT '100',
-  `vRange` int NOT NULL DEFAULT '0',
-  `vRangeKM` int NOT NULL DEFAULT '0',
-  `vFuel` int NOT NULL DEFAULT '100',
-  `vFuelType` int NOT NULL DEFAULT '1',
-  `vAlarm` tinyint NOT NULL DEFAULT '0',
-  `vXenon` tinyint NOT NULL DEFAULT '0',
-  `vLock` tinyint NOT NULL DEFAULT '0',
-  `vNitro` tinyint NOT NULL DEFAULT '0',
-  `vState` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`vID`),
-  KEY `vCharacterID` (`vOwner`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `vRegDate` int(11) NOT NULL DEFAULT 0,
+  `vOil` int(11) NOT NULL DEFAULT 100,
+  `vRange` int(11) NOT NULL DEFAULT 0,
+  `vRangeKM` int(11) NOT NULL DEFAULT 0,
+  `vFuel` int(11) NOT NULL DEFAULT 100,
+  `vFuelType` int(11) NOT NULL DEFAULT 1,
+  `vAlarm` tinyint(4) NOT NULL DEFAULT 0,
+  `vXenon` tinyint(4) NOT NULL DEFAULT 0,
+  `vLock` tinyint(4) NOT NULL DEFAULT 0,
+  `vNitro` tinyint(4) NOT NULL DEFAULT 0,
+  `vState` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -615,12 +575,11 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
 -- Table structure for table `winter_settings`
 --
 
-DROP TABLE IF EXISTS `winter_settings`;
-CREATE TABLE IF NOT EXISTS `winter_settings` (
-  `username` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Maryland',
-  `map` tinyint NOT NULL DEFAULT '0',
-  `breath` tinyint NOT NULL DEFAULT '0',
-  `fallsnow` tinyint NOT NULL DEFAULT '0'
+CREATE TABLE `winter_settings` (
+  `username` varchar(24) NOT NULL DEFAULT 'Maryland',
+  `map` tinyint(4) NOT NULL DEFAULT 0,
+  `breath` tinyint(4) NOT NULL DEFAULT 0,
+  `fallsnow` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -644,6 +603,209 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Klaus', 0, 0, 0),
 ('Dickey_Corleone', 0, 0, 0),
 ('Stojke_Castello', 0, 0, 0);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `benches`
+--
+ALTER TABLE `benches`
+  ADD PRIMARY KEY (`seat_ID`);
+
+--
+-- Indexes for table `cash_registers`
+--
+ALTER TABLE `cash_registers`
+  ADD PRIMARY KEY (`registerID`);
+
+--
+-- Indexes for table `characters`
+--
+ALTER TABLE `characters`
+  ADD PRIMARY KEY (`character_id`);
+
+--
+-- Indexes for table `containers`
+--
+ALTER TABLE `containers`
+  ADD PRIMARY KEY (`conID`);
+
+--
+-- Indexes for table `factions`
+--
+ALTER TABLE `factions`
+  ADD PRIMARY KEY (`factionID`);
+
+--
+-- Indexes for table `faction_police`
+--
+ALTER TABLE `faction_police`
+  ADD PRIMARY KEY (`fPoliceID`);
+
+--
+-- Indexes for table `houses`
+--
+ALTER TABLE `houses`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `hCharacterID` (`hOwner`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `metros`
+--
+ALTER TABLE `metros`
+  ADD PRIMARY KEY (`metroID`);
+
+--
+-- Indexes for table `player_crypto`
+--
+ALTER TABLE `player_crypto`
+  ADD UNIQUE KEY `crypto_id` (`character_id`);
+
+--
+-- Indexes for table `player_documents`
+--
+ALTER TABLE `player_documents`
+  ADD UNIQUE KEY `player_id` (`character_document`);
+
+--
+-- Indexes for table `player_electronic`
+--
+ALTER TABLE `player_electronic`
+  ADD UNIQUE KEY `player_id` (`character_electronics`);
+
+--
+-- Indexes for table `player_property`
+--
+ALTER TABLE `player_property`
+  ADD UNIQUE KEY `player_id` (`pOwner`);
+
+--
+-- Indexes for table `re_business`
+--
+ALTER TABLE `re_business`
+  ADD PRIMARY KEY (`bID`);
+
+--
+-- Indexes for table `re_centar`
+--
+ALTER TABLE `re_centar`
+  ADD PRIMARY KEY (`re_BCenterID`),
+  ADD KEY `BCenterCharacter` (`re_BCenterOwner`);
+
+--
+-- Indexes for table `safezones`
+--
+ALTER TABLE `safezones`
+  ADD PRIMARY KEY (`safeSQLID`);
+
+--
+-- Indexes for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  ADD PRIMARY KEY (`vID`),
+  ADD KEY `vCharacterID` (`vOwner`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `benches`
+--
+ALTER TABLE `benches`
+  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `cash_registers`
+--
+ALTER TABLE `cash_registers`
+  MODIFY `registerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `characters`
+--
+ALTER TABLE `characters`
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `containers`
+--
+ALTER TABLE `containers`
+  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `factions`
+--
+ALTER TABLE `factions`
+  MODIFY `factionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `faction_police`
+--
+ALTER TABLE `faction_police`
+  MODIFY `fPoliceID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `houses`
+--
+ALTER TABLE `houses`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `metros`
+--
+ALTER TABLE `metros`
+  MODIFY `metroID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `re_business`
+--
+ALTER TABLE `re_business`
+  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `re_centar`
+--
+ALTER TABLE `re_centar`
+  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `safezones`
+--
+ALTER TABLE `safezones`
+  MODIFY `safeSQLID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  MODIFY `vID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
