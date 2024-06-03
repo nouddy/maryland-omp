@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 10, 2024 at 08:09 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Host: localhost:3306
+-- Generation Time: Jun 03, 2024 at 02:10 PM
+-- Server version: 10.3.39-MariaDB-0+deb10u2
+-- PHP Version: 8.2.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `maryland`
+-- Database: `s13_maryland`
 --
 
 -- --------------------------------------------------------
@@ -45,7 +45,7 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (11, 'Frosty', '123456', 4, '2023-11-29 17:25:33', '2023-11-29 17:25:33', 'fuck@off.com'),
 (12, 'Nodislav', 'dino9099', 4, '2023-11-30 18:06:44', '2023-11-30 18:06:44', 'dino@mailer.com'),
 (13, 'Nodislav_Aleksienko', 'ferid420', 4, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com'),
-(14, 'Silentus', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com'),
+(14, 'Vostic', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com'),
 (15, 'Ogi', 'Aleksic999', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com'),
 (16, 'Capital_Camora', 'ichbruderman1', 4, '2023-12-02 17:52:35', '2023-12-02 17:52:35', 'capital@samp.com'),
 (17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com'),
@@ -434,6 +434,22 @@ INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pumps`
+--
+
+CREATE TABLE `pumps` (
+  `pumpID` int(11) NOT NULL,
+  `pumpBusinessID` int(11) NOT NULL,
+  `pumpFuel` int(11) NOT NULL DEFAULT 0,
+  `pumpFuelType` int(11) NOT NULL DEFAULT 0,
+  `pump_X` float NOT NULL DEFAULT 0,
+  `pump_Y` float NOT NULL DEFAULT 0,
+  `pump_Z` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `re_business`
 --
 
@@ -694,6 +710,12 @@ ALTER TABLE `player_property`
   ADD UNIQUE KEY `player_id` (`pOwner`);
 
 --
+-- Indexes for table `pumps`
+--
+ALTER TABLE `pumps`
+  ADD PRIMARY KEY (`pumpID`);
+
+--
 -- Indexes for table `re_business`
 --
 ALTER TABLE `re_business`
@@ -782,6 +804,12 @@ ALTER TABLE `jobs`
 --
 ALTER TABLE `metros`
   MODIFY `metroID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pumps`
+--
+ALTER TABLE `pumps`
+  MODIFY `pumpID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `re_business`
