@@ -39,6 +39,7 @@ hook OnGameModeInit() {
 
 hook OnPlayerConnect(playerid) {
 
+    burglary_CoolDown[playerid] = 0;
     burglary_HouseID[playerid] = -1;
     stolenObjects[playerid] = 0;
 

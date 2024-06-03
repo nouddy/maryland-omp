@@ -65,10 +65,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
             new miles[ 64 ];
             format( miles, sizeof( miles ), "%dkm", eVehicle[vehicle][vRangeKM]);
             PlayerTextDrawSetString(playerid, speed_TD[playerid][7], miles);
-
-            new fuel[ 64 ];
-            format( fuel, sizeof( fuel ), "%dL", eVehicle[vehicle][vFuel]);
-            PlayerTextDrawSetString(playerid, speed_TD[playerid][17], fuel);
+            PlayerTextDrawSetString(playerid, speed_TD[playerid][17], "%dL", ReturnVehicleFuelType(vehicle));
 
 
         }
@@ -88,57 +85,39 @@ ptask BrzinomerUpdate[1000](playerid)
 
         if(!IsVehicleBicycle(vehicle)) { 
 
-            foreach(new v : iter_Vehicles) 
-            {
-                if(eVehicle[v][vOwner] == GetCharacterSQLID(playerid)) 
-                {
-                    if(!IsPlayerInVehicle(playerid, pvVehicle[v])) return false;
-                    
-                    eVehicle[ v ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
-                    if( eVehicle[ v ][ vRange ] > 999 )
-                    {
-                        eVehicle[ v ][ vRangeKM ]++;
-                        eVehicle[ v ][ vRange ] = 0;
-                    }
-                    new miles[ 64 ];
-                    format( miles, sizeof( miles ), "%dkm", eVehicle[v][vRangeKM]);
-                    PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
-                    new fuel[ 64 ];
-                    format( fuel, sizeof( fuel ), "%dL",eVehicle[v][vFuel]);
-                    PlayerTextDrawSetString(playerid, speed_TD[playerid][17], fuel);
-                    return Y_HOOKS_BREAK_RETURN_1;
-                }
+            //* if(!IsPlayerInVehicle(playerid, pvVehicle[v])) return false; -> Add an function exmp. "UpdatePersonalVehicleData" or smth like that. Its fucked up whern using foreach in this shite, it is not working on any other vehicle.
+            //* OMP - Just fuck it.
 
-                else if(eVehicle[v][vOwner] == VEHICLE_OWNER_NONE) {
-
-                    eVehicle[ v ][ vRange ] += ( GetSpeed(playerid)*10 )/36;
-                    if( eVehicle[ v ][ vRange ] > 999 )
-                    {
-                        eVehicle[ v ][ vRangeKM ]++;
-                        eVehicle[ v ][ vRange ] = 0;
-                        printf("%d - Nova kilometraza, %d - Novi metri", eVehicle[v][vRangeKM], eVehicle[v][vRange]);
-                    }
-                    new fuel[ 64 ];
-                    format( fuel, sizeof( fuel ), "%dL", eVehicle[v][vFuel]);
-                    PlayerTextDrawSetString(playerid, speed_TD[playerid][17], fuel);
-
-                    new miles[ 64 ];
-                    format( miles, sizeof( miles ), "%dkm", eVehicle[v][vRangeKM]);
-                    PlayerTextDrawSetString( playerid, speed_TD[playerid][7], miles);
-                    return Y_HOOKS_BREAK_RETURN_1;
-                }
-            }
             new string[ 32 ];
             format( string, sizeof( string ), "%d", GetSpeed( playerid ) );
             PlayerTextDrawSetString( playerid, speed_TD[playerid][5], string );
             PlayerTextDrawSetString( playerid, speed_TD[playerid][6], string );
+
+            PlayerTextDrawSetString(playerid, PlayerText:speed_TD[playerid][17] , "%dL", GetVehicleFuel(vehicle));
+
         }
     }    
+
     return 1;
 }
 hook OnPlayerDisconnect(playerid, reason)
 {
-    BuildSpeedTextDraws(playerid, false);
+    for(new j = 0; j < sizeof speed_TD[]; j++) {
+
+        PlayerTextDrawDestroy(playerid, PlayerText:speed_TD[playerid][j]);
+        speed_TD[playerid][j] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+
+    for(new i=0; i < sizeof speed_TD[]; i++)
+    {
+        speed_TD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -181,8 +160,8 @@ hook OnPlayerExitVehicle(playerid, vehicleid) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-forward BuildSpeedTextDraws(playerid, bool:show);
-public BuildSpeedTextDraws(playerid, bool:show)
+
+stock BuildSpeedTextDraws(playerid, bool:show)
 {
     if(show == true)
     {
@@ -351,7 +330,7 @@ public BuildSpeedTextDraws(playerid, bool:show)
 
         speed_TD[playerid][14] = CreatePlayerTextDraw(playerid, 216.333343, 379.985198, "sultan");
         PlayerTextDrawLetterSize(playerid, speed_TD[playerid][14], 0.100997, 0.550517);
-        PlayerTextDrawAlignment(playerid, speed_TD[playerid][14], TEXT_DRAW_ALIGN_RIGHT);
+        PlayerTextDrawAlignment(playerid, speed_TD[playerid][14], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColour(playerid, speed_TD[playerid][14], 1684302335);
         PlayerTextDrawSetShadow(playerid, speed_TD[playerid][14], 0);
         PlayerTextDrawBackgroundColour(playerid, speed_TD[playerid][14], 255);

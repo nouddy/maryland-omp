@@ -83,6 +83,15 @@ new Text3D:re_BusinessLabel[MAX_BUSINESS][2],
            Iterator:iter_Business<MAX_BUSINESS>,
            re_InBusiness[MAX_PLAYERS];
 
+//*     >> [ TEMP VARS FOR KIOSK ] <<
+
+static bool:re_tempFirm[MAX_PLAYERS],
+       Float:re_tempFirmPos[MAX_PLAYERS][3],
+
+       re_tempFirmName[MAX_PLAYERS][MAX_BUSINESS_NAME_LEN],
+       re_tempFirmLevel[MAX_PLAYERS],
+       re_tempFirmPrice[MAX_PLAYERS];
+
 enum e_ACTOR_POSITION {
 
     Float:actorPos[4],
@@ -947,8 +956,11 @@ public Business_LoadData() {
             re_BusinessLabel[i][0] = Create3DTextLabel(tmp_string, -1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2], 3.50, 0);
             re_BusinessLabel[i][1] = Create3DTextLabel(""c_server" \187; "c_grey"Za kupovinu pritisnite 'N' "c_server"\171;", -1, re_BusinessData[i][bInteract][0], re_BusinessData[i][bInteract][1], re_BusinessData[i][bInteract][2], 3.50, re_BusinessData[i][bVW]);
 
-            re_BusinessActor[i] = CreateActor(re_BusinessData[i][bActorSkin], re_BusinessData[i][bActorPos][0], re_BusinessData[i][bActorPos][1], re_BusinessData[i][bActorPos][2], re_BusinessData[i][bActorPos][3]);
-            SetActorVirtualWorld(re_BusinessActor[i],  re_BusinessData[i][bVW]);
+            if(re_BusinessData[i][bActorSkin] != -1) {
+
+                re_BusinessActor[i] = CreateActor(re_BusinessData[i][bActorSkin], re_BusinessData[i][bActorPos][0], re_BusinessData[i][bActorPos][1], re_BusinessData[i][bActorPos][2], re_BusinessData[i][bActorPos][3]);
+                SetActorVirtualWorld(re_BusinessActor[i],  re_BusinessData[i][bVW]);
+            }
 
             re_BusinessPickup[i] = CreatePickup(19134, 1, re_BusinessData[i][bEntrance][0], re_BusinessData[i][bEntrance][1], re_BusinessData[i][bEntrance][2]);
 
@@ -960,8 +972,8 @@ public Business_LoadData() {
     return 1;
 }
 
-forward mysql_AddBusiness(id);
-public mysql_AddBusiness(id) {
+forward mysql_AddBusiness(id, playerid);
+public mysql_AddBusiness(id, playerid) {
 
     re_BusinessData[id][bID] = cache_insert_id();
 
@@ -969,13 +981,22 @@ public mysql_AddBusiness(id) {
 
     format(tmp_string, sizeof tmp_string, ""c_server"[ "c_white"%s"c_server" ]\n"c_white"Za ulazak pritisnite 'F'", re_BusinessData[id][bName]);
 
+    if(re_BusinessData[id][bType] == BUSINESS_TYPE_KIOSK) {
+
+        re_BusinessLabel[id][0] = Create3DTextLabel(tmp_string, -1, re_tempFirmPos[playerid][0], re_tempFirmPos[playerid][1], re_tempFirmPos[playerid][2], 3.50, 0);
+        re_BusinessPickup[id] = CreatePickup(19134, 1, re_tempFirmPos[playerid][0], re_tempFirmPos[playerid][1], re_tempFirmPos[playerid][2]);
+    }
+
     re_BusinessLabel[id][0] = Create3DTextLabel(tmp_string, -1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2], 3.50, 0);
     re_BusinessLabel[id][1] = Create3DTextLabel(""c_server" \187; "c_grey"Za kupovinu pritisnite 'N'' "c_server"\171;", -1, re_BusinessData[id][bInteract][0], re_BusinessData[id][bInteract][1], re_BusinessData[id][bInteract][2], 3.50, re_BusinessData[id][bVW]);
-
-    re_BusinessActor[id] = CreateActor(re_BusinessData[id][bActorSkin], re_BusinessData[id][bActorPos][0], re_BusinessData[id][bActorPos][1], re_BusinessData[id][bActorPos][2], re_BusinessData[id][bActorPos][3]);
-    SetActorVirtualWorld(re_BusinessActor[id],  re_BusinessData[id][bVW]);
-
     re_BusinessPickup[id] = CreatePickup(19134, 1, re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2]);
+
+    if(re_BusinessData[id][bActorSkin] != -1) {
+
+        re_BusinessActor[id] = CreateActor(re_BusinessData[id][bActorSkin], re_BusinessData[id][bActorPos][0], re_BusinessData[id][bActorPos][1], re_BusinessData[id][bActorPos][2], re_BusinessData[id][bActorPos][3]);
+        SetActorVirtualWorld(re_BusinessActor[id],  re_BusinessData[id][bVW]);
+
+    }
 
     Iter_Add(iter_Business, id);
 
@@ -1344,35 +1365,13 @@ YCMD:createbusiness(playerid, params[], help)
     if(btip < BUSINESS_TYPE_MARKET || btip > BUSINESS_TYPE_AMMUNATION)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Unijeli ste pogresan tip biznisa, '/createbusiness help'");
 
-    
+    new Float:pPos[3];
+
     new id = Iter_Free(iter_Business);
-
-    re_BusinessData[id][bType] = btip;
-
     new namestring[MAX_BUSINESS_NAME_LEN];
     format(namestring, sizeof namestring, "%s", bname);
 
-    re_BusinessData[id][bName] = namestring;
-    re_BusinessData[id][bLocked] = false;
-    re_BusinessData[id][bPrice] = bprice;
-    re_BusinessData[id][bLevel] = blvl;
-
-    new Float:pPos[3];
-
-    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-
-    re_BusinessData[id][bEntrance][0] = pPos[0];
-    re_BusinessData[id][bEntrance][1] = pPos[1];
-    re_BusinessData[id][bEntrance][2] = pPos[2];
-
-    re_BusinessData[id][bExit][0] = business_Interiors[btip-1][interiorPos][0];
-    re_BusinessData[id][bExit][1] = business_Interiors[btip-1][interiorPos][1];
-    re_BusinessData[id][bExit][2] = business_Interiors[btip-1][interiorPos][2];
-
-    re_BusinessData[id][bInt] = business_Interiors[btip-1][InteriorID];
-    re_BusinessData[id][bVW] = id+1;
-
-    if( re_BusinessData[id][bType] == BUSINESS_TYPE_FITNESS) {
+    if( btip == BUSINESS_TYPE_FITNESS) {
 
         re_BusinessData[id][bInteract][0] = 0.00;
         re_BusinessData[id][bInteract][1] = 0.00;
@@ -1385,6 +1384,26 @@ YCMD:createbusiness(playerid, params[], help)
         re_BusinessData[id][bActorPos][2] = 0.00;
         re_BusinessData[id][bActorPos][3] = 0.00;
 
+    }
+
+    else if( btip == BUSINESS_TYPE_KIOSK ) {
+
+        static Float:ePos[3];
+
+        GetPlayerPos(playerid, ePos[0], ePos[1], ePos[2]);
+
+        re_tempFirmPos[playerid][0] = ePos[0];
+        re_tempFirmPos[playerid][1] = ePos[1];
+        re_tempFirmPos[playerid][2] = ePos[2];
+
+        re_tempFirmName[playerid] = bname;
+        re_tempFirmPrice[playerid] = bprice;
+        re_tempFirmLevel[playerid] = blvl;
+
+        re_tempFirm[playerid] = true;
+        SendClientMessage(playerid, -1, ""c_server"[KIOSK] >> "c_white"Iskoristite komandu /saveinteract, kako biste sacuvali poziciju kioska");
+
+        return (true);
     }
 
     else {
@@ -1401,6 +1420,24 @@ YCMD:createbusiness(playerid, params[], help)
         re_BusinessData[id][bActorPos][3] = business_ActorPositions[btip-1][actorPos][3];
     }
 
+    re_BusinessData[id][bType] = btip;
+    re_BusinessData[id][bName] = namestring;
+    re_BusinessData[id][bLocked] = false;
+    re_BusinessData[id][bPrice] = bprice;
+    re_BusinessData[id][bLevel] = blvl;
+
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    re_BusinessData[id][bEntrance][0] = pPos[0];
+    re_BusinessData[id][bEntrance][1] = pPos[1];
+    re_BusinessData[id][bEntrance][2] = pPos[2];
+
+    re_BusinessData[id][bExit][0] = business_Interiors[btip-1][interiorPos][0];
+    re_BusinessData[id][bExit][1] = business_Interiors[btip-1][interiorPos][1];
+    re_BusinessData[id][bExit][2] = business_Interiors[btip-1][interiorPos][2];
+
+    re_BusinessData[id][bInt] = business_Interiors[btip-1][InteriorID];
+    re_BusinessData[id][bVW] = id+1;
 
     new q[660];
 
@@ -1414,7 +1451,48 @@ YCMD:createbusiness(playerid, params[], help)
                                     re_BusinessData[id][bActorSkin], re_BusinessData[id][bActorPos][0], re_BusinessData[id][bActorPos][1],
                                     re_BusinessData[id][bActorPos][2], re_BusinessData[id][bActorPos][3],
                                     re_BusinessData[id][bInt], re_BusinessData[id][bVW]);
-    mysql_tquery(SQL, q, "mysql_AddBusiness", "d", id);
+    mysql_tquery(SQL, q, "mysql_AddBusiness", "dd", id, playerid);
+
+    return 1;
+}
+
+YCMD:saveinteract(playerid, params[], help) 
+{
+    //*         >> [ KIOSK COMMAND ] <<
+
+    if(!IsPlayerAdmin(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Samo RCON Admini!");
+    
+    if(!re_tempFirm[playerid]) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne kreirate kiosk!");
+
+    new idx = Iter_Free(iter_Business);
+
+    new Float:pPos[3];
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    re_BusinessData[idx][bInteract][0] = pPos[0];
+    re_BusinessData[idx][bInteract][1] = pPos[1];
+    re_BusinessData[idx][bInteract][2] = pPos[2];
+
+    re_BusinessData[idx][bExit][0] = 0.00;
+    re_BusinessData[idx][bExit][1] = 0.00;
+    re_BusinessData[idx][bExit][2] = 0.00;
+
+    re_BusinessData[idx][bInt] = 0;
+    re_BusinessData[idx][bVW] = 0;
+
+    new q[660];
+
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
+                                    `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bInt`, `bVW`)
+                                    VALUES ('%e', '1', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
+                                    re_tempFirmName[playerid], BUSINESS_TYPE_KIOSK, re_BusinessData[idx][bLevel],
+                                    re_tempFirmPos[playerid][0], re_tempFirmPos[playerid][1], re_tempFirmPos[playerid][2],
+                                    re_BusinessData[idx][bExit][0], re_BusinessData[idx][bExit][1], re_BusinessData[idx][bExit][2],
+                                    re_BusinessData[idx][bInteract][0], re_BusinessData[idx][bInteract][1], re_BusinessData[idx][bInteract][2],
+                                    -1, 0.00, 0.00, 0.00, 0.00, re_BusinessData[idx][bInt], re_BusinessData[idx][bVW]);
+    mysql_tquery(SQL, q, "mysql_AddBusiness", "dd", idx, playerid);
 
     return 1;
 }

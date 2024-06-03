@@ -1,4 +1,4 @@
-/***
+/*
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -8,41 +8,46 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Vostic & Ogy_
- *  @Date           05th May 2023
+ *  @Author         Nodi
+ *  @Date           24th May 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
  *
- *  @File           db-config.script
- *  @Module         database
+ *  @File           houses.script
+ *  @Module         property
  */
+
 
 #include <ysilib\YSI_Coding\y_hooks>
 
- new MySQL: SQL;
+//*     >> [ ENUMS / CONSTANTS / VARS ]
 
-hook OnGameModeInit()
-{
-    mysql_log(ALL);
-	SQL = mysql_connect_file("mysql.ini");
+#define MAX_APARTMENTS             (120)
+#define APARTMENT_LOCATION_LEN      (24)
 
-    if(mysql_errno(SQL) != 0)
-    {
-        printf("[MYSQL] Database connection failed, check mysql.ini!");
-    }
-    else
-    {
-        mysql_set_charset("utf8mb4", SQL);
-        printf("[MYSQL] Connected to database succesfully");
-    }
-    return (true);
+new const sz_ApartmentInteriors[3][2] = {
+
+    { { 2282.97,-1140.28,1050.89 }, 11 },
+    { { 2262.83,-1137.71,1050.63 }, 10 },
+    { { 2319.12,-1023.95,1050.21 }, 9 },
+
 }
 
-hook OnGameModeExit()
-{
-    if(SQL)
-    {
-        mysql_close(SQL);
-    }
-    return (true);
+enum e_APARTMENT_DATA {
+
+    apartmentID,
+    apartmentLocation[APARTMENT_LOCATION_LEN],
+    apartmentOwner,
+
+    apartmentLevel,
+    apartmentPrice,
+    apartmentType,
+
+    Float:apartmentEntrance[3],
+    Float:apartmentExit[3],
+
+    bool:apartmentLocked,
+
+    apartmentMoney
+
 }

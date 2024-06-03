@@ -33,7 +33,7 @@ hook OnCharacterLoaded(playerid)
     new q[150];
     mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_property WHERE pOwner = '%d' LIMIT 1", GetCharacterSQLID(playerid));
     mysql_tquery(SQL, q, "LoadPlayerProperty", "i", playerid);
-    return true;
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 forward LoadPlayerProperty(playerid);

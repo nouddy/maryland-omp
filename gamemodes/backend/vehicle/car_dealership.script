@@ -96,13 +96,11 @@ static Text3D:dealership_VehicleLabel[5];
 
 static vehicleBought[MAX_PLAYERS];
 
-new bool:client_PossibleBuy;
-
 forward Dealership_StreamVehicle(id, playerid);
 public Dealership_StreamVehicle(id, playerid) {
 
     eVehicle[id][vID] = cache_insert_id();
-	pvVehicle[id] = CreateVehicle(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+4.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true);
+	pvVehicle[id] = CreateVehicleEx(eVehicle[id][vModel], eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2]+4.0, eVehicle[id][vPos][3], eVehicle[id][vColor][0], eVehicle[id][vColor][1], 1500, true, false, 50, eVehicle[id][vFuelType]);
 
 	new plate_string[MAX_PLATE_LEN];
 	format(plate_string, sizeof plate_string, "%s", eVehicle[id][vPlate]);
@@ -116,6 +114,15 @@ public Dealership_StreamVehicle(id, playerid) {
     SetCameraBehindPlayer(playerid);
     Dealership_ShowInterface(playerid, false);
     DestroyVehicle(temp_Vehicle[playerid]);
+
+    ToggleGlobalTextDraw(playerid, true);
+	TogglePlayerTextDraw(playerid, true);
+
+    PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
+	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
+    PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+    SetPlayerVirtualWorld(playerid, 0);
 
 	Iter_Add(iter_Vehicles, id);
 }
@@ -162,7 +169,9 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
 
     if(option == true) {
 
-        for(new i = 0; i < 69; i++) {
+        for(new i = 0; i < sizeof dealership_TD[]; i++) {
+
+            if(dealership_TD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
 
             PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
             PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
@@ -866,12 +875,12 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
 
         dealership_UI[playerid] = true;
 
-        client_PossibleBuy = true;
-
     }
     else {
 
-        for(new i = 0; i < 69; i++) {
+        for(new i = 0; i < sizeof dealership_TD[]; i++) {
+
+            if(dealership_TD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
 
             PlayerTextDrawHide(playerid, dealership_TD[playerid][i]);
             PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
@@ -882,7 +891,6 @@ stock Dealership_ShowInterface(playerid, const bool:option) {
         CancelSelectTextDraw(playerid);
 
         dealership_UI[playerid] = false;
-        client_PossibleBuy = false;
     }
     return 1;
 }
@@ -891,7 +899,23 @@ hook OnPlayerConnect(playerid) {
 
     dealership_UI[playerid] = false;
 
-    return 1;
+    for(new j = 0; j < sizeof dealership_TD[]; j++) {
+
+        dealership_TD[playerid][j] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+
+    for(new j = 0; j < sizeof dealership_TD[]; j++) {
+
+        PlayerTextDrawDestroy(playerid, dealership_TD[playerid][j]);
+        dealership_TD[playerid][j] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 YCMD:catalogue(playerid, params[], help) 
@@ -902,21 +926,29 @@ YCMD:catalogue(playerid, params[], help)
 
     if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
         return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
-    
-    if(client_PossibleBuy)
-        return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Svi agenti su vec zauzeti sacekajte vas red!"); 
 
     if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
 
         Dealership_ShowInterface(playerid, false);
+        
+        ToggleGlobalTextDraw(playerid, true);
+	    TogglePlayerTextDraw(playerid, true);
+
+        PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
+        PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
+        PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
         TogglePlayerControllable(playerid, true);
+        SetPlayerVirtualWorld(playerid, 0);
         SetCameraBehindPlayer(playerid);
         
         DestroyVehicle(temp_Vehicle[playerid]);
 
     }
     else {
+
+        ToggleGlobalTextDraw(playerid, false);
+	    TogglePlayerTextDraw(playerid, false);
 
         Dealership_ShowInterface(playerid, true);
 
@@ -926,6 +958,8 @@ YCMD:catalogue(playerid, params[], help)
             InterpolateCameraLookAt(playerid, 970.190490, -1703.935180, 14.529376, 969.156066, -1693.405761, 14.502281, 3500);
 
             temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[0][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+            SetPlayerVirtualWorld(playerid, playerid+1);
+            SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
         }
     }
 
@@ -972,7 +1006,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         if(IsValidVehicle(temp_Vehicle[playerid])) {
 
             DestroyVehicle(temp_Vehicle[playerid]);
-            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, e_CHOSEN_COLOUR[playerid], e_CHOSEN_COLOUR[playerid], 1500);
+            temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, e_CHOSEN_COLOUR[playerid], e_CHOSEN_COLOUR[playerid], 1500);\
+            SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
         }
     }
 
@@ -991,6 +1026,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
             DestroyVehicle(temp_Vehicle[playerid]);
             temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, e_CHOSEN_COLOUR[playerid], e_CHOSEN_COLOUR[playerid], 1500);
+            SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
         }
 
         new tmp_string[64];
@@ -1250,6 +1286,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 7, 7, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             }
 
             e_CHOSEN_COLOUR[playerid] = 7;
@@ -1267,6 +1304,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 16, 16, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             }   
 
             e_CHOSEN_COLOUR[playerid] = 16;
@@ -1283,6 +1321,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 6, 6, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             } 
             
             e_CHOSEN_COLOUR[playerid] = 6;
@@ -1299,6 +1338,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 142, 142, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             } 
             
             e_CHOSEN_COLOUR[playerid] = 142;
@@ -1314,6 +1354,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 211, 211, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             } 
             
             e_CHOSEN_COLOUR[playerid] = 211;
@@ -1331,6 +1372,7 @@ Dialog:dealership_Color(const playerid, response, listitem, string:inputtext[]) 
 
                 DestroyVehicle(temp_Vehicle[playerid]);
                 temp_Vehicle[playerid] = CreateVehicle(sz_MarylandModels[e_CHOSEN_MODEL[playerid]][d_Model], 973.3201,-1691.8093,13.6998,135.2371, 3, 3, 1500);
+                SetVehicleVirtualWorld(temp_Vehicle[playerid], playerid+1);
             } 
 
             e_CHOSEN_COLOUR[playerid] = 3;

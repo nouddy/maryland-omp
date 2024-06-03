@@ -41,6 +41,12 @@ hook OnPlayerConnect(playerid)
 
 hook OnPlayerDisconnect(playerid, reason) {
 
+    for(new i=0; i < sizeof Player_TDs[]; i++)
+    {
+        PlayerTextDrawDestroy(playerid, PlayerText:Player_TDs[playerid][i]);
+        Player_TDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -950,6 +956,8 @@ stock CreatePlayerTextDraws(playerid)
 {
     for(new i = 0; i < sizeof Player_TDs[]; i++) {
 
+        if(Player_TDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
         PlayerTextDrawHide(playerid, PlayerText:Player_TDs[playerid][i]);
         PlayerTextDrawDestroy(playerid, PlayerText:Player_TDs[playerid][i]);
         Player_TDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
@@ -1004,7 +1012,7 @@ stock CreatePlayerTextDraws(playerid)
 
     Player_TDs[playerid][5] = CreatePlayerTextDraw(playerid, 469.735321, 431.937164, "mulholland");
     PlayerTextDrawLetterSize(playerid, Player_TDs[playerid][5], 0.095999, 0.529775);
-    PlayerTextDrawAlignment(playerid, Player_TDs[playerid][5], TEXT_DRAW_ALIGN_RIGHT);
+    PlayerTextDrawAlignment(playerid, Player_TDs[playerid][5], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColour(playerid, Player_TDs[playerid][5], -926364161);
     PlayerTextDrawSetShadow(playerid, Player_TDs[playerid][5], 0);
     PlayerTextDrawBackgroundColour(playerid, Player_TDs[playerid][5], 255);
