@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 03, 2024 at 02:10 PM
+-- Generation Time: Jun 03, 2024 at 05:14 PM
 -- Server version: 10.3.39-MariaDB-0+deb10u2
 -- PHP Version: 8.2.17
 
@@ -51,7 +51,9 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com'),
 (18, 'djasa', '401253', 0, '2023-12-03 12:45:24', '2023-12-03 12:45:24', 'lazarradisavljevic5@gmail.com'),
 (19, 'Klaus', 'klaus021', 4, '2023-12-03 13:51:35', '2023-12-03 13:51:35', 'dada@gmail.com'),
-(20, 'Dickey_Corleone', '22031997', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com');
+(20, 'Dickey_Corleone', '22031997', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
+(21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
+(22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -124,7 +126,7 @@ CREATE TABLE `characters` (
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cMoney`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`) VALUES
 (3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002048, 0, 2147483647, 1401.78, 1591.35, 12.0481),
-(4, 14, 'Joy_Silence', 60, 0, 0, 0, 0, 9999999, 0, 1701536970, 1401.78, 1591.35, 12.0481),
+(4, 14, 'Joy_Silence', 60, 0, 0, 0, 0, 9999849, 0, 1701536970, 1401.78, 1591.35, 12.0481),
 (5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 1701539256, 1401.78, 1591.35, 12.0481),
 (6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 1701539568, 1401.78, 1591.35, 12.0481),
 (7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120403456, 0, 1701539846, 1401.78, 1591.35, 12.0481),
@@ -132,7 +134,9 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 1701611624, 1401.78, 1591.35, 12.0481),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 0, 0, 1701621495, 1401.78, 1591.35, 12.0481),
 (11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 5700, 0, 1702238719, 1401.78, 1591.35, 12.0481),
-(12, 13, 'Howard_Picketina', 12, 1, 0, 0, 2, 100000000, 0, 1706641971, 1401.78, 1591.35, 12.0481);
+(12, 13, 'Howard_Picketina', 12, 1, 0, 0, 2, 100000000, 0, 1706641971, 1401.78, 1591.35, 12.0481),
+(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 1717421538, 1401.78, 1591.35, 12.0481),
+(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 1717423439, 1401.78, 1591.35, 12.0481);
 
 -- --------------------------------------------------------
 
@@ -167,15 +171,17 @@ CREATE TABLE `factions` (
   `factionAreaY` float NOT NULL DEFAULT 0,
   `factionAreaZ` float NOT NULL DEFAULT 0,
   `factionInterior` int(11) NOT NULL DEFAULT 0,
-  `factionVirutalWorld` int(11) NOT NULL DEFAULT 0
+  `factionVirutalWorld` int(11) NOT NULL DEFAULT 0,
+  `factionHouseID` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `factions`
 --
 
-INSERT INTO `factions` (`factionID`, `factionName`, `factionType`, `factionBoss`, `factionRightHand`, `factionAreaX`, `factionAreaY`, `factionAreaZ`, `factionInterior`, `factionVirutalWorld`) VALUES
-(1, 'Capital Silent', 1, 1, 14, 0, 0, 0, 0, 0);
+INSERT INTO `factions` (`factionID`, `factionName`, `factionType`, `factionBoss`, `factionRightHand`, `factionAreaX`, `factionAreaY`, `factionAreaZ`, `factionInterior`, `factionVirutalWorld`, `factionHouseID`) VALUES
+(1, 'Capital Silent', 1, 1, 14, 0, 0, 0, 0, 0, 0),
+(2, 'PICKE PANDURSKE', 1, 1, 14, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -196,7 +202,9 @@ CREATE TABLE `faction_members` (
 
 INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) VALUES
 (6, 0, 7, 1),
-(0, 1, 1, 1);
+(0, 1, 1, 1),
+(14, 0, 7, 1),
+(0, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -271,6 +279,14 @@ CREATE TABLE `houses` (
   `Int` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `houses`
+--
+
+INSERT INTO `houses` (`ID`, `hOwner`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, `PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`, `Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`, `FridgeX`, `FridgeY`, `FridgeZ`, `Int`) VALUES
+(1, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 878.045, -1333.87, 13.5469, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
+(2, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 1005.29, -1137.52, 23.6498, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15);
+
 -- --------------------------------------------------------
 
 --
@@ -337,7 +353,9 @@ INSERT INTO `player_crypto` (`character_id`, `AmountBTC`, `AmountETH`, `AmountLT
 (9, 0, 0, 0, 0, 0),
 (10, 0, 0, 0, 0, 0),
 (11, 0, 0, 0, 0, 0),
-(12, 0, 0, 0, 0, 0);
+(12, 0, 0, 0, 0, 0),
+(13, 0, 0, 0, 0, 0),
+(14, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -371,7 +389,9 @@ INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, 
 (9, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 13:53:44'),
 (10, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 16:38:15'),
 (11, 0, 0, 0, 0, 0, 0, -1, '2023-12-10 21:05:19'),
-(12, 0, 0, 0, 0, 0, 0, -1, '2024-01-30 20:12:51');
+(12, 0, 0, 0, 0, 0, 0, -1, '2024-01-30 20:12:51'),
+(13, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 15:32:18'),
+(14, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 16:03:59');
 
 -- --------------------------------------------------------
 
@@ -400,7 +420,9 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 (9, 0, 0, 0),
 (10, 0, 0, 0),
 (11, 0, 0, 0),
-(12, 0, 0, 0);
+(12, 0, 0, 0),
+(13, 0, 0, 0),
+(14, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -429,7 +451,9 @@ INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VAL
 (9, 0, -1, 0),
 (10, 0, -1, 0),
 (11, 0, -1, 0),
-(12, 3, 0, 0);
+(12, 3, 0, 0),
+(13, 0, -1, 0),
+(14, 4, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -446,6 +470,13 @@ CREATE TABLE `pumps` (
   `pump_Y` float NOT NULL DEFAULT 0,
   `pump_Z` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pumps`
+--
+
+INSERT INTO `pumps` (`pumpID`, `pumpBusinessID`, `pumpFuel`, `pumpFuelType`, `pump_X`, `pump_Y`, `pump_Z`) VALUES
+(1, 0, 4000, 1, 1761.86, -1815.32, 13.5437);
 
 -- --------------------------------------------------------
 
@@ -534,7 +565,8 @@ CREATE TABLE `re_centar` (
 INSERT INTO `re_centar` (`re_BCenterID`, `re_BCenterOwner`, `re_BCenterName`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY`, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) VALUES
 (1, 3, 'Nepoznato', 4, 1, 1, 1826.06, -1286.32, 131.754, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 1827.96, -1302.59, 131.739, 3.5893),
 (2, 4, 'Nepoznato', 9, 2, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942),
-(3, 12, 'Nepoznato', 9, 3, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 150, 2279.2, 2183.56, 103.916, 0.2942);
+(3, 12, 'Nepoznato', 9, 3, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 150, 2279.2, 2183.56, 103.916, 0.2942),
+(4, 14, 'Nepoznato', 9, 4, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942);
 
 -- --------------------------------------------------------
 
@@ -585,6 +617,13 @@ CREATE TABLE `vehicles` (
   `vState` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `vehicles`
+--
+
+INSERT INTO `vehicles` (`vID`, `vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) VALUES
+(2, 14, 451, 211, 211, 'Casey_Skendy', 950.804, -1759.56, 13.2938, 347.9, 1720016265, 100, 0, 0, 100, 0, 1, 1, 0, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -618,7 +657,10 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('djasa', 0, 0, 0),
 ('Klaus', 0, 0, 0),
 ('Dickey_Corleone', 0, 0, 0),
-('Stojke_Castello', 0, 0, 0);
+('Stojke_Castello', 0, 0, 0),
+('Vostic', 0, 0, 0),
+('Nodislav_Alksienko', 0, 0, 0),
+('Casey_Skendy', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -749,7 +791,7 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `benches`
@@ -767,7 +809,7 @@ ALTER TABLE `cash_registers`
 -- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `containers`
@@ -779,7 +821,7 @@ ALTER TABLE `containers`
 -- AUTO_INCREMENT for table `factions`
 --
 ALTER TABLE `factions`
-  MODIFY `factionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `factionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `faction_police`
@@ -791,7 +833,7 @@ ALTER TABLE `faction_police`
 -- AUTO_INCREMENT for table `houses`
 --
 ALTER TABLE `houses`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -809,7 +851,7 @@ ALTER TABLE `metros`
 -- AUTO_INCREMENT for table `pumps`
 --
 ALTER TABLE `pumps`
-  MODIFY `pumpID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pumpID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `re_business`
@@ -821,7 +863,7 @@ ALTER TABLE `re_business`
 -- AUTO_INCREMENT for table `re_centar`
 --
 ALTER TABLE `re_centar`
-  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `safezones`
@@ -833,17 +875,11 @@ ALTER TABLE `safezones`
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `vID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `vID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `houses`
---
-ALTER TABLE `houses`
-  ADD CONSTRAINT `hCharacterID` FOREIGN KEY (`hOwner`) REFERENCES `characters` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `player_documents`

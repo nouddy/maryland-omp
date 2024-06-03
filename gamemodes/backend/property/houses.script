@@ -66,7 +66,7 @@ public House_LoadData() {
 		for(new i = 0; i < rows; i++) {
 
 			cache_get_value_name_int(i, "ID", house_ID[i]);
-			cache_get_value_name_int(i, "PID", house_Owner[i]);
+			cache_get_value_name_int(i, "hOwner", house_Owner[i]);
 			cache_get_value_name_int(i, "Price", house_Price[i]);
 			cache_get_value_name_int(i, "Type", house_Type[i]);
 
@@ -105,7 +105,7 @@ public House_LoadData() {
 
 			if(house_Owner[i] < 1) {
 
-				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], FormatNumber(house_Price[i]));
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[i], GetHouseType(house_Type[i]), house_Adress[i], FormatNumber(house_Price[i]));
 
 				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 				house_Pickup[i] = CreateDynamicPickup(19522, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
@@ -113,7 +113,7 @@ public House_LoadData() {
 
 			else {
 
-				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[i], GetHouseType(house_ID[i]), house_Adress[i], zakljucan1);
+				format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[i], GetHouseType(house_Type[i]), house_Adress[i], zakljucan1);
 
 				house_Label[i] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 				house_Pickup[i] = CreateDynamicPickup(1273, 1, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2], -1, -1);
@@ -135,6 +135,9 @@ forward House_Create(id);
 public House_Create(id) {
 
 	house_ID[id] = cache_insert_id();
+	Iter_Add(iHouse, id);
+	House_UpdateLabel(id, 1);
+
 	return (true);
 }
 
@@ -170,7 +173,7 @@ stock House_UpdateLabel(id, const option) {
 
 	if(option == 1) {
 
-		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], FormatNumber(house_Price[id]));
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_Type[id]), house_Adress[id], FormatNumber(house_Price[id]));
 
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(19522, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
@@ -178,7 +181,7 @@ stock House_UpdateLabel(id, const option) {
 
 	else if(option == 2)
 	{
-		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_ID[id]), house_Adress[id], zakljucan1);
+		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_Type[id]), house_Adress[id], zakljucan1);
 
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
@@ -274,7 +277,7 @@ YCMD:buyhouse(playerid, params[], help) {
 	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `hOwner` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ID]);
 	mysql_tquery(SQL, query);
 
-	House_UpdateLabel(house_ID[ID], 1);
+	House_UpdateLabel(house_ID[ID], 2);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }

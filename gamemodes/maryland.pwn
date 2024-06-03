@@ -36,6 +36,7 @@
 		* Fali fuel sys koji je zapoceo Nodi
 		* Fali include progress novi sto je dodao vratio sam old
 		* Proveriti Build yaml i pawndisam u compiler folderu vljd je sve vraceno kako Bogu Spada.
+		* Fixati house bulgrary
 
 
  */

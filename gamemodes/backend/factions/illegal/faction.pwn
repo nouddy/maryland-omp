@@ -64,14 +64,15 @@ enum FACTION_CORE {
 
     factionID,                              // Faction SQL ID
     factionName[MAX_FACTION_NAME_LEN],      // Faction Name on Create
-    factionType,         // Faction Type
+    factionType,                            // Faction Type
     
     factionBoss,                            // Faction leader
     factionRightHand,                       // Faction second leader
     
     Float:factionArea[3],                   // Faction will have their area for cars etc.. If is duo they will get random street cords for their area. When they upgrade prop is area.
     factionInterior,                        // When they got upgrade this is interior of prop
-    factionVirtualWorld                     // When they got upgrade this is virtual world of prop
+    factionVirtualWorld,                    // When they got upgrade this is virtual world of prop
+    factionHouseID                          // Faction House for members
 }
 
 new FactionInfo[MAX_FACTIONS][FACTION_CORE];
@@ -119,6 +120,7 @@ public Faction_LoadData() {
 
         cache_get_value_name_int(i, "factionInterior", FactionInfo[i][factionInterior]);
         cache_get_value_name_int(i, "factionVirtualWorld", FactionInfo[i][factionVirtualWorld]);
+        cache_get_value_name_int(i, "factionHouseID", FactionInfo[i][factionHouseID]);
 
         if(FactionInfo[i][factionArea][0] != 0.00) {
 
