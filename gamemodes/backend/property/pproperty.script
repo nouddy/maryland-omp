@@ -45,7 +45,7 @@ public LoadPlayerProperty(playerid)
     {  
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_property` (pOwner, BCenter, HouseID, BusinessID) \ 
+           "INSERT INTO `player_property` (pOwner, BCenter, HouseID, BusinessID) \
             VALUES('%d', '0', '-1', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
 

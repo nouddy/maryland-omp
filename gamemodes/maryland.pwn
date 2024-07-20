@@ -516,6 +516,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/crypto/end/do-not-look.temp"
 
+//-------------------------------------------------------------------------------------------------------- Inventory
+#include "backend/inventory/main.pwn"
+#include "backend/inventory/functions.pwn"
+
 //-------------------------------------------------------------------------------------------------------- Finances
 //#include "backend/finance/bank_old.script"							//* Bankarstvo
 //#include "backend/finance/bank_ogy.script"							//* Bankarstvo

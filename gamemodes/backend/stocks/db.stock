@@ -103,7 +103,7 @@ stock SaveDocuments(playerid)
             PlayerDocuments[playerid][pBoatLicense],
             PlayerDocuments[playerid][pGunLicense],
             GetCharacterSQLID(playerid));
-        mysql_tquery(SQL,query);      `
+        mysql_tquery(SQL,query);   
     }
 
     return true;
