@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jun 03, 2024 at 05:14 PM
--- Server version: 10.3.39-MariaDB-0+deb10u2
--- PHP Version: 8.2.17
+-- Host: 127.0.0.1
+-- Generation Time: Jul 21, 2024 at 10:01 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `s13_maryland`
+-- Database: `maryland`
 --
 
 -- --------------------------------------------------------
@@ -51,7 +51,7 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com'),
 (18, 'djasa', '401253', 0, '2023-12-03 12:45:24', '2023-12-03 12:45:24', 'lazarradisavljevic5@gmail.com'),
 (19, 'Klaus', 'klaus021', 4, '2023-12-03 13:51:35', '2023-12-03 13:51:35', 'dada@gmail.com'),
-(20, 'Dickey_Corleone', '22031997', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
+(20, 'Darko_Jovanovic', 'durant123', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
 (21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
 (22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com');
 
@@ -132,7 +132,7 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120403456, 0, 1701539846, 1401.78, 1591.35, 12.0481),
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 1701607678, 1401.78, 1591.35, 12.0481),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 1701611624, 1401.78, 1591.35, 12.0481),
-(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 0, 0, 1701621495, 1401.78, 1591.35, 12.0481),
+(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 1701621495, 1401.78, 1591.35, 12.0481),
 (11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 5700, 0, 1702238719, 1401.78, 1591.35, 12.0481),
 (12, 13, 'Howard_Picketina', 12, 1, 0, 0, 2, 100000000, 0, 1706641971, 1401.78, 1591.35, 12.0481),
 (13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 1717421538, 1401.78, 1591.35, 12.0481),
@@ -284,8 +284,21 @@ CREATE TABLE `houses` (
 --
 
 INSERT INTO `houses` (`ID`, `hOwner`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, `PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`, `Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`, `FridgeX`, `FridgeY`, `FridgeZ`, `Int`) VALUES
-(1, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 878.045, -1333.87, 13.5469, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
+(1, 4, 120000, 2, 'Brooklyn Park, Maryland', 0, 878.045, -1333.87, 13.5469, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
 (2, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 1005.29, -1137.52, 23.6498, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `PlayerID` int(11) NOT NULL,
+  `ItemID` int(11) NOT NULL DEFAULT 50,
+  `ItemQuantity` int(11) NOT NULL DEFAULT 10,
+  `ItemType` int(11) NOT NULL DEFAULT 3
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -442,18 +455,7 @@ CREATE TABLE `player_property` (
 --
 
 INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VALUES
-(3, 1, -1, 0),
-(4, 2, 0, 0),
-(5, 0, -1, 0),
-(6, 0, -1, 0),
-(7, 0, -1, 0),
-(8, 0, -1, 0),
-(9, 0, -1, 0),
-(10, 0, -1, 0),
-(11, 0, -1, 0),
-(12, 3, 0, 0),
-(13, 0, -1, 0),
-(14, 4, 0, 0);
+(4, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -660,7 +662,8 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Stojke_Castello', 0, 0, 0),
 ('Vostic', 0, 0, 0),
 ('Nodislav_Alksienko', 0, 0, 0),
-('Casey_Skendy', 0, 0, 0);
+('Casey_Skendy', 0, 0, 0),
+('Darko_Jovanovic', 0, 0, 0);
 
 --
 -- Indexes for dumped tables

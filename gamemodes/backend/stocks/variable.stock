@@ -26,6 +26,13 @@ hook OnGameModeInit()
 	return 1;
 }
 
+hook OnPlayerConnect(playerid)
+{
+    ResetVariables(playerid);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 stock ResetVariables(playerid)
 {
     // Main register
