@@ -523,7 +523,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Finances
 //#include "backend/finance/bank_old.script"							//* Bankarstvo
 //#include "backend/finance/bank_ogy.script"							//* Bankarstvo
-
+#include "frontend/textdraws/Bank/BankUI.pwn"
+#include "backend/finance/Accounts.pwn"
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.temp"
 
@@ -741,3 +742,31 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	- 
 
 */
+
+CMD:bank(playerid, params[])
+{
+	BankCreateMainUI(playerid);
+	SelectTextDraw(playerid, -1);
+	return 1;
+}
+
+CMD:cls(playerid, params[])
+{
+	for(new i = 0; i < 20; i++)
+		SendClientMessage(playerid, -1, " ");
+		
+	return 1;
+}
+
+CMD:createbankaccount(playerid, params[])
+{
+	CreateBankAccount(GetCharacterSQLID(playerid), OWNER_TYPE_PLAYER);
+
+	return 1;
+}
+
+CMD:deletemybankaccounts(playerid, params[])
+{
+	DeleteBankAccountByOwner(GetCharacterSQLID(playerid), OWNER_TYPE_PLAYER);
+	return 1;
+}

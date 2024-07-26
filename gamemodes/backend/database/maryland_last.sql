@@ -665,6 +665,34 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Casey_Skendy', 0, 0, 0),
 ('Darko_Jovanovic', 0, 0, 0);
 
+
+--
+-- Table structure for table `bankaccounts`
+--
+CREATE TABLE IF NOT EXISTS `bankaccounts` (
+  `AccountID` int NOT NULL AUTO_INCREMENT,
+  `OwnerID` int NOT NULL,
+  `OwnerType` enum('Player','Faction','Bussiness','Government') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Player',
+  `Dollar` float NOT NULL DEFAULT '0',
+  `Euro` float NOT NULL DEFAULT '0',
+  `Pound` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`AccountID`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bankaccounts`
+--
+
+INSERT INTO `bankaccounts` (`AccountID`, `OwnerID`, `OwnerType`, `Dollar`, `Euro`, `Pound`) VALUES
+(12, 7, 'Player', 111, 222, 333),
+(13, 7, 'Player', 444, 555, 666),
+(14, 2, 'Faction', 123, 456, 789),
+(15, 11, 'Player', 123, 456, 789),
+(16, 11, 'Player', 213, 21412, 2151),
+(17, 1, 'Faction', 213, 4421, 21412400);
+COMMIT;
+
+
 --
 -- Indexes for dumped tables
 --
