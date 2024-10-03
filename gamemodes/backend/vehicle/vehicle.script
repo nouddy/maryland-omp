@@ -74,7 +74,7 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 
     if (newstate == PLAYER_STATE_DRIVER) 
     {
-        if(engine == VEHICLE_PARAMS_OFF)
+        if(!engine)
         {   
             notification.Show(playerid, "Info", "Da upalis vozilo koristi tipku 'CTRL', za svetla 'Y'.", "?", BOXCOLOR_BLUE);
         }
@@ -103,13 +103,13 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                    
             GetVehicleParamsEx(veh, engine, lights, alarm, doors, bonnet, boot, objective);
 
-            if(engine == VEHICLE_PARAMS_OFF)
+            if(!engine)
                 SetVehicleParamsEx(veh, VEHICLE_PARAMS_ON, lights, alarm, doors, bonnet, boot, objective);
             else
                 SetVehicleParamsEx(veh, VEHICLE_PARAMS_OFF, lights, alarm, doors, bonnet, boot, objective);
 
             new str[60];
-            format(str, sizeof(str),"%s si motor.", (engine == VEHICLE_PARAMS_OFF) ? "Upalio" : "Ugasio");
+            format(str, sizeof(str),"%s si motor.", (!engine) ? "Upalio" : "Ugasio");
             notification.Show(playerid, "Info", str, "?", BOXCOLOR_BLUE);
 
             return Y_HOOKS_BREAK_RETURN_1;
@@ -132,7 +132,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             
             GetVehicleParamsEx(veh, engine, lights, alarm, doors, bonnet, boot, objective);
 
-            if(lights == VEHICLE_PARAMS_OFF)
+            if(!lights)
             {
                 SetVehicleParamsEx(veh, engine, VEHICLE_PARAMS_ON, alarm, doors, bonnet, boot, objective);
 
@@ -142,7 +142,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
                 SetVehicleParamsEx(veh, engine, VEHICLE_PARAMS_OFF, alarm, doors, bonnet, boot, objective);
             }
             new str[60];
-            format(str, sizeof(str),"%s si svetla.", (lights == VEHICLE_PARAMS_OFF) ? "Upalio" : "Ugasio");
+            format(str, sizeof(str),"%s si svetla.", (!lights) ? "Upalio" : "Ugasio");
             notification.Show(playerid, "Info", str, "?", BOXCOLOR_BLUE);
 
             return Y_HOOKS_BREAK_RETURN_1;

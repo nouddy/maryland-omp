@@ -212,7 +212,7 @@ stock BuildSpeedTextDraws(playerid, bool:show)
         PlayerTextDrawSetProportional(playerid, speed_TD[playerid][3], false);
         PlayerTextDrawSetPreviewModel(playerid, speed_TD[playerid][3], 560);
         PlayerTextDrawSetPreviewRot(playerid, speed_TD[playerid][3], 0.000000, 0.000000, 35.000000, 1.000000);
-        PlayerTextDrawSetPreviewVehCol(playerid, speed_TD[playerid][3], 1, 1);
+        PlayerTextDrawSetPreviewVehicleColours(playerid, speed_TD[playerid][3], 1, 1);
 
         speed_TD[playerid][4] = CreatePlayerTextDraw(playerid, 188.533737, 437.459167, "");
         PlayerTextDrawTextSize(playerid, speed_TD[playerid][4], 62.000000, -69.000000);
