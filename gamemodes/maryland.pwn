@@ -467,7 +467,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
 #include "backend/assets/custommarkers.inc"						//* Custom markers
-#include "backend/finance/currency.pwn"									//* Currency
+#include "backend/finance/currency.pwn"							//* Currency
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 						//* ProxDetector
@@ -477,7 +477,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/end/do-not-look.temp" 
 
 //-------------------------------------------------------------------------------------------------------- Main
-#include "backend/reg-log/main.pwn"								//* Register and login
+#include "backend/reg-log/main.pwn"									//* Register and login
 
 #include "frontend/textdraws/register.tde"							//* Register tdovi
 #include "frontend/textdraws/login.tde"								//* Login tdovi
