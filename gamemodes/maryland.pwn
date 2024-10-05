@@ -499,7 +499,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/speedometer.script"						//* Brzinomer
 #include "backend/vehicle/fuel.pwn"									//* Brzinomer
 #include "backend/vehicle/car_dealership.script"					//* Vozila paljenje gasenje itd
-//#include "backend/vehicle/driving_school.script"					//* Dok se ne fixa ne paliti sjebe mape skroz.
+#include "backend/vehicle/driving_school.script"					//* Dok se ne fixa ne paliti sjebe mape skroz.
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.temp"
