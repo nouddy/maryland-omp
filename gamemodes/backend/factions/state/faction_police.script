@@ -67,6 +67,28 @@ new dutyPickup[MAX_POLICE];
 
 //============================================================ Boze Pomozi
 
+/* Stocks */
+
+stock PoliceStateCheck(playerid) {
+
+    new fpID = fCreatingID[playerid];
+    new str_state[30];
+
+    if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
+        
+        format(str_state, sizeof str_state, "Little Italy");
+    }
+    
+    else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
+
+        format(str_state, sizeof str_state, "Egypt");
+    }
+    
+    else { format(str_state, sizeof str_state, "Maryland"); }
+
+    return strmid(fPoliceInfo[fpID][fPoliceState], str_state, 0, sizeof(str_state), 255);
+}
+
 stock GetPoliceType(id) {
 
     new string[30];
@@ -85,6 +107,8 @@ hook OnGameModeInit()
 
     mysql_tquery(SQL, "SELECT * FROM `faction_police`", "PoliceLoad", "");
 }
+
+/* Publics */
 
 forward PoliceLoad();
 public PoliceLoad()
@@ -190,25 +214,7 @@ public CreateEquPoint(id) {
     return 1;
 }
 
-stock PoliceStateCheck(playerid) {
-
-    new fpID = fCreatingID[playerid];
-    new str_state[30];
-
-    if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
-        
-        format(str_state, sizeof str_state, "Little Italy");
-    }
-    
-    else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
-
-        format(str_state, sizeof str_state, "Egypt");
-    }
-    
-    else { format(str_state, sizeof str_state, "Maryland"); }
-
-    return strmid(fPoliceInfo[fpID][fPoliceState], str_state, 0, sizeof(str_state), 255);
-}
+/* Dialogs */
 
 Dialog:dialog_createPolice(const playerid, response, listitem, string:inputtext[]) {
 

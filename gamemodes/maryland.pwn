@@ -29,13 +29,8 @@
 		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
 		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
 		* Srediti help komand za svaku komandu koja ima dodatne parametre.
-		* Pregledati kod izbaciti nepotrebne stvari i uraditi ponegde bolje ukoliko je moguce
 		* Dodati provere za death i uraditi custom dmg.
 		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
-		* Rename sve funkcije i variable u skripti sa srpskog na engleski.
-		* Fali fuel sys koji je zapoceo Nodi
-		* Fali include progress novi sto je dodao vratio sam old
-		* Proveriti Build yaml i pawndisam u compiler folderu vljd je sve vraceno kako Bogu Spada.
 		* Fixati house bulgrary
 
 
@@ -484,6 +479,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Main
 #include "backend/reg-log/main.pwn"								//* Register and login
 
+#include "frontend/textdraws/register.tde"							//* Register tdovi
+#include "frontend/textdraws/login.tde"								//* Login tdovi
+#include "frontend/textdraws/chose-character.tde"					//* Create or chose character TextDraws
+
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/custom_markers.asset"						//* Markeri
 #include "backend/assets/time.asset"						//* Time calculation
@@ -506,7 +505,9 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/vehicle/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Crypto
-#include "backend/crypto/crypto_ogy.script"						//* Crypto
+#include "backend/crypto/crypto_ogy.script"							//* Crypto
+
+#include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/crypto/end/do-not-look.temp"
@@ -516,8 +517,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/inventory/functions.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Finances
-//#include "backend/finance/bank_old.script"							//* Bankarstvo
-//#include "backend/finance/bank_ogy.script"							//* Bankarstvo
 #include "frontend/textdraws/Bank/BankUI.pwn"
 #include "backend/finance/Accounts.pwn"
 //-------------------------------------------------------------------------------------------------------- Temp
@@ -611,13 +610,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Textdraws
 #include "frontend/textdraws/main.tde"								//* Glavni tdovi
-
-#include "frontend/textdraws/register.tde"							//* Register tdovi
-#include "frontend/textdraws/login.tde"								//* Login tdovi
-
-#include "frontend/textdraws/chose-character.tde"					//* Create or chose character TextDraws
-
-#include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
 
 //-------------------------------------------------------------------------------------------------------- Exteriors
 #include "frontend/exterior/starbucks.map"							//* Starbucks map 
@@ -733,8 +725,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	- Odraditi redesign databaze za sve stvari.
 	- Odraditi functions.stock gdje ce se kreirati funkcije koje ce se koristiti!
 	- PlayerLogged fixati, ne rade cuvanja zbog njega
-	- Proveriti Key secondary attack na spawnu kad treba da se izadje ne radi
-	- 
+	- Za open verziju zakljucati ljude unutar Marylanda sa custom streamer zonama.
 
 */
 
