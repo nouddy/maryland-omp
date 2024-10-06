@@ -148,7 +148,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
-    SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw textid %d", playertextid);
+    // SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw textid %d", playertextid);
 
     if(BankShownPageForPlayer[playerid] == BankMenuUnknown) return Y_HOOKS_CONTINUE_RETURN_1;
     SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw BankShownPageForPlayer %s(%d)", BankMenuButtonStrings[BankShownPageForPlayer[playerid]], _:BankShownPageForPlayer[playerid]);

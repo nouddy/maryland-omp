@@ -15,9 +15,12 @@
  *
  *  @File           driving_school.script
  *  @Module         script
+ *  @Todo:          Smaknuti debug poruke, vratiti ga u autoskolu kad polozi, dodati tajmere od 2 sekunda kad udje u checkpoint. (To cu ja sjutra (Noddy));
  */
 
 #include <ysilib\YSI_Coding\y_hooks>
+
+#define INVALID_POLY_PROGRESS       (-1)
 
 new polygonCars[6];
 new Text3D:drivingSchool_Label[6];
@@ -33,8 +36,31 @@ new drivingSchool_Answers[MAX_PLAYERS][8];
 new bool:e_CHOSEN_DOWN[MAX_PLAYERS],
     bool:e_CHOSEN_UP[MAX_PLAYERS];
 
+new bool:onPoly[MAX_PLAYERS],
+    polyProgress[MAX_PLAYERS];
+
 new ds_Actor[2];
 new Text3D:ds_ActorLabel[2];
+
+new const Float:sz_PolyCheckpoints[13][3] = {
+
+    { 1306.6147,1560.5885,100.6834 },
+    { 1313.1958,1541.9470,100.6721 },
+    { 1271.8976,1521.4279,100.6718 },
+    { 1289.4443,1478.8098,100.6716 },
+    { 1280.1346,1449.8429,100.6720 },
+    { 1290.8688,1449.8009,100.6878 },
+    { 1331.4336,1454.0608,100.6718 },
+    { 1342.0768,1453.6407,101.1683 },
+    { 1375.3126,1453.8861,100.6721 },
+    { 1357.9390,1443.8104,100.6718 },
+    { 1341.6152,1443.9585,100.6730 },
+    { 1325.6704,1435.6135,100.6776 },
+    { 1298.4663,1560.8510,100.6721 }
+
+} ;
+
+new polyCPs[MAX_PLAYERS][13];
 
 hook OnGameModeInit() {
 
@@ -87,6 +113,9 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerConnect(playerid) {
+
+    onPoly[playerid] = false;
+    polyProgress[playerid] = INVALID_POLY_PROGRESS;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -970,6 +999,17 @@ stock DrivingSchool_DisplayInterface(playerid, const bool:option) {
     }
 }
 
+stock bool:DrivingSchool_IsPlayerInVehicle(playerid) {
+
+    for(new i = 0; i < sizeof polygonCars; i++) {
+
+        if(IsPlayerInVehicle(playerid, i))
+            return true;
+    }
+
+    return false;
+}
+
 hook OnGameModeExit() {
 
     if(IsValid3DTextLabel(drivingSchool_LabelEntrance)) {
@@ -1005,14 +1045,17 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         if(IsPlayerInRangeOfPoint(playerid, 3.50, 1428.5536,1546.4618,10.8503)) {
 
+            if(PlayerDocuments[playerid][pDriveLicense] == 1)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec imate polozen ispit za auto!");
+
             DrivingSchool_DisplayInterface(playerid, true);
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-forward DrivingSchool_SelectAnswers(playerid, answer);
-public DrivingSchool_SelectAnswers(playerid, answer) {
+forward DrivingSchool_SelectAnswers(playerid, answer, PlayerText:textID);
+public DrivingSchool_SelectAnswers(playerid, answer, PlayerText:textID) {
 
     new tmp_answer = 1+(floatround((answer)/2, floatround_ceil));
 
@@ -1024,16 +1067,10 @@ public DrivingSchool_SelectAnswers(playerid, answer) {
 
     if((answer+1)%2 != 0) {
 
-        SendClientMessage(playerid, -1, "Gornji Odgovor!");
-        SendClientMessage(playerid, -1, "Br. Pitanja %d", tmp_answer);
-
         drivingSchool_Answers[playerid][tmp_answer-1] = 1;
 
     }
     else {
-
-        SendClientMessage(playerid, -1, "Donji Odgovor");
-        SendClientMessage(playerid, -1, "Br. Pitanja %d", tmp_answer);
 
         drivingSchool_Answers[playerid][tmp_answer-1] = 2;
     }
@@ -1042,6 +1079,9 @@ public DrivingSchool_SelectAnswers(playerid, answer) {
     PlayerTextDrawSetSelectable(playerid, drivingSchool_PTD[playerid][answer+42], false);
     PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][answer+41]);
     PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][answer+42]);
+
+    PlayerTextDrawColour(playerid, textID, -1916144641);
+    PlayerTextDrawShow(playerid, textID);
     
     return 1;
 }
@@ -1054,11 +1094,64 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
         if(playertextid == drivingSchool_PTD[playerid][i]) {
 
-            CallLocalFunction("DrivingSchool_SelectAnswers", "dd", playerid, i-42);
-
-            PlayerTextDrawColour(playerid, drivingSchool_PTD[playerid][i], -1916144641);
-            PlayerTextDrawShow(playerid, drivingSchool_PTD[playerid][i]);
+            CallLocalFunction("DrivingSchool_SelectAnswers", "ddd", playerid, i-42, PlayerText:playertextid);
         }
     }
+
+    if(playertextid == drivingSchool_PTD[playerid][84]) {
+
+        for(new i = 0; i < sizeof drivingSchool_Answers; i++) {
+
+            if(drivingSchool_Answers[playerid][i] == 1) {
+
+                DrivingSchool_DisplayInterface(playerid, false);
+
+                SendClientMessage(playerid, x_server, "maryland » "c_white"Uspjesno ste prosli pismeni dio polaganja za vozacki.");
+                SendClientMessage(playerid, x_server, "maryland » "c_white"Trenutno idete do poligona, sjeditne u jedno od slobodnih vozila kako bih zapoceli sa polaganjem.");
+
+                SetPlayerPos(playerid, 1279.9238,1557.9868,100.9567);
+                SetPlayerInterior(playerid, 0);
+                SetPlayerVirtualWorld(playerid, 8);
+
+                onPoly[playerid] = true;
+                polyProgress[playerid] = 1;
+
+                polyCPs[playerid][0] = CreateDynamicCP(sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 3.5, 8, -1, playerid);
+                break;
+            }
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid) {
+    if(checkpointid == polyCPs[playerid][polyProgress[playerid]-1]) {
+        if(onPoly[playerid] == true) {
+
+            if(DrivingSchool_IsPlayerInVehicle(playerid)) {
+
+                if(polyProgress[playerid] == 13) {
+
+                    SetPlayerPos(playerid, 1424.2428,1555.2067,10.8503);
+                    SetPlayerInterior(playerid, 16);
+
+                    onPoly[playerid] = false;
+                    PlayerDocuments[playerid][pDriveLicense] = 1;
+
+                    SaveDocuments(playerid);
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste polozili vozacki ispit.");
+
+                }    
+
+                DestroyDynamicCP(polyCPs[playerid][polyProgress[playerid]-1]);
+                polyProgress[playerid]++;
+                polyCPs[playerid][polyProgress[playerid]-1] = CreateDynamicCP(sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 3.5, 8, -1, playerid);
+                
+            }
+        }
+
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
