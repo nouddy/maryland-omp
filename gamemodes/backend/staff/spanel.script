@@ -89,21 +89,21 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner",
+					"Kucu\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu\nActor Banker\nBankomat\nBiznis\nMetro Stanica\nPolicija",
+					"Kucu\nMetro Stanica\nPolicija",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nActor Banker\nBankomat\nBiznis\nSafe Zona\nMetro Stanica\nKontejner",
+					"Kucu\nSve Kuce\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nKontejner",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -197,74 +197,26 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			}
 			case 2:
 			{
-				Dialog_Show(playerid, "kreiraj_bankera", DIALOG_STYLE_INPUT,
-					"Kreiraj bankera",
-					"Unesi skin bankera kojeg kreirate",
-					"Odaberi", "Izlaz");
-			}
-			case 3:
-			{
-
-				SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
-
-				/*
-
-				new idzz = Iter_Free(ATMs);
-				if(idzz == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne mogu kreirati vise ATMs.");
-				ATMData[idzz][atmRX] = ATMData[idzz][atmRY] = 0.0;
-				
-				GetPlayerPos(playerid, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ]);
-				GetPlayerFacingAngle(playerid, ATMData[idzz][atmRZ]);
-
-				ATMData[idzz][atmX] += (2.0 * floatsin(-ATMData[idzz][atmRZ], degrees));
-			    ATMData[idzz][atmY] += (2.0 * floatcos(-ATMData[idzz][atmRZ], degrees));
-			    ATMData[idzz][atmZ] -= 0.3;
-			    
-				ATMData[idzz][atmObjID] = Maryland_CreateDynamicObject(2942, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
-			    if(IsValidDynamicObject(ATMData[idzz][atmObjID]))
-			    {
-			        EditingATMID[playerid] = idzz;
-			        EditDynamicObject(playerid, ATMData[idzz][atmObjID]);
-			    }
-			    
-				#if defined ATM_USE_MAPICON
-				ATMData[idzz][atmIconID] = CreateDynamicMapIcon(ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], 52, 0, .streamdistance = ATM_ICON_RANGE);
-				#endif
-
-				new label_string[64];
-				format(label_string, sizeof(label_string), "ATM (%d)\n\n{FFFFFF}Use {F1C40F}/atm!", idzz);
-				ATMData[idzz][atmLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ] + 0.85, 5.0, .testlos = 1);
-
-				new query[144];
-				mysql_format(SQL, query, sizeof(query), "INSERT INTO bank_atms SET ID=%d, PosX='%f', PosY='%f', PosZ='%f', RotX='%f', RotY='%f', RotZ='%f'", idzz, ATMData[idzz][atmX], ATMData[idzz][atmY], ATMData[idzz][atmZ], ATMData[idzz][atmRX], ATMData[idzz][atmRY], ATMData[idzz][atmRZ]);
-				mysql_tquery(SQL, query);
-
-				Iter_Add(ATMs, idzz);
-			*/
-
-			}
-			case 4:
-			{
 				Dialog_Show(playerid, "kreiraj_biznis", DIALOG_STYLE_INPUT,
 					"Kreiraj bankera",
 					"Upisite cenu za biznis i vrstu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
 					"Odaberi", "Izlaz");
 			}
-			case 5:
+			case 3:
 			{
 				Dialog_Show(playerid, "dialog_safezona", DIALOG_STYLE_INPUT, "Maryland - SafeZona Kreiraj:", "** Upisite zeljenu boju za vasu Safe Zonu.", "Dalje", "Izlaz");
 			}
-			case 6:
+			case 4:
 			{
 				Dialog_Show(playerid, "dialog_odabirstanice", DIALOG_STYLE_INPUT, "Maryland - Metro Kreiraj:", "** Upisite zeljenu rutu za vas metro\n\nMetro stanice: 1 - Ruta1 | 1 - Ruta2 | 2 - Ruta2 | 3 - Ruta3 | 4 - Ruta4 | 5 - Ruta5", "Dalje", "Izlaz");
 
 			}
 
-			case 7: {
+			case 5: {
 
 				Dialog_Show(playerid, "dialog_createPolice", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Upisite zeljeno ime za policiju", "Unesi", "Odustani");
 			}
-			case 8: {
+			case 6: {
 
 				new conID = 0;
 				for( new j = 0; j < MAX_CONTAINERS; j++ ) {
@@ -361,52 +313,6 @@ Dialog:dialog_safezona(const playerid, response, listitem, string:inputtext[])
 	}
 	return (true);
 }
-Dialog:kreiraj_bankera(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
-	if(response)
-	{
-
-		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
-
-		/*
-
-		new id = Iter_Free(Bankers);
-		if(id == -1) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Dostigli ste limit bankera.");
-		new skin;
-		if(sscanf(inputtext, "i", skin)) return 				
-			Dialog_Show(playerid, "kreiraj_bankera", DIALOG_STYLE_INPUT,
-					"Kreiraj bankera",
-					"Unesi skin bankera kojeg kreirate",
-					"Odaberi", "Izlaz");
-		if(!(0 <= skin <= 311)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Ne moze taj skin.");
-
-		BankerData[id][Skin] = skin;
-		GetPlayerPos(playerid, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ]);
-		GetPlayerFacingAngle(playerid, BankerData[id][bankerA]);
-		SetPlayerPos(playerid, BankerData[id][bankerX] + (1.0 * floatsin(-BankerData[id][bankerA], degrees)), BankerData[id][bankerY] + (1.0 * floatcos(-BankerData[id][bankerA], degrees)), BankerData[id][bankerZ]);
-
-		BankerData[id][bankerActorID] = CreateActor(skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
-		if(IsValidActor(BankerData[id][bankerActorID])) SetActorInvulnerable(BankerData[id][bankerActorID], true);
-		
-		#if defined BANKER_USE_MAPICON
-		BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
-		#endif
-
-		new label_string[64];
-		format(label_string, sizeof(label_string), "Radnik banke(%d)\n\n{FFFFFF}Koristite {F1C40F}/banka", id);
-		BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25, 5.0, .testlos = 1);
-
-		new query[144];
-		mysql_format(SQL, query, sizeof(query), "INSERT INTO bankers SET ID=%d, Skin=%d, PosX='%f', PosY='%f', PosZ='%f', PosA='%f'", id, skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
-		mysql_tquery(SQL, query);
-		
-		Iter_Add(Bankers, id);
-		*/
-	}
-	return (true);
-}
 
 Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 {	
@@ -422,7 +328,7 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 						"Nastavi", "Nazad"
 					);				
 			}
-			case 4:
+			case 1:
 			{
 				new id = NearestMetro(playerid);
 
@@ -431,7 +337,7 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 					return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nema metroa u blizini");
 				Dialog_Show(playerid, "dialog_izmenistanicu", DIALOG_STYLE_LIST, "metro Stanica - izmena", "Ruta1\nRuta2\nRuta3\nRuta5\nRuta5\n", "Dalje", "Izlaz");
 			}
-			case 5: {
+			case 2: {
 
 				Dialog_Show(playerid, "dialog_policeEdit", DIALOG_STYLE_LIST, "Police Department - izmena", "Napravi Duty Point\nNapravi Equipment Point\nPromjeni Tip", "Odaberi", "Odustani");
 			}
@@ -514,29 +420,13 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 			}
 			case 3:
 			{
-				Dialog_Show(playerid, "obrisi_bankera", DIALOG_STYLE_INPUT,
-						"Obrisite bankera",
-						"Unesite id bankera kojeg zelite da obrisete.",
-						"Nastavi", "Nazad"
-					);	
-			}
-			case 4:
-			{
-				Dialog_Show(playerid, "obrisi_bankomat", DIALOG_STYLE_INPUT,
-						"Obrisite bankomat",
-						"Unesite id bankomata kojeg zelite da obrisete.",
-						"Nastavi", "Nazad"
-					);	
-			}
-			case 5:
-			{
 				Dialog_Show(playerid, "obrisi_biznis", DIALOG_STYLE_INPUT,
 						"Obrisite biznis",
 						"Unesite id biznisa kojeg zelite da obrisete.",
 						"Nastavi", "Nazad"
 					);
 			}
-			case 6:
+			case 4:
 			{
 				new id = GetNearestSafe(playerid);
 				if(id == -1)
@@ -556,7 +446,7 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 
 			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali safe zonu.");				
 			}
-			case 7:
+			case 5:
 			{
 				new id = NearestMetro(playerid);
 				if(id == -1)
@@ -575,7 +465,7 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 
 			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali metro.");	
 			}
-			case 8:
+			case 6:
 			{
 				if( GetNearestContainer( playerid ) == -1 ) return SendClientMessage(playerid, x_server, "Niste u blizini kontejnera.");
 				new i = GetNearestContainer( playerid );
@@ -605,105 +495,17 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-Dialog:obrisi_bankomat(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
-
-	if(response)
-	{
-
-		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
-
-		/*
-
-		new id;
-		if(sscanf(inputtext, "i", id)) return 				
-				Dialog_Show(playerid, "obrisi_bankomat", DIALOG_STYLE_INPUT,
-						"Obrisite bankomat",
-						"Unesite id bankomata kojeg zelite da obrisete.",
-						"Nastavi", "Nazad"
-					);	
-
-		if(!Iter_Contains(ATMs, id)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Invalid ATM ID.");
-		if(IsValidDynamicObject(ATMData[id][atmObjID])) DestroyDynamicObject(ATMData[id][atmObjID]);
-		ATMData[id][atmObjID] = -1;
-
-		#if defined ATM_USE_MAPICON
-		if(IsValidDynamicMapIcon(ATMData[id][atmIconID])) DestroyDynamicMapIcon(ATMData[id][atmIconID]);
-	    ATMData[id][atmIconID] = -1;
-	    #endif
-
-	    if(IsValidDynamic3DTextLabel(ATMData[id][atmLabel])) DestroyDynamic3DTextLabel(ATMData[id][atmLabel]);
-	    ATMData[id][atmLabel] = Text3D: -1;
-
-		new query[48];
-		mysql_format(SQL, query, sizeof(query), "DELETE FROM bank_atms WHERE ID=%d", id);
-		mysql_tquery(SQL, query);
-
-		*/
-
-	}
-	return (true);
-}
-
-Dialog:obrisi_bankera(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response)
-		return 1;
-
-	if(response)
-	{
-
-		SendClientMessage(playerid, -1, "Trenutno Alajhmanet!");
-
-		/*
-
-		new id;
-		if(sscanf(inputtext, "i", id)) return 				
-			Dialog_Show(playerid, "obrisi_bankera", DIALOG_STYLE_INPUT,
-						"Obrisite bankera",
-						"Unesite id bankera kojeg zelite da obrisete.",
-						"Nastavi", "Nazad"
-					);	
-
-		if(!Iter_Contains(Bankers, id)) return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Invalid banker ID.");
-		if(IsValidActor(BankerData[id][bankerActorID])) DestroyActor(BankerData[id][bankerActorID]);
-		BankerData[id][bankerActorID] = -1;
-		
-		#if defined BANKER_USE_MAPICON
-		if(IsValidDynamicMapIcon(BankerData[id][bankerIconID])) DestroyDynamicMapIcon(BankerData[id][bankerIconID]);
-	    BankerData[id][bankerIconID] = -1;
-	    #endif
-
-	    if(IsValidDynamic3DTextLabel(BankerData[id][bankerLabel])) DestroyDynamic3DTextLabel(BankerData[id][bankerLabel]);
-	    BankerData[id][bankerLabel] = Text3D: -1;
-	    
-		new query[48];
-		mysql_format(SQL, query, sizeof(query), "DELETE FROM bankers WHERE ID=%d", id);
-		mysql_tquery(SQL, query);
-
-		*/
-
-	}
-	return (true);
-}
-
 Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]) {
 
-	print("kreirajkucu dialog");
 	if(response) {
 
 		new id = Iter_Free(iHouse), Float:pPos[3];
 		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
-		print("kreirajkucu dialog prosao");
 		switch(listitem) {
 
 			case 0: {
 
-
-				print("dialog_kreirajkucu case 0");
 
 				house_Price[id] = 50000;
 				house_Type[id] = 1;
@@ -730,7 +532,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 
 			case 1: {
 
-				print("dialog_kreirajkucu case 1");
 				house_Price[id] = 120000;
 				house_Type[id] = 2;
 
@@ -756,7 +557,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		
 			case 2: {
 
-				print("dialog_kreirajkucu case 2");
 				house_Price[id] = 300000;
 				house_Type[id] = 3;
 
@@ -781,11 +581,10 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 			}
 		}
 
-		print("dialog_kreirajkucu prosao case");
-		new zone[28], add[70];
+		new zone[64], add[160];
 		GetPlayer2DZone(playerid, zone, sizeof(zone));
 		format(add, sizeof(add), "%s, Maryland", zone);
-		strmid(house_Adress[id], add, 0, sizeof(add), 255);
+		strmid(house_Adress[id], add, 0, sizeof(add), sizeof(add));
 
 
 		house_Owner[id] = 0;
@@ -800,8 +599,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		house_Drugs[id][1] = 0;
 		house_Drugs[id][2] = 0;
 
-		print("dolazi do kverija");
-
 		new query[900];
 		mysql_format(SQL, query, sizeof query, "INSERT INTO `houses` (`hOwner`, `Price`, `Type`, `Adress`, `Locked`, `PosX`,`PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`,`Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`,`FridgeX`, `FridgeY`, `FridgeZ`, `Int`) \
         VALUES ('%d', '%d', '%d', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f', '%i', '%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%d')", 
@@ -811,8 +608,6 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
         house_Drugs[id][1], house_Drugs[id][2], house_Wardrobe[id][0], house_Wardrobe[id][1], house_Wardrobe[id][2],
         house_Fridge[id][0], house_Fridge[id][1], house_Fridge[id][2], house_Int[id]);
         mysql_tquery(SQL, query, "House_Create", "i", id);
-
-		print("kveri prosao");
 	}
 
 	return 1;

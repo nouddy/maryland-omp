@@ -28,6 +28,15 @@ new e_SPECTATE_SUSPECT[MAX_PLAYERS],
 	e_SPECTATE_STATE[MAX_PLAYERS],
 	bool:e_SPECTATE_ACTIVE[MAX_PLAYERS];
 
+
+enum {
+	e_ASSISTANT = 1,
+	e_STAFF,
+	e_DIRECTOR,
+	e_HEAD_MANAGER,
+	e_OWNER
+}
+
 hook OnGameModeInit()
 {
 	print("staff/staff.script loaded");
@@ -63,7 +72,7 @@ hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
-	if(PlayerInfo[playerid][Staff] >= 1)
+	if(GetPlayerStaffLevel(playerid) >= e_ASSISTANT)
 	{
 		SetPlayerPosFindZ(playerid, fX, fY, fZ);
 		SetPlayerInterior(playerid, 0);
@@ -129,7 +138,7 @@ YCMD:sc(playerid, const string: params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!.", "!", BOXCOLOR_RED);
 
 	if (isnull(params))
@@ -154,7 +163,7 @@ YCMD:sveh(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new Float:x, Float:y, Float:z;
@@ -210,7 +219,7 @@ YCMD:goto(playerid, params[],help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new giveplayerid, giveplayer[MAX_PLAYER_NAME];
@@ -245,7 +254,7 @@ YCMD:cc(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "/sc [Tekst]", "?", BOXCOLOR_BLUE);
 
 	for(new cc; cc < 110; cc++)
@@ -272,7 +281,7 @@ YCMD:fv(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new vehicleid = GetPlayerVehicleID(playerid);
@@ -293,7 +302,7 @@ YCMD:gethere(playerid, const params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new targetid = INVALID_PLAYER_ID;
@@ -336,7 +345,7 @@ YCMD:nitro(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	AddVehicleComponent(GetPlayerVehicleID(playerid), 1010);
@@ -353,7 +362,7 @@ YCMD:jetpack(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
@@ -371,7 +380,7 @@ YCMD:setskin(playerid, const string: params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	static
@@ -408,7 +417,7 @@ YCMD:xgoto(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new Float:x, Float:y, Float:z;
@@ -439,7 +448,7 @@ YCMD:setint(const playerid, params[], help)
         SendClientMessage(playerid, x_ltorange, "[Syntax]: {ffffff}Postavka igracevog interijera.");
         return 1;
     }
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new id,int;
@@ -455,7 +464,7 @@ YCMD:setint(const playerid, params[], help)
 
 YCMD:setvw(const playerid, params[], help)
 {
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 	
 	new id,vw;
@@ -482,8 +491,8 @@ YCMD:setstaff(playerid, const string: params[], help)
         return 1;
     }
 
-	if(!IsPlayerAdmin(playerid))
-		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+	if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+		return notification.Show(playerid, "Greska", "Samo community manager moze ovo!", "!", BOXCOLOR_RED);
 
 	static
 		targetid,
@@ -527,8 +536,8 @@ YCMD:setstaff(playerid, const string: params[], help)
 
 YCMD:restart(playerid, const string: params[], help)
 {
-	if(!IsPlayerAdmin(playerid))
-		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+	if(!IsPlayerAdmin(playerid) && GetPlayerStaffLevel(playerid) < e_OWNER)
+		return notification.Show(playerid, "Greska", "Samo owner moze ovo!", "!", BOXCOLOR_RED);
 
 	SendRconCommand("gmx");
 
@@ -543,7 +552,7 @@ YCMD:slap(playerid, const params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid) < 1)
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new targetid;
@@ -573,7 +582,7 @@ YCMD:givemoney(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid)< 4)
+	if (GetPlayerStaffLevel(playerid)< e_HEAD_MANAGER)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new targetid, cash;
@@ -630,7 +639,7 @@ YCMD:sm(playerid, params[], help)
         return 1;
     }
 
-	if (GetPlayerStaffLevel(playerid)< 2)
+	if (GetPlayerStaffLevel(playerid)< e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
 
 	new mess[128], chat_str[286];
@@ -658,4 +667,143 @@ YCMD:sm(playerid, params[], help)
 		Command_ReProcess(playerid, params, true);
 	}
 	return 1;
+}
+
+
+//////////////////////////////////////////////////////////////
+// Player punishments
+
+stock AddPlayerWarn(playerid, const  reason[]) {
+
+	new query[512], playercharid, warn_expire;
+	playercharid = GetCharacterSQLID(playerid);
+	warn_expire = gettime() + 30 * 24 * 60 * 60; // 30 days
+
+	mysql_format(SQL, query, sizeof(query), "INSERT INTO warns (character_id, warn_date, warn_reason, warn_expire) VALUES (%d, NOW(), '%s', FROM_UNIXTIME(%d));", playercharid, reason, warn_expire);
+	mysql_tquery(SQL, query);
+
+	//Check how many warns player have
+	CheckPlayerWarns(playerid);
+
+}
+
+// Check for warns - Proveriti da li warn expire vraca kao string ili int.
+
+stock CheckPlayerWarns(playerid) {
+
+	new q[512], playercharid;
+	playercharid = GetCharacterSQLID(playerid);
+
+	mysql_format(SQL, q, sizeof(q), "SELECT COUNT(*) AS warn_count FROM warns WHERE character_id = %d AND warn_expire > NOW() AND active = 1;", playercharid);
+	mysql_tquery(SQL, q, "OnPlayerWarnCountCheck", "i", playerid);
+
+}
+
+forward OnPlayerWarnCountCheck(playerid, warn_count);
+public OnPlayerWarnCountCheck(playerid, warn_count) {
+
+	if(warn_count >= 5) {
+		// BanPlayer(playerid, "Previse warnova (5/5) u 30 dana.");
+		//Dodati funkciju za ban i ispis banovanih si zbog previse warnova 5/5, reason, vreme
+	}
+}
+
+stock BanPlayer(playerid, const reason[], bool:perma = false, timeban = 0) {
+
+	new q[512], playercharid;
+	playercharid = GetCharacterSQLID(playerid);
+
+	if(perma) {
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, is_permanent) VALUES (%d, '%s', NOW(), 1)", playercharid, reason);
+	} else {
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_expire) VALUES (%d, '%s', NOW(), NOW() + %d)", playercharid, reason, timeban);
+	}
+
+	mysql_tquery(SQL, q);
+
+	Kick(playerid);
+}
+
+stock BanPlayerIP(playerid, const reason[], bool:perma = false, timeban = 0) {
+
+	new q[512], playercharid, playerip[16];
+	playercharid = GetCharacterSQLID(playerid);
+	GetPlayerIp(playerid, playerip, sizeof(playerip));
+
+	if(perma) {
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, is_permanent) VALUES (%d, '%s', NOW(), '%s', 1)", playercharid, reason, playerip);
+	} else {
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, ban_expire) VALUES (%d, '%s', NOW(), '%s', NOW() + %d)", playercharid, reason, playerip, timeban);
+	}
+
+	mysql_tquery(SQL, q);
+
+	Kick(playerid);
+}
+
+stock IsIPBanned(playerid) {
+	new q[256], playerip[16];
+	GetPlayerIp(playerid, playerip, sizeof(playerip));
+
+	mysql_format(SQL, q, sizeof(q), "SELECT * FROM bans WHERE ban_ip = '%s' AND (ban_expire > NOW() OR is_permanent = 1);", playerip);
+	mysql_tquery(SQL, q, "OnCheckIPBan", "i", playerid);
+}
+
+forward OnCheckIPBan(playerid);
+public OnCheckIPBan(playerid) {
+
+	// If is ip banned kick from nnnn
+	SendClientMessage(playerid, x_red, "maryland // "c_white"Mrs kuci.");
+	Kick(playerid);
+}
+
+
+//Punishments commands
+
+YCMD:warn(playerid, params[], help)
+{
+	if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/warn [id] [reason]");
+	
+	new targetid, reason[128];
+	if(sscanf(params, "us[128]", targetid, reason)) return SendClientMessage(playerid, x_red, "maryland // "c_white"Koristi /warn [id] [reason]");
+
+	AddPlayerWarn(targetid, reason);
+	SendClientMessage(playerid, x_blue, "maryland // "c_white"Uspesno si postavio igracu %s warn.", ReturnPlayerName(targetid));
+
+	return (true);
+}
+
+YCMD:ban(playerid, params[], help)
+{
+	if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/ban [id] [reason] [vreme(minuti) / perma]");
+
+	new targetid, reason[128], ban_time[16];
+	if(sscanf(params, "us[128]s[16]", targetid, reason, ban_time)) return SendClientMessage(playerid, x_red, "maryland // "c_white"Koristi /ban [id] [reason] [vreme(minuti) / perma]");
+
+	if(strcmp(ban_time, "perma", true) == 0) {
+		BanPlayer(targetid, reason, true);
+	} else {
+		new timeban = strval(ban_time);
+		BanPlayer(targetid, reason, false, timeban);
+	}
+
+	return true;
+}
+
+
+YCMD:banip(playerid, params[], help)
+{
+	if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/banip [id] [reason] [vreme(minuti) / perma]");
+
+	new targetid, reason[128], ban_time[16];
+	if(sscanf(params, "us[128]s[16]", targetid, reason, ban_time)) return SendClientMessage(playerid, x_red, "maryland // "c_white"Koristi /banip [id] [reason] [vreme(minuti) / perma]");
+
+	if(strcmp(ban_time, "perma", true) == 0) {
+		BanPlayerIP(targetid, reason, true);
+	} else {
+		new timeban = strval(ban_time);
+		BanPlayerIP(targetid, reason, false, timeban);
+	}
+
+	return true;
 }

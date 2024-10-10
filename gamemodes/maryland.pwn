@@ -19,23 +19,6 @@
  */
 
 
-
- /* 
-		? TO DO LIST FOR REWORK:
-		! Srediti login/reg do kraja i izmeniti ostatak funckija na engleski i dialoge, takodje izbaciti visak dialoga jer postoji...
-		! Bazu koju sam ja pushao dodati u nju sta fali (business, re_centar itd jer nisi pushao bazu zadnju kalega.)
-
-		* Izmeniti zones.inc po gradovima koji pripadaju serveru.
-		* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
-		* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
-		* Srediti help komand za svaku komandu koja ima dodatne parametre.
-		* Dodati provere za death i uraditi custom dmg.
-		* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
-		* Fixati house bulgrary
-
-
- */
-
 #define YSI_NO_HEAP_MALLOC
 
 #define CGEN_MEMORY 80000
@@ -466,12 +449,12 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //* Bitno jako da bude medju prvima
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
-#include "backend/assets/custommarkers.inc"						//* Custom markers
-#include "backend/finance/currency.pwn"							//* Currency
+#include "backend/assets/custommarkers.inc"							//* Custom markers
+#include "backend/finance/currency.pwn"								//* Currency
 
 //-------------------------------------------------------------------------------------------------------- Assets
-#include "backend/assets/proxdetect.asset" 						//* ProxDetector
-#include "backend/assets/anims.asset"							//* Anim preload
+#include "backend/assets/proxdetect.asset" 							//* ProxDetector
+#include "backend/assets/anims.asset"								//* Anim preload
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/assets/end/do-not-look.temp" 
@@ -485,9 +468,9 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/custom_markers.asset"						//* Markeri
-#include "backend/assets/time.asset"						//* Time calculation
+#include "backend/assets/time.asset"								//* Time calculation
 //-------------------------------------------------------------------------------------------------------- Documentation
-#include "backend/documentation/playerdocuments.script"			//* Dokumenta
+#include "backend/documentation/playerdocuments.script"				//* Dokumenta
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/documentation/end/do-not-look.temp"
@@ -726,6 +709,15 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	- Odraditi functions.stock gdje ce se kreirati funkcije koje ce se koristiti!
 	- PlayerLogged fixati, ne rade cuvanja zbog njega
 	- Za open verziju zakljucati ljude unutar Marylanda sa custom streamer zonama.
+	! Srediti login/reg do kraja i izmeniti ostatak funckija na engleski i dialoge, takodje izbaciti visak dialoga jer postoji...
+	! Bazu koju sam ja pushao dodati u nju sta fali (business, re_centar itd jer nisi pushao bazu zadnju kalega.)
+
+	* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
+	* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
+	* Srediti help komand za svaku komandu koja ima dodatne parametre.
+	* Dodati provere za death i uraditi custom dmg.
+	* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
+	* Fixati house bulgrary
 
 */
 

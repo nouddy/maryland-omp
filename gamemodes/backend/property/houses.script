@@ -30,7 +30,7 @@ new house_ID[MAX_HOUSES],
 	   house_Owner[MAX_HOUSES],
 	   house_Price[MAX_HOUSES],
 	   house_Type[MAX_HOUSES],
-	   house_Adress[MAX_HOUSES][70],
+	   house_Adress[MAX_HOUSES][160],
 
 	   bool:house_Locked[MAX_HOUSES],
 
