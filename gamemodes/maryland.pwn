@@ -502,6 +502,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Finances
 #include "frontend/textdraws/Bank/BankUI.pwn"
 #include "backend/finance/Accounts.pwn"
+#include "backend/finance/jewlery.pwn"
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.temp"
 
@@ -651,11 +652,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
-// #include "frontend/interior/login_map.map"							//* Login Soba Mapa
 
 #include "frontend/interior/levis-int.map"							//* Levis (12)
-#include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
-#include "frontend/exterior/train_tut.map"						    //* Egypt Hotel (14)
+//#include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
+#include "frontend/exterior/train_tut.map"						    //* Train Tut (14)
 #include "frontend/interior/house-int.map"						    //* House Int (15)
 #include "frontend/interior/driving-school-int.map"					//* Driving_School (16)
 #include "frontend/interior/mob_int.map"						    //* Mob Int (17)
@@ -718,6 +718,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	* Dodati provere za death i uraditi custom dmg.
 	* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
 	* Fixati house bulgrary
+	* Sve onplayerkeystatechange prebaciti u hook u svakom sistemu posebno jer ovako se izgubis
 
 */
 
