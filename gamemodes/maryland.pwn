@@ -688,7 +688,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"								//* Chat Stock
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
-#include "backend/stocks/variable.stock"							//* Variable stock rest
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
@@ -719,6 +718,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 	* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
 	* Fixati house bulgrary
 	* Sve onplayerkeystatechange prebaciti u hook u svakom sistemu posebno jer ovako se izgubis
+	* Dodati proveru za warn i ban na login da ne moze uci na srv ako je banned
+	* napraviti player_jewrely tabelu posto imamo bank accounts za valute i player crypto za kripto ovo ce biti za (silver,gold)
 
 */
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2024 at 06:15 AM
+-- Generation Time: Oct 18, 2024 at 05:35 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -97,6 +97,14 @@ CREATE TABLE `bans` (
   `is_permanent` tinyint(1) DEFAULT 0,
   `ban_ip` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bans`
+--
+
+INSERT INTO `bans` (`id`, `character_id`, `ban_reason`, `ban_date`, `ban_expire`, `is_permanent`, `ban_ip`) VALUES
+(1, 4, 'zato', '2024-10-18 15:07:53', '2024-10-18 15:07:54', 0, NULL),
+(2, 4, 'testiram', '2024-10-18 15:09:24', '2024-10-18 15:12:24', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -489,6 +497,17 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `player_jewlery`
+--
+
+CREATE TABLE `player_jewlery` (
+  `character_id` int(11) NOT NULL,
+  `Gold` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `player_property`
 --
 
@@ -504,7 +523,7 @@ CREATE TABLE `player_property` (
 --
 
 INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VALUES
-(4, 0, 1, 0);
+(4, 5, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -617,7 +636,8 @@ INSERT INTO `re_centar` (`re_BCenterID`, `re_BCenterOwner`, `re_BCenterName`, `r
 (1, 3, 'Nepoznato', 4, 1, 1, 1826.06, -1286.32, 131.754, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 1827.96, -1302.59, 131.739, 3.5893),
 (2, 4, 'Nepoznato', 9, 2, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942),
 (3, 12, 'Nepoznato', 9, 3, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 150, 2279.2, 2183.56, 103.916, 0.2942),
-(4, 14, 'Nepoznato', 9, 4, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942);
+(4, 14, 'Nepoznato', 9, 4, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942),
+(5, 4, 'Nepoznato', 9, 5, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942);
 
 -- --------------------------------------------------------
 
@@ -647,6 +667,7 @@ CREATE TABLE `safezones` (
 CREATE TABLE `vehicles` (
   `vID` int(11) NOT NULL,
   `vOwner` int(11) NOT NULL DEFAULT 0,
+  `vOwnerType` int(11) NOT NULL DEFAULT 0,
   `vModel` int(11) NOT NULL DEFAULT 0,
   `Color1` int(11) NOT NULL DEFAULT 0,
   `Color2` int(11) NOT NULL DEFAULT 0,
@@ -672,8 +693,8 @@ CREATE TABLE `vehicles` (
 -- Dumping data for table `vehicles`
 --
 
-INSERT INTO `vehicles` (`vID`, `vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) VALUES
-(2, 14, 451, 211, 211, 'Casey_Skendy', 950.804, -1759.56, 13.2938, 347.9, 1720016265, 100, 0, 0, 100, 0, 1, 1, 0, 1, 1);
+INSERT INTO `vehicles` (`vID`, `vOwner`, `vOwnerType`, `vModel`, `Color1`, `Color2`, `vPlate`, `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) VALUES
+(2, 14, 0, 451, 211, 211, 'Casey_Skendy', 950.804, -1759.56, 13.2938, 347.9, 1720016265, 100, 0, 0, 100, 0, 1, 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -689,14 +710,6 @@ CREATE TABLE `warns` (
   `warn_expire` datetime NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `warns`
---
-
-INSERT INTO `warns` (`id`, `character_id`, `warn_date`, `warn_reason`, `warn_expire`, `active`) VALUES
-(1, 1, '2024-10-10 21:09:52', 'Nema', '2024-10-11 19:09:20', 1),
-(2, 1, '2024-10-10 21:11:04', 'Nema', '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -833,6 +846,12 @@ ALTER TABLE `player_electronic`
   ADD UNIQUE KEY `player_id` (`character_electronics`);
 
 --
+-- Indexes for table `player_jewlery`
+--
+ALTER TABLE `player_jewlery`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
 -- Indexes for table `player_property`
 --
 ALTER TABLE `player_property`
@@ -896,7 +915,7 @@ ALTER TABLE `bankaccounts`
 -- AUTO_INCREMENT for table `bans`
 --
 ALTER TABLE `bans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `benches`
@@ -968,7 +987,7 @@ ALTER TABLE `re_business`
 -- AUTO_INCREMENT for table `re_centar`
 --
 ALTER TABLE `re_centar`
-  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `safezones`

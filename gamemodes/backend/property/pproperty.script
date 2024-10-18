@@ -28,6 +28,17 @@ enum p_PROPERTY_DATA {
 }
 new PlayerProperty[MAX_PLAYERS][p_PROPERTY_DATA];
 
+hook OnPlayerConnect(playerid)
+{
+    
+    // Business Centre
+    PlayerProperty[playerid][BCenter] = 0;
+    // House Script
+    player_House[playerid] = -1;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnCharacterLoaded(playerid)
 {
     new q[150];

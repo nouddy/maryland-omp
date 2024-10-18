@@ -45,6 +45,14 @@ new PlayerDocuments[MAX_PLAYERS][PlayerDocumentsz];
 
 hook OnPlayerConnect(playerid) {
 
+    // Documents of player
+    PlayerDocuments[playerid][pNationalID] = 0;
+    PlayerDocuments[playerid][pPassport] = 0;
+    PlayerDocuments[playerid][pDriveLicense] = 0;
+    PlayerDocuments[playerid][pMotoLicense] = 0;
+    PlayerDocuments[playerid][pBoatLicense] = 0;
+    PlayerDocuments[playerid][pGunLicense] = 0;
+    PlayerDocuments[playerid][pLifeInsurance] = -1;
     PlayerHasLifeInsurance[playerid] = false;
 
     return Y_HOOKS_CONTINUE_RETURN_1;

@@ -1009,6 +1009,8 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][lastPos][0] = 0.0;
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
+
+	PlayerInfo[playerid][SQLID] = 0;
 }
 
 hook OnPlayerSpawn(playerid) {

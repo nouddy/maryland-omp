@@ -46,7 +46,8 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-
+	PlayerInfo[playerid][Staff] = 0;
+	
 	return 1;
 }
 
@@ -703,8 +704,7 @@ forward OnPlayerWarnCountCheck(playerid, warn_count);
 public OnPlayerWarnCountCheck(playerid, warn_count) {
 
 	if(warn_count >= 5) {
-		// BanPlayer(playerid, "Previse warnova (5/5) u 30 dana.");
-		//Dodati funkciju za ban i ispis banovanih si zbog previse warnova 5/5, reason, vreme
+		BanPlayer(playerid, "Previse warnova (5/5) u 30 dana.");
 	}
 }
 

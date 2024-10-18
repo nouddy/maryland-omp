@@ -43,6 +43,14 @@ hook OnGameModeInit()
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerConnect(playerid)
+{
+	//Customs Vrata itd
+    InFrontOfService[playerid] = false;
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerSpawn(playerid)
 {
     SetPlayerMapIcon(playerid, 2, customsDoorX, customsDoorY, customsDoorZ, 27, 0, MAPICON_GLOBAL); // Ikonica na mapi

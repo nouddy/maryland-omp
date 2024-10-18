@@ -83,7 +83,8 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-
+    InSafeZone[playerid] = false;
+	
     return 1;
 }
 
@@ -292,4 +293,13 @@ hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 	}
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+GetNearestSafe(playerid)
+{
+    foreach(new i : SafeZone)
+	{
+        if( IsPlayerInDynamicArea(playerid, SafeZone[i][safeID])) { return i; }
+    }
+	return -1;
 }

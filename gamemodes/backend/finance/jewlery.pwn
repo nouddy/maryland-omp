@@ -20,6 +20,13 @@
 
  #include <ysilib\YSI_Coding\y_hooks>
 
+enum E_JEWLERY {
+    
+    e_Gold
+}
+
+new CharacterJewlery[MAX_PLAYERS][E_JEWLERY];
+
  hook OnGameModeInit() {
 
     print("finance/jewlery.pwn loaded");
@@ -29,6 +36,35 @@
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+hook OnCharacterLoaded(playerid)
+{   
+    new q[267];
+    mysql_format(SQL, q, sizeof(q), "SELECT * FROM player_jewlery WHERE character_id = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, q, "SQL_JewleryLoad", "i", playerid);
+
+	return 1;
+}
+
+forward SQL_JewleryLoad(playerid);
+public SQL_JewleryLoad(playerid)
+{
+    static rows;
+    cache_get_row_count(rows);
+    if(!rows) 
+    {
+        new q[300];
+        mysql_format(SQL, q, sizeof(q), 
+           "INSERT INTO `player_jewlery` (character_id, Gold) \ 
+            VALUES('%d', '0')", GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+    }
+    else 
+    {
+        cache_get_value_name_int(0, "Gold", CharacterJewlery[playerid][e_Gold]);
+    }
+}
+
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
@@ -49,4 +85,20 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+//* Jewlery save
+stock SaveCharacterJewlery(playerid)
+{
+    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
+    {
+        new query[500];
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_jewlery` SET `Gold` = '%d' WHERE `character_id` = '%d'",
+            CharacterJewlery[playerid][e_Gold],
+            GetCharacterSQLID(playerid));
+        mysql_tquery(SQL,query);      
+    }
+
+    return true;
 }

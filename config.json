@@ -8,10 +8,10 @@
         "web_server_bind": ""
     },
     "banners": {
-        "dark": "",
-        "light": ""
+        "dark": "https://i.ibb.co/GQnPtxm/cover.jpg",
+        "light": "https://i.ibb.co/GQnPtxm/cover.jpg"
     },
-    "logo": "",
+    "logo": "https://i.ibb.co/dJnpWFt/transparent.png",
     "discord": {
         "invite": "https://discord.gg/CzaAhXjPak"
     },
