@@ -49,7 +49,7 @@ new playerJob[MAX_PLAYERS],
 new jobInfo[MAX_JOBS][e_JOB_DATA] = {
 
     {INVALID_JOB_ID, "UNDEFINED:", JOB_QUALIFICATION_NONE, {0.00, 0.00, 0.00}, {0.00, 0.00, 0.00}, 24, -1, INVALID_BUSINESS_ID, -1, -1},
-    {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {1088.4877,-1185.4963,21.9630}, {1103.1801,-1184.1455,18.3704}, 24, 2500, INVALID_BUSINESS_ID, 3, 525},
+    {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {1088.4877,-1185.4963,21.9630}, {1103.1801,-1184.1455,18.3704}, 50, 2500, INVALID_BUSINESS_ID, 3, 525},
     {JOB_BUS_DRIVER, "Vozac Autobusa", JOB_QUALIFICATION_HIGH_SCHOOL, {1752.5388,-1894.2367,13.5574}, {1753.8374,-1885.9547,13.5571}, 253, 3500, INVALID_BUSINESS_ID, 2, 431}
 };
 
@@ -238,6 +238,7 @@ YCMD:jobs(playerid, params[], help)
         format(dialogStrg, sizeof dialogStrg, " >> "c_white"%d | %s\n", jobInfo[i][jobID], jobInfo[i][jobName]);
 
         Dialog_Show(playerid, "dialog_JobList", DIALOG_STYLE_LIST, ">> Poslovi", dialogStrg, "OK", "");
+        break;
 
     }
 
