@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2024 at 10:01 AM
+-- Generation Time: Oct 12, 2024 at 06:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,6 +54,49 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (20, 'Darko_Jovanovic', 'durant123', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
 (21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
 (22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bankaccounts`
+--
+
+CREATE TABLE `bankaccounts` (
+  `AccountID` int(11) NOT NULL,
+  `OwnerID` int(11) NOT NULL,
+  `OwnerType` enum('Player','Faction','Bussiness','Government') NOT NULL DEFAULT 'Player',
+  `Dollar` float NOT NULL DEFAULT 0,
+  `Euro` float NOT NULL DEFAULT 0,
+  `Pound` float NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bankaccounts`
+--
+
+INSERT INTO `bankaccounts` (`AccountID`, `OwnerID`, `OwnerType`, `Dollar`, `Euro`, `Pound`) VALUES
+(12, 7, 'Player', 111, 222, 333),
+(13, 7, 'Player', 444, 555, 666),
+(14, 2, 'Faction', 123, 456, 789),
+(15, 11, 'Player', 123, 456, 789),
+(16, 11, 'Player', 213, 21412, 2151),
+(17, 1, 'Faction', 213, 4421, 21412400);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bans`
+--
+
+CREATE TABLE `bans` (
+  `id` int(11) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  `ban_reason` varchar(255) DEFAULT NULL,
+  `ban_date` datetime NOT NULL,
+  `ban_expire` datetime DEFAULT NULL,
+  `is_permanent` tinyint(1) DEFAULT 0,
+  `ban_ip` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -285,7 +328,13 @@ CREATE TABLE `houses` (
 
 INSERT INTO `houses` (`ID`, `hOwner`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, `PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`, `Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`, `FridgeX`, `FridgeY`, `FridgeZ`, `Int`) VALUES
 (1, 4, 120000, 2, 'Brooklyn Park, Maryland', 0, 878.045, -1333.87, 13.5469, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
-(2, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 1005.29, -1137.52, 23.6498, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15);
+(3, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 791.401, -1342.12, 13.5469, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
+(4, 0, 300000, 3, 'Brooklyn Park, Maryland', 0, 853.715, -1313.9, 13.5469, 2324.38, -1148.48, 1050.71, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 12),
+(5, 0, 300000, 3, 'Dares Beach, Maryland', 0, 553.541, -1739.35, 12.6926, 2324.38, -1148.48, 1050.71, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 12),
+(6, 0, 120000, 2, 'Downtown Los Santos, Maryland', 0, 1483.01, -1305.47, 13.591, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
+(7, 0, 120000, 2, 'Cromwell Valley, Maryland', 0, 1883.17, -1142.73, 24.0543, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15),
+(8, 0, 300000, 3, 'Rockville Maryland', 0, 481.436, -1362.14, 18.7266, 2324.38, -1148.48, 1050.71, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 12),
+(9, 0, 50000, 1, 'Commerce, Maryland', 0, 1459.18, -1451.79, 13.3689, 224.28, 1289.19, 1082.14, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 1);
 
 -- --------------------------------------------------------
 
@@ -629,6 +678,29 @@ INSERT INTO `vehicles` (`vID`, `vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `warns`
+--
+
+CREATE TABLE `warns` (
+  `id` int(11) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  `warn_date` datetime NOT NULL,
+  `warn_reason` varchar(255) NOT NULL DEFAULT 'Nema',
+  `warn_expire` datetime NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `warns`
+--
+
+INSERT INTO `warns` (`id`, `character_id`, `warn_date`, `warn_reason`, `warn_expire`, `active`) VALUES
+(1, 1, '2024-10-10 21:09:52', 'Nema', '2024-10-11 19:09:20', 1),
+(2, 1, '2024-10-10 21:11:04', 'Nema', '0000-00-00 00:00:00', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `winter_settings`
 --
 
@@ -665,34 +737,6 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Casey_Skendy', 0, 0, 0),
 ('Darko_Jovanovic', 0, 0, 0);
 
-
---
--- Table structure for table `bankaccounts`
---
-CREATE TABLE IF NOT EXISTS `bankaccounts` (
-  `AccountID` int NOT NULL AUTO_INCREMENT,
-  `OwnerID` int NOT NULL,
-  `OwnerType` enum('Player','Faction','Bussiness','Government') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Player',
-  `Dollar` float NOT NULL DEFAULT '0',
-  `Euro` float NOT NULL DEFAULT '0',
-  `Pound` float NOT NULL DEFAULT '0',
-  PRIMARY KEY (`AccountID`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `bankaccounts`
---
-
-INSERT INTO `bankaccounts` (`AccountID`, `OwnerID`, `OwnerType`, `Dollar`, `Euro`, `Pound`) VALUES
-(12, 7, 'Player', 111, 222, 333),
-(13, 7, 'Player', 444, 555, 666),
-(14, 2, 'Faction', 123, 456, 789),
-(15, 11, 'Player', 123, 456, 789),
-(16, 11, 'Player', 213, 21412, 2151),
-(17, 1, 'Faction', 213, 4421, 21412400);
-COMMIT;
-
-
 --
 -- Indexes for dumped tables
 --
@@ -702,6 +746,18 @@ COMMIT;
 --
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `bankaccounts`
+--
+ALTER TABLE `bankaccounts`
+  ADD PRIMARY KEY (`AccountID`);
+
+--
+-- Indexes for table `bans`
+--
+ALTER TABLE `bans`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `benches`
@@ -815,6 +871,12 @@ ALTER TABLE `vehicles`
   ADD KEY `vCharacterID` (`vOwner`);
 
 --
+-- Indexes for table `warns`
+--
+ALTER TABLE `warns`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -823,6 +885,18 @@ ALTER TABLE `vehicles`
 --
 ALTER TABLE `accounts`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `bankaccounts`
+--
+ALTER TABLE `bankaccounts`
+  MODIFY `AccountID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `bans`
+--
+ALTER TABLE `bans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `benches`
@@ -864,7 +938,7 @@ ALTER TABLE `faction_police`
 -- AUTO_INCREMENT for table `houses`
 --
 ALTER TABLE `houses`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -907,6 +981,12 @@ ALTER TABLE `safezones`
 --
 ALTER TABLE `vehicles`
   MODIFY `vID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `warns`
+--
+ALTER TABLE `warns`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

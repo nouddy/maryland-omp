@@ -91,7 +91,7 @@ YCMD:setplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, Float:ammount, moneyType;
-    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /setplayermoney [PlayerID/Name][Ammount](Type - 0,1,2)");
+    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /setplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
 
     new Float:iReturn = SetPlayerMoney(playerid, ammount, MONEY_TYPE:moneyType);
     SendClientMessage(playerid, x_green, "DEBUG: SetPlayerMoney returned %f", iReturn);
@@ -104,7 +104,7 @@ YCMD:giveplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, Float:ammount, moneyType;
-    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /giveplayermoney [PlayerID/Name][Ammount](Type - 0,1,2)");
+    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /giveplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
 
     new Float:iReturn = GivePlayerMoney(playerid, ammount, MONEY_TYPE:moneyType);
     SendClientMessage(playerid, x_green, "DEBUG: GivePlayerMoney returned %f", iReturn);
@@ -117,7 +117,7 @@ YCMD:getplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, moneyType;
-    if(sscanf(params, "uD("#MONEY_TYPE_DOLLAR")", playerid, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /getplayermoney [PlayerID/Name](Type - 0,1,2)");
+    if(sscanf(params, "uD("#MONEY_TYPE_DOLLAR")", playerid, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /getplayermoney [PlayerID/Name](Type - 1,2,3)");
 
     new Float:money = GetPlayerMoney(playerid, MONEY_TYPE:moneyType);
 
