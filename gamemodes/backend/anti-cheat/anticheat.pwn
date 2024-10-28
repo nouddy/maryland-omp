@@ -30,6 +30,45 @@ const SFKA_RPC_GIVETAKEDAMAGE = 115;
 
 static g_sNextExploitAttemptLogTick[MAX_PLAYERS] = { 0, ... };
 
+
+//* Raknet custom
+// Packet/RPC IDs:
+const ID_DRIVER_SYNC = (200);
+const ID_RCON_COMMAND = (201);
+const ID_ONFOOT_SYNC = (207);
+const ID_PASSENGER_SYNC = (211);
+const ID_AIM_SYNC = (203);
+const ID_UNOCCUPIED_SYNC = (209);
+
+const RPC_GIVETAKEDAMAGE = (115);
+
+// Lengths of the packets:
+const DRIVER_SYNC_BITS = (512);
+const RCON_COMMAND_BITS = (512);
+const ONFOOT_SYNC_BITS = (552);
+const PASSENGER_SYNC_BITS = (200);
+const AIM_SYNC_BITS = (256);
+const UNOCCUPIED_SYNC_BITS = (544);
+
+const GIVETAKEDAMAGE_BITS = (113);
+
+stock BS_IsDataLengthValid(BitStream:bs, packetid) {
+    new numberOfBits;
+
+    BS_GetNumberOfBitsUsed(bs, numberOfBits);
+
+    switch(packetid) {
+    case ID_DRIVER_SYNC: return (numberOfBits == DRIVER_SYNC_BITS);
+    case ID_RCON_COMMAND: return (48 <= numberOfBits <= 2088);
+    case ID_ONFOOT_SYNC: return (numberOfBits == ONFOOT_SYNC_BITS);
+    case ID_PASSENGER_SYNC: return (numberOfBits == PASSENGER_SYNC_BITS);
+    case ID_AIM_SYNC: return (numberOfBits == AIM_SYNC_BITS);
+    case ID_UNOCCUPIED_SYNC: return (numberOfBits == UNOCCUPIED_SYNC_BITS);
+    }
+    return 1;
+}
+//
+
 IRPC:SFKA_RPC_GIVETAKEDAMAGE(playerid, BitStream:bs) {
 	if (!BS_IsDataLengthValid(bs, SFKA_RPC_GIVETAKEDAMAGE)) {
 		return 0;
@@ -92,7 +131,7 @@ stock Altchat_Control(playerid) {
 	return (true);
 }
 
-SendAltChatMessage(playerid, message[])
+SendAltChatMessage(playerid, const message[])
 {
 	for(new i = 0; i < MAX_LINES; i ++) 
 	{
@@ -112,11 +151,11 @@ SendAltChatMessage(playerid, message[])
 	return 1;
 }
 	
-p_sendboxmessage(msg[]) 
+p_sendboxmessage(const msg[]) 
 {
 	foreach(new i : Player) 
 	{
-	    if ( (PlayerInfo[ i ][ Staff ] > 0 ) && ALTPoruke[ i ] == true ) 
+	    if ( (GetPlayerStaffLevel(i) > 0 ) && ALTPoruke[ i ] == true ) 
 		{
  			SendAltChatMessage(i, msg);
 	    }
@@ -124,11 +163,12 @@ p_sendboxmessage(msg[])
 	return 1;
 }
 
-stock ACKick(playerid, const code[]) {
+stock ACKick(playerid, const code[])
+{
 
-   if(playerid == INVALID_PLAYER_ID) return false;
+   	if(playerid == INVALID_PLAYER_ID) return false;
 
-    new tmp_str[288];
+	new tmp_str[288];
 	format(tmp_str, sizeof tmp_str, "~b~[ML:AC]_~w~Igrac_~b~%s[%d]_~w~je_kickovan_sa_servera__~b~[%s]", ReturnPlayerName(playerid), playerid, code);
 	p_sendboxmessage(tmp_str);
 
@@ -163,16 +203,16 @@ public OnCheatDetected(playerid, const ip_address[], type, code) {
 
     switch(code)
     {
-		case 0: if(!IsPlayerPaused(playerid) && PlayerInfo[playerid][pLearned] == 0 && PlayerInfo[playerid][Staff] < 4) ACKick(playerid, "#0 AirBreak (on foot)");//bio warning //#0 AirBreak (on foot)
-		case 1: if(!IsPlayerPaused(playerid) && PlayerInfo[playerid][Staff] < 4) ACKick(playerid, "#1 AirBreak (in vehicle)");//bio warning //#1 AirBreak (in vehicle)
-		case 2: if(!IsPlayerPaused(playerid) &&  PlayerInfo[playerid][Staff] < 1) ACWarning(playerid, "#2 Teleport Hack (on foot)"); // dodaj  && PlayerInfo[playerid][pSupporter] < 1 && PlayerInfo[playerid][pVip] < 1 ako bude warning //#2 Teleport Hack (on foot)
+		case 0: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#0 AirBreak (on foot)");//bio warning //#0 AirBreak (on foot)
+		case 1: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#1 AirBreak (in vehicle)");//bio warning //#1 AirBreak (in vehicle)
+		case 2: if(!IsPlayerPaused(playerid) &&  GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "#2 Teleport Hack (on foot)"); // dodaj  && PlayerInfo[playerid][pSupporter] < 1 && PlayerInfo[playerid][pVip] < 1 ako bude warning //#2 Teleport Hack (on foot)
 		case 3: if(!IsPlayerPaused(playerid) ) ACWarning(playerid, "#3 Teleport Hack (in vehicle)");//!! #3 Teleport Hack (in vehicle)
-		case 4: if(PlayerInfo[playerid][Staff] < 1) ACWarning(playerid, "#4 Teleport Hack (between vehicle)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio
+		case 4: if(GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "#4 Teleport Hack (between vehicle)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio
 		case 5: ACWarning(playerid, "#5 Moguce bacanje vozila"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio // #5 Moguce bacanje vozila
 		case 6: ACWarning(playerid, "#6 Teleport Hack (pickups)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio //#6 Teleport Hack (pickups)
-		case 7: if(!IsPlayerPaused(playerid) && PlayerInfo[playerid][Staff] < 3) ACWarning(playerid, "#7 Fly Hack (on foot)"); //#7 Fly Hack (on foot)
+		case 7: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 3) ACWarning(playerid, "#7 Fly Hack (on foot)"); //#7 Fly Hack (on foot)
 		case 8: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "#8 Fly Hack (in vehicle)"); //#8 Fly Hack (in vehicle)
-		case 9: if(PlayerInfo[playerid][Staff] < 4) ACKick(playerid, "#9 Speed Hack (on foot)"); //#9 Speed Hack (on foot)
+		case 9: if(GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#9 Speed Hack (on foot)"); //#9 Speed Hack (on foot)
 		case 10: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "#10 Speed Hack (in vehicle)"); //#10 Speed Hack (in vehicle)
 		case 11: ACWarning(playerid, "#11 Health Hack (in vehicle)"); //#11 Health Hack (in vehicle)
 		case 18: ACKick(playerid, "#18 Special Action hack"); // #18 Special Action hack
@@ -203,7 +243,7 @@ public OnCheatDetected(playerid, const ip_address[], type, code) {
 
 YCMD:altchat(playerid, params[], help)
 {
-	if( PlayerInfo[ playerid ][ Staff ] < 1 ) return (true)
+	if( GetPlayerStaffLevel(playerid) < 1 ) return (true);
 	if( ALTPoruke[ playerid ] )
 	{
 		ALTPoruke[ playerid ] = false;

@@ -169,7 +169,7 @@ enum e_PLAYER_DATA {
    	e_iVehicleID
 };
 
-enum e_VEHICLE_DATA {
+enum ec_VEHICLE_DATA {
 	e_iPanels,
 	e_iDoors,
 	e_iLights,
@@ -192,7 +192,7 @@ enum e_PLAYER_FLAGS (<<= 1) {
 static
 	s_aPlayerInfo[MAX_PLAYERS][e_PLAYER_DATA],
 	s_aPlayerTickInfo[MAX_PLAYERS][e_PLAYER_TICK_ENUM],
-	s_aVehicleInfo[MAX_VEHICLES][e_VEHICLE_DATA];
+	s_aVehicleInfo[MAX_VEHICLES][ec_VEHICLE_DATA];
 
 // --------------------------------------------------
 // Arrays
@@ -360,7 +360,7 @@ stock static Callback_GetDriver(vehicleid)
 {
 	// Returns the driver of a vehicle (obvious).
 
-	for(new i = 0, l = GetPlayerPoolSize(); i <= l; i ++)
+	for(new i = 0, l = MAX_PLAYERS-1; i <= l; i ++)
 	{
 		if(IsPlayerInVehicle(i, vehicleid) && GetPlayerState(i) == PLAYER_STATE_DRIVER)
 		{
@@ -937,7 +937,7 @@ public OnPlayerUpdate(playerid)
         }
         else if(GetPlayerWeapon(playerid) == WEAPON_SPRAYCAN && s_aPlayerInfo[playerid][e_iLastAmmo] > ammo)
         {
-			for(new i = 1, l = GetVehiclePoolSize(); i <= l; i ++)
+			for(new i = 1, l = MAX_VEHICLES - 1; i <= l; i ++)
 			{
 			    if(IsPlayerSprayingVehicle(playerid, i))
             	{
@@ -1150,7 +1150,7 @@ public Callback_HoldTimer(playerid, key)
 forward Callback_TabCheck();
 public Callback_TabCheck()
 {
-	for(new i = 0, l = GetPlayerPoolSize(); i <= l; i ++)
+	for(new i = 0, l = MAX_PLAYERS-1; i <= l; i ++)
 	{
 	    switch(GetPlayerState(i))
 	    {

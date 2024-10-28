@@ -9,6 +9,10 @@
 
 #if !defined FILTERSCRIPT
 
+#if !defined DEBUG
+    #define DEBUG
+#endif
+
 #if !defined NO_SUSPICION_LOGS
 	//#define NO_SUSPICION_LOGS
 #endif

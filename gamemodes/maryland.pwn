@@ -29,6 +29,7 @@
 #include <streamer>
 #include <sscanf2>
 #include <Pawn.RakNet>
+#include <callbacks>			//We needed IsPlayerPaused for ac.
 
 
 #include <nex-ac>
@@ -457,6 +458,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/globalstuff.asset"
 #include "backend/assets/custommarkers.inc"							//* Custom markers
 #include "backend/finance/currency.pwn"								//* Currency
+#include "backend/anti-cheat/anticheat.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
