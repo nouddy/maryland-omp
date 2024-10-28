@@ -18,6 +18,7 @@
  *  @Module         main
  */
 
+#pragma warning disable 213
 
 #define YSI_NO_HEAP_MALLOC
 
@@ -25,6 +26,12 @@
 
 #include <open.mp>
 #include <a_mysql>
+#include <streamer>
+#include <sscanf2>
+#include <Pawn.RakNet>
+
+
+#include <nex-ac>
 #include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>
 #include <ysilib\YSI_Coding\y_timers>
@@ -32,8 +39,6 @@
 #include <ysilib\YSI_Data\y_foreach>
 #include <ysilib\YSI_Data\y_iterate>
 #include <ysilib\YSI_Coding\y_va>
-#include <streamer>
-#include <sscanf2>
 #include <easyDialog>
 #include <distance>
 #include <zones>
@@ -278,6 +283,7 @@ public OnPlayerSelectObject(playerid, SELECT_OBJECT:type, objectid, modelid, Flo
 {
 	return 1;
 }
+
 
 public OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)
 {

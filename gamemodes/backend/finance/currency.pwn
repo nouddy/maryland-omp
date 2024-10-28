@@ -45,7 +45,7 @@ stock Float:GetPlayerMoney2(playerid, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
 
     return pMoney[playerid][type];
 }
-#define GetPlayerMoney(%0) GetPlayerMoney2(%0)
+#define acc_GetPlayerMoney(%0) GetPlayerMoney2(%0)
 
 stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
 {
@@ -62,7 +62,7 @@ stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TY
 
     return pMoney[playerid][type];
 }
-#define GivePlayerMoney(%0) GivePlayerMoney2(%0)
+#define acc_GivePlayerMoney(%0) GivePlayerMoney2(%0)
 
 stock Float:TakePlayerMoney(playerid, MONEY_TYPE:type, Float:ammount, bool:allowNegative = false)
 {

@@ -573,7 +573,7 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 					
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	
-	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
@@ -853,7 +853,7 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 				Destroy3DMenu(p3DMenu[playerid]);
 
 				new rand = random(sizeof(RandomSpawnCords));
-				SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], RandomSpawnCords[rand][0], RandomSpawnCords[rand][1], RandomSpawnCords[rand][2], RandomSpawnCords[rand][3]);
+				SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], RandomSpawnCords[rand][0], RandomSpawnCords[rand][1], RandomSpawnCords[rand][2], RandomSpawnCords[rand][3], WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 				
 				new query[512];
 				mysql_format(SQL, query, sizeof(query), "INSERT INTO 	`characters` SET `account_id` = %d,\

@@ -30,7 +30,7 @@ forward OnDialogPerformed(playerid, const dialog[], response, success);
 stock Dialog_Close(const playerid)
 {
 	dialog_Name[playerid]{0} = 0;
-	return ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", "");
+	return HidePlayerDialog(playerid);
 }
 
 stock Dialog_Open(const playerid, const function[], DIALOG_STYLE:style, const caption[], const info[], const button1[], const button2[] = "", va_args<>)
