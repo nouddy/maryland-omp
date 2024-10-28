@@ -1507,7 +1507,7 @@ ac_fpublic ac_SetPlayerInterior(playerid, interiorid)
 	ACInfo[playerid][acNOPCount][2] = 0;
 	ACInfo[playerid][acSet][0] = interiorid % 256;
 	ACInfo[playerid][acGtc][16] =
-	ACInfo[playerid][acGtc][0] = GetTickCount() + 2650;
+	ACInfo[playerid][acGtc][0] = GetTickCount() + 4000;
 	return 1;
 }
 
@@ -1878,7 +1878,7 @@ ac_fpublic ac_EnableAntiCheat(code, enable)
 			}
 			fwrite(ac_cfgFile, ac_string);
 			fclose(ac_cfgFile);
-		}
+		} 
 	#endif
 	return 1;
 }
@@ -5940,7 +5940,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		}
 	#endif
 	#if defined ac_OnPlayerKeyStateChange
-		return ac_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+		return ac_OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys);
 	#else
 		return 1;
 	#endif
@@ -5953,7 +5953,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 #endif
 #define OnPlayerKeyStateChange ac_OnPlayerKeyStateChange
 #if defined ac_OnPlayerKeyStateChange
-	forward ac_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+	forward ac_OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys);
 #endif
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)

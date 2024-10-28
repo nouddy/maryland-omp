@@ -459,7 +459,7 @@ YCMD:setint(const playerid, params[], help)
 
 	va_SendClientMessage(playerid, x_ltorange, "[SET-INT]: > {ffffff}Postavili ste igracu(%s) interior(%d)",ReturnPlayerName(id),int);
 	va_SendClientMessage(id, x_ltorange, "[SET-INT]: > {ffffff}%s vam je podesio interior(%d)",ReturnPlayerName(playerid),int);
-
+	SendClientMessage(playerid, -1, "PlayerVW %d | PlayerInt %d", GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -481,6 +481,12 @@ YCMD:setvw(const playerid, params[], help)
 YCMD:spectate(playerid, params[], help) 
 {
 	
+	return 1;
+}
+
+YCMD:getint(playerid, params[], help) 
+{
+	SendClientMessage(playerid, -1, "PlayerVW %d | PlayerInt %d", GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
 	return 1;
 }
 

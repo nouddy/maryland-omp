@@ -109,5 +109,5 @@
     "use_dyn_ticks": true,
     "website": "maryland-ogc.com",
     "trace": "pf",
-    "crashdetect_log": "crashdetect.txt"
+    "crashdetect_log": "_crashdetect"
 }

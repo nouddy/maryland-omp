@@ -188,7 +188,7 @@ new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 hook OnPlayerConnect(playerid)
 {	
 	ResetPlayerRegLogVars(playerid);
-
+	// SetPlayerInterior(playerid, 0);
 	ResetPlayerRegisterTextDraw(playerid);
 	ResetPlayerLoginTextDraw(playerid);
 
@@ -568,12 +568,10 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	TogglePlayerSpectating(playerid, false);
 	TogglePlayerControllable(playerid, true);
 					
-	SetPlayerVirtualWorld(playerid, 6);
-	SetPlayerInterior(playerid, 6);
-					
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	
-	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
+	new rand = random(sizeof(RandomSpawnCords));
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], 1401.7791,1591.3466,12.0481,0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
@@ -582,14 +580,18 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
+	SetTimerEx("delayed_Interior", 150, false, "d", playerid);
 
-	for(new j = 0; j < 12; j++) {
-
-		SetPlayerSkillLevel(playerid, WEAPONSKILL:j, MAX_WEAPONSKILLS);
-	}
-
-	SpawnPlayer(playerid);
 	return 1;
+}
+
+forward delayed_Interior(playerid);
+public delayed_Interior(playerid) {
+
+	SetPlayerInterior(playerid, 6);
+	SpawnPlayer(playerid);
+	SetPlayerCompensatedPosEx(playerid, 1401.7791,1591.3466,12.0481, 6, 6, 5000);
+	return (true);
 }
 
 forward OnCharacterLoaded(playerid);
@@ -1015,16 +1017,14 @@ ResetPlayerRegLogVars(playerid)
 
 hook OnPlayerSpawn(playerid) {
 
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1401.7791,1591.3466,12.0481)) {
-
-		SetPlayerVirtualWorld(playerid, 6);
-		SetPlayerInterior(playerid, 6);
-
-	}
-
 	
 	// SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], 0.0);
 	// SpawnPlayer(playerid);
 	
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+// stock delayed_LoginSpawn(playerid) {
+// 	SpawnPlayer(playerid);
+// 	return (true);
+// }

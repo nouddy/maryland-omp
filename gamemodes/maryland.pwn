@@ -28,11 +28,10 @@
 #include <a_mysql>
 #include <streamer>
 #include <sscanf2>
-#include <Pawn.RakNet>
-#include <callbacks>			//We needed IsPlayerPaused for ac.
-
-
+#include <Pawn.RakNet>		//We needed IsPlayerPaused for ac.
 #include <nex-ac>
+#include <callbacks>	
+
 #include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>
 #include <ysilib\YSI_Coding\y_timers>
