@@ -121,7 +121,7 @@ stock Altchat_Control(playerid) {
         PlayerTextDrawSetShadow(playerid, AltChatTD_Player[i], 0);
         PlayerTextDrawSetOutline(playerid, AltChatTD_Player[i], 1);
         PlayerTextDrawBackgroundColor(playerid, AltChatTD_Player[i], 255);
-        PlayerTextDrawFont(playerid, AltChatTD_Player[i], TEXT_DRAW_FONT_AHARONI_BOLD);
+        PlayerTextDrawFont(playerid, AltChatTD_Player[i], TEXT_DRAW_FONT_1);
         PlayerTextDrawSetProportional(playerid, AltChatTD_Player[i], true);
         PlayerTextDrawSetShadow(playerid, AltChatTD_Player[i], 0);
         strmid(AltChatTD_Text[playerid][i], " ", 0, 1);
@@ -177,7 +177,7 @@ stock ACKick(playerid, const code[])
 	SendClientMessage(playerid, x_server, "|MARYLAND| ~ "c_white"Ukoliko mislite da je doslo do greske, obratite se na nasem forumu : "c_server"forum.maryland-ogc.com");
 	SendClientMessage(playerid, x_server, "|MARYLAND| ~ "c_white"Kick Type : "c_server"AntiCheat Detection");
 
-	delayed_Kick(playerid);
+	SetTimerEx("delayed_Kick", 400, false, "d", playerid);
 
     return (true);
 }
@@ -203,39 +203,39 @@ public OnCheatDetected(playerid, const ip_address[], type, code) {
 
     switch(code)
     {
-		case 0: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#0 AirBreak (on foot)");//bio warning //#0 AirBreak (on foot)
-		case 1: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#1 AirBreak (in vehicle)");//bio warning //#1 AirBreak (in vehicle)
-		case 2: if(!IsPlayerPaused(playerid) &&  GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "#2 Teleport Hack (on foot)"); // dodaj  && PlayerInfo[playerid][pSupporter] < 1 && PlayerInfo[playerid][pVip] < 1 ako bude warning //#2 Teleport Hack (on foot)
-		case 3: if(!IsPlayerPaused(playerid) ) ACWarning(playerid, "#3 Teleport Hack (in vehicle)");//!! #3 Teleport Hack (in vehicle)
-		case 4: if(GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "#4 Teleport Hack (between vehicle)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio
-		case 5: ACWarning(playerid, "#5 Moguce bacanje vozila"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio // #5 Moguce bacanje vozila
-		case 6: ACWarning(playerid, "#6 Teleport Hack (pickups)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio //#6 Teleport Hack (pickups)
-		case 7: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 3) ACWarning(playerid, "#7 Fly Hack (on foot)"); //#7 Fly Hack (on foot)
-		case 8: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "#8 Fly Hack (in vehicle)"); //#8 Fly Hack (in vehicle)
-		case 9: if(GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "#9 Speed Hack (on foot)"); //#9 Speed Hack (on foot)
-		case 10: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "#10 Speed Hack (in vehicle)"); //#10 Speed Hack (in vehicle)
-		case 11: ACWarning(playerid, "#11 Health Hack (in vehicle)"); //#11 Health Hack (in vehicle)
-		case 18: ACKick(playerid, "#18 Special Action hack"); // #18 Special Action hack
-		case 20: ACWarning(playerid, "#20 God mode (in vehicle)"); // #20 God mode (in vehicle)
-		case 21: ACWarning(playerid, "#21 Invisible hack"); //#21 Invisible hack
-		case 22: ACWarning(playerid, "#22 Lag comp spoof"); //#22 Lag comp spoof
-		case 24: ACWarning(playerid, "#24 Parkour / WheelWalk"); //#24 Parkour mod
-		case 25: ACWarning(playerid, "#25 Quick turn"); //#25 Quick turn
-		case 26: ACWarning(playerid, "#26 Rapid fire"); //#26 Rapid fire
-		case 27: ACWarning(playerid, "#27 Fake spawn");//#27 Fake spawn
-		case 28: ACKick(playerid, "#28 Fake kill"); //#28 Fake kill
-		case 29: ACWarning(playerid, "#29 Pro Aim");//#29 Pro Aim
-		case 30: ACWarning(playerid, "#30 CJ run");//#30 CJ run
-		case 31: ACKick(playerid, "#31 Car shot");//#31 Car shot
-		case 32: ACWarning(playerid, "#32 Car jack"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio //#32 Car jack
-		case 34: ACKick(playerid, "#34 AFK Ghost");//#34 AFK Ghost
-		case 35: ACWarning(playerid, "#35 Full Aiming");//#35 Full Aiming
-		case 43: ACKick(playerid, "#43 Tuning Crasher");//#43 Tuning Crasher
-		case 44: ACWarning(playerid, "#44 Invalid seat crasher");//#44 Invalid seat crasher
-		case 46: ACKick(playerid, "#46 Attached object crasher");//#46 Attached object crasher
-		case 47: ACKick(playerid, "#47 Weapon crasher");//#47 Weapon crasher
-		case 49: if(type != 400 && type != 450) ACKick(playerid, "#49 Callback Flood");//#49 Callback Flood
-		case 50: ACKick(playerid, "#50 Seat Flood");//#50 Seat Flood // dodati proveru za cuffed
+		case 0: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "[0] AirBreak (on foot)");//bio warning //#0 AirBreak (on foot)
+		case 1: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "[1] AirBreak (in vehicle)");//bio warning //#1 AirBreak (in vehicle)
+		case 2: if(!IsPlayerPaused(playerid) &&  GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "[2] Teleport Hack (on foot)"); // dodaj  && PlayerInfo[playerid][pSupporter] < 1 && PlayerInfo[playerid][pVip] < 1 ako bude warning //#2 Teleport Hack (on foot)
+		case 3: if(!IsPlayerPaused(playerid) ) ACWarning(playerid, "[3] Teleport Hack (in vehicle)");//!! #3 Teleport Hack (in vehicle)
+		case 4: if(GetPlayerStaffLevel(playerid) < 1) ACWarning(playerid, "[4] Teleport Hack (between vehicle)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio
+		case 5: ACWarning(playerid, "[5] Moguce bacanje vozila"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio // #5 Moguce bacanje vozila
+		case 6: ACWarning(playerid, "[6] Teleport Hack (pickups)"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio //#6 Teleport Hack (pickups)
+		case 7: if(!IsPlayerPaused(playerid) && GetPlayerStaffLevel(playerid) < 3) ACWarning(playerid, "[7] Fly Hack (on foot)"); //#7 Fly Hack (on foot)
+		case 8: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "[8] Fly Hack (in vehicle)"); //#8 Fly Hack (in vehicle)
+		case 9: if(GetPlayerStaffLevel(playerid) < 4) ACKick(playerid, "[9] Speed Hack (on foot)"); //#9 Speed Hack (on foot)
+		case 10: if(!IsPlayerPaused(playerid)) ACWarning(playerid, "[10] Speed Hack (in vehicle)"); //#10 Speed Hack (in vehicle)
+		case 11: ACWarning(playerid, "[11] Health Hack (in vehicle)"); //#11 Health Hack (in vehicle)
+		case 18: ACKick(playerid, "[18] Special Action hack"); // #18 Special Action hack
+		case 20: ACWarning(playerid, "[20] God mode (in vehicle)"); // #20 God mode (in vehicle)
+		case 21: ACWarning(playerid, "[21] Invisible hack"); //#21 Invisible hack
+		case 22: ACWarning(playerid, "[22] Lag comp spoof"); //#22 Lag comp spoof
+		case 24: ACWarning(playerid, "[24] Parkour / WheelWalk"); //#24 Parkour mod
+		case 25: ACWarning(playerid, "[25] Quick turn"); //#25 Quick turn
+		case 26: ACWarning(playerid, "[26] Rapid fire"); //#26 Rapid fire
+		case 27: ACWarning(playerid, "[27] Fake spawn");//#27 Fake spawn
+		case 28: ACKick(playerid, "[28] Fake kill"); //#28 Fake kill
+		case 29: ACWarning(playerid, "[29] Pro Aim");//#29 Pro Aim
+		case 30: ACWarning(playerid, "[30] CJ run");//#30 CJ run
+		case 31: ACKick(playerid, "[31] Car shot");//#31 Car shot
+		case 32: ACWarning(playerid, "[32] Car jack"); //ANTICHEAT MSG bilo iskljuceno - casey ukljucio //#32 Car jack
+		case 34: ACKick(playerid, "[34] AFK Ghost");//#34 AFK Ghost
+		case 35: ACWarning(playerid, "[35] Full Aiming");//#35 Full Aiming
+		case 43: ACKick(playerid, "[43] Tuning Crasher");//#43 Tuning Crasher
+		case 44: ACWarning(playerid, "[44] Invalid seat crasher");//#44 Invalid seat crasher
+		case 46: ACKick(playerid, "[46] Attached object crasher");//#46 Attached object crasher
+		case 47: ACKick(playerid, "[47] Weapon crasher");//#47 Weapon crasher
+		case 49: if(type != 400 && type != 450) ACKick(playerid, "[49] Callback Flood");//#49 Callback Flood
+		case 50: ACKick(playerid, "[50] Seat Flood");//#50 Seat Flood // dodati proveru za cuffed
     }
 
     return 1;
