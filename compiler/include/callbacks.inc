@@ -164,15 +164,15 @@ enum e_PLAYER_DATA {
   	e_iAnimIndex,
   	e_iHoverColor,
   	e_iShotsFired[12],
-  	e_iLastGun,
+  	WEAPON:e_iLastGun,
   	e_iLastAmmo,
    	e_iVehicleID
 };
 
 enum ec_VEHICLE_DATA {
-	e_iPanels,
-	e_iDoors,
-	e_iLights,
+	VEHICLE_PANEL_STATUS:e_iPanels,
+	VEHICLE_DOOR_STATUS:e_iDoors,
+	VEHICLE_LIGHT_STATUS:e_iLights,
 	Float:e_fHealth,
 	Float:e_fSpeed
 };
@@ -456,14 +456,14 @@ stock IsPlayerSwimming(playerid)
 
 stock IsPlayerSkydiving(playerid)
 {
-	return (GetPlayerWeapon(playerid) == 46 && GetPlayerAnimationIndex(playerid) == 1134);
+	return (GetPlayerWeapon(playerid) == WEAPON:46 && GetPlayerAnimationIndex(playerid) == 1134);
 }
 
 stock IsPlayerJumping(playerid)
 {
 	new
 	    index = GetPlayerAnimationIndex(playerid),
-	    keys,
+	    KEY:keys,
 	    ud,
 	    lr
 	;
@@ -654,7 +654,7 @@ public OnPlayerDisconnect(playerid, reason)
 	}
 
 	s_aPlayerInfo[playerid][e_iAction] = PLAYER_ACTION_NONE;
-	s_aPlayerInfo[playerid][e_iLastGun] = 0;
+	s_aPlayerInfo[playerid][e_iLastGun] = WEAPON_UNKNOWN;
 	s_aPlayerInfo[playerid][e_iLastAmmo] = 0;
   	s_aPlayerInfo[playerid][e_iFrames] = 0;
   	s_aPlayerInfo[playerid][e_iDrunk] = 0;
@@ -747,7 +747,7 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 public OnPlayerUpdate(playerid)
 {
 	new
-		weaponid = GetPlayerWeapon(playerid),
+		WEAPON:weaponid = GetPlayerWeapon(playerid),
 		level = GetPlayerDrunkLevel(playerid),
 		Float:health,
 		animlib[32],
@@ -835,7 +835,7 @@ public OnPlayerUpdate(playerid)
 
 			if(s_aPlayerInfo[playerid][e_iMoney] != money)
 			{
-	    	    if(GetPlayerCameraMode(playerid) == 15)
+	    	    if(GetPlayerCameraMode(playerid) == CAM_MODE_FIXED)
 	        	{
 	        	    switch(s_aPlayerInfo[playerid][e_iMoney] - money)
 	            	{
@@ -860,10 +860,10 @@ public OnPlayerUpdate(playerid)
 
 	 		new
 	   			vehicleid = GetPlayerVehicleID(playerid),
-			   	panels,
-			   	doors,
-			   	lights,
-			   	tires
+			   	VEHICLE_PANEL_STATUS:panels,
+			   	VEHICLE_DOOR_STATUS:doors,
+			   	VEHICLE_LIGHT_STATUS:lights,
+			   	VEHICLE_TYRE_STATUS:tires
 	   		;
 
 			GetVehicleHealth(vehicleid, health);
@@ -952,7 +952,7 @@ public OnPlayerUpdate(playerid)
 	if(s_aPlayerInfo[playerid][e_iLastGun] != weaponid)
 	{
 	    new
-			lastweapon = s_aPlayerInfo[playerid][e_iLastGun];
+			WEAPON:lastweapon = s_aPlayerInfo[playerid][e_iLastGun];
 
 		if((WEAPON_COLT45 <= lastweapon <= WEAPON_TEC9) && lastweapon != WEAPON_SHOTGUN)
 		{
@@ -1025,7 +1025,7 @@ public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstat
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 	new
-		weaponid = GetPlayerWeapon(playerid);
+		WEAPON:weaponid = GetPlayerWeapon(playerid);
 
 	if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING && GetPlayerState(playerid) != PLAYER_STATE_SPAWNED && GetPlayerState(playerid) != PLAYER_STATE_WASTED)
 	{
@@ -1118,11 +1118,11 @@ public Callback_CheckAnimation(playerid)
 	Callback_SetFlag(playerid, e_bAnimSet, true);
 }
 
-forward Callback_HoldTimer(playerid, key);
-public Callback_HoldTimer(playerid, key)
+forward Callback_HoldTimer(playerid, KEY:key);
+public Callback_HoldTimer(playerid, KEY:key)
 {
     new
-		keys,
+		KEY:keys,
 		ud,
 		lr;
 

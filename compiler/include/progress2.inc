@@ -427,7 +427,7 @@ stock _progress2_renderBar(playerid, barid)
 	return true;
 }
 
-hook OnScriptInit() {
+hook OnGameModeInit() {
 	Iter_Init(pbar_Index);
 }
 
@@ -435,7 +435,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 	Iter_Clear(pbar_Index[playerid]);
 }
 
-hook OnScriptExit() {
+hook OnGameModeExit() {
 	for(new i = 0; i < MAX_PLAYERS; i++) {
 		if(IsPlayerConnected(i))
 			DestroyAllPlayerProgressBars(i);

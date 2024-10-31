@@ -18,7 +18,6 @@
  *  @Module         main
  */
 
-#pragma warning disable 213
 
 #define YSI_NO_HEAP_MALLOC
 
@@ -30,16 +29,18 @@
 #include <sscanf2>
 #include <Pawn.RakNet>		//We needed IsPlayerPaused for ac.
 #include <nex-ac>
+
+#include <ysilib\YSI_Coding\y_va>
+#include <ysilib\YSI_Coding\y_hooks>
+
+#include <easyDialog>
 #include <callbacks>	
 
-#include <ysilib\YSI_Coding\y_hooks>
 #include <ysilib\YSI_Core\y_utils>
 #include <ysilib\YSI_Coding\y_timers>
 #include <ysilib\YSI_Visual\y_commands>
 #include <ysilib\YSI_Data\y_foreach>
 #include <ysilib\YSI_Data\y_iterate>
-#include <ysilib\YSI_Coding\y_va>
-#include <easyDialog>
 #include <distance>
 #include <zones>
 #include <notify>

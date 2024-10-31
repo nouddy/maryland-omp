@@ -570,7 +570,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 					
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	
-	new rand = random(sizeof(RandomSpawnCords));
 	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], 1401.7791,1591.3466,12.0481,0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
