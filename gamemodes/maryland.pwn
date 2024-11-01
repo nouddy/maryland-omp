@@ -558,6 +558,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Safe Zone
 #include "backend/safezone/safezone.script"
+
+//-------------------------------------------------------------------------------------------------------- Misc1
+#include "backend/misc/medical.pwn"									//* Hospital
+
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/safezone/end/do-not-look.temp"
 
@@ -672,6 +676,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bcenter-garage.map"						//* Business Centre Garage (20)
 #include "frontend/interior/jewlery_int.map"						//* Jewlery Int (21)
 #include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
+#include "frontend/interior/hospital-int.map"						//* Recpetion Int (23)
 
 
 

@@ -61,7 +61,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerDeath(playerid, killerid, WEAPON:reason) {
 
-    if(burglary_CoolDown[playerid] < gettime()) {
+    if(burglary_InProgress[playerid]) {
 
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Provala kuce je propala jer ste umrli!");
         burglary_CoolDown[playerid] = 0;
@@ -124,14 +124,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         if(burglary_InProgress[playerid]) {
 
-            if(IsPlayerInRangeOfVehicle(playerid, burglary_Van[playerid], 3.50)) {
+            if(IsPlayerInRangeOfVehicle(playerid, burglary_Van[playerid], 5.50)) {
 
                 if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_ELECTRONIC_GOODS)) {
 
                     ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
+                    RemovePlayerAttachedObject(playerid, INDEX_SLOT_ELECTRONIC_GOODS);
+                    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
                     stolenObjects[playerid]++;
 
-                    SendClientMessage(playerid, -1, "Stolen Objects - %d", stolenObjects[playerid]);
 
                     if(stolenObjects[playerid] == 3) {
 
@@ -178,7 +179,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         return Y_HOOKS_BREAK_RETURN_1;
                     }
                 }
-
             }
 
             for(new i = 0; i < sizeof burglary_Objects[]; i++) {

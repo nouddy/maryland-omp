@@ -2731,12 +2731,6 @@ stock acc_SetPlayerInterior(playerid, interiorid)
 	#endif
 }
 
-#if defined _ALS_SetPlayerInterior
-	#undef SetPlayerInterior
-#else
-	#define _ALS_SetPlayerInterior
-#endif
-#define SetPlayerInterior acc_SetPlayerInterior
 
 stock orig_SetPlayerPos(playerid, Float:x, Float:y, Float:z) return SetPlayerPos(playerid, x, y, z);
 
