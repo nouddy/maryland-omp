@@ -580,7 +580,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 	SetTimerEx("delayed_Interior", 150, false, "d", playerid);
-
 	return 1;
 }
 
@@ -588,6 +587,7 @@ forward delayed_Interior(playerid);
 public delayed_Interior(playerid) {
 
 	SetPlayerInterior(playerid, 6);
+	Log(mainLog, DEBUG, "delayed_Interior func : Interior ID : 6 | Player Interior : %d", GetPlayerInterior(playerid));
 	SpawnPlayer(playerid);
 	SetPlayerCompensatedPosEx(playerid, 1401.7791,1591.3466,12.0481, 6, 6, 5000);
 	return (true);

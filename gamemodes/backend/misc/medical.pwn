@@ -63,6 +63,13 @@ timer medicCooldown[1000](playerid)
 //     return (true);
 // }
 
+hook OnGameModeInit() {
+
+    Create3DTextLabel(""c_server" \187; "c_grey"MD | Vehicles "c_server"\171; \n \187; "c_white" [ N ] "c_server" \171; ", -1, 2011.6052,-1411.2238,16.9922, 4.50, 0);
+    CreateDynamic3DTextLabel(""c_server" \187; "c_grey"MD | Treatment "c_server"\171; \n \187; "c_white" [ N ] "c_server" \171; ", -1, 1152.7070,-1304.9401,1019.4139, 4.50, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 0, -1, -1);
+    return (true);  
+}
+
 hook OnPlayerConnect(playerid) {
 
     medic_Time[playerid] = 0;
@@ -86,8 +93,24 @@ hook OnPlayerSpawn(playerid)
         new xRand = random(5);
         SetPlayerCompensatedPosEx(playerid, sz_BedLocations[xRand][0], sz_BedLocations[xRand][1], sz_BedLocations[xRand][2], -1, 23, 7000);
         defer medicCooldown(playerid);
+
         SetTimerEx("DelayedMedInt", 150, false, "d", playerid);
     }
+    return (true);
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED(KEY_NO)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, 1152.7070,-1304.9401,1019.4139) && GetPlayerInterior(playerid) == 23) {
+
+            SetPlayerHealth(playerid, 100.00);
+            GivePlayerMoney(playerid, -900);
+            return (true);
+        }
+    }
+
     return (true);
 }
 
@@ -95,6 +118,10 @@ forward DelayedMedInt(playerid);
 public DelayedMedInt(playerid)
 {
     SetPlayerInterior(playerid, 23);
+    TogglePlayerControllable(playerid, false);
+    TogglePlayerControllable(playerid, false);
+    PreloadAnimations(playerid);
+    ApplyAnimation(playerid, "CRACK", "crckdeth3", 4.1, true, true, true, true, 2);
     if(IsPlayerControllable(playerid))
     {
         TogglePlayerControllable(playerid, false);

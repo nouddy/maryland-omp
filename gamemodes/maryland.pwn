@@ -21,13 +21,15 @@
 
 #define YSI_NO_HEAP_MALLOC
 
+#define MAX_Y_HOOKS (256)
 #define CGEN_MEMORY 80000
 
 #include <open.mp>
 #include <a_mysql>
 #include <streamer>
 #include <sscanf2>
-#include <Pawn.RakNet>		//We needed IsPlayerPaused for ac.
+#include <Pawn.RakNet>
+#include <log-plugin>		
 #include <nex-ac>
 
 #include <ysilib\YSI_Coding\y_va>
@@ -55,7 +57,6 @@
 #include <macroes>
 #include <maryland-tp>
 
-
 main()
 {
     print("-                                     -");
@@ -69,11 +70,12 @@ main()
     print("-                                     -");
 }
 
+new Logger:mainLog;
 
 public OnGameModeInit()
 {
 	mysql_log(ALL);
-	
+	mainLog = CreateLog("main_log");
 	//!Streamer za ucitavanje mapa
 
 	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 550);
@@ -296,6 +298,16 @@ public OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, model
 	return 1;
 }
 
+public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success) {
+
+    if(success != COMMAND_OK)
+    {
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Komanda "c_server"%s"c_white"nije pronadjena, iskoristite /komande", cmdtext); 
+        return COMMAND_OK;
+    }
+    return COMMAND_OK;
+}
+
 public OnObjectMoved(objectid)
 {
 	return 1;
@@ -376,10 +388,10 @@ public OnIncomingConnection(playerid, ip_address[], port)
 	return 1;
 }
 
-public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
-{
-	return 1;
-}
+// public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
+// {
+// 	return 1;
+// }
 
 public OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
@@ -598,6 +610,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Trashs
 
 #include "backend/trash/trash.script"								//* Kontejner system
+
+//-------------------------------------------------------------------------------------------------------- Ports
+
+#include "backend/ports/ports.pwn"								//* Kontejner system
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/trash/end/do-not-look.temp"

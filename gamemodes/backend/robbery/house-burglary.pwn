@@ -108,6 +108,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                 SetPlayerPos(playerid, 224.28,1289.19,1082.14);
                 SetPlayerVirtualWorld(playerid, playerid+1);
+                Log(mainLog, DEBUG, "House Burglary - KeyStateChange : SetPlayerInterior to 1");
                 SetPlayerInterior(playerid, 1);
             }
 

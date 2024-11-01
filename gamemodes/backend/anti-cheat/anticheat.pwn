@@ -21,7 +21,7 @@
 
 #define MAX_LINES                       10
 new bool:ALTPoruke[MAX_PLAYERS];
-new PlayerText: AltChatTD_Player[MAX_LINES],
+new PlayerText:AltChatTD_Player[MAX_LINES],
 	AltChatTD_Text[MAX_PLAYERS][MAX_LINES][128];	
 
 #define SFKA_EXPLOIT_LOG_COOLDOWN 					(5000)
@@ -116,10 +116,10 @@ stock Altchat_Control(playerid) {
         AltChatTD_Player[i] = CreatePlayerTextDraw(playerid, 35.599971, AltChat_posY, " ");
         PlayerTextDrawLetterSize(playerid, AltChatTD_Player[i], 0.21, 0.9);
         PlayerTextDrawAlignment(playerid, AltChatTD_Player[i], TEXT_DRAW_ALIGN_LEFT);
-        PlayerTextDrawColor(playerid, AltChatTD_Player[i], -1);
+        PlayerTextDrawColour(playerid, AltChatTD_Player[i], -1);
         PlayerTextDrawSetShadow(playerid, AltChatTD_Player[i], 0);
         PlayerTextDrawSetOutline(playerid, AltChatTD_Player[i], 1);
-        PlayerTextDrawBackgroundColor(playerid, AltChatTD_Player[i], 255);
+        PlayerTextDrawBackgroundColour(playerid, AltChatTD_Player[i], 255);
         PlayerTextDrawFont(playerid, AltChatTD_Player[i], TEXT_DRAW_FONT_1);
         PlayerTextDrawSetProportional(playerid, AltChatTD_Player[i], true);
         PlayerTextDrawSetShadow(playerid, AltChatTD_Player[i], 0);
@@ -159,7 +159,6 @@ p_sendboxmessage(const msg[])
  			SendAltChatMessage(i, msg);
 	    }
 	}
-	return 1;
 }
 
 stock ACKick(playerid, const code[])
@@ -195,6 +194,13 @@ hook OnGameModeInit() {
     print("anti-cheat/anticheat.pwn loaded"); 
 
     return true;
+}
+
+hook OnPlayerConnect(playerid) {
+
+	Altchat_Control(playerid);
+
+	return 1;
 }
 
 forward OnCheatDetected(playerid, const ip_address[], type, code);

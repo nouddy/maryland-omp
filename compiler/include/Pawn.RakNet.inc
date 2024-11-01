@@ -144,7 +144,7 @@
             Float:PR_quaternion[4],
             PR_health,
             PR_armour,
-            WEAPON:PR_weaponId,
+            PR_weaponId,
             PR_additionalKey,
             SPECIAL_ACTION:PR_specialAction,
             Float:PR_velocity[3],

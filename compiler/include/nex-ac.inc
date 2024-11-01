@@ -314,6 +314,8 @@ bool:ac_NOPAllow[] =
 	true	//11 Anti-NOP RemovePlayerFromVehicle
 };
 
+new Logger:nex_ac_log;
+
 static const ac_Mtfc[][] =
 {
 	{120, 8},	//0 OnDialogResponse
@@ -1508,6 +1510,7 @@ ac_fpublic ac_SetPlayerInterior(playerid, interiorid)
 	ACInfo[playerid][acSet][0] = interiorid % 256;
 	ACInfo[playerid][acGtc][16] =
 	ACInfo[playerid][acGtc][0] = GetTickCount() + 2650;
+	// Log(nex_ac_log, DEBUG, "NEX-AC:ac_SetPlayerInterior :  New interior id : %d | Current player interior id : %d", interiorid, GetPlayerInterior(playerid));
 	return 1;
 }
 
@@ -3567,8 +3570,11 @@ static AntiCheatGetNextDialog(playerid)
 
 #else
 
+
 public OnGameModeInit()
 {
+	nex_ac_log = CreateLog("nex_ac");
+
 	#if AC_USE_CONFIG_FILES
 		if(!ac_LoadCfg()) printf(CFG_OPENING_ERROR, AC_CONFIG_FILE);
 		if(!ac_LoadNOPCfg()) printf(CFG_OPENING_ERROR, AC_NOP_CONFIG_FILE);
@@ -4374,9 +4380,11 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
 		SetPlayerInterior(playerid, ACInfo[playerid][acInt]);
 		if(ACInfo[playerid][acIntRet] == 2) TogglePlayerControllable(playerid, 1);
 		ACInfo[playerid][acIntRet] = 0;
+		// Log(nex_ac_log, DEBUG, "NEX-AC:SUCCESS New interior id : %d | Current player interior id : %d", newinteriorid, GetPlayerInterior(playerid));
 	}
 	else if(newinteriorid != ACInfo[playerid][acSet][0])
 	{
+		// Log(nex_ac_log, DEBUG, "NEX-AC:CHEAT New interior id : %d | Current player interior id : %d", newinteriorid, GetPlayerInterior(playerid));
 		if(ACInfo[playerid][acSet][0] == -1)
 		{
 			if(ACInfo[playerid][acVeh] > 0)
@@ -8702,7 +8710,7 @@ public OnVehicleStreamIn(vehicleid, forplayerid)
 			BS_SetWriteOffset(bs, 8);
 			BS_WriteOnFootSync(bs, ac_fData);
 		}
-		if(ac_fData[PR_weaponId] == WEAPON_BOMB && ACInfo[playerid][acCamMode] != 4)
+		if(WEAPON:ac_fData[PR_weaponId] == WEAPON_BOMB && ACInfo[playerid][acCamMode] != 4)
 		{
 			ac_fData[PR_weaponId] = UNKNOWN_WEAPON;
 			BS_SetWriteOffset(bs, 8);

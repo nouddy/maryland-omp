@@ -87,7 +87,10 @@ CreatePickupsAnd3Ds()
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Da koristite lift 'F'", 1281.4939,-45.6868,1000.8384, 22, 0, 50.0); //lift kod recepcije
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Da koristite lift 'F'", 1786.6508,-1300.3116,54.9062, 0, 7, 50.0);  //Lift kod soba
     
+    //? Bolnica
 
+    CreateCustomMarker(""c_server"[ Medical Department ]\n"c_server"» "c_white"'Za izllaz pritisnite 'F'", 1171.4449,-1311.7319,1019.4160,  23, 0, 50.0); //Izlaz
+    CreateCustomMarker(""c_server"[ Medical Department ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 2025.2113,-1401.9033,17.2094, 0, 0, 50.0); //Ulaz recepcija
 
     //      * MARKERS WITHOUT 3D TEXT LABELS
 
@@ -192,6 +195,22 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, 980.5701, -1190.3965, 23.8752);
+            SetCameraBehindPlayer(playerid);
+        }
+        //? Medical Department
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1171.4449,-1311.7319,1019.4160) && GetPlayerInterior(playerid) == 23) // Izlaz
+        {
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 2025.2113,-1401.9033,17.2094);
+            SetCameraBehindPlayer(playerid);
+        }
+
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 2025.2113,-1401.9033,17.2094) && GetPlayerVirtualWorld(playerid) == 0) // Ulaz
+        {
+            SetPlayerInterior(playerid, 23);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 1171.4449,-1311.7319,1019.4160);
             SetCameraBehindPlayer(playerid);
         }
     }

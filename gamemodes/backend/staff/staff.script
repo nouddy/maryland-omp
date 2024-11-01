@@ -813,3 +813,13 @@ YCMD:banip(playerid, params[], help)
 
 	return true;
 }
+
+YCMD:freeze(playerid, params[], help){
+
+	if(IsPlayerControllable(playerid))
+		TogglePlayerControllable(playerid, false);
+	
+	else TogglePlayerControllable(playerid, true);
+
+	return (true);
+}

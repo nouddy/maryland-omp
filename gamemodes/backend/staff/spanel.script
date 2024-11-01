@@ -89,7 +89,7 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner",
+					"Kucu\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner\nPort",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
@@ -255,6 +255,10 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 				EditDynamicObject( playerid, containerInfo[ conID ][ conObjID ] ); 
 				EditContainer[ playerid ] = conID;
 				creatingContainer[ playerid ] = true;
+			}
+			case 7: {
+
+				Dialog_Show(playerid, "dialog_CreatePort", DIALOG_STYLE_INPUT, "Maryland - Port Creation", "** Upisite zeljeno ime za port", "Unesi", "Odustani");
 			}
 		}
 	}
@@ -494,6 +498,64 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+Dialog:dialog_CreatePort(const playerid, response, listitem, string:inputtext[]) {
+
+	if(response) {
+		
+
+		if(sscanf(inputtext, "s[64]", tmp_portName[playerid])) return Dialog_Show(playerid, "dialog_CreatePort", DIALOG_STYLE_INPUT, "Maryland - Port Creation", "** Upisite zeljeno ime za port", "Unesi", "Odustani");
+
+		if(strlen(tmp_portName[playerid]) > MAX_PORT_NAME_LEN)
+			return Dialog_Show(playerid, "dialog_CreatePort", DIALOG_STYLE_INPUT, "Maryland - Port Creation", "Uneseno ime porta je preko limita (64)!\n** Upisite zeljeno ime za port", "Unesi", "Odustani");
+
+		tmp_portID[playerid] = Iter_Free(iter_Ports);
+		strmid(tmp_portName[playerid], inputtext, 0, strlen(inputtext));
+
+		Dialog_Show(playerid, "dialog_PortType", DIALOG_STYLE_LIST, "Maryland - Port Creation", "1 - Glavno\n2 - Poslovi\n3 - Organizacije", "Odaberi", "Odustani");
+
+	}
+
+	return true;
+}
+
+Dialog:dialog_PortType(const playerid, response, listitem, string:inputtext[]) {
+
+	if(!response) {
+
+		tmp_portID[playerid] = -1;
+		tmp_portName[playerid] = "";
+		return (true);
+	}
+
+	if(response) {
+		
+		new type = listitem+1, idx = tmp_portID[playerid];
+
+		new Float:pPos[3];
+		GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+		PortInfo[idx][portName] = tmp_portName[playerid];
+		PortInfo[idx][portType] = type;
+
+		PortInfo[idx][portPosition][0] = pPos[0];
+		PortInfo[idx][portPosition][1] = pPos[1];
+		PortInfo[idx][portPosition][2] = pPos[2];
+
+		new q[284];
+		mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO ports (`Name`, `Type`, `posX`, `posY`, `posZ`) \
+											  VALUES ('%e', '%d', '%f', '%f', '%f')",
+											  PortInfo[idx][portName], PortInfo[idx][portType],
+											  PortInfo[idx][portPosition][0], PortInfo[idx][portPosition][1], PortInfo[idx][portPosition][2]);
+		mysql_tquery(SQL, q, "mysql_InsertPort", "d", idx);
+
+		tmp_portID[playerid] = -1;
+		tmp_portName[playerid] = "";
+	}
+
+	return true;
+}
+
 
 Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]) {
 

@@ -33,9 +33,6 @@ new bool:drivingSchool_Shown[MAX_PLAYERS];
 
 new drivingSchool_Answers[MAX_PLAYERS][8];
 
-new bool:e_CHOSEN_DOWN[MAX_PLAYERS],
-    bool:e_CHOSEN_UP[MAX_PLAYERS];
-
 new bool:onPoly[MAX_PLAYERS],
     polyProgress[MAX_PLAYERS];
 

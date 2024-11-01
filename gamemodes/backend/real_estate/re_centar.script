@@ -85,6 +85,7 @@ new BCenterData[MAX_BUSINESS_CENTER][RE_BUSINESS_CENTER_DATA];
 new BCenterActor[MAX_BUSINESS_CENTER];
 
 new e_CHOSEN_INTERIOR[MAX_PLAYERS],
+    e_BC_NAME[MAX_PLAYERS][MAX_BCENTER_NAME],
     bool:e_CHOSEN_SAFE[MAX_PLAYERS],
     bool:e_CHOSEN_WARDROBE[MAX_PLAYERS],
     bool:e_CHOSEN_ARMORY[MAX_PLAYERS],
@@ -108,6 +109,7 @@ hook OnPlayerConnect(playerid) {
     e_CHOSEN_ARMORY[playerid] = false;
     e_IN_BUSINESS_CENTRE[playerid] = false;
     e_BUZZER_ID[playerid] = INVALID_PLAYER_ID;
+    e_BC_NAME[playerid] = "";
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -236,7 +238,6 @@ public BCenter_Load()
         }
 
         else {
-
             re_CenterSign[i] = Maryland_CreateDynamicObject(19482, 2279.039794, 2181.769287, 104.791435, 0.000008, -0.000000, 89.999954, BCenterData[i][re_BCenterVirtualWorld], 4, -1, 300.00, 300.00); 
             SetDynamicObjectMaterial(re_CenterSign[i], 0, 19063, "xmasorbs", "sphere", 0x00000000);
 
@@ -429,6 +430,19 @@ Dialog:re_BCenterBuy(const playerid, response, listitem, string:inputtext[]) {
 
         SetPlayerPos(playerid, 2277.1470,2199.6155,103.9314);
     }
+
+    Dialog_Show(playerid, "re_BCenterIme", DIALOG_STYLE_INPUT, "Business Center", "Unesite zeljeno ime za vas Business Center", "Unesi", "Odustani");
+
+
+    return 1;
+}
+
+Dialog:re_BCenterIme(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response)
+        return false;
+
+    strmid(e_BC_NAME[playerid], inputtext, 0, strlen(inputtext));
 
     Dialog_Show(playerid, "re_BCenterSafe", DIALOG_STYLE_MSGBOX, "Business Center", "Da li zelite kupiti sef za vas business center.\nSef je jedna od dodatnih stvari koja vam omogucava shranjivanje novca i ostalih stvari.\n \
                                                                                     Cijena sefa bi iznosila $%d, ukoliko nemate novca, moguce je kasnije nadograditi.", ">> Kupi", ">> Dalje", BUSINESS_INTERIOR_SAFE_PRICE);
@@ -705,7 +719,7 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         BCenterData[bID][re_BCenterVirtualWorld] = bID+1;
         BCenterData[bID][re_BCenterOwner] = GetCharacterSQLID(playerid);
-
+        BCenterData[bID][re_BCenterName] = e_BC_NAME[playerid];
         BCenterData[bID][re_BCenterLocked] = false;
 
         BCenterData[bID][re_BCenterType] = e_CHOSEN_INTERIOR[playerid];
@@ -753,12 +767,12 @@ Dialog:re_BCenterAgent(const playerid, response, listitem, string:inputtext[]) {
 
         new q[1400];
 
-        mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, \
+        mysql_format(SQL, q, sizeof q, "INSERT INTO `re_centar` (`re_BCenterOwner`, `re_BCenterInterior`, `re_BCenterName` ,`re_BCenterVirtualWorld`, `re_BCenterType`, \
                                         `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, \
-                                        `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \ 
+                                        `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, \
                                         `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY`, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) \
-                                        VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
-                                        BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior],  BCenterData[bID][re_BCenterVirtualWorld],
+                                        VALUES ('%d', '%d', '%e', '%d', '%d', '%f', '%f', '%f', '%d', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f')", 
+                                        BCenterData[bID][re_BCenterOwner],  BCenterData[bID][re_BCenterInterior], BCenterData[bID][re_BCenterName],  BCenterData[bID][re_BCenterVirtualWorld],
                                         e_CHOSEN_INTERIOR[playerid], BCenterData[bID][re_BCenterInt][0], BCenterData[bID][re_BCenterInt][1],
                                         BCenterData[bID][re_BCenterInt][2], BCenterData[bID][re_BCenterLocked], e_CHOSEN_SAFE[playerid], BCenterData[bID][re_BCenterSafePos][0],
                                         BCenterData[bID][re_BCenterSafePos][1], BCenterData[bID][re_BCenterSafePos][2], e_CHOSEN_WARDROBE[playerid], BCenterData[bID][re_BCenterWardrobePos][0],

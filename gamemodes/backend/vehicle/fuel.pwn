@@ -51,8 +51,7 @@ enum E_FUEL_PUMP_DATA {
 new ePumpInfo[MAX_FUEL_PUMPS][E_FUEL_PUMP_DATA],
     Iterator:pumpIterator<MAX_FUEL_PUMPS>,
     Text3D:pumpLabel[MAX_FUEL_PUMPS],
-    pumpPickup[MAX_FUEL_PUMPS],
-    pumpActor[MAX_FUEL_PUMPS];
+    pumpPickup[MAX_FUEL_PUMPS];
 
 new PlayerText:Fuel_UI[MAX_PLAYERS][4];
 

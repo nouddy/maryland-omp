@@ -1,7 +1,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define MAX_JOBS                 (3)
+#define MAX_JOBS                 (4)
 #define MAX_JOB_LEN              (32)
 
 #define INVALID_JOB_ID           (-1)
@@ -22,7 +22,8 @@ enum {
 
     JOB_UNKNOWN = 0,
     JOB_MECHANIC,
-    JOB_BUS_DRIVER
+    JOB_BUS_DRIVER,
+    JOB_MEDIC
 }
 
 enum e_JOB_DATA {
@@ -50,7 +51,8 @@ new jobInfo[MAX_JOBS][e_JOB_DATA] = {
 
     {INVALID_JOB_ID, "UNDEFINED:", JOB_QUALIFICATION_NONE, {0.00, 0.00, 0.00}, {0.00, 0.00, 0.00}, 24, -1, INVALID_BUSINESS_ID, -1, -1},
     {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {1088.4877,-1185.4963,21.9630}, {1103.1801,-1184.1455,18.3704}, 50, 2500, INVALID_BUSINESS_ID, 3, 525},
-    {JOB_BUS_DRIVER, "Vozac Autobusa", JOB_QUALIFICATION_HIGH_SCHOOL, {1752.5388,-1894.2367,13.5574}, {1753.8374,-1885.9547,13.5571}, 253, 3500, INVALID_BUSINESS_ID, 2, 431}
+    {JOB_BUS_DRIVER, "Vozac Autobusa", JOB_QUALIFICATION_HIGH_SCHOOL, {1752.5388,-1894.2367,13.5574}, {1753.8374,-1885.9547,13.5571}, 253, 3500, INVALID_BUSINESS_ID, 2, 431},
+    {JOB_MEDIC, "Bolnicar", JOB_QUALIFICATION_COLLEGE, {1145.2380,-1303.6646,1019.4139}, {1148.7601,-1302.8539,1019.4139}, 274, 4500, INVALID_BUSINESS_ID, 4, 416}
 };
 
 new Text3D:jobLabel[MAX_JOBS][2],
@@ -86,22 +88,24 @@ stock Job_SetPlayerJob(const playerid, job) {
     }
 
     if(playerJob[playerid] != INVALID_JOB_ID) return 
-        SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Vec ste zaposleni!");
+        SendClientMessage(playerid, x_server, "posao \187; "c_white"Vec ste zaposleni!");
 
     playerContract[playerid] = gettime() + jobInfo[job][jobContract]*3600;
     playerJob[playerid] = jobInfo[job][jobID];
 
-    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste se zaposlili kao %s", jobInfo[job][jobName]);
-    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Ugovor posla traje : "c_white"%d sata", jobInfo[job][jobContract]);
-    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Da vidite informacije o poslu /job");
+    SendClientMessage(playerid, x_server, "posao \187; "c_white"Uspjesno ste se zaposlili kao %s", jobInfo[job][jobName]);
+    SendClientMessage(playerid, x_server, "posao \187; "c_white"Ugovor posla traje : "c_white"%d sata", jobInfo[job][jobContract]);
+    SendClientMessage(playerid, x_server, "posao \187; "c_white"Da vidite informacije o poslu /job");
 
     return (true);
 }
 
 stock Job_GivePlayerSalary(playerid, salary, business = INVALID_BUSINESS_ID) {
 
+    new tmp_id = playerJob[playerid];
+
     GivePlayerMoney(playerid, salary);
-    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste zaradili %d$", salary);
+    SendClientMessage(playerid, x_server, "%s \187; "c_white"Uspjesno ste zaradili %d$", jobInfo[tmp_id][jobName], salary);
 
     if(business != INVALID_BUSINESS_ID) {
 
@@ -117,15 +121,20 @@ stock Job_LoadData() {
     print("-                    -");
     print("");
 
+    new tj_str[256], tu_str[256];
+
     for(new i = 0; i < sizeof jobInfo; i++) {
 
         if(jobInfo[i][jobID] > INVALID_JOB_ID) {
+            
+            format(tj_str, sizeof tj_str, ""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Take Job [ N ]"c_grey" \171;", jobInfo[i][jobName]);
+            format(tu_str, sizeof tu_str, ""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Uniform [ N ]"c_grey" \171;", jobInfo[i][jobName]);
 
-            jobPickup[i][0] = CreatePickup(1210, 1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 0);
-            jobLabel[i][0] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Take Job [ N ]"c_grey" \171;", -1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 3.50, 0, false, jobInfo[i][jobName]);
-        
-            jobPickup[i][1] = CreatePickup(1275, 1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 0);
-            jobLabel[i][1] = Create3DTextLabel(""c_grey"\187; "c_white"Job : %s "c_grey"\171; \n\187; "c_white"Uniform [ N ]"c_grey" \171;", -1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 3.50, 0, false, jobInfo[i][jobName]);
+            jobPickup[i][0] = CreateDynamicPickup(1210, 1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], -1, -1);
+            jobLabel[i][0] = CreateDynamic3DTextLabel(tj_str, -1, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2], 3.50, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 0, -1, -1);
+            
+            jobPickup[i][1] = CreateDynamicPickup(1275, 1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], -1, -1);
+            jobLabel[i][1] = CreateDynamic3DTextLabel(tu_str,  -1, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2], 3.50, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 0, -1, -1);
 
             printf("[ JOB ] %s #LOADED", jobInfo[i][jobName]);
 
@@ -202,7 +211,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     playerUniform[playerid] = INVALID_JOB_ID;
 
                     SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
-                    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste skinuli uniformu!");
+                    SendClientMessage(playerid, 0xFF0056FF, "%s \187; "c_white"Uspjesno ste skinuli uniformu!", jobInfo[uniform][jobName]);
                 }
 
                 else {
@@ -210,7 +219,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     playerUniform[playerid] = jobInfo[uniform][jobID];
 
                     SetPlayerSkin(playerid, jobInfo[uniform][jobUniform]);
-                    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste uzeli uniformu!");
+                    SendClientMessage(playerid, 0xFF0056FF, "%s \187; "c_white"Uspjesno ste uzeli uniformu!", jobInfo[uniform][jobName]);
                 }
             }
             else { SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposljeni kao %s", jobInfo[uniform][jobName]); }
@@ -225,23 +234,18 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 YCMD:poslovi(playerid, params[], help) = jobs;
 YCMD:jobs(playerid, params[], help) 
 {
-    
+    new dialogStrg[246];
+
     foreach(new i : iter_Jobs) {
 
         if(i == INVALID_JOB_ID) {
 
-            SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Nema biznis nema pari!");
+            SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Desila se greska u skripti!");
             return ~1;
         }
-
-        new dialogStrg[246];
-        format(dialogStrg, sizeof dialogStrg, " >> "c_white"%d | %s\n", jobInfo[i][jobID], jobInfo[i][jobName]);
-
-        Dialog_Show(playerid, "dialog_JobList", DIALOG_STYLE_LIST, ">> Poslovi", dialogStrg, "OK", "");
-        break;
-
+        format(dialogStrg, sizeof dialogStrg, " >> "c_white"%d | %s\n%s", jobInfo[i][jobID], jobInfo[i][jobName], dialogStrg);
     }
-
+    Dialog_Show(playerid, "dialog_JobList", DIALOG_STYLE_LIST, ">> Poslovi", dialogStrg, "OK", "");
     return 1;
 }
 
