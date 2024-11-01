@@ -20,6 +20,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 new medic_Time[MAX_PLAYERS];
+new bool:normaldeath[MAX_PLAYERS];
 
 new const Float:sz_BedLocations[][] = {
 
@@ -65,6 +66,7 @@ timer medicCooldown[1000](playerid)
 hook OnPlayerConnect(playerid) {
 
     medic_Time[playerid] = 0;
+    normaldeath[playerid] = false;
 
     return (true);
 }
@@ -72,16 +74,38 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerDeath(playerid, killerid, reason) {
 
     medic_Time[playerid] = 30;
-
-    new xRand = random(5);
-
-    SetPlayerCompensatedPosEx(playerid, sz_BedLocations[xRand][0], sz_BedLocations[xRand][1], sz_BedLocations[xRand][2], -1, 23, 5000);
-    SpawnPlayer(playerid);
-    PreloadAnimations(playerid);
-    ApplyAnimation(playerid, "CRACK", "crckdeth3", 4.1, true, true, true, true, 2);
-    SetPlayerInterior(playerid, 23);
-    defer medicCooldown(playerid);
+    normaldeath[playerid] = true;
 
     return (true);
 }
 
+hook OnPlayerSpawn(playerid)
+{
+    if(normaldeath[playerid])
+    {
+        new xRand = random(5);
+        SetPlayerCompensatedPosEx(playerid, sz_BedLocations[xRand][0], sz_BedLocations[xRand][1], sz_BedLocations[xRand][2], -1, 23, 7000);
+        defer medicCooldown(playerid);
+        SetTimerEx("DelayedMedInt", 150, false, "d", playerid);
+    }
+    return (true);
+}
+
+forward DelayedMedInt(playerid);
+public DelayedMedInt(playerid)
+{
+    SetPlayerInterior(playerid, 23);
+    if(IsPlayerControllable(playerid))
+    {
+        TogglePlayerControllable(playerid, false);
+        PreloadAnimations(playerid);
+        ApplyAnimation(playerid, "CRACK", "crckdeth3", 4.1, true, true, true, true, 2);
+    }
+}
+
+YCMD:killme(playerid, params[], help)
+{
+    SetPlayerHealth(playerid, 0.0);
+
+    return true;
+}
