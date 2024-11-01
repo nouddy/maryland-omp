@@ -371,3 +371,55 @@ Dialog:dialog_factionName(playerid, response, listitem, string:inputtext[]) {
 
     return (true);
 }
+
+// Faction Member Respect Give (Stock for robs etc)
+stock Faction_GiveRespect(playerid, amount)
+{
+    if(FactionMember[playerid][factionID] == 0) return false;
+
+    FactionMember[playerid][factionRespect] += amount;
+
+    new q[256];
+    mysql_format(SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE `member_id` = '%d'", FactionMember[playerid][factionRespect], playerid);
+    mysql_tquery(SQL, q);
+
+    SendClientMessage(playerid, x_server, "faction \187; "c_white"Nagradjeni ste sa %d respekta.", amount);
+
+    return true;
+}
+
+
+// Stock for counting members of some org by SIKA 101 PLUS
+stock Faction_CountMembers(fID)
+{
+    new countQuery[256];
+
+    mysql_format(SQL, countQuery, sizeof countQuery, "SELECT COUNT(`member_id`) AS `member_count` FROM `faction_members` WHERE `faction_id` = '%d'", fID);
+    mysql_tquery(SQL, countQuery, "Faction_MemberCountCallback", "d", fID);
+
+    return true;
+}
+
+// Logic for getting members from sql
+forward Faction_MemberCountCallback(fID);
+public Faction_MemberCountCallback(fID)
+{
+    if(cache_num_rows() > 0)
+    {
+        new member_count;
+        cache_get_value_name_int(0, "member_count", member_count);
+
+        if(member_count < 5) return printf("Ova organizacija ima manje od 5 clanova. Broj clanova u org %d", member_count);
+    }
+
+    return true;
+}
+
+/* TODO
+
+Make cmd /orgstats za lidere gde mogu pratiti broj membera etc i kolko im fali do sledeceg upgrade
+kad dodju do odredjenog sranja odu na mesto na mapi i idu upgrade. I onda ce im traziti da kupe kucu itd sto sve treba za upgrade.
+Namestiti safe money za org i za drugs od org.
+Dodato brojanje membera od org i dodato logika za davanje respekta igracu.
+
+*/

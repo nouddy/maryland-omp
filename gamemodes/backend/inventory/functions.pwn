@@ -11,6 +11,8 @@
 *   @Author : Noddy
 *   @Date : 7.13.2024
 
+? TODO > Dodati funkcije za getanje droge itd da se mogu koristiti u ostalim modulima.
+
 */
 
 #include <ysilib\YSI_Coding\y_hooks>
@@ -37,6 +39,9 @@ stock Inventory_ReturnItemName(id) {
         case INVENTORY_ITEM_LIGHTER: { string = "Upaljac"; }
         case INVENTORY_ITEM_BEER: { string = "Piva"; }
         case INVENTORY_ITEM_CHICKEN_BURGER: { string = "Pileci hamburger"; }
+        case INVENTORY_ITEM_MARIJUANA: { string = "Marihuana"; }
+        case INVENTORY_ITEM_KOKAIN: { string = "Kokain"; }
+        case INVENTORY_ITEM_MDMA: { string = "MDMA"; }
 
         default: { string = "[Undefined]:"; }
     }

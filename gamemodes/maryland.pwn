@@ -560,7 +560,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.script"					//* Bunker
 #include "backend/factions/illegal/faction.pwn"					    //* Core
-
+#include "backend/factions/illegal/drugs.pwn"						//* Drugs
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.temp"
 

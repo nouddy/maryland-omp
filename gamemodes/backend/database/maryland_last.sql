@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2024 at 05:35 PM
+-- Generation Time: Nov 01, 2024 at 07:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,7 @@ CREATE TABLE `accounts` (
 INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `RegisterDate`, `Email`) VALUES
 (11, 'Frosty', '123456', 4, '2023-11-29 17:25:33', '2023-11-29 17:25:33', 'fuck@off.com'),
 (12, 'Nodislav', 'dino9099', 4, '2023-11-30 18:06:44', '2023-11-30 18:06:44', 'dino@mailer.com'),
-(13, 'Nodislav_Aleksienko', 'ferid420', 4, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com'),
+(13, 'Nodislav_Aleksienko', 'ferid420', 0, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com'),
 (14, 'Vostic', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com'),
 (15, 'Ogi', 'Aleksic999', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com'),
 (16, 'Capital_Camora', 'ichbruderman1', 4, '2023-12-02 17:52:35', '2023-12-02 17:52:35', 'capital@samp.com'),
@@ -53,7 +53,8 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (19, 'Klaus', 'klaus021', 4, '2023-12-03 13:51:35', '2023-12-03 13:51:35', 'dada@gmail.com'),
 (20, 'Darko_Jovanovic', 'durant123', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
 (21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
-(22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com');
+(22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com'),
+(23, 'Vostic_Dev', 'Voki23', 0, '2024-10-28 15:42:50', '2024-10-28 15:42:50', 'vostic@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -184,10 +185,11 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 1701607678, 1401.78, 1591.35, 12.0481),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 1701611624, 1401.78, 1591.35, 12.0481),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 1701621495, 1401.78, 1591.35, 12.0481),
-(11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 5700, 0, 1702238719, 1401.78, 1591.35, 12.0481),
-(12, 13, 'Howard_Picketina', 12, 1, 0, 0, 2, 100000000, 0, 1706641971, 1401.78, 1591.35, 12.0481),
+(11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 676006016, 0, 1702238719, 1401.78, 1591.35, 12.0481),
 (13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 1717421538, 1401.78, 1591.35, 12.0481),
-(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 1717423439, 1401.78, 1591.35, 12.0481);
+(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 1717423439, 1401.78, 1591.35, 12.0481),
+(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 1730130178, 1401.78, 1591.35, 12.0481),
+(17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 1730137305, 1401.78, 1591.35, 12.0481);
 
 -- --------------------------------------------------------
 
@@ -393,6 +395,13 @@ CREATE TABLE `metros` (
   `metroVw` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `metros`
+--
+
+INSERT INTO `metros` (`metroID`, `metroX`, `metroY`, `metroZ`, `MetroRoute`, `metroInt`, `metroVw`) VALUES
+(1, 869.928, -1337.28, 13.6469, 1, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -425,7 +434,10 @@ INSERT INTO `player_crypto` (`character_id`, `AmountBTC`, `AmountETH`, `AmountLT
 (11, 0, 0, 0, 0, 0),
 (12, 0, 0, 0, 0, 0),
 (13, 0, 0, 0, 0, 0),
-(14, 0, 0, 0, 0, 0);
+(14, 0, 0, 0, 0, 0),
+(15, 0, 0, 0, 0, 0),
+(16, 0, 0, 0, 0, 0),
+(17, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -459,9 +471,10 @@ INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, 
 (9, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 13:53:44'),
 (10, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 16:38:15'),
 (11, 0, 0, 0, 0, 0, 0, -1, '2023-12-10 21:05:19'),
-(12, 0, 0, 0, 0, 0, 0, -1, '2024-01-30 20:12:51'),
 (13, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 15:32:18'),
-(14, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 16:03:59');
+(14, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 16:03:59'),
+(15, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 16:42:58'),
+(17, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 18:41:45');
 
 -- --------------------------------------------------------
 
@@ -489,10 +502,11 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 (8, 0, 0, 0),
 (9, 0, 0, 0),
 (10, 0, 0, 0),
-(11, 0, 0, 0),
-(12, 0, 0, 0),
+(11, 1, 0, 1),
 (13, 0, 0, 0),
-(14, 0, 0, 0);
+(14, 0, 0, 0),
+(15, 0, 0, 0),
+(17, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -504,6 +518,18 @@ CREATE TABLE `player_jewlery` (
   `character_id` int(11) NOT NULL,
   `Gold` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `player_jewlery`
+--
+
+INSERT INTO `player_jewlery` (`character_id`, `Gold`) VALUES
+(3, 0),
+(4, 0),
+(11, 0),
+(15, 0),
+(16, 0),
+(17, 0);
 
 -- --------------------------------------------------------
 
@@ -523,7 +549,47 @@ CREATE TABLE `player_property` (
 --
 
 INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VALUES
-(4, 5, 1, 0);
+(3, 0, -1, 0),
+(4, 0, 1, 0),
+(11, 1, -1, 0),
+(15, 0, -1, 0),
+(17, 0, -1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ports`
+--
+
+CREATE TABLE `ports` (
+  `ID` int(11) NOT NULL,
+  `Name` varchar(64) NOT NULL,
+  `Type` int(11) NOT NULL,
+  `posX` float NOT NULL,
+  `posY` float NOT NULL,
+  `posZ` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ports`
+--
+
+INSERT INTO `ports` (`ID`, `Name`, `Type`, `posX`, `posY`, `posZ`) VALUES
+(1, 'Spawn', 1, 815.897, -1332.13, 13.4854),
+(2, 'Banka', 1, 996.333, -1157.41, 23.9641),
+(3, 'Bolnica', 1, 2029.9, -1421.9, 16.9922),
+(4, 'Biro Rada', 1, 1454.16, -1028.46, 23.9278),
+(5, 'Hotel', 1, 1792.66, -1280.81, 13.7328),
+(6, 'Business {737be1}Centre', 1, 1641.53, -1322.93, 17.5447),
+(7, 'Baltimore Opstina', 1, 1482.45, -1806.75, 23.7203),
+(8, 'Bus Vozac', 2, 1805.88, -1888.63, 13.5076),
+(9, 'Trzni Centar', 1, 1114.87, -931.297, 43.1413),
+(10, '{737BE1}Police {FFFFFF}Department', 3, 359.57, -1538.13, 33.6132),
+(11, 'Auto Salon', 1, 934.99, -1722.07, 13.646),
+(12, 'Maryland Jewelry', 1, 1721.67, -1627.55, 20.2128),
+(13, 'Auto Skola', 1, 2515.46, -1510, 24.0991),
+(14, 'Teretana', 1, 802.339, -1762.18, 13.6466),
+(15, 'Technomedia', 1, 1683.79, -1635.24, 13.6461);
 
 -- --------------------------------------------------------
 
@@ -586,11 +652,7 @@ CREATE TABLE `re_business` (
 --
 
 INSERT INTO `re_business` (`bID`, `bOwner`, `bName`, `bLocked`, `bType`, `bPrice`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bProducts`, `bInt`, `bVW`) VALUES
-(1, 0, 'Ammunation', 0, 11, 250000, 1, 1368.49, -1279.27, 13.5469, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1),
-(2, 0, 'Shop', 0, 1, 250000, 1, 1315.44, -898.382, 39.5781, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 2),
-(3, 0, '1', 0, 1, 250000, 1, 721.71, -1199.13, 19.0703, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 3),
-(4, 0, '1', 0, 11, 250000, 1, 1999.48, -1129.64, 25.6198, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 4),
-(5, 0, '1', 0, 1, 250000, 1, 1333.82, -1294.56, 13.6463, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 5);
+(1, 0, 'Ammunation', 0, 11, 250000, 10, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -633,11 +695,7 @@ CREATE TABLE `re_centar` (
 --
 
 INSERT INTO `re_centar` (`re_BCenterID`, `re_BCenterOwner`, `re_BCenterName`, `re_BCenterInterior`, `re_BCenterVirtualWorld`, `re_BCenterType`, `re_BCenterIntX`, `re_BCenterIntY`, `re_BCenterIntZ`, `re_BCenterLocked`, `re_BCenterSafe`, `re_BCenterSafePosX`, `re_BCenterSafePosY`, `re_BCenterSafePosZ`, `re_BCenterWardrobe`, `re_BCenterWardrobePosX`, `re_BCenterWardrobePosY`, `re_BCenterWardrobePosZ`, `re_BCenterArmory`, `re_BCenterArmoryPosX`, `re_BCenterArmoryPosY`, `re_BCenterArmoryPosZ`, `re_BCenterAgentType`, `re_AgentPosX`, `re_AgentPosY`, `re_AgentPosZ`, `re_AgentPosA`) VALUES
-(1, 3, 'Nepoznato', 4, 1, 1, 1826.06, -1286.32, 131.754, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 1827.96, -1302.59, 131.739, 3.5893),
-(2, 4, 'Nepoznato', 9, 2, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942),
-(3, 12, 'Nepoznato', 9, 3, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 150, 2279.2, 2183.56, 103.916, 0.2942),
-(4, 14, 'Nepoznato', 9, 4, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942),
-(5, 4, 'Nepoznato', 9, 5, 2, 2277.15, 2199.62, 103.931, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 2279.2, 2183.56, 103.916, 0.2942);
+(1, 11, 'FedjaOlsun', 4, 1, 1, 1826.06, -1286.32, 131.754, 0, 1, 0, 0, 0, 1, 2262.13, 2178.29, 103.916, 1, 2295.51, 2176.33, 103.906, 147, 1827.96, -1302.59, 131.739, 3.5893);
 
 -- --------------------------------------------------------
 
@@ -748,7 +806,9 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Vostic', 0, 0, 0),
 ('Nodislav_Alksienko', 0, 0, 0),
 ('Casey_Skendy', 0, 0, 0),
-('Darko_Jovanovic', 0, 0, 0);
+('Darko_Jovanovic', 0, 0, 0),
+('Vostic_Dev', 0, 0, 0),
+('Nodislav', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -858,6 +918,12 @@ ALTER TABLE `player_property`
   ADD UNIQUE KEY `player_id` (`pOwner`);
 
 --
+-- Indexes for table `ports`
+--
+ALTER TABLE `ports`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `pumps`
 --
 ALTER TABLE `pumps`
@@ -903,7 +969,7 @@ ALTER TABLE `warns`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `bankaccounts`
@@ -933,7 +999,7 @@ ALTER TABLE `cash_registers`
 -- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `containers`
@@ -969,7 +1035,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `metros`
 --
 ALTER TABLE `metros`
-  MODIFY `metroID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `metroID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `ports`
+--
+ALTER TABLE `ports`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pumps`
@@ -981,13 +1053,13 @@ ALTER TABLE `pumps`
 -- AUTO_INCREMENT for table `re_business`
 --
 ALTER TABLE `re_business`
-  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `re_centar`
 --
 ALTER TABLE `re_centar`
-  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `re_BCenterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `safezones`
