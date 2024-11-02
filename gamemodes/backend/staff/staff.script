@@ -823,3 +823,16 @@ YCMD:freeze(playerid, params[], help){
 
 	return (true);
 }
+
+YCMD:tod(playerid, params[], help){
+
+	if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/tod [ vreme (0-23) ]");
+
+	new time;
+	if(sscanf(params, "i", time)) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/tod [ vreme (0-23) ]");
+
+	SetWorldTime(time);
+	SendClientMessageToAll(x_blue, "maryland \187; "c_white"Vreme servera je trenutno %d sati.", time);
+
+	return (true);
+}
