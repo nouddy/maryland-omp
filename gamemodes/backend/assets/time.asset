@@ -49,3 +49,12 @@ stock GetRemainingTime(unixTimestamp, str[20])
     new remainingSeconds = unixTimestamp - gettime();
     GetReadableTime(remainingSeconds, str);
 }
+
+stock convertTime(vreme) {
+    new string[11];
+    new minuti, sekunde;
+    minuti = floatround(vreme/60);
+    sekunde = floatround(vreme - minuti*60);
+    format(string, sizeof string, "%02d:%02d", minuti, sekunde);
+    return string;
+}

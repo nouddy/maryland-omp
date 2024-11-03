@@ -22,7 +22,9 @@
 #define YSI_NO_HEAP_MALLOC
 
 #define MAX_Y_HOOKS (256)
-#define CGEN_MEMORY 80000
+#define CGEN_MEMORY 140000
+
+#pragma dynamic 200000
 
 #include <open.mp>
 #include <a_mysql>
@@ -471,6 +473,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/custommarkers.inc"							//* Custom markers
 #include "backend/finance/currency.pwn"								//* Currency
 #include "backend/anti-cheat/anticheat.pwn"
+#include "backend/assets/ml_notify.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
@@ -516,7 +519,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/crypto/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Inventory
-#include "backend/inventory/main.pwn"
+#include "backend/inventory/inventory.pwn"
 #include "backend/inventory/functions.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Finances

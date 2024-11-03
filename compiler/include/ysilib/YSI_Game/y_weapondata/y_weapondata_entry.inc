@@ -108,10 +108,7 @@ Optional plugins:
 #define WEAPON_FIRE_TYPE_CAMERA 5
 //P:D(Weapon_IsValid(weaponid));
 //#define Weapon_IsValid(%0) (%0>=1 && %0<=18 || %0>=21 && %0<=46)
-stock bool:Weapon_IsValid(weaponid)
-{
-	return (weaponid >= 1 && weaponid <= 18 || weaponid >= 21 && weaponid <= 46);
-}
+
 
 #if !defined YSI_WEAPDATA_MAX_STRING_SIZE
 	#define YSI_WEAPDATA_MAX_STRING_SIZE (24)

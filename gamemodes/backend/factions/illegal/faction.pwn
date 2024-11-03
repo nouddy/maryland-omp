@@ -12,21 +12,6 @@ enum {
     FACTION_TYPE_MAFIA
 }
 
-stock Faction_GetGroupType(id) {
-
-    new string[24];
-
-    switch(FactionInfo[id][factionType]) {
-
-        case FACTION_TYPE_UNKNOWN: { string = "Civil"; }
-        case FACTION_TYPE_FRIENDS: { string = "Friends"; }
-        case FACTION_TYPE_GANG: { string = "Gang"; }
-        case FACTION_TYPE_MAFIA: { string = "Mafia"; }
-        default: { string = "[Undefined]"; }
-    }
-
-    return string;
-}
 
 new faction_ProhibitedSkins[17] = {
 
@@ -129,7 +114,8 @@ public Faction_LoadData() {
 
             faction_Label[i] = Create3DTextLabel(str_faction, -1, FactionInfo[i][factionArea][0], FactionInfo[i][factionArea][1], FactionInfo[i][factionArea][2], 3.50, 0);
         }
-
+        new ret = Iter_Add(iter_Factions, i);
+        printf("IterFactions [%d] = %d", i, ret);
     }
 
     return 1;
@@ -163,13 +149,13 @@ public Member_LoadData(id) {
     new rows = cache_num_rows();
     if(!rows) return false;
 
-    else {
+    cache_get_value_name_int(0, "member_id", FactionMember[id][characterID]);
+    cache_get_value_name_int(0, "faction_id", FactionMember[id][factionID]);
+    cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
+    cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
 
-        cache_get_value_name_int(0, "member_id", FactionMember[id][characterID]);
-        cache_get_value_name_int(0, "faction_id", FactionMember[id][factionID]);
-        cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
-        cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
-    }
+    SendClientMessage(id, x_grey, "faction \187; "c_white"Vas ID fakcije je : %d", FactionMember[id][factionID]);
+
     return 1;
 }
 
@@ -181,14 +167,15 @@ public Member_ShowList(playerid) {
 
     else {
 
-        new dialogStr[120];
-
+        new dialogStr[1024];
+        new stringicc[288];
         for(new i = 0; i < rows; i++) {
 
             new charID;
             cache_get_value_name_int(i, "member_id", charID);
 
-            format(dialogStr, sizeof dialogStr, ">> %d | << %d\n", i+1, charID);
+            format(stringicc, sizeof stringicc, "\187; %d | ID:{DAA520}%d\n", i+1, charID);
+            strcat(dialogStr, stringicc);
         }
 
         Dialog_Show(playerid, "dialog_noreturn-faction", DIALOG_STYLE_LIST, "Faction - Members", dialogStr, "Ok", "");
@@ -202,7 +189,7 @@ hook OnGameModeInit() {
 
     print("factions/faction.pwn > Dev Progress Loaded.");
 
-    //mysql_tquery(SQL, "SELECT * FROM `factions`", "PreloadFactionData");    > For later.
+    //mysql_tquery(SQL, "SELECT * FROM `factions`", "PreloadFactionData");    > For later. Sorry mr voki
 
     ActorsFactionCreate[0] = CreateDynamicActor(208, -775.2356, -1972.8859, 8.7799, 182.1289, 1, 100.0, -1, 3, -1);
     ActorsFactionCreate[1] = CreateDynamicActor(228, -775.9028, -1979.6080, 8.7799, 312.1205, 1, 100.0, -1, 3, -1);
@@ -215,8 +202,7 @@ hook OnGameModeInit() {
 
     FactionCreateLabels[0] = CreateDynamic3DTextLabel(""c_server" » "c_grey"Faction Create "c_server"«\n"c_server" » "c_grey"Pritisni 'Y' za kreiranje. "c_server"«", x_white, -776.4226, -1977.0199, 8.7799, 4.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 3, -1);
 
-    new q[267];
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `factions`", "Faction_LoadData");
+    mysql_tquery(MySQL:SQL, "SELECT * FROM `factions`", "Faction_LoadData"); // * I just lost 30 minutes on my mistake...
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -226,7 +212,7 @@ hook OnCharacterLoaded(playerid) {
     new q[267];
 
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `faction_members` WHERE `member_id` = '%d'",GetCharacterSQLID(playerid));
-    mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d",GetCharacterSQLID(playerid));
+    mysql_tquery(MySQL:SQL, q, "Member_LoadData", "d", playerid);
 
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -263,10 +249,50 @@ YCMD:members(playerid, params[], help)
     new q[267];
 
     new orgID = FactionMember[playerid][factionID];
-    new sID = FactionInfo[orgID][factionID];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT `member_id` FROM `faction_members` WHERE `faction_id` = '%d'", sID);
+    mysql_format(MySQL:SQL, q, sizeof q, "SELECT `member_id` FROM `faction_members` WHERE `faction_id` = '%d'", orgID);
     mysql_tquery(MySQL:SQL, q, "Member_ShowList", "d", playerid);
+
+    return 1;
+}
+
+YCMD:allfactions(playerid, params[], help) 
+{
+    SendClientMessage(playerid, -1, "DEBUG: My Faction SQL %d", FactionMember[playerid][factionID]);
+
+    foreach(new i : iter_Factions) {
+
+        SendClientMessage(playerid, -1, "DEBUG: Faction %s(%d) SQL(%d)", FactionInfo[i][factionName], i, FactionInfo[i][factionID]);
+    }
+
+    return 1;
+}
+
+YCMD:f(playerid, params[], help) {
+
+    if(FactionMember[playerid][factionID] < 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan fakcije!");
+
+    new message[128];
+
+    if(sscanf(params, "s[128]", message))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/f [Poruka]");
+    
+    new fID = FactionMember[playerid][factionID];
+    new tmp_message[320];
+
+    foreach(new i : iter_Factions) {
+
+        if(fID == FactionInfo[i][factionID]) {
+            
+            SendClientMessage(playerid, -1, "DEBUG: naslo valjda");
+            format(tmp_message, sizeof tmp_message, ""c_grey"#FACTION %s \187; "c_white"%s[%d] %s.",
+            FactionInfo[i][factionName], ReturnPlayerName(playerid), playerid, message);
+            break;
+        }
+    }
+
+    Faction_SendMessage(fID, tmp_message);
 
     return 1;
 }
@@ -398,6 +424,46 @@ stock Faction_CountMembers(fID)
     mysql_tquery(SQL, countQuery, "Faction_MemberCountCallback", "d", fID);
 
     return true;
+}
+
+stock Faction_GetGroupType(id) {
+
+    new string[24];
+
+    switch(FactionInfo[id][factionType]) {
+
+        case FACTION_TYPE_UNKNOWN: { string = "Civil"; }
+        case FACTION_TYPE_FRIENDS: { string = "Friends"; }
+        case FACTION_TYPE_GANG: { string = "Gang"; }
+        case FACTION_TYPE_MAFIA: { string = "Mafia"; }
+        default: { string = "[Undefined]"; }
+    }
+
+    return string;
+}
+
+stock Faction_PlayerGroupType(playerid) {
+    
+    foreach(new i : iter_Factions) {
+
+        if(FactionMember[playerid][factionID] == FactionInfo[i][factionID]) 
+            return FactionInfo[i][factionType];
+    }
+    return FACTION_TYPE_UNKNOWN;
+
+}
+
+stock Faction_SendMessage(faction, const message[]) {
+
+    foreach(new i : Player) {
+
+        if(FactionMember[i][factionID] == faction) {
+
+            SendClientMessage(i, -1, message);
+        }
+    }
+
+    return (true);
 }
 
 // Logic for getting members from sql

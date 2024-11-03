@@ -2571,7 +2571,7 @@ stock acc_GivePlayerWeapon(playerid, WEAPON:weaponid, ammo)
 
 stock orig_SetPlayerAmmo(playerid, weaponslot, ammo) return SetPlayerAmmo(playerid, weaponslot, ammo);
 
-stock acc_SetPlayerAmmo(playerid, weaponslot, ammo)
+stock acc_SetPlayerAmmo(playerid, WEAPON:weaponslot, ammo)
 {
 	if(!(0 <= playerid < MAX_PLAYERS)) return 0;
 	#if defined FILTERSCRIPT
