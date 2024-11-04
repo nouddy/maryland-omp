@@ -28,6 +28,15 @@
 #define MAX_PLANTS      (MAX_PLAYERS * 10)  // * Every player on server can have up to 10 plants (at once)
 #define PLANT_DISPLACEMENT      0.128       //* Fuck this shit I stole it
 
+//Cocaine
+#define MAX_HERBS 20
+#define INVALID_HERB_ID -1
+
+new HerbObject[MAX_HERBS],
+    HerbArea[MAX_HERBS],
+    HerbTimer[MAX_HERBS],
+    Text3D:HerbLabel[MAX_HERBS];
+
 
 //* Inventory item ID's
 
@@ -64,6 +73,42 @@ new RothTimer[MAX_PLANTS],
 
 new weed_zone;
 
+
+//Cocaine
+
+enum HerbData{
+    Float:HerbX,
+    Float:HerbY,
+    Float:HerbZ,
+    HerbModel,
+    Float:HerbRotX,
+    Float:HerbRotY,
+    Float:HerbRotZ,
+}
+
+//x,y,z,modelid,rx,ry,rz
+new HerbPositions[MAX_HERBS][HerbData] = {
+    {978.038391, 184.931762, 34.524505, 2249, 0.0, 0.0, 0.0},
+    {1134.495117, 482.813110, 24.820110, 811, 0.0, 0.0, -107.2},
+    {1015.625244, -82.297264, 1.082602, 2345, 0.0, 0.0, 10.2},
+    {1587.888305, -83.889030, -3.048310, 855, 0.0, 0.0, 0.0},
+    {585.466674, -371.482696, 29.196155, 3532, 0.0, 0.0, 112.8},
+    {382.171386, 11.290806, 6.290235, 811, 0.0, 0.0, -45.0},
+    {-818.230224, 48.439861, 37.409496, 815, 0.0, 0.0, 0.0},
+    {2589.792724, -653.552917, 134.046432, 809, 0.0, 0.0, 0.0},
+    {2351.034912, -683.781372, 132.316131, 859, 0.0, 0.0, 0.0},
+    {802.445373, -181.449096, 10.689357, 2247, 0.0, 0.0, 0.0},
+    {2121.213378, -85.999298, 0.860602, 806, 0.0, 0.0, 0.0},
+    {2864.915039, -409.177612, 6.740871, 815, 0.0, 0.0, -147.0},
+    {162.623947, -392.340789, 1.514611, 806, 0.0, 0.0, 0.0},
+    {139.909622, -1105.504272, 41.364116, 2249, 0.0, 0.0, 73.7},
+    {855.514892, -10.931550, 62.032058, 864, 0.0, 0.0, -82.6},
+    {1038.925781, 67.669708, 63.399932, 864, 0.0, 0.0, 0.0},
+    {783.839843, 100.555610, 67.050361, 864, 0.0, 0.0, 0.0},
+    {493.360504, -244.988159, 0.451016, 806, 0.0, 0.0, 0.0},
+    {470.220306, -516.334472, 42.727748, 811, 0.0, 0.0, 0.0},
+    {220.390792, -664.897155, 45.957477, 811, 0.0, 0.0, 0.0}
+};
 //*==============================================================================
 //?--->>> Querys & Funcs
 //*==============================================================================
@@ -171,7 +216,7 @@ public mysql_LoadPlantData() {
 
         for(new i = 0; i < rows; i++) {
 
-            cache_get_value_name_int(i, "ID", PlantInfo[i][plantID]);
+            cache_get_value_name_int(i, "PlantID", PlantInfo[i][plantID]);
             cache_get_value_name_int(i, "CharacterID", PlantInfo[i][plantOwner]);
             cache_get_value_name_int(i, "GrowTime", PlantInfo[i][plantGrowTime]);
             cache_get_value_name_int(i, "RothTime", PlantInfo[i][plantRothTime]);
@@ -212,6 +257,60 @@ stock Weed_GetPlantedPlants(playerid) {
     return count;
 }
 
+//Cocaine
+stock HerbIsNearPlayer(playerid)
+{
+    new Float:tmpPos[3];
+
+    for(new i = 0; i < MAX_HERBS; i++)
+    {
+        GetDynamicObjectPos(HerbObject[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+
+        if(IsPlayerInDynamicArea(playerid, HerbArea[i]) && IsPlayerInRangeOfPoint(playerid, 5.0, tmpPos[0], tmpPos[1], tmpPos[2]) && IsValidDynamicObject(HerbObject[i])) return i;
+    }
+    return INVALID_HERB_ID;
+}
+
+stock CreateAllHerbs()
+{
+    new count = 0;
+    for(new i = 0; i < MAX_HERBS; i++)
+    {
+        new Float:hx = HerbPositions[i][HerbX],
+            Float:hy = HerbPositions[i][HerbY],
+            Float:hz = HerbPositions[i][HerbZ],
+            herbModel = HerbPositions[i][HerbModel],
+            Float:hrx = HerbPositions[i][HerbRotX],
+            Float:hry = HerbPositions[i][HerbRotY],
+            Float:hrz = HerbPositions[i][HerbRotZ];
+
+        HerbObject[i] = CreateDynamicObject(herbModel, hx, hy, hz, hrx, hry, hrz, -1, -1, -1);
+        HerbArea[i] = CreateDynamicCircle(hx, hy, 5.0);
+        HerbLabel[i] = Create3DTextLabel(""c_server"(( Retka biljka : 'N' ))", -1, hx, hy, hz, 3.50, 0);
+
+        count ++;
+    }
+    printf("Cocaine system > Kreiranje biljaka uspesno zavrseno, broj kreiranih biljaka %d", count);
+}
+
+forward RespawnHerb(HerbID);
+public RespawnHerb(HerbID)
+{
+    new Float:hx = HerbPositions[HerbID][HerbX],
+    Float:hy = HerbPositions[HerbID][HerbY],
+    Float:hz = HerbPositions[HerbID][HerbZ],
+    herbModel = HerbPositions[HerbID][HerbModel],
+    Float:hrx = HerbPositions[HerbID][HerbRotX],
+    Float:hry = HerbPositions[HerbID][HerbRotY],
+    Float:hrz = HerbPositions[HerbID][HerbRotZ];
+
+    HerbObject[HerbID] = CreateDynamicObject(herbModel, hx, hy, hz, hrx, hry, hrz, -1, -1, -1);
+    HerbLabel[HerbID] = Create3DTextLabel(""c_server"(( Retka biljka : 'N' ))", -1, hx, hy, hz, 3.50, 0);
+    KillTimer(HerbTimer[HerbID]);
+    
+    return true;
+}
+
 //*==============================================================================
 //?--->>> Hooks
 //*==============================================================================
@@ -225,6 +324,8 @@ hook OnGameModeInit() {
     Create3DTextLabel(""c_server"\187; "c_white"Black Market "c_server"\171;\n"c_white"[ N ]", -1, -396.7119,1275.0776,8.0296, 4.50, 0);
 
     mysql_tquery(SQL, "SELECT * FROM `player_plants`", "mysql_LoadPlantData");
+
+    CreateAllHerbs();
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -304,6 +405,21 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 }
             }
         }
+        // Cocaine
+        new HerbID = HerbIsNearPlayer(playerid);
+        if(HerbID == INVALID_HERB_ID) return false;
+        if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_HERBS) >= 15)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec posjedujete maksimalnu kolicinu retkih biljaka!");
+
+        DestroyDynamicObject(HerbObject[HerbID]);
+        Delete3DTextLabel(HerbLabel[HerbID]);
+            
+        HerbTimer[HerbID] = SetTimerEx("RespawnHerb", 240 * 1000, false, "d", HerbID);
+
+        Inventory_AddItem(playerid, INVENTORY_ITEM_HERBS, 1);
+        ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ubrao si retku biljku sa poda");
+        
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -317,6 +433,22 @@ hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
                                            Kako biste posadili travu koristite ~b~/posadi", 
                                            "PLANTAZA TRAVE", 
         19473);
+    }
+
+    //Cocaine
+    for (new i = 0; i < MAX_HERBS; i++)
+    {
+        if(areaid == HerbArea[i])
+        {
+            if(IsValidDynamicObject(HerbObject[i]))
+            {
+                Notify_SendNotification(playerid, "U zoni ste retke biljke~n~\
+                               Kako biste ubrali biljku ~b~[ N ]", 
+                               "RARE HERBS", 
+                    19473);
+                break;
+            }
+        }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
