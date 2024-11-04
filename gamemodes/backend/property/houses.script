@@ -17,7 +17,6 @@
  *  @Module         property
  */
 
-
 //==================={Includes}=========================
 #include <ysilib\YSI_Coding\y_hooks>
 //======================================================
@@ -212,7 +211,7 @@ hook OnGameModeInit() {
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
-	if(newkeys & KEY_SECONDARY_ATTACK)
+	if(PRESSED(KEY_SECONDARY_ATTACK))
 	{
 		foreach(new i : iHouse) {
 
@@ -237,9 +236,27 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 		}
 	}
 
-
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+// YCMD:wardrobe(playerid, params[], help) {
+
+// 	foreach(new i : iHouse) {
+
+// 		if(player_House[playerid] == house_ID[i]) {
+
+// 			if(IsPlayerInRangeOfPoint(playerid, 3.50, house_Wardrobe[i][0], house_Wardrobe[i][1], house_Wardrobe[i][2])) {
+
+				
+
+// 				break;
+// 			}
+// 		}
+// 	}
+
+// 	return (true);
+// }
+
 
 YCMD:buyhouse(playerid, params[], help) {
 

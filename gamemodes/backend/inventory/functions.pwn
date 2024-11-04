@@ -46,7 +46,6 @@ new const inv_WeaponModels[47] = {
 	369,371	
 };
 
-
 stock Inventory_ReturnItemName(id) {
 
     new string[50];
@@ -386,9 +385,6 @@ stock Inventory_InterfaceControl(playerid, bool:show) {
 
 
 //*--> Items
-
-        new cID[12];
-        Container_IsNearPlayer(playerid, cID);
         for(new i = 0; i < 12; i++) {
             
 
@@ -449,73 +445,7 @@ stock Inventory_InterfaceControl(playerid, bool:show) {
             PlayerTextDrawShow(playerid, item_quantity[playerid][ tmp_idx ]);
         }
 
-        new floorItems[12];
-
-        for(new i = 0; i < 12; i++) {
-
-            if(cID[i] == INVALID_CONTAINER_ID) continue;
-
-            floorItems[i] = INVENTORY_INVALID_ITEM_TYPE;
-
-            new tmp_idx = i;
-            new Float:offX = ((i%4)*59.333) + 308.334;
-            new Float:offY = floatround(((i/4)*79.229), floatround_floor);
-            new tmp_str[64];
-
-            new index = ContainerData[cID[i]][containerItem];
-        
-            if(floorItems[i] == index) continue;
-
-            floorItems[i] = index;
-
-            container_item_bg[playerid][ tmp_idx ] = CreatePlayerTextDraw(playerid, 39.333267 + offX , 83.237045 + offY, ""); //* 1st item bg
-            PlayerTextDrawTextSize(playerid, container_item_bg[playerid][tmp_idx], 78.000000, 105.000000);
-            PlayerTextDrawAlignment(playerid, container_item_bg[playerid][tmp_idx], TEXT_DRAW_ALIGN_LEFT);
-            PlayerTextDrawColour(playerid, container_item_bg[playerid][tmp_idx], 148);
-            PlayerTextDrawSetShadow(playerid, container_item_bg[playerid][tmp_idx], 0);
-            PlayerTextDrawBackgroundColour(playerid, container_item_bg[playerid][tmp_idx], -256);
-            PlayerTextDrawFont(playerid, container_item_bg[playerid][tmp_idx], TEXT_DRAW_FONT_MODEL_PREVIEW);
-            PlayerTextDrawSetProportional(playerid, container_item_bg[playerid][tmp_idx], false);
-            PlayerTextDrawSetPreviewModel(playerid, container_item_bg[playerid][tmp_idx], 2731);
-            PlayerTextDrawSetPreviewRot(playerid, container_item_bg[playerid][tmp_idx], 0.000000, 0.000000, 0.000000, 1.000000);
-
-            container_item_title[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 78.666656 + offX, 105.792587 + offY, Inventory_ReturnItemName(index)); //* 1ST ITEM TITLE
-            PlayerTextDrawLetterSize(playerid, container_item_title[playerid][tmp_idx], 0.114999, 0.608592);
-            PlayerTextDrawAlignment(playerid, container_item_title[playerid][tmp_idx], TEXT_DRAW_ALIGN_CENTRE);
-            PlayerTextDrawColour(playerid, container_item_title[playerid][tmp_idx], -1);
-            PlayerTextDrawSetShadow(playerid, container_item_title[playerid][tmp_idx], 0);
-            PlayerTextDrawBackgroundColour(playerid, container_item_title[playerid][tmp_idx], 255);
-            PlayerTextDrawFont(playerid, container_item_title[playerid][tmp_idx], TEXT_DRAW_FONT_1);
-            PlayerTextDrawSetProportional(playerid, container_item_title[playerid][tmp_idx], true);
-
-            container_item_model[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 64.666671 + offX, 118.911109 + offY, ""); //* 1st item model
-            PlayerTextDrawTextSize(playerid, container_item_model[playerid][tmp_idx], 30.000000, 33.000000);
-            PlayerTextDrawAlignment(playerid, container_item_model[playerid][tmp_idx], TEXT_DRAW_ALIGN_LEFT);
-            PlayerTextDrawColour(playerid, container_item_model[playerid][tmp_idx], -1);
-            PlayerTextDrawSetShadow(playerid, container_item_model[playerid][tmp_idx], 0);
-            PlayerTextDrawBackgroundColour(playerid, container_item_model[playerid][tmp_idx], -256);
-            PlayerTextDrawFont(playerid, container_item_model[playerid][tmp_idx], TEXT_DRAW_FONT_MODEL_PREVIEW);
-            PlayerTextDrawSetProportional(playerid, container_item_model[playerid][tmp_idx], false);
-            PlayerTextDrawSetPreviewModel(playerid, container_item_model[playerid][tmp_idx], Container_ReturnItemModel(index));
-            PlayerTextDrawSetPreviewRot(playerid, container_item_model[playerid][tmp_idx], 0.000000, 0.000000, 0.000000, 1.000000);
-            PlayerTextDrawSetSelectable(playerid, container_item_model[playerid][tmp_idx], bool:Container_IsValidItem(index));
-
-            format(tmp_str, sizeof tmp_str, "%d", ContainerData[cID[i]][containerItemQuantity]);
-
-            container_item_quantity[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 98.333358 + offX , 154.325942 + offY,  tmp_str); // * 1ST Item quantity
-            PlayerTextDrawLetterSize(playerid, container_item_quantity[playerid][tmp_idx], 0.199666, 1.110518);
-            PlayerTextDrawAlignment(playerid, container_item_quantity[playerid][tmp_idx], TEXT_DRAW_ALIGN_RIGHT);
-            PlayerTextDrawColour(playerid, container_item_quantity[playerid][tmp_idx], -1);
-            PlayerTextDrawSetShadow(playerid, container_item_quantity[playerid][tmp_idx], 0);
-            PlayerTextDrawBackgroundColour(playerid, container_item_quantity[playerid][tmp_idx], 255);
-            PlayerTextDrawFont(playerid, container_item_quantity[playerid][tmp_idx], TEXT_DRAW_FONT_1);
-            PlayerTextDrawSetProportional(playerid, container_item_quantity[playerid][tmp_idx], true);
-
-            PlayerTextDrawShow(playerid, container_item_bg[playerid][ tmp_idx ]);
-            PlayerTextDrawShow(playerid, container_item_title[playerid][ tmp_idx ]);
-            PlayerTextDrawShow(playerid, container_item_model[playerid][ tmp_idx ]);
-            PlayerTextDrawShow(playerid, container_item_quantity[playerid][ tmp_idx ]);
-        }
+        Container_CreateInterface(playerid);
 
         SelectTextDraw(playerid, x_server);
 
@@ -535,7 +465,85 @@ stock Inventory_InterfaceControl(playerid, bool:show) {
     }
 }
 
-stock Container_IsNearPlayer(playerid, containers[], containers_size = sizeof containers) {
+stock Container_CreateInterface(playerid) {
+
+    new cID[12];
+    // Container_GeatNearestToPlayer(playerid, cID);
+    if(GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0)
+        Container_GeatNearestToPlayer(playerid, cID);
+    else  
+        Container_GetItems(playerid, cID);
+
+    new floorItems[12];
+
+    for(new i = 0; i < 12; i++) {
+
+        if(cID[i] == INVALID_CONTAINER_ID) continue;
+
+        floorItems[i] = INVENTORY_INVALID_ITEM_TYPE;
+
+        new tmp_idx = i;
+        new Float:offX = ((i%4)*59.333) + 308.334;
+        new Float:offY = floatround(((i/4)*79.229), floatround_floor);
+        new tmp_str[64];
+
+        new index = ContainerData[cID[i]][containerItem];
+    
+        if(floorItems[i] == index) continue;
+
+        floorItems[i] = index;
+
+        container_item_bg[playerid][ tmp_idx ] = CreatePlayerTextDraw(playerid, 39.333267 + offX , 83.237045 + offY, ""); //* 1st item bg
+        PlayerTextDrawTextSize(playerid, container_item_bg[playerid][tmp_idx], 78.000000, 105.000000);
+        PlayerTextDrawAlignment(playerid, container_item_bg[playerid][tmp_idx], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, container_item_bg[playerid][tmp_idx], 148);
+        PlayerTextDrawSetShadow(playerid, container_item_bg[playerid][tmp_idx], 0);
+        PlayerTextDrawBackgroundColour(playerid, container_item_bg[playerid][tmp_idx], -256);
+        PlayerTextDrawFont(playerid, container_item_bg[playerid][tmp_idx], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, container_item_bg[playerid][tmp_idx], false);
+        PlayerTextDrawSetPreviewModel(playerid, container_item_bg[playerid][tmp_idx], 2731);
+        PlayerTextDrawSetPreviewRot(playerid, container_item_bg[playerid][tmp_idx], 0.000000, 0.000000, 0.000000, 1.000000);
+
+        container_item_title[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 78.666656 + offX, 105.792587 + offY, Inventory_ReturnItemName(index)); //* 1ST ITEM TITLE
+        PlayerTextDrawLetterSize(playerid, container_item_title[playerid][tmp_idx], 0.114999, 0.608592);
+        PlayerTextDrawAlignment(playerid, container_item_title[playerid][tmp_idx], TEXT_DRAW_ALIGN_CENTRE);
+        PlayerTextDrawColour(playerid, container_item_title[playerid][tmp_idx], -1);
+        PlayerTextDrawSetShadow(playerid, container_item_title[playerid][tmp_idx], 0);
+        PlayerTextDrawBackgroundColour(playerid, container_item_title[playerid][tmp_idx], 255);
+        PlayerTextDrawFont(playerid, container_item_title[playerid][tmp_idx], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, container_item_title[playerid][tmp_idx], true);
+
+        container_item_model[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 64.666671 + offX, 118.911109 + offY, ""); //* 1st item model
+        PlayerTextDrawTextSize(playerid, container_item_model[playerid][tmp_idx], 30.000000, 33.000000);
+        PlayerTextDrawAlignment(playerid, container_item_model[playerid][tmp_idx], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, container_item_model[playerid][tmp_idx], -1);
+        PlayerTextDrawSetShadow(playerid, container_item_model[playerid][tmp_idx], 0);
+        PlayerTextDrawBackgroundColour(playerid, container_item_model[playerid][tmp_idx], -256);
+        PlayerTextDrawFont(playerid, container_item_model[playerid][tmp_idx], TEXT_DRAW_FONT_MODEL_PREVIEW);
+        PlayerTextDrawSetProportional(playerid, container_item_model[playerid][tmp_idx], false);
+        PlayerTextDrawSetPreviewModel(playerid, container_item_model[playerid][tmp_idx], Container_ReturnItemModel(index));
+        PlayerTextDrawSetPreviewRot(playerid, container_item_model[playerid][tmp_idx], 0.000000, 0.000000, 0.000000, 1.000000);
+        PlayerTextDrawSetSelectable(playerid, container_item_model[playerid][tmp_idx], bool:Container_IsValidItem(index));
+
+        format(tmp_str, sizeof tmp_str, "%d", ContainerData[cID[i]][containerItemQuantity]);
+
+        container_item_quantity[playerid][tmp_idx] = CreatePlayerTextDraw(playerid, 98.333358 + offX , 154.325942 + offY,  tmp_str); // * 1ST Item quantity
+        PlayerTextDrawLetterSize(playerid, container_item_quantity[playerid][tmp_idx], 0.199666, 1.110518);
+        PlayerTextDrawAlignment(playerid, container_item_quantity[playerid][tmp_idx], TEXT_DRAW_ALIGN_RIGHT);
+        PlayerTextDrawColour(playerid, container_item_quantity[playerid][tmp_idx], -1);
+        PlayerTextDrawSetShadow(playerid, container_item_quantity[playerid][tmp_idx], 0);
+        PlayerTextDrawBackgroundColour(playerid, container_item_quantity[playerid][tmp_idx], 255);
+        PlayerTextDrawFont(playerid, container_item_quantity[playerid][tmp_idx], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, container_item_quantity[playerid][tmp_idx], true);
+
+        PlayerTextDrawShow(playerid, container_item_bg[playerid][ tmp_idx ]);
+        PlayerTextDrawShow(playerid, container_item_title[playerid][ tmp_idx ]);
+        PlayerTextDrawShow(playerid, container_item_model[playerid][ tmp_idx ]);
+        PlayerTextDrawShow(playerid, container_item_quantity[playerid][ tmp_idx ]);
+    }
+}
+
+stock Container_GeatNearestToPlayer(playerid, containers[], containers_size = sizeof containers) {
 
     new count = 0;
 
@@ -545,16 +553,72 @@ stock Container_IsNearPlayer(playerid, containers[], containers_size = sizeof co
     }
 
     foreach(new i : iter_Containers) {
+        //* INVALID_PROPERTY_ID - because dropped objects does not have an owner so SQL ID does not exists.
+        if(ContainerData[i][containerPropID] == INVALID_PROPERTY_ID && ContainerData[i][containerType] == CONTAINER_TYPE_FLOOR) {
 
-        if(IsPlayerInRangeOfPoint(playerid, 3.50, ContainerData[i][containerPos][0], ContainerData[i][containerPos][1], ContainerData[i][containerPos][2]))
-        {
-            if(count >= containers_size)
-                break;
+            if(IsPlayerInRangeOfPoint(playerid, 3.50, ContainerData[i][containerPos][0], ContainerData[i][containerPos][1], ContainerData[i][containerPos][2]))
+            {
+                if(count >= containers_size)
+                    break;
 
-            containers[count] = i;
-            count++;
+                containers[count] = i;
+                count++;
+            }
         }
     }
 
     return count;
 }
+
+stock Container_GetItems(playerid, containers[], containers_size = sizeof containers) {
+
+    new count = 0;
+
+    for(new i = 0; i < containers_size; i++) {
+
+        containers[i] = INVALID_CONTAINER_ID;
+    }
+
+    foreach(new i : iter_Containers) {
+        //* INVALID_PROPERTY_ID - because dropped objects does not have an owner so SQL ID does not exists.
+        if(ContainerData[i][containerPropID] != INVALID_PROPERTY_ID && ContainerData[i][containerType] != CONTAINER_TYPE_FLOOR) {
+
+            new Float:pPos[3];
+
+            if(ContainerData[i][containerType] == CONTAINER_TYPE_WARDROBE) {
+
+                foreach(new j : iHouse) {
+
+                    if(player_House[playerid] == house_ID[j]) {
+
+                        pPos[0] = house_Wardrobe[j][0];
+                        pPos[1] = house_Wardrobe[j][1];
+                        pPos[2] = house_Wardrobe[j][2];
+                        break;
+                    }
+                }
+            }
+
+            if(IsPlayerInRangeOfPoint(playerid, 3.50, pPos[0], pPos[1], pPos[2]) && ContainerData[i][containerPropID] == GetPlayerVirtualWorld(playerid))
+            {
+                if(count >= containers_size)
+                    break;
+
+                containers[count] = i;
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
+/*
+
+* if(count >= containers_size)
+*     break;
+* 
+* containers[count] = i;
+* count++;
+
+*/

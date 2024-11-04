@@ -575,7 +575,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 				house_Entrance[id][0] = pPos[0];
 				house_Entrance[id][1] = pPos[1];
 				house_Entrance[id][2] = pPos[2];
-
+		
 				house_Exit[id][0] = 224.28; 
 				house_Exit[id][1] = 1289.19;
 				house_Exit[id][2] = 1082.14;

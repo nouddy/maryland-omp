@@ -519,8 +519,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/crypto/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Inventory
-#include "backend/inventory/inventory.pwn"
-#include "backend/inventory/functions.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Finances
 #include "frontend/textdraws/Bank/BankUI.pwn"
@@ -531,14 +529,16 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Property
 #include "backend/property/houses.script"							//* Imovina
+#include "backend/property/pproperty.script"
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/property/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Business
-#include "backend/property/pproperty.script"
 #include "backend/real_estate/re_centar.script"						//* Business Centar
+#include "backend/inventory/inventory.pwn"
 #include "backend/real_estate/re_business.script"					//* Bizovi
+
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/real_estate/end/do-not-look.temp"
@@ -723,6 +723,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
+#include "backend/inventory/functions.pwn"
 
 /*
 
