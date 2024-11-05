@@ -101,18 +101,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(PRESSED(KEY_NO))
     {
-        if(IsPlayerNearRent(playerid))
+        if(IsPlayerNearRent(playerid) != INVALID_RENTAL_ID)
         {
+            new rID = IsPlayerNearRent(playerid);
             RentaCar_Interface(playerid, true);
 
-            foreach(new i : iter_Rental) {
+            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][12], PlayerRental[rID][rentVehModels][0]);
+            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][13], PlayerRental[rID][rentVehModels][1]);
+            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][14], PlayerRental[rID][rentVehModels][2]);
 
-                PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][12], PlayerRental[i][rentVehModels][0]);
-                PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][13], PlayerRental[i][rentVehModels][1]);
-                PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][14], PlayerRental[i][rentVehModels][2]);
-
-                return Y_HOOKS_BREAK_RETURN_1;
-            }
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -205,6 +202,9 @@ stock RentaCar_Interface(playerid, bool:show) {
     if (show) {
 
         for (new i = 0; i < sizeof RentacarTD[]; i++) {
+
+            if(RentacarTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
             PlayerTextDrawHide(playerid, RentacarTD[playerid][i]);
             PlayerTextDrawDestroy(playerid, RentacarTD[playerid][i]);
             RentacarTD[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
@@ -243,7 +243,7 @@ stock RentaCar_Interface(playerid, bool:show) {
         PlayerTextDrawTextSize(playerid, RentacarTD[playerid][3], -115.000000, -137.000000);
         PlayerTextDrawAlignment(playerid, RentacarTD[playerid][3], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, RentacarTD[playerid][3], 135009023);
-        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][3], 0x00000000);
+        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][3], 0xFFFFFF00);
         PlayerTextDrawSetShadow(playerid, RentacarTD[playerid][3], 0);
         PlayerTextDrawFont(playerid, RentacarTD[playerid][3], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, RentacarTD[playerid][3], false);
@@ -254,7 +254,7 @@ stock RentaCar_Interface(playerid, bool:show) {
         PlayerTextDrawTextSize(playerid, RentacarTD[playerid][4], -115.000000, -137.000000);
         PlayerTextDrawAlignment(playerid, RentacarTD[playerid][4], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, RentacarTD[playerid][4], 135009023);
-        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][4], 0x00000000);
+        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][4], 0xFFFFFF00);
         PlayerTextDrawSetShadow(playerid, RentacarTD[playerid][4], 0);
         PlayerTextDrawFont(playerid, RentacarTD[playerid][4], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, RentacarTD[playerid][4], false);
@@ -265,7 +265,7 @@ stock RentaCar_Interface(playerid, bool:show) {
         PlayerTextDrawTextSize(playerid, RentacarTD[playerid][5], -115.000000, -137.000000);
         PlayerTextDrawAlignment(playerid, RentacarTD[playerid][5], TEXT_DRAW_ALIGN_LEFT);
         PlayerTextDrawColour(playerid, RentacarTD[playerid][5], 135009023);
-        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][5], 0x00000000);
+        PlayerTextDrawBackgroundColour(playerid, RentacarTD[playerid][5], 0xFFFFFF00);
         PlayerTextDrawSetShadow(playerid, RentacarTD[playerid][5], 0);
         PlayerTextDrawFont(playerid, RentacarTD[playerid][5], TEXT_DRAW_FONT_MODEL_PREVIEW);
         PlayerTextDrawSetProportional(playerid, RentacarTD[playerid][5], false);
@@ -374,14 +374,20 @@ stock RentaCar_Interface(playerid, bool:show) {
         PlayerTextDrawSetPreviewRot(playerid, RentacarTD[playerid][14], 0.000000, 0.000000, -23.000000, 1.000000);
         PlayerTextDrawSetPreviewVehicleColours(playerid, RentacarTD[playerid][14], 1, 1);
 
+        SelectTextDraw(playerid, x_server);
+
         for (new i = 0; i < sizeof RentacarTD[]; i++) {
             PlayerTextDrawShow(playerid, RentacarTD[playerid][i]);
         }
     } else {
         for (new i = 0; i < sizeof RentacarTD[]; i++) {
+
+            if(RentacarTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
             PlayerTextDrawHide(playerid, RentacarTD[playerid][i]);
             PlayerTextDrawDestroy(playerid, RentacarTD[playerid][i]);
             RentacarTD[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
         }
+        CancelSelectTextDraw(playerid);
     }
 }
