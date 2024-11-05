@@ -106,10 +106,16 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             new rID = IsPlayerNearRent(playerid);
             RentaCar_Interface(playerid, true);
 
-            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][12], PlayerRental[rID][rentVehModels][0]);
-            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][13], PlayerRental[rID][rentVehModels][1]);
-            PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][14], PlayerRental[rID][rentVehModels][2]);
+            foreach(new i : iter_Rental) {
 
+                if(PlayerRental[rID][rentID]  == PlayerRental[i][rentID]) {
+
+                    PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][12], PlayerRental[i][rentVehModels][0]);
+                    PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][13], PlayerRental[i][rentVehModels][1]);
+                    PlayerTextDraw_UpdateModel(playerid, RentacarTD[playerid][14], PlayerRental[i][rentVehModels][2]);
+                    break;
+                }
+            }
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;

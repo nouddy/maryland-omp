@@ -109,9 +109,35 @@ new HerbPositions[MAX_HERBS][HerbData] = {
     {470.220306, -516.334472, 42.727748, 811, 0.0, 0.0, 0.0},
     {220.390792, -664.897155, 45.957477, 811, 0.0, 0.0, 0.0}
 };
+
+// * MDMA
+
+#define MAX_TEMP_Y_2      (340.00)
+
+new temperatureCount[MAX_PLAYERS];
+new bool:cookingMdma[MAX_PLAYERS];
+new cookingMdma_Warnings[MAX_PLAYERS];
+
+new PlayerText:temperatureProgress[MAX_PLAYERS];
+new PlayerText:TemperatureCheck[MAX_PLAYERS][4];
+
+new Float:temperatureValue[MAX_PLAYERS];
+
 //*==============================================================================
 //?--->>> Querys & Funcs
 //*==============================================================================
+
+forward updatebar(playerid);
+public updatebar(playerid) {
+    if (!cookingMdma[playerid]) {
+        temperatureValue[playerid] -= 0.7; 
+        if (temperatureValue[playerid] < 0.0) {
+            temperatureValue[playerid] = 0.0; 
+        }
+    }
+    
+    UpdateTemperatureTextDraw(playerid, -1, temperatureValue[playerid]);
+}
 
 forward mysql_InsertPlantID(idx);
 public mysql_InsertPlantID(idx) {
@@ -271,6 +297,26 @@ stock HerbIsNearPlayer(playerid)
     return INVALID_HERB_ID;
 }
 
+stock MDMA_ReturnPlayerIngridients(playerid) {
+
+    /*
+
+    * --> INVENTORY_ITEM_DISTILLED_WATER, 
+    * --> INVENTORY_ITEM_ALCOHOL,         
+    * --> INVENTORY_ITEM_OMEPRAZOLE
+
+    * --> 2L of Distiled Water | 1L of Rubbing Alcohol | 5g of Omeprazole
+
+    */
+
+    if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_DISTILLED_WATER) >= 2 &&
+       Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_ALCOHOL) >= 1 &&
+       Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_OMEPRAZOLE) >= 5)
+        return true;
+
+    return false;
+}
+
 stock CreateAllHerbs()
 {
     new count = 0;
@@ -311,6 +357,148 @@ public RespawnHerb(HerbID)
     return true;
 }
 
+stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
+
+    new temp[48];
+    format(temp, sizeof temp, "Temperature: %.2f", temperatureValue[playerid]);
+    PlayerTextDrawSetString(playerid, TemperatureCheck[playerid][2], temp); // Update the text draw string
+
+    new Float:tempPos[2];
+    new Float:mtyX;
+    PlayerTextDrawGetPos(playerid, TemperatureCheck[playerid][0], mtyX, tempPos[0]);
+    PlayerTextDrawGetPos(playerid, TemperatureCheck[playerid][1], mtyX, tempPos[1]);
+
+    if(count == 15) {
+
+        PlayerTextDrawSetPos(playerid, TemperatureCheck[playerid][0], 97.999977 + 30, tempPos[0] + 1.00);
+        PlayerTextDrawSetPos(playerid, TemperatureCheck[playerid][1], 97.999977 + 30, tempPos[1] - 1.00);
+
+        PlayerTextDrawShow(playerid,  TemperatureCheck[playerid][0]);
+        PlayerTextDrawShow(playerid,  TemperatureCheck[playerid][1]);
+        //BEST_TEMPERATURE_Y
+
+        new Float:tmpX, Float:tmpY;
+
+        PlayerTextDrawGetPos(playerid, TemperatureCheck[playerid][0], mtyX, tmpX);
+        PlayerTextDrawGetPos(playerid, TemperatureCheck[playerid][1], mtyX, tmpY);
+
+        new Float:prog[2];
+        PlayerTextDrawGetTextSize(playerid, temperatureProgress[playerid], prog[0], prog[1]);
+
+        new Float:absVal = floatabs(prog[1]);
+
+        if( ( absVal + 315.00 ) > tmpY) {   
+            
+            cookingMdma_Warnings[playerid]++;
+
+            if(cookingMdma_Warnings[playerid] >= 4) {
+                
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Kuvanje MDME vam je propalo.");
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            }
+
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pripazi na temperaturu - %d/3", cookingMdma_Warnings[playerid]);
+        }
+
+        if(  tmpX == tmpY ) {
+            
+            // *            | --> Finish Cooking <-- |
+
+            new xDivider = 1;
+
+            if(cookingMdma_Warnings[playerid] > 0)
+                xDivider = cookingMdma_Warnings[playerid] + 1;
+
+            new quantity = RandomMinMax(4, 10);
+            quantity =  floatround( (quantity / xDivider), floatround_ceil );
+
+            Inventory_AddItem(playerid, INVENTORY_ITEM_MDMA, quantity);
+            MDMA_Interface(playerid, false);
+
+            new header[228];
+            format(header, sizeof header, "Uspjesno ste zavrsili kuvanje MDME ~n~\
+                                           Za uspjesno kuvanje ste dobili ~r~%dg ~w~mdme", quantity);
+
+            Notify_SendNotification(playerid, header, 
+                                              "MDMA", 1241);
+
+            return Y_HOOKS_BREAK_RETURN_1;
+        }
+
+        temperatureCount[playerid] = 0;
+
+    }
+
+    PlayerTextDrawTextSize(playerid, temperatureProgress[playerid], 5.000000, -value);
+    PlayerTextDrawShow(playerid,  temperatureProgress[playerid]);
+
+    return true;
+
+}
+
+stock MDMA_Interface(playerid, bool:show) {
+    if (show) {
+        for (new i = 0; i < sizeof TemperatureCheck[]; i++) {
+            PlayerTextDrawHide(playerid, TemperatureCheck[playerid][i]);
+            PlayerTextDrawDestroy(playerid, TemperatureCheck[playerid][i]);
+            TemperatureCheck[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
+        }
+
+        new Float:lineYPosition = 306.00; // 
+        new Float:lineYPosition2 = 380.0; //
+        
+        temperatureProgress[playerid] = CreatePlayerTextDraw(playerid, 124.532798, 373.551055, "ld_spac:white");
+        PlayerTextDrawTextSize(playerid, temperatureProgress[playerid], 8.000000, 0.00);
+        PlayerTextDrawAlignment(playerid, temperatureProgress[playerid], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, temperatureProgress[playerid], -1);
+        PlayerTextDrawSetShadow(playerid, temperatureProgress[playerid], 0);
+        PlayerTextDrawBackgroundColour(playerid, temperatureProgress[playerid], 255);
+        PlayerTextDrawFont(playerid, temperatureProgress[playerid], TEXT_DRAW_FONT_SPRITE_DRAW);
+        PlayerTextDrawSetProportional(playerid, temperatureProgress[playerid], false);
+
+        TemperatureCheck[playerid][0] = CreatePlayerTextDraw(playerid, 97.999977 + 30.00, lineYPosition, "-------"); // * Current temp
+        PlayerTextDrawLetterSize(playerid, TemperatureCheck[playerid][0], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, TemperatureCheck[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, TemperatureCheck[playerid][0], -16776961);
+        PlayerTextDrawSetShadow(playerid, TemperatureCheck[playerid][0], 0);
+        PlayerTextDrawBackgroundColour(playerid, TemperatureCheck[playerid][0], 255);
+        PlayerTextDrawFont(playerid, TemperatureCheck[playerid][0], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, TemperatureCheck[playerid][0], true);
+
+        // Create second line
+        TemperatureCheck[playerid][1] = CreatePlayerTextDraw(playerid, 97.999977 + 30.00, lineYPosition2, "-------"); // Max Temp
+        PlayerTextDrawLetterSize(playerid, TemperatureCheck[playerid][1], 0.400000, 1.600000);
+        PlayerTextDrawAlignment(playerid, TemperatureCheck[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+        PlayerTextDrawColour(playerid, TemperatureCheck[playerid][1], 65535);
+        PlayerTextDrawSetShadow(playerid, TemperatureCheck[playerid][1], 0);
+        PlayerTextDrawBackgroundColour(playerid, TemperatureCheck[playerid][1], 255);
+        PlayerTextDrawFont(playerid, TemperatureCheck[playerid][1], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, TemperatureCheck[playerid][1], true);
+        
+        // Create temperature display
+        new temp[48];
+        format(temp, sizeof temp, "Temperature: %.2f", temperatureValue[playerid]);
+        TemperatureCheck[playerid][2] = CreatePlayerTextDraw(playerid, 97.999977 + 30.00, 404.459259, temp);
+        PlayerTextDrawLetterSize(playerid, TemperatureCheck[playerid][2], 0.122666, 0.708147);
+        PlayerTextDrawAlignment(playerid, TemperatureCheck[playerid][2], TEXT_DRAW_ALIGN_CENTER);
+        PlayerTextDrawColour(playerid, TemperatureCheck[playerid][2], -1);
+        PlayerTextDrawSetShadow(playerid, TemperatureCheck[playerid][2], 0);
+        PlayerTextDrawBackgroundColour(playerid, TemperatureCheck[playerid][2], 255);
+        PlayerTextDrawFont(playerid, TemperatureCheck[playerid][2], TEXT_DRAW_FONT_1);
+        PlayerTextDrawSetProportional(playerid, TemperatureCheck[playerid][2], true);
+
+        for (new i = 0; i < sizeof TemperatureCheck[]; i++) {
+            PlayerTextDrawShow(playerid, TemperatureCheck[playerid][i]);
+        }
+    } else {
+        for (new i = 0; i < sizeof TemperatureCheck[]; i++) {
+            PlayerTextDrawHide(playerid, TemperatureCheck[playerid][i]);
+            PlayerTextDrawDestroy(playerid, TemperatureCheck[playerid][i]);
+            TemperatureCheck[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
+        }
+    }
+}
+
 //*==============================================================================
 //?--->>> Hooks
 //*==============================================================================
@@ -339,13 +527,17 @@ hook OnPlayerConnect(playerid) {
 
     weedHarvesting[playerid] = false;
 
+    cookingMdma[playerid] = false;
+    cookingMdma_Warnings[playerid] = 0;
+    temperatureCount[playerid] = 0;
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
-
+    SendClientMessage(playerid, -1, "DEBUG: KeyStateChange -> drugs.pwn");
     if(PRESSED(KEY_NO)) {
-
+        SendClientMessage(playerid, -1, "DEBUG: KeyStateChange N -> drugs.pwn");
         if(IsPlayerInRangeOfPoint(playerid, 3.50, -396.7119,1275.0776,8.0296)) {
 
             Dialog_Show(playerid, "dialog_BlackMarket", DIALOG_STYLE_TABLIST_HEADERS, "Black {737be1}Market", "Item\tCijena\n\
@@ -419,7 +611,30 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
         Inventory_AddItem(playerid, INVENTORY_ITEM_HERBS, 1);
         ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ubrao si retku biljku sa poda");
-        
+
+        //* -> MDMA
+
+        if(cookingMdma[playerid])
+        {
+            temperatureValue[playerid] += 1.5;
+            SendClientMessage(playerid, -1, "DEBUG1: Let Him Cook");
+            if (temperatureValue[playerid] > 100.0) { 
+                temperatureValue[playerid] = 100.0; 
+            }
+            if(temperatureCount[playerid] < 15) {
+                SendClientMessage(playerid, -1, "DEBUG2: Let Him Cook");
+                temperatureCount[playerid]++;
+                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            }
+
+            else if(temperatureCount[playerid] > 15) {
+                
+                temperatureCount[playerid] = 0;
+                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            } 
+        }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -457,6 +672,28 @@ hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 //*==============================================================================
 //?--->>> Commands
 //*==============================================================================
+
+YCMD:cookmdma(playerid, params[], help) {
+
+    if(!MDMA_ReturnPlayerIngridients(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate sastojke za pripremu mdme");
+
+    if(cookingMdma[playerid]) 
+        return SendClientMessage(playerid, -1, "DEBUG: He cookin");
+
+        // Notify_SendNotification(playerid, "Zapoceli ste proces kuvanja MDME ~n~ \
+        //                                   Kako bi povecali temperaturu pritisnite gumb ~b~ [ N ]",
+        //                                   "MDMA", 
+        // 1241);
+
+    MDMA_Interface(playerid, true);
+    SetTimerEx("updatebar", 100, true, "d", playerid);
+
+    cookingMdma[playerid] = true;
+
+
+    return 1;
+}
 
 YCMD:checkgrowth(playerid, params[], help) {
 
