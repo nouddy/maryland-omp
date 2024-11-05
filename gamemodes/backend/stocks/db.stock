@@ -124,23 +124,6 @@ stock SaveElectronic(playerid)
 
     return true;
 }
-//* Save sve u vezi finansija
-stock SaveFinance(playerid)
-{
-
-    if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
-    {
-        new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_finance` SET `BankAccount` = '%d',`BankMoney` = '%d',`BankPin` = '%d' WHERE `finance_id` = '%d'",
-            PlayerFinance[playerid][pBankAccount],
-            PlayerFinance[playerid][pBankMoney],
-            PlayerFinance[playerid][pBankPin],
-            GetCharacterSQLID(playerid));
-        mysql_tquery(SQL,query);      
-    }
-
-    return true;
-}
 
 //* Save sve u vezi property
 stock SavePropForPlayer(playerid)
@@ -250,4 +233,33 @@ stock ReturnCharacterName(character) {
     format(string, sizeof string, "%s", CharacterInfo[character][Name]);
 
     return string;
+}
+
+// SQL UPDATES VOSTIC
+stock UpdateSqlInt(dbHandle, tableName[], columnName[], newValue, conditionColumn[], conditionValue)
+{
+    new query[980];
+    mysql_format(query, sizeof(query), "UPDATE %s SET %s = %d WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
+    mysql_tquery(dbHandle, query);
+}
+
+stock UpdateSqlString(dbHandle, tableName[], columnName[], newValue[], conditionColumn[], conditionValue)
+{
+    new query[256];
+    mysql_format(query, sizeof(query), "UPDATE %s SET %s = '%e' WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
+    mysql_tquery(dbHandle, query);
+}
+
+stock UpdateSql(dbHandle, tableName[], fields[], condition[])
+{
+    new query[256];
+    mysql_format(query, sizeof(query), "UPDATE %s SET %s WHERE %s", tableName, fields, condition);
+    mysql_tquery(dbHandle, query);
+}
+
+stock UpdateSqlFloat(dbHandle, tableName[], columnName[], Float:newValue, conditionColumn[], conditionValue)
+{
+    new query[128];
+    mysql_format(query, sizeof(query), "UPDATE %s SET %s = %.2f WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
+    mysql_tquery(dbHandle, query);
 }

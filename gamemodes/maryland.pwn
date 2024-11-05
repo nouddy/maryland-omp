@@ -725,6 +725,9 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "temp/end/do-not-look.temp"
 #include "backend/inventory/functions.pwn"
 
+#include "backend/factions/illegal/progresstest.pwn"
+#include "backend/vehicle/rent_vehicle.pwn"
+
 /*
 
 * TODO:

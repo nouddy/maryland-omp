@@ -188,6 +188,16 @@ stock House_UpdateLabel(id, const option) {
 	return (true);
 }
 
+stock GetCharacterHouse(playerid)
+{
+    if (player_House[playerid] != INVALID_HOUSE_ID)
+    {
+        return player_House[playerid];
+    }
+    return INVALID_HOUSE_ID; // Return -1 if the player does not own a house
+}
+
+
 GetHouseType(id)
 {
     new typezz[30];

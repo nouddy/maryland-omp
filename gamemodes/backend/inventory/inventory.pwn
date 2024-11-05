@@ -396,7 +396,7 @@ public mysql_AddInventoryItem(playerid, item, quantity) {
 
         Iter_Add(iter_Items[playerid], nextID);
 
-        Inventory_InterfaceControl(playerid, true);
+        //Inventory_InterfaceControl(playerid, true);
 
         // printf("PlayerID - %d, ItemID - %d, ItemQuantity - %d, ItemType - %s", playerid, item, quantity, Inventory_ReturnItemName(item) );
         // printf("Array ID - %d", nextID);
@@ -455,7 +455,7 @@ hook OnCharacterLoaded(playerid) {
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `inventory` WHERE `PlayerID` = %d LIMIT 35", GetCharacterSQLID(playerid));
     mysql_tquery(MySQL:SQL, q, "mysql_CheckPlayerInventory", "d", playerid);
 
-    mysql_format(SQL, q, sizeof q, "SELECT * FROM `inv_containers` WHERE 'propID' = '%d' LIMIT 12", player_House[playerid]);
+    mysql_format(SQL, q, sizeof q, "SELECT * FROM `inv_containers` WHERE 'propID' = '%d' LIMIT 12", GetCharacterHouse(playerid));
     mysql_tquery(SQL, q, "LoadWardrobeItemsForPlayer", "d", playerid);
 
     Inventory_ResetInterface(playerid);
@@ -937,7 +937,6 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 
         if(playertextid == container_item_model[playerid][i]) {
 
-
             //* Tmp fix for wardrobe - cleanup later...
             if(GetPlayerInterior(playerid) != 0) {
 
@@ -955,26 +954,26 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 
             if(ContainerData[chosen_ContainerItem][containerItemType] != INVENTORY_ITEM_TYPE_WEAPON) {
 
-                    if( tmp_sum >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity]) {
 
-                        new tmp_quantity = sz_quantityInfo[ tmp_item - 50 ][maxQuantity] - Inventory_GetItemQuantity(playerid, tmp_item);
+                if( tmp_sum >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity]) {
 
-                        Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], tmp_quantity);
-                        ContainerData[chosen_ContainerItem][containerItemQuantity] -= tmp_quantity;
+                    new tmp_quantity = sz_quantityInfo[ tmp_item - 50 ][maxQuantity] - Inventory_GetItemQuantity(playerid, tmp_item);
 
-                        new q[248];
-                        mysql_format(SQL, q, sizeof q, "UPDATE `inv_containers` SET `Quantity` = '%d' WHERE `Item` = '%d' AND `ID` = '%d'",
-                                                        ContainerData[chosen_ContainerItem][containerItemQuantity], ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
-                        mysql_tquery(SQL, q);
+                    Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], tmp_quantity);
+                    ContainerData[chosen_ContainerItem][containerItemQuantity] -= tmp_quantity;
 
-                        if(ContainerData[chosen_ContainerItem][containerItemQuantity] == 0) {
+                    new q[248];
+                    mysql_format(SQL, q, sizeof q, "UPDATE `inv_containers` SET `Quantity` = '%d' WHERE `Item` = '%d' AND `ID` = '%d'",
+                                                    ContainerData[chosen_ContainerItem][containerItemQuantity], ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
+                    mysql_tquery(SQL, q);
+
+                    if(ContainerData[chosen_ContainerItem][containerItemQuantity] == 0) {
+
 
                         mysql_format(SQL, q, sizeof q, "DELETE FROM `inv_containers` WHERE `Item` = '%d' AND `ID` = '%d'",
                                             ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
                         mysql_tquery(SQL, q);
                     }
-
-
                     return Y_HOOKS_BREAK_RETURN_1;
                 }
 
@@ -1005,6 +1004,7 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
             Iter_Remove(iter_Containers, chosen_ContainerItem);
 
             return Y_HOOKS_BREAK_RETURN_1;
+            
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
