@@ -117,6 +117,8 @@ new HerbPositions[MAX_HERBS][HerbData] = {
 new temperatureCount[MAX_PLAYERS];
 new bool:cookingMdma[MAX_PLAYERS];
 new cookingMdma_Warnings[MAX_PLAYERS];
+new bool:cookingDecrease[MAX_PLAYERS];
+new MdmaCookTimer[MAX_PLAYERS];
 
 new PlayerText:temperatureProgress[MAX_PLAYERS];
 new PlayerText:TemperatureCheck[MAX_PLAYERS][4];
@@ -129,7 +131,7 @@ new Float:temperatureValue[MAX_PLAYERS];
 
 forward updatebar(playerid);
 public updatebar(playerid) {
-    if (!cookingMdma[playerid]) {
+    if (cookingDecrease[playerid]) {
         temperatureValue[playerid] -= 0.7; 
         if (temperatureValue[playerid] < 0.0) {
             temperatureValue[playerid] = 0.0; 
@@ -394,6 +396,9 @@ stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
             if(cookingMdma_Warnings[playerid] >= 4) {
                 
                 SendClientMessage(playerid, x_server, "maryland \187; "c_white"Kuvanje MDME vam je propalo.");
+
+                ResetMdmaCooking(playerid);
+
                 return Y_HOOKS_CONTINUE_RETURN_1;
             }
 
@@ -421,6 +426,7 @@ stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
 
             Notify_SendNotification(playerid, header, 
                                               "MDMA", 1241);
+            ResetMdmaCooking(playerid);
 
             return Y_HOOKS_BREAK_RETURN_1;
         }
@@ -434,6 +440,17 @@ stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
 
     return true;
 
+}
+
+stock ResetMdmaCooking(playerid) 
+{
+    cookingMdma[playerid] = false;
+    cookingMdma_Warnings[playerid] = 0;
+    temperatureCount[playerid] = 0;
+    cookingDecrease[playerid] = false;
+    KillTimer(MdmaCookTimer[playerid]);
+
+    return true;
 }
 
 stock MDMA_Interface(playerid, bool:show) {
@@ -527,17 +544,14 @@ hook OnPlayerConnect(playerid) {
 
     weedHarvesting[playerid] = false;
 
-    cookingMdma[playerid] = false;
-    cookingMdma_Warnings[playerid] = 0;
-    temperatureCount[playerid] = 0;
+    ResetMdmaCooking(playerid);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
-    SendClientMessage(playerid, -1, "DEBUG: KeyStateChange -> drugs.pwn");
     if(PRESSED(KEY_NO)) {
-        SendClientMessage(playerid, -1, "DEBUG: KeyStateChange N -> drugs.pwn");
+
         if(IsPlayerInRangeOfPoint(playerid, 3.50, -396.7119,1275.0776,8.0296)) {
 
             Dialog_Show(playerid, "dialog_BlackMarket", DIALOG_STYLE_TABLIST_HEADERS, "Black {737be1}Market", "Item\tCijena\n\
@@ -597,6 +611,27 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 }
             }
         }
+        //* -> MDMA
+        if(cookingMdma[playerid])
+        {
+            temperatureValue[playerid] += 1.5;
+            if (temperatureValue[playerid] > 100.0) { 
+                temperatureValue[playerid] = 100.0; 
+            }
+            if(temperatureCount[playerid] < 15) {
+                temperatureCount[playerid]++;
+                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            }
+
+            else if(temperatureCount[playerid] > 15) {
+                
+                temperatureCount[playerid] = 0;
+                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
+                return Y_HOOKS_CONTINUE_RETURN_1;
+            } 
+        }
+
         // Cocaine
         new HerbID = HerbIsNearPlayer(playerid);
         if(HerbID == INVALID_HERB_ID) return false;
@@ -612,29 +647,11 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
         ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ubrao si retku biljku sa poda");
 
-        //* -> MDMA
+    }
 
-        if(cookingMdma[playerid])
-        {
-            temperatureValue[playerid] += 1.5;
-            SendClientMessage(playerid, -1, "DEBUG1: Let Him Cook");
-            if (temperatureValue[playerid] > 100.0) { 
-                temperatureValue[playerid] = 100.0; 
-            }
-            if(temperatureCount[playerid] < 15) {
-                SendClientMessage(playerid, -1, "DEBUG2: Let Him Cook");
-                temperatureCount[playerid]++;
-                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
-                return Y_HOOKS_CONTINUE_RETURN_1;
-            }
-
-            else if(temperatureCount[playerid] > 15) {
-                
-                temperatureCount[playerid] = 0;
-                UpdateTemperatureTextDraw(playerid, temperatureCount[playerid], temperatureValue[playerid]);
-                return Y_HOOKS_CONTINUE_RETURN_1;
-            } 
-        }
+    if(RELEASED(KEY_NO))
+    {
+        if(cookingMdma[playerid]) { cookingDecrease[playerid] = true; }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -679,18 +696,17 @@ YCMD:cookmdma(playerid, params[], help) {
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate sastojke za pripremu mdme");
 
     if(cookingMdma[playerid]) 
-        return SendClientMessage(playerid, -1, "DEBUG: He cookin");
+        return SendClientMessage(playerid, -1, "DEBUG: He cookin already");
 
-        // Notify_SendNotification(playerid, "Zapoceli ste proces kuvanja MDME ~n~ \
-        //                                   Kako bi povecali temperaturu pritisnite gumb ~b~ [ N ]",
-        //                                   "MDMA", 
-        // 1241);
+    // Notify_SendNotification(playerid, "Zapoceli ste proces kuvanja MDME ~n~ \
+    //                                   Kako bi povecali temperaturu pritisnite gumb ~b~ [ N ]",
+    //                                   "MDMA", 
+    // 1241);
 
     MDMA_Interface(playerid, true);
-    SetTimerEx("updatebar", 100, true, "d", playerid);
+    MdmaCookTimer[playerid] = SetTimerEx("updatebar", 100, true, "d", playerid);
 
     cookingMdma[playerid] = true;
-
 
     return 1;
 }
