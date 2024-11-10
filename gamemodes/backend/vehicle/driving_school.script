@@ -20,6 +20,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+#define DRIVING_SCHOOL_ICON         (25)
 #define INVALID_POLY_PROGRESS       (-1)
 
 new polygonCars[6];
@@ -58,6 +59,7 @@ new const Float:sz_PolyCheckpoints[13][3] = {
 } ;
 
 new polyCPs[MAX_PLAYERS][13];
+new polyIcons[MAX_PLAYERS][13];
 
 hook OnGameModeInit() {
 
@@ -1112,8 +1114,10 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
                 onPoly[playerid] = true;
                 polyProgress[playerid] = 1;
-
-                polyCPs[playerid][0] = CreateDynamicCP(sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 3.5, 8, -1, playerid);
+                //* Necemo moci cpove koristiti
+                polyIcons[playerid][0] = SetPlayerMapIcon(playerid, DRIVING_SCHOOL_ICON, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 0, 0xFF0056FF, MAPICON_GLOBAL);
+                polyCPs[playerid][0] = CreatePlayerPickup(playerid, 19607, 1, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2]-0.9);
+                SetPlayerPickupVirtualWorld(playerid, polyCPs[playerid][0], 8);
                 break;
             }
         }
@@ -1122,33 +1126,46 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid) {
-    if(checkpointid == polyCPs[playerid][polyProgress[playerid]-1]) {
-        if(onPoly[playerid] == true) {
+hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
 
-            if(DrivingSchool_IsPlayerInVehicle(playerid)) {
+    for(new i = 0; i < sizeof polyCPs[]; i++) {
+        //* isto njesra, bolje player, jer OMP ima pise da CPovi i ostalo nece raditi jedino pickupi, sve ostalo pada na pod
+        if(pickupid == polyCPs[playerid][i]) {
 
-                if(polyProgress[playerid] == 13) {
-
-                    SetPlayerPos(playerid, 1424.2428,1555.2067,10.8503);
-                    SetPlayerInterior(playerid, 16);
-
-                    onPoly[playerid] = false;
-                    PlayerDocuments[playerid][pDriveLicense] = 1;
-
-                    SaveDocuments(playerid);
-                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste polozili vozacki ispit.");
-
-                }    
-
-                DestroyDynamicCP(polyCPs[playerid][polyProgress[playerid]-1]);
-                polyProgress[playerid]++;
-                polyCPs[playerid][polyProgress[playerid]-1] = CreateDynamicCP(sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 3.5, 8, -1, playerid);
+            if(polyProgress[playerid] == 13) {
                 
-            }
-        }
+                if(!DrivingSchool_IsPlayerInVehicle(playerid))
+                    return Y_HOOKS_BREAK_RETURN_1;
 
+                SetPlayerPos(playerid, 1424.2428,1555.2067,10.8503);
+                SetPlayerInterior(playerid, 16);
+
+                DestroyPlayerPickup(playerid, polyCPs[playerid][12]);
+                RemovePlayerMapIcon(playerid, polyIcons[playerid][12]);
+
+                onPoly[playerid] = false;
+                PlayerDocuments[playerid][pDriveLicense] = 1;
+
+                SaveDocuments(playerid);
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste polozili vozacki ispit.");
+
+            }    
+
+            DestroyPlayerPickup(playerid, polyCPs[playerid][i]);
+            RemovePlayerMapIcon(playerid, polyIcons[playerid][i]);
+            polyProgress[playerid]++;
+            polyIcons[playerid][i] = SetPlayerMapIcon(playerid, DRIVING_SCHOOL_ICON, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 0, 0xFF0056FF, MAPICON_GLOBAL);
+            polyCPs[playerid][ polyProgress[playerid] - 1 ] = CreatePlayerPickup(playerid, 19607, 1, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2]-0.9, 8);
+            break;
+        }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:testcp(playerid, params[], help) {
+
+    CreateDynamicCP(1306.6147,1560.5885,100.6834, 4.0, 8, GetPlayerInterior(playerid)); // Z - 100.9567
+    
+    return (true);
 }

@@ -21,7 +21,7 @@
 
 static const COLOR_ARRAY[] =
 {
-    0x00000000,
+    0x00000000, 
     0xFF33FFFF, // plava  = klasicna
     0xFFCC00FF,  
     0xEB8C6CFF, // OGY OMILJENA / LJUBICASTA 

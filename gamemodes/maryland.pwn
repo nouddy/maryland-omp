@@ -472,7 +472,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/globalstuff.asset"
 #include "backend/assets/custommarkers.inc"							//* Custom markers
 #include "backend/finance/currency.pwn"								//* Currency
-#include "backend/anti-cheat/anticheat.pwn"
 #include "backend/assets/ml_notify.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
@@ -489,6 +488,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/textdraws/login.tde"								//* Login tdovi
 #include "frontend/textdraws/chose-character.tde"					//* Create or chose character TextDraws
 
+// * AntiCheat
+#include "backend/anti-cheat/anticheat.pwn"	
 //-------------------------------------------------------------------------------------------------------- Assets Continue
 #include "backend/assets/custom_markers.asset"						//* Markeri
 #include "backend/assets/time.asset"								//* Time calculation

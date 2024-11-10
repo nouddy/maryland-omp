@@ -377,7 +377,6 @@ stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
 
         PlayerTextDrawShow(playerid,  TemperatureCheck[playerid][0]);
         PlayerTextDrawShow(playerid,  TemperatureCheck[playerid][1]);
-        //BEST_TEMPERATURE_Y
 
         new Float:tmpX, Float:tmpY;
 
@@ -449,6 +448,7 @@ stock ResetMdmaCooking(playerid)
     temperatureCount[playerid] = 0;
     cookingDecrease[playerid] = false;
     KillTimer(MdmaCookTimer[playerid]);
+    MDMA_Interface(playerid, false);
 
     return true;
 }

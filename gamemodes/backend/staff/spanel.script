@@ -626,15 +626,15 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 				house_Entrance[id][1] = pPos[1];
 				house_Entrance[id][2] = pPos[2];
 
-				house_Exit[id][0] = 2324.38; 
-				house_Exit[id][1] = -1148.48; 
-				house_Exit[id][2] = 1050.71;
+				house_Exit[id][0] = 199.5770; 
+				house_Exit[id][1] = 4.8688; 
+				house_Exit[id][2] = 1501.0079;
 
-				house_Int[id] = 12; 
+				house_Int[id] = 15; 
 
-				house_Wardrobe[id][0] = 224.28; 
-				house_Wardrobe[id][1] = 1289.19;
-				house_Wardrobe[id][2] = 1082.14;
+				house_Wardrobe[id][0] = 179.4774; 
+				house_Wardrobe[id][1] = 15.5518;
+				house_Wardrobe[id][2] = 1505.1927;
 
 				house_Fridge[id][0] = 224.28; 
 				house_Fridge[id][1] = 1289.19;

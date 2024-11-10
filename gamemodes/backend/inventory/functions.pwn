@@ -590,7 +590,7 @@ stock Container_GetItems(playerid, containers[], containers_size = sizeof contai
                 foreach(new j : iHouse) {
 
                     if(player_House[playerid] == house_ID[j]) {
-
+                        SendClientMessage(playerid, -1, "DEBUG: Owner kuce si ti!");
                         pPos[0] = house_Wardrobe[j][0];
                         pPos[1] = house_Wardrobe[j][1];
                         pPos[2] = house_Wardrobe[j][2];

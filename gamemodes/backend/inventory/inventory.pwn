@@ -25,14 +25,14 @@
 //PlayerTextDrawSetProportional\((.*),(.*), 1\);
 //PlayerTextDrawSetProportional($1, $2, true);
 
-//*==============================================================================
-//*--->>> Begining
-//*==============================================================================
-
 stock Weapon_IsValid(weaponid)
 {
 	return (weaponid >= 1 && weaponid <= 18 || weaponid >= 21 && weaponid <= 46);
 }
+
+//*==============================================================================
+//*--->>> Begining
+//*==============================================================================
 
 new PlayerText:Inventory_UI[MAX_PLAYERS][16],
     bool:inventoryShown[MAX_PLAYERS];
@@ -276,19 +276,17 @@ public mysql_CheckPlayerInventory(character) {
 
     new rows = cache_num_rows();
 
-    if(!rows) return true;
+    if(!rows) return SendClientMessage(character, -1, "DEBUG: Inventory for CharacterSQLID : %d is empty!", GetCharacterSQLID(character));
 
-    else {
 
-        for(new i = 0; i < rows; i++) {
+    for(new i = 0; i < rows; i++) {
 
-            cache_get_value_name_int(i, "PlayerID", InventoryInfo[character][i][PlayerID]);
-            cache_get_value_name_int(i, "ItemID", InventoryInfo[character][i][ItemID]);
-            cache_get_value_name_int(i, "ItemQuantity", InventoryInfo[character][i][ItemQuantity]);
-            cache_get_value_name_int(i, "ItemType", InventoryInfo[character][i][ItemType]);
+        cache_get_value_name_int(i, "PlayerID", InventoryInfo[character][i][PlayerID]);
+        cache_get_value_name_int(i, "ItemID", InventoryInfo[character][i][ItemID]);
+        cache_get_value_name_int(i, "ItemQuantity", InventoryInfo[character][i][ItemQuantity]);
+        cache_get_value_name_int(i, "ItemType", InventoryInfo[character][i][ItemType]);
 
-            Iter_Add(iter_Items[character], i);
-        }
+        Iter_Add(iter_Items[character], i);
     }
 
     return (true);
@@ -429,7 +427,7 @@ public mysql_AddInventoryItem(playerid, item, quantity) {
             }
         }
 
-        Inventory_InterfaceControl(playerid, true);
+        // Inventory_InterfaceControl(playerid, true);
     }
 
     return (true);
@@ -450,11 +448,11 @@ hook OnGameModeInit() {
 hook OnCharacterLoaded(playerid) {
 
     new q[124];
-    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `inventory` WHERE `PlayerID` = %d LIMIT 35", GetCharacterSQLID(playerid));
+    mysql_format(MySQL:SQL, q, sizeof q, "SELECT * FROM `inventory` WHERE `PlayerID` = %d LIMIT 12", GetCharacterSQLID(playerid));
     mysql_tquery(MySQL:SQL, q, "mysql_CheckPlayerInventory", "d", playerid);
 
-    mysql_format(SQL, q, sizeof q, "SELECT * FROM `inv_containers` WHERE 'propID' = '%d' LIMIT 12", GetCharacterHouse(playerid));
-    mysql_tquery(SQL, q, "LoadWardrobeItemsForPlayer", "d", playerid);
+    // mysql_format(SQL, q, sizeof q, "SELECT * FROM `inv_containers` WHERE 'propID' = '%d' LIMIT 12", GetCharacterHouse(playerid));
+    // mysql_tquery(SQL, q, "LoadWardrobeItemsForPlayer", "d", playerid);
 
     Inventory_ResetInterface(playerid);
 

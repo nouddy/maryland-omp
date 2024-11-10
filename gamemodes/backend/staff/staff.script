@@ -70,15 +70,16 @@ hook OnPlayerDeath(playerid, killerid, WEAPON:reason)
 	return 1;
 }
 
-
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
-{
+{	
+
 	if(GetPlayerStaffLevel(playerid) >= e_ASSISTANT)
 	{
-		SetPlayerPosFindZ(playerid, fX, fY, fZ);
+		SetPlayerPos(playerid, fX, fY, fZ);
 		SetPlayerInterior(playerid, 0);
 		SetPlayerVirtualWorld(playerid, 0);
 	}
+
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
