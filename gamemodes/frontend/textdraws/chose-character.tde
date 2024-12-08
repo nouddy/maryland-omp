@@ -153,7 +153,7 @@ stock HidePlayerChoseCharacterTextDraw(playerid)
     }
 }
 
-stock CreatePlayerChoseCharacterTextDraw(playerid, characterid, skin = -1, const characterName[] = "", eGender:gender = GENDER_MALE, age = 0, const job[] = "", const stateName[] = "", lastLogin = 0)
+stock CreatePlayerChoseCharacterTextDraw(playerid, characterid, skin = -1, const characterName[] = "", eGender:gender = GENDER_MALE, age = 0, const job[] = "", const stateName[] = "", const lastLogin[] = "")
 {
     //Kosa crta
     CharacterSelectCharacter[playerid][characterid][0] = CreatePlayerTextDraw(playerid, 142.933364 + (174.36 * characterid), 248.333343, "");//X += 174.36
@@ -295,16 +295,7 @@ stock CreatePlayerChoseCharacterTextDraw(playerid, characterid, skin = -1, const
         PlayerTextDrawFont(playerid, CharacterSelectCharacter[playerid][characterid][11], TEXT_DRAW_FONT_1);
         PlayerTextDrawSetProportional(playerid, CharacterSelectCharacter[playerid][characterid][11], true);
 
-
-        new year, month, day, hour, minute, second;
-        if(lastLogin != 0)
-        {
-            // printf("Last login timestamp %d | %d-%d-%d  %d:%d:%d", lastLogin, year, month, day, hour, minute, second);
-            cvttimestamp(lastLogin, year, month, day, hour, minute, second);
-            format(tmpStr, sizeof(tmpStr), "-_Last_Login:_%d-%d-%d__%d:%d:%d", year, month, day, hour, minute, second); 
-        }
-        else tmpStr = "-_Last_Login:_Never";
-        CharacterSelectCharacter[playerid][characterid][12] = CreatePlayerTextDraw(playerid, 140.999923 + (174.36 * characterid), 250.977737, tmpStr);
+        CharacterSelectCharacter[playerid][characterid][12] = CreatePlayerTextDraw(playerid, 140.999923 + (174.36 * characterid), 250.977737, lastLogin);
         PlayerTextDrawLetterSize(playerid, CharacterSelectCharacter[playerid][characterid][12], 0.130999, 0.608592);
         PlayerTextDrawAlignment(playerid, CharacterSelectCharacter[playerid][characterid][12], TEXT_DRAW_ALIGN_CENTRE);
         PlayerTextDrawColour(playerid, CharacterSelectCharacter[playerid][characterid][12], -1);

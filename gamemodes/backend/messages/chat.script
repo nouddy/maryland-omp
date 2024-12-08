@@ -20,7 +20,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 /*
-	Hooks
+	*Hooks
 */
 hook OnGameModeInit()
 {
@@ -31,15 +31,13 @@ hook OnGameModeInit()
 
 hook OnPlayerText(playerid, text[])
 {
-    if(IC_CHAT)
-    {
-        static string[256];
-        format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
-        ProxDetector(playerid, Float:30.0, x_white, string);
-        return Y_HOOKS_BREAK_RETURN_0;
-    }
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
+	if(GetPlayerCallStatus(playerid) == CALL_STATUS_ACTIVE) return Y_HOOKS_BREAK_RETURN_0;
+
+	static string[256];
+	format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
+	ProxDetector(playerid, Float:30.0, x_white, string);
+	return Y_HOOKS_BREAK_RETURN_0;
 }
 
 YCMD:me(playerid, params[], help)
@@ -51,6 +49,7 @@ YCMD:me(playerid, params[], help)
  	ProxDetector(playerid, Float:30.0, x_purple, string);
 	return 1;
 }
+
 YCMD:do(playerid, params[], help)
 {
 	new text[80];

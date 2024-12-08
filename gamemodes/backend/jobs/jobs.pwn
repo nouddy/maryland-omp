@@ -153,7 +153,7 @@ stock Job_GetNearest(const playerid) {
 
     foreach(new i : iter_Jobs) {
 
-        if(IsPlayerInRangeOfPoint(playerid, 3.50, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2]))
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, jobInfo[i][jobPos][0], jobInfo[i][jobPos][1], jobInfo[i][jobPos][2]))
             return i;
     }
 
@@ -164,7 +164,7 @@ stock Job_GetNearestUniform(const playerid) {
 
     foreach(new i : iter_Jobs) {
 
-        if(IsPlayerInRangeOfPoint(playerid, 3.50, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2]))
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, jobInfo[i][jobUniformPos][0], jobInfo[i][jobUniformPos][1], jobInfo[i][jobUniformPos][2]))
             return i;
     }
 
@@ -174,7 +174,6 @@ stock Job_GetNearestUniform(const playerid) {
 hook OnGameModeInit() {
     
     print("- SELECT * jobs.pwn - LOADED");
-
     job.LoadData();
 
     return Y_HOOKS_CONTINUE_RETURN_1;

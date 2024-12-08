@@ -402,7 +402,7 @@ YCMD:setskin(playerid, const string: params[], help)
 
 	CharacterInfo[targetid][Skin] = skinid;
 
-	SavePlayer(targetid);
+	UpdateSqlInt(SQL, "characters", "cSkin", skinid, "character_id", GetCharacterSQLID(targetid));
 
 	PlayerTextDrawHide(targetid, Player_TDs[targetid][1]);
 	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][1], CharacterInfo[targetid][Skin]);
@@ -717,30 +717,27 @@ public OnPlayerWarnCountCheck(playerid, warn_count) {
 
 stock BanPlayer(playerid, const reason[], bool:perma = false, timeban = 0) {
 
-	new q[512], playercharid;
-	playercharid = GetCharacterSQLID(playerid);
+	new q[512];
 
 	if(perma) {
-		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, is_permanent) VALUES (%d, '%s', NOW(), 1)", playercharid, reason);
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, is_permanent) VALUES (%d, '%s', NOW(), 1)", PlayerInfo[playerid][SQLID], reason);
 	} else {
-		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_expire) VALUES (%d, '%s', NOW(), NOW() + %d)", playercharid, reason, timeban);
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_expire) VALUES (%d, '%s', NOW(), NOW() + %d)", PlayerInfo[playerid][SQLID], reason, timeban);
 	}
 
 	mysql_tquery(SQL, q);
-
 	Kick(playerid);
 }
 
 stock BanPlayerIP(playerid, const reason[], bool:perma = false, timeban = 0) {
 
-	new q[512], playercharid, playerip[16];
-	playercharid = GetCharacterSQLID(playerid);
+	new q[512], playerip[16];
 	GetPlayerIp(playerid, playerip, sizeof(playerip));
 
 	if(perma) {
-		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, is_permanent) VALUES (%d, '%s', NOW(), '%s', 1)", playercharid, reason, playerip);
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, is_permanent) VALUES (%d, '%s', NOW(), '%s', 1)", PlayerInfo[playerid][SQLID], reason, playerip);
 	} else {
-		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, ban_expire) VALUES (%d, '%s', NOW(), '%s', NOW() + %d)", playercharid, reason, playerip, timeban);
+		mysql_format(SQL, q, sizeof(q), "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, ban_expire) VALUES (%d, '%s', NOW(), '%s', NOW() + %d)", PlayerInfo[playerid][SQLID], reason, playerip, timeban);
 	}
 
 	mysql_tquery(SQL, q);
@@ -817,12 +814,33 @@ YCMD:banip(playerid, params[], help)
 
 YCMD:freeze(playerid, params[], help){
 
-	if(IsPlayerControllable(playerid))
-		TogglePlayerControllable(playerid, false);
-	
-	else TogglePlayerControllable(playerid, true);
 
-	return (true);
+	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+	new target;
+	if(sscanf(params, "u", target))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/freeze <igrac>");
+
+	if(target == INVALID_PLAYER_ID) return (true);
+	if(!IsPlayerConnected(target)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije na serveru!");
+
+	if(IsPlayerControllable(target))
+	{
+		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zamrznuli ste igraca "c_server"%s", ReturnPlayerName(target));
+		SendClientMessage(target, x_server, "maryland \187; "c_white"Zamrznuti ste od strane admina!");
+		TogglePlayerControllable(playerid, false);
+		return (true);
+	}
+
+	else {
+
+		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odmrznuli ste igraca "c_server"%s", ReturnPlayerName(target));
+		SendClientMessage(target, x_server, "maryland \187; "c_white"Odmrznuti ste od strane admina!");
+		TogglePlayerControllable(playerid, true);
+		return (true);
+	}
+
 }
 
 YCMD:tod(playerid, params[], help){
@@ -834,6 +852,32 @@ YCMD:tod(playerid, params[], help){
 
 	SetWorldTime(time);
 	SendClientMessageToAll(x_blue, "maryland \187; "c_white"Vreme servera je trenutno %d sati.", time);
+
+	return (true);
+}
+
+YCMD:aclearwl(playerid, params[], help) {
+
+	if (GetPlayerStaffLevel(playerid)< e_ASSISTANT)
+		return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+	
+	new target;
+	if(sscanf(params, "u", target))
+		return notification.Show(playerid, "Greska", "/aclearwl Igrac", "?", BOXCOLOR_RED);
+
+	if(!IsPlayerConnected(target))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan na server!");
+
+	if(target == INVALID_PLAYER_ID)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Invalid pid!");
+
+	if(!IsPlayerWanted(target)) 
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije trazen!");
+
+	Police_SetPlayerWantedLevel(target, 0, "Staff");
+	
+	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ocistili ste wanted level igracu %s", ReturnPlayerName(target));
+	SendClientMessage(target, x_server, "maryland \187; "c_white"Admin %s vam je ocistio wanted level", ReturnPlayerName(playerid));
 
 	return (true);
 }

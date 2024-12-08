@@ -1,6 +1,5 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
-
 #define TD_TYPE_REG_MAIL        54
 #define TD_TYPE_REG_PASS        55
 #define TD_TYPE_REG_CONFIRM     56

@@ -18,7 +18,6 @@
  *  @Module         main
  */
 
-
 #define YSI_NO_HEAP_MALLOC
 
 #define MAX_Y_HOOKS (256)
@@ -98,13 +97,10 @@ public OnGameModeInit()
 	EnableVehicleFriendlyFire();
 	EnableStuntBonusForAll(false);	
 
+	EnableAllAnimations(true);
+
 	SnowMap_Init();
 
-	return 1;
-}
-
-public OnGameModeExit()
-{
 	return 1;
 }
 
@@ -116,353 +112,14 @@ public OnGameModeExit()
 
 */
 
-public OnPlayerConnect(playerid)
-{
-
-	return 1;
-}
-
-public OnPlayerDisconnect(playerid, reason)
-{
-
-	return 1;
-}
-
-public OnPlayerSpawn(playerid)
-{
-	return (true);
-}
-
-public OnPlayerDeath(playerid, killerid, WEAPON:reason)
-{
-	return 1;
-}
-
-public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
-{
-	return 1;
-}
-
-public OnPlayerExitVehicle(playerid, vehicleid)
-{
-	return 1;
-}
-
-public OnVehicleSpawn(vehicleid)
-{
-	return 1;
-}
-
-public OnVehicleDeath(vehicleid, killerid)
-{
-	return 1;
-}
-
-public OnPlayerRequestSpawn(playerid)
-{
-	return 1;
-}
-
-public OnPlayerCommandText(playerid, cmdtext[])
-{
-	return 0;
-}
-
-public OnPlayerUpdate(playerid)
-{
-	return 1;
-}
-
-
-public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
-{
-	return 1;
-}
-
-public OnPlayerEnterCheckpoint(playerid)
-{
-	return 1;
-}
-
-public OnPlayerLeaveCheckpoint(playerid)
-{
-	return 1;
-}
-
-public OnPlayerEnterRaceCheckpoint(playerid)
-{
-	return 1;
-}
-
-public OnPlayerLeaveRaceCheckpoint(playerid)
-{
-	return 1;
-}
-
-public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, WEAPON:weaponid, bodypart)
-{
-	return 1;
-}
-
-public OnActorStreamIn(actorid, forplayerid)
-{
-	return 1;
-}
-
-public OnActorStreamOut(actorid, forplayerid)
-{
-	return 1;
-}
-
-public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
-{
-	return 1;
-}
-
-public OnPlayerEnterGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerLeaveGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerEnterPlayerGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerLeavePlayerGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerClickGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerClickPlayerGangZone(playerid, zoneid)
-{
-	return 1;
-}
-
-public OnPlayerSelectedMenuRow(playerid, row)
-{
-	return 1;
-}
-
-public OnPlayerExitedMenu(playerid)
-{
-	return 1;
-}
-
-public OnClientCheckResponse(playerid, actionid, memaddr, retndata)
-{
-	return 1;
-}
-
-public OnRconLoginAttempt(ip[], password[], success)
-{
-	return 1;
-}
-
-public OnPlayerFinishedDownloading(playerid, virtualworld)
-{
-	return 1;
-}
-
-public OnPlayerRequestDownload(playerid, DOWNLOAD_REQUEST:type, crc)
-{
-	return 1;
-}
-
-public OnRconCommand(cmd[])
-{
-	return 0;
-}
-
-public OnPlayerSelectObject(playerid, SELECT_OBJECT:type, objectid, modelid, Float:fX, Float:fY, Float:fZ)
-{
-	return 1;
-}
-
-
-public OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)
-{
-	return 1;
-}
-
-public OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)
-{
-	return 1;
-}
-
 public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success) {
 
     if(success != COMMAND_OK)
     {
-        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Komanda "c_server"%s"c_white"nije pronadjena, iskoristite /komande", cmdtext); 
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Komanda "c_server"%s"c_white" nije pronadjena, iskoristite /komande", cmdtext); 
         return COMMAND_OK;
     }
     return COMMAND_OK;
-}
-
-public OnObjectMoved(objectid)
-{
-	return 1;
-}
-
-public OnPlayerObjectMoved(playerid, objectid)
-{
-	return 1;
-}
-
-public OnPlayerPickUpPickup(playerid, pickupid)
-{
-	return 1;
-}
-
-public OnPlayerPickUpPlayerPickup(playerid, pickupid)
-{
-	return 1;
-}
-
-public OnPickupStreamIn(pickupid, playerid)
-{
-	return 1;
-}
-
-public OnPickupStreamOut(pickupid, playerid)
-{
-	return 1;
-}
-
-public OnPlayerPickupStreamIn(pickupid, playerid)
-{
-	return 1;
-}
-
-public OnPlayerPickupStreamOut(pickupid, playerid)
-{
-	return 1;
-}
-
-public OnPlayerStreamIn(playerid, forplayerid)
-{
-	return 1;
-}
-
-public OnPlayerStreamOut(playerid, forplayerid)
-{
-	return 1;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
-{
-	return 1;
-}
-
-public OnPlayerGiveDamage(playerid, damagedid, Float:amount, WEAPON:weaponid, bodypart)
-{
-	return 1;
-}
-
-public OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)
-{
-	return 1;
-}
-
-public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
-{
-	return 1;
-}
-
-public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
-{
-	return 1;
-}
-
-public OnIncomingConnection(playerid, ip_address[], port)
-{
-	return 1;
-}
-
-// public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
-// {
-// 	return 1;
-// }
-
-public OnPlayerClickTextDraw(playerid, Text:clickedid)
-{
-	return 1;
-}
-
-public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
- {
- 	return 1;
- }
-
-public OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid)
-{
-	return 1;
-}
-
-public OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid)
-{
-	return 1;
-}
-
-public OnTrailerUpdate(playerid, vehicleid)
-{
-	return 1;
-}
-
-public OnVehicleSirenStateChange(playerid, vehicleid, newstate)
-{
-	return 1;
-}
-
-public OnVehicleStreamIn(vehicleid, forplayerid)
-{
-	return 1;
-}
-
-public OnVehicleStreamOut(vehicleid, forplayerid)
-{
-	return 1;
-}
-
-public OnVehicleMod(playerid, vehicleid, componentid)
-{
-	return 1;
-}
-
-public OnEnterExitModShop(playerid, enterexit, interiorid)
-{
-	return 1;
-}
-
-public OnVehiclePaintjob(playerid, vehicleid, paintjobid)
-{
-	return 1;
-}
-
-public OnVehicleRespray(playerid, vehicleid, color1, color2)
-{
-	return 1;
-}
-
-public OnVehicleDamageStatusUpdate(vehicleid, playerid)
-{
-	return 1;
-}
-
-public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
-{
-	return 1;
 }
 
 //-------------------------------------------------------------------------------------------------------- Includes List
@@ -473,6 +130,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/assets/custommarkers.inc"							//* Custom markers
 #include "backend/finance/currency.pwn"								//* Currency
 #include "backend/assets/ml_notify.pwn"
+#include "backend/stocks/float.stock"								//* Float Stocks
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
@@ -483,7 +141,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 
 //-------------------------------------------------------------------------------------------------------- Main
 #include "backend/reg-log/main.pwn"									//* Register and login
-
 #include "frontend/textdraws/register.tde"							//* Register tdovi
 #include "frontend/textdraws/login.tde"								//* Login tdovi
 #include "frontend/textdraws/chose-character.tde"					//* Create or chose character TextDraws
@@ -582,8 +239,6 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "backend/safezone/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Messages
-
-#include "backend/messages/chat.script"								//* Chat
 #include "backend/messages/random_messages.script"					//* Random poruke
 #include "backend/messages/custom_tags.script"						//* Custom tags iznad glave bez health bara i armora
 
@@ -696,7 +351,8 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 #include "frontend/interior/bcenter-garage.map"						//* Business Centre Garage (20)
 #include "frontend/interior/jewlery_int.map"						//* Jewlery Int (21)
 #include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
-#include "frontend/interior/hospital-int.map"						//* Recpetion Int (23)
+#include "frontend/interior/hospital-int.map"						//* Hospital Int (23)
+#include "frontend/interior/police_int.map"								//* Police Int (24)
 
 
 
@@ -725,8 +381,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
 #include "backend/inventory/functions.pwn"
+#include "backend/messages/chat.script"								//* Chat
+#include "backend/misc/commands.pwn"							   //* Cmds
 
-#include "backend/vehicle/rent_vehicle.pwn"
+// #include "backend/vehicle/rent_vehicle.pwn"
 
 /*
 

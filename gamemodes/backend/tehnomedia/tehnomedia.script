@@ -1,4 +1,5 @@
 /*
+
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -8,24 +9,95 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Vostic & Ogy_
+ *  @Author         Vostic & Nouddy
  *  @Date           03th Jun 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
  *
  *  @File           tehnomedia.script
  *  @Module         tehnomedia
+
  */
 
 #include <ysilib\YSI_Coding\y_hooks>
+
+//*==============================================================================
+//*--->>> Begining
+//*==============================================================================
+
+#define MAX_NUMBER_LEN          (15)
+
+enum {
+
+    CALL_STATUS_NONE,
+    CALL_STATUS_DIALING,
+    CALL_STATUS_ACTIVE
+
+}
 
 enum PlayerTehnomedia
 {
     eDronItem,
     eBatteryItem,
-    eGPSItem
+    eGPSItem,
+    ePhoneModel,
+    ePhoneNumber[3]
 }
 new PlayerElectronic[MAX_PLAYERS][PlayerTehnomedia];
+
+new p_CallWith[MAX_PLAYERS],
+    p_CallStatus[MAX_PLAYERS];
+
+enum e_PHONE_MODELS {
+
+    pModel[32],
+    price
+}
+
+static const sz_PhoneModels[][e_PHONE_MODELS] = {
+
+    { "iPhone 14 Pro Max", 1500 },
+    { "Samsung Galaxy S21", 1250 },
+    { "Redmi Note 13 Pro", 250 },
+    { "Huawei Mate 20 Lite", 350 }
+};
+
+//*==============================================================================
+//*--->>> Timers
+//*==============================================================================
+
+stock GetPlayerCallStatus(playerid) {
+
+    return p_CallStatus[playerid];
+}
+
+timer mobile_CallTimeout[30000](playerid) 
+{   
+    if(p_CallStatus[playerid] == CALL_STATUS_DIALING) {
+
+        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_STOPUSECELLPHONE);
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nazalost niko se nije javio...");
+        
+        p_CallWith[playerid] = INVALID_PLAYER_ID;
+        
+        foreach(new i : Player) {
+
+            if(i == playerid) continue;
+            if(p_CallWith[i] == playerid) {
+
+                p_CallWith[i] = INVALID_PLAYER_ID;
+                break;
+            }
+        }
+        return ~1;
+    }
+
+    return (true);
+}
+
+//*==============================================================================
+//*--->>> Hooks
+//*==============================================================================
 
 hook OnGameModeInit()
 {
@@ -43,25 +115,12 @@ hook OnCharacterLoaded(playerid)
 	return 1;
 }
 
-forward SQL_ElectronicLoad(playerid);
-public SQL_ElectronicLoad(playerid)
-{
-    static rows;
-    cache_get_row_count(rows);
-    if(!rows) 
-    {
-        new q[300];
-        mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_electronic` (character_electronics, Dron, Battery, GPS) \ 
-            VALUES('%d', '0', '0', '0')", GetCharacterSQLID(playerid));
-        mysql_tquery(SQL, q);
-    }
-    else 
-    {
-        cache_get_value_name_int(0, "Dron", PlayerElectronic[playerid][eDronItem]);
-        cache_get_value_name_int(0, "Battery", PlayerElectronic[playerid][eBatteryItem]);
-        cache_get_value_name_int(0, "GPS", PlayerElectronic[playerid][eGPSItem]);
-    }
+hook OnPlayerConnect(playerid) {
+
+    p_CallWith[playerid] = INVALID_PLAYER_ID;
+    p_CallStatus[playerid] = CALL_STATUS_NONE;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
@@ -81,7 +140,205 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[])
+hook OnPlayerText(playerid, text[])
+{
+
+    if(p_CallStatus[playerid] == CALL_STATUS_ACTIVE && p_CallWith[playerid] != INVALID_PLAYER_ID) {
+
+        new callerid = p_CallWith[playerid];
+        SendClientMessage(playerid, x_server, "phone \187; "c_white" %s", text);
+        SendClientMessage(callerid, x_server, "phone \187; "c_white" %s", text);
+
+        static string[256];
+        format(string,sizeof(string), "%s kaze na telefonu : %s", ReturnPlayerName(playerid), text);
+        ProxDetector(playerid, Float:15.0, x_grey, string);
+
+        return Y_HOOKS_BREAK_RETURN_0;
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+//*==============================================================================
+//*--->>> Commands 
+//*==============================================================================
+
+YCMD:smsad(playerid, params[], help) 
+{
+    
+    if(PlayerElectronic[playerid][ePhoneModel] == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
+
+    new text[128];
+    if(sscanf(params, "s[128]", text)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/smsad <oglas>");
+    if(strlen(text) <= 0 || strlen(text) > sizeof text) return (true);
+
+    SendClientMessageToAll(x_server, "advertisement \187; "c_white"%s | telefonski broj : "c_server"%d-%d-%d", text, PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
+
+    return 1;
+}
+
+YCMD:sms(playerid, params[], help) {
+
+    if(PlayerElectronic[playerid][ePhoneModel] == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
+
+    new numer[3], text[128];
+    if(sscanf(params, "ddds[128]", numer[0], numer[1], numer[2], text)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/sms <pozivni> <1> <2> <poruka>");
+    if(strlen(text) <= 0 || strlen(text) > sizeof text) return (true);
+
+    if(PlayerElectronic[playerid][ePhoneNumber][0] == numer[0] && \
+    PlayerElectronic[playerid][ePhoneNumber][1] == numer[1] && \
+    PlayerElectronic[playerid][ePhoneNumber][2] == numer[2]) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete poslati sami sebi poruku!");
+
+    foreach(new i : Player) {
+
+        if(i == playerid) continue;
+
+        if(PlayerElectronic[i][ePhoneNumber][0] == numer[0] && PlayerElectronic[i][ePhoneNumber][1] == numer[1] && PlayerElectronic[i][ePhoneNumber][2] == numer[2]) 
+        {
+            SendClientMessage(playerid, x_server, "sms \187; [%d-%d-%d]: "c_white"%s", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2], text);
+            SendClientMessage(i, x_server, "sms \187; [%d-%d-%d]: "c_white"%s", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2], text);
+            break;
+        }
+
+        else {
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Broj nije registrovan!");
+            break;
+        }
+    }
+
+    return 1;
+}
+
+YCMD:call(playerid, params[], help) {
+
+    if(PlayerElectronic[playerid][ePhoneModel] == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
+
+    if(p_CallStatus[playerid] != CALL_STATUS_NONE)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste u pozivu!");
+
+    new numer[3];
+    if(sscanf(params, "ddd", numer[0], numer[1], numer[2])) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/call <1> <2> <3>");
+
+    if(PlayerElectronic[playerid][ePhoneNumber][0] == numer[0] && \
+    PlayerElectronic[playerid][ePhoneNumber][1] == numer[1] && \
+    PlayerElectronic[playerid][ePhoneNumber][2] == numer[2]) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete zovnuti samog!");
+
+    foreach(new i : Player) {
+
+        if(i == playerid) continue;
+
+        if(PlayerElectronic[i][ePhoneNumber][0] == numer[0] && PlayerElectronic[i][ePhoneNumber][1] == numer[1] && PlayerElectronic[i][ePhoneNumber][2] == numer[2]) 
+        {
+
+            if(p_CallStatus[i] != CALL_STATUS_NONE)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Broj zauzet!");
+
+            static str[302];
+            format(str, sizeof str, "Imate dolazni poziv : ~y~%d %d %d~n~_~w~Da prihvatite poziv /answer", numer[0], numer[1], numer[2]);
+            Notify_SendNotification(i, str, "M O B I T E L", 1247);
+            
+            p_CallStatus[playerid] = CALL_STATUS_DIALING;
+            p_CallStatus[i] = CALL_STATUS_DIALING;
+            
+            p_CallWith[playerid] = i;
+            p_CallWith[i] = playerid;
+
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
+
+            defer mobile_CallTimeout(playerid);
+
+            break;
+        }
+
+        else {
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Broj nije registrovan!");
+            break;
+        }
+    }
+
+    return 1;
+}
+
+YCMD:answer(playerid, params[], help) {
+
+    if(p_CallStatus[playerid] != CALL_STATUS_DIALING) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dolazni poziv!");
+
+    new callerid = p_CallWith[playerid];
+
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
+
+    p_CallStatus[playerid] = CALL_STATUS_ACTIVE;
+    p_CallStatus[callerid] = CALL_STATUS_ACTIVE;
+
+
+    Notify_SendNotification(playerid, "Veza je upsjesno uspostavljena...", "M O B I T E L", 1247);
+    Notify_SendNotification(callerid, "Veza je upsjesno uspostavljena...", "M O B I T E L", 1247);
+
+    return 1;
+}
+
+YCMD:hangup(playerid, params[], help) {
+
+    if(p_CallStatus[playerid] == CALL_STATUS_NONE) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate sta da prekidate!");
+
+    new callerid = p_CallWith[playerid];
+
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_STOPUSECELLPHONE);
+    SetPlayerSpecialAction(callerid, SPECIAL_ACTION_STOPUSECELLPHONE);
+    
+    p_CallStatus[playerid] = CALL_STATUS_NONE;
+    p_CallStatus[callerid] = CALL_STATUS_NONE;
+
+    Notify_SendNotification(playerid, "Veza prekinuta...", "M O B I T E L", 1247);
+    Notify_SendNotification(callerid, "Veza prekinuta...", "M O B I T E L", 1247);
+
+    p_CallWith[callerid] = INVALID_PLAYER_ID;
+    p_CallWith[playerid] = INVALID_PLAYER_ID;
+
+    return 1;
+}
+
+//*==============================================================================
+//*--->>> Dialogs
+//*==============================================================================
+
+Dialog:dialog_chosePhone(const playerid, response, listitem, string: inputtext[]) {
+
+    if(response) {
+
+        new id = listitem;
+
+        if(PlayerElectronic[playerid][ePhoneModel] != -1)
+            return SendClientMessage(playerid, x_server, "tehnomedia \187; "c_white"Vec posjedujete mobilni telefon!");
+
+        if(GetPlayerMoney(playerid) < sz_PhoneModels[id][price])
+            return SendClientMessage(playerid, x_server, "tehnomedia \187; "c_white"Nemate dovoljno novca za ovaj model telefona!");
+
+        PlayerElectronic[playerid][ePhoneModel] = listitem;
+
+        new x1 = RandomMinMax(100, 999);
+        new x2 = RandomMinMax(200, 999);
+        new p1 = RandomMinMax(60, 63);
+
+        PlayerElectronic[playerid][ePhoneNumber][0] = p1;
+        PlayerElectronic[playerid][ePhoneNumber][1] = x1;
+        PlayerElectronic[playerid][ePhoneNumber][2] = x2;
+
+        SendClientMessage(playerid, x_server, "technomedia \187; "c_white"Uspjesno ste kupili "c_server"%s", sz_PhoneModels[id][pModel]);
+        SendClientMessage(playerid, x_server, "technomedia \187; "c_white"Dodjeljen vam je telefonski broj : "c_server"%d %d %d", p1, x1, x2);
+        SaveElectronic(playerid);
+
+        return (true);
+    
+    }
+
+    return (true);
+}
+
+Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[])
 {	
     if(!response) return Y_HOOKS_CONTINUE_RETURN_1;
 	if(response)
@@ -91,7 +348,16 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
             case 0:
             {
 
-                SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Zao nam je, nisu u ponudi jos telefoni!");
+                static __str[128], dlgStrgEx[567];
+
+                for(new i = 0; i < sizeof sz_PhoneModels; i++) {
+
+                    format(__str, sizeof __str, ""c_server"%s   \t"c_white"%d\n", sz_PhoneModels[i][pModel], sz_PhoneModels[i][price]);
+                    strcat(dlgStrgEx, __str);
+
+                }
+
+                Dialog_Show(playerid, "dialog_chosePhone", DIALOG_STYLE_LIST, ""c_server"Tehnomedia \187; "c_white"Telefoni", dlgStrgEx, "Odaberi", "Odustani");
 
                 return Y_HOOKS_CONTINUE_RETURN_1;
             }
@@ -117,8 +383,6 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
                 if(GetPlayerMoney(playerid) < 150) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Nemate dovoljno novca!");
 
                 PlayerElectronic[playerid][eBatteryItem]++;
-                // - Dodati kada se odradi player_currency
-                // GiveMoneyEx(playerid, -150);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste Battery!");
@@ -147,4 +411,42 @@ Dialog: dialog_electronic(const playerid, response, listitem, string: inputtext[
 		}
 	}
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//*==============================================================================
+//*--->>> Funcs * Query
+//*==============================================================================
+
+forward SQL_ElectronicLoad(playerid);
+public SQL_ElectronicLoad(playerid)
+{
+    static rows;
+    cache_get_row_count(rows);
+    if(!rows) 
+    {
+        new q[300];
+        mysql_format(SQL, q, sizeof(q), 
+           "INSERT INTO `player_electronic` (character_electronics, Dron, Battery, GPS) \
+            VALUES('%d', '0', '0', '0')", GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+
+        PlayerElectronic[playerid][ePhoneModel] = -1;
+    }
+    else 
+    {   
+        static xNumm[MAX_NUMBER_LEN];
+
+        cache_get_value_name_int(0, "Dron", PlayerElectronic[playerid][eDronItem]);
+        cache_get_value_name_int(0, "Battery", PlayerElectronic[playerid][eBatteryItem]);
+        cache_get_value_name_int(0, "GPS", PlayerElectronic[playerid][eGPSItem]);
+        cache_get_value_name_int(0, "phoneModel", PlayerElectronic[playerid][ePhoneModel]);
+        cache_get_value_name(0, "phoneNumber", xNumm, MAX_NUMBER_LEN);
+
+        if(strfind(xNumm, "0 | 0 | 0") == -1) {
+
+            sscanf(xNumm, "p<|>ddd", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2] );
+            SendClientMessage(playerid, 0xFF0055FF, "Tehnomedia \187; "c_white"Vas broj telefona je : %d %d %d", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
+
+        }
+    }
 }

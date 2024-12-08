@@ -130,7 +130,7 @@ public Faction_InsertData(id, member) {
 
     FactionMember[member][characterID] = PlayerInfo[member][SQLID];
     FactionMember[member][factionID] = FactionInfo[id][factionID];
-    FactionMember[member][factionRank] = 1;
+    FactionMember[member][factionRank] = 7;
     FactionMember[member][factionRespect] = 1;
 
     new q[260];
@@ -256,18 +256,6 @@ YCMD:members(playerid, params[], help)
     return 1;
 }
 
-YCMD:allfactions(playerid, params[], help) 
-{
-    SendClientMessage(playerid, -1, "DEBUG: My Faction SQL %d", FactionMember[playerid][factionID]);
-
-    foreach(new i : iter_Factions) {
-
-        SendClientMessage(playerid, -1, "DEBUG: Faction %s(%d) SQL(%d)", FactionInfo[i][factionName], i, FactionInfo[i][factionID]);
-    }
-
-    return 1;
-}
-
 YCMD:f(playerid, params[], help) {
 
     if(FactionMember[playerid][factionID] < 0)
@@ -285,7 +273,6 @@ YCMD:f(playerid, params[], help) {
 
         if(fID == FactionInfo[i][factionID]) {
             
-            SendClientMessage(playerid, -1, "DEBUG: naslo valjda");
             format(tmp_message, sizeof tmp_message, ""c_grey"#FACTION %s \187; "c_white"%s[%d] %s.",
             FactionInfo[i][factionName], ReturnPlayerName(playerid), playerid, message);
             break;
@@ -293,6 +280,23 @@ YCMD:f(playerid, params[], help) {
     }
 
     Faction_SendMessage(fID, tmp_message);
+
+    return 1;
+}
+
+YCMD:faction(playerid, params[], help) {
+
+    if(FactionMember[playerid][factionID] == 0) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne organizacije!");
+
+    foreach(new i : iter_Factions) {
+
+        if(FactionInfo[i][factionID] == FactionMember[playerid][factionID]) {
+
+            new fa_str[568], dlgStrEx[2048];
+            format(fa_str, sizeof fa_str, ""c_server"#1 \187; "c_white"Informacije\n");
+            break;
+        }
+    }
 
     return 1;
 }

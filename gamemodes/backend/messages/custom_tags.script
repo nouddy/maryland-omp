@@ -19,7 +19,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
  
-#define CT_DISTANCE 25.0 // Nametag render distance
+#define CT_DISTANCE 25.0 //* Nametag render distance
  
 new Text3D:cNametag[MAX_PLAYERS];
  
@@ -32,7 +32,6 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
     cNametag[playerid] = CreateDynamic3DTextLabel("Loading nametag...", 0xFFFFFFFF, 0.0, 0.0, 0.1, CT_DISTANCE, .attachedplayer = playerid, .testlos = 1);
-    
     return 1;
 }
 

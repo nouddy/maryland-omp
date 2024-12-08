@@ -8,7 +8,6 @@ new burglary_Objects[MAX_PLAYERS][3];
 new PlayerText3D:burglary_Labels[MAX_PLAYERS][3];
 
 new burglary_CoolDown[MAX_PLAYERS];
-new burglary_Counter[MAX_PLAYERS];
 new bool:burglary_InProgress[MAX_PLAYERS];
 
 new burglary_Icon[MAX_PLAYERS],

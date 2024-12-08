@@ -90,7 +90,7 @@ public mysql_ChosePort(playerid) {
 
         }
 
-        Dialog_Show(playerid, "dialog_ChosePort", DIALOG_STYLE_LIST, "Maryland - Port", _dialogStr, "Odaberi", "Odustani");
+        Dialog_Show(playerid, "dialog_ChosePort", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_white"Port", _dialogStr, "Odaberi", "Odustani");
     }
 
     return true;

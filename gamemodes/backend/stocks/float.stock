@@ -1,0 +1,41 @@
+
+/*
+*
+*  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+*  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+*  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+*  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+*  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+*  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+*  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+*
+*  @Author         Nodi A.K.A Ferid Olsun
+*  @Date           05th May 2023
+*  @Weburl         https://maryland-ogc.com
+*  @Project        maryland_project
+*
+*  @File           textdraw.stock
+*  @Module         stocks
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+stock DistanceBetweenPlayers(Float:radi, playerid, targetid)
+{
+    if(IsPlayerConnected(playerid) && IsPlayerConnected(targetid))
+	{
+		new Float:posx, Float:posy, Float:posz;
+		new Float:oldposx, Float:oldposy, Float:oldposz;
+		new Float:tempposx, Float:tempposy, Float:tempposz;
+		GetPlayerPos(playerid, oldposx, oldposy, oldposz);
+		GetPlayerPos(targetid, posx, posy, posz);
+		tempposx = (oldposx -posx);
+		tempposy = (oldposy -posy);
+		tempposz = (oldposz -posz);
+		if (((tempposx < radi) && (tempposx > -radi)) && ((tempposy < radi) && (tempposy > -radi)) && ((tempposz < radi) && (tempposz > -radi)))
+		{
+			return true;
+		}
+	}
+	return false;
+}

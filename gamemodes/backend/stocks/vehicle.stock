@@ -43,6 +43,15 @@ new stock g_arrVehicleNames[][] = {
     "Chevrolet SV", "Tiller", "Utility Trailer"
 };
 
+new OneSeatVehicles[ 38 ] = {
+
+    425, 430, 432, 441, 446, 448, 452, 453,
+    454, 464, 465, 472, 473, 476, 481, 484,
+    485, 486, 493, 501, 509, 510, 519, 520,
+    530, 531, 532, 539, 553, 564, 568, 571,
+    572, 574, 583, 592, 594, 595
+};
+
 stock GetVehicleSpeed(vehicleid)
 {
 	new Float:xPos[3];
@@ -173,4 +182,33 @@ stock GetVehicleState(vehicle) {
     else vehicleState = "Maryland";
     
 	return vehicleState;
+}
+
+
+stock IsSeatAvailable( vehicleid, seat)
+{
+    new carmodel = GetVehicleModel( vehicleid);
+    for (new i = 0; i < sizeof( OneSeatVehicles ); i++ )
+    {
+        if( carmodel == OneSeatVehicles[i] ) return 0;
+    }
+    foreach(new i : Player)
+    {
+        if(GetPlayerVehicleID(i) == vehicleid && GetPlayerVehicleSeat(i) == seat) return 0;
+    }
+    return 1;
+}
+
+stock GetNearestVehicle(playerid) {
+
+	for(new i = 0; i < MAX_VEHICLES -1; i++) {
+
+		new Float:vehPos[3];
+		GetVehiclePos(i, vehPos[0], vehPos[1], vehPos[2]);
+
+		if(IsPlayerInRangeOfPoint(playerid, 2.5, vehPos[0], vehPos[1], vehPos[2])) 
+			return i;
+	}
+
+	return INVALID_VEHICLE_ID;
 }

@@ -4,13 +4,184 @@
 //new PlayerText:BankaIgraca[MAX_PLAYERS];
 /////////////////////////////////////// Public za sve PlayerTdove  ////////////////////////////////////////////////////
 
+#define TEXTDRAW_WANTED_LEVEL           Player_TDs[playerid][4]
+
+new Text:mhud_UI[14],
+    PlayerText:money_UI[MAX_PLAYERS];
+
+stock Hud_CreateInterface() {
+
+    mhud_UI[0] = TextDrawCreate(499.000030, 77.318550, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[0], 107.129814, 20.949998);
+    TextDrawAlignment(mhud_UI[0], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[0], 151719423);
+    TextDrawSetShadow(mhud_UI[0], 0);
+    TextDrawBackgroundColour(mhud_UI[0], 255);
+    TextDrawFont(mhud_UI[0], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[0], false);
+
+    mhud_UI[1] = TextDrawCreate(493.900146, 75.533416, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[1], 10.000000, 11.000000);
+    TextDrawAlignment(mhud_UI[1], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[1], 151719423);
+    TextDrawSetShadow(mhud_UI[1], 0);
+    TextDrawBackgroundColour(mhud_UI[1], 255);
+    TextDrawFont(mhud_UI[1], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[1], false);
+
+    mhud_UI[2] = TextDrawCreate(493.900146, 88.907493, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[2], 10.000000, 11.000000);
+    TextDrawAlignment(mhud_UI[2], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[2], 151719423);
+    TextDrawSetShadow(mhud_UI[2], 0);
+    TextDrawBackgroundColour(mhud_UI[2], 255);
+    TextDrawFont(mhud_UI[2], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[2], false);
+
+    mhud_UI[3] = TextDrawCreate(600.566894, 88.907493, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[3], 10.000000, 11.000000);
+    TextDrawAlignment(mhud_UI[3], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[3], 151719423);
+    TextDrawSetShadow(mhud_UI[3], 0);
+    TextDrawBackgroundColour(mhud_UI[3], 255);
+    TextDrawFont(mhud_UI[3], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[3], false);
+
+    mhud_UI[4] = TextDrawCreate(600.566894, 75.503761, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[4], 10.000000, 11.000000);
+    TextDrawAlignment(mhud_UI[4], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[4], 151719423);
+    TextDrawSetShadow(mhud_UI[4], 0);
+    TextDrawBackgroundColour(mhud_UI[4], 255);
+    TextDrawFont(mhud_UI[4], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[4], false);
+
+    mhud_UI[5] = TextDrawCreate(495.566772, 81.066688, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[5], 113.210044, 12.230005);
+    TextDrawAlignment(mhud_UI[5], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[5], 151719423);
+    TextDrawSetShadow(mhud_UI[5], 0);
+    TextDrawBackgroundColour(mhud_UI[5], 255);
+    TextDrawFont(mhud_UI[5], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[5], false);
+
+    mhud_UI[6] = TextDrawCreate(499.333404, 82.822219, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[6], 11.000000, 10.000000);
+    TextDrawAlignment(mhud_UI[6], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[6], -1);
+    TextDrawSetShadow(mhud_UI[6], 0);
+    TextDrawBackgroundColour(mhud_UI[6], 255);
+    TextDrawFont(mhud_UI[6], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[6], false);
+
+    mhud_UI[7] = TextDrawCreate(501.666778, 84.066665, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[7], 13.000000, 2.000000);
+    TextDrawAlignment(mhud_UI[7], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[7], 151719423);
+    TextDrawSetShadow(mhud_UI[7], 0);
+    TextDrawBackgroundColour(mhud_UI[7], 255);
+    TextDrawFont(mhud_UI[7], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[7], false);
+
+    mhud_UI[8] = TextDrawCreate(503.633422, 83.251861, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[8], -3.839998, 3.450000);
+    TextDrawAlignment(mhud_UI[8], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[8], 151719423);
+    TextDrawSetShadow(mhud_UI[8], 0);
+    TextDrawBackgroundColour(mhud_UI[8], 255);
+    TextDrawFont(mhud_UI[8], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[8], false);
+
+    mhud_UI[9] = TextDrawCreate(506.767089, 87.466613, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[9], 6.000000, 3.000000);
+    TextDrawAlignment(mhud_UI[9], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[9], 151719423);
+    TextDrawSetShadow(mhud_UI[9], 0);
+    TextDrawBackgroundColour(mhud_UI[9], 255);
+    TextDrawFont(mhud_UI[9], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[9], false);
+
+    mhud_UI[10] = TextDrawCreate(504.366821, 86.355552, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[10], 5.240005, 5.289981);
+    TextDrawAlignment(mhud_UI[10], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[10], 151719423);
+    TextDrawSetShadow(mhud_UI[10], 0);
+    TextDrawBackgroundColour(mhud_UI[10], 255);
+    TextDrawFont(mhud_UI[10], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[10], false);
+
+    mhud_UI[11] = TextDrawCreate(506.633514, 87.270362, "ld_beat:chit");
+    TextDrawTextSize(mhud_UI[11], 3.069998, 3.470000);
+    TextDrawAlignment(mhud_UI[11], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[11], -1);
+    TextDrawSetShadow(mhud_UI[11], 0);
+    TextDrawBackgroundColour(mhud_UI[11], 255);
+    TextDrawFont(mhud_UI[11], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[11], false);
+
+    mhud_UI[12] = TextDrawCreate(414.466918, 77.859199, "");
+    TextDrawTextSize(mhud_UI[12], 194.000000, 14.000000);
+    TextDrawAlignment(mhud_UI[12], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[12], -1378294179);
+    TextDrawSetShadow(mhud_UI[12], 0);
+    TextDrawBackgroundColour(mhud_UI[12], 1090519040);
+    TextDrawFont(mhud_UI[12], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    TextDrawSetProportional(mhud_UI[12], false);
+    TextDrawSetPreviewModel(mhud_UI[12], 1317);
+    TextDrawSetPreviewRot(mhud_UI[12], 0.000000, 270.000000, 95.000000, 1.000000);
+
+    mhud_UI[13] = TextDrawCreate(511.067138, 83.948081, "LD_SPAC:white");
+    TextDrawTextSize(mhud_UI[13], 1.940000, 11.000000);
+    TextDrawAlignment(mhud_UI[13], TEXT_DRAW_ALIGN_LEFT);
+    TextDrawColour(mhud_UI[13], 151719423);
+    TextDrawSetShadow(mhud_UI[13], 0);
+    TextDrawBackgroundColour(mhud_UI[13], 255);
+    TextDrawFont(mhud_UI[13], TEXT_DRAW_FONT_SPRITE_DRAW);
+    TextDrawSetProportional(mhud_UI[13], false);
+}
+
+stock UpdateMoneyTD(playerid) {
+
+    if(!IsPlayerTextDrawVisible(playerid, money_UI[playerid])) {}
+
+    PlayerTextDrawSetString(playerid, money_UI[playerid], "%.2f", GetPlayerMoney(playerid));
+    PlayerTextDrawShow(playerid, money_UI[playerid]);
+    return (true);
+}
+
+stock Hud_ShowInterface(playerid) {
+
+    for(new i = 0; i < sizeof mhud_UI; i++) {
+        if(!IsTextDrawVisibleForPlayer(playerid, mhud_UI[i]))
+            TextDrawShowForPlayer(playerid, mhud_UI[i]);
+    }
+
+    PlayerTextDrawDestroy(playerid, money_UI[playerid]);
+    money_UI[playerid] = INVALID_PLAYER_TEXT_DRAW;
+
+    money_UI[playerid] = CreatePlayerTextDraw(playerid, 514.666259, 85.466659, "$_28327632");
+    PlayerTextDrawLetterSize(playerid, money_UI[playerid], 0.091333, 0.575407);
+    PlayerTextDrawAlignment(playerid, money_UI[playerid], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, money_UI[playerid], -1);
+    PlayerTextDrawSetShadow(playerid, money_UI[playerid], 0);
+    PlayerTextDrawBackgroundColour(playerid, money_UI[playerid], 255);
+    PlayerTextDrawFont(playerid, money_UI[playerid], TEXT_DRAW_FONT_2);
+    PlayerTextDrawSetProportional(playerid, money_UI[playerid], true);
+    PlayerTextDrawShow(playerid, money_UI[playerid]);
+
+    UpdateMoneyTD(playerid);
+
+
+
+    return (true);
+}
 
 hook OnGameModeInit()
 {
     print("frontend/main.tde loaded");
 
     CreateTextdraws();		//Stock za tdove
-
+    Hud_CreateInterface();
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -87,12 +258,7 @@ stock TogglePlayerTextDraw(playerid, const bool:option) {
             if(Player_TDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
 
             PlayerTextDrawShow(playerid, Player_TDs[playerid][i]);
-            
-            printf(" PlayerTD: (%d)", i);
         }
-        
-        // PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
-	    // PlayerTextDrawSetString(playerid, Player_TDs[playerid][0], "%s", ReturnCharacterName(playerid));
     }
     else {
 
@@ -1042,6 +1208,26 @@ task VremeDatum[1000]()
     TextDrawSetString(Global_TD[78], stringic);
     TextDrawSetString(Global_TD[79], stringicc);
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock UpdateWantedLevel(playerid, wanted) {
+
+    new string[20];
+
+    switch(wanted) {
+
+        case 0: { string = "]_]_]_]_]_]"; }
+        case 1: { string = "]_]_]_]_]_~r~]"; }
+        case 2: { string = "]_]_]_]_~r~]_]"; }
+        case 3: { string = "]_]_]_~r~]_]_]"; }
+        case 4: { string = "]_]_~r~]_]_]_]"; }
+        case 5: { string = "]_~r~]_]_]_]_]"; }
+        case 6: { string = "~r~]_]_]_]_]_]"; }
+        default: { string = "]_]_]_]_]_]"; }
+
+    }
+
+    PlayerTextDrawSetString(playerid, TEXTDRAW_WANTED_LEVEL, string);
 }
 
 // 78 Sat 79 Datu

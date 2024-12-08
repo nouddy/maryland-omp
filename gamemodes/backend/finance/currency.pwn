@@ -21,6 +21,17 @@ new MoneyTypeString[MONEY_TYPE][24] = {
            Update visual representation of money when it changes. 
 */
 
+stock Float:GetPlayerMoney2(playerid, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
+{
+    if(!IsPlayerConnected(playerid)) return 0;
+    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
+
+    return pMoney[playerid][type];
+}
+
+#undef GetPlayerMoney
+#define GetPlayerMoney(%0) GetPlayerMoney2(%0)
+
 stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
 {   
     if(!IsPlayerConnected(playerid)) return 0;
@@ -32,20 +43,32 @@ stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MON
     {
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cDollars` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
     }
 
+    if(type == MONEY_TYPE_EURO) {
+
+        ResetPlayerMoney(playerid);
+        GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEuro` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_EURO), GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+    }
+
+    if(type == MONEY_TYPE_POUND) {
+
+        ResetPlayerMoney(playerid);
+        GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEGPound` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_POUND), GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+    }
+    UpdateMoneyTD(playerid);
     return pMoney[playerid][type];
 }
 #define SetPlayerMoney(%0) SetPlayerMoney2(%0)
-
-stock Float:GetPlayerMoney2(playerid, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
-{
-    if(!IsPlayerConnected(playerid)) return 0;
-    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
-
-    return pMoney[playerid][type];
-}
-#define acc_GetPlayerMoney(%0) GetPlayerMoney2(%0)
 
 stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
 {
@@ -60,9 +83,23 @@ stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TY
         GivePlayerMoney(playerid,floatround(Float:pMoney[playerid][type]));
     }
 
+    if(type == MONEY_TYPE_EURO) {
+
+        ResetPlayerMoney(playerid);
+        GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
+    }
+
+    if(type == MONEY_TYPE_POUND) {
+
+        ResetPlayerMoney(playerid);
+        GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
+    }
+
+    UpdateMoneyTD(playerid);
     return pMoney[playerid][type];
 }
-#define acc_GivePlayerMoney(%0) GivePlayerMoney2(%0)
+#undef GivePlayerMoney
+#define GivePlayerMoney(%0) GivePlayerMoney2(%0)
 
 stock Float:TakePlayerMoney(playerid, MONEY_TYPE:type, Float:ammount, bool:allowNegative = false)
 {

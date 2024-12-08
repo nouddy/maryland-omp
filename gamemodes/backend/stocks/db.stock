@@ -113,11 +113,16 @@ stock SaveElectronic(playerid)
 {
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
-        new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d' WHERE `character_electronics` = '%d'",
+        new query[500], tmp_num[15];
+
+        format(tmp_num, sizeof tmp_num, "%d | %d | %d", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
+
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_electronic` SET `Dron` = '%d',`Battery` = '%d',`GPS` = '%d', `phoneModel` = '%d', phoneNumber = '%e' WHERE `character_electronics` = '%d'",
             PlayerElectronic[playerid][eDronItem],
             PlayerElectronic[playerid][eBatteryItem],
             PlayerElectronic[playerid][eGPSItem],
+            PlayerElectronic[playerid][ePhoneModel],
+            tmp_num,
             GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }
@@ -236,10 +241,10 @@ stock ReturnCharacterName(character) {
 }
 
 // SQL UPDATES VOSTIC
-stock UpdateSqlInt(dbHandle, tableName[], columnName[], newValue, conditionColumn[], conditionValue)
+stock UpdateSqlInt(MySQL:dbHandle, const tableName[], const columnName[], newValue, const conditionColumn[], conditionValue)
 {
     new query[980];
-    mysql_format(query, sizeof(query), "UPDATE %s SET %s = %d WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
+    mysql_format(dbHandle, query, sizeof(query), "UPDATE %s SET %s = %d WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
     mysql_tquery(dbHandle, query);
 }
 

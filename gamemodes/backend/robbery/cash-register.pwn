@@ -124,12 +124,11 @@ hook OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, EDIT_RESP
 YCMD:createcashregister(playerid, params[], help) 
 {
     
-    new crID = CashRegister_InProgress[playerid] = Iter_Free(iter_CRegister);
+    new crID  = Iter_Free(iter_CRegister);
+    CashRegister_InProgress[playerid] = crID;
 
     new Float:pPos[3];
-
     GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-
     CashRegister_Object[crID] = CreateDynamicObject(2771, pPos[0], pPos[1], pPos[2], 0.00, 0.00, 90.00, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1);
     EditDynamicObject(playerid,  CashRegister_Object[crID]);
 

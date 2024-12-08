@@ -19,9 +19,13 @@
 
  #include <ysilib\YSI_Coding\y_hooks>
 
- //============================================================ Defines
+//============================================================ Defines
+
 const MAX_POLICE = 30;
 const MAX_RANK_NAME = 32;
+
+const JAIL_TYPE_PRISON  = 1;
+
 //============================================================ Enums (sufix f = Faction)
 
 enum E_POLICE_DATA {
@@ -50,7 +54,6 @@ enum E_POLICE_DATA {
 
     fPolicePickup,                 
     Text3D:fPoliceLabel,           
-
     fPoliceSkins[4]                
 }
 
@@ -65,9 +68,172 @@ new fCreatingID[MAX_PLAYERS] = -1;
 new Text3D:dutyLabel[MAX_POLICE];
 new dutyPickup[MAX_POLICE];
 
+new Text3D:equLabel[MAX_POLICE];
+new equPickup[MAX_POLICE];
+
+//============================================================ Police Members
+
+enum e_POLICE_MEMBER_DATA {
+
+    policeID,
+    characterID,
+    policeRank,
+    arrests,
+    joinDate[64]
+}
+
+new PoliceMember[MAX_PLAYERS][e_POLICE_MEMBER_DATA];
+
+new bool:memberDuty[MAX_PLAYERS],
+    bool:tazerAvailable[MAX_PLAYERS],
+    equipmentCoolDown[MAX_PLAYERS],
+    bool:playerTazed[MAX_PLAYERS],
+    bool:playerTied[MAX_PLAYERS],
+    cuffedPoliceMan[MAX_PLAYERS];
+
+//============================================================ Prison
+
+enum e_PRISON_DATA {
+
+    characterID,
+    jailTime,
+    jailedBy[64],
+    jailDate[64]
+}
+
+new PlayerPrison[MAX_PLAYERS][e_PRISON_DATA];
+
+new const Float:sz_PrisonPositions[][3] = {
+
+    { 771.8502,1791.9386,-70.2358 },
+    { 772.2028,1800.9569,-70.2358 },
+    { 765.9811,1800.5922,-70.2358 },
+    { 765.5214,1791.8507,-70.2358 }
+};
+
+
 //============================================================ Boze Pomozi
 
+/* Timers */
+
+forward Cuff_UpdatePlayerPosition(playerid);
+public Cuff_UpdatePlayerPosition(playerid) {
+
+    if(IsPlayerCuffed(playerid) && !IsPlayerInAnyVehicle(playerid)) {
+
+        if(cuffedPoliceMan[playerid] != INVALID_PLAYER_ID) {
+
+            static Float:pPos[3];
+            GetPlayerPos(cuffedPoliceMan[playerid], pPos[0], pPos[1], pPos[2]);
+            SetPlayerPos(playerid, pPos[0] + 0.5, pPos[1] + 0.5, pPos[2]);
+        }
+    }
+
+    return (true);
+}
+
 /* Stocks */
+
+stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
+
+
+    SendClientMessageToAll(-1, " ");
+    SendClientMessageToAll(x_server, "P O L I C E \187; "c_white"Kriminalac %s je uhapsen od strane "c_server"%s", ReturnPlayerName(player), jBy);
+    SendClientMessageToAll(-1, " ");
+
+    new q[328];
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `player_prisons` (`characterID`, `jailTime`, `jailedBy`, `jailDate`) \
+                                    VALUES ('%d', '%d', '%e', NOW())", GetCharacterSQLID(player), ( time*5 ), jBy );
+    mysql_tquery(SQL, q);
+
+
+    new djura = random( sizeof sz_PrisonPositions);
+    SetPlayerCompensatedPos(player, sz_PrisonPositions[djura][0], sz_PrisonPositions[djura][1], sz_PrisonPositions[djura][2], ( player + 1 ));
+
+    static sstr[64];
+    format(sstr, sizeof sstr, "%s", jBy);
+
+    PlayerPrison[player][jailTime] = ( time * 5 );
+    PlayerPrison[player][jailedBy] = sstr;
+
+    SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", player);
+
+    return (true);
+}
+
+stock Police_SetPlayerWantedLevel(target, wanted, const reason[] = "Nepoznat") {
+
+    if(wanted > 6) 
+        wanted = 6;
+
+    if(wanted == 0) {
+
+        CharacterInfo[target][WantedLevel] = 0;
+        UpdateWantedLevel(target, wanted);
+        return ~1;
+    }
+
+    SendClientMessage(target, x_red, "wanted \187; "c_white"Dobili ste "c_red"%d "c_white"wanted levela.", wanted);
+    SendClientMessage(target, x_red, "wanted \187; "c_white"Razlog : "c_red"%s", reason);
+    CharacterInfo[target][WantedLevel] = wanted;
+    UpdateWantedLevel(target, wanted);
+
+    return (true);
+}
+
+stock GetPlayerWantedLevelEx(playerid)
+    return CharacterInfo[playerid][WantedLevel];
+
+stock IsPlayerWanted(playerid) {
+
+    if(GetPlayerWantedLevelEx(playerid) > 0)
+        return (true);
+
+    return (false);
+}
+
+stock ReturnNearestPolice(playerid) {
+
+    foreach(new i : iter_Police) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.50, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2]))
+            return i;
+    }
+
+    return -1;
+}
+
+stock IsPlayerPoliceMember(playerid) {
+
+    if(PoliceMember[playerid][policeID] != 0)
+        return (true);
+
+    return false;
+}
+
+stock IsPlayerTazed(playerid) {
+
+    if(playerTazed[playerid])
+        return (true);
+    
+    return false;
+}
+
+stock IsPlayerOnPoliceDuty(playerid) {
+
+    if(memberDuty[playerid])
+        return (true);
+
+    return false;
+}
+
+stock IsPlayerCuffed(playerid) {
+
+    if(playerTied[playerid])
+        return (true);
+
+    return false;
+}
 
 stock PoliceStateCheck(playerid) {
 
@@ -101,14 +267,514 @@ stock GetPoliceType(id) {
     return string;
 }
 
+hook OnCharacterLoaded(playerid) {
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "SELECT * FROM `police_members` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, q, "police_LoadMember", "d", playerid);
+
+    new qp[128];
+    mysql_format(SQL, qp, sizeof qp, "SELECT * FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, qp, "SQL_LoadPlayerPrison", "d", playerid);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnGameModeInit()
 {
     print("backend/faction_police.script loaded");
 
     mysql_tquery(SQL, "SELECT * FROM `faction_police`", "PoliceLoad", "");
+
+    CreatePickup(11749, 1, 342.9758,-1525.4742,33.3481, 0);
+    Create3DTextLabel(""c_server" » "c_grey"Arrest Point "c_server"«\n » "c_grey"/arrest"c_server" « ", -1, 342.9758,-1525.4742,33.3481, 3.50, 0);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    tazerAvailable[playerid] = false;
+    equipmentCoolDown[playerid] = gettime();
+    playerTied[playerid] = false;
+    playerTazed[playerid] = false;
+    cuffedPoliceMan[playerid] = INVALID_PLAYER_ID;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
+
+    if(IsPlayerTazed(playerid) || IsPlayerCuffed(playerid))
+        return (true);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED(KEY_SECONDARY_ATTACK)) {
+
+        new id = ReturnNearestPolice(playerid);
+        if(id != -1) {
+
+            if(IsPlayerInRangeOfPoint(playerid, 3.50, fPoliceInfo[id][fPoliceEntrance][0], fPoliceInfo[id][fPoliceEntrance][1], fPoliceInfo[id][fPoliceEntrance][2])) {
+
+                SetPlayerCompensatedPos(playerid, fPoliceInfo[id][fPoliceExit][0], fPoliceInfo[id][fPoliceExit][1], fPoliceInfo[id][fPoliceExit][2], fPoliceInfo[id][fPoliceID]);
+            }
+        }
+
+        foreach(new i : iter_Police) {
+
+            if(IsPlayerInRangeOfPoint(playerid, 3.50, fPoliceInfo[i][fPoliceExit][0], fPoliceInfo[i][fPoliceExit][1], fPoliceInfo[i][fPoliceExit][2])) {
+
+                SetPlayerCompensatedPos(playerid, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2], 0);
+                return ~1;
+            }
+        }
+    }
+
+    if(PRESSED(KEY_NO)) {
+
+        foreach(new i : iter_Police) {
+
+            if(IsPlayerInRangeOfPoint(playerid, 2.0, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2])) {
+
+                if(PoliceMember[playerid][policeID] != fPoliceInfo[i][fPoliceID])
+                    return SendClientMessage(playerid, x_server, "police department \187; "c_white"Niste clan policije "c_server"(%s)", fPoliceInfo[i][fPoliceShortName]);
+                
+                if(IsPlayerOnPoliceDuty(playerid)) {
+
+                    memberDuty[playerid] = false;
+                    SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
+                    SendClientMessage(playerid, x_server, "%s \187; "c_white"Vise niste na policijsok duznosti!", fPoliceInfo[i][fPoliceShortName]);
+
+                    return ~1;
+                }
+
+                else {
+
+                    memberDuty[playerid] = true;
+                    SetPlayerSkin(playerid, fPoliceInfo[i][fPoliceSkins][ PoliceMember[playerid][policeRank] - 1 ]);
+
+                    foreach(new j : Player) {
+
+                        if(PoliceMember[j][policeID] == PoliceMember[playerid][policeID]) {
+
+                            SendClientMessage(j, x_server, "%s \187; "c_white"%s %s se javlja na duznost. ", fPoliceRanks[i][ PoliceMember[playerid][policeRank] - 1 ], ReturnPlayerName(playerid), fPoliceInfo[i][fPoliceShortName]);
+                        }
+                    }
+                    return ~1;
+                }
+            }
+
+            if(IsPlayerInRangeOfPoint(playerid, 2.0, fPoliceInfo[i][fEquipment][0], fPoliceInfo[i][fEquipment][1], fPoliceInfo[i][fEquipment][2])) 
+            {
+            
+
+                if(PoliceMember[playerid][policeID] != fPoliceInfo[i][fPoliceID])
+                    return SendClientMessage(playerid, x_server, "police department \187; "c_white"Niste clan policije "c_server"(%s)", fPoliceInfo[i][fPoliceShortName]);
+                
+                if(equipmentCoolDown[playerid] > gettime())
+                    return SendClientMessage(playerid, x_server, "equipment \187; "c_grey"Opremu mozete uzeti za %s!", convertTime(equipmentCoolDown[playerid] - gettime()));
+
+                GivePlayerWeapon(playerid, WEAPON_MP5, 120);
+                GivePlayerWeapon(playerid, WEAPON_COLT45, 100);
+                GivePlayerWeapon(playerid, WEAPON_NITESTICK, 1);
+                
+                if(!tazerAvailable[playerid])
+                    tazerAvailable[playerid] = true;
+
+                equipmentCoolDown[playerid] = gettime() + 600;
+
+                static string[256];
+                format(string,sizeof(string), "%s uzima opremu iz sanduka", ReturnPlayerName(playerid));
+                ProxDetector(playerid, Float:10.0, x_grey, string);
+                return ~1;
+            }
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, WEAPON:weaponid, bodypart) {
+
+    if(IsPlayerPoliceMember(playerid)) {
+
+        if(weaponid == WEAPON_SILENCED) {
+
+            if(IsPlayerWanted(damagedid)) {
+
+                if(IsPlayerTazed(damagedid))
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ovaj igrac je vec tazean!");
+
+                SendClientMessage(damagedid, x_server, "wanted \187; "c_white"Sokirani ste!");
+                ApplyAnimation(damagedid, "CRACK", "crckdeth2", 4.1, false, false, false, false, 0);
+                TogglePlayerControllable(damagedid, false);
+                playerTazed[damagedid] = true;
+            }
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+/* Commands */
+
+YCMD:r(playerid, params[], help) 
+{
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    new text[128];
+    if(sscanf(params, "s[128]", text))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/r  <tekst>");
+
+    if(strlen(text) < 0 || strlen(text) > sizeof text || isnull(text))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Null parametri");
+
+    foreach(new i : Player) {
+
+        if(PoliceMember[i][policeID] == PoliceMember[playerid][policeID]) {
+
+            SendClientMessage(i, x_server, "police \187; "c_grey"%s : %s.(( prijem ))", ReturnPlayerName(playerid), text);
+        } 
+    }
+
+    return 1;
+}
+
+YCMD:pchat(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!");
+
+    new text[128];
+    if(sscanf(params, "s[128]", text))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pchat  <tekst>");
+
+    if(strlen(text) < 0 || strlen(text) > sizeof text || isnull(text))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Null parametri");
+
+    new xName[30];
+
+    foreach(new x : iter_Police) {
+
+        if(fPoliceInfo[x][fPoliceID] == PoliceMember[playerid][policeID]) {
+            
+            format(xName, sizeof xName, "%s", fPoliceInfo[x][fPoliceShortName]);
+            break;
+        }
+    }
+
+    foreach(new i : Player) {
+
+        if(PoliceMember[i][policeID] != 0) {
+
+            SendClientMessage(i, x_server, "%s \187; "c_grey"%s : %s.(( prijem ))", xName, ReturnPlayerName(playerid), text);
+        } 
+    }
+
+    return 1;
+}
+
+YCMD:bork(playerid, params[], help) = su;
+YCMD:su(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new target, wanted, reason[64];
+
+    if(sscanf(params, "uds[64]", target, wanted, reason)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/su <igrac> <kolicina> <razlog>");
+    
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    else if(!IsPlayerConnected(target)) return (true);
+    else if(IsPlayerPoliceMember(target)) return (true);
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+
+    if(wanted > 6 || wanted <= 0) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Wanted level ne moze biti manji od 1 a veci od 6");
+
+    Police_SetPlayerWantedLevel(target, wanted, reason);
+
+    return 1;
+}
+
+YCMD:tazer(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    if(!tazerAvailable[playerid])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu");
+
+    if(GetPlayerWeapon(playerid) == WEAPON_SILENCED)
+        return (true);
+
+    GivePlayerWeapon(playerid, WEAPON_SILENCED, 5);
+    return 1;
+}
+
+YCMD:cuff(playerid, params[], help) = tie;
+YCMD:tie(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new target;
+
+    if(sscanf(params, "u", target)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/tie <igrac>");
+
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    
+    if(!IsPlayerConnected(target)) return (true);
+    if(IsPlayerPoliceMember(target)) return (true);
+
+    if(!IsPlayerWanted(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije trazen!");
+
+    if(!IsPlayerTazed(target))
+        return SendClientMessage(playerid, playerid, "maryland \187; "c_white"Taj igrac nije sokiran!");
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+    
+    if(IsPlayerCuffed(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je vec zavezan!");
+    
+
+    ClearAnimations(target);
+    TogglePlayerControllable(target, false);
+    SetPlayerSpecialAction(target, SPECIAL_ACTION_CUFFED);
+    
+    playerTied[target] = true;
+    cuffedPoliceMan[target] = playerid;
+
+    static string[256];
+    format(string,sizeof(string), "%s stavlja lisice kriminalnom licu...", ReturnPlayerName(playerid));
+    ProxDetector(playerid, Float:10.0, x_grey, string);
+    SetTimerEx("Cuff_UpdatePlayerPosition", 2300, true, "d", target);
+
+    return 1;
+
+}
+
+YCMD:pu(playerid, params[], help) 
+{
+    
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new target, seat;
+
+    if(sscanf(params, "ud", target, seat)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pu <igrac> <sjediste>");
+
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    
+    if(!IsPlayerConnected(target)) return (true);
+    if(IsPlayerPoliceMember(target)) return (true);
+
+    if(!IsPlayerWanted(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije trazen!");
+
+    if(!IsPlayerTazed(target))
+        return SendClientMessage(playerid, playerid, "maryland \187; "c_white"Taj igrac nije sokiran!");
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+    
+    if(!IsPlayerCuffed(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije zavezan!");
+
+    if(seat > GetVehicleSeats(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete ubaciti igraca na to sjediste!");
+
+    new vehicleid = GetNearestVehicle(playerid);
+    if(vehicleid == INVALID_VEHICLE_ID) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se blizu vozila!");
+
+    if(IsSeatAvailable( vehicleid, seat) == 1)
+        PutPlayerInVehicle(target, vehicleid, seat);
+
+    return 1;
+}
+
+YCMD:uhapsi(playerid, params[], help) = arrest;
+YCMD:arrest(playerid, params[], help) 
+{
+    
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, 342.9758,-1525.4742,33.3481))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se na mjestu za hapsenje!");
+
+    new target;
+
+    if(sscanf(params, "u", target)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/arrest <igrac>");
+
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    
+    if(!IsPlayerConnected(target)) return (true);
+    if(IsPlayerPoliceMember(target)) return (true);
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+    
+    if(!IsPlayerCuffed(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije zavezan!");
+
+    /*=================== | Prison | ========================= */
+
+    ImprisonPlayer(target, GetPlayerWantedLevelEx(target), ReturnPlayerName(playerid));
+    return 1;
+}
+
+YCMD:rmv(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new target;
+
+    if(sscanf(params, "u", target)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pu <igrac>");
+
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    
+    if(!IsPlayerConnected(target)) return (true);
+    if(IsPlayerPoliceMember(target)) return (true);
+
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+    
+    if(!IsPlayerCuffed(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije zavezan!");
+
+    if(!IsPlayerInAnyVehicle(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije u vozilu!");
+
+    RemovePlayerFromVehicle(target);
+
+    return 1;
 }
 
 /* Publics */
+
+forward SQL_LoadPlayerPrison(playerid);
+public SQL_LoadPlayerPrison(playerid) {
+
+    new rows = cache_num_rows();
+
+    if(!rows) {
+
+        PlayerPrison[playerid][jailTime] = 0;
+        return (true);
+    }
+
+    cache_get_value_name_int(0, "jailTime", PlayerPrison[playerid][jailTime]);
+    cache_get_value_name(0, "jailedBy", PlayerPrison[playerid][jailedBy], 64);
+    cache_get_value_name(0, "jailDate", PlayerPrison[playerid][jailDate], 64);
+
+    if(PlayerPrison[playerid][jailTime] <= 0) {
+
+        SendClientMessage(playerid, -1, "DEBUG: Prison, nono!"); 
+        return (true);
+    }
+
+    SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", playerid);
+    return (true);
+
+}
+
+forward Prisono_DecreasePlayerTime(playerid);
+public Prisono_DecreasePlayerTime(playerid) {
+
+    if(PlayerPrison[playerid][jailTime] >= 1) {
+
+        PlayerPrison[playerid][jailTime]--;
+        SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", playerid);
+        return (true);
+    }
+
+    else if(PlayerPrison[playerid][jailTime] <= 0) {
+
+        PlayerPrison[playerid][jailTime] = 0;
+        SendClientMessage(playerid, x_grey, "prison \187; "c_white"Pusteni ste na slobodu, budite bolji gradjanin!");
+
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prison` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+
+        SetPlayerPos(playerid, 1799.1263,-1577.9620,14.0765);
+        SetPlayerVirtualWorld(playerid, 0);
+        SetPlayerInterior(playerid, 0);
+        return (true);
+    }
+
+    return (true);
+}
+
+forward police_LoadMember(playerid);
+public police_LoadMember(playerid) {
+
+    new rows = cache_num_rows();
+
+    if(!rows)  {
+
+        PoliceMember[playerid][policeID] = 0;
+        return (true);
+    }
+
+    cache_get_value_name_int(0, "police_id", PoliceMember[playerid][policeID]);
+    cache_get_value_name_int(0, "characterid", PoliceMember[playerid][characterID]);
+    cache_get_value_name_int(0, "police_rank", PoliceMember[playerid][policeRank]);
+    cache_get_value_name_int(0, "arrests", PoliceMember[playerid][arrests]);
+    cache_get_value_name(0, "joinDate", PoliceMember[playerid][joinDate]);
+
+    foreach(new i : iter_Police) {
+
+        if(fPoliceInfo[i][fPoliceID] == PoliceMember[playerid][policeID]) {
+
+            new xRank = PoliceMember[playerid][policeRank];
+            new xSkin = fPoliceInfo[i][fPoliceSkins][xRank - 1];
+            SetPlayerSkin(playerid, xSkin);
+            break;
+        }
+    }
+
+    return (true);
+}
 
 forward PoliceLoad();
 public PoliceLoad()
@@ -159,7 +825,6 @@ public PoliceLoad()
         cache_get_value_name(i, "fPoliceRank2", fPoliceRanks[i][1], 32);
         cache_get_value_name(i, "fPoliceRank3", fPoliceRanks[i][2], 32);
 
-
         cache_get_value_name_int(i, "fPoliceSkins1", fPoliceInfo[i][fPoliceSkins][0]);
         cache_get_value_name_int(i, "fPoliceSkins2", fPoliceInfo[i][fPoliceSkins][1]);
         cache_get_value_name_int(i, "fPoliceSkins3", fPoliceInfo[i][fPoliceSkins][2]);
@@ -171,8 +836,11 @@ public PoliceLoad()
         fPoliceInfo[i][fPolicePickup] = CreatePickup(1581, 1, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2], 0);
         fPoliceInfo[i][fPoliceLabel] = Create3DTextLabel(tmp_str, -1, fPoliceInfo[i][fPoliceEntrance][0], fPoliceInfo[i][fPoliceEntrance][1], fPoliceInfo[i][fPoliceEntrance][2], 3.0, 0);
     
-        dutyLabel[i] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete opremu pritisnite "c_server"'N'", -1, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2], 4.5, -1);
+        dutyLabel[i] = Create3DTextLabel(""c_server"[ DUTY POINT ]\n"c_white"Da uzmete opremu pritisnite "c_server"'N'", -1, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2], 4.5, -1);
         dutyPickup[i] = CreatePickup(334, 1, fPoliceInfo[i][fDutyPoint][0], fPoliceInfo[i][fDutyPoint][1], fPoliceInfo[i][fDutyPoint][2], -1);
+
+        equLabel[i] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete equipment pritisnite "c_server"'N'", -1, fPoliceInfo[i][fEquipment][0], fPoliceInfo[i][fEquipment][1], fPoliceInfo[i][fEquipment][2], 4.5, -1);
+        equPickup[i] = CreatePickup(19773, 1, fPoliceInfo[i][fEquipment][0], fPoliceInfo[i][fEquipment][1], fPoliceInfo[i][fEquipment][2], -1);
 
         Iter_Add(iter_Police, i);
     }
@@ -208,8 +876,8 @@ public CreateDutyPoint(id) {
 forward CreateEquPoint(id);
 public CreateEquPoint(id) {
 
-    dutyLabel[id] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete equipment pritisnite "c_server"'N'", -1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], 4.5, -1);
-    dutyPickup[id] = CreatePickup(19773, 1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], -1);
+    equLabel[id] = Create3DTextLabel(""c_server"[ EQUIPMENT POINT ]\n"c_white"Da uzmete equipment pritisnite "c_server"'N'", -1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], 4.5, -1);
+    equPickup[id] = CreatePickup(19773, 1, fPoliceInfo[id][fEquipment][0], fPoliceInfo[id][fEquipment][1], fPoliceInfo[id][fEquipment][2], -1);
 
     return 1;
 }
@@ -413,26 +1081,26 @@ Dialog:dialog_policeAccept(const playerid, response, listitem, string:inputtext[
         GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
         PoliceStateCheck(playerid);
 
-        new zone[28], add[35];
+        new zone[64], add[160];
         GetPlayer2DZone(playerid, zone, sizeof(zone));
-        format(add, sizeof(add), "%s, %s", fPoliceInfo[fpID][fPoliceState]);
+        format(add, sizeof(add), "%s, %s", zone, fPoliceInfo[fpID][fPoliceState]);
         strmid(fPoliceInfo[fpID][fPoliceAdress], add, 0, sizeof(add), 255);
 
         fPoliceInfo[fpID][fPoliceEntrance][0] = pPos[0];
         fPoliceInfo[fpID][fPoliceEntrance][1] = pPos[1];
         fPoliceInfo[fpID][fPoliceEntrance][2] = pPos[2];
 
-        fPoliceInfo[fpID][fPoliceExit][0] = 246.66;
-        fPoliceInfo[fpID][fPoliceExit][1] = 65.80;
-        fPoliceInfo[fpID][fPoliceExit][2] = 1003.64;
+        fPoliceInfo[fpID][fPoliceExit][0] = 796.3059; 
+        fPoliceInfo[fpID][fPoliceExit][1] = 1769.4341;
+        fPoliceInfo[fpID][fPoliceExit][2] = -61.9399;
 
         new query[789];
         mysql_format(SQL, query, sizeof query, "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, \
-                                                `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) \
-                                                VALUES ('%e', '%e', '%e', '%e', '%i', '%f', '%f', '%f', '%e', '%e', '%e', '%i', '%i', '%i', '%i')", 
+                                                `fPoliceExitX`, `fPoliceExitY`, `fPoliceExitZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) \
+                                                VALUES ('%e', '%e', '%e', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f', '%e', '%e', '%e', '%i', '%i', '%i', '%i')", 
                                                 fPoliceInfo[fpID][fPoliceName], fPoliceInfo[fpID][fPoliceShortName], fPoliceInfo[fpID][fPoliceAdress], fPoliceInfo[fpID][fPoliceState],
                                                 fPoliceInfo[fpID][fPoliceType], fPoliceInfo[fpID][fPoliceEntrance][0], fPoliceInfo[fpID][fPoliceEntrance][1],
-                                                fPoliceInfo[fpID][fPoliceEntrance][2], fPoliceRanks[fpID][0], fPoliceRanks[fpID][1], fPoliceRanks[fpID][2], 
+                                                fPoliceInfo[fpID][fPoliceEntrance][2], fPoliceInfo[fpID][fPoliceExit][0], fPoliceInfo[fpID][fPoliceExit][1], fPoliceInfo[fpID][fPoliceExit][2], fPoliceRanks[fpID][0], fPoliceRanks[fpID][1], fPoliceRanks[fpID][2], 
                                                 fPoliceInfo[fpID][fPoliceSkins][0], fPoliceInfo[fpID][fPoliceSkins][1], fPoliceInfo[fpID][fPoliceSkins][2], fPoliceInfo[fpID][fPoliceSkins][3]);
         mysql_tquery(SQL, query, "CreatePolice", "i", fpID);
 

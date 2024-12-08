@@ -19,9 +19,12 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-new PlayerText:g_NotifyTD[MAX_PLAYERS][12];
+new PlayerText:g_NotifyTD[MAX_PLAYERS][12],
+    bool:p_NotifyShown[MAX_PLAYERS];
 
 stock Notify_SendNotification(playerid, const notification[], const header[], modelid) {
+
+    if(p_NotifyShown[playerid]) return (true);
 
     for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
 
@@ -29,6 +32,7 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
         PlayerTextDrawHide(playerid, g_NotifyTD[playerid][i]);
 
         g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+        p_NotifyShown[playerid] = false;
     }
 
     g_NotifyTD[playerid][0] = CreatePlayerTextDraw(playerid, 253.000122, 352.451995, "LD_SPAC:white");
@@ -144,6 +148,8 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
     PlayerTextDrawFont(playerid, g_NotifyTD[playerid][11], TEXT_DRAW_FONT_AHARONI_BOLD);
     PlayerTextDrawSetProportional(playerid, g_NotifyTD[playerid][11], true);
 
+    p_NotifyShown[playerid] = true;
+
     for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
 
         PlayerTextDrawShow(playerid, g_NotifyTD[playerid][i]);
@@ -154,17 +160,25 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
     return (true);
 }
 
+hook OnPlayerConnect(playerid) {
+
+    p_NotifyShown[playerid] = false;
+}
+
 forward notify_DestroyInterface(playerid);
 public notify_DestroyInterface(playerid) {
 
-    for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
+    if(p_NotifyShown[playerid]) {
 
-        PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
-        PlayerTextDrawHide(playerid, g_NotifyTD[playerid][i]);
+        for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
 
-        g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+            PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
+            PlayerTextDrawHide(playerid, g_NotifyTD[playerid][i]);
+
+            g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+            p_NotifyShown[playerid] = false;
+        }
     }
-
     return (true);
 }
 

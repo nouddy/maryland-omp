@@ -40,6 +40,7 @@ stock BS_IsDataLengthValid(BitStream:bs, packetid) {
     case ID_PASSENGER_SYNC: return (numberOfBits == PASSENGER_SYNC_BITS);
     case ID_AIM_SYNC: return (numberOfBits == AIM_SYNC_BITS);
     case ID_UNOCCUPIED_SYNC: return (numberOfBits == UNOCCUPIED_SYNC_BITS);
+	
     }
     return 1;
 }

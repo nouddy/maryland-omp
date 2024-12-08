@@ -107,7 +107,5 @@
     },
     "sleep": 5.0,
     "use_dyn_ticks": true,
-    "website": "maryland-ogc.com",
-    "trace": "pf",
-    "crashdetect_log": "_crashdetect"
+    "website": "maryland-ogc.com"
 }

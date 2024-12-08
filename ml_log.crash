@@ -1,0 +1,25 @@
+[19:36:56] Run time error 4: "Array index out of bounds"
+[19:36:56]  Attempted to read/write array element at negative index -1
+[19:36:56] AMX backtrace:
+[19:36:56] #0 002202e0 in ?? (0, 16, 0) in <unknown>
+[19:36:56] #1 0007f77c in public OnPlayerKeyStateChange (0, 16, 0) in <unknown>
+[21:01:35] Run time error 4: "Array index out of bounds"
+[21:01:35]  Attempted to read/write array element at index 65535 in array of size 1000
+[21:01:35] AMX backtrace:
+[21:01:35] #0 0027c1dc in ?? (0, 51232880, 0) in <unknown>
+[21:01:35] #1 000c6224 in ?? (0, 83165576, 0) in <unknown>
+[21:01:35] #2 000cbc4c in ?? (0, 83165576) in <unknown>
+[21:01:35] #3 0007dda0 in public OnPlayerCommandText (0, 83165576) in <unknown>
+[21:01:53] Run time error 4: "Array index out of bounds"
+[21:01:53]  Attempted to read/write array element at index 65535 in array of size 1000
+[21:01:53] AMX backtrace:
+[21:01:53] #0 0027c1dc in ?? (1, 51232880, 0) in <unknown>
+[21:01:53] #1 000c6224 in ?? (1, 83165576, 0) in <unknown>
+[21:01:53] #2 000cbc4c in ?? (1, 83165576) in <unknown>
+[21:01:53] #3 0007dda0 in public OnPlayerCommandText (1, 83165576) in <unknown>
+[23:33:40] Run time error 4: "Array index out of bounds"
+[23:33:40]  Attempted to read/write array element at index 65535 in array of size 1000
+[23:33:40] AMX backtrace:
+[23:33:40] #0 0021ed7c in ?? (65535) in <unknown>
+[23:33:40] #1 00220f98 in ?? (1, 65535, 1084122727, 54, 3) in <unknown>
+[23:33:40] #2 0007fc78 in public OnPlayerTakeDamage (1, 65535, 1084122727, 54, 3) in <unknown>

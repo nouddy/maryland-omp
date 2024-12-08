@@ -594,18 +594,18 @@ stock CB_AddStaticVehicleEx(modelid, Float:x, Float:y, Float:z, Float:rotation, 
 	return vehicleid;
 }
 
-// stock CB_ApplyAnimation(playerid, animlib[], animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync = 0)
-// {
-// 	new
-// 		ret = ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time, forcesync);
+stock CB_ApplyAnimation(playerid, const animlib[], const animname[], Float:fDelta, bool:loop, bool:lockx, bool:locky, bool:freeze, time, FORCE_SYNC:forcesync = SYNC_NONE)
+{
+	new
+		ret = ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time, forcesync);
 
-// 	if(ret)
-// 	{
-// 	 	SetTimerEx("Callback_CheckAnimation", 100, false, "i", playerid);
-// 	}
+	if(ret)
+	{
+	 	SetTimerEx("Callback_CheckAnimation", 100, false, "i", playerid);
+	}
 
-// 	return ret;
-// }
+	return ret;
+}
 
 stock CB_SelectTextDraw(playerid, hovercolor)
 {
@@ -1202,11 +1202,11 @@ public Callback_TabCheck()
 	#define _ALS_AddStaticVehicleEx
 #endif
 
-#if defined _ALS_ApplyAnimation
-	#undef ApplyAnimation
-#else
-	#define _ALS_ApplyAnimation
-#endif
+// #if defined _ALS_ApplyAnimation
+// 	#undef ApplyAnimation
+// #else
+// 	#define _ALS_ApplyAnimation
+// #endif
 
 #if defined _ALS_SelectTextDraw
 	#undef SelectTextDraw

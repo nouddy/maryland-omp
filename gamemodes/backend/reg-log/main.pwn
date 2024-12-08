@@ -75,7 +75,7 @@ new pTmpSkinIDX[MAX_PLAYERS],
 	tmpCharAge[MAX_PLAYERS][3],
 	tmpCharJob[MAX_PLAYERS][3],
 	tmpCharState[MAX_PLAYERS][3],
-	tmpCharLastLogin[MAX_PLAYERS][3];
+	tmpCharLastLogin[MAX_PLAYERS][3][64];
 
 //==============================================================================
 enum ePLAYER_CONNECT_STATE {
@@ -177,22 +177,76 @@ enum e_CHARACTER_DATA {
 	Age,
 	WalkStyle,
 	State,
-	Money,
+	Money[3],
 	Level,
 	Job,
-	Float:lastPos[3]
+	Float:lastPos[3],
+	WantedLevel
 }
 new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 
+forward SQL_CheckBan(playerid);
+public SQL_CheckBan(playerid) {
+
+	new rows = cache_num_rows();
+
+	if(!rows) {
+
+		//*	I hope this shit works
+
+		pConnectState[playerid] = PLAYER_CONNECT_STATE_LOGIN;
+ 
+		CreatePlayerLoginTextDraws(playerid);
+		ShowPlayerLoginDialog(playerid);
+
+		SetPlayerInterior(playerid, 1);
+		SetPlayerVirtualWorld(playerid, playerid+1);
+
+		SetPlayerPos(playerid, CAM_START_POS+10.0);
+		SetPlayerFacingAngle(playerid,176.0717);
+
+		InterpolateCameraPos(playerid, CAM_START_POS, CAM_START_POS2, 1000);
+		InterpolateCameraLookAt(playerid, CAM_START_LOOKAT, CAM_START_LOOKAT, 1000);
+
+		Streamer_UpdateEx(playerid, CAM_START_POS);
+		return (true);
+	}
+
+	new xReason[64], xBanDate[64], tmp_exp[64], is_perma;
+
+	cache_get_value_name_int(0, "is_permanent", is_perma);
+	cache_get_value_name(0, "ban_reason", xReason, sizeof xReason);
+	cache_get_value_name(0, "ban_date", xBanDate, sizeof xBanDate);
+	
+	if(is_perma == 1)
+		tmp_exp = "Nikad (Permanent)";
+	else
+		cache_get_value_name(0, "ban_expire", tmp_exp, sizeof tmp_exp);
+
+	__clear(playerid);
+
+	SendClientMessage(playerid, x_server, "M A R Y L A N D | "c_white"Ovaj korisnicki nalog je banovan!");
+	SendClientMessage(playerid, x_server, "M A R Y L A N D | "c_white"Razlog bana : "c_server"%s", xReason);
+	SendClientMessage(playerid, x_server, "M A R Y L A N D | "c_white"Datum bana : "c_server"%s", xBanDate);
+	SendClientMessage(playerid, x_server, "M A R Y L A N D | "c_white"Istek Bana : "c_server"%s", tmp_exp);
+
+	return (true);
+}
 
 hook OnPlayerConnect(playerid)
 {	
+
+	__clear(playerid);
+
 	ResetPlayerRegLogVars(playerid);
 	// SetPlayerInterior(playerid, 0);
 	ResetPlayerRegisterTextDraw(playerid);
 	ResetPlayerLoginTextDraw(playerid);
 
-	new query[267];
+	//*	Dva put jer me boli pimpek;
+
+
+	new query[246];
 	mysql_format(SQL, query, sizeof(query), "SELECT * FROM `accounts` WHERE `Username` = '%e'  LIMIT 1", ReturnPlayerName(playerid));
 	mysql_tquery(SQL, query, "SQL_AccountCheck", "i", playerid);
 	return Y_HOOKS_CONTINUE_RETURN_1;
@@ -205,7 +259,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	p3DMenu[playerid] = INVALID_3D_MENU;
 
 	new q[267];
-	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cMoney` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid), CharacterInfo[playerid][SQLID]);
+	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cDollars` = '%f', `cEuro` = '%f', `cEGPound` = '%f', `cLastLogin` = NOW() WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_DOLLAR), GetPlayerMoney(playerid, MONEY_TYPE_EURO), GetPlayerMoney(playerid, MONEY_TYPE_POUND), CharacterInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
 
 	ResetPlayerRegLogVars(playerid);
@@ -239,23 +293,13 @@ public SQL_AccountCheck(playerid)
 		cache_get_value_name(0, "Password", PlayerInfo[playerid][Password]);
 		cache_get_value_name_int(0, "Staff", PlayerInfo[playerid][Staff]);
  
-		pConnectState[playerid] = PLAYER_CONNECT_STATE_LOGIN;
- 
-		CreatePlayerLoginTextDraws(playerid);
-		ShowPlayerLoginDialog(playerid);
+		new query[267];
+		mysql_format(SQL, query, sizeof query, "SELECT * FROM `bans` WHERE `character_id` = '%d'", GetPlayerSQLID(playerid));
+		mysql_tquery(SQL, query, "SQL_CheckBan", "d", playerid);
 	}
- 
-	SetPlayerInterior(playerid, 1);
-	SetPlayerVirtualWorld(playerid, playerid+1);
- 
-	SetPlayerPos(playerid, CAM_START_POS+10.0);
-	SetPlayerFacingAngle(playerid,176.0717);
- 
-	InterpolateCameraPos(playerid, CAM_START_POS, CAM_START_POS2, 1000);
-	InterpolateCameraLookAt(playerid, CAM_START_LOOKAT, CAM_START_LOOKAT, 1000);
- 
-	Streamer_UpdateEx(playerid, CAM_START_POS);
 }
+
+stock __clear(playerid) { for(new i = 0; i < 120; i++) { SendClientMessage(playerid, 0, " "); } }
 
 stock ShowPlayerLoginDialog(playerid)
 {
@@ -356,7 +400,7 @@ public SqlGetPlayerCharacters(playerid) {
 		cache_get_value_name_int(i, "cAge", tmpCharAge[playerid][i]);
 		cache_get_value_name_int(i, "cJob", tmpCharJob[playerid][i]);
 		cache_get_value_name_int(i, "cState", tmpCharState[playerid][i]);
-		cache_get_value_name_int(i, "cLastLogin", tmpCharLastLogin[playerid][i]);
+		cache_get_value_name(i, "cLastLogin", tmpCharLastLogin[playerid][i], 64);
 
 		CreatePlayerChoseCharacterTextDraw(playerid, i, tmpCharSkin[playerid][i], tmpCharName[playerid][i], tmpCharGender[playerid][i], tmpCharAge[playerid][i], "Dvorska Luda", tmpStateStr[tmpCharState[playerid][i]], tmpCharLastLogin[playerid][i]);
 	}
@@ -551,8 +595,11 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 		cache_get_value_name_int(i, "cGender",CharacterInfo[playerid][Gender]);
 		cache_get_value_name_int(i, "cAge", CharacterInfo[playerid][Age]);
 		cache_get_value_name_int(i, "cJob", CharacterInfo[playerid][Job]);
+		cache_get_value_name_int(i, "cWanted", CharacterInfo[playerid][WantedLevel]);
 		cache_get_value_name_int(i, "cState", CharacterInfo[playerid][State]);
-		cache_get_value_name_int(i, "cMoney", CharacterInfo[playerid][Money]);
+		cache_get_value_name_int(i, "cDollars", CharacterInfo[playerid][Money][0]);
+		cache_get_value_name_int(i, "cEuro", CharacterInfo[playerid][Money][1]);
+		cache_get_value_name_int(i, "cEGPound", CharacterInfo[playerid][Money][2]);
 		cache_get_value_name_float(i, "cLastX", CharacterInfo[playerid][lastPos][0]);
 		cache_get_value_name_float(i, "cLastY", CharacterInfo[playerid][lastPos][1]);
 		cache_get_value_name_float(i, "cLastZ", CharacterInfo[playerid][lastPos][2]);
@@ -569,8 +616,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	TogglePlayerControllable(playerid, true);
 					
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
-	
-	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], 1401.7791,1591.3466,12.0481,0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
@@ -579,20 +624,29 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
-	SetTimerEx("delayed_Interior", 150, false, "d", playerid);
+	SetTimerEx("delayed_Spawn", 150, false, "d", playerid);
 	return 1;
 }
 
-forward delayed_Interior(playerid);
-public delayed_Interior(playerid) {
+forward delayed_Spawn(playerid);
+public delayed_Spawn(playerid) {
 
+	__clear(playerid);
+
+	SetSpawnInfo(playerid, NO_TEAM, CharacterInfo[playerid][Skin], 1401.7791,1591.3466,12.0481,0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
+	SetPlayerVirtualWorld(playerid, 6);
 	SetPlayerInterior(playerid, 6);
-	Log(mainLog, DEBUG, "delayed_Interior func : Interior ID : 6 | Player Interior : %d", GetPlayerInterior(playerid));
 	SpawnPlayer(playerid);
-	SetPlayerCompensatedPosEx(playerid, 1401.7791,1591.3466,12.0481, 6, 6, 5000);
+
+	Hud_ShowInterface(playerid);
+	UpdateWantedLevel(playerid, CharacterInfo[playerid][WantedLevel]);
+	
+	PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
+	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
+    PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
 	return (true);
 }
-
 forward OnCharacterLoaded(playerid);
 public OnCharacterLoaded(playerid) {
 
@@ -863,7 +917,7 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		`cGender` = %d,\
 																		`cAge` = %d,\
 																		`cState` = %d,\
-																		`cLastLogin` = %d,\
+																		`cLastLogin` = NOW(),\
 																		cLastX = %f,\
 																		cLastY = %f,\
 																		cLastZ = %f", 
@@ -873,7 +927,6 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		CharacterInfo[playerid][Gender],
 																		CharacterInfo[playerid][Age],
 																		CharacterInfo[playerid][State],
-																		gettime(),
 																		RandomSpawnCords[rand][0], RandomSpawnCords[rand][1], RandomSpawnCords[rand][2]);																		
 				mysql_tquery(SQL, query, "SQL_InsertPlayerCharacter", "ii", playerid, pCharacterIDX[playerid]);
 			}
@@ -1007,6 +1060,7 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][Money] = 0;
 	CharacterInfo[playerid][Level] = 0;
 	CharacterInfo[playerid][Job] = 0;
+	CharacterInfo[playerid][WantedLevel] = 0;
 	CharacterInfo[playerid][lastPos][0] = 0.0;
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
