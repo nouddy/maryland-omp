@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2024 at 02:21 PM
+-- Generation Time: Dec 08, 2024 at 03:43 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -55,7 +55,14 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
 (22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com'),
 (23, 'Vostic_Dev', 'Voki23', 0, '2024-10-28 15:42:50', '2024-10-28 15:42:50', 'vostic@gmail.com'),
-(24, 'Silva_Rose', '123321', 0, '2024-11-05 12:56:50', '2024-11-05 12:56:50', 'sa@gmail.com');
+(24, 'Daco_Delahunt', 'alemrjgh', 0, '2024-12-03 19:06:09', '2024-12-03 19:06:09', 'alem.cokoja@gmail.com'),
+(25, 'Eros_Bosandzeros', '123321', 0, '2024-12-03 19:06:10', '2024-12-03 19:06:10', 'dsad@gmail.com'),
+(26, 'Silva', '123321', 4, '2024-12-03 19:07:11', '2024-12-03 19:07:11', 'dsag@gmail.com'),
+(27, 'Silva_Rose', 'Moosy1312', 0, '2024-12-07 22:46:46', '2024-12-07 22:46:46', 'kurac@gmail.com'),
+(28, 'Casey', '123456', 5, '2024-12-07 22:50:11', '2024-12-07 22:50:11', 'caseymacka@whiskas.com'),
+(29, 'Leon_Skandy', '123456', 5, '2024-12-07 23:13:21', '2024-12-07 23:13:21', '@.com'),
+(30, 'Midori_Smith', '123123', 0, '2024-12-07 23:13:40', '2024-12-07 23:13:40', 'midori123@gmail.com'),
+(31, 'Midori_Test', '123123', 0, '2024-12-07 23:16:34', '2024-12-07 23:16:34', 'dasdasd@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -165,33 +172,41 @@ CREATE TABLE `characters` (
   `cAge` int(11) NOT NULL DEFAULT 18,
   `cJob` int(11) NOT NULL DEFAULT 0,
   `cState` int(11) NOT NULL DEFAULT 0,
-  `cMoney` int(11) NOT NULL DEFAULT 0,
+  `cDollars` float NOT NULL DEFAULT 0,
+  `cEuro` float NOT NULL,
+  `cEGPound` float NOT NULL,
   `cLevel` int(11) NOT NULL DEFAULT 0,
-  `cLastLogin` int(11) NOT NULL,
+  `cLastLogin` datetime NOT NULL,
   `cLastX` float NOT NULL DEFAULT 0,
   `cLastY` float NOT NULL DEFAULT 0,
-  `cLastZ` float NOT NULL DEFAULT 0
+  `cLastZ` float NOT NULL DEFAULT 0,
+  `cWanted` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `characters`
 --
 
-INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cMoney`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`) VALUES
-(3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002048, 0, 2147483647, 1401.78, 1591.35, 12.0481),
-(4, 14, 'Joy_Silence', 60, 0, 0, 0, 0, 9999849, 0, 1701536970, 1401.78, 1591.35, 12.0481),
-(5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 1701539256, 1401.78, 1591.35, 12.0481),
-(6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 1701539568, 1401.78, 1591.35, 12.0481),
-(7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120403456, 0, 1701539846, 1401.78, 1591.35, 12.0481),
-(8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 1701607678, 1401.78, 1591.35, 12.0481),
-(9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 1701611624, 1401.78, 1591.35, 12.0481),
-(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 1701621495, 1401.78, 1591.35, 12.0481),
-(11, 13, 'Ferid_Olsun', 60, 0, 0, 0, 0, 676000640, 0, 1702238719, 1401.78, 1591.35, 12.0481),
-(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 1717421538, 1401.78, 1591.35, 12.0481),
-(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 1717423439, 1401.78, 1591.35, 12.0481),
-(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 1730130178, 1401.78, 1591.35, 12.0481),
-(17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 1730137305, 1401.78, 1591.35, 12.0481),
-(18, 24, 'Silva_Rose', 22, 0, 0, 0, 0, 0, 0, 1730811439, 1401.78, 1591.35, 12.0481);
+INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cWanted`) VALUES
+(3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10004500, 0, 0, 0, '2024-12-08 15:37:55', 1401.78, 1591.35, 12.0481, 0),
+(5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(11, 13, 'Ferid_Olsun', 180, 0, 0, 0, 0, 625, 0, 0, 0, '2024-12-08 15:43:11', 1401.78, 1591.35, 12.0481, 0),
+(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
+(19, 26, 'Silva_Rose', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 14:37:25', 1401.78, 1591.35, 12.0481, 0),
+(20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0),
+(21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0),
+(22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0),
+(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0);
 
 -- --------------------------------------------------------
 
@@ -302,6 +317,13 @@ CREATE TABLE `faction_police` (
   `fPoliceSkins4` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `faction_police`
+--
+
+INSERT INTO `faction_police` (`fPoliceID`, `fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceBoss`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceExitX`, `fPoliceExitY`, `fPoliceExitZ`, `fPoliceInt`, `fPoliceVault`, `fPoliceMoney`, `fPoliceDirtMoney`, `fConfiscatedDrugs`, `fDutyPointX`, `fDutyPointY`, `fDutyPointZ`, `fEquipmentX`, `fEquipmentY`, `fEquipmentZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES
+(1, 'Maryland Police Department', 'MLPD', 'Rockville, Maryland', 'Maryland', 0, 2, 327.207, -1515.58, 36.1391, 796.306, 1769.43, -61.9399, 6, 0, 0, 0, 0, 739.103, 1781.27, -61.9399, 741.049, 1763.12, -61.9399, 'Rookie', 'Recruit', 'Officer', 280, 281, 267, 265);
+
 -- --------------------------------------------------------
 
 --
@@ -361,8 +383,7 @@ CREATE TABLE `inventory` (
 
 INSERT INTO `inventory` (`PlayerID`, `ItemID`, `ItemQuantity`, `ItemType`) VALUES
 (11, 60, 3, 1),
-(11, 50, 4, 2),
-(4, 62, 2, 5);
+(11, 50, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -470,7 +491,12 @@ INSERT INTO `player_crypto` (`character_id`, `AmountBTC`, `AmountETH`, `AmountLT
 (15, 0, 0, 0, 0, 0),
 (16, 0, 0, 0, 0, 0),
 (17, 0, 0, 0, 0, 0),
-(18, 0, 0, 0, 0, 0);
+(18, 0, 0, 0, 0, 0),
+(19, 0, 0, 0, 0, 0),
+(20, 0, 0, 0, 0, 0),
+(21, 0, 0, 0, 0, 0),
+(22, 0, 0, 0, 0, 0),
+(23, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -508,7 +534,12 @@ INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, 
 (14, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 16:03:59'),
 (15, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 16:42:58'),
 (17, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 18:41:45'),
-(18, 0, 0, 0, 0, 0, 0, -1, '2024-11-05 13:57:19');
+(18, 0, 0, 0, 0, 0, 0, -1, '2024-12-03 20:06:45'),
+(19, 0, 0, 0, 0, 0, 0, -1, '2024-12-03 20:07:29'),
+(20, 0, 0, 0, 0, 0, 0, -1, '2024-12-07 23:48:01'),
+(21, 0, 0, 0, 0, 0, 0, -1, '2024-12-07 23:51:10'),
+(22, 0, 0, 0, 0, 0, 0, -1, '2024-12-08 00:14:21'),
+(23, 0, 0, 0, 0, 0, 0, -1, '2024-12-08 13:26:44');
 
 -- --------------------------------------------------------
 
@@ -520,28 +551,23 @@ CREATE TABLE `player_electronic` (
   `character_electronics` int(11) NOT NULL,
   `Dron` tinyint(4) NOT NULL DEFAULT 0,
   `Battery` int(11) NOT NULL DEFAULT 0,
-  `GPS` tinyint(4) NOT NULL DEFAULT 0
+  `GPS` tinyint(4) NOT NULL DEFAULT 0,
+  `phoneModel` int(11) NOT NULL DEFAULT -1,
+  `phoneNumber` varchar(16) NOT NULL DEFAULT '0 | 0 | 0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_electronic`
 --
 
-INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GPS`) VALUES
-(3, 0, 0, 0),
-(4, 0, 0, 0),
-(5, 0, 0, 0),
-(6, 0, 0, 0),
-(7, 0, 0, 0),
-(8, 0, 0, 0),
-(9, 0, 0, 0),
-(10, 0, 0, 0),
-(11, 1, 0, 1),
-(13, 0, 0, 0),
-(14, 0, 0, 0),
-(15, 0, 0, 0),
-(17, 0, 0, 0),
-(18, 0, 0, 0);
+INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GPS`, `phoneModel`, `phoneNumber`) VALUES
+(4, 0, 0, 0, 0, '60 | 826 | 245'),
+(11, 0, 0, 0, 3, '61 | 179 | 872'),
+(19, 0, 0, 0, -1, '0 | 0 | 0'),
+(20, 0, 0, 0, -1, '0 | 0 | 0'),
+(21, 0, 0, 0, -1, '0 | 0 | 0'),
+(22, 0, 0, 0, -1, '0 | 0 | 0'),
+(23, 0, 0, 0, -1, '0 | 0 | 0');
 
 -- --------------------------------------------------------
 
@@ -565,7 +591,12 @@ INSERT INTO `player_jewlery` (`character_id`, `Gold`) VALUES
 (15, 0),
 (16, 0),
 (17, 0),
-(18, 0);
+(18, 0),
+(19, 0),
+(20, 0),
+(21, 0),
+(22, 0),
+(23, 0);
 
 -- --------------------------------------------------------
 
@@ -582,6 +613,19 @@ CREATE TABLE `player_plants` (
   `posY` float NOT NULL,
   `posZ` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `player_prisons`
+--
+
+CREATE TABLE `player_prisons` (
+  `characterID` int(11) NOT NULL,
+  `jailTime` int(11) NOT NULL,
+  `jailedBy` varchar(24) NOT NULL,
+  `jailDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -606,7 +650,33 @@ INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VAL
 (11, 1, 1, 0),
 (15, 0, -1, 0),
 (17, 0, -1, 0),
-(18, 0, -1, 0);
+(18, 0, -1, 0),
+(19, 0, -1, 0),
+(20, 0, -1, 0),
+(21, 0, -1, 0),
+(22, 0, -1, 0),
+(23, 0, -1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `police_members`
+--
+
+CREATE TABLE `police_members` (
+  `police_id` int(11) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  `police_rank` int(11) NOT NULL,
+  `arrests` int(11) NOT NULL,
+  `joinDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `police_members`
+--
+
+INSERT INTO `police_members` (`police_id`, `character_id`, `police_rank`, `arrests`, `joinDate`) VALUES
+(1, 11, 1, 0, '2024-12-07 20:16:26');
 
 -- --------------------------------------------------------
 
@@ -644,8 +714,7 @@ INSERT INTO `ports` (`ID`, `Name`, `Type`, `posX`, `posY`, `posZ`) VALUES
 (14, 'Teretana', 1, 802.339, -1762.18, 13.6466),
 (15, 'Technomedia', 1, 1683.79, -1635.24, 13.6461),
 (16, 'Polje Plantaze', 1, 1882.75, 222.158, 29.0836),
-(17, 'Black Market', 1, -395.579, 1256.56, 6.98163),
-(18, '{FCB232}Bunker {FFFFFF}Ulaz', 3, -1590.18, -2575.98, 30.3966);
+(17, 'Black Market', 1, -395.579, 1256.56, 6.98163);
 
 -- --------------------------------------------------------
 
@@ -669,29 +738,6 @@ CREATE TABLE `pumps` (
 
 INSERT INTO `pumps` (`pumpID`, `pumpBusinessID`, `pumpFuel`, `pumpFuelType`, `pump_X`, `pump_Y`, `pump_Z`) VALUES
 (1, 0, 4000, 1, 1761.86, -1815.32, 13.5437);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `rent`
---
-
-CREATE TABLE `rent` (
-  `rentID` int(11) NOT NULL,
-  `fVehModel` int(11) NOT NULL,
-  `sVehModel` int(11) NOT NULL,
-  `tVehModel` int(11) NOT NULL,
-  `rPosX` int(11) NOT NULL,
-  `rPosY` int(11) NOT NULL,
-  `rPosZ` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `rent`
---
-
-INSERT INTO `rent` (`rentID`, `fVehModel`, `sVehModel`, `tVehModel`, `rPosX`, `rPosY`, `rPosZ`) VALUES
-(0, 522, 562, 560, 824, -1319, 13);
 
 -- --------------------------------------------------------
 
@@ -882,13 +928,20 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Klaus', 0, 0, 0),
 ('Dickey_Corleone', 0, 0, 0),
 ('Stojke_Castello', 0, 0, 0),
-('Vostic', 0, 0, 0),
+('Vostic', 1, 0, 1),
 ('Nodislav_Alksienko', 0, 0, 0),
 ('Casey_Skendy', 0, 0, 0),
 ('Darko_Jovanovic', 0, 0, 0),
 ('Vostic_Dev', 0, 0, 0),
 ('Nodislav', 0, 0, 0),
-('Silva_Rose', 0, 0, 0);
+('Daco_Delahunt', 1, 0, 1),
+('Eros_Bosandzeros', 0, 0, 0),
+('Silva', 1, 1, 1),
+('Silva_Rose', 1, 1, 1),
+('Casey', 0, 0, 0),
+('Leon_Skandy', 0, 0, 0),
+('Midori_Smith', 0, 0, 0),
+('Midori_Test', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -1061,7 +1114,7 @@ ALTER TABLE `warns`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `bankaccounts`
@@ -1091,7 +1144,7 @@ ALTER TABLE `cash_registers`
 -- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `containers`
@@ -1109,7 +1162,7 @@ ALTER TABLE `factions`
 -- AUTO_INCREMENT for table `faction_police`
 --
 ALTER TABLE `faction_police`
-  MODIFY `fPoliceID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `fPoliceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `houses`
@@ -1145,7 +1198,7 @@ ALTER TABLE `player_plants`
 -- AUTO_INCREMENT for table `ports`
 --
 ALTER TABLE `ports`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `pumps`
