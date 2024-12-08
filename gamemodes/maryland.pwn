@@ -30,6 +30,7 @@
 #include <streamer>
 #include <sscanf2>
 #include <Pawn.RakNet>
+#include <Pawn.Regex>
 #include <log-plugin>		
 #include <nex-ac>
 

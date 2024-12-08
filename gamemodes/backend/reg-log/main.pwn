@@ -680,37 +680,31 @@ public SQL_PlayerDeleteCharacter(playerid, characteridx)
 
 Dialog: PlayerCreateCharacterName(const playerid, response, listitem, string: inputtext[])
 {
-	if(!response)
+	if (!response)
 	{
 		Dialog_Show(playerid, "PlayerCreateCharacterName", DIALOG_STYLE_INPUT, "Create Character - Name", "Unesite roleplay ime i prezime vaseg novog karaktera:", "Potvrdi", "");
 		return 1;
-	}		
+	}
 
-	if(strlen(inputtext) < 6)
+	// Provera regex-a
+	if (!CheckCharNameRegex(inputtext))
 	{
 		Dialog_Show(playerid, "PlayerCreateCharacterName", DIALOG_STYLE_INPUT,
-				"Create Character - Name",
-				"Greska:Ime je previse kratko da bude validno.\nUnesite roleplay ime i prezime vaseg novog karaktera:",
-				"Potvrdi", ""
+			"Create Character - Name",
+			"Greska: Ime nije u pravilnom formatu.\nUnesite roleplay ime i prezime vašeg novog karaktera:",
+			"Potvrdi", ""
 		);
 		return 1;
 	}
 
-	if(strfind(inputtext, "_", true) == -1)
-	{
-		Dialog_Show(playerid, "PlayerCreateCharacterName", DIALOG_STYLE_INPUT,
-				"Create Character - Name",
-				"Greska:Ime i prezime ne moze biti krace od 6 slova.\nUnesite roleplay ime i prezime vaseg novog karaktera:",
-				"Potvrdi", ""
-		);		
-		return 1;
-	}
-
+	// Provera dostupnosti u bazi podataka
 	new query[128];
 	mysql_format(SQL, query, sizeof(query), "SELECT `cName` FROM `characters` WHERE `cName` = '%e'", inputtext);
 	mysql_tquery(SQL, query, "SQL_CheckRolePlayName", "is", playerid, inputtext);
+
 	return 1;
 }
+
 forward SQL_CheckRolePlayName(playerid, string:rpname[]);
 public SQL_CheckRolePlayName(playerid, string:rpname[])
 {
@@ -1080,3 +1074,11 @@ hook OnPlayerSpawn(playerid) {
 // 	SpawnPlayer(playerid);
 // 	return (true);
 // }
+
+stock CheckCharNameRegex(const nickname[])
+{
+  static Regex:charname;
+  if (!charname) charname = Regex_New("^[A-Z][a-z]{2,9}_[A-Z][a-z]+([A-Z][a-z]+)?$");
+
+  return Regex_Check(nickname, charname);
+}
