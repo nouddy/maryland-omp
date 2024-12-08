@@ -151,7 +151,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 new randValue = RandomMinMax(20, 250);
                 SendClientMessage(playerid, x_green, ">> Uspjesno ste uzeli "c_white"%d$ "c_green"iz kase!", randValue);
 
-                GivePlayerMoney(playerid, randValue);
+                GivePlayerMoney(playerid, randValue);   
 
                 CashRegister_Timer[i] = SetTimerEx("CashRegister_Reset", 1000, true, "ii", i, -1);
 
@@ -165,6 +165,10 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE character_id = '%d'", FactionMember[playerid][factionRespect], PlayerInfo[playerid][SQLID]);
                     mysql_tquery(MySQL:SQL, q);
                 }
+
+                static log_str[128];
+                format(log_str, sizeof log_str, "ROBBERY:  %s je obio kasu | Iznos novca %d", ReturnPlayerName(playerid), randValue);
+                mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
             }
         }
     }
@@ -205,6 +209,10 @@ hook OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid
 
             CashRegister_Money[i] = CreateDynamicPickup(1212, 1, CashRegister[i][registerPos][0] + (1.25 * floatsin(-a, degrees)), CashRegister[i][registerPos][1] + (1.25 * floatcos(-a, degrees)), CashRegister[i][registerPos][2] - 0.5);
             CashRegister_Timer[i] = SetTimerEx("CashRegister_Reset", 1000, true, "ii", i, CreateDynamicObject(18703, CashRegister[i][registerPos][0] - (0.15 * floatsin(-a, degrees)), CashRegister[i][registerPos][1] - (0.15 * floatcos(-a, degrees)), CashRegister[i][registerPos][2] - 1.65, 0.00, 0.00, 0.00, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid)));
+
+            static log_str[128];
+            format(log_str, sizeof log_str, "ROBBERY:  %s je obio kasu | OnPlayerShootDynObj", ReturnPlayerName(playerid));
+            mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
 
             return Y_HOOKS_BREAK_RETURN_1;
         }

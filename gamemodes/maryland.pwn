@@ -132,6 +132,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/finance/currency.pwn"								//* Currency
 #include "backend/assets/ml_notify.pwn"
 #include "backend/stocks/float.stock"								//* Float Stocks
+#include "backend/logs/log.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector

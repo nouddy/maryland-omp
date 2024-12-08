@@ -138,7 +138,9 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
 
     cuffedPoliceMan[player] = INVALID_PLAYER_ID;
     playerTied[player] = false;
+    playerTazed[player] = false;
     TogglePlayerControllable(player, true);
+    SetPlayerSpecialAction(player, SPECIAL_ACTION_NONE);
 
     SendClientMessageToAll(-1, " ");
     SendClientMessageToAll(x_server, "P O L I C E \187; "c_white"Kriminalac %s je uhapsen od strane "c_server"%s", ReturnPlayerName(player), jBy);
@@ -578,8 +580,57 @@ YCMD:tie(playerid, params[], help) {
     ProxDetector(playerid, Float:10.0, x_grey, string);
     SetTimerEx("Cuff_UpdatePlayerPosition", 2300, true, "d", target);
 
+    static log_str[128];
+    format(log_str, sizeof log_str, "CUFF:  %s je zavezao igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
     return 1;
 
+}
+
+YCMD:uncuff(playerid, params[], help) = untie;
+YCMD:untie(playerid, params[], help) {
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new target;
+
+    if(sscanf(params, "u", target)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/tie <igrac>");
+
+    if(target == playerid) return (true);
+    else if(target == INVALID_PLAYER_ID) return (true);
+    
+    if(!IsPlayerConnected(target)) return (true);
+    if(IsPlayerPoliceMember(target)) return (true);
+
+    if(!DistanceBetweenPlayers(3.40, playerid, target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+    
+    if(!IsPlayerCuffed(target))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je odvezan!");
+    
+
+    ClearAnimations(target);
+    TogglePlayerControllable(target, true);
+    SetPlayerSpecialAction(target, SPECIAL_ACTION_NONE);
+    playerTied[target] = false;
+    cuffedPoliceMan[target] = INVALID_PLAYER_ID;
+    playerTazed[target] = false;
+
+    static string[256];
+    format(string,sizeof(string), "%s skida lisice kriminalnom licu...", ReturnPlayerName(playerid));
+    ProxDetector(playerid, Float:10.0, x_grey, string);
+
+    static log_str[128];
+    format(log_str, sizeof log_str, "CUFF:  %s je odvezao igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
 }
 
 YCMD:pu(playerid, params[], help) 
@@ -659,6 +710,11 @@ YCMD:arrest(playerid, params[], help)
     /*=================== | Prison | ========================= */
 
     ImprisonPlayer(target, GetPlayerWantedLevelEx(target), ReturnPlayerName(playerid));
+
+    static log_str[128];
+    format(log_str, sizeof log_str, "ARREST:  %s je uhapsio igraca %s sa %d WL", ReturnPlayerName(playerid), ReturnPlayerName(target), GetPlayerWantedLevelEx(target));
+    mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
     return 1;
 }
 
@@ -739,9 +795,15 @@ public Prisono_DecreasePlayerTime(playerid) {
         mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
 
+        Police_SetPlayerWantedLevel(playerid, 0);
         SetPlayerPos(playerid, 1799.1263,-1577.9620,14.0765);
         SetPlayerVirtualWorld(playerid, 0);
         SetPlayerInterior(playerid, 0);
+
+        static log_str[128];
+        format(log_str, sizeof log_str, "PRISON:  %s je pusten iz zatvora", ReturnPlayerName(playerid));
+        mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
         return (true);
     }
 

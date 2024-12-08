@@ -536,6 +536,10 @@ YCMD:setstaff(playerid, const string: params[], help)
 
 		format(fmt_string, sizeof(fmt_string), "Ubacili ste %s u staff, nivo %i.", ReturnPlayerName(targetid), level);
 		notification.Show(playerid, "USPESNO", fmt_string, "!", BOXCOLOR_GREEN);
+
+		static log_str[128];
+		format(log_str, sizeof log_str, "STAFF:  %s je postavio staff level %d igracu %s", ReturnPlayerName(playerid), level, ReturnPlayerName(targetid));
+		mysql_write_log(log_str, LOG_TYPE_STAFF);
 	}
 	SavePlayer(targetid);
 	
@@ -546,6 +550,10 @@ YCMD:restart(playerid, const string: params[], help)
 {
 	if(!IsPlayerAdmin(playerid) && GetPlayerStaffLevel(playerid) < e_OWNER)
 		return notification.Show(playerid, "Greska", "Samo owner moze ovo!", "!", BOXCOLOR_RED);
+
+	static log_str[128];
+	format(log_str, sizeof log_str, "STAFF:  %s restartovao server", ReturnPlayerName(playerid));
+	mysql_write_log(log_str, LOG_TYPE_STAFF);
 
 	SendRconCommand("gmx");
 
@@ -578,6 +586,10 @@ YCMD:slap(playerid, const params[], help)
 
 	va_SendClientMessage(targetid, x_ltorange, "SLAP > {ffffff}%s vas je slapao.",ReturnPlayerName(playerid));
 	va_SendClientMessage(playerid, x_ltorange, "SLAP > {ffffff}Slapao si igraca %s.",ReturnPlayerName(targetid));
+
+	static log_str[128];
+	format(log_str, sizeof log_str, "STAFF:  %s je slapovao igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(targetid));
+	mysql_write_log(log_str, LOG_TYPE_STAFF);
 
 	return 1;
 }
@@ -632,6 +644,10 @@ YCMD:givegun(playerid, const params[], help) {
 			GivePlayerWeapon(targetid, WEAPON:gun, ammo);
 			va_SendClientMessage(targetid, x_red, "Admin %s ti je dao oruzje.", ReturnPlayerName(playerid));
 			va_SendClientMessage(playerid, x_red, "Dao si oruzje igracu %s.", ReturnPlayerName(targetid));
+
+			static log_str[128];
+			format(log_str, sizeof log_str, "STAFF:  %s je dao oruzje id %d igracu %s", ReturnPlayerName(playerid), gun, ReturnPlayerName(targetid));
+    		mysql_write_log(log_str, LOG_TYPE_STAFF);
 		}
 	}
 
@@ -830,6 +846,11 @@ YCMD:freeze(playerid, params[], help){
 		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zamrznuli ste igraca "c_server"%s", ReturnPlayerName(target));
 		SendClientMessage(target, x_server, "maryland \187; "c_white"Zamrznuti ste od strane admina!");
 		TogglePlayerControllable(playerid, false);
+
+		static log_str[128];
+    	format(log_str, sizeof log_str, "STAFF:  %s je zamrznuo igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    	mysql_write_log(log_str, LOG_TYPE_STAFF);
+
 		return (true);
 	}
 
@@ -838,6 +859,11 @@ YCMD:freeze(playerid, params[], help){
 		SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odmrznuli ste igraca "c_server"%s", ReturnPlayerName(target));
 		SendClientMessage(target, x_server, "maryland \187; "c_white"Odmrznuti ste od strane admina!");
 		TogglePlayerControllable(playerid, true);
+
+		static log_str[128];
+    	format(log_str, sizeof log_str, "STAFF:  %s je odmrznuo igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    	mysql_write_log(log_str, LOG_TYPE_STAFF);
+
 		return (true);
 	}
 
@@ -878,6 +904,47 @@ YCMD:aclearwl(playerid, params[], help) {
 	
 	SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ocistili ste wanted level igracu %s", ReturnPlayerName(target));
 	SendClientMessage(target, x_server, "maryland \187; "c_white"Admin %s vam je ocistio wanted level", ReturnPlayerName(playerid));
+
+	static log_str[128];
+    format(log_str, sizeof log_str, "STAFF:  %s je ocistio igracu %s wanted level", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+	return (true);
+}
+
+YCMD:unprison(playerid, params[], help) {
+
+	if (GetPlayerStaffLevel(playerid)< e_ASSISTANT)
+		return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+	
+	new target;
+	if(sscanf(params, "u", target))
+		return notification.Show(playerid, "Greska", "/unprison Igrac", "?", BOXCOLOR_RED);
+
+	if(!IsPlayerConnected(target))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan na server!");
+
+	if(target == INVALID_PLAYER_ID)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Invalid playerid!");
+
+	if(PlayerPrison[target][jailTime] == 0)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije zatvoren!");
+	
+	PlayerPrison[target][jailTime] = 0;
+	SendClientMessage(target, x_grey, "prison \187; "c_white"Pusteni ste na slobodu, budite bolji gradjanin!");
+
+	new q[128];
+	mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(target));
+	mysql_tquery(SQL, q);
+
+	Police_SetPlayerWantedLevel(target, 0);
+	SetPlayerPos(target, 1799.1263,-1577.9620,14.0765);
+	SetPlayerVirtualWorld(target, 0);
+	SetPlayerInterior(target, 0);
+
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF:  %s je oslobodio igraca %s | UNPRISON", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
 
 	return (true);
 }
