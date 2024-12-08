@@ -445,8 +445,6 @@ public SQL_ElectronicLoad(playerid)
         if(strfind(xNumm, "0 | 0 | 0") == -1) {
 
             sscanf(xNumm, "p<|>ddd", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2] );
-            SendClientMessage(playerid, 0xFF0055FF, "Tehnomedia \187; "c_white"Vas broj telefona je : %d %d %d", PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
-
         }
     }
 }

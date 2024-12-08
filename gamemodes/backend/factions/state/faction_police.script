@@ -136,6 +136,9 @@ public Cuff_UpdatePlayerPosition(playerid) {
 
 stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
 
+    cuffedPoliceMan[player] = INVALID_PLAYER_ID;
+    playerTied[player] = false;
+    TogglePlayerControllable(player, true);
 
     SendClientMessageToAll(-1, " ");
     SendClientMessageToAll(x_server, "P O L I C E \187; "c_white"Kriminalac %s je uhapsen od strane "c_server"%s", ReturnPlayerName(player), jBy);
@@ -143,7 +146,7 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
 
     new q[328];
     mysql_format(SQL, q, sizeof q, "INSERT INTO `player_prisons` (`characterID`, `jailTime`, `jailedBy`, `jailDate`) \
-                                    VALUES ('%d', '%d', '%e', NOW())", GetCharacterSQLID(player), ( time*5 ), jBy );
+                                    VALUES ('%d', '%d', '%e', NOW())", GetCharacterSQLID(player), time, jBy );
     mysql_tquery(SQL, q);
 
 
@@ -154,7 +157,11 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
     format(sstr, sizeof sstr, "%s", jBy);
 
     PlayerPrison[player][jailTime] = ( time * 5 );
-    PlayerPrison[player][jailedBy] = sstr;
+    PlayerPrison[player][jailedBy] = sstr;  
+
+    CharacterInfo[player][WantedLevel] = 0;
+    UpdateWantedLevel(player, CharacterInfo[player][WantedLevel]);
+    UpdateSqlInt(SQL, "characters", "cWanted", 0, "character_id", GetCharacterSQLID(player));
 
     SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", player);
 
@@ -706,12 +713,8 @@ public SQL_LoadPlayerPrison(playerid) {
     cache_get_value_name(0, "jailedBy", PlayerPrison[playerid][jailedBy], 64);
     cache_get_value_name(0, "jailDate", PlayerPrison[playerid][jailDate], 64);
 
-    if(PlayerPrison[playerid][jailTime] <= 0) {
-
-        SendClientMessage(playerid, -1, "DEBUG: Prison, nono!"); 
-        return (true);
-    }
-
+    new djura = random( sizeof sz_PrisonPositions);
+    SetPlayerCompensatedPos(playerid, sz_PrisonPositions[djura][0], sz_PrisonPositions[djura][1], sz_PrisonPositions[djura][2], ( playerid + 1 ));
     SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", playerid);
     return (true);
 
@@ -727,13 +730,13 @@ public Prisono_DecreasePlayerTime(playerid) {
         return (true);
     }
 
-    else if(PlayerPrison[playerid][jailTime] <= 0) {
+    else if(PlayerPrison[playerid][jailTime] < 1) {
 
         PlayerPrison[playerid][jailTime] = 0;
         SendClientMessage(playerid, x_grey, "prison \187; "c_white"Pusteni ste na slobodu, budite bolji gradjanin!");
 
         new q[128];
-        mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prison` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
+        mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
 
         SetPlayerPos(playerid, 1799.1263,-1577.9620,14.0765);
@@ -761,17 +764,6 @@ public police_LoadMember(playerid) {
     cache_get_value_name_int(0, "police_rank", PoliceMember[playerid][policeRank]);
     cache_get_value_name_int(0, "arrests", PoliceMember[playerid][arrests]);
     cache_get_value_name(0, "joinDate", PoliceMember[playerid][joinDate]);
-
-    foreach(new i : iter_Police) {
-
-        if(fPoliceInfo[i][fPoliceID] == PoliceMember[playerid][policeID]) {
-
-            new xRank = PoliceMember[playerid][policeRank];
-            new xSkin = fPoliceInfo[i][fPoliceSkins][xRank - 1];
-            SetPlayerSkin(playerid, xSkin);
-            break;
-        }
-    }
 
     return (true);
 }

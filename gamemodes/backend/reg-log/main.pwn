@@ -621,9 +621,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	ToggleGlobalTextDraw(playerid, true);
 	TogglePlayerTextDraw(playerid, true);
 
-	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
-
-	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 	SetTimerEx("delayed_Spawn", 150, false, "d", playerid);
 	return 1;
 }
@@ -644,6 +641,8 @@ public delayed_Spawn(playerid) {
 	PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
 	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
     PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
+
+	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
 	return (true);
 }
