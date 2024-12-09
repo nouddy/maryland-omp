@@ -18,13 +18,16 @@
  */
 
 
-//? Todo : Make td representation. Add custom func ifrentisnearrent(on createing). 
+//? Todo : Implement condition for checking when someone try to take other rent.
+//? Todo : Add rent price and edit timer when timer is near to expire to ask him if he want to extend rent.
+//? Todo : Check code for any error
 
 #include <ysilib\YSI_Coding\y_hooks>
 
 #define MAX_RENTALS (100)
 #define INVALID_RENTAL_ID (-1)
 
+// Rent Enum
 enum RentalInfo
 {
     rentID,
@@ -39,6 +42,15 @@ enum RentalInfo
 new PlayerRental[MAX_RENTALS][RentalInfo];
 new Iterator:iter_Rental<MAX_RENTALS>;
 
+// Variables for rent - player side
+new bool:PlayerRenting[MAX_PLAYERS],
+    PlayerRentModel[MAX_PLAYERS],
+    PlayerRentalVehicle[MAX_PLAYERS],
+    PlayerRentalTimer[MAX_PLAYERS],
+    bool:RentShown[MAX_PLAYERS],
+    Text3D:RentVehLabel;
+
+// rent td
 new PlayerText:RentacarTD[MAX_PLAYERS][15];
 
 hook OnGameModeInit() {
@@ -60,6 +72,17 @@ hook OnGameModeExit() {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerConnect(playerid)
+{
+    PlayerRenting[playerid] = false;
+    RentShown[playerid] = false;
+    PlayerRentModel[playerid] = INVALID_RENTAL_ID;
+    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+    PlayerRentalTimer[playerid] = -1;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+
+}
 
 forward RentalLoad();
 public RentalLoad()
@@ -103,6 +126,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     {
         if(IsPlayerNearRent(playerid) != INVALID_RENTAL_ID)
         {
+            if(PlayerRenting[playerid]) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Vec rentas vozilo.");
+
             new rID = IsPlayerNearRent(playerid);
             RentaCar_Interface(playerid, true);
 
@@ -121,7 +146,52 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-///////////////////////////////////////////////////////////
+hook OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+    if(!Rent_IsInterfaceActive(playerid)) 
+        return Y_HOOKS_CONTINUE_RETURN_1;
+
+    if(clickedid == INVALID_TEXT_DRAW)
+    {
+        RentaCar_Interface(playerid, false);
+        CancelSelectTextDraw(playerid);
+
+        return Y_HOOKS_BREAK_RETURN_1;
+    }
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
+{
+    if(!Rent_IsInterfaceActive(playerid)) 
+        return Y_HOOKS_CONTINUE_RETURN_1;
+
+    new rID = IsPlayerNearRent(playerid);
+    foreach (new i : iter_Rental)
+    {
+        if (PlayerRental[rID][rentID] == PlayerRental[i][rentID])
+        {
+            if (playertextid == RentacarTD[playerid][12])
+                PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][0];
+            if (playertextid == RentacarTD[playerid][13])
+                PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][1];
+            if (playertextid == RentacarTD[playerid][14])
+                PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][2];
+
+            RentInProgress(playerid, PlayerRentModel[playerid]);
+            RentaCar_Interface(playerid, false);
+            CancelSelectTextDraw(playerid);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspešno ste iznajmili vozilo.");
+
+            break;
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+//COMMANDS
 
 YCMD:createrent(playerid, params[], help)
 {
@@ -177,6 +247,23 @@ YCMD:deleterent(playerid, params[], help)
     return (true);
 }
 
+YCMD:unrent(playerid, params[], help) 
+{ 
+    if (!PlayerRenting[playerid]) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Nemas rentano vozilo.");
+
+    DestroyVehicle(PlayerRentalVehicle[playerid]);
+    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+
+    PlayerRenting[playerid] = false;
+
+    KillTimer(PlayerRentalTimer[playerid]);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vratio si rentovano vozilo.");
+    
+    return true;
+}
+
+//
 
 //? FPS
 forward Create_Rent(id);
@@ -191,16 +278,24 @@ public Create_Rent(id) {
 	return (true);
 }
 
+// Timer 
+forward ExpireRental(playerid);
+public ExpireRental(playerid)
+{
 
-IsPlayerNearRent(playerid) {
+    DestroyVehicle(PlayerRentalVehicle[playerid]);
+    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
 
-    foreach(new j : iter_Rental) {
+    PlayerRenting[playerid] = false;
 
-        if(IsPlayerInRangeOfPoint(playerid, 4.0, PlayerRental[j][rentalPos][0], PlayerRental[j][rentalPos][1], PlayerRental[j][rentalPos][2])) return j;
-    }
-    return INVALID_RENTAL_ID;
+    KillTimer(PlayerRentalTimer[playerid]);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Istekao ti je rent, vozilo je vraceno rent kuci.");
+    
+    return true;
 }
 
+//STOCKS 
 
 //TD
 stock RentaCar_Interface(playerid, bool:show) {
@@ -381,6 +476,7 @@ stock RentaCar_Interface(playerid, bool:show) {
         PlayerTextDrawSetPreviewVehicleColours(playerid, RentacarTD[playerid][14], 1, 1);
 
         SelectTextDraw(playerid, x_server);
+        RentShown[playerid] = true;
 
         for (new i = 0; i < sizeof RentacarTD[]; i++) {
             PlayerTextDrawShow(playerid, RentacarTD[playerid][i]);
@@ -394,6 +490,48 @@ stock RentaCar_Interface(playerid, bool:show) {
             PlayerTextDrawDestroy(playerid, RentacarTD[playerid][i]);
             RentacarTD[playerid][i] = PlayerText:INVALID_TEXT_DRAW;
         }
+        RentShown[playerid] = false;
         CancelSelectTextDraw(playerid);
     }
+}
+
+
+stock Rent_IsInterfaceActive(playerid) {
+
+    return RentShown[playerid];
+}
+
+
+stock RentInProgress(playerid, model)
+{
+    new Float:pPos[4];
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+    GetPlayerFacingAngle(playerid, pPos[3]);
+
+    PlayerRentalVehicle[playerid] = CreateVehicle(model, pPos[0] + 2.0, pPos[1], pPos[2], pPos[3], -1, -1, 0);
+
+    PutPlayerInVehicle(playerid, PlayerRentalVehicle[playerid], 0);
+
+    PlayerRenting[playerid] = true;
+
+    new stringic[128];
+    format(stringic, sizeof(stringic), ""c_server"\187;"c_white"Rent Vehicle"c_server"\171;\n\187;"c_white"Vlasnik: %s"c_server"\171;", ReturnPlayerName(playerid));
+
+    RentVehLabel = Create3DTextLabel(stringic, -1, pPos[0], pPos[1], pPos[2] + 2.0, 10.0, 0);
+    Attach3DTextLabelToVehicle(RentVehLabel, PlayerRentalVehicle[playerid],  0.0, 0.0, 0.0);
+    PlayerRentalTimer[playerid] = SetTimerEx("ExpireRental", 60000, false, "i", playerid);
+
+    SendClientMessage(playerid, -1, "maryland \187; Uspesno si rentao vozilo marke %s.", ReturnVehicleModelName(model));
+
+    return true;
+}
+
+
+IsPlayerNearRent(playerid) {
+
+    foreach(new j : iter_Rental) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 4.0, PlayerRental[j][rentalPos][0], PlayerRental[j][rentalPos][1], PlayerRental[j][rentalPos][2])) return j;
+    }
+    return INVALID_RENTAL_ID;
 }

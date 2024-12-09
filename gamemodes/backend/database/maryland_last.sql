@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 03:43 PM
+-- Generation Time: Dec 09, 2024 at 12:17 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -189,7 +189,7 @@ CREATE TABLE `characters` (
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cWanted`) VALUES
 (3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10004500, 0, 0, 0, '2024-12-08 15:37:55', 1401.78, 1591.35, 12.0481, 0),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10004500, 0, 0, 0, '2024-12-09 12:11:09', 1401.78, 1591.35, 12.0481, 0),
 (5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
@@ -430,6 +430,107 @@ CREATE TABLE `jobs` (
   `PositionY` float NOT NULL,
   `PositionZ` float NOT NULL,
   `Interior` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_anticheat`
+--
+
+CREATE TABLE `log_anticheat` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_commands`
+--
+
+CREATE TABLE `log_commands` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `log_commands`
+--
+
+INSERT INTO `log_commands` (`log_str`, `date`) VALUES
+('COMMAND:  Vostic je iskoristio komandu /createrent', '2024-12-09 10:04:48'),
+('COMMAND:  Vostic je iskoristio komandu /createrent 522 560 451', '2024-12-09 10:04:55'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 11:51:06'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 11:51:09'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 11:51:11'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 11:51:13'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 11:51:14'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 11:51:16'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 12:04:40'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 12:04:48'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 12:05:28'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 12:10:00'),
+('COMMAND:  Vostic je iskoristio komandu /clear', '2024-12-09 12:10:16'),
+('COMMAND:  Vostic je iskoristio komandu /unret', '2024-12-09 12:10:18'),
+('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 12:10:23'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 12:10:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_connection`
+--
+
+CREATE TABLE `log_connection` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `log_connection`
+--
+
+INSERT INTO `log_connection` (`log_str`, `date`) VALUES
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 10:04:14'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:08:38'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:32:40'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:38:10'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:49:35'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 12:04:11'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 12:08:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_crecords`
+--
+
+CREATE TABLE `log_crecords` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_faction`
+--
+
+CREATE TABLE `log_faction` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_staff`
+--
+
+CREATE TABLE `log_staff` (
+  `log_str` varchar(128) NOT NULL,
+  `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -738,6 +839,29 @@ CREATE TABLE `pumps` (
 
 INSERT INTO `pumps` (`pumpID`, `pumpBusinessID`, `pumpFuel`, `pumpFuelType`, `pump_X`, `pump_Y`, `pump_Z`) VALUES
 (1, 0, 4000, 1, 1761.86, -1815.32, 13.5437);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rent`
+--
+
+CREATE TABLE `rent` (
+  `rentID` int(11) NOT NULL,
+  `fVehModel` int(11) NOT NULL DEFAULT 0,
+  `sVehModel` int(11) NOT NULL DEFAULT 0,
+  `tVehModel` int(11) NOT NULL DEFAULT 0,
+  `rPosX` float NOT NULL DEFAULT 0,
+  `rPosY` float NOT NULL DEFAULT 0,
+  `rPosZ` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rent`
+--
+
+INSERT INTO `rent` (`rentID`, `fVehModel`, `sVehModel`, `tVehModel`, `rPosX`, `rPosY`, `rPosZ`) VALUES
+(1, 522, 560, 451, 823.602, -1317.12, 13.5262);
 
 -- --------------------------------------------------------
 
@@ -1075,6 +1199,12 @@ ALTER TABLE `pumps`
   ADD PRIMARY KEY (`pumpID`);
 
 --
+-- Indexes for table `rent`
+--
+ALTER TABLE `rent`
+  ADD PRIMARY KEY (`rentID`);
+
+--
 -- Indexes for table `re_business`
 --
 ALTER TABLE `re_business`
@@ -1205,6 +1335,12 @@ ALTER TABLE `ports`
 --
 ALTER TABLE `pumps`
   MODIFY `pumpID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `rent`
+--
+ALTER TABLE `rent`
+  MODIFY `rentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `re_business`
