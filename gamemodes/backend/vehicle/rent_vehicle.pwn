@@ -120,11 +120,11 @@ public RentalLoad()
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
-    if(!ispassenger && PlayerRentalVehicle[playerid] != vehicleid)
+    if(!ispassenger && PlayerRentalVehicle[playerid] != vehicleid)  //* Jer si napravio provjeru samo ako je igrac na vozacevom mjestu
     {
 		foreach(new i : Player)
 		{
-  			if(GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER)
+  			if(GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER) /
 	    	{
 				if(GetPlayerStaffLevel(playerid) < 4)
 				{
@@ -133,7 +133,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 					SetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 					ClearAnimations(playerid);
 			  		GameTextForPlayer(playerid, "~r~GDE CES???~n~ovo nije tvoje vozilo!", 5000, 3);
-			  		return true;
+			  		return ~1;
 				}
 			}
 		}

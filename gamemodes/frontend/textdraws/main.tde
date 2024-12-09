@@ -169,10 +169,6 @@ stock Hud_ShowInterface(playerid) {
     PlayerTextDrawSetProportional(playerid, money_UI[playerid], true);
     PlayerTextDrawShow(playerid, money_UI[playerid]);
 
-    UpdateMoneyTD(playerid);
-
-
-
     return (true);
 }
 

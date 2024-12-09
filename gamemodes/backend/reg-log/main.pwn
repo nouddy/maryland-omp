@@ -614,8 +614,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 
 	TogglePlayerSpectating(playerid, false);
 	TogglePlayerControllable(playerid, true);
-					
-	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
@@ -634,10 +632,6 @@ public delayed_Spawn(playerid) {
 	SetPlayerVirtualWorld(playerid, 6);
 	SetPlayerInterior(playerid, 6);
 	SpawnPlayer(playerid);
-
-	Hud_ShowInterface(playerid);
-	UpdateWantedLevel(playerid, CharacterInfo[playerid][WantedLevel]);
-	UpdateMoneyTD(playerid);
 	
 	PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
 	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
@@ -647,8 +641,14 @@ public delayed_Spawn(playerid) {
 
 	return (true);
 }
+
 forward OnCharacterLoaded(playerid);
 public OnCharacterLoaded(playerid) {
+
+	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
+	Hud_ShowInterface(playerid);
+	UpdateWantedLevel(playerid, CharacterInfo[playerid][WantedLevel]);
+	UpdateMoneyTD(playerid);
 
 	return 1;
 }
