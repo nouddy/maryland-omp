@@ -13,19 +13,17 @@
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
  *
- *  @File           fuel.script
+ *  @File           rent_vehicle.pwn
  *  @Module         vehicle
  */
 
-
-//? Todo : Implement condition for checking when someone try to take other rent.
-//? Todo : Add rent price and edit timer when timer is near to expire to ask him if he want to extend rent.
 //? Todo : Check code for any error
 
 #include <ysilib\YSI_Coding\y_hooks>
 
 #define MAX_RENTALS (100)
 #define INVALID_RENTAL_ID (-1)
+#define RENTAL_PRICE_PER_MIN (5.0)
 
 // Rent Enum
 enum RentalInfo
@@ -120,6 +118,30 @@ public RentalLoad()
 //?Hooks
 ///////////////////////////////////////////////////////////
 
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+{
+    if(!ispassenger && PlayerRentalVehicle[playerid] != vehicleid)
+    {
+		foreach(new i : Player)
+		{
+  			if(GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER)
+	    	{
+				if(GetPlayerStaffLevel(playerid) < 4)
+				{
+			 		new Float:pPos[3];
+					GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+					SetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+					ClearAnimations(playerid);
+			  		GameTextForPlayer(playerid, "~r~GDE CES???~n~ovo nije tvoje vozilo!", 5000, 3);
+			  		return true;
+				}
+			}
+		}
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(PRESSED(KEY_NO))
@@ -173,22 +195,52 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid)
         if (PlayerRental[rID][rentID] == PlayerRental[i][rentID])
         {
             if (playertextid == RentacarTD[playerid][12])
+            {
                 PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][0];
+                Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+
+            }
             if (playertextid == RentacarTD[playerid][13])
+            {
                 PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][1];
+                Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+
+            }
             if (playertextid == RentacarTD[playerid][14])
+            {
                 PlayerRentModel[playerid] = PlayerRental[i][rentVehModels][2];
-
-            RentInProgress(playerid, PlayerRentModel[playerid]);
-            RentaCar_Interface(playerid, false);
-            CancelSelectTextDraw(playerid);
-            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspešno ste iznajmili vozilo.");
-
+                Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+            }
             break;
         }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog: dialog_rentveh(const playerid, response, listitem, string: inputtext[])
+{
+    if(!response)
+    {
+        RentaCar_Interface(playerid, false);
+        CancelSelectTextDraw(playerid);
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odustali ste od iznajmljivanja vozila.");
+    }
+
+	if(response)
+	{
+        new time;
+
+        if(sscanf(inputtext, "i", time))
+			return  Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+
+        RentInProgress(playerid, PlayerRentModel[playerid], time);
+        RentaCar_Interface(playerid, false);
+        CancelSelectTextDraw(playerid);
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspešno ste iznajmili vozilo na %d minuta.", time);
+	}
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 //COMMANDS
@@ -252,6 +304,8 @@ YCMD:unrent(playerid, params[], help)
     if (!PlayerRenting[playerid]) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Nemas rentano vozilo.");
 
     DestroyVehicle(PlayerRentalVehicle[playerid]);
+    
+    PlayerRentModel[playerid] = INVALID_RENTAL_ID;
     PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
 
     PlayerRenting[playerid] = false;
@@ -284,6 +338,8 @@ public ExpireRental(playerid)
 {
 
     DestroyVehicle(PlayerRentalVehicle[playerid]);
+
+    PlayerRentModel[playerid] = INVALID_RENTAL_ID;
     PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
 
     PlayerRenting[playerid] = false;
@@ -502,7 +558,7 @@ stock Rent_IsInterfaceActive(playerid) {
 }
 
 
-stock RentInProgress(playerid, model)
+stock RentInProgress(playerid, model, time)
 {
     new Float:pPos[4];
     GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
@@ -519,9 +575,12 @@ stock RentInProgress(playerid, model)
 
     RentVehLabel = Create3DTextLabel(stringic, -1, pPos[0], pPos[1], pPos[2] + 2.0, 10.0, 0);
     Attach3DTextLabelToVehicle(RentVehLabel, PlayerRentalVehicle[playerid],  0.0, 0.0, 0.0);
-    PlayerRentalTimer[playerid] = SetTimerEx("ExpireRental", 60000, false, "i", playerid);
+    PlayerRentalTimer[playerid] = SetTimerEx("ExpireRental", time*60000, false, "i", playerid);
 
-    SendClientMessage(playerid, -1, "maryland \187; Uspesno si rentao vozilo marke %s.", ReturnVehicleModelName(model));
+    GivePlayerMoney(playerid, -RENTAL_PRICE_PER_MIN*time, MONEY_TYPE_DOLLAR);
+    UpdateMoneyTD(playerid);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspesno si rentao vozilo marke "c_server"%s "c_white"za "c_server"$%.2f.", ReturnVehicleModelName(model), RENTAL_PRICE_PER_MIN*time);
 
     return true;
 }

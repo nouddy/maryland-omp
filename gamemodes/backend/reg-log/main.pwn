@@ -637,6 +637,7 @@ public delayed_Spawn(playerid) {
 
 	Hud_ShowInterface(playerid);
 	UpdateWantedLevel(playerid, CharacterInfo[playerid][WantedLevel]);
+	UpdateMoneyTD(playerid);
 	
 	PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
 	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
