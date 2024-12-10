@@ -355,6 +355,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
 #include "frontend/interior/hospital-int.map"						//* Hospital Int (23)
 #include "frontend/interior/police_int.map"								//* Police Int (24)
+#include "frontend/exterior/alcatraz_int.map"								//* Police Int (-1)
 
 
 

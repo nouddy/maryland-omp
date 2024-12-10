@@ -46,7 +46,7 @@ new bool:PlayerRenting[MAX_PLAYERS],
     PlayerRentalVehicle[MAX_PLAYERS],
     PlayerRentalTimer[MAX_PLAYERS],
     bool:RentShown[MAX_PLAYERS],
-    Text3D:RentVehLabel;
+    Text3D:RentVehLabel[MAX_PLAYERS];
 
 // rent td
 new PlayerText:RentacarTD[MAX_PLAYERS][15];
@@ -78,8 +78,28 @@ hook OnPlayerConnect(playerid)
     PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
     PlayerRentalTimer[playerid] = -1;
 
+    if(IsValid3DTextLabel(RentVehLabel[playerid]))
+        Delete3DTextLabel(RentVehLabel[playerid]);
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+
+    if(PlayerRenting[playerid]) {
+
+        DestroyVehicle(PlayerRentalVehicle[playerid]);
+        Delete3DTextLabel(RentVehLabel[playerid]);
+        KillTimer(PlayerRentalTimer[playerid]);
+
+        PlayerRentModel[playerid] = INVALID_RENTAL_ID;
+        PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+        PlayerRenting[playerid] = false;
+
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 forward RentalLoad();
@@ -114,7 +134,7 @@ public RentalLoad()
     return (true);
 }
 
-///////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 //?Hooks
 ///////////////////////////////////////////////////////////
 
@@ -124,7 +144,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
     {
 		foreach(new i : Player)
 		{
-  			if(GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER) /
+  			if(GetPlayerVehicleID(i) == vehicleid && GetPlayerState(i) == PLAYER_STATE_DRIVER) 
 	    	{
 				if(GetPlayerStaffLevel(playerid) < 4)
 				{
@@ -304,7 +324,7 @@ YCMD:unrent(playerid, params[], help)
     if (!PlayerRenting[playerid]) return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Nemas rentano vozilo.");
 
     DestroyVehicle(PlayerRentalVehicle[playerid]);
-    
+    Delete3DTextLabel(RentVehLabel[playerid]);
     PlayerRentModel[playerid] = INVALID_RENTAL_ID;
     PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
 
@@ -338,6 +358,7 @@ public ExpireRental(playerid)
 {
 
     DestroyVehicle(PlayerRentalVehicle[playerid]);
+    Delete3DTextLabel(RentVehLabel[playerid]);
 
     PlayerRentModel[playerid] = INVALID_RENTAL_ID;
     PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
@@ -573,8 +594,8 @@ stock RentInProgress(playerid, model, time)
     new stringic[128];
     format(stringic, sizeof(stringic), ""c_server"\187;"c_white"Rent Vehicle"c_server"\171;\n\187;"c_white"Vlasnik: %s"c_server"\171;", ReturnPlayerName(playerid));
 
-    RentVehLabel = Create3DTextLabel(stringic, -1, pPos[0], pPos[1], pPos[2] + 2.0, 10.0, 0);
-    Attach3DTextLabelToVehicle(RentVehLabel, PlayerRentalVehicle[playerid],  0.0, 0.0, 0.0);
+    RentVehLabel[playerid] = Create3DTextLabel(stringic, -1, pPos[0], pPos[1], pPos[2] + 2.0, 10.0, 0);
+    Attach3DTextLabelToVehicle(RentVehLabel[playerid], PlayerRentalVehicle[playerid],  0.0, 0.0, 0.0);
     PlayerRentalTimer[playerid] = SetTimerEx("ExpireRental", time*60000, false, "i", playerid);
 
     GivePlayerMoney(playerid, -RENTAL_PRICE_PER_MIN*time, MONEY_TYPE_DOLLAR);

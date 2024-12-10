@@ -948,3 +948,5 @@ YCMD:unprison(playerid, params[], help) {
 
 	return (true);
 }
+
+#include "backend/staff/jails.pwn"								//* Jail script

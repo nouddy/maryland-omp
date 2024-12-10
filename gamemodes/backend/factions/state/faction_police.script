@@ -23,6 +23,7 @@
 
 const MAX_POLICE = 30;
 const MAX_RANK_NAME = 32;
+const INVALID_POLICE_ID = -1;
 
 const JAIL_TYPE_PRISON  = 1;
 
@@ -134,6 +135,17 @@ public Cuff_UpdatePlayerPosition(playerid) {
 
 /* Stocks */
 
+stock GetPlayerPoliceID(playerid) {
+
+    foreach(new i : iter_Police) {
+
+        if(fPoliceInfo[i][fPoliceID] == PoliceMember[playerid][policeID])
+            return i;
+    }
+
+    return INVALID_POLICE_ID;
+}
+
 stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
 
     cuffedPoliceMan[player] = INVALID_PLAYER_ID;
@@ -142,9 +154,11 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
     TogglePlayerControllable(player, true);
     SetPlayerSpecialAction(player, SPECIAL_ACTION_NONE);
 
+    SendClientMessageToAll(x_server, "________________________________ ARREST ________________________________");
     SendClientMessageToAll(-1, " ");
-    SendClientMessageToAll(x_server, "P O L I C E \187; "c_white"Kriminalac %s je uhapsen od strane "c_server"%s", ReturnPlayerName(player), jBy);
+    SendClientMessageToAll(x_server, "P O L I C E \187; "c_white"Kriminalac %s je uhapsen od strane "c_server"%s", ReturnCharacterName(player), jBy);
     SendClientMessageToAll(-1, " ");
+    SendClientMessageToAll(x_server, "________________________________________________________________________");
 
     new q[328];
     mysql_format(SQL, q, sizeof q, "INSERT INTO `player_prisons` (`characterID`, `jailTime`, `jailedBy`, `jailDate`) \
@@ -356,7 +370,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                     memberDuty[playerid] = false;
                     SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
-                    SendClientMessage(playerid, x_server, "%s \187; "c_white"Vise niste na policijsok duznosti!", fPoliceInfo[i][fPoliceShortName]);
+                    SendClientMessage(playerid, x_server, "%s \187; "c_white"Vise niste na policijskoj duznosti!", fPoliceInfo[i][fPoliceShortName]);
 
                     return ~1;
                 }
@@ -370,7 +384,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                         if(PoliceMember[j][policeID] == PoliceMember[playerid][policeID]) {
 
-                            SendClientMessage(j, x_server, "%s \187; "c_white"%s %s se javlja na duznost. ", fPoliceRanks[i][ PoliceMember[playerid][policeRank] - 1 ], ReturnPlayerName(playerid), fPoliceInfo[i][fPoliceShortName]);
+                            SendClientMessage(j, x_server, "%s \187; "c_grey"%s [%s]: "c_white"se javlja na duznost. ", fPoliceRanks[i][ PoliceMember[playerid][policeRank] - 1 ], ReturnCharacterName(playerid), fPoliceInfo[i][fPoliceShortName]);
                         }
                     }
                     return ~1;
@@ -397,7 +411,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 equipmentCoolDown[playerid] = gettime() + 600;
 
                 static string[256];
-                format(string,sizeof(string), "%s uzima opremu iz sanduka", ReturnPlayerName(playerid));
+                format(string,sizeof(string), "%s uzima opremu iz sanduka", ReturnCharacterName(playerid));
                 ProxDetector(playerid, Float:10.0, x_grey, string);
                 return ~1;
             }
@@ -447,7 +461,7 @@ YCMD:r(playerid, params[], help)
 
         if(PoliceMember[i][policeID] == PoliceMember[playerid][policeID]) {
 
-            SendClientMessage(i, x_server, "police \187; "c_grey"%s : %s.(( prijem ))", ReturnPlayerName(playerid), text);
+            SendClientMessage(i, x_server, "police \187; "c_grey"%s : %s.(( prijem ))", ReturnCharacterName(playerid), text);
         } 
     }
 
@@ -481,7 +495,7 @@ YCMD:pchat(playerid, params[], help) {
 
         if(PoliceMember[i][policeID] != 0) {
 
-            SendClientMessage(i, x_server, "%s \187; "c_grey"%s : %s.(( prijem ))", xName, ReturnPlayerName(playerid), text);
+            SendClientMessage(i, x_server, "%s \187; "c_grey"%s : %s.(( prijem ))", xName, ReturnCharacterName(playerid), text);
         } 
     }
 
@@ -576,12 +590,12 @@ YCMD:tie(playerid, params[], help) {
     cuffedPoliceMan[target] = playerid;
 
     static string[256];
-    format(string,sizeof(string), "%s stavlja lisice kriminalnom licu...", ReturnPlayerName(playerid));
+    format(string,sizeof(string), "%s stavlja lisice kriminalnom licu...", ReturnCharacterName(playerid));
     ProxDetector(playerid, Float:10.0, x_grey, string);
     SetTimerEx("Cuff_UpdatePlayerPosition", 2300, true, "d", target);
 
     static log_str[128];
-    format(log_str, sizeof log_str, "CUFF:  %s je zavezao igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    format(log_str, sizeof log_str, "CUFF:  %s je zavezao igraca %s", ReturnCharacterName(playerid), ReturnCharacterName(target));
     mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
 
     return 1;
@@ -623,11 +637,11 @@ YCMD:untie(playerid, params[], help) {
     playerTazed[target] = false;
 
     static string[256];
-    format(string,sizeof(string), "%s skida lisice kriminalnom licu...", ReturnPlayerName(playerid));
+    format(string,sizeof(string), "%s skida lisice kriminalnom licu...", ReturnCharacterName(playerid));
     ProxDetector(playerid, Float:10.0, x_grey, string);
 
     static log_str[128];
-    format(log_str, sizeof log_str, "CUFF:  %s je odvezao igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(target));
+    format(log_str, sizeof log_str, "CUFF:  %s je odvezao igraca %s", ReturnCharacterName(playerid), ReturnCharacterName(target));
     mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
 
     return 1;
@@ -709,11 +723,14 @@ YCMD:arrest(playerid, params[], help)
 
     /*=================== | Prison | ========================= */
 
-    ImprisonPlayer(target, GetPlayerWantedLevelEx(target), ReturnPlayerName(playerid));
+    ImprisonPlayer(target, GetPlayerWantedLevelEx(target), ReturnCharacterName(playerid));
 
     static log_str[128];
-    format(log_str, sizeof log_str, "ARREST:  %s je uhapsio igraca %s sa %d WL", ReturnPlayerName(playerid), ReturnPlayerName(target), GetPlayerWantedLevelEx(target));
+    format(log_str, sizeof log_str, "ARREST:  %s je uhapsio igraca %s sa %d WL", ReturnCharacterName(playerid), ReturnCharacterName(target), GetPlayerWantedLevelEx(target));
     mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
+    PoliceMember[playerid][arrests]++;
+    UpdateSqlInt(SQL, "police_members", "arrests", PoliceMember[playerid][arrests], "character_id", GetCharacterSQLID(playerid));
 
     return 1;
 }
@@ -801,7 +818,7 @@ public Prisono_DecreasePlayerTime(playerid) {
         SetPlayerInterior(playerid, 0);
 
         static log_str[128];
-        format(log_str, sizeof log_str, "PRISON:  %s je pusten iz zatvora", ReturnPlayerName(playerid));
+        format(log_str, sizeof log_str, "PRISON:  %s je pusten iz zatvora", ReturnCharacterName(playerid));
         mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
 
         return (true);
