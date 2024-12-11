@@ -404,6 +404,7 @@ stock Inventory_InterfaceControl(playerid, bool:show) {
             PlayerTextDrawSetPreviewRot(playerid, item_bg[playerid][tmp_idx], 0.000000, 0.000000, 0.000000, 1.000000);
 
             new index = InventoryInfo[playerid][tmp_idx][ItemID];
+            if(InventoryInfo[playerid][tmp_idx][ItemQuantity] <= 0) continue;
 
             new tmp_str[64];
 
@@ -590,7 +591,6 @@ stock Container_GetItems(playerid, containers[], containers_size = sizeof contai
                 foreach(new j : iHouse) {
 
                     if(player_House[playerid] == house_ID[j]) {
-                        SendClientMessage(playerid, -1, "DEBUG: Owner kuce si ti!");
                         pPos[0] = house_Wardrobe[j][0];
                         pPos[1] = house_Wardrobe[j][1];
                         pPos[2] = house_Wardrobe[j][2];

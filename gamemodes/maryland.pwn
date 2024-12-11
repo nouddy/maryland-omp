@@ -1,4 +1,5 @@
 /*
+
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -16,7 +17,8 @@
  *
  *  @File           maryland.core
  *  @Module         main
- */
+
+*/
 
 #define YSI_NO_HEAP_MALLOC
 
@@ -194,9 +196,10 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/property/end/do-not-look.temp"
 
-//-------------------------------------------------------------------------------------------------------- Business
-#include "backend/real_estate/re_centar.script"						//* Business Centar
+//-------------------------------------------------------------------------------------------------------- Business 'n inventory
 #include "backend/inventory/inventory.pwn"
+
+#include "backend/real_estate/re_centar.script"						//* Business Centar
 #include "backend/real_estate/re_business.script"					//* Bizovi
 
 
