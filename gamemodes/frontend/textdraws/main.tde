@@ -142,10 +142,14 @@ stock Hud_CreateInterface() {
 
 stock UpdateMoneyTD(playerid) {
 
-    if(!IsPlayerTextDrawVisible(playerid, money_UI[playerid])) {}
+    if(!IsPlayerTextDrawVisible(playerid, money_UI[playerid])) {
 
-    PlayerTextDrawSetString(playerid, money_UI[playerid], "%.2f", GetPlayerMoney(playerid));
-    PlayerTextDrawShow(playerid, money_UI[playerid]);
+        PlayerTextDrawSetString(playerid, money_UI[playerid], "%.2f", GetPlayerMoney(playerid));
+        PlayerTextDrawShow(playerid, money_UI[playerid]);
+    }
+
+    else { PlayerTextDrawSetString(playerid, money_UI[playerid], "%.2f", GetPlayerMoney(playerid)); }
+
     return (true);
 }
 
