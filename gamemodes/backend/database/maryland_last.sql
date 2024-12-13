@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2024 at 12:17 PM
+-- Generation Time: Dec 12, 2024 at 10:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -196,7 +196,7 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
-(11, 13, 'Ferid_Olsun', 180, 0, 0, 0, 0, 625, 0, 0, 0, '2024-12-08 15:43:11', 1401.78, 1591.35, 12.0481, 0),
+(11, 13, 'Ferid_Olsun', 180, 0, 0, 0, 0, -1381.4, 0, 0, 0, '2024-12-11 18:49:20', 1401.78, 1591.35, 12.0481, 0),
 (13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
 (15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0),
@@ -382,8 +382,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`PlayerID`, `ItemID`, `ItemQuantity`, `ItemType`) VALUES
-(11, 60, 3, 1),
-(11, 50, 4, 2);
+(11, 60, 8, 1),
+(11, 50, 8, 2),
+(11, 51, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -403,14 +404,6 @@ CREATE TABLE `inv_containers` (
   `posY` float NOT NULL,
   `posZ` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `inv_containers`
---
-
-INSERT INTO `inv_containers` (`ID`, `propID`, `Type`, `Item`, `ItemType`, `Quantity`, `Model`, `posX`, `posY`, `posZ`) VALUES
-(1, 2, 1, 50, 2, 4, 10, 0, 0, 0),
-(2, 1, 2, 51, 2, 2, 10, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -443,6 +436,13 @@ CREATE TABLE `log_anticheat` (
   `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `log_anticheat`
+--
+
+INSERT INTO `log_anticheat` (`log_str`, `date`) VALUES
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-11 18:26:13');
+
 -- --------------------------------------------------------
 
 --
@@ -474,7 +474,92 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Vostic je iskoristio komandu /clear', '2024-12-09 12:10:16'),
 ('COMMAND:  Vostic je iskoristio komandu /unret', '2024-12-09 12:10:18'),
 ('COMMAND:  Vostic je iskoristio komandu /unrent', '2024-12-09 12:10:23'),
-('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 12:10:25');
+('COMMAND:  Vostic je iskoristio komandu /cc', '2024-12-09 12:10:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /jail', '2024-12-09 21:48:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /jail 0 1 10', '2024-12-09 21:48:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 2295.757,-3588.850,-14.594', '2024-12-09 21:51:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 2295.757,-3588.850,-14.594', '2024-12-09 21:51:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 2295.757,-3588.850,20.594', '2024-12-09 21:51:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 0 0', '2024-12-09 21:54:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-09 21:55:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-09 21:55:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-09 21:55:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-09 21:55:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-09 21:55:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-09 21:55:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 20', '2024-12-09 21:56:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1430.018310, 1507.042358, 32.806980', '2024-12-09 21:56:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1430.018310, 1507.042358, 32.806980', '2024-12-09 21:56:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /jetpack', '2024-12-09 21:56:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:19:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:19:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:19:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:19:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:19:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-11 18:21:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 0 0', '2024-12-11 18:23:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-11 18:25:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createbusiness', '2024-12-11 18:26:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createbusiness', '2024-12-11 18:26:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createbusiness 7Eleven 1 1 900', '2024-12-11 18:26:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -2257.441894, -1743.539916, 487.737579', '2024-12-11 18:34:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 50.001941, -1528.682739, -0.777544', '2024-12-11 18:35:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 50.001941, -1528.682739, -0.777544', '2024-12-11 18:35:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 50.001941, -1528.682739, 5.777544', '2024-12-11 18:35:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 8', '2024-12-11 18:37:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1358.160400, 1501.470703, 101.226661', '2024-12-11 18:37:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:38:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:38:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:38:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:38:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 20', '2024-12-11 18:39:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 20', '2024-12-11 18:39:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 14', '2024-12-11 18:39:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956', '2024-12-11 18:39:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -849.774291, 89.610961, 46.717956w', '2024-12-11 18:39:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -850.774291, 89.610961, 46.717956w', '2024-12-11 18:39:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -850.774291, 89.610961, 46.717956', '2024-12-11 18:39:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 14', '2024-12-11 18:39:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -850.774291, 89.610961, 46.717956', '2024-12-11 18:40:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 2838.814453, 1330.542480, 19.785236', '2024-12-11 18:41:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 0', '2024-12-11 18:41:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-11 18:41:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1687.083740, -1450.942871, 12.507729', '2024-12-11 18:42:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1687.083740, -1450.942871, 12.507729', '2024-12-11 18:42:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1687.083740, -1460.942871, 12.507729', '2024-12-11 18:42:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1687.083740, -1450.942871, 12.507729', '2024-12-11 18:42:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1687.083740, -1450.942871, 15.507729', '2024-12-11 18:42:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 15', '2024-12-11 18:43:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 4.941112, 1501.662963', '2024-12-11 18:43:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 5.941112, 1501.662963', '2024-12-11 18:43:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 9.941112, 1501.662963', '2024-12-11 18:43:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 4.941112, 1501.662963', '2024-12-11 18:43:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 4.941112, 1521.662963', '2024-12-11 18:43:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 4.941112, 1511.662963', '2024-12-11 18:43:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 4.941112, 1519.662963', '2024-12-11 18:43:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 9.941112, 1519.662963', '2024-12-11 18:43:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 9.941112, 1510.662963', '2024-12-11 18:44:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 200.901672, 9.941112, 1505.662963', '2024-12-11 18:44:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 199.687561, 4.908154, 1504.100097', '2024-12-11 18:44:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 17', '2024-12-11 18:45:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -2139.315673, -1401.012939, 1.974555', '2024-12-11 18:45:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /givegun 0 24 90', '2024-12-11 18:46:31');
 
 -- --------------------------------------------------------
 
@@ -498,7 +583,11 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:38:10'),
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 11:49:35'),
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 12:04:11'),
-('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 12:08:57');
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-09 12:08:57'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-09 21:47:45'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-09 21:50:24'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-11 18:19:10'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-11 18:23:52');
 
 -- --------------------------------------------------------
 
@@ -532,6 +621,13 @@ CREATE TABLE `log_staff` (
   `log_str` varchar(128) NOT NULL,
   `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `log_staff`
+--
+
+INSERT INTO `log_staff` (`log_str`, `date`) VALUES
+('STAFF:  Nodislav_Aleksienko je dao oruzje id 24 igracu Nodislav_Aleksienko', '2024-12-11 18:46:31');
 
 -- --------------------------------------------------------
 
@@ -669,6 +765,20 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 (21, 0, 0, 0, -1, '0 | 0 | 0'),
 (22, 0, 0, 0, -1, '0 | 0 | 0'),
 (23, 0, 0, 0, -1, '0 | 0 | 0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `player_jails`
+--
+
+CREATE TABLE `player_jails` (
+  `character_id` int(11) NOT NULL,
+  `jailType` int(11) NOT NULL,
+  `jailTime` int(11) NOT NULL,
+  `jailedBy` varchar(25) NOT NULL,
+  `jailDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -901,7 +1011,8 @@ CREATE TABLE `re_business` (
 --
 
 INSERT INTO `re_business` (`bID`, `bOwner`, `bName`, `bLocked`, `bType`, `bPrice`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bProducts`, `bInt`, `bVW`) VALUES
-(1, 0, 'Ammunation', 0, 11, 250000, 10, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1);
+(1, 0, 'Ammunation', 0, 11, 250000, 10, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1),
+(2, 0, '7Eleven', 0, 1, 250000, 1, 973.081, -1288.71, 13.454, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 2);
 
 -- --------------------------------------------------------
 
@@ -1169,6 +1280,12 @@ ALTER TABLE `player_electronic`
   ADD UNIQUE KEY `player_id` (`character_electronics`);
 
 --
+-- Indexes for table `player_jails`
+--
+ALTER TABLE `player_jails`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
 -- Indexes for table `player_jewlery`
 --
 ALTER TABLE `player_jewlery`
@@ -1304,7 +1421,7 @@ ALTER TABLE `houses`
 -- AUTO_INCREMENT for table `inv_containers`
 --
 ALTER TABLE `inv_containers`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -1346,7 +1463,7 @@ ALTER TABLE `rent`
 -- AUTO_INCREMENT for table `re_business`
 --
 ALTER TABLE `re_business`
-  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `re_centar`
