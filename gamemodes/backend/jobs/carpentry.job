@@ -48,9 +48,9 @@ public Carpentry_ContinueTimer(playerid, option) {
             SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uzmite neobradjeno drvo sa palete, te ga odnesite na masinu");
             carpentryProgress[playerid] = CARPENTRY_PROGRESS_CARVING;
 
-            carpentryObject[playerid] = CreateDynamicObject(1453, 1416.087036, -26.280941, 1002.152648, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 1453, 1416.087036, -26.280941, 1002.152648, 0.000000, 0.000000, 0.000000, 30.0);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
 
             return (true);
         }
@@ -66,11 +66,11 @@ public Carpentry_ContinueTimer(playerid, option) {
 
             ClearAnimations(playerid);
 
-            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, 30.0); 
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
-            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            AttachPlayerObjectToPlayer(playerid, carpentryObject[playerid], playerid, 0.5, 0.5, 0.00, 0.00, 0.00, 0.00);
             TogglePlayerControllable(playerid, true);
             return (true);
         }
@@ -85,11 +85,11 @@ public Carpentry_ContinueTimer(playerid, option) {
 
             ClearAnimations(playerid);
 
-            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, 30.0); 
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
-            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            AttachPlayerObjectToPlayer(playerid, carpentryObject[playerid], playerid, 0.5, 0.5, 0.00, 0.00, 0.00, 0.00);
             TogglePlayerControllable(playerid, true);
             return (true);
         }
@@ -99,11 +99,11 @@ public Carpentry_ContinueTimer(playerid, option) {
             new Float:pPos[3];
             GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
-            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, 30.0); 
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
 
-            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            AttachPlayerObjectToPlayer(playerid, carpentryObject[playerid], playerid, 0.5, 0.5, 0.00, 0.00, 0.00, 0.00);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
             SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odnesi zavrsni produkt do police za transport kako bi zavrsio sa poslom!");
             ClearAnimations(playerid);
@@ -144,8 +144,8 @@ hook OnPlayerConnect(playerid) {
     carpentryTools[playerid] = false;
     mvProgress[playerid] = 0;
     
-    if(IsValidDynamicObject(carpentryObject[playerid]))
-        DestroyDynamicObject(carpentryObject[playerid]);
+    if(IsValidPlayerObject(playerid, carpentryObject[playerid]))
+        DestroyPlayerObject(playerid, carpentryObject[playerid]);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -201,7 +201,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Doslo je do greskice!");
 
             ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
-            DestroyDynamicObject(carpentryObject[playerid]);
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
             SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_CARVING);
             return (true);
         }
@@ -221,7 +221,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite drvo!");
 
             carryObj[playerid] = true;
-            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            AttachPlayerObjectToPlayer(playerid, carpentryObject[playerid], playerid, 0.5, 0.5, 0.00, 0.00, 0.00, 0.00);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
             return (true);
         }
@@ -240,7 +240,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_POLISHING) 
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa poliranja!");
 
-            DestroyDynamicObject(carpentryObject[playerid]);
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
             ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
             SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_POLISHING);
             return (true);
@@ -261,12 +261,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_COATING) 
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa premazivanja!");
 
-            DestroyDynamicObject(carpentryObject[playerid]);
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
 
-            carpentryObject[playerid] = CreateDynamicObject(2096, 1395.9418,-28.8385,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            MoveDynamicObject(carpentryObject[playerid], 1395.9574,-33.4059,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000);
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, 1395.9418,-28.8385,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, 30.0); 
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            MovePlayerObject( playerid, carpentryObject[playerid], 1395.9574,-33.4059,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000);
 
             mvProgress[playerid] = 1;
 
@@ -302,7 +302,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             carpentryProgress[playerid] = CARPENTRY_PROGRESS_UNKNOWN;
             carpentryTools[playerid] = false;
             mvProgress[playerid] = 0;
-            DestroyDynamicObject(carpentryObject[playerid]);
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
             return (true);
         }
     }
@@ -310,30 +310,27 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnDynamicObjectMoved(STREAMER_TAG_OBJECT:objectid) {
+hook OnPlayerObjectMoved(playerid, objectid){
 
-    foreach(new i : Player) {
+    if(objectid == carpentryObject[playerid]) {
 
-        if(mvProgress[i] == 0) continue;
 
-        if(mvProgress[i] == 1) {
+        if(mvProgress[playerid] == 1) {
 
-            DestroyDynamicObject(carpentryObject[i]);
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
 
-            carpentryObject[i] = CreateDynamicObject(2096, 1398.6428,-33.4058,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, i + 1, 25, -1, 300.00, 300.00); 
-            SetDynamicObjectMaterial(carpentryObject[i], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            SetDynamicObjectMaterial(carpentryObject[i], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            MoveDynamicObject(carpentryObject[i], 1398.6108,-28.9143,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000 /**/);
-            mvProgress[i] = 2;
-            break;
+            carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, 1398.6428,-33.4058,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, 30.0); 
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            MovePlayerObject(playerid, carpentryObject[playerid], 1398.6108,-28.9143,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000 /**/);
+            mvProgress[playerid] = 2;
         }
 
-        if(mvProgress[i] == 2) {
+        if(mvProgress[playerid] == 2) {
 
-            DestroyDynamicObject(carpentryObject[i]);
-            mvProgress[i] = 3;
-            SetTimerEx("Carpentry_ContinueTimer", 1000, false, "dd", i, 101);
-            break;
+            DestroyPlayerObject(playerid, carpentryObject[playerid]);
+            mvProgress[playerid] = 3;
+            SetTimerEx("Carpentry_ContinueTimer", 1000, false, "dd", playerid, 101);
         }
     }
 
