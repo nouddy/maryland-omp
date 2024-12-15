@@ -263,10 +263,10 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             DestroyDynamicObject(carpentryObject[playerid]);
 
-            carpentryObject[playerid] = CreateDynamicObject(2096, 1395.9418,-28.8385,1001.6611, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            carpentryObject[playerid] = CreateDynamicObject(2096, 1395.9418,-28.8385,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
             SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
             SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            MoveDynamicObject(carpentryObject[playerid], 1395.9574,-33.4059,1001.6611, 0.7, 0.000, 0.000, 0.000);
+            MoveDynamicObject(carpentryObject[playerid], 1395.9574,-33.4059,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000);
 
             mvProgress[playerid] = 1;
 
@@ -320,10 +320,10 @@ hook OnDynamicObjectMoved(STREAMER_TAG_OBJECT:objectid) {
 
             DestroyDynamicObject(carpentryObject[i]);
 
-            carpentryObject[i] = CreateDynamicObject(2096, 1398.6428,-33.4058,1001.6611, 0.000000, 0.000000, 0.000000, i + 1, 25, -1, 300.00, 300.00); 
+            carpentryObject[i] = CreateDynamicObject(2096, 1398.6428,-33.4058,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, i + 1, 25, -1, 300.00, 300.00); 
             SetDynamicObjectMaterial(carpentryObject[i], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
             SetDynamicObjectMaterial(carpentryObject[i], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
-            MoveDynamicObject(carpentryObject[i], 1398.6108,-28.9143,1001.6611, 0.7, 0.000, 0.000, 0.000 /**/);
+            MoveDynamicObject(carpentryObject[i], 1398.6108,-28.9143,1001.6611 - 1.0, 0.7, 0.000, 0.000, 0.000 /**/);
             mvProgress[i] = 2;
             break;
         }

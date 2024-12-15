@@ -27,6 +27,8 @@ stock CreateCustomMarker(const text[], Float:vXU, Float:vYU, Float:vZU, vInt, vV
     CreateMarker(vXU, vYU, vZU-0.9, radius, vVW, vInt, MarkerColour);
 }
 
+
+
 hook OnGameModeInit()
 {
 	print("assets/labels.asset loaded");

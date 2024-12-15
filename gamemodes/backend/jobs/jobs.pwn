@@ -1,7 +1,7 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define MAX_JOBS                 (5)
+#define MAX_JOBS                 (6)
 #define MAX_JOB_LEN              (32)
 
 #define INVALID_JOB_ID           (-1)
@@ -24,7 +24,8 @@ enum {
     JOB_MECHANIC,
     JOB_BUS_DRIVER,
     JOB_MEDIC,
-    JOB_CARPENTRY
+    JOB_CARPENTRY,
+    JOB_MOWER
 }
 
 enum e_JOB_DATA {
@@ -54,7 +55,8 @@ new jobInfo[MAX_JOBS][e_JOB_DATA] = {
     {JOB_MECHANIC, "Mehanicar", JOB_QUALIFICATION_NONE, {1088.4877,-1185.4963,21.9630}, {1103.1801,-1184.1455,18.3704}, 50, 2500, INVALID_BUSINESS_ID, 3, 525},
     {JOB_BUS_DRIVER, "Vozac Autobusa", JOB_QUALIFICATION_HIGH_SCHOOL, {1752.5388,-1894.2367,13.5574}, {1753.8374,-1885.9547,13.5571}, 253, 3500, INVALID_BUSINESS_ID, 2, 431},
     {JOB_MEDIC, "Bolnicar", JOB_QUALIFICATION_COLLEGE, {1145.2380,-1303.6646,1019.4139}, {1148.7601,-1302.8539,1019.4139}, 274, 4500, INVALID_BUSINESS_ID, 4, 416},
-    {JOB_CARPENTRY, "Stolar", JOB_QUALIFICATION_NONE, {122.3619,-294.1564,1.5781}, {1417.1678,-30.5823,1000.9615}, 16, 4500, INVALID_BUSINESS_ID, 2, INVALID_VEHICLE_ID}
+    {JOB_CARPENTRY, "Stolar", JOB_QUALIFICATION_NONE, {122.3619,-294.1564,1.5781}, {1417.1678,-30.5823,1000.9615}, 16, 4500, INVALID_BUSINESS_ID, 2, INVALID_VEHICLE_ID},
+    {JOB_MOWER, "Kosac Trave", JOB_QUALIFICATION_NONE, {1228.2214,-2363.1228,10.7937}, {1234.0742,-2359.8420,10.7937}, 162, 950, INVALID_BUSINESS_ID, 2, 572}
 };
 
 new Text3D:jobLabel[MAX_JOBS][2],
@@ -87,6 +89,7 @@ stock Job_SetPlayerJob(const playerid, job) {
         SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste dali otkaz!");
         playerJob[playerid] = INVALID_JOB_ID;
         playerUniform[playerid] = INVALID_JOB_ID;    
+        SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
     }
 
     if(playerJob[playerid] != INVALID_JOB_ID) return 
@@ -260,6 +263,16 @@ YCMD:job(playerid, params[], help) {
                                                                  "OK", "", jobInfo[playerJob[playerid]][jobName], jobInfo[playerJob[playerid]][jobContract]);
 
     return 1;
+}
+
+YCMD:otkaz(playerid, params[], help) {
+
+    if(playerJob[playerid] == INVALID_JOB_ID) 
+        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
+        
+    job.SetPlayerJob(playerid, INVALID_JOB_ID);
+
+    return (true);
 }
 
 YCMD:jobhelp(playerid, params[], help) 

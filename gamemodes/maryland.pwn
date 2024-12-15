@@ -370,6 +370,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/jobs/jobs.pwn"
 #include "backend/jobs/bus-driver.job"
 #include "backend/jobs/carpentry.job"
+#include "backend/jobs/mower-job.pwn"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"

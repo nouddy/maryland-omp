@@ -23,3 +23,19 @@
 [23:33:40] #0 0021ed7c in ?? (65535) in <unknown>
 [23:33:40] #1 00220f98 in ?? (1, 65535, 1084122727, 54, 3) in <unknown>
 [23:33:40] #2 0007fc78 in public OnPlayerTakeDamage (1, 65535, 1084122727, 54, 3) in <unknown>
+[15:44:37] Run time error 4: "Array index out of bounds"
+[15:44:37]  Attempted to read/write array element at negative index -1
+[15:44:37] AMX backtrace:
+[15:44:37] #0 00865248 in ?? (0, -1) in <unknown>
+[15:44:37] #1 00867658 in ?? (0, 51232852, 0) in <unknown>
+[15:44:37] #2 000c5a1c in ?? (0, 84275632, 0) in <unknown>
+[15:44:37] #3 000cb444 in ?? (0, 84275632) in <unknown>
+[15:44:37] #4 0007d7d8 in public OnPlayerCommandText (0, 84275632) in <unknown>
+[16:56:12] Run time error 4: "Array index out of bounds"
+[16:56:12]  Attempted to read/write array element at negative index -1
+[16:56:12] AMX backtrace:
+[16:56:12] #0 00865248 in ?? (0, -1) in <unknown>
+[16:56:12] #1 00867658 in ?? (0, 51232852, 0) in <unknown>
+[16:56:12] #2 000c5a1c in ?? (0, 84275632, 0) in <unknown>
+[16:56:12] #3 000cb444 in ?? (0, 84275632) in <unknown>
+[16:56:12] #4 0007d7d8 in public OnPlayerCommandText (0, 84275632) in <unknown>

@@ -169,6 +169,17 @@ stock Hud_ShowInterface(playerid) {
     return (true);
 }
 
+YCMD:debugui(playerid, params[], help) {
+
+    for(new i = 0; i < sizeof mhud_UI; i++) {
+        TextDrawHideForPlayer(playerid, mhud_UI[i]);
+    }
+
+    PlayerTextDrawHide(playerid, money_UI[playerid]);
+
+    return (true);
+}
+
 hook OnGameModeInit()
 {
     print("frontend/main.tde loaded");
