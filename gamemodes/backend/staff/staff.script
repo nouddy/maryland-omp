@@ -24,10 +24,6 @@ static
 
 new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
 
-new e_SPECTATE_SUSPECT[MAX_PLAYERS],
-	e_SPECTATE_STATE[MAX_PLAYERS],
-	bool:e_SPECTATE_ACTIVE[MAX_PLAYERS];
-
 
 enum {
 	e_ASSISTANT = 1,
@@ -403,10 +399,6 @@ YCMD:setskin(playerid, const string: params[], help)
 	CharacterInfo[targetid][Skin] = skinid;
 
 	UpdateSqlInt(SQL, "characters", "cSkin", skinid, "character_id", GetCharacterSQLID(targetid));
-
-	PlayerTextDrawHide(targetid, Player_TDs[targetid][1]);
-	PlayerTextDrawSetPreviewModel(targetid, Player_TDs[targetid][1], CharacterInfo[targetid][Skin]);
-    PlayerTextDrawShow(targetid, Player_TDs[targetid][1]);
 
     return 1;
 }

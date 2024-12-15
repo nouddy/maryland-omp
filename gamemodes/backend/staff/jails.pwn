@@ -23,7 +23,7 @@
 //*--->>> vars
 //*==============================================================================
 
-enum JAIL_TYPE {
+enum  {
 
     JAIL_TYPE_UNKNOWN,
     JAIL_TYPE_ALCATRAZ,
@@ -39,7 +39,7 @@ enum {
 enum e_PLAYER_JAIL_DATA {
 
     characterID,
-    JAIL_TYPE:jType,
+    jType,
     jTime,
     jBy[MAX_PLAYER_NAME],
     jDate[64]
@@ -140,6 +140,8 @@ hook OnCharacterLoaded(playerid) {
 //*--->>> commands
 //*==============================================================================
 
+//*Jebem ti mikrovalnu, jebem ti dnevni boravak, gle sad ovo ono pajsad
+
 YCMD:jail(playerid, params[], help) 
 {
 
@@ -152,15 +154,15 @@ YCMD:jail(playerid, params[], help)
 
 	if(targetid == INVALID_PLAYER_ID) return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru", "!", BOXCOLOR_RED);
     
-    if(JAIL_TYPE:type != JAIL_TYPE_ALCATRAZ) return (true);
+    if(type != JAIL_TYPE_ALCATRAZ) return (true);
 
     new q[288];
     mysql_format(SQL, q, sizeof q, "INSERT INTO `player_jails` (`character_id`, `jailTime`, `jailType`, `jailedBy`, `jailDate`) VALUES \
                                     ('%d', '%d', '%d', `%e`, NOW())", GetCharacterSQLID(targetid), time, type, ReturnPlayerName(playerid) );
     mysql_tquery(SQL, q);
 
-    PlayerJail[playerid][jailTime] = time;
-    PlayerJail[playerid][jType] = JAIL_TYPE:type;
+    PlayerJail[playerid][jTime] = time;
+    PlayerJail[playerid][jType] = type;
 
     SendClientMessage(playerid, -1, "DEBUG: Aj z!");
 

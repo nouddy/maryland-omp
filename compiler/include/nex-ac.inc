@@ -314,8 +314,6 @@ bool:ac_NOPAllow[] =
 	true	//11 Anti-NOP RemovePlayerFromVehicle
 };
 
-new Logger:nex_ac_log;
-
 static const ac_Mtfc[][] =
 {
 	{120, 8},	//0 OnDialogResponse
@@ -3573,7 +3571,6 @@ static AntiCheatGetNextDialog(playerid)
 
 public OnGameModeInit()
 {
-	nex_ac_log = CreateLog("nex_ac");
 
 	#if AC_USE_CONFIG_FILES
 		if(!ac_LoadCfg()) printf(CFG_OPENING_ERROR, AC_CONFIG_FILE);

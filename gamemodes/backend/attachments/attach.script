@@ -23,7 +23,6 @@ hook OnGameModeInit()
 {
 	print("attachments/attach.script loaded");
 
-
     return 1;
 }
 

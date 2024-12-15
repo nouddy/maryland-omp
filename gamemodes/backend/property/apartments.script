@@ -49,5 +49,4 @@ enum e_APARTMENT_DATA {
     bool:apartmentLocked,
 
     apartmentMoney
-
 }

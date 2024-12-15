@@ -267,33 +267,6 @@ public safeZoneLabel(id)
     /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
 
 */
-hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
-
-	foreach(new s : SafeZone)
-	{
-		if(areaid == SafeZone[s][safeID]) 
-		{
-            TextDrawSetStringForPlayer(Global_TD[77], playerid, "SAFE");
-			InSafeZone[playerid] = true;
-		}
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-hook OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
-
-	foreach(new i : SafeZone)
-	{
-		if(areaid == SafeZone[i][safeID]) 
-		{
-            TextDrawSetStringForPlayer(Global_TD[77], playerid, "UNSAFE");
-			InSafeZone[playerid] = false;
-		}
-	}
-
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
 
 GetNearestSafe(playerid)
 {

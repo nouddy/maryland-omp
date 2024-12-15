@@ -83,7 +83,7 @@ CreatePickupsAnd3Ds()
     CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1201.1162, 2565.0740, -21.6386, 0, 10, 50.0);
     //? Hotel Maryland
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 1785.1909,-1296.4972,13.3967,  0, 0, 50.0); //ulaz
-    CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1284.1803,8.6575,1004.5601, 22, 0, 50.0); //izlaz recepcija
+    CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1284.1803,5.6575,1004.5601, 22, 0, 50.0); //izlaz recepcija
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Da koristite lift 'F'", 1281.4939,-45.6868,1000.8384, 22, 0, 50.0); //lift kod recepcije
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Da koristite lift 'F'", 1786.6508,-1300.3116,54.9062, 0, 7, 50.0);  //Lift kod soba
     
@@ -103,7 +103,9 @@ CreatePickupsAnd3Ds()
     BizCenter[1] = CreateMarker(1825.2643,-1286.4944,131.7544-0.9, 50.0, 0, 0);
     //
     
-
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"'Za izllaz pritisnite 'F'", 1372.1616,-22.0082,1000.9615,  25, 0, 50.0); //Izlaz stolarija
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 122.7126,-298.3658,1.5781, 0, 0, 50.0); //Ulaz Stolarija
+    
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -111,6 +113,23 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(newkeys & KEY_SECONDARY_ATTACK)
     {
+
+        if(IsPlayerInRangeOfPoint(playerid, 2.01, 1372.1616,-22.0082,1000.9615)) {
+
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 122.7126,-298.3658,1.5781);
+            SetCameraBehindPlayer(playerid);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 2.01, 122.7126,-298.3658,1.5781)) {
+
+            SetPlayerInterior(playerid, 25);
+            SetPlayerVirtualWorld(playerid, playerid+1);
+            SetPlayerPos(playerid, 1372.1616,-22.0082,1000.9615);
+            SetCameraBehindPlayer(playerid);
+        }
+
         //? Maryland Opstina
         if(IsPlayerInRangeOfPoint(playerid, 3.0, 1482.6442,-1805.5509,18.7957) || IsPlayerInRangeOfPoint(playerid, 3.0, 1451.9034,-1805.8535,13.5661)) //Opstina Maryland ulaz
         {
@@ -156,7 +175,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1785.1909,-1296.4972,13.3967) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) // Hotel ulaz
         {
             SetPlayerInterior(playerid, 22);
-            SetPlayerPos(playerid, 1284.1803,8.6575,1004.5601);
+            SetPlayerPos(playerid, 1284.1803,5.6575,1004.5601);
             SetCameraBehindPlayer(playerid);
         }
         //Hotel ulaz u sobe
@@ -176,7 +195,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
             SetCameraBehindPlayer(playerid);
         }
         // Hotel izlaz
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1284.1803,8.6575,1004.5601) && GetPlayerInterior(playerid) == 22) // Hotel izlaz
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1284.1803,5.6575,1004.5601) && GetPlayerInterior(playerid) == 22) // Hotel izlaz
         {
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);

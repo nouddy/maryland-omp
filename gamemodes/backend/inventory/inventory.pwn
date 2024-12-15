@@ -100,9 +100,9 @@ enum {
     INVENTORY_ITEM_LIGHTER,
     INVENTORY_ITEM_BEER,
     INVENTORY_ITEM_CHICKEN_BURGER,
-    INVENTORY_ITEM_HASH,        // 58
-    INVENTORY_ITEM_COCAINE,     // 59
-    INVENTORY_ITEM_MDMA,       // 60
+    INVENTORY_ITEM_HASH,        
+    INVENTORY_ITEM_COCAINE,     
+    INVENTORY_ITEM_MDMA,       
 
     //*     >> [ DRUG PREP ITEMS ] <<
 
@@ -474,7 +474,6 @@ YCMD:inventory(playerid, params[], help) {
 
     if(!Inventory_IsInterfaceActive(playerid)) {
 
-        TogglePlayerTextDraw(playerid, false);
         ToggleGlobalTextDraw(playerid, false);
         Inventory_InterfaceControl(playerid, true);
         return Y_HOOKS_CONTINUE_RETURN_1;
@@ -483,9 +482,7 @@ YCMD:inventory(playerid, params[], help) {
     else {
 
         Inventory_InterfaceControl(playerid, false);
-        TogglePlayerTextDraw(playerid, true);
         ToggleGlobalTextDraw(playerid, true);
-        PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
     }
 
     return 1;
@@ -841,7 +838,6 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
         Inventory_ResetInterface(playerid);
         Inventory_InterfaceControl(playerid, false);
-        TogglePlayerTextDraw(playerid, true);
         ToggleGlobalTextDraw(playerid, true);
         return Y_HOOKS_BREAK_RETURN_1;
     }

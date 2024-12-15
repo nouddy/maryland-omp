@@ -1087,15 +1087,15 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         GetPlayerWeaponData(playerid, ammunation_ItemList[WeaponID][weaponSlot], playerWeapon, playerAmmo);
 
         if(playerWeapon == ammunation_ItemList[WeaponID][weaponID])
-            return SendClientMessage(playerid, x_green, ">> Vec posjedujete ovo oruzje!");
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec posjedujete ovo oruzje!");
 
         if(GetPlayerMoney(playerid) < ammunation_ItemList[WeaponID][weaponPrice])
-            return SendClientMessage(playerid, x_green, ">> Potrebno vam je $%d za kupovinu ovog oruzja!", ammunation_ItemList[WeaponID][weaponPrice]);
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white" Potrebno vam je $%d za kupovinu ovog oruzja!", ammunation_ItemList[WeaponID][weaponPrice]);
 
         if(ammunation_ItemList[WeaponID][weaponSlot] == WEAPON_SLOT_MELEE) {
 
             GivePlayerWeapon(playerid, ammunation_ItemList[WeaponID][weaponID], 1);
-            SendClientMessage(playerid, x_green, ">> Uspjesno ste kupili %s!", ammunation_ItemList[WeaponID][weaponName] );
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", ammunation_ItemList[WeaponID][weaponName] );
             GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponPrice]);
 
             return Y_HOOKS_BREAK_RETURN_1;
@@ -1115,7 +1115,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         }
 
         GivePlayerWeapon(playerid, ammunation_ItemList[WeaponID][weaponID], 30);
-        SendClientMessage(playerid, x_green, ">> Uspjesno ste kupili %s sa 30 municije!", ammunation_ItemList[WeaponID][weaponName] );
+        SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s sa 30 municije!", ammunation_ItemList[WeaponID][weaponName] );
         GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponPrice]);
 
     }
@@ -1130,25 +1130,25 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         GetPlayerWeaponData(playerid, ammunation_ItemList[WeaponID][weaponSlot], playerWeapon, playerAmmo);
 
         if(playerWeapon != ammunation_ItemList[WeaponID][weaponID])
-            return SendClientMessage(playerid, x_green, ">> Ne posjedujete ovo oruzje!");
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovo oruzje!");
 
         if(GetPlayerMoney(playerid) < ammunation_ItemList[WeaponID][weaponMagPrice])
-            return SendClientMessage(playerid, x_green, ">> Potrebno vam je $%d za kupovinu municije ovog oruzja!", ammunation_ItemList[WeaponID][weaponMagPrice]);
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Potrebno vam je $%d za kupovinu municije ovog oruzja!", ammunation_ItemList[WeaponID][weaponMagPrice]);
 
         if(ammunation_ItemList[WeaponID][weaponSlot] == WEAPON_SLOT_MELEE || ammunation_ItemList[WeaponID][weaponSlot] == WEAPON_SLOT_UNKNOWN) {
 
-            SendClientMessage(playerid, x_green, ">> Za %s ne mozete kupovati municiju!", ammunation_ItemList[WeaponID][weaponName] );
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Za %s ne mozete kupovati municiju!", ammunation_ItemList[WeaponID][weaponName] );
             return Y_HOOKS_BREAK_RETURN_1;
         }
 
         if(playerAmmo >= ammunation_ItemList[WeaponID][weaponMaxMag]) {
 
-            SendClientMessage(playerid, x_green, ">> Za %s imate maksimalno municije!", ammunation_ItemList[WeaponID][weaponName] );
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Za %s imate maksimalno municije!", ammunation_ItemList[WeaponID][weaponName] );
             return Y_HOOKS_BREAK_RETURN_1;
         }
 
         GivePlayerWeapon(playerid, ammunation_ItemList[WeaponID][weaponID], ammunation_ItemList[WeaponID][weaponMag]);
-        SendClientMessage(playerid, x_green, ">> Uspjesno ste kupili %d municije za %d$", ammunation_ItemList[WeaponID][weaponMag], ammunation_ItemList[WeaponID][weaponMagPrice] );
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %d municije za %d$", ammunation_ItemList[WeaponID][weaponMag], ammunation_ItemList[WeaponID][weaponMagPrice] );
         GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponMagPrice]);
 
         SetPlayerArmedWeapon(playerid, ammunation_ItemList[WeaponID][weaponID]);
@@ -1159,7 +1159,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         new ProductID = business_ChosenItem[playerid];
 
         if(GetPlayerMoney(playerid) < business_ItemList[ProductID][productPrice])
-            return SendClientMessage(playerid, x_green, ">> Nemate dovoljno novca za ovaj produkt!");
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca za ovaj produkt!");
 
         if(business_ItemList[ProductID][productWeaponID] != WEAPON_UNKNOWN) {
 
@@ -1172,7 +1172,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
                 if(pWeapon == business_ItemList[ProductID][productWeaponID] && pAmmo > 0 ) return SendClientMessage(playerid, x_server, ">> Vec posjedujete ovaj produkt!");
 
                 GivePlayerMoney(playerid, -business_ItemList[ProductID][productPrice]);
-                SendClientMessage(playerid, x_green, ">> Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
+                SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
                 GivePlayerWeapon(playerid, business_ItemList[ProductID][productWeaponID], 1);
 
                 return Y_HOOKS_BREAK_RETURN_1;
@@ -1186,14 +1186,23 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
             GetPlayerHealth(playerid, pHP);
 
             if(pHP > 85.00 && pHP < 100.00) return SetPlayerHealth(playerid, 100);
-            else if(pHP == 100.00) return SendClientMessage(playerid, x_green, ">> Ne mozete vise jesti!");
+            else if(pHP == 100.00) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete vise jesti!");
 
             SetPlayerHealth(playerid, pHP+15.00);
 
         }
 
+
+        if(GetPlayerMoney(playerid) < business_ItemList[ProductID][productPrice] )
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca "c_server"(%d$)", business_ItemList[ProductID][productPrice] );
+
+        if(Inventory_GetItemQuantity(playerid, business_ItemList[ProductID][productInventory]) >= sz_quantityInfo[business_ItemList[ProductID][productInventory]-50][maxQuantity])
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec imate maksimalnu kolicinu ovog produkta u inventaru!");
+
         GivePlayerMoney(playerid, -business_ItemList[ProductID][productPrice]);
-        SendClientMessage(playerid, x_green, ">> Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
+
+        Inventory_AddItem(playerid, business_ItemList[ProductID][productInventory], 1);
     }
 
     else if(playertextid == BUSINESS_TD_EXIT) {
@@ -1323,7 +1332,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         new WeaponID = ammunation_ChosenWeapon[playerid];
 
                         ammunation_WeaponPickup[playerid] = CreatePlayerPickup(playerid, ammunation_ItemList[WeaponID][weaponModel], 1, 290.6817,-110.6698,1002.5266, GetPlayerVirtualWorld(playerid));
-                        SendClientMessage(playerid, x_green, ">> Chosen Weapon - %s", ammunation_ItemList[WeaponID][weaponName]);
 
                         ammunation.ShowInterfaceForPlayer(playerid, true);
                         ammunation.UpdateDamageStatus(playerid, WeaponID);
@@ -1535,7 +1543,7 @@ YCMD:buybusiness(playerid, params[], help)
                                          re_BusinessData[BID][bID], GetCharacterSQLID(playerid));
     mysql_tquery(MySQL:SQL, q);
 
-    SendClientMessage(playerid, x_green, "[BUSINESS] >> "c_white"Uspjesno ste kupili firmu!");
+    SendClientMessage(playerid, x_server, "business \187; "c_white"Uspjesno ste kupili firmu!");
 
     return 1;
 }

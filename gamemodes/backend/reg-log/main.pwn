@@ -617,7 +617,6 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
-	TogglePlayerTextDraw(playerid, true);
 
 	SetTimerEx("delayed_Spawn", 150, false, "d", playerid);
 	return 1;
@@ -633,9 +632,6 @@ public delayed_Spawn(playerid) {
 	SetPlayerInterior(playerid, 6);
 	SpawnPlayer(playerid);
 	
-	PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
-	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
-    PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
@@ -647,9 +643,7 @@ public OnCharacterLoaded(playerid) {
 
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	Hud_ShowInterface(playerid);
-	UpdateWantedLevel(playerid, CharacterInfo[playerid][WantedLevel]);
 	UpdateMoneyTD(playerid);
-
 	return 1;
 }
 
@@ -949,10 +943,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
-	TogglePlayerTextDraw(playerid, true);
 
-	PlayerTextDraw_UpdateModel(playerid, Player_TDs[playerid][1], GetPlayerSkin(playerid));
-	//PlayerTextDrawSetString(playerid, Player_TDs[playerid][0], "Test Name");
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
@@ -960,15 +951,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	return;
 }
 
-/*
-hook OnPlayerSpawned(playerid)
-{
-	if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
-		TogglePlayerTextDraw(playerid, true);
-	
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-*/
+
 hook OnPlayerSlectedSlider(playerid, KEY:leftright, bool:selected)
 {
 	if(pSelectionType[playerid] == PLAYER_SELECTION_SKIN) 

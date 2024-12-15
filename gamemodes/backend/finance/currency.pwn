@@ -65,6 +65,7 @@ stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MON
         mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEGPound` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_POUND), GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
+    Hud_ShowInterface(playerid);
     UpdateMoneyTD(playerid);
     return pMoney[playerid][type];
 }
@@ -94,7 +95,7 @@ stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TY
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
     }
-
+    Hud_ShowInterface(playerid);
     UpdateMoneyTD(playerid);
     return pMoney[playerid][type];
 }

@@ -176,7 +176,6 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
     PlayerPrison[player][jailedBy] = sstr;  
 
     CharacterInfo[player][WantedLevel] = 0;
-    UpdateWantedLevel(player, CharacterInfo[player][WantedLevel]);
     UpdateSqlInt(SQL, "characters", "cWanted", 0, "character_id", GetCharacterSQLID(player));
 
     SetTimerEx("Prisono_DecreasePlayerTime", 60 * 1000, false, "d", player);
@@ -192,14 +191,12 @@ stock Police_SetPlayerWantedLevel(target, wanted, const reason[] = "Nepoznat") {
     if(wanted == 0) {
 
         CharacterInfo[target][WantedLevel] = 0;
-        UpdateWantedLevel(target, wanted);
         return ~1;
     }
 
     SendClientMessage(target, x_red, "wanted \187; "c_white"Dobili ste "c_red"%d "c_white"wanted levela.", wanted);
     SendClientMessage(target, x_red, "wanted \187; "c_white"Razlog : "c_red"%s", reason);
     CharacterInfo[target][WantedLevel] = wanted;
-    UpdateWantedLevel(target, wanted);
 
     return (true);
 }

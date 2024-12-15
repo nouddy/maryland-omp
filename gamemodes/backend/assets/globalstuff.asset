@@ -38,8 +38,7 @@ hook OnGameModeInit()
 }
 
 
-new Text:Global_TD[81];
-new PlayerText:Player_TDs[MAX_PLAYERS][7];
+new Text:Global_TD[30];
 // new PlayerText:Register_PTD[MAX_PLAYERS][70];
 // new PlayerText:ChooseSkin_PTD[MAX_PLAYERS][9];
 

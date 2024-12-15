@@ -1,0 +1,358 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Noddy
+ *  @Date           1st December 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           carpentry.job
+ *  @Module         jobs
+*/
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+#define INDEX_SLOT_CARPENTRY     ( 8 )
+
+enum {
+
+    CARPENTRY_PROGRESS_UNKNOWN,
+    CARPENTRY_PROGRESS_BEGIN,
+    CARPENTRY_PROGRESS_CARVING,
+    CARPENTRY_PROGRESS_POLISHING,
+    CARPENTRY_PROGRESS_COATING,
+    CARPENTRY_PROGRESS_FINISH
+}
+
+new carpentryProgress[MAX_PLAYERS],
+    carpentryObject[MAX_PLAYERS],
+    bool:carpentryTools[MAX_PLAYERS],
+    bool:carryObj[MAX_PLAYERS],
+    mvProgress[MAX_PLAYERS];
+
+forward Carpentry_ContinueTimer(playerid, option); 
+public Carpentry_ContinueTimer(playerid, option) {
+
+    switch(option) { 
+
+        case CARPENTRY_PROGRESS_BEGIN: {
+
+            ClearAnimations(playerid);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uzmite neobradjeno drvo sa palete, te ga odnesite na masinu");
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_CARVING;
+
+            carpentryObject[playerid] = CreateDynamicObject(1453, 1416.087036, -26.280941, 1002.152648, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 18065, "ab_sfammumain", "plywood_gym", 0x00000000);
+
+            return (true);
+        }
+
+        case CARPENTRY_PROGRESS_CARVING: {
+
+            ClearAnimations(playerid);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uspjesno ste preradili drvo, odnesite ga na masinu za poliranje");
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_POLISHING;
+
+            new Float:pPos[3];
+            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);  
+
+            ClearAnimations(playerid);
+
+            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            TogglePlayerControllable(playerid, true);
+            return (true);
+        }
+
+        case CARPENTRY_PROGRESS_POLISHING: {
+
+            SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uspjesno ste obrusili drvo, odnesite ga na traku za premazivanje");
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_COATING;
+
+            new Float:pPos[3];
+            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);  
+
+            ClearAnimations(playerid);
+
+            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            TogglePlayerControllable(playerid, true);
+            return (true);
+        }
+
+        case 101: {
+
+            new Float:pPos[3];
+            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+            carpentryObject[playerid] = CreateDynamicObject(2096, pPos[0], pPos[1], pPos[2], 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+
+            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odnesi zavrsni produkt do police za transport kako bi zavrsio sa poslom!");
+            ClearAnimations(playerid);
+            TogglePlayerControllable(playerid, true);
+
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_FINISH;
+            return (true);
+        }
+
+
+        case CARPENTRY_PROGRESS_COATING: {
+
+            ClearAnimations(playerid);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uspjesno ste obrusili drvo, odnesite ga na traku za premazivanje");
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_COATING;
+            return (true);
+        }
+    }
+
+    return (true);
+}
+
+hook OnGameModeInit() {
+
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste uzeli alat", 1418.1774,-18.6627,1003.7561,  25, -1, 50.0);
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste dezinficirali alat", 1406.4669,-19.2442,1000.9615, 25, -1, 50.0);
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste zapoceli obradu drveta", 1406.9081,-29.2071,1000.9615,  25, -1, 50.0);
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste zapoceli brusenje drveta", 1401.8640,-32.3924,1000.9615,  25, -1, 50.0); 
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste premazali produkt zastitom", 1395.7720,-27.9602,1000.9615,  25, -1, 50.0);
+    CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"Pritsnite 'N' kako biste odlozili zavrsni produkt", 1377.4749,-17.5984,1000.9615,  25, -1, 50.0);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    carpentryProgress[playerid] = CARPENTRY_PROGRESS_UNKNOWN;
+    carpentryTools[playerid] = false;
+    mvProgress[playerid] = 0;
+    
+    if(IsValidDynamicObject(carpentryObject[playerid]))
+        DestroyDynamicObject(carpentryObject[playerid]);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED(KEY_NO)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 2.50, 1418.1774,-18.6627,1003.7561)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec posjedujete alat za preradu drveta!");
+
+            carpentryTools[playerid] = true;
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uzeli ste alat za preradjivanje drveta");
+            return (true);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1406.4669,-19.2442,1000.9615)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+
+            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            SetTimerEx("Carpentry_ContinueTimer", 7000, false, "dd", playerid, CARPENTRY_PROGRESS_BEGIN);
+            return (true);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1406.9081,-29.2071,1000.9615)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+            
+            if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_CARVING)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Doslo je do greskice!");
+
+            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            DestroyDynamicObject(carpentryObject[playerid]);
+            SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_CARVING);
+            return (true);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1416.087036, -26.280941, 1002.152648)) {
+            
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+            
+            if(carryObj[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite drvo!");
+
+            carryObj[playerid] = true;
+            AttachDynamicObjectToPlayer(carpentryObject[playerid], playerid, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+            return (true);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1401.8640,-32.3924,1000.9615)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+
+            if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_POLISHING) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa poliranja!");
+
+            DestroyDynamicObject(carpentryObject[playerid]);
+            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_POLISHING);
+            return (true);
+
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1395.7720,-27.9602,1000.9615)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+
+            if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_COATING) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa premazivanja!");
+
+            DestroyDynamicObject(carpentryObject[playerid]);
+
+            carpentryObject[playerid] = CreateDynamicObject(2096, 1395.9418,-28.8385,1001.6611, 0.000000, 0.000000, 0.000000, playerid + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            MoveDynamicObject(carpentryObject[playerid], 1395.9574,-33.4059,1001.6611, 0.7, 0.000, 0.000, 0.000);
+
+            mvProgress[playerid] = 1;
+
+            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            return (true);
+
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.7, 1377.4749,-17.5984,1000.9615)) {
+
+            if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+            if(playerUniform[playerid] != JOB_CARPENTRY)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+
+            if(!carpentryTools[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
+
+            if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_FINISH) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do zadnje faze!");
+
+            /* FINISH */
+
+            new xRand = RandomMinMax(100, 300);
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili sa poslom, i zaradili "c_server"%d$!", xRand);
+            GivePlayerMoney(playerid, xRand);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+            ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
+
+            carryObj[playerid] = false;
+            carpentryTools[playerid] = false;
+            carpentryProgress[playerid] = CARPENTRY_PROGRESS_UNKNOWN;
+            carpentryTools[playerid] = false;
+            mvProgress[playerid] = 0;
+            DestroyDynamicObject(carpentryObject[playerid]);
+            return (true);
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnDynamicObjectMoved(STREAMER_TAG_OBJECT:objectid) {
+
+    foreach(new i : Player) {
+
+        if(mvProgress[i] == 0) continue;
+
+        if(mvProgress[i] == 1) {
+
+            DestroyDynamicObject(carpentryObject[i]);
+
+            carpentryObject[i] = CreateDynamicObject(2096, 1398.6428,-33.4058,1001.6611, 0.000000, 0.000000, 0.000000, i + 1, 25, -1, 300.00, 300.00); 
+            SetDynamicObjectMaterial(carpentryObject[i], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            SetDynamicObjectMaterial(carpentryObject[i], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
+            MoveDynamicObject(carpentryObject[i], 1398.6108,-28.9143,1001.6611, 0.7, 0.000, 0.000, 0.000 /**/);
+            mvProgress[i] = 2;
+            break;
+        }
+
+        if(mvProgress[i] == 2) {
+
+            DestroyDynamicObject(carpentryObject[i]);
+            mvProgress[i] = 3;
+            SetTimerEx("Carpentry_ContinueTimer", 1000, false, "dd", i, 101);
+            break;
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:prerada(playerid, params[], help) {
+
+    if(playerJob[playerid] != JOB_CARPENTRY) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zaposleni kao stolar!");
+
+    if(playerUniform[playerid] != JOB_CARPENTRY)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste uzeli opremu!");
+    
+    if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_UNKNOWN) 
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste zapoceli sa poslom!");
+    
+    carpentryProgress[playerid] = CARPENTRY_PROGRESS_BEGIN;
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odnesite alat do mjesta za dezinfekciju, i premazivanje!");
+
+    return (true);
+}

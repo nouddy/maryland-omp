@@ -181,7 +181,7 @@ stock Container_ReturnItemModel(item) {
 }
 
 stock Inventory_IsInterfaceActive(playerid) {
-
+    
     return inventoryShown[playerid];
 }
 

@@ -13,7 +13,7 @@ enum {
 }
 
 
-new faction_ProhibitedSkins[17] = {
+static const faction_ProhibitedSkins[17] = {
 
     //      >> [ Grove Street Families ] <<
 
@@ -284,22 +284,22 @@ YCMD:f(playerid, params[], help) {
     return 1;
 }
 
-YCMD:faction(playerid, params[], help) {
+// YCMD:faction(playerid, params[], help) {
 
-    if(FactionMember[playerid][factionID] == 0) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne organizacije!");
+//     if(FactionMember[playerid][factionID] == 0) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne organizacije!");
 
-    foreach(new i : iter_Factions) {
+//     foreach(new i : iter_Factions) {
 
-        if(FactionInfo[i][factionID] == FactionMember[playerid][factionID]) {
+//         if(FactionInfo[i][factionID] == FactionMember[playerid][factionID]) {
 
-            new fa_str[568], dlgStrEx[2048];
-            format(fa_str, sizeof fa_str, ""c_server"#1 \187; "c_white"Informacije\n");
-            break;
-        }
-    }
+//             new fa_str[568], dlgStrEx[2048];
+//             format(fa_str, sizeof fa_str, ""c_server"#1 \187; "c_white"Informacije\n");
+//             break;
+//         }
+//     }
 
-    return 1;
-}
+//     return 1;
+// }
 
 Dialog:dialog_createFaction(playerid, response, listitem, string:inputtext[]) {
 

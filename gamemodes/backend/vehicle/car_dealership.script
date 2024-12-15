@@ -116,11 +116,6 @@ public Dealership_StreamVehicle(id, playerid) {
     DestroyVehicle(temp_Vehicle[playerid]);
 
     ToggleGlobalTextDraw(playerid, true);
-	TogglePlayerTextDraw(playerid, true);
-
-    PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
-	PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
-    PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
     SetPlayerVirtualWorld(playerid, 0);
 
@@ -932,11 +927,6 @@ YCMD:catalogue(playerid, params[], help)
         Dealership_ShowInterface(playerid, false);
         
         ToggleGlobalTextDraw(playerid, true);
-	    TogglePlayerTextDraw(playerid, true);
-
-        PlayerTextDrawHide(playerid, Player_TDs[playerid][1]);
-        PlayerTextDrawSetPreviewModel(playerid, Player_TDs[playerid][1], CharacterInfo[playerid][Skin]);
-        PlayerTextDrawShow(playerid, Player_TDs[playerid][1]);
 
         TogglePlayerControllable(playerid, true);
         SetPlayerVirtualWorld(playerid, 0);
@@ -948,7 +938,6 @@ YCMD:catalogue(playerid, params[], help)
     else {
 
         ToggleGlobalTextDraw(playerid, false);
-	    TogglePlayerTextDraw(playerid, false);
 
         Dealership_ShowInterface(playerid, true);
 

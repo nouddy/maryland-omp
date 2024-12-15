@@ -599,7 +599,6 @@ stock RentInProgress(playerid, model, time)
     PlayerRentalTimer[playerid] = SetTimerEx("ExpireRental", time*60000, false, "i", playerid);
 
     GivePlayerMoney(playerid, -RENTAL_PRICE_PER_MIN*time, MONEY_TYPE_DOLLAR);
-    UpdateMoneyTD(playerid);
 
     SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspesno si rentao vozilo marke "c_server"%s "c_white"za "c_server"$%.2f.", ReturnVehicleModelName(model), RENTAL_PRICE_PER_MIN*time);
 

@@ -357,8 +357,9 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/jewlery_int.map"						//* Jewlery Int (21)
 #include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
 #include "frontend/interior/hospital-int.map"						//* Hospital Int (23)
-#include "frontend/interior/police_int.map"								//* Police Int (24)
-#include "frontend/exterior/alcatraz_int.map"								//* Police Int (-1)
+#include "frontend/interior/police_int.map"							//* Police Int (24)
+#include "frontend/exterior/alcatraz_int.map"						//* Police Int (-1)
+#include "frontend/interior/carpentry_int.map"						//* Stolarija Int (25) znaci boze
 
 
 
@@ -368,6 +369,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Jobs
 #include "backend/jobs/jobs.pwn"
 #include "backend/jobs/bus-driver.job"
+#include "backend/jobs/carpentry.job"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"
