@@ -158,7 +158,7 @@ YCMD:jail(playerid, params[], help)
 
     new q[288];
     mysql_format(SQL, q, sizeof q, "INSERT INTO `player_jails` (`character_id`, `jailTime`, `jailType`, `jailedBy`, `jailDate`) VALUES \
-                                    ('%d', '%d', '%d', `%e`, NOW())", GetCharacterSQLID(targetid), time, type, ReturnPlayerName(playerid) );
+                                    ('%d', '%d', '%d', '%e', NOW())", GetCharacterSQLID(targetid), time, type, ReturnPlayerName(playerid) );
     mysql_tquery(SQL, q);
 
     PlayerJail[playerid][jTime] = time;
