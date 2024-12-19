@@ -291,9 +291,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             /* FINISH */
 
-            new xRand = RandomMinMax(100, 300);
-            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili sa poslom, i zaradili "c_server"%d$!", xRand);
-            GivePlayerMoney(playerid, xRand);
+            job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
             ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
 

@@ -172,14 +172,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/vehicle/end/do-not-look.temp"
 
-//-------------------------------------------------------------------------------------------------------- Crypto
-#include "backend/crypto/crypto_ogy.script"							//* Crypto
-
-#include "frontend/textdraws/crypto.tde"							//* Crypto Textdraws
-
-//-------------------------------------------------------------------------------------------------------- Temp
-#include "backend/crypto/end/do-not-look.temp"
-
 //-------------------------------------------------------------------------------------------------------- Inventory
 
 //-------------------------------------------------------------------------------------------------------- Finances
@@ -371,10 +363,10 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/jobs/bus-driver.job"
 #include "backend/jobs/carpentry.job"
 #include "backend/jobs/mower-job.pwn"
+#include "backend/jobs/ls_customs.pwn"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"
-#include "backend/xmas/snowballing.script"
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/jobs/end/do-not-look.temp"
@@ -391,7 +383,9 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "temp/end/do-not-look.temp"
 #include "backend/inventory/functions.pwn"
 #include "backend/messages/chat.script"								//* Chat
+
 #include "backend/misc/commands.pwn"							   //* Cmds
+#include "backend/misc/experience.pwn"							   //* Cmds
 
 #include "backend/vehicle/rent_vehicle.pwn"
 

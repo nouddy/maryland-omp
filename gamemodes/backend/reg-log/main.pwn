@@ -178,10 +178,12 @@ enum e_CHARACTER_DATA {
 	WalkStyle,
 	State,
 	Money[3],
-	Level,
 	Job,
 	Float:lastPos[3],
-	WantedLevel
+	WantedLevel,
+	XP,
+	NeedXP,
+	Score
 }
 new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 
@@ -195,8 +197,6 @@ public SQL_CheckBan(playerid) {
 		//*	I hope this shit works
 
 		pConnectState[playerid] = PLAYER_CONNECT_STATE_LOGIN;
- 
-		CreatePlayerLoginTextDraws(playerid);
 		ShowPlayerLoginDialog(playerid);
 
 		SetPlayerInterior(playerid, 1);
@@ -303,8 +303,6 @@ stock __clear(playerid) { for(new i = 0; i < 120; i++) { SendClientMessage(playe
 
 stock ShowPlayerLoginDialog(playerid)
 {
- 
-	ShowPlayerLoginTextDraw(playerid);
  
 	new sDStrg[ 560 ],ip[50];
 	GetPlayerIp(playerid, ip, sizeof(ip));
@@ -603,6 +601,10 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 		cache_get_value_name_float(i, "cLastX", CharacterInfo[playerid][lastPos][0]);
 		cache_get_value_name_float(i, "cLastY", CharacterInfo[playerid][lastPos][1]);
 		cache_get_value_name_float(i, "cLastZ", CharacterInfo[playerid][lastPos][2]);
+
+		cache_get_value_name_int(i, "XP", CharacterInfo[playerid][XP]);
+		cache_get_value_name_int(i, "Score", CharacterInfo[playerid][Score]);
+		cache_get_value_name_int(i, "NeedXP", CharacterInfo[playerid][NeedXP]);
 	}
 
 	DestroyPlayerChoseCharacterTextDraws(playerid);
@@ -908,7 +910,10 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		`cLastLogin` = NOW(),\
 																		cLastX = %f,\
 																		cLastY = %f,\
-																		cLastZ = %f", 
+																		cLastZ = %f,\
+																		XP = 0,\
+																		NeedXP = 1250,\
+																		Score = 0", 
 																		PlayerInfo[playerid][SQLID],
 																		CharacterInfo[playerid][Name],
 																		CharacterInfo[playerid][Skin],
@@ -944,6 +949,11 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
 
+	CharacterInfo[playerid][XP] = 0;
+	CharacterInfo[playerid][NeedXP] = 1250;
+	CharacterInfo[playerid][Score] = 0;
+	
+	SetPlayerScore(playerid, CharacterInfo[playerid][Score]);
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
 
@@ -1035,12 +1045,15 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][WalkStyle] = 0;
 	CharacterInfo[playerid][State] = 0;
 	CharacterInfo[playerid][Money] = 0;
-	CharacterInfo[playerid][Level] = 0;
+	CharacterInfo[playerid][Score] = 0;
 	CharacterInfo[playerid][Job] = 0;
 	CharacterInfo[playerid][WantedLevel] = 0;
 	CharacterInfo[playerid][lastPos][0] = 0.0;
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
+
+	CharacterInfo[playerid][XP] = 0;
+	CharacterInfo[playerid][NeedXP] = 1250;
 
 	PlayerInfo[playerid][SQLID] = 0;
 }

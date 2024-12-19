@@ -83,6 +83,9 @@ enum e_FACTION_MEMBERS {
 
 new FactionMember[MAX_PLAYERS][e_FACTION_MEMBERS];
 
+new faction_InviteID[MAX_PLAYERS],
+    faction_InviteFID[MAX_PLAYERS];
+
 forward Faction_LoadData();
 public Faction_LoadData() {
 
@@ -121,24 +124,36 @@ public Faction_LoadData() {
     return 1;
 }
 
-forward Faction_InsertData(id, member);
-public Faction_InsertData(id, member) {
+forward Faction_InsertData(id, member, playerid);
+public Faction_InsertData(id, member, playerid) {
 
     FactionInfo[id][factionID] = cache_insert_id();
 
     Iter_Add(iter_Factions, id);
 
-    FactionMember[member][characterID] = PlayerInfo[member][SQLID];
+    FactionMember[member][characterID] = GetCharacterSQLID(member);
     FactionMember[member][factionID] = FactionInfo[id][factionID];
-    FactionMember[member][factionRank] = 7;
+    FactionMember[member][factionRank] = 4;
     FactionMember[member][factionRespect] = 1;
 
     new q[260];
 
-    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \ 
-                                             VALUES('%d', '%d', '1', '1')", 
+    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
+                                          VALUES('%d', '%d', '1', '1')", 
                                       member, FactionInfo[id][factionID]);
     mysql_tquery(MySQL:SQL, q);
+
+    new query[260];
+
+    mysql_format(MySQL:SQL, query, sizeof query, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
+                                             VALUES('%d', '%d', '4', '1')", 
+                                     GetCharacterSQLID(playerid), FactionInfo[id][factionID]);
+    mysql_tquery(MySQL:SQL, query);
+
+    FactionMember[playerid][characterID] = GetCharacterSQLID(playerid);
+    FactionMember[playerid][factionID] = FactionInfo[id][factionID];
+    FactionMember[playerid][factionRank] = 4;
+    FactionMember[playerid][factionRespect] = 1;
 
     return 1;
 }
@@ -218,6 +233,14 @@ hook OnCharacterLoaded(playerid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerConnect(playerid) {
+
+    faction_InviteID[playerid] = INVALID_PLAYER_ID;
+    faction_InviteFID[playerid] = 0;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
     if(PRESSED(KEY_NO)) {
@@ -230,6 +253,24 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         }
     }
+
+    if(PRESSED(KEY_SECONDARY_ATTACK)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.7, -767.0725,-1966.6206,8.8245) && GetPlayerInterior(playerid) == 3) {
+
+            SetPlayerPos(playerid, 1006.0764,-1230.3038,11.7786);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerInterior(playerid, 0);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.70, 1006.0764,-1230.3038,11.7786)) {
+
+            SetPlayerPos(playerid, 1006.0764,-1230.3038,11.7786);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerInterior(playerid, 3);
+        }
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -273,7 +314,7 @@ YCMD:f(playerid, params[], help) {
 
         if(fID == FactionInfo[i][factionID]) {
             
-            format(tmp_message, sizeof tmp_message, ""c_grey"#FACTION %s \187; "c_white"%s[%d] %s.",
+            format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; "c_white"%s[%d] %s.",
             FactionInfo[i][factionName], ReturnPlayerName(playerid), playerid, message);
             break;
         }
@@ -281,6 +322,61 @@ YCMD:f(playerid, params[], help) {
 
     Faction_SendMessage(fID, tmp_message);
 
+    return 1;
+}
+
+YCMD:finvite(playerid, params[], help) 
+{
+    
+    if(FactionMember[playerid][factionRank] < 4)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste lider niti jedne organizacije!");
+
+    new targetid;
+    
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/finvite [ID/Ime]!");
+
+    if(!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Igrac nije konektovan na server!");
+    
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozes ubaciti samog sebe :/...");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Momak?!");
+
+    if(FactionMember[targetid][factionID] != 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je vec clan neke fakcije!");
+
+    if(IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je vec clan neke fakcije!"); 
+
+    if(faction_InviteID[playerid] != INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste poslali poziv nekom igracu!"); 
+
+    if(faction_InviteFID[targetid] != 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Tom igracu je vec ponudjen poziv!"); 
+
+    if(!DistanceBetweenPlayers(3.40, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+
+    //*
+
+    faction_InviteID[playerid] = targetid;
+    faction_InviteID[targetid] = playerid;
+    faction_InviteFID[targetid] = FactionMember[playerid][factionID];
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Poslali ste invite za fakciju igracu %s!", ReturnPlayerName(targetid));
+
+    new sstr[2048];
+    format(sstr, sizeof sstr, "%s[%d] vas je pozvao da se priduzite organizaciji.\n\
+                              "c_white"Fakcija : "c_server"%s[%d].\n\
+                              "c_white"Leader : "c_server"%s[%d].\n\
+                              "c_white"Ukoliko zelite prihvatiti poziv pritisnite "c_server"PRIHVATI.", 
+                              ReturnPlayerName(playerid), playerid, Faction_ReturnNameByPlayer(playerid), FactionMember[playerid][factionID], ReturnPlayerName(playerid), playerid);
+
+    Dialog_Show(faction_InviteID[playerid], "dialog_factionInvite", DIALOG_STYLE_MSGBOX, "Maryland \187; "c_server"Factions", sstr, ""c_green"PRIHVATI", ""c_lred"ODBIJ");
+    
     return 1;
 }
 
@@ -300,6 +396,51 @@ YCMD:f(playerid, params[], help) {
 
 //     return 1;
 // }
+
+Dialog:dialog_factionInvite(playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        new target = faction_InviteID[playerid];
+
+        SendClientMessage(target, x_server, "maryland \187; "c_white"%s je odbio vas poziv za pridruzivanje u organizaciju", ReturnPlayerName(target));
+
+        faction_InviteID[target] = INVALID_PLAYER_ID;
+        faction_InviteID[playerid] = INVALID_PLAYER_ID;
+        faction_InviteFID[playerid] = 0;
+        return Y_HOOKS_BREAK_RETURN_1;
+    }
+
+    new target = faction_InviteID[playerid];
+
+    SendClientMessage(target, x_server, "maryland \187; "c_white"%s je prihvatio vas poziv za pridruzivanje u organizaciju", ReturnPlayerName(target));
+
+    FactionMember[playerid][factionID] = faction_InviteFID[playerid];
+
+    //*
+
+    new fID = FactionMember[playerid][factionID];
+    new tmp_message[320];
+
+    foreach(new i : iter_Factions) {
+
+        if(fID == FactionInfo[i][factionID]) {
+            
+            format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; %s[%d] se je uspjesno pridruzio organizaciji.",
+            FactionInfo[i][factionName], ReturnPlayerName(playerid), playerid);
+            SendClientMessage(playerid, x_faction, "FACTION: Uspjesno ste se pridruzili fakciji (%s)", FactionInfo[i][factionName]);
+            break;
+        }
+    }
+
+    Faction_SendMessage(fID, tmp_message);
+
+    faction_InviteID[target] = INVALID_PLAYER_ID;
+    faction_InviteID[playerid] = INVALID_PLAYER_ID;
+    faction_InviteFID[playerid] = 0;
+    
+    return 1;
+}
 
 Dialog:dialog_createFaction(playerid, response, listitem, string:inputtext[]) {
 
@@ -390,19 +531,25 @@ Dialog:dialog_factionName(playerid, response, listitem, string:inputtext[]) {
                                                  VALUES('%e', '%d', '%d', '%d')",
                                 FactionInfo[fID][factionName], FactionInfo[fID][factionType],
                                 FactionInfo[fID][factionBoss], FactionInfo[fID][factionRightHand]);
-    mysql_tquery(MySQL:SQL, q, "Faction_InsertData", "dd", fID, faction_SecondBoss[playerid]);
-
-    new query[260];
-
-    mysql_format(MySQL:SQL, query, sizeof query, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
-                                             VALUES('%d', '%d', '7', '1')", 
-                                     GetCharacterSQLID(playerid), FactionInfo[fID][factionID]);
-    mysql_tquery(MySQL:SQL, query);
+    mysql_tquery(MySQL:SQL, q, "Faction_InsertData", "ddd", fID, faction_SecondBoss[playerid], playerid);
 
     return (true);
 }
 
 // Faction Member Respect Give (Stock for robs etc)
+
+stock Faction_ReturnNameByPlayer(playerid) {
+
+    new str[MAX_FACTION_NAME_LEN];
+    foreach(new i : iter_Factions) {
+
+        if(FactionMember[playerid][factionID] == FactionInfo[i][factionID])
+        format(str, sizeof str, "%s", FactionInfo[i][factionName]);
+    }
+
+    return str;
+}
+
 stock Faction_GiveRespect(playerid, amount)
 {
     if(FactionMember[playerid][factionID] == 0) return false;

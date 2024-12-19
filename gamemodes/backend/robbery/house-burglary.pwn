@@ -40,6 +40,7 @@ hook OnPlayerConnect(playerid) {
 
     burglary_CoolDown[playerid] = 0;
     burglary_HouseID[playerid] = -1;
+    burglary_InProgress[playerid] = false;
     stolenObjects[playerid] = 0;
 
     return Y_HOOKS_CONTINUE_RETURN_1;

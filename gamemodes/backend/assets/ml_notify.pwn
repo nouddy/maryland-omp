@@ -29,7 +29,6 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
     for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
 
         PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
-        PlayerTextDrawHide(playerid, g_NotifyTD[playerid][i]);
 
         g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
         p_NotifyShown[playerid] = false;
@@ -173,7 +172,6 @@ public notify_DestroyInterface(playerid) {
         for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
 
             PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
-            PlayerTextDrawHide(playerid, g_NotifyTD[playerid][i]);
 
             g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
             p_NotifyShown[playerid] = false;

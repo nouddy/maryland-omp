@@ -3,6 +3,7 @@
 #define     c_server2       "{c092de}"
 #define     c_red           "{ff1100}"
 #define     c_darkred       "{FF0000}"
+#define     c_lred          "{FF0055}"
 #define     c_blue          "{0099cc}"
 #define     c_darkblue      "{0100F8}" 
 #define     c_white         "{ffffff}"
@@ -23,6 +24,7 @@
 #define     c_error         "{FF1100}"
 #define     c_admin         "{2d97fa}"
 #define     c_job           "{cc9704}"
+#define     c_faction       "{68b0c4}"
 
 #define     x_server        0x8DC9F3FF
 #define     x_server2       0xC092DEFF
@@ -48,3 +50,4 @@
 #define     x_error         0xFF1100AA
 #define     x_admin         0x2d97faAA
 #define     x_job           0xcc9704AA
+#define     x_faction       0x68b0c4FF

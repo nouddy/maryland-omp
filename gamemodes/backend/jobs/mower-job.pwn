@@ -280,7 +280,6 @@ YCMD:mower(playerid, params[], help) {
 }
 
 
-
 Dialog:dialog_moweroption(const playerid, response, listitem, string: inputtext[]) {
 
     if(response) {
@@ -320,7 +319,7 @@ Dialog:dialog_mowerContniue(playerid, response, listitem, inputtext[]) {
         SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Uspjesno ste pokosili sve travke.");
         SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Plata u iznosu $%d vam je legla na racun.", xMowerPay );
 
-        GivePlayerMoney(playerid, xMowerPay);
+        job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
 
         new randomGrass = randomEx(100, 300);
 
@@ -355,8 +354,7 @@ Dialog:dialog_mowerContniue(playerid, response, listitem, inputtext[]) {
         SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Uspjesno ste pokosili sve travke.");
         SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Plata u iznosu $%d vam je legla na racun.", xMowerPay );
 
-        GivePlayerMoney(playerid, xMowerPay);
-
+        job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
         new randomGrass = randomEx(100, 300);
 
         storageValue+= randomGrass;
@@ -429,7 +427,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Uspesno ste istovarili travu na deponiju!");
                 SendClientMessage(playerid, 0xFF0055FF, "Mower \187; "c_white"Plata u iznosu $%d vam je legla na racun.", xMowerPay );
 
-                GivePlayerMoney(playerid, xMowerPay);
+                job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
 
                 player_MowingProgress[playerid] = 0;
                 RemovePlayerFromVehicle(playerid);
