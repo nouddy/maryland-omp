@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2024 at 09:26 PM
+-- Generation Time: Dec 20, 2024 at 02:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -177,9 +177,11 @@ CREATE TABLE `characters` (
   `cEGPound` float NOT NULL,
   `cLevel` int(11) NOT NULL DEFAULT 0,
   `cLastLogin` datetime NOT NULL,
-  `cLastX` float NOT NULL DEFAULT 0,
-  `cLastY` float NOT NULL DEFAULT 0,
-  `cLastZ` float NOT NULL DEFAULT 0,
+  `cLastX` float NOT NULL DEFAULT 1401.78,
+  `cLastY` float NOT NULL DEFAULT 1591.35,
+  `cLastZ` float NOT NULL DEFAULT 12.0481,
+  `cVW` int(11) NOT NULL DEFAULT 6,
+  `cInt` int(11) NOT NULL DEFAULT 6,
   `cWanted` int(11) NOT NULL DEFAULT 0,
   `XP` int(11) NOT NULL DEFAULT 0,
   `Score` int(11) NOT NULL DEFAULT 0,
@@ -190,26 +192,26 @@ CREATE TABLE `characters` (
 -- Dumping data for table `characters`
 --
 
-INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cWanted`, `XP`, `Score`, `NeedXP`) VALUES
-(3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10003500, 0, 0, 0, '2024-12-19 18:42:58', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(11, 13, 'Ferid_Olsun', 180, 0, 0, 0, 0, 3325, 0, 0, 0, '2024-12-19 21:24:04', 1401.78, 1591.35, 12.0481, 0, 300, 1, 1875),
-(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(19, 26, 'Silva_Rose', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-19 16:33:35', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0),
-(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0);
+INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`) VALUES
+(3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10003500, 0, 0, 0, '2024-12-20 14:01:25', 980.57, -1190.4, 22.8073, 0, 0, 0, 0, 0, 0),
+(5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(11, 13, 'Ferid_Olsun', 180, 0, 0, 0, 0, 3325, 0, 0, 0, '2024-12-19 21:24:04', 1401.78, 1591.35, 12.0481, 0, 0, 0, 300, 1, 1875),
+(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(19, 26, 'Silva_Rose', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-19 16:33:35', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1159,7 +1161,24 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /startservice', '2024-12-19 21:23:30'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-19 21:23:46'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spoilers', '2024-12-19 21:23:52'),
-('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /carservice', '2024-12-19 21:24:02');
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /carservice', '2024-12-19 21:24:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 6', '2024-12-19 22:04:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 6', '2024-12-19 22:04:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /goto 1', '2024-12-19 22:04:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 0', '2024-12-19 22:04:46'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-19 22:04:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /jail', '2024-12-19 22:04:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /jail 1 1 1', '2024-12-19 22:05:14'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2024-12-20 13:29:45'),
+('COMMAND:  Vostic je iskoristio komandu /slap 0', '2024-12-20 13:31:17'),
+('COMMAND:  Vostic je iskoristio komandu /kill', '2024-12-20 13:31:31'),
+('COMMAND:  Vostic je iskoristio komandu /komande', '2024-12-20 13:31:38'),
+('COMMAND:  Vostic je iskoristio komandu /komande', '2024-12-20 13:31:45'),
+('COMMAND:  Vostic je iskoristio komandu //q', '2024-12-20 13:35:38'),
+('COMMAND:  Vostic je iskoristio komandu /setvw 0 10', '2024-12-20 13:46:00'),
+('COMMAND:  Vostic je iskoristio komandu /setint 0 0', '2024-12-20 13:46:26'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2024-12-20 13:50:54'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2024-12-20 13:56:49');
 
 -- --------------------------------------------------------
 
@@ -1263,7 +1282,33 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-19 20:57:40'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-19 21:04:24'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-19 21:09:15'),
-('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-19 21:19:15');
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-19 21:19:15'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 26.57.53.176', '2024-12-19 22:01:07'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 26.57.53.176', '2024-12-19 22:03:55'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:04:02'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:13:41'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:14:42'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:28:36'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:33:08'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-19 22:39:27'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 12:49:20'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 12:58:52'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:02:24'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:06:38'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:08:24'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:12:40'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:13:32'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:28:36'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:30:47'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:32:12'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:34:43'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:36:02'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:45:30'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:48:57'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:50:25'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:52:54'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 13:56:10'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-20 14:00:28');
 
 -- --------------------------------------------------------
 

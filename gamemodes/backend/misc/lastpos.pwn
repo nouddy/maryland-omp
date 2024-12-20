@@ -29,10 +29,10 @@ hook OnGameModeInit()
 
 hook OnCharacterLoaded(playerid)
 {
-    if(IsPlayerJailed(playerid) == 0)
+    if(!IsPlayerJailed(playerid))
     {
         new query[256];
-        mysql_format(SQL, query, sizeof(query), "SELECT cLastX, cLastY, cLastZ FROM `characters` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+        mysql_format(SQL, query, sizeof(query), "SELECT cLastX, cLastY, cLastZ, cVW, cInt FROM `characters` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, query, "OnCharacterPositionLoaded", "i", playerid);
     }
 }
@@ -41,33 +41,37 @@ forward OnCharacterPositionLoaded(playerid);
 public OnCharacterPositionLoaded(playerid)
 {
     new rows = cache_num_rows();
+    new cVW, cInt;
 
     if(!rows) return (true);
 
     cache_get_value_name_float(0, "cLastX", CharacterInfo[playerid][lastPos][0]);
     cache_get_value_name_float(0, "cLastY", CharacterInfo[playerid][lastPos][1]);
     cache_get_value_name_float(0, "cLastZ", CharacterInfo[playerid][lastPos][2]);
+    cache_get_value_name_int(0, "cVW", cVW);
+    cache_get_value_name_int(0, "cInt", cInt);
 
-    SetPlayerPos(playerid, CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2]);
+    SetPlayerCompensatedPos(playerid, CharacterInfo[playerid][lastPos][0], CharacterInfo[playerid][lastPos][1], CharacterInfo[playerid][lastPos][2], cVW, cInt);
+
+    FreezePlayerForMapLoading(playerid);
 
     SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vracen si na poziciju sa koje si izasao.");
 
     return (true);
 }
 
-hook OnPlayerDisconnect(playerid, reason)
+stock FreezePlayerForMapLoading(playerid)
 {
-    if(IsPlayerJailed(playerid) == 0)
-    {
-        new Float:x, Float:y, Float:z;
-        GetPlayerPos(playerid, x, y, z);
+    TogglePlayerControllable(playerid, false);
 
-        new query[456];
-        mysql_format(SQL, query, sizeof(query),
-            "UPDATE `characters` SET `cLastX` = '%f', `cLastY` = '%f', `cLastZ` = '%f' WHERE `character_id` = '%d'", x, y, z, GetCharacterSQLID(playerid));
-        mysql_tquery(SQL, query);
-        printf("DEBUG: Pozicija igra?a %d uspešno sa?uvana (%f, %f, %f)", GetCharacterSQLID(playerid), x, y, z);
-    }
+    notification.Show(playerid, "Info", "Ucitavanje objekata molim vas sacekajte.", "?", BOXCOLOR_BLUE);
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
+    SetTimerEx("UnfreezePlayer", 4500, false, "i", playerid);
+}
+
+forward UnfreezePlayer(playerid);
+public UnfreezePlayer(playerid)
+{
+    TogglePlayerControllable(playerid, true); 
+    notification.Show(playerid, "Success", "Uspesno ocitana mapa!", "!", BOXCOLOR_GREEN);
 }

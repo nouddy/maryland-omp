@@ -262,6 +262,16 @@ hook OnPlayerDisconnect(playerid, reason)
 	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cDollars` = '%f', `cEuro` = '%f', `cEGPound` = '%f', `cLastLogin` = NOW() WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_DOLLAR), GetPlayerMoney(playerid, MONEY_TYPE_EURO), GetPlayerMoney(playerid, MONEY_TYPE_POUND), CharacterInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
 
+	if(!IsPlayerJailed(playerid))
+    {
+        new Float:x, Float:y, Float:z;
+        GetPlayerPos(playerid, x, y, z);
+
+        new query[428];
+        mysql_format(SQL, query, sizeof query, "UPDATE `characters` SET `cLastX` = '%f', `cLastY` = '%f', `cLastZ` = '%f', `cVW` = '%d', `cInt` = '%d' WHERE `character_id` = '%d'", x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, query);
+    }
+
 	ResetPlayerRegLogVars(playerid);
 
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_UNKNOWN;

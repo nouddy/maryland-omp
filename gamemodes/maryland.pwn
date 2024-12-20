@@ -374,11 +374,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //--------------------------------------------------------------------------------------------------------Important for all systems
 #include "backend/staff/staff.script"								//* Staff script
 #include "backend/staff/spanel.script"								//* Staff Panel Dynamic Stuff
-
-//-------------------------------------------------------------------------------------------------------- Stocks
-#include "backend/stocks/chat.stock"								//* Chat Stock
-#include "backend/stocks/db.stock"									//* Database Stock Cuvanja
-#include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
 #include "backend/inventory/functions.pwn"
@@ -389,6 +384,11 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved
+
+//-------------------------------------------------------------------------------------------------------- Stocks
+#include "backend/stocks/chat.stock"								//* Chat Stock
+#include "backend/stocks/db.stock"									//* Database Stock Cuvanja
+#include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
 
 /*
 

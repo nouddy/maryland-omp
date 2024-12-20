@@ -68,7 +68,7 @@
     "max_players": 50,
     "name": "/M/ Maryland open.mp #alfa",
     "network": {
-        "acks_limit": 3000,
+        "acks_limit": 5000,
         "aiming_sync_rate": 30,
         "allow_037_clients": true,
         "bind": "",
