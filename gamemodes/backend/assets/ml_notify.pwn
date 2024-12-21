@@ -1,4 +1,5 @@
 /*
+
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -15,7 +16,8 @@
  *
  *  @File           globalstuff.asset
  *  @Module         assets
- */
+
+*/
 
 #include <ysilib\YSI_Coding\y_hooks>
 
@@ -26,13 +28,8 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
 
     if(p_NotifyShown[playerid]) return (true);
 
-    for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
-
-        PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
-
-        g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-        p_NotifyShown[playerid] = false;
-    }
+    notify_ResetInterface(playerid);
+    p_NotifyShown[playerid] = false;
 
     g_NotifyTD[playerid][0] = CreatePlayerTextDraw(playerid, 253.000122, 352.451995, "LD_SPAC:white");
     PlayerTextDrawTextSize(playerid, g_NotifyTD[playerid][0], 124.000000, 56.000000);
@@ -161,7 +158,12 @@ stock Notify_SendNotification(playerid, const notification[], const header[], mo
 
 hook OnPlayerConnect(playerid) {
 
+
+    notify_ResetInterface(playerid);
+
     p_NotifyShown[playerid] = false;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 forward notify_DestroyInterface(playerid);
@@ -170,13 +172,26 @@ public notify_DestroyInterface(playerid) {
     if(p_NotifyShown[playerid]) {
 
         for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
-
+            
+            if(g_NotifyTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
             PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
 
             g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
             p_NotifyShown[playerid] = false;
         }
     }
+    return (true);
+}
+
+stock notify_ResetInterface(playerid) {
+
+    for(new i = 0; i < sizeof g_NotifyTD[]; i++) {
+            
+        if(g_NotifyTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, g_NotifyTD[playerid][i]);
+        g_NotifyTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
     return (true);
 }
 

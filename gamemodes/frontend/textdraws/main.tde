@@ -205,7 +205,7 @@ hook OnGameModeExit() {
 
 hook OnPlayerConnect(playerid)
 {
-
+    money_UI[playerid] = INVALID_PLAYER_TEXT_DRAW;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

@@ -1,0 +1,4 @@
+//This code has output by 'XpDeviL's Object Attacher'
+//Put these codes to where you want to attach object to player. (OnPlayerSpawn, command etc.)
+
+SetPlayerAttachedObject(playerid, 0, 1141, 5, 0.028000, 0.103999, 1.371999, -83.699821, -4.400029, 118.499832, 1.000000, 1.000000, 1.000000);

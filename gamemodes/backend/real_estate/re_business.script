@@ -39,6 +39,7 @@
 #define BUSINESS_TYPE_AGRICULTURAL_STORE        (10)
 #define BUSINESS_TYPE_AMMUNATION                (11)
 #define BUSINESS_TYPE_FITNESS                   (12)
+#define BUSINESS_TYPE_BOUTIQUE                  (13)
 
 //*             >> [ SKINS ] <<
 
@@ -51,6 +52,7 @@
 #define SEX_SHOP_ACTOR_SKIN                     (178)
 #define HOTEL_ACTOR_SKIN                        (216)
 #define AGRICULTURAL_STORE_ACTOR_SKIN           (158)
+#define BOUTIQUE_ACTOR_SKIN                     (93)
 
 enum e_BUSINESS_DATA {
 
@@ -141,7 +143,8 @@ enum e_BUSINESS_INTERIORS {
     InteriorID
 }
 
-new business_Interiors[12][e_BUSINESS_INTERIORS] = {
+
+new business_Interiors[13][e_BUSINESS_INTERIORS] = {
 
     { { 1414.3778,430.5065,1081.5009     },    18 },
     { { 6.08, -28.89, 1003.54     },    10 },
@@ -154,9 +157,12 @@ new business_Interiors[12][e_BUSINESS_INTERIORS] = {
     { { 2217.28,-1150.53,1025.79  },    15 },
     { { 6.08, -28.89, 1003.54     },    10 },
     { { 297.14,-109.87,1001.51    },    6  },
-    { { 770.80,-0.70,1000.72      },    5  }
+    { { 770.80,-0.70,1000.72      },    5  },
+    { { 161.0973,-96.6359,1001.8047}, 0}
 
 };
+
+new skinlist = mS_INVALID_LISTID;
 
 //      >> [ AMMUNATION ] <<
 
@@ -297,6 +303,7 @@ stock Business_Type(biz) {
         case BUSINESS_TYPE_AGRICULTURAL_STORE:          { string = "Poljoprivredna Apoteka"; }
         case BUSINESS_TYPE_AMMUNATION:                  { string = "Ammunation"; }
         case BUSINESS_TYPE_FITNESS:                     { string = "Fitnes"; }
+        case BUSINESS_TYPE_BOUTIQUE:                    { string = "Butik"; }
         default:                                        { string = "[Undefined]"; }
         
     }
@@ -385,15 +392,7 @@ stock Business_ShowInterfaceForPlayer(playerid, const bool:option) {
 
     if(option) {
 
-        for(new i = 0; i < sizeof business_PTD[]; i++) {
-
-            if(business_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
-            PlayerTextDrawHide(playerid, business_PTD[playerid][i]);
-            PlayerTextDrawDestroy(playerid, business_PTD[playerid][i]);
-            business_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-
-        }
+        Business_ResetInterface(playerid);
 
         business_PTD[playerid][0] = CreatePlayerTextDraw(playerid, 519.666748, 161.636932, "");
         PlayerTextDrawTextSize(playerid, business_PTD[playerid][0], 105.000000, 129.000000);
@@ -556,21 +555,28 @@ stock Business_ShowInterfaceForPlayer(playerid, const bool:option) {
 
     else {
 
-        for(new i = 0; i < sizeof business_PTD[]; i++) {
-
-            if(business_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
-            PlayerTextDrawHide(playerid, business_PTD[playerid][i]);
-            PlayerTextDrawDestroy(playerid, business_PTD[playerid][i]);
-            business_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-
-        }
+        Business_ResetInterface(playerid);
 
         CancelSelectTextDraw(playerid);
         business_InterfaceShown[playerid] = false;
     }
 
     return 1;
+}
+
+stock Business_ResetInterface(playerid) {
+
+    for(new i = 0; i < sizeof business_PTD[]; i++) {
+
+        if(business_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
+        PlayerTextDrawHide(playerid, business_PTD[playerid][i]);
+        PlayerTextDrawDestroy(playerid, business_PTD[playerid][i]);
+        business_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+
+    }
+
+    return (true);
 }
 
 //      >> [ AMMUNATION ] <<
@@ -1008,6 +1014,8 @@ hook OnGameModeInit() {
 
     mysql_tquery(SQL, "SELECT * FROM `re_business`", "Business_LoadData", "");
 
+    skinlist = LoadModelSelectionMenu("skins.txt"); // load skins for buy
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -1016,6 +1024,8 @@ hook OnPlayerConnect(playerid) {
     ammunation_ChosenWeapon[playerid] = -1;
     business_ChosenItem[playerid] = INVALID_PRODUCT_ID;
     re_InBusiness[playerid] = INVALID_BUSINESS_ID;
+
+    Business_ResetInterface(playerid);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -1175,6 +1185,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
                 SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
                 GivePlayerWeapon(playerid, business_ItemList[ProductID][productWeaponID], 1);
 
+
                 return Y_HOOKS_BREAK_RETURN_1;
 
             }
@@ -1203,6 +1214,18 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
 
         Inventory_AddItem(playerid, business_ItemList[ProductID][productInventory], 1);
+
+        if(business_ItemList[ProductID][productBusiness] == BUSINESS_TYPE_MARKET) {
+
+            if(QuestData[playerid][questDone][4] == 0) {
+
+                QuestData[playerid][questDone][4] = 1;
+                UpdateSqlInt(SQL, "character_quests", "Quest_5", 1, "characterid", GetCharacterSQLID(playerid));
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[4][questName]);
+                GivePlayerMoney(playerid, sz_QuestList[4][questAwards][0]);
+                GiveCharXP(playerid, sz_QuestList[4][questAwards][1]);
+            }
+        }
     }
 
     else if(playertextid == BUSINESS_TD_EXIT) {
@@ -1341,6 +1364,11 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         return Y_HOOKS_BREAK_RETURN_1;
                         
                     }
+
+                    case BUSINESS_TYPE_BOUTIQUE: {
+
+                        ShowModelSelectionMenu( playerid, skinlist, "Select Skin");
+                    }
                 }
             }
         }
@@ -1369,7 +1397,7 @@ YCMD:createbusiness(playerid, params[], help)
     if(sscanf(params, "s[64]ddd", bname, blvl, btip, bprice))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/createbusiness [Ime] [Level] [Tip] [Cijena]");
 
-    if(btip < BUSINESS_TYPE_MARKET || btip > BUSINESS_TYPE_AMMUNATION)
+    if(btip < BUSINESS_TYPE_MARKET || btip > BUSINESS_TYPE_BOUTIQUE)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Unijeli ste pogresan tip biznisa, '/createbusiness help'");
 
     new Float:pPos[3];
@@ -1390,6 +1418,21 @@ YCMD:createbusiness(playerid, params[], help)
         re_BusinessData[id][bActorPos][1] = 0.00;
         re_BusinessData[id][bActorPos][2] = 0.00;
         re_BusinessData[id][bActorPos][3] = 0.00;
+
+    }
+
+    if(btip == BUSINESS_TYPE_BOUTIQUE) {
+
+        re_BusinessData[id][bInteract][0] = 179.5436;
+        re_BusinessData[id][bInteract][1] = -83.1313;
+        re_BusinessData[id][bInteract][2] = 1001.7947;
+
+        re_BusinessData[id][bActorSkin] = 1;
+
+        re_BusinessData[id][bActorPos][0] = 181.3402;
+        re_BusinessData[id][bActorPos][1] = -83.4839;
+        re_BusinessData[id][bActorPos][2] = 1001.7947;
+        re_BusinessData[id][bActorPos][3] = 90.9137;
 
     }
 
@@ -1554,5 +1597,29 @@ YCMD:business(playerid, params[], help) {
 
     SendClientMessage(playerid, x_info, "DEBUG: YCMD:business!");
 
+    return 1;
+}
+
+hook OnPlayerModelSelection( playerid, response, listid, modelid) {
+    if(listid == skinlist) {
+        if( response ) {
+            if( GetPlayerMoney(playerid) < 150.45 ) return SendClientMessage( playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca." );
+            
+            CharacterInfo[playerid][Skin] = modelid;
+            SetPlayerSkin(playerid, modelid);
+            GivePlayerMoney( playerid, -150.45 );
+            UpdateSqlInt(SQL, "characters", "cSkin", modelid, "character_id", GetCharacterSQLID(playerid));
+
+            if(QuestData[playerid][questDone][6] == 0){
+
+                QuestData[playerid][questDone][6] = 1;
+                UpdateSqlInt(SQL, "character_quests", "Quest_7", 1, "characterid", GetCharacterSQLID(playerid));
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[6][questName]);
+                GivePlayerMoney(playerid, sz_QuestList[6][questAwards][0]);
+                GiveCharXP(playerid, sz_QuestList[6][questAwards][1]);
+            }
+            return 1;
+        }
+    }
     return 1;
 }

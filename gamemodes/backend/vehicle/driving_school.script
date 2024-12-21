@@ -114,7 +114,17 @@ hook OnGameModeInit() {
 hook OnPlayerConnect(playerid) {
 
     onPoly[playerid] = false;
-    polyProgress[playerid] = INVALID_POLY_PROGRESS;
+    polyProgress[playerid] = INVALID_POLY_PROGRESS; 
+
+    for(new j = 0; j < sizeof drivingSchool_Answers[]; j++) 
+        drivingSchool_Answers[playerid][j] = false;
+
+    for(new i = 0; i < 85; i++) {
+
+        if(drivingSchool_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+        PlayerTextDrawDestroy(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
+        drivingSchool_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -126,10 +136,8 @@ stock DrivingSchool_DisplayInterface(playerid, const bool:option) {
         for(new i = 0; i < 85; i++) {
 
             if(drivingSchool_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
             PlayerTextDrawDestroy(playerid, PlayerText:drivingSchool_PTD[playerid][i]);
-
-            drivingSchool_PTD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+            drivingSchool_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
         }
 
         drivingSchool_PTD[playerid][0] = CreatePlayerTextDraw(playerid, -496.666717, 624.570556, "particle:lamp_shad_64");
@@ -998,11 +1006,11 @@ stock DrivingSchool_DisplayInterface(playerid, const bool:option) {
     }
 }
 
-stock bool:DrivingSchool_IsPlayerInVehicle(playerid) {
+stock DrivingSchool_IsPlayerInVehicle(playerid) {
 
     for(new i = 0; i < sizeof polygonCars; i++) {
 
-        if(IsPlayerInVehicle(playerid, i))
+        if(IsPlayerInVehicle(playerid, polygonCars[i]))
             return true;
     }
 
@@ -1132,10 +1140,10 @@ hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
         //* isto njesra, bolje player, jer OMP ima pise da CPovi i ostalo nece raditi jedino pickupi, sve ostalo pada na pod
         if(pickupid == polyCPs[playerid][i]) {
 
+            if(!DrivingSchool_IsPlayerInVehicle(playerid))
+                return SendClientMessage(playerid, x_server, "Moras biti u vozilu!");
+
             if(polyProgress[playerid] == 13) {
-                
-                if(!DrivingSchool_IsPlayerInVehicle(playerid))
-                    return Y_HOOKS_BREAK_RETURN_1;
 
                 SetPlayerPos(playerid, 1424.2428,1555.2067,10.8503);
                 SetPlayerInterior(playerid, 16);
@@ -1149,6 +1157,14 @@ hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
                 SaveDocuments(playerid);
                 SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste polozili vozacki ispit.");
 
+                if(QuestData[playerid][questDone][3] == 0) {
+
+                    QuestData[playerid][questDone][3] = 1;
+                    UpdateSqlInt(SQL, "character_quests", "Quest_4", 1, "characterid", GetCharacterSQLID(playerid));
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[3][questName]);
+                    GivePlayerMoney(playerid, sz_QuestList[3][questAwards][0]);
+                    GiveCharXP(playerid, sz_QuestList[3][questAwards][1]);
+                }
             }    
 
             DestroyPlayerPickup(playerid, polyCPs[playerid][i]);
@@ -1167,5 +1183,13 @@ YCMD:testcp(playerid, params[], help) {
 
     CreateDynamicCP(1306.6147,1560.5885,100.6834, 4.0, 8, GetPlayerInterior(playerid)); // Z - 100.9567
     
+    return (true);
+}
+
+YCMD:testnigger(playerid, params[], help) {
+
+    if(!DrivingSchool_IsPlayerInVehicle(playerid))
+        SendClientMessage(playerid, -1, "Moze bi si glup moze bi si pametn");
+
     return (true);
 }

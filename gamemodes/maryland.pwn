@@ -21,6 +21,7 @@
 */
 
 #define YSI_NO_HEAP_MALLOC
+#define MIXED_SPELLINGS
 
 #define MAX_Y_HOOKS (256)
 #define CGEN_MEMORY 140000
@@ -60,6 +61,7 @@
 #include <colors>
 #include <macroes>
 #include <maryland-tp>
+#include <mSelection>
 
 main()
 {
@@ -135,6 +137,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/assets/ml_notify.pwn"
 #include "backend/stocks/float.stock"								//* Float Stocks
 #include "backend/logs/log.pwn"
+
+#include "backend/misc/quests.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
@@ -337,7 +341,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
 #include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
 
-#include "frontend/interior/levis-int.map"							//* Levis (12)
+#include "frontend/interior/levis-int.map"							//* Levis (0) -> Becasuse of default Ds interior
 //#include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
 #include "frontend/exterior/train_tut.map"						    //* Train Tut (14)
 #include "frontend/interior/house-int.map"						    //* House Int (15)

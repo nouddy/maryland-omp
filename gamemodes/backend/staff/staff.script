@@ -240,6 +240,7 @@ YCMD:goto(playerid, params[],help)
 			SetPlayerPos(playerid,plx,ply+2, plz);
 		}
 		SetPlayerInterior(playerid, GetPlayerInterior(giveplayerid));
+		SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(giveplayerid));
 	}
     return 1;
 }

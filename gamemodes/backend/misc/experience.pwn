@@ -27,8 +27,8 @@ public Exp_DestroyInterface(playerid) {
     for(new i = 0; i < sizeof exp_UI[]; i++) {
 
         if(exp_UI[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
         PlayerTextDrawDestroy(playerid, exp_UI[playerid][i]);
+        exp_UI[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
 
     return (true);
@@ -39,8 +39,8 @@ stock Exp_UpdateInterface(playerid, amount) {
     for(new i = 0; i < sizeof exp_UI[]; i++) {
 
         if(exp_UI[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
         PlayerTextDrawDestroy(playerid, exp_UI[playerid][i]);
+        exp_UI[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
 
     new tmpstr[200];
@@ -154,14 +154,12 @@ ptask exp_UpdatePlayer[3600000](playerid) {
     return (true);
 }
 
-hook OnGameModeInit()
-{
-	print("exp/exp.pwn loaded");
+hook OnPlayerConnect(playerid) {
 
+    Exp_DestroyInterface(playerid);
 
-    return 1;
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
-
 
 hook OnCharacterLoaded(playerid)
 {
@@ -178,6 +176,8 @@ stock GiveCharXP(playerid, amount)
     }
 
     Exp_UpdateInterface(playerid, amount);
+
+    PlayerPlaySound(playerid, 1149, 0.00, 0.00, 0.00);
 
     UpdateSqlInt(SQL, "characters", "XP", CharacterInfo[playerid][XP], "character_id", GetCharacterSQLID(playerid));
     // SendClientMessage(playerid, -1, "Dobili ste XP!");
@@ -217,6 +217,8 @@ stock LevelUpChar(playerid)
     new tmpStr[64];
     format(tmpStr, sizeof tmpStr, "Uspjesno ste se level-up na level %d", CharacterInfo[playerid][Score]);
     Notify_SendNotification(playerid, tmpStr, "LEVEL-UP", 1239);
+
+    PlayerPlaySound(playerid, 30800, 0.00, 0.00, 0.00);
 
     UpdateSqlInt(SQL, "characters", "XP", CharacterInfo[playerid][XP], "character_id", GetCharacterSQLID(playerid));
     UpdateSqlInt(SQL, "characters", "NeedXP", CharacterInfo[playerid][NeedXP], "character_id", GetCharacterSQLID(playerid));

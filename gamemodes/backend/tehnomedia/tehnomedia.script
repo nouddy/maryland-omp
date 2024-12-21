@@ -398,8 +398,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
 
                 PlayerElectronic[playerid][eGPSItem] = 1;
 
-                // - Dodati kada se odradi player_currency
-                // GiveMoneyEx(playerid, -300);
+                GivePlayerMoney(playerid, -300);
                 ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste navigaciju!");

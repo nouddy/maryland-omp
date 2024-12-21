@@ -120,3 +120,43 @@
 [21:23:25] #1 000c59ac in ?? (0, 83704464, 0) in <unknown>
 [21:23:25] #2 000cb3d4 in ?? (0, 83704464) in <unknown>
 [21:23:25] #3 0007d620 in public OnPlayerCommandText (0, 83704464) in <unknown>
+[14:35:49] Run time error 4: "Array index out of bounds"
+[14:35:49]  Attempted to read/write array element at negative index -1
+[14:35:49] AMX backtrace:
+[14:35:49] #0 001702b0 in ?? (0, 0) in <unknown>
+[14:35:49] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[14:45:24] Run time error 4: "Array index out of bounds"
+[14:45:24]  Attempted to read/write array element at negative index -1
+[14:45:24] AMX backtrace:
+[14:45:24] #0 001702b0 in ?? (0, 0) in <unknown>
+[14:45:24] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[14:50:34] Run time error 4: "Array index out of bounds"
+[14:50:34]  Attempted to read/write array element at negative index -1
+[14:50:34] AMX backtrace:
+[14:50:34] #0 001702b0 in ?? (0, 0) in <unknown>
+[14:50:34] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[14:51:58] Run time error 4: "Array index out of bounds"
+[14:51:58]  Attempted to read/write array element at negative index -1
+[14:51:58] AMX backtrace:
+[14:51:58] #0 001702b0 in ?? (1, 0) in <unknown>
+[14:51:58] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (1, 0) in <unknown>
+[14:55:38] Run time error 4: "Array index out of bounds"
+[14:55:38]  Attempted to read/write array element at negative index -1
+[14:55:38] AMX backtrace:
+[14:55:38] #0 001702b0 in ?? (0, 0) in <unknown>
+[14:55:38] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[14:59:22] Run time error 4: "Array index out of bounds"
+[14:59:22]  Attempted to read/write array element at negative index -1
+[14:59:22] AMX backtrace:
+[14:59:22] #0 001702b0 in ?? (0, 0) in <unknown>
+[14:59:22] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[15:02:38] Run time error 4: "Array index out of bounds"
+[15:02:38]  Attempted to read/write array element at negative index -1
+[15:02:38] AMX backtrace:
+[15:02:38] #0 001702b0 in ?? (0, 0) in <unknown>
+[15:02:38] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[15:04:59] Run time error 4: "Array index out of bounds"
+[15:04:59]  Attempted to read/write array element at negative index -1
+[15:04:59] AMX backtrace:
+[15:04:59] #0 001702b0 in ?? (0, 0) in <unknown>
+[15:04:59] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>

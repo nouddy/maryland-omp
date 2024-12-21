@@ -162,7 +162,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                     new q[267];
 
-                    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE character_id = '%d'", FactionMember[playerid][factionRespect], PlayerInfo[playerid][SQLID]);
+                    mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE member_id = '%d'", FactionMember[playerid][factionRespect], GetCharacterSQLID(playerid));
                     mysql_tquery(MySQL:SQL, q);
                 }
 

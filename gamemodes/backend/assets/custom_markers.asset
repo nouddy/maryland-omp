@@ -199,39 +199,30 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         // Hotel izlaz
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1284.1803,5.6575,1004.5601) && GetPlayerInterior(playerid) == 22) // Hotel izlaz
         {
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 1785.1909,-1296.4972,13.3967);
+            SetPlayerCompensatedPos(playerid, 1785.1909,-1296.4972,13.3967, 0, 0);
             SetCameraBehindPlayer(playerid);
         }
         //? Maryland Harbor Bankss
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 978.1812, -1188.2797, 23.8752) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) //Ulaz
         {
-            SetPlayerVirtualWorld(playerid, 10);
-            SetPlayerPos(playerid, 1201.1162, 2565.0740, -21.6386);
+            SetPlayerCompensatedPos(playerid, 1201.1162, 2565.0740, -21.6386, 10);
             SetCameraBehindPlayer(playerid);
         }
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerVirtualWorld(playerid) == 10) // izlaz
         {
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 980.5701, -1190.3965, 23.8752);
+            SetPlayerCompensatedPos(playerid, 980.5701, -1190.3965, 23.8752, 0, 0);
             SetCameraBehindPlayer(playerid);
         }
         //? Medical Department
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1171.4449,-1311.7319,1019.4160) && GetPlayerInterior(playerid) == 23) // Izlaz
         {
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 2025.2113,-1401.9033,17.2094);
+            SetPlayerCompensatedPos(playerid, 2025.2113,-1401.9033,17.2094, 0, 0);
             SetCameraBehindPlayer(playerid);
         }
 
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 2025.2113,-1401.9033,17.2094) && GetPlayerVirtualWorld(playerid) == 0) // Ulaz
         {
-            SetPlayerInterior(playerid, 23);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 1171.4449,-1311.7319,1019.4160);
+            SetPlayerCompensatedPos(playerid, 1171.4449,-1311.7319,1019.4160, 0, 23);
             SetCameraBehindPlayer(playerid);
         }
     }

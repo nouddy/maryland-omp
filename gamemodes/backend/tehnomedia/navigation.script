@@ -37,7 +37,11 @@ enum Navigation {
 new const NavData[][Navigation] = {
 	{"Maryland Opstina", 1533.0863,-1682.4469,13.3828}, // {"Ime Lokacije", X, Y, Z}
 	{"Tehnomedia", 1685.7739,-1628.6365,13.3828},
-	{"Maryland Park", 1871.1927,-1168.0505,23.6607}
+	{"Maryland Park", 1871.1927,-1168.0505,23.6607},
+	{"7Eleven", 972.4135,-1298.4198,13.3713 },
+	{"Los Santos Customs", 1140.9113,-1206.3418,18.6070},
+	{"Maryland Hospital", 2002.0251,-1449.1727,13.1341},
+	{"H4RBOR Bank", 997.7505,-1156.0481,23.4127 }
 };
 
 hook OnGameModeInit()

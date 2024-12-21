@@ -17,7 +17,6 @@
  *  @Module         vehicle
  */
 
-//? Todo : Check code for any error
 
 #include <ysilib\YSI_Coding\y_hooks>
 
@@ -75,7 +74,7 @@ hook OnPlayerConnect(playerid)
     PlayerRenting[playerid] = false;
     RentShown[playerid] = false;
     PlayerRentModel[playerid] = INVALID_RENTAL_ID;
-    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+    PlayerRentalVehicle[playerid] = INVALID_VEHICLE_ID;
     PlayerRentalTimer[playerid] = -1;
 
     if(IsValid3DTextLabel(RentVehLabel[playerid]))
@@ -254,6 +253,13 @@ Dialog: dialog_rentveh(const playerid, response, listitem, string: inputtext[])
         if(sscanf(inputtext, "i", time))
 			return  Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
 
+        if(!IsNumeric(inputtext))
+            return Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+
+        if(GetPlayerMoney(playerid) < RENTAL_PRICE_PER_MIN*time)
+            return  Dialog_Show(playerid, dialog_rentveh, DIALOG_STYLE_INPUT, "Maryland Rent", "Upisite na koje vreme zelite iznajmiti vozilo:\n\n** CENA RENTA JE 5$ PO MINUTI.", "Dalje", "Izlaz");
+
+
         RentInProgress(playerid, PlayerRentModel[playerid], time);
         RentaCar_Interface(playerid, false);
         CancelSelectTextDraw(playerid);
@@ -326,7 +332,7 @@ YCMD:unrent(playerid, params[], help)
     DestroyVehicle(PlayerRentalVehicle[playerid]);
     Delete3DTextLabel(RentVehLabel[playerid]);
     PlayerRentModel[playerid] = INVALID_RENTAL_ID;
-    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+    PlayerRentalVehicle[playerid] = INVALID_VEHICLE_ID;
 
     PlayerRenting[playerid] = false;
 
@@ -361,7 +367,7 @@ public ExpireRental(playerid)
     Delete3DTextLabel(RentVehLabel[playerid]);
 
     PlayerRentModel[playerid] = INVALID_RENTAL_ID;
-    PlayerRentalVehicle[playerid] = INVALID_RENTAL_ID;
+    PlayerRentalVehicle[playerid] = INVALID_VEHICLE_ID;
 
     PlayerRenting[playerid] = false;
 
@@ -371,8 +377,6 @@ public ExpireRental(playerid)
     
     return true;
 }
-
-//STOCKS 
 
 //TD
 stock RentaCar_Interface(playerid, bool:show) {

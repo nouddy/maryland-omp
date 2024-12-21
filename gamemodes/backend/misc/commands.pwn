@@ -96,3 +96,10 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
     }
 
 }
+
+YCMD:spa(playerid, params[], help) {
+
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+
+    return (true);
+}
