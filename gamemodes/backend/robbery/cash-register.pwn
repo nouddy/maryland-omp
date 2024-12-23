@@ -1,7 +1,6 @@
+
 #include <ysilib\YSI_Coding\y_hooks>
 
-// 2771 - Object model for cash register
-// 18703 - Smoke model
 
 #define MAX_CASH_REGISTERS      (40)
 
@@ -144,12 +143,15 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(IsPlayerInRangeOfPoint(playerid, 3.50, CashRegister[i][registerPos][0], CashRegister[i][registerPos][1], CashRegister[i][registerPos][2])) {
 
                 if(CashRegister_CoolDown[i] > 1)
-                    return SendClientMessage(playerid, x_green, ">> Ova kasa je opljackana nedavno!");
+                    return SendClientMessage(playerid, x_green, "cash-register \187; "c_white"Ova kasa je opljackana nedavno!");
+                
+                if(GetPlayerVirtualWorld(playerid) != CashRegister[i][registerVW] && GetPlayerInterior(playerid) != CashRegister[i][registerInterior])
+                    continue;
 
                 CashRegister_CoolDown[i] = 120;
 
                 new randValue = RandomMinMax(20, 250);
-                SendClientMessage(playerid, x_green, ">> Uspjesno ste uzeli "c_white"%d$ "c_green"iz kase!", randValue);
+                SendClientMessage(playerid, x_green, "cash-register \187; "c_white"uspjesno ste uzeli %d$ iz kase!", randValue);
 
                 GivePlayerMoney(playerid, randValue);   
 
@@ -158,10 +160,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 if(FactionMember[playerid][factionID] > 0) {
 
                     FactionMember[playerid][factionRespect]++;
-                    SendClientMessage(playerid, x_green, ">> Uspjesno ste dobili faction respect, trenutno imate "c_white"%d "c_green"respekata!", FactionMember[playerid][factionRespect]);
+                    
+                    static ntf_str[128];
+                    format(ntf_str, sizeof ntf_str, "Za opljackanu kasu ste zaradili +1 faction respekt\nFaction Respect : %d", FactionMember[playerid][factionRespect]);
+                    Notify_SendNotification(playerid, ntf_str, "ROBBERY", 1313);
 
                     new q[267];
-
                     mysql_format(MySQL:SQL, q, sizeof q, "UPDATE `faction_members` SET `faction_respekt` = '%d' WHERE member_id = '%d'", FactionMember[playerid][factionRespect], GetCharacterSQLID(playerid));
                     mysql_tquery(MySQL:SQL, q);
                 }
@@ -197,7 +201,10 @@ hook OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid
         if(objectid == CashRegister_Object[i]) {
             
             if(CashRegister_CoolDown[i] > 1)
-                return SendClientMessage(playerid, x_green, ">> Ova kasa je opljackana nedavno!");
+                return SendClientMessage(playerid, x_green, "cash-register \187; "c_white"Ova kasa je opljackana nedavno!");
+            
+            if(GetPlayerVirtualWorld(playerid) != CashRegister[i][registerVW] && GetPlayerInterior(playerid) != CashRegister[i][registerInterior])
+                continue;
 
             new Float:a = CashRegister[i][registerRot][2] + 180.0;
 

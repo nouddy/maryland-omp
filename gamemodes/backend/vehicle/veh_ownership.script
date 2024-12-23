@@ -43,8 +43,8 @@ enum OWNER_TYPE
 {
 	OWNER_TYPE_UNKNOWN,
 	OWNER_TYPE_PLAYER,
-	OWNER_TYPE_BUSINESS,
 	OWNER_TYPE_FACTION,
+	OWNER_TYPE_BUSINESS,
 	OWNER_TYPE_JOB,
 	OWNER_TYPE_PUBLIC,//Public transports (rent, buses for npc's, trains and such)
 }
@@ -52,8 +52,8 @@ enum OWNER_TYPE
 new OwnerTypeString[OWNER_TYPE][24] = {
 	"Unknown",
 	"Player",
-	"Business",
 	"Faction",
+	"Business",
 	"Job",
 	"Public"
 };

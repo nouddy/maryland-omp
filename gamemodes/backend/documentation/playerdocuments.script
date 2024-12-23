@@ -28,7 +28,6 @@ hook OnGameModeInit()
 
 //      >> [ VARIABLES ] <<
 
-new bool:PlayerHasLifeInsurance[MAX_PLAYERS];
 
 //>>
 enum PlayerDocumentsz
@@ -38,8 +37,7 @@ enum PlayerDocumentsz
     pDriveLicense,
     pMotoLicense,
     pBoatLicense,
-    pGunLicense,
-    pLifeInsurance
+    pGunLicense
 }
 new PlayerDocuments[MAX_PLAYERS][PlayerDocumentsz];
 
@@ -52,8 +50,6 @@ hook OnPlayerConnect(playerid) {
     PlayerDocuments[playerid][pMotoLicense] = 0;
     PlayerDocuments[playerid][pBoatLicense] = 0;
     PlayerDocuments[playerid][pGunLicense] = 0;
-    PlayerDocuments[playerid][pLifeInsurance] = -1;
-    PlayerHasLifeInsurance[playerid] = false;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -67,17 +63,6 @@ hook OnCharacterLoaded(playerid)
 	return 1;
 }
 
-hook OnCharacterFirstStream(playerid)
-{
-	if(PlayerDocuments[playerid][pLifeInsurance] != -1)
-	{
-		new string[128];
-		mysql_format(SQL, string, sizeof(string), "SELECT DATEDIFF(LifeInsuranceValidUntil,CURRENT_DATE), LifeInsuranceValidUntil from `player_documents` where `character_document`='%i'", GetCharacterSQLID(playerid));
-		mysql_tquery(SQL, string, "CheckLifeInsurance", "i", playerid);
-	}
-
-    return (true);
-}
 
 //
 YCMD:getidcard(playerid, params[], help)
@@ -124,26 +109,6 @@ YCMD:getpassport(playerid, params[], help)
 
 }
 
-YCMD:getlifeinsurance(playerid, params[], help)
-{
-    if(IsPlayerInRangeOfPoint(playerid, 3.0, -2334.7085,1255.7548,-31.6301))
-    {
-        if(PlayerDocuments[playerid][pLifeInsurance] != -1) return notification.Show(playerid, "GRESKA", "Vec imate zivotno osiguranje", "!", BOXCOLOR_RED);
-        if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
-
-        PlayerDocuments[playerid][pLifeInsurance] = 1;
-        // - Dodati kada se odradi player_currency
-        // GiveMoneyEx(playerid, -200);
-        ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
-        notification.Show(playerid, "OPSTINA", "Uspesno si izvadio zivotno osiguranje!", "!", BOXCOLOR_GREEN);
-
-        SaveDocuments(playerid);
-    }
-    else notification.Show(playerid, "GRESKA", "Morate biti na salteru u opstini", "!", BOXCOLOR_RED);
-
-    return Y_HOOKS_CONTINUE_RETURN_1;
-
-}
 /*
     * Funkcije:
 */
@@ -156,8 +121,8 @@ public SQL_AccountDocumentsLoad(playerid)
     {
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_documents` (character_document, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense, LifeInsurance) \ 
-            VALUES('%d', '0', '0', '0', '0', '0', '0', '-1')", GetCharacterSQLID(playerid));
+           "INSERT INTO `player_documents` (character_document, NationalID, Passport, DriveLicense, MotoLicense, BoatLicense, GunLicense) \ 
+            VALUES('%d', '0', '0', '0', '0', '0', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
     else 
@@ -168,27 +133,5 @@ public SQL_AccountDocumentsLoad(playerid)
         cache_get_value_name_int(0, "MotoLicense", PlayerDocuments[playerid][pMotoLicense]);
         cache_get_value_name_int(0, "BoatLicense", PlayerDocuments[playerid][pBoatLicense]);
         cache_get_value_name_int(0, "GunLicense", PlayerDocuments[playerid][pGunLicense]);
-        cache_get_value_name_int(0, "LifeInsurance", PlayerDocuments[playerid][pLifeInsurance]);
     }
-}
-
-forward CheckLifeInsurance(playerid);
-public CheckLifeInsurance(playerid)
-{
-    new diff;
-    cache_get_value_int(0, 0, diff);
-    if(diff <= 0)
-    {
-        PlayerHasLifeInsurance[playerid] = false;
-        PlayerDocuments[playerid][pLifeInsurance] = -1;
-        SendClientMessage(playerid, 0x32a88dFF, "[ZIVOTNO-OSIGURANJE] {ffffff}Vase zivotno osiguranje je isteklo.");
-    }
-    else
-    {
-        new date[24];
-        cache_get_value_name(0, "LifeInsuranceValidUntil", date, 24);
-        va_SendClientMessage(playerid, 0x32a88dFF, "[ZIVOTNO-OSIGURANJE] {ffffff}Vase zivotno osiguranje traje do datuma: %s.",date);
-        PlayerHasLifeInsurance[playerid] = true;
-    }
-    return 1;
 }

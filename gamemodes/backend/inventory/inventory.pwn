@@ -645,24 +645,26 @@ Dialog:inventoryItemOption(const playerid, response, listitem, string: inputtext
 
             if(InventoryInfo[playerid][tmp_id][ItemType] == INVENTORY_ITEM_TYPE_FOOD) {
 
+                if(GetPlayerHunger(playerid) >= 100.00 && GetPlayerThirst(playerid) >= 100.00) 
+                        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete iskoristiti ovaj item, niste gladni/zedni.");
+
+                if(GetPlayerHunger(playerid) >= 90.0) {
+
+                    AddPlayerHunger(playerid, MAX_HUNGER);
+                    AddPlayerThirst(playerid, MAX_THIRST);
+                }
+                
+                
+                else {
+                    
+                    AddPlayerThirst(playerid, 15.00);
+                    AddPlayerHunger(playerid, 10.00 );
+                }
+
+
                 if(InventoryInfo[playerid][tmp_id][ItemQuantity] == 1) {
-
-                    new Float:Health;
-                    GetPlayerHealth(playerid, Health);
                     
-                    if(Health == 100.00) 
-                        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete iskoristiti ovaj item, health vam je pun.");
-
-                    else if( ( Health + 25.00 )  > 100.00)
-                        SetPlayerHealth(playerid, 100.00);
-                    
-                    else {
-
-                        SetPlayerHealth(playerid, ( Health + 25.00 ) );
-                        SendClientMessage(playerid, x_server, "maryland \187; "c_white"%s vam je regenerirao helth za 25.00 vise.", Inventory_ReturnItemName(InventoryInfo[playerid][tmp_id][ItemID]));
-                    }
-
-                    InventoryInfo[playerid][tmp_id][ItemQuantity]--;
+                    // InventoryInfo[playerid][tmp_id][ItemQuantity]--;
 
                     new q[128];
                     mysql_format(SQL, q, sizeof q, "DELETE FROM `inventory` WHERE `ItemID` = '%d' AND `PlayerID` = '%d'", 
@@ -680,18 +682,6 @@ Dialog:inventoryItemOption(const playerid, response, listitem, string: inputtext
                     inventory_ChosenItem[playerid] = INVALID_INVENTORY_ITEM;
 
                     return (true);
-                }
-
-                new Float:xHealth;
-                GetPlayerHealth(playerid, xHealth);
-                
-                if( ( xHealth + 25.00 ) > 100.00)
-                    SetPlayerHealth(playerid, 100.00);
-                
-                else {
-
-                    SetPlayerHealth(playerid, ( xHealth + 25.00 ) );
-                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"%s vam je regenerirao helth za 25.00 vise.", Inventory_ReturnItemName(InventoryInfo[playerid][tmp_id][ItemID]));
                 }
 
                 InventoryInfo[playerid][tmp_id][ItemQuantity]--;

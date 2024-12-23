@@ -39,16 +39,20 @@ timer medicCooldown[1000](playerid)
 
         medic_Time[playerid]--;
         GameTextForPlayer(playerid, "~w~PREOSTALO VRIJEME : ~r~%d ~w~SEKUNDI", 1000, 3, medic_Time[playerid]);
-        ApplyAnimation(playerid, "CRACK", "crckidle1", 4.0, false, true, true, true, 0);
+        ApplyAnimation(playerid, !"CRACK", !"crckidle1", 4.0, false, true, true, true, 0);
         defer medicCooldown(playerid);
         return ~1;
     }
 
     if(medic_Time[playerid] < 1) {
 
-        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Platili ste "c_server"500$"c_white" ljecenje!");
+        if(!HasLifeInsurance(playerid)) {
+
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Platili ste "c_server"500$"c_white" ljecenje!");
+            GivePlayerMoney(playerid, -500);
+        }
+        
         ClearAnimations(playerid);
-        GivePlayerMoney(playerid, -500);
         TogglePlayerControllable(playerid, true);
         return ~1;
     }
@@ -111,9 +115,9 @@ forward DelayedMedInt(playerid);
 public DelayedMedInt(playerid)
 {   
     new xRand = random(5);
-    SetPlayerCompensatedPosEx(playerid, sz_BedLocations[xRand][0], sz_BedLocations[xRand][1], sz_BedLocations[xRand][2], -1, 23, 7000);
+    SetPlayerCompensatedPos(playerid, sz_BedLocations[xRand][0], sz_BedLocations[xRand][1], sz_BedLocations[xRand][2], -1, 23, 7000);
     SetPlayerInterior(playerid, 23);   
-    ApplyAnimation(playerid, "CRACK", "crckidle1", 4.0, false, false, false, false, 0);
+    ApplyAnimation(playerid, !"CRACK", !"crckidle1", 4.0, false, false, false, false, 0);
     defer medicCooldown(playerid);
 
     return (true);

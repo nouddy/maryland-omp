@@ -33,16 +33,16 @@ enum e_ROUTE_DATA {
 
 new RouteInfo[][e_ROUTE_DATA] = {
 
-    //* [ 1 ] - Bus Station -> Corona -> Ganton -> Glen Park -> Main Street -> Bus Station
 
-    { {1941.5576, -1935.9686, 13.0402} },
-    { {2110.8706, -1707.1532, 13.0475} },
-    { {2076.1069, -1242.7205, 23.5490} },
-    { {2006.8578, -1057.0656, 24.1792} },
-    { {1751.2178, -1158.2406, 23.3850} },
-    { {1339.5123, -1252.2383, 13.0405} },
-    { {1293.8795, -1612.1737, 13.0411} },
-    { {1776.8569, -1911.2544, 13.0616} }
+    { { 2245.1421,-1734.9933,12.9471 } },
+    { { 2472.8179,-1735.8374,12.9524 } },
+    { { 1868.8044,-1256.9802,12.9603 } },
+    { { 1610.1376,-1294.8402,16.8517 } },
+    { { 1338.3033,-1252.3529,12.9464 } },
+    { { 1293.9431,-1612.2274,12.9538 } },
+    { { 1809.4779,-1890.7416,12.9795 } }
+
+
 };
 
 hook OnGameModeInit() {
@@ -83,11 +83,56 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 
         if(vehicleid == busDriver_Vehicle[j]) {
 
-            ClearAnimations(playerid);
+            if(playerJob[playerid] != JOB_BUS_DRIVER)
+                return SendClientMessage(playerid, x_ltorange, "Bus Driver \187; "c_white"Niste zaposleni kao vozac busa!");
+
+            if(playerUniform[playerid] != JOB_BUS_DRIVER)
+                return SendClientMessage(playerid, x_ltorange, "Bus Driver \187; "c_white"Niste obuceni u poslovnu uniformu!");
+
+            if(routeID[playerid] != INVALID_ROUTE_ID)
+                return SendClientMessage(playerid, x_ltorange, "Bus Driver \187; "c_white"Vec vozite odredjenu rutu!");
+
+            new Float:pPos[3];
+            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+            SendClientMessage(playerid, x_ltorange, "Bus Driver \187; "c_white"Zapoceli ste sa poslom, prati lokacije oznacene na mapi!");
+            va_SetVehicleNumberPlate(busVehicle[playerid], "ML-BS0%d", playerid);
+
+            routeID[playerid] = 0;
+            SetPlayerCheckpoint(playerid, RouteInfo[routeID[playerid]][route_Position][0], RouteInfo[routeID[playerid]][route_Position][1], RouteInfo[routeID[playerid]][route_Position][2], 3.50);
         }
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock IsPlayerInBusDriverVehicle(playerid) {
+
+    for(new i = 0; i < sizeof busDriver_Vehicle; i++) {
+
+        if(IsPlayerInVehicle(playerid, busDriver_Vehicle[i]))
+            return (true);
+    }
+
+    return (false);
+}
+
+forward BusDriver_RefreshRouteStatus(playerid);
+public BusDriver_RefreshRouteStatus(playerid) {
+
+    TogglePlayerControllable(playerid, true);
+    routeID[playerid]++;
+
+    if(routeID[playerid] == MAX_ROUTE_ID) {
+
+        RemovePlayerFromVehicle(playerid);
+        SetVehicleToRespawn(GetPlayerVehicleID(playerid));
+        routeID[playerid] = INVALID_ROUTE_ID;
+        job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
+        return Y_HOOKS_BREAK_RETURN_1;
+    }
+
+    SetPlayerCheckpoint(playerid, RouteInfo[routeID[playerid]][route_Position][0], RouteInfo[routeID[playerid]][route_Position][1], RouteInfo[routeID[playerid]][route_Position][2], 3.50);
+    return (true);
 }
 
 hook OnPlayerEnterCheckpoint(playerid) {
@@ -96,55 +141,23 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         if(routeID[playerid] != INVALID_ROUTE_ID) {
 
-            if(!IsPlayerInVehicle(playerid, busVehicle[playerid]))
-                return SendClientMessage(playerid, x_red, "[ ! ] : "c_white"Morate biti u poslovnom vozilu!");
+            if(!IsPlayerInBusDriverVehicle(playerid))
+                return SendClientMessage(playerid, x_ltorange, "Bus Driver \187; "c_white"Morate biti u poslovnom vozilu!");
 
             new Route = routeID[playerid];
 
             if(IsPlayerInRangeOfPoint(playerid, 3.50, RouteInfo[Route][route_Position][0], RouteInfo[Route][route_Position][1], RouteInfo[Route][route_Position][2])) {
 
-                routeID[playerid]++;
-
-                if(Route == MAX_ROUTE_ID) {
-
-                    RemovePlayerFromVehicle(playerid);
-                    DestroyVehicle(busVehicle[playerid]);
-                    
-                    routeID[playerid] = INVALID_ROUTE_ID;
-
-                    job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
-                }
-
+                Notify_SendNotification(playerid, "Utovar putnika, sacekajte malo...", "BUS DRIVER", 431);
                 DisablePlayerCheckpoint(playerid);
-                SetPlayerCheckpoint(playerid, RouteInfo[routeID[playerid]][route_Position][0], RouteInfo[routeID[playerid]][route_Position][1], RouteInfo[routeID[playerid]][route_Position][2], 3.50);
+                TogglePlayerControllable(playerid, false);
+
+                SetTimerEx("BusDriver_RefreshRouteStatus", 4500, false, "d", playerid);
             }
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnJobVehicleCreated(playerid, modelID) {
-
-    new Float:pPos[3];
-
-    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-
-    busVehicle[playerid] = CreateVehicle(modelID, pPos[0], pPos[1], pPos[2], 90.00, 1, 0, 1500);
-    PutPlayerInVehicle(playerid, busVehicle[playerid], 0);
-
-    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste kreirali poslovno vozilo!");
-
-    va_SetVehicleNumberPlate(busVehicle[playerid], "ML-BS0%d", playerid);
-
-    if(routeID[playerid] == INVALID_ROUTE_ID) {
-
-        SendClientMessage(playerid, -1, "[ - ] >> Player RoteID is different than INVALID_ROUTE_ID");
-
-        routeID[playerid] = 0;
-        SetPlayerCheckpoint(playerid, RouteInfo[routeID[playerid]][route_Position][0], RouteInfo[routeID[playerid]][route_Position][1], RouteInfo[routeID[playerid]][route_Position][2], 3.50);
-    }
-
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
 
 //*          >> [ COMMANDS ] <<

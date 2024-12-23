@@ -191,7 +191,10 @@ stock ShowBankDepositPage(playerid)
     PlayerTextDrawFont(playerid, BankDepositPageTDs[playerid][18], TEXT_DRAW_FONT_1);
     PlayerTextDrawSetProportional(playerid, BankDepositPageTDs[playerid][18], true);
 
-    BankDepositPageTDs[playerid][19] = CreatePlayerTextDraw(playerid, 450.666717, 158.888931, "NALOG_(0)");
+    static iban_str[122];
+    format(iban_str, sizeof iban_str, "IBAN_(%s)", FormatIBANString(PlayerBankAccounts[playerid][ ActivePlayerBankAccount[playerid] ][IBAN]));
+
+    BankDepositPageTDs[playerid][19] = CreatePlayerTextDraw(playerid, 450.666717, 158.888931, iban_str);
     PlayerTextDrawLetterSize(playerid, BankDepositPageTDs[playerid][19], 0.195666, 0.716444);
     PlayerTextDrawAlignment(playerid, BankDepositPageTDs[playerid][19], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColour(playerid, BankDepositPageTDs[playerid][19], -1);
@@ -200,7 +203,8 @@ stock ShowBankDepositPage(playerid)
     PlayerTextDrawFont(playerid, BankDepositPageTDs[playerid][19], TEXT_DRAW_FONT_1);
     PlayerTextDrawSetProportional(playerid, BankDepositPageTDs[playerid][19], true);
 
-    BankDepositPageTDs[playerid][20] = CreatePlayerTextDraw(playerid, 396.666748, 185.851928, "CURRENT:_TRENUTNO_STANJE");
+    
+    BankDepositPageTDs[playerid][20] = CreatePlayerTextDraw(playerid, 396.666748, 185.851928, "CURRENT:_CHOOSE_CURNNECY");
     PlayerTextDrawLetterSize(playerid, BankDepositPageTDs[playerid][20], 0.123332, 0.492444);
     PlayerTextDrawAlignment(playerid, BankDepositPageTDs[playerid][20], TEXT_DRAW_ALIGN_LEFT);
     PlayerTextDrawColour(playerid, BankDepositPageTDs[playerid][20], -1);
@@ -282,4 +286,29 @@ stock HideBankDepositPage(playerid)
         BankDepositPageTDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
     return 1;
+}
+
+stock bool:IsBankDepositCurrencyButton(playerid, PlayerText:playertextid) {
+
+    if( playertextid == BankDepositPageTDs[playerid][13] )
+        return true;
+    
+    return false;
+}
+
+stock bool:IsBankDepositValueButton(playerid, PlayerText:playertextid) {
+
+    if( playertextid == BankDepositPageTDs[playerid][14] )
+        return true;
+    
+    return false;
+}
+
+
+stock bool:IsBankDepositConfirmButton(playerid, PlayerText:playertextid) {
+
+    if( playertextid == BankDepositPageTDs[playerid][22] )
+        return true;
+    
+    return false;
 }

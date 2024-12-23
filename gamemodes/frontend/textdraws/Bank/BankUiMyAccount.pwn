@@ -174,61 +174,61 @@ stock ShowBankMyAccountPage(playerid)
     PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][32], true);
 
     //Y+26.00 is next item
-    for(new i = 0; i < sizeof(TransfersDummyData); i++)
-    {
-        new tmpStr[128];
-        format(tmpStr, sizeof(tmpStr), "%f.2", TransfersDummyData[i][ammount]);
-        BankMyAccountPageTDs[playerid][37] = CreatePlayerTextDraw(playerid, 202.333435, 146.029708 + (i*26), tmpStr);
+    // for(new i = 0; i < sizeof(TransfersDummyData); i++)
+    // {
+    //     new tmpStr[128];
+    //     format(tmpStr, sizeof(tmpStr), "%f.2", TransfersDummyData[i][ammount]);
+    //     BankMyAccountPageTDs[playerid][37] = CreatePlayerTextDraw(playerid, 202.333435, 146.029708 + (i*26), tmpStr);
 
-        PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][37], 0.132666, 0.616886);
-        PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][37], TEXT_DRAW_ALIGN_LEFT);
-        PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][37], (TransfersDummyData[i][ammount] > 0) ? 16711935 : -216792833 );
-        PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][37], false);
-        PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][37], 255);
-        PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][37], TEXT_DRAW_FONT_1);
-        PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][37], true);
+    //     PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][37], 0.132666, 0.616886);
+    //     PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][37], TEXT_DRAW_ALIGN_LEFT);
+    //     PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][37], (TransfersDummyData[i][ammount] > 0) ? 16711935 : -216792833 );
+    //     PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][37], false);
+    //     PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][37], 255);
+    //     PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][37], TEXT_DRAW_FONT_1);
+    //     PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][37], true);
         
 
 
-        format(tmpStr, sizeof(tmpStr), "FROM_(%s)_TO_(%s)", TransfersDummyData[i][fromAccount], TransfersDummyData[i][toAccount]);
-        BankMyAccountPageTDs[playerid][33] = CreatePlayerTextDraw(playerid, 347.000091, 141.466751 + (i*26), tmpStr);
+    //     format(tmpStr, sizeof(tmpStr), "FROM_(%s)_TO_(%s)", TransfersDummyData[i][fromAccount], TransfersDummyData[i][toAccount]);
+    //     BankMyAccountPageTDs[playerid][33] = CreatePlayerTextDraw(playerid, 347.000091, 141.466751 + (i*26), tmpStr);
 
-        PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][33], 0.113333, 0.475849);
-        PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][33], TEXT_DRAW_ALIGN_CENTRE);
-        PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][33], -1);
-        PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][33], false);
-        PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][33], 255);
-        PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][33], TEXT_DRAW_FONT_1);
-        PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][33], true);
+    //     PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][33], 0.113333, 0.475849);
+    //     PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][33], TEXT_DRAW_ALIGN_CENTRE);
+    //     PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][33], -1);
+    //     PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][33], false);
+    //     PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][33], 255);
+    //     PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][33], TEXT_DRAW_FONT_1);
+    //     PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][33], true);
 
-        BankMyAccountPageTDs[playerid][36] = CreatePlayerTextDraw(playerid, 346.999938, 150.177856 + (i*26), TransfersDummyData[i][transferDescription]);
-        PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][36], 0.113333, 0.475849);
-        PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][36], TEXT_DRAW_ALIGN_CENTRE);
-        PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][36], -1);
-        PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][36], false);
-        PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][36], 255);
-        PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][36], TEXT_DRAW_FONT_1);
-        PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][36], true);
+    //     BankMyAccountPageTDs[playerid][36] = CreatePlayerTextDraw(playerid, 346.999938, 150.177856 + (i*26), TransfersDummyData[i][transferDescription]);
+    //     PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][36], 0.113333, 0.475849);
+    //     PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][36], TEXT_DRAW_ALIGN_CENTRE);
+    //     PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][36], -1);
+    //     PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][36], false);
+    //     PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][36], 255);
+    //     PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][36], TEXT_DRAW_FONT_1);
+    //     PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][36], true);
 
-        BankMyAccountPageTDs[playerid][34] = CreatePlayerTextDraw(playerid, 518.333312, 146.029708 + (i*26), TransfersDummyData[i][transferDate]);
-        PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][34], 0.132666, 0.616886);
-        PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][34], TEXT_DRAW_ALIGN_RIGHT);
-        PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][34], -1);
-        PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][34], false);
-        PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][34], 255);
-        PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][34], TEXT_DRAW_FONT_1);
-        PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][34], true);
+    //     BankMyAccountPageTDs[playerid][34] = CreatePlayerTextDraw(playerid, 518.333312, 146.029708 + (i*26), TransfersDummyData[i][transferDate]);
+    //     PlayerTextDrawLetterSize(playerid, BankMyAccountPageTDs[playerid][34], 0.132666, 0.616886);
+    //     PlayerTextDrawAlignment(playerid, BankMyAccountPageTDs[playerid][34], TEXT_DRAW_ALIGN_RIGHT);
+    //     PlayerTextDrawColour(playerid, BankMyAccountPageTDs[playerid][34], -1);
+    //     PlayerTextDrawSetShadow(playerid, BankMyAccountPageTDs[playerid][34], false);
+    //     PlayerTextDrawBackgroundColour(playerid, BankMyAccountPageTDs[playerid][34], 255);
+    //     PlayerTextDrawFont(playerid, BankMyAccountPageTDs[playerid][34], TEXT_DRAW_FONT_1);
+    //     PlayerTextDrawSetProportional(playerid, BankMyAccountPageTDs[playerid][34], true);
 
-        PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][33]);
-        PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][36]);
-        PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][34]);
-        PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][37]);
+    //     PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][33]);
+    //     PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][36]);
+    //     PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][34]);
+    //     PlayerTextDrawShow(playerid, BankMyAccountPageTDs[playerid][37]);
 
-        BankMyAccountPageTDs[playerid][33] = INVALID_PLAYER_TEXT_DRAW;
-        BankMyAccountPageTDs[playerid][36] = INVALID_PLAYER_TEXT_DRAW;
-        BankMyAccountPageTDs[playerid][34] = INVALID_PLAYER_TEXT_DRAW;
-        BankMyAccountPageTDs[playerid][37] = INVALID_PLAYER_TEXT_DRAW;
-    }
+    //     BankMyAccountPageTDs[playerid][33] = INVALID_PLAYER_TEXT_DRAW;
+    //     BankMyAccountPageTDs[playerid][36] = INVALID_PLAYER_TEXT_DRAW;
+    //     BankMyAccountPageTDs[playerid][34] = INVALID_PLAYER_TEXT_DRAW;
+    //     BankMyAccountPageTDs[playerid][37] = INVALID_PLAYER_TEXT_DRAW;
+    // }
 
     BankMyAccountPageTDs[playerid][41] = CreatePlayerTextDraw(playerid, 333.666809, 294.377777, "ld_beat:left");
     PlayerTextDrawTextSize(playerid, BankMyAccountPageTDs[playerid][41], 7.000000, 9.000000);
@@ -265,7 +265,6 @@ stock HideBankMyAccountPage(playerid)
     for(new i = 0; i < sizeof(BankMyAccountPageTDs[]); i++)
     {
         if(BankMyAccountPageTDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
         PlayerTextDrawDestroy(playerid, BankMyAccountPageTDs[playerid][i]);
         BankMyAccountPageTDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }

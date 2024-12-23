@@ -1,4 +1,5 @@
 /*
+
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -16,7 +17,8 @@
  *  @File           driving_school.script
  *  @Module         script
  *  @Todo:          Smaknuti debug poruke, vratiti ga u autoskolu kad polozi, dodati tajmere od 2 sekunda kad udje u checkpoint. (To cu ja sjutra (Noddy));
- */
+ 
+*/
 
 #include <ysilib\YSI_Coding\y_hooks>
 
@@ -56,7 +58,7 @@ new const Float:sz_PolyCheckpoints[13][3] = {
     { 1325.6704,1435.6135,100.6776 },
     { 1298.4663,1560.8510,100.6721 }
 
-} ;
+};
 
 new polyCPs[MAX_PLAYERS][13];
 new polyIcons[MAX_PLAYERS][13];
@@ -1122,10 +1124,12 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
                 onPoly[playerid] = true;
                 polyProgress[playerid] = 1;
-                //* Necemo moci cpove koristiti
+
                 polyIcons[playerid][0] = SetPlayerMapIcon(playerid, DRIVING_SCHOOL_ICON, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2], 0, 0xFF0056FF, MAPICON_GLOBAL);
                 polyCPs[playerid][0] = CreatePlayerPickup(playerid, 19607, 1, sz_PolyCheckpoints[polyProgress[playerid]-1][0], sz_PolyCheckpoints[polyProgress[playerid]-1][1], sz_PolyCheckpoints[polyProgress[playerid]-1][2]-0.9);
                 SetPlayerPickupVirtualWorld(playerid, polyCPs[playerid][0], 8);
+                SetTimerEx("Polygon_UpdatePlayerProgress", 1000, true, "d", playerid);
+
                 break;
             }
         }
@@ -1134,14 +1138,18 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
+forward Polygon_UpdatePlayerProgress(playerid);
+public Polygon_UpdatePlayerProgress(playerid) {
 
     for(new i = 0; i < sizeof polyCPs[]; i++) {
         //* isto njesra, bolje player, jer OMP ima pise da CPovi i ostalo nece raditi jedino pickupi, sve ostalo pada na pod
-        if(pickupid == polyCPs[playerid][i]) {
+        new Float:pPos[3];
+        GetPlayerPickupPos(playerid, polyCPs[playerid][i], pPos[0], pPos[1], pPos[2]);
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.7, pPos[0], pPos[1], pPos[2])) {
 
             if(!DrivingSchool_IsPlayerInVehicle(playerid))
-                return SendClientMessage(playerid, x_server, "Moras biti u vozilu!");
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Moras biti u vozilu!");
 
             if(polyProgress[playerid] == 13) {
 
@@ -1150,7 +1158,6 @@ hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
 
                 DestroyPlayerPickup(playerid, polyCPs[playerid][12]);
                 RemovePlayerMapIcon(playerid, polyIcons[playerid][12]);
-
                 onPoly[playerid] = false;
                 PlayerDocuments[playerid][pDriveLicense] = 1;
 
@@ -1165,6 +1172,7 @@ hook OnPlayerPickUpPlayerPickup(playerid, pickupid) {
                     GivePlayerMoney(playerid, sz_QuestList[3][questAwards][0]);
                     GiveCharXP(playerid, sz_QuestList[3][questAwards][1]);
                 }
+                return Y_HOOKS_BREAK_RETURN_1;
             }    
 
             DestroyPlayerPickup(playerid, polyCPs[playerid][i]);

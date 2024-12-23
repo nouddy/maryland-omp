@@ -2,25 +2,35 @@
 
 
 new static PlayerText:BankAccountsPageTDs[MAX_PLAYERS][24];
-new static PlayerText:BankAccountsPageListTDs[MAX_PLAYERS][10];
+new PlayerText:BankAccountsPageListTDs[MAX_PLAYERS][10];
 
-enum Currency {
-    Dollar,
-    Euro,
-    Pound
-}
-new stock CurrencyString[Currency][8] = {
-    "Dollar",
-    "Euro",
-    "Pound"
-};
+// enum Currency {
+//     Dollar,
+//     Euro,
+//     Pound
+// }
+// new stock CurrencyString[Currency][8] = {
+//     "Dollar",
+//     "Euro",
+//     "Pound"
+// };
 
 
 enum eBankAccountsList {
-    IBAN[24],
+    IBAN,
     OwnerName[MAX_PLAYER_NAME],
-    Float:Currencies[Currency],
+    Float:Currencies[eCurrency],
 }
+
+new PlayerBankAccounts[MAX_PLAYERS][10][eBankAccountsList];
+
+new ActivePlayerBankAccount[MAX_PLAYERS];
+
+new ActiveChosenCurrency[MAX_PLAYERS],
+    Float:ActiveDepositAmmount[MAX_PLAYERS];
+
+new WithdrawCurrency[MAX_PLAYERS],
+    Float:ActiveWithdrawAmmount[MAX_PLAYERS];
 
 //All kind of buttons
 stock bool:IsBankAccountCreateNewButton(playerid, PlayerText:playertextid)
@@ -91,43 +101,43 @@ stock ShowBankAccountsPage(playerid)
 
 
     //Pagination
-    BankAccountsPageTDs[playerid][3] = CreatePlayerTextDraw(playerid, 504.000091, 369.200103, "PAGE_1_/_?");
-    PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][3], 0.125330, 0.621034);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][3], TEXT_DRAW_ALIGN_CENTRE);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][3], -1);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][3], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][3], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][3], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][3], true);
+    // BankAccountsPageTDs[playerid][3] = CreatePlayerTextDraw(playerid, 504.000091, 369.200103, "PAGE_1_/_?");
+    // PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][3], 0.125330, 0.621034);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][3], TEXT_DRAW_ALIGN_CENTRE);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][3], -1);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][3], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][3], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][3], TEXT_DRAW_FONT_1);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][3], true);
 
-    BankAccountsPageTDs[playerid][4] = CreatePlayerTextDraw(playerid, 505.333343, 359.089080, "ld_beat:right");
-    PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][4], 6.000000, 9.000000);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][4], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][4], -141);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][4], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][4], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][4], false);
-    PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][4], true);
+    // BankAccountsPageTDs[playerid][4] = CreatePlayerTextDraw(playerid, 505.333343, 359.089080, "ld_beat:right");
+    // PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][4], 6.000000, 9.000000);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][4], -141);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][4], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][4], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][4], false);
+    // PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][4], true);
 
-    BankAccountsPageTDs[playerid][5] = CreatePlayerTextDraw(playerid, 496.666595, 359.089080, "ld_beat:left");
-    PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][5], 6.000000, 9.000000);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][5], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][5], -141);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][5], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][5], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][5], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][5], false);
-    PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][5], true);
+    // BankAccountsPageTDs[playerid][5] = CreatePlayerTextDraw(playerid, 496.666595, 359.089080, "ld_beat:left");
+    // PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][5], 6.000000, 9.000000);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][5], -141);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][5], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][5], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][5], TEXT_DRAW_FONT_SPRITE_DRAW);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][5], false);
+    // PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][5], true);
 
-    BankAccountsPageTDs[playerid][6] = CreatePlayerTextDraw(playerid, 500.766387, 359.088928, "LD_SPAC:white");
-    PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][6], 6.219982, 9.000000);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][6], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][6], 539506175);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][6], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][6], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][6], false);
+    // BankAccountsPageTDs[playerid][6] = CreatePlayerTextDraw(playerid, 500.766387, 359.088928, "LD_SPAC:white");
+    // PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][6], 6.219982, 9.000000);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][6], 539506175);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][6], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][6], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][6], TEXT_DRAW_FONT_SPRITE_DRAW);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][6], false);
 
 
     //Table Header
@@ -152,7 +162,7 @@ stock ShowBankAccountsPage(playerid)
     /*
     for(new i = 0; i < 10; i++)
     {
-        ShowPlayerBankAccountInfo(playerid, i, iBAN, OwnerName Float:Money[MONEY_TYPE]);
+        ShowPlayerBankAccountInfo(playerid, i, iBAN, OwnerName Float:Money[eCurrency]);
     }
     */
 
@@ -277,36 +287,36 @@ stock ShowBankAccountsPage(playerid)
     PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][20], TEXT_DRAW_FONT_1);
     PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][20], true);
 
-    BankAccountsPageTDs[playerid][21] = CreatePlayerTextDraw(playerid, 267.999969, 347.059387, "");
-    PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][21], 107.000000, 24.000000);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][21], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][21], 1095325951);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][21], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][21], -256);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][21], TEXT_DRAW_FONT_MODEL_PREVIEW);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][21], false);
-    PlayerTextDrawSetPreviewModel(playerid, BankAccountsPageTDs[playerid][21], 1317);
-    PlayerTextDrawSetPreviewRot(playerid, BankAccountsPageTDs[playerid][21], 0.000000, 270.000000, 0.000000, 1.000000);
+    // BankAccountsPageTDs[playerid][21] = CreatePlayerTextDraw(playerid, 267.999969, 347.059387, "");
+    // PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][21], 107.000000, 24.000000);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][21], TEXT_DRAW_ALIGN_LEFT);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][21], 1095325951);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][21], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][21], -256);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][21], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][21], false);
+    // PlayerTextDrawSetPreviewModel(playerid, BankAccountsPageTDs[playerid][21], 1317);
+    // PlayerTextDrawSetPreviewRot(playerid, BankAccountsPageTDs[playerid][21], 0.000000, 270.000000, 0.000000, 1.000000);
 
-    BankAccountsPageTDs[playerid][22] = CreatePlayerTextDraw(playerid, 348.366760, 362.477905, "SWITCH");
-    PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][22], 8.000000, 48.000000);
-    PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][22], 0.172000, 0.637628);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][22], TEXT_DRAW_ALIGN_CENTRE);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][22], -141);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][22], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][22], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][22], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][22], true);
-    PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][22], true);
+    // BankAccountsPageTDs[playerid][22] = CreatePlayerTextDraw(playerid, 348.366760, 362.477905, "SWITCH");
+    // PlayerTextDrawTextSize(playerid, BankAccountsPageTDs[playerid][22], 8.000000, 48.000000);
+    // PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][22], 0.172000, 0.637628);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][22], TEXT_DRAW_ALIGN_CENTRE);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][22], -141);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][22], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][22], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][22], TEXT_DRAW_FONT_1);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][22], true);
+    // PlayerTextDrawSetSelectable(playerid, BankAccountsPageTDs[playerid][22], true);
 
-    BankAccountsPageTDs[playerid][23] = CreatePlayerTextDraw(playerid, 347.366912, 348.788940, "logovanje_na_drugi_nalog");
-    PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][23], 0.172000, 0.637628);
-    PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][23], TEXT_DRAW_ALIGN_CENTRE);
-    PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][23], -1);
-    PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][23], false);
-    PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][23], 255);
-    PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][23], TEXT_DRAW_FONT_1);
-    PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][23], true);
+    // BankAccountsPageTDs[playerid][23] = CreatePlayerTextDraw(playerid, 347.366912, 348.788940, "logovanje_na_drugi_nalog");
+    // PlayerTextDrawLetterSize(playerid, BankAccountsPageTDs[playerid][23], 0.172000, 0.637628);
+    // PlayerTextDrawAlignment(playerid, BankAccountsPageTDs[playerid][23], TEXT_DRAW_ALIGN_CENTRE);
+    // PlayerTextDrawColour(playerid, BankAccountsPageTDs[playerid][23], -1);
+    // PlayerTextDrawSetShadow(playerid, BankAccountsPageTDs[playerid][23], false);
+    // PlayerTextDrawBackgroundColour(playerid, BankAccountsPageTDs[playerid][23], 255);
+    // PlayerTextDrawFont(playerid, BankAccountsPageTDs[playerid][23], TEXT_DRAW_FONT_1);
+    // PlayerTextDrawSetProportional(playerid, BankAccountsPageTDs[playerid][23], true);
 
     for(new i = 0; i < sizeof(BankAccountsPageTDs[]); i++)
     {
@@ -348,10 +358,26 @@ stock BankAccountsPageResetVars(playerid)
     }    
 }
 
-stock ShowPlayerBankAccountInfo(playerid, index, iBAN, AccountOwnerName[], Float:AccountMoney[MONEY_TYPE])
+stock ShowPlayerBankAccountInfo(playerid, index, iBAN, AccountOwnerName[], Float:AccountMoney[eCurrency])
 {
+
+    if(index == -1) {
+
+        print("Failed to show bank account info for playerid %d | invalid ActiveBankAccount var");
+        return 0;
+    }
+
     new tmpStr[128];
-    format(tmpStr, sizeof(tmpStr), "(%012d)_._%s__.__%.2f_%s__.__%.2f_%s__.__%.2f_%s", iBAN, AccountOwnerName, AccountMoney[MONEY_TYPE_DOLLAR], MoneyTypeString[MONEY_TYPE_DOLLAR], AccountMoney[MONEY_TYPE_EURO], MoneyTypeString[MONEY_TYPE_EURO], AccountMoney[MONEY_TYPE_POUND], MoneyTypeString[MONEY_TYPE_POUND]);
+    format(tmpStr, sizeof(tmpStr), "(%s)_._%s__.__%.2f_%s__.__%.2f_%s__.__%.2f_%s", FormatIBANString(iBAN), AccountOwnerName, AccountMoney[CURRENCY_DOLLAR], CurrencyString[CURRENCY_DOLLAR], AccountMoney[CURRENCY_EURO], CurrencyString[CURRENCY_EURO], AccountMoney[CURRENCY_POUND], CurrencyString[CURRENCY_POUND]);
+
+
+    PlayerBankAccounts[playerid][index][IBAN] = iBAN;
+    strmid(PlayerBankAccounts[playerid][index][OwnerName], AccountOwnerName, 0, 24);
+
+    //Currencies -> Dollar Euro Pound
+    PlayerBankAccounts[playerid][index][Currencies][CURRENCY_DOLLAR] = AccountMoney[CURRENCY_DOLLAR];
+    PlayerBankAccounts[playerid][index][Currencies][CURRENCY_EURO] = AccountMoney[CURRENCY_EURO];
+    PlayerBankAccounts[playerid][index][Currencies][CURRENCY_POUND] = AccountMoney[CURRENCY_POUND];
 
     BankAccountsPageListTDs[playerid][index] = CreatePlayerTextDraw(playerid, 196.333496, 153.081497 + (index*10), tmpStr);
     PlayerTextDrawLetterSize(playerid, BankAccountsPageListTDs[playerid][index], 0.140666, 0.737184);
@@ -364,13 +390,44 @@ stock ShowPlayerBankAccountInfo(playerid, index, iBAN, AccountOwnerName[], Float
     PlayerTextDrawTextSize(playerid, BankAccountsPageListTDs[playerid][index], 498.000000, 6.9);
     PlayerTextDrawSetSelectable(playerid, BankAccountsPageListTDs[playerid][index], true);
 
-    
     //TMP Just to demonstrate active item
-    if(index == 0)
+    if(index == ActivePlayerBankAccount[playerid])
     {
         PlayerTextDrawColour(playerid, BankAccountsPageListTDs[playerid][index], -1);
         PlayerTextDrawSetSelectable(playerid, BankAccountsPageListTDs[playerid][index], false);
     }
 
     PlayerTextDrawShow(playerid, BankAccountsPageListTDs[playerid][index]); 
+
+    return 1;
+}
+
+stock FormatIBANString(iBAN) {
+
+    new str[24];
+    format(str, sizeof str, "%012d", iBAN);
+    return str;
+}
+
+stock SetPlayerActiveBankAccount(playerid, td_index) {
+
+    if(!IsPlayerConnected(playerid))
+        return false;
+
+    if(td_index < 0 || td_index >= sizeof BankAccountsPageListTDs[] )
+        return false;
+
+    for(new i = 0; i < sizeof BankAccountsPageListTDs[]; i++) {
+
+        PlayerTextDrawColour(playerid, BankAccountsPageListTDs[playerid][i], -141);
+        PlayerTextDrawSetSelectable(playerid, BankAccountsPageListTDs[playerid][i], true);
+        PlayerTextDrawShow(playerid, BankAccountsPageListTDs[playerid][i]); 
+    }
+
+    ActivePlayerBankAccount[playerid] = td_index;
+    PlayerTextDrawColour(playerid, BankAccountsPageListTDs[playerid][td_index], -1);
+    PlayerTextDrawSetSelectable(playerid, BankAccountsPageListTDs[playerid][td_index], false);
+    PlayerTextDrawShow(playerid, BankAccountsPageListTDs[playerid][td_index]); 
+
+    return true;
 }

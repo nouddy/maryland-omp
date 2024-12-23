@@ -78,7 +78,7 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
                 if(PoliceMember[playerid][policeID] > 0) {
 
                     Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX,""c_server"Maryland \187; "c_white"Police",
-                                                                        ""c_white"/cuff /tie /pu /su /bork", "Ok", "");
+                                                                        ""c_white"/cuff /tie /pu /su /bork /r", "Ok", "");
                 }
             }
 

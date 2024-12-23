@@ -89,21 +89,21 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
-					"Kucu\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nPolicija\nKontejner\nPort",
+					"Kucu\nKlupu\nBiznis\nPolicija\nKontejner\nPort",
 					"Odaberi", "Izlaz");
 			}
 			case 4:
 			{
 				Dialog_Show(playerid, "dialog_izmeni", DIALOG_STYLE_LIST,
 					"Izmeni Funkcije",
-					"Kucu\nMetro Stanica\nPolicija",
+					"Kucu\nPolicija",
 					"Odaberi", "Izlaz");
 			}
 			case 5:
 			{
 				Dialog_Show(playerid, "dialog_izbrisi", DIALOG_STYLE_LIST,
 					"Izbrisi Funkcije",
-					"Kucu\nSve Kuce\nKlupu\nBiznis\nSafe Zona\nMetro Stanica\nKontejner",
+					"Kucu\nSve Kuce\nKlupu\nBiznis\nnKontejner",
 					"Odaberi", "Izlaz");
 			}
 		}
@@ -176,7 +176,6 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 		{
 			case 0:
 			{
-				print("dolazi do dialoga.");
 				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Maryland - Kreiraj Kucu:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila", "Dalje", "Izlaz");
 			}
 			case 1:
@@ -204,19 +203,15 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 			}
 			case 3:
 			{
-				Dialog_Show(playerid, "dialog_safezona", DIALOG_STYLE_INPUT, "Maryland - SafeZona Kreiraj:", "** Upisite zeljenu boju za vasu Safe Zonu.", "Dalje", "Izlaz");
-			}
-			case 4:
-			{
 				Dialog_Show(playerid, "dialog_odabirstanice", DIALOG_STYLE_INPUT, "Maryland - Metro Kreiraj:", "** Upisite zeljenu rutu za vas metro\n\nMetro stanice: 1 - Ruta1 | 1 - Ruta2 | 2 - Ruta2 | 3 - Ruta3 | 4 - Ruta4 | 5 - Ruta5", "Dalje", "Izlaz");
 
 			}
 
-			case 5: {
+			case 4: {
 
 				Dialog_Show(playerid, "dialog_createPolice", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Upisite zeljeno ime za policiju", "Unesi", "Odustani");
 			}
-			case 6: {
+			case 5: {
 
 				new conID = 0;
 				for( new j = 0; j < MAX_CONTAINERS; j++ ) {
@@ -256,7 +251,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 				EditContainer[ playerid ] = conID;
 				creatingContainer[ playerid ] = true;
 			}
-			case 7: {
+			case 6: {
 
 				Dialog_Show(playerid, "dialog_CreatePort", DIALOG_STYLE_INPUT, "Maryland - Port Creation", "** Upisite zeljeno ime za port", "Unesi", "Odustani");
 			}
@@ -264,59 +259,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
-Dialog:dialog_odabirstanice(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		new idmetroa;
-		if(sscanf(inputtext, "i", idmetroa))
-			return Dialog_Show(playerid, "dialog_odabirstanice", DIALOG_STYLE_INPUT, "Maryland - Metro Kreiraj:", "** Upisite zeljenu rutu za vas metro\n\nMetro stanice: 1 - Ruta1 | 1 - Ruta2 | 2 - Ruta2 | 3 - Ruta3 | 4 - Ruta4 | 5 - Ruta5", "Dalje", "Izlaz");
 
-
-		new id = Iter_Free(Metros);
-
-		if(id == -1)
-			return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nema dovoljno slobodnih mesta za metro stanice");
-
-		GetPlayerPos(playerid, metroInfo[id][MetroX], metroInfo[id][MetroY], metroInfo[id][MetroZ]);
-
-
-		metroInfo[id][MetroRouteID] = idmetroa;
-
-		sql_createmetro(id);
-
-		MetrosLabel(id);
-		
-
-		printf("%f, %f, %f",metroInfo[id][MetroX], metroInfo[id][MetroY], metroInfo[id][MetroZ]);
-	}
-	return (true);
-}
-Dialog:dialog_safezona(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		new boja;
-		if(sscanf(inputtext,"x",boja))
-			return Dialog_Show(playerid, dialog_safezonekreiraj, DIALOG_STYLE_INPUT, "Maryland - SafeZona Kreiraj:", "** Upisite zeljenu boju za vasu Safe Zonu.", "Dalje", "Izlaz");
-
-		new id;
-		id = Iter_Free(SafeZone);
-		if(id == -1) 
-			return SendClientMessage(playerid, x_server, "Prekoracen je limit vaseg iteratora.");
-
-		PlayerCreateSafeZoneID[playerid] = id;
-		PlayerCreateSafeZone[playerid] = 1;
-
-		SafeZone[id][safeColor] = boja;
-
-		SendClientMessage(playerid, x_server, "Uspesno ste postavili boju za vasu safe zonu.");
-		SendClientMessage(playerid, x_server, "Odredi vasu prvu poziciju za safe zonu.");
-	}
-	return (true);
-}
 
 Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 {	
@@ -332,16 +275,7 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 						"Nastavi", "Nazad"
 					);				
 			}
-			case 1:
-			{
-				new id = NearestMetro(playerid);
-
-
-				if(id == -1)
-					return SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Nema metroa u blizini");
-				Dialog_Show(playerid, "dialog_izmenistanicu", DIALOG_STYLE_LIST, "metro Stanica - izmena", "Ruta1\nRuta2\nRuta3\nRuta5\nRuta5\n", "Dalje", "Izlaz");
-			}
-			case 2: {
+			case 1: {
 
 				Dialog_Show(playerid, "dialog_policeEdit", DIALOG_STYLE_LIST, "Police Department - izmena", "Napravi Duty Point\nNapravi Equipment Point\nPromjeni Tip", "Odaberi", "Odustani");
 			}
@@ -350,24 +284,7 @@ Dialog: dialog_izmeni(const playerid, response, listitem, string: inputtext[])
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-Dialog:dialog_izmenistanicu(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		new id = NearestMetro(playerid);
-		switch(listitem)
-		{
-			case 0: metroInfo[id][MetroRouteID] = 1;
-			case 1: metroInfo[id][MetroRouteID] = 2;
-			case 2: metroInfo[id][MetroRouteID] = 3;
-			case 3: metroInfo[id][MetroRouteID] = 4;
-			case 4: metroInfo[id][MetroRouteID] = 5;
-		}
-		va_SendClientMessage(playerid, 0xE74C3CFF, "Greska: {FFFFFF}Promenili ste rutu metroa id: %d",id);
-	}
-	return (true);
-}
+
 Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 {	
 	if(response)
@@ -431,45 +348,6 @@ Dialog: dialog_izbrisi(const playerid, response, listitem, string: inputtext[])
 					);
 			}
 			case 4:
-			{
-				new id = GetNearestSafe(playerid);
-				if(id == -1)
-					return SendClientMessage(playerid, x_server, "Niste u blizini safe zone.");
-
-				if(!Iter_Contains(SafeZone, id))
-					return SendClientMessage(playerid, x_server, "Ta safezona je vec obrisana.");
-
-			    new szQuery[128];
-			    format(szQuery, sizeof szQuery, "DELETE FROM `safezones` WHERE `safeSQLID`='%d'", id);
-			    mysql_tquery(SQL, szQuery);
-			    
-			    DestroyDynamicPickup(SafeZone[ id ][ safePickup ]);
-			    DestroyDynamic3DTextLabel(SafeZone[ id ][ safeLabel ]);
-			    Iter_Remove(SafeZone, id);
-				InSafeZone[playerid] = false;
-
-			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali safe zonu.");				
-			}
-			case 5:
-			{
-				new id = NearestMetro(playerid);
-				if(id == -1)
-					return SendClientMessage(playerid, x_server, "Niste u blizini metroa.");
-
-				if(!Iter_Contains(Metros, id))
-					return SendClientMessage(playerid, x_server, "Taj metro je vec obrisana.");
-
-			    new szQuery[128];
-			    format(szQuery, sizeof szQuery, "DELETE FROM `metros` WHERE `metroID`='%d'", id);
-			    mysql_tquery(SQL, szQuery);
-			    
-			    DestroyDynamicPickup(MetroPickup[id]);
-			    DestroyDynamic3DTextLabel(MetroLabel[id]);
-			    Iter_Remove(Metros, id);
-
-			    SendClientMessage(playerid, x_server, "Uspesno ste obrisali metro.");	
-			}
-			case 6:
 			{
 				if( GetNearestContainer( playerid ) == -1 ) return SendClientMessage(playerid, x_server, "Niste u blizini kontejnera.");
 				new i = GetNearestContainer( playerid );

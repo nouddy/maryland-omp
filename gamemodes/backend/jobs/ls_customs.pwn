@@ -471,7 +471,7 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
 
         SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
         RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
-        ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
+        ApplyAnimation(playerid, !"CARRY", !"putdwn", 4.1, false, false, false, false, SYNC_NONE);
 
         mechanic_CurrentList[playerid][ mechanic_Carry1[playerid] ] = mechanic_Carry2[playerid]; 
         mechanic_Carry1[playerid] = -1;

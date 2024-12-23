@@ -139,6 +139,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/logs/log.pwn"
 
 #include "backend/misc/quests.pwn"
+#include "backend/misc/randomVehicle.pwn"
+#include "backend/misc/shell-minigame.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
@@ -178,10 +180,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- Inventory
 
-//-------------------------------------------------------------------------------------------------------- Finances
-#include "frontend/textdraws/Bank/BankUI.pwn"
-#include "backend/finance/Accounts.pwn"
-#include "backend/finance/jewlery.pwn"
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/finance/end/do-not-look.temp"
 
@@ -191,6 +189,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/property/end/do-not-look.temp"
+
+#include "backend/misc/hunger.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Business 'n inventory
 #include "backend/inventory/inventory.pwn"
@@ -226,6 +226,11 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.temp"
 
+//-------------------------------------------------------------------------------------------------------- Finances
+#include "frontend/textdraws/Bank/BankUI.pwn"
+#include "backend/finance/Accounts.pwn"
+#include "backend/finance/jewlery.pwn"
+
 //-------------------------------------------------------------------------------------------------------- Robbery
 #include "backend/robbery/cash-register.pwn"
 #include "backend/robbery/house-burglary.pwn"
@@ -235,6 +240,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- Misc1
 #include "backend/misc/medical.pwn"									//* Hospital
+#include "backend/misc/life-insurance.pwn"									//* Hospital
+#include "backend/misc/player-spawn.pwn"							//* Biranje spawna
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/safezone/end/do-not-look.temp"
@@ -251,6 +258,9 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/npcs/end/do-not-look.temp"
 
+//-------------------------------------------------------------------------------------------------------- Crypto Wallets
+#include "backend/crypto/crypto_ogy.script"
+
 //-------------------------------------------------------------------------------------------------------- Tehnomedia
 #include "backend/tehnomedia/tehnomedia.script"						//* Tehnomedia prodavnica
 #include "backend/tehnomedia/drone.script"							//* Drone
@@ -259,10 +269,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/tehnomedia/end/do-not-look.temp"
 
-
-//-------------------------------------------------------------------------------------------------------- Metros
-
-#include "backend/metros/metros.script"								//* Metro System
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/metros/end/do-not-look.temp"
@@ -368,6 +374,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/jobs/carpentry.job"
 #include "backend/jobs/mower-job.pwn"
 #include "backend/jobs/ls_customs.pwn"
+#include "backend/jobs/bus-stations.pwn"
 
 //-------------------------------------------------------------------------------------------------------- XMAS
 #include "backend/xmas/winter.script"
@@ -388,6 +395,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved
+
+#include "backend/metros/metros.script"								//* Metro System
 
 //-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"								//* Chat Stock
@@ -425,12 +434,12 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 */
 
-CMD:bank(playerid, params[])
-{
-	BankCreateMainUI(playerid);
-	SelectTextDraw(playerid, -1);
-	return 1;
-}
+// CMD:bank(playerid, params[])
+// {
+// 	BankCreateMainUI(playerid);
+// 	SelectTextDraw(playerid, -1);
+// 	return 1;
+// }
 
 CMD:cls(playerid, params[])
 {
@@ -450,5 +459,14 @@ CMD:createbankaccount(playerid, params[])
 CMD:deletemybankaccounts(playerid, params[])
 {
 	DeleteBankAccountByOwner(GetCharacterSQLID(playerid), OWNER_TYPE_PLAYER);
+	return 1;
+}
+
+YCMD:refresh(playerid, params[], help) {
+
+	new Float:pPos[3];
+	GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+	Streamer_UpdateEx(playerid, pPos[0], pPos[1], pPos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+
 	return 1;
 }

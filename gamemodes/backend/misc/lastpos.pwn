@@ -26,15 +26,6 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnCharacterLoaded(playerid)
-{
-    if(!IsPlayerJailed(playerid))
-    {
-        new query[256];
-        mysql_format(SQL, query, sizeof(query), "SELECT cLastX, cLastY, cLastZ, cVW, cInt FROM `characters` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
-        mysql_tquery(SQL, query, "OnCharacterPositionLoaded", "i", playerid);
-    }
-}
 
 forward OnCharacterPositionLoaded(playerid);
 public OnCharacterPositionLoaded(playerid)

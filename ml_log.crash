@@ -160,3 +160,163 @@
 [15:04:59] AMX backtrace:
 [15:04:59] #0 001702b0 in ?? (0, 0) in <unknown>
 [15:04:59] #1 0007f9a0 in public OnPlayerPickUpPlayerPickup (0, 0) in <unknown>
+[14:55:02] Run time error 4: "Array index out of bounds"
+[14:55:02]  Attempted to read/write array element at index 13 in array of size 13
+[14:55:02] AMX backtrace:
+[14:55:02] #0 001787bc in public Polygon_UpdatePlayerProgress (0) in <unknown>
+[15:03:19] Run time error 4: "Array index out of bounds"
+[15:03:19]  Attempted to read/write array element at index 13 in array of size 13
+[15:03:19] AMX backtrace:
+[15:03:19] #0 00178840 in public Polygon_UpdatePlayerProgress (0) in <unknown>
+[19:27:52] Run time error 11: "Divide by zero"
+[19:27:52] AMX backtrace:
+[19:27:52] #0 008752a8 in ?? (0, 120) in <unknown>
+[19:27:52] #1 008775d8 in ?? (0, 120) in <unknown>
+[19:27:52] #2 001d9cb0 in ?? (0, 1, 0, 44) in <unknown>
+[19:27:52] #3 0007fab8 in public OnPlayerModelSelection (0, 1, 0, 44) in <unknown>
+[19:27:52] #4 native CallLocalFunction () in Pawn.dll
+[19:27:52] #5 000e01b4 in public ac_OnPlayerClickPlayerTextDraw (0, 35) in <unknown>
+[19:27:52] #6 00045820 in ?? (0, 35) in <unknown>
+[19:27:52] #7 0007d6d4 in public OnPlayerClickPlayerTextDraw (0, 35) in <unknown>
+[13:44:45] Run time error 4: "Array index out of bounds"
+[13:44:45]  Attempted to read/write array element at negative index -1
+[13:44:45] AMX backtrace:
+[13:44:45] #0 00210508 in public SqlDeleteBankAccount (1, -1, -1) in <unknown>
+[13:44:54] Run time error 4: "Array index out of bounds"
+[13:44:54]  Attempted to read/write array element at negative index -1
+[13:44:54] AMX backtrace:
+[13:44:54] #0 00210508 in public SqlDeleteBankAccount (2, -1, -1) in <unknown>
+[13:49:03] Run time error 4: "Array index out of bounds"
+[13:49:03]  Attempted to read/write array element at negative index -1
+[13:49:03] AMX backtrace:
+[13:49:03] #0 002104fc in public SqlDeleteBankAccount (1, -1, -1) in <unknown>
+[13:49:10] Run time error 4: "Array index out of bounds"
+[13:49:10]  Attempted to read/write array element at negative index -1
+[13:49:10] AMX backtrace:
+[13:49:10] #0 002104fc in public SqlDeleteBankAccount (2, -1, -1) in <unknown>
+[13:50:11] Run time error 4: "Array index out of bounds"
+[13:50:11]  Attempted to read/write array element at negative index -1
+[13:50:11] AMX backtrace:
+[13:50:11] #0 002104fc in public SqlDeleteBankAccount (2, -1, -1) in <unknown>
+[13:53:04] Run time error 4: "Array index out of bounds"
+[13:53:04]  Attempted to read/write array element at negative index -1
+[13:53:04] AMX backtrace:
+[13:53:04] #0 002104fc in public SqlDeleteBankAccount (0, -1, -1) in <unknown>
+[13:53:12] Run time error 4: "Array index out of bounds"
+[13:53:12]  Attempted to read/write array element at negative index -1
+[13:53:12] AMX backtrace:
+[13:53:12] #0 002104fc in public SqlDeleteBankAccount (3, -1, -1) in <unknown>
+[13:53:19] Run time error 4: "Array index out of bounds"
+[13:53:19]  Attempted to read/write array element at negative index -1
+[13:53:19] AMX backtrace:
+[13:53:19] #0 002104fc in public SqlDeleteBankAccount (3, -1, -1) in <unknown>
+[13:53:25] Run time error 4: "Array index out of bounds"
+[13:53:25]  Attempted to read/write array element at negative index -1
+[13:53:25] AMX backtrace:
+[13:53:25] #0 002104fc in public SqlDeleteBankAccount (4, -1, -1) in <unknown>
+[13:53:30] Run time error 4: "Array index out of bounds"
+[13:53:30]  Attempted to read/write array element at negative index -1
+[13:53:30] AMX backtrace:
+[13:53:30] #0 002104fc in public SqlDeleteBankAccount (4, -1, -1) in <unknown>
+[13:53:34] Run time error 4: "Array index out of bounds"
+[13:53:34]  Attempted to read/write array element at negative index -1
+[13:53:34] AMX backtrace:
+[13:53:34] #0 002104fc in public SqlDeleteBankAccount (4, -1, -1) in <unknown>
+[13:58:43] Run time error 4: "Array index out of bounds"
+[13:58:43]  Attempted to read/write array element at negative index -1
+[13:58:43] AMX backtrace:
+[13:58:43] #0 002104fc in public SqlDeleteBankAccount (5, -1, -1) in <unknown>
+[13:59:01] Run time error 4: "Array index out of bounds"
+[13:59:01]  Attempted to read/write array element at negative index -1
+[13:59:01] AMX backtrace:
+[13:59:01] #0 002104fc in public SqlDeleteBankAccount (6, -1, -1) in <unknown>
+[13:59:07] Run time error 4: "Array index out of bounds"
+[13:59:07]  Attempted to read/write array element at negative index -1
+[13:59:07] AMX backtrace:
+[13:59:07] #0 002104fc in public SqlDeleteBankAccount (7, -1, -1) in <unknown>
+[13:59:13] Run time error 4: "Array index out of bounds"
+[13:59:13]  Attempted to read/write array element at negative index -1
+[13:59:13] AMX backtrace:
+[13:59:13] #0 002104fc in public SqlDeleteBankAccount (8, -1, -1) in <unknown>
+[17:30:02] Run time error 4: "Array index out of bounds"
+[17:30:02]  Attempted to read/write array element at negative index -1
+[17:30:02] AMX backtrace:
+[17:30:02] #0 0020f5a0 in ?? (0) in <unknown>
+[17:30:02] #1 00217f74 in ?? (0, 2) in <unknown>
+[17:30:02] #2 00214344 in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[17:30:02] #3 native CallLocalFunction () in Pawn.dll
+[17:30:02] #4 002133c8 in ?? (0, 20) in <unknown>
+[17:30:02] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[17:30:09] Run time error 4: "Array index out of bounds"
+[17:30:09]  Attempted to read/write array element at negative index -1
+[17:30:09] AMX backtrace:
+[17:30:09] #0 0020f5a0 in ?? (0) in <unknown>
+[17:30:09] #1 00217f74 in ?? (0, 2) in <unknown>
+[17:30:09] #2 00214344 in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[17:30:09] #3 native CallLocalFunction () in Pawn.dll
+[17:30:09] #4 002133c8 in ?? (0, 20) in <unknown>
+[17:30:09] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[18:34:11] Run time error 4: "Array index out of bounds"
+[18:34:11]  Attempted to read/write array element at negative index -1
+[18:34:11] AMX backtrace:
+[18:34:11] #0 0020f5a0 in ?? (0) in <unknown>
+[18:34:11] #1 002181a4 in ?? (0, 2) in <unknown>
+[18:34:11] #2 00214574 in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[18:34:11] #3 native CallLocalFunction () in Pawn.dll
+[18:34:11] #4 002133c8 in ?? (0, 20) in <unknown>
+[18:34:11] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[18:40:07] Run time error 4: "Array index out of bounds"
+[18:40:07]  Attempted to read/write array element at negative index -1
+[18:40:07] AMX backtrace:
+[18:40:07] #0 0020f5a0 in ?? (0) in <unknown>
+[18:40:07] #1 002181bc in ?? (0, 2) in <unknown>
+[18:40:07] #2 0021458c in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[18:40:07] #3 native CallLocalFunction () in Pawn.dll
+[18:40:07] #4 002133c8 in ?? (0, 20) in <unknown>
+[18:40:07] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[18:57:55] Run time error 4: "Array index out of bounds"
+[18:57:55]  Attempted to read/write array element at negative index -1
+[18:57:55] AMX backtrace:
+[18:57:55] #0 0020f5a0 in ?? (0) in <unknown>
+[18:57:55] #1 002181a4 in ?? (0, 2) in <unknown>
+[18:57:55] #2 00214574 in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[18:57:55] #3 native CallLocalFunction () in Pawn.dll
+[18:57:55] #4 002133c8 in ?? (0, 20) in <unknown>
+[18:57:55] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[18:58:05] Run time error 4: "Array index out of bounds"
+[18:58:05]  Attempted to read/write array element at negative index -1
+[18:58:05] AMX backtrace:
+[18:58:05] #0 0020f5a0 in ?? (0) in <unknown>
+[18:58:05] #1 002181a4 in ?? (0, 2) in <unknown>
+[18:58:05] #2 00214574 in public OnPlayerSelectBankMenuNavItem (0, 2) in <unknown>
+[18:58:05] #3 native CallLocalFunction () in Pawn.dll
+[18:58:05] #4 002133c8 in ?? (0, 20) in <unknown>
+[18:58:05] #5 0007d7ac in public OnPlayerClickPlayerTextDraw (0, 20) in <unknown>
+[19:03:02] Run time error 4: "Array index out of bounds"
+[19:03:02]  Attempted to read/write array element at negative index -1
+[19:03:02] AMX backtrace:
+[19:03:02] #0 008144e4 in ?? (0, -1) in <unknown>
+[19:03:02] #1 00816900 in ?? (0, 51232852, 0) in <unknown>
+[19:03:02] #2 000c5cf0 in ?? (0, 86432944, 0) in <unknown>
+[19:03:02] #3 000cb718 in ?? (0, 86432944) in <unknown>
+[19:03:02] #4 0007d9ec in public OnPlayerCommandText (0, 86432944) in <unknown>
+[19:06:03] Run time error 4: "Array index out of bounds"
+[19:06:03]  Attempted to read/write array element at negative index -1
+[19:06:03] AMX backtrace:
+[19:06:03] #0 008144e4 in ?? (0, -1) in <unknown>
+[19:06:03] #1 00816900 in ?? (0, 51232852, 0) in <unknown>
+[19:06:03] #2 000c5cf0 in ?? (0, 86432944, 0) in <unknown>
+[19:06:03] #3 000cb718 in ?? (0, 86432944) in <unknown>
+[19:06:03] #4 0007d9ec in public OnPlayerCommandText (0, 86432944) in <unknown>
+[20:44:33] Run time error 4: "Array index out of bounds"
+[20:44:33]  Attempted to read/write array element at negative index -1
+[20:44:33] AMX backtrace:
+[20:44:33] #0 00818bb8 in ?? (0, -1) in <unknown>
+[20:44:33] #1 0081afd4 in ?? (0, 51232852, 0) in <unknown>
+[20:44:33] #2 000c5cf0 in ?? (0, 86598468, 0) in <unknown>
+[20:44:33] #3 000cb718 in ?? (0, 86598468) in <unknown>
+[20:44:33] #4 0007d9ec in public OnPlayerCommandText (0, 86598468) in <unknown>
+[21:37:39] Run time error 4: "Array index out of bounds"
+[21:37:39]  Attempted to read/write array element at negative index -1
+[21:37:39] AMX backtrace:
+[21:37:39] #0 0082a860 in public BusDriver_RefreshRouteStatus (0) in <unknown>

@@ -92,7 +92,7 @@ stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, world = -1, i
 	
 	TogglePlayerControllable(playerid, false);
 	Streamer_ToggleItemUpdate(playerid, STREAMER_TYPE_OBJECT, false);
-	
+
 	Streamer_UpdateEx(playerid, X, Y, Z, world, interior, STREAMER_TYPE_OBJECT);
 	
 	if(interior != -1)
@@ -102,11 +102,4 @@ stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, world = -1, i
 	
     SetCameraBehindPlayer(playerid);
 	return SetPlayerPos(playerid, X, Y, Z - 0.3);
-}
-
-stock SetPlayerCompensatedPosEx(playerid, Float:X, Float:Y, Float:Z, world = -1, interior = -1, wait_time = TP_WAIT_TIME)
-{
-	SetPlayerCompensatedPos(playerid, X, Y, Z, world, interior, wait_time);
-	SetCameraBehindPlayer(playerid);
-	return 1;
 }

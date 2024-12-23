@@ -259,7 +259,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	p3DMenu[playerid] = INVALID_3D_MENU;
 
 	new q[267];
-	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cDollars` = '%f', `cEuro` = '%f', `cEGPound` = '%f', `cLastLogin` = NOW() WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_DOLLAR), GetPlayerMoney(playerid, MONEY_TYPE_EURO), GetPlayerMoney(playerid, MONEY_TYPE_POUND), CharacterInfo[playerid][SQLID]);
+	mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cDollars` = '%f', `cEuro` = '%f', `cEGPound` = '%f', `cLastLogin` = NOW() WHERE `character_id` = '%d'", GetPlayerMoney(playerid, CURRENCY_DOLLAR), GetPlayerMoney(playerid, CURRENCY_EURO), GetPlayerMoney(playerid, CURRENCY_POUND), CharacterInfo[playerid][SQLID]);
 	mysql_tquery(SQL, q);
 
 	if(!IsPlayerJailed(playerid))
@@ -631,6 +631,17 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 	ToggleGlobalTextDraw(playerid, true);
 
 	SetTimerEx("delayed_Spawn", 150, false, "d", playerid);
+
+	static playerIP[36]; static register_str[224];
+
+	GetPlayerIp(playerid, playerIP, sizeof playerIP);
+	format(register_str, sizeof register_str, ""c_server"[LOGIN]: "c_white"%s[%d] se uspjesno ulogovao na server | IP[%s]", ReturnPlayerName(playerid), playerid, playerIP);
+
+	foreach(new j : Player) {
+
+		if(PlayerInfo[playerid][Staff] >= 1)
+			SendClientMessage(playerid, x_white, register_str);
+	}
 	return 1;
 }
 
@@ -655,6 +666,7 @@ public OnCharacterLoaded(playerid) {
 
 	SetPlayerMoney2(playerid, CharacterInfo[playerid][Money]);
 	Hud_ShowInterface(playerid);
+	CreateSurvivalInterface(playerid);
 	UpdateMoneyTD(playerid);
 	return 1;
 }
@@ -966,6 +978,17 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	SetPlayerScore(playerid, CharacterInfo[playerid][Score]);
 
 	CallLocalFunction("OnCharacterLoaded", "d", playerid);
+
+	static playerIP[36]; static register_str[224];
+
+	GetPlayerIp(playerid, playerIP, sizeof playerIP);
+	format(register_str, sizeof register_str, ""c_server"[REGISTER]: "c_white"%s[%d] se uspjesno registrovao na server | IP[%s]", ReturnPlayerName(playerid), playerid, playerIP);
+
+	foreach(new j : Player) {
+
+		if(PlayerInfo[playerid][Staff] >= 1)
+			SendClientMessage(playerid, x_white, register_str);
+	}
 
 	SpawnPlayer(playerid);
 	return;

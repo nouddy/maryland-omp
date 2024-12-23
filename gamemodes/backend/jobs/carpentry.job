@@ -79,6 +79,7 @@ public Carpentry_ContinueTimer(playerid, option) {
 
             SendClientMessage(playerid, x_server, "maryland \187; "c_server"Uspjesno ste obrusili drvo, odnesite ga na traku za premazivanje");
             carpentryProgress[playerid] = CARPENTRY_PROGRESS_COATING;
+            ClearAnimations(playerid);
 
             new Float:pPos[3];
             GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);  
@@ -181,7 +182,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(!carpentryTools[playerid])
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate alat za preradu drveta!");
 
-            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            ApplyAnimation(playerid, !"GRAFFITI", !"spraycan_fire", 4.0, false, true, true, true, SYNC_NONE);
             SetTimerEx("Carpentry_ContinueTimer", 7000, false, "dd", playerid, CARPENTRY_PROGRESS_BEGIN);
             return (true);
         }
@@ -200,7 +201,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(carpentryProgress[playerid] != CARPENTRY_PROGRESS_CARVING)
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Doslo je do greskice!");
 
-            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            ApplyAnimation(playerid, !"GRAFFITI", !"spraycan_fire", 4.0, false, true, true, true, 0);
             DestroyPlayerObject(playerid, carpentryObject[playerid]);
             SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_CARVING);
             return (true);
@@ -241,7 +242,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa poliranja!");
 
             DestroyPlayerObject(playerid, carpentryObject[playerid]);
-            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            ApplyAnimation(playerid, !"GRAFFITI", !"spraycan_fire", 4.0, false, true, true, true, 0);
             SetTimerEx("Carpentry_ContinueTimer", 9000, false, "dd", playerid, CARPENTRY_PROGRESS_POLISHING);
             return (true);
 
@@ -270,7 +271,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             mvProgress[playerid] = 1;
 
-            ApplyAnimation(playerid, "GRAFFITI", "spraycan_fire", 4.0, false, true, true, true, 0);
+            ApplyAnimation(playerid, !"GRAFFITI", !"spraycan_fire", 4.0, false, true, true, true, 0);
             return (true);
 
         }
@@ -293,7 +294,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             job.GivePlayerSalary(playerid, jobInfo[playerJob[playerid]][jobSalary]);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-            ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
+            ApplyAnimation(playerid, !"CARRY", !"putdwn", 4.1, false, true, true, false, 2);
 
             carryObj[playerid] = false;
             carpentryTools[playerid] = false;

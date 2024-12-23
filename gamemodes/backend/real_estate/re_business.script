@@ -1561,7 +1561,7 @@ YCMD:buybusiness(playerid, params[], help)
     if(re_BusinessData[BID][bOwner] > 0)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ova firma nije na prodaju!");    
 
-    if(GetPlayerMoney2(playerid, MONEY_TYPE_DOLLAR) < re_BusinessData[BID][bPrice])
+    if(GetPlayerMoney2(playerid, CURRENCY_DOLLAR) < re_BusinessData[BID][bPrice])
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca kako biste kupili ovu firmu!!");    
 
     if(GetPlayerScore(playerid) < re_BusinessData[BID][bLevel])

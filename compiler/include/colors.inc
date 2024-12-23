@@ -51,3 +51,4 @@
 #define     x_admin         0x2d97faAA
 #define     x_job           0xcc9704AA
 #define     x_faction       0x68b0c4FF
+#define     x_ltred         0xFF0055FF

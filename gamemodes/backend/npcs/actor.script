@@ -23,6 +23,7 @@ new TehnomediaActor;
 new mCustomsActors[9];
 
 static dealership_Actor;
+static hotelActor;
 
 //! Task actor preload
 
@@ -69,6 +70,9 @@ hook OnGameModeInit()
 
     dealership_Actor = CreateActor(12, 972.0587,-1702.8320,13.5727,82.0353);
     ApplyActorAnimation(dealership_Actor,"GANGS","prtial_gngtlkA",4.000000,true, false, false, false,0);
+
+    hotelActor = CreateDynamicActor(76, 1282.4191,-27.5250,1001.0211, 24.1445); 
+    ApplyDynamicActorAnimation(hotelActor, !"ped", !"SEAT_idle", 4.000000,true, false, false, false, 0);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -130,5 +134,5 @@ task resetActorPos[4000]()
     SetActorFacingAngle(dealership_Actor, 82.0353);
     ApplyActorAnimation(dealership_Actor,"GANGS","prtial_gngtlkA",4.000000,true, false, false, false,0);
 
-    return 1;
+    return 1;   
 }

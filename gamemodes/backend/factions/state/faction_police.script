@@ -430,7 +430,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, WEAPON:weaponid, body
                     return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ovaj igrac je vec tazean!");
 
                 SendClientMessage(damagedid, x_server, "wanted \187; "c_white"Sokirani ste!");
-                ApplyAnimation(damagedid, "CRACK", "crckdeth2", 4.1, false, false, false, false, 0);
+                ApplyAnimation(damagedid, !"CRACK", !"crckdeth2", 4.1, false, false, false, false, 0);
                 TogglePlayerControllable(damagedid, false);
                 playerTazed[damagedid] = true;
             }

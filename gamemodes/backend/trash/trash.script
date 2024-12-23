@@ -65,7 +65,6 @@ new Iterator:Containers<MAX_CONTAINERS>;
 
 timer trash_StartSearch[6500](playerid) {
 
-	new money = randomEx(20, 100);
 	TogglePlayerControllable(playerid, true);
 	ClearAnimations(playerid);
 
@@ -75,14 +74,18 @@ timer trash_StartSearch[6500](playerid) {
 
 		case 1: {
 
-			// - Dodati kada se odradi player_currency
-			// GiveMoneyEx(playerid, money);
-			va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste pronasli : %d novca u kontejneru", money);
+			new item = RandomMinMax(50, 58);
+			if(Inventory_GetItemQuantity(playerid, item) >= sz_quantityInfo[item-50][maxQuantity])
+            	return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pronasli ste %s, ali nemate dovoljno mjesta u inventaru...");
+
+			Inventory_AddItem(playerid, item, 1);
+			
+			SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste pronasli : %s", Inventory_ReturnItemName(item));
 		}
 
 		case 2: {
 
-			va_SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vise srece drugi put, niste nista nasli...");
+			SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vise srece drugi put, niste nista pronasli...");
 		}
 
 	}
@@ -172,14 +175,14 @@ hook OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Float
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
-	if(newkeys & KEY_CROUCH)
+	if(newkeys & KEY_NO)
 	{
 		new id = GetNearestContainer(playerid);
 
 		if(id != -1)
 		{
 			// new money = randomEx(20, 100);
-			ApplyAnimation(playerid, "POLICE", "plc_drgbst_02", 4.1, false, true, true, true, SYNC_NONE);
+			ApplyAnimation(playerid, !"POLICE", !"plc_drgbst_02", 4.1, false, true, true, true, SYNC_NONE);
 			defer trash_StartSearch(playerid);
 		}
 	}

@@ -290,13 +290,3 @@ YCMD:contract(playerid, params[], help)
     
     return 1;
 }
-
-YCMD:jobveh(playerid, params[], help) 
-{
-    
-    new vehModel = jobInfo[playerJob[playerid]][jobVehicle];
-
-    CallLocalFunction("OnJobVehicleCreated", "dd", playerid, vehModel);
-
-    return 1;
-}

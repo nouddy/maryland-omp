@@ -1,15 +1,15 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
-enum MONEY_TYPE {
-    MONEY_TYPE_UNKNOWN,
-    MONEY_TYPE_DOLLAR,
-    MONEY_TYPE_EURO,
-    MONEY_TYPE_POUND
+enum eCurrency {
+    CURRENCY_UNKNOWN,
+    CURRENCY_DOLLAR,
+    CURRENCY_EURO,
+    CURRENCY_POUND
 }
-new Float:pMoney[MAX_PLAYERS][MONEY_TYPE];
+new Float:pMoney[MAX_PLAYERS][eCurrency];
 
 
-new MoneyTypeString[MONEY_TYPE][24] = {
+new CurrencyString[eCurrency][24] = {
     "Unknown",
     "Dollar",
     "Euro",
@@ -21,10 +21,10 @@ new MoneyTypeString[MONEY_TYPE][24] = {
            Update visual representation of money when it changes. 
 */
 
-stock Float:GetPlayerMoney2(playerid, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
+stock Float:GetPlayerMoney2(playerid, eCurrency:type = CURRENCY_DOLLAR)
 {
     if(!IsPlayerConnected(playerid)) return 0;
-    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
+    if(!(eCurrency:0 < type < eCurrency)) return 0;
 
     return pMoney[playerid][type];
 }
@@ -32,14 +32,14 @@ stock Float:GetPlayerMoney2(playerid, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
 #undef GetPlayerMoney
 #define GetPlayerMoney(%0) GetPlayerMoney2(%0)
 
-stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
+stock Float:SetPlayerMoney2(playerid, Float:ammount, const eCurrency:type = CURRENCY_DOLLAR)
 {   
     if(!IsPlayerConnected(playerid)) return 0;
-    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
+    if(!(eCurrency:0 < type < eCurrency)) return 0;
 
     pMoney[playerid][type]=ammount;    
 
-    if(type == MONEY_TYPE_DOLLAR)
+    if(type == CURRENCY_DOLLAR)
     {
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
@@ -48,21 +48,21 @@ stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MON
         mysql_tquery(SQL, q);
     }
 
-    if(type == MONEY_TYPE_EURO) {
+    if(type == CURRENCY_EURO) {
 
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
         new q[128];
-        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEuro` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_EURO), GetCharacterSQLID(playerid));
+        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEuro` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, CURRENCY_EURO), GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
 
-    if(type == MONEY_TYPE_POUND) {
+    if(type == CURRENCY_POUND) {
 
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
         new q[128];
-        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEGPound` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, MONEY_TYPE_POUND), GetCharacterSQLID(playerid));
+        mysql_format(SQL, q, sizeof q, "UPDATE `characters` SET `cEGPound` = '%f' WHERE `character_id` = '%d'", GetPlayerMoney(playerid, CURRENCY_POUND), GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
     }
     Hud_ShowInterface(playerid);
@@ -71,26 +71,26 @@ stock Float:SetPlayerMoney2(playerid, Float:ammount, const MONEY_TYPE:type = MON
 }
 #define SetPlayerMoney(%0) SetPlayerMoney2(%0)
 
-stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TYPE_DOLLAR)
+stock Float:GivePlayerMoney2(playerid, Float:ammount, eCurrency:type = CURRENCY_DOLLAR)
 {
     if(!IsPlayerConnected(playerid)) return 0;
-    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
+    if(!(eCurrency:0 < type < eCurrency)) return 0;
 
     pMoney[playerid][type]+=ammount;    
 
-    if(type == MONEY_TYPE_DOLLAR)
+    if(type == CURRENCY_DOLLAR)
     {
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid,floatround(Float:pMoney[playerid][type]));
     }
 
-    if(type == MONEY_TYPE_EURO) {
+    if(type == CURRENCY_EURO) {
 
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
     }
 
-    if(type == MONEY_TYPE_POUND) {
+    if(type == CURRENCY_POUND) {
 
         ResetPlayerMoney(playerid);
         GivePlayerMoney(playerid, floatround(Float:pMoney[playerid][type]));
@@ -102,10 +102,10 @@ stock Float:GivePlayerMoney2(playerid, Float:ammount, MONEY_TYPE:type = MONEY_TY
 #undef GivePlayerMoney
 #define GivePlayerMoney(%0) GivePlayerMoney2(%0)
 
-stock Float:TakePlayerMoney(playerid, MONEY_TYPE:type, Float:ammount, bool:allowNegative = false)
+stock Float:TakePlayerMoney(playerid, eCurrency:type, Float:ammount, bool:allowNegative = false)
 {
     if(!IsPlayerConnected(playerid)) return 0;
-    if(!(MONEY_TYPE:0 < type < MONEY_TYPE)) return 0;
+    if(!(eCurrency:0 < type < eCurrency)) return 0;
 
     if(ammount > pMoney[playerid][type] && allowNegative == false) return 0;
 
@@ -116,10 +116,10 @@ stock Float:TakePlayerMoney(playerid, MONEY_TYPE:type, Float:ammount, bool:allow
     return pMoney[playerid][type];
 }
 
-stock GetMoneyTypeString(MONEY_TYPE:type)
+stock GetCurrencyString(eCurrency:type)
 {
-    if(!(MONEY_TYPE:-1 < type < MONEY_TYPE)) return MoneyTypeString[MONEY_TYPE_UNKNOWN];
-    return MoneyTypeString[type];
+    if(!(eCurrency:-1 < type < eCurrency)) return CurrencyString[CURRENCY_UNKNOWN];
+    return CurrencyString[type];
 }
 
 
@@ -129,9 +129,9 @@ YCMD:setplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, Float:ammount, moneyType;
-    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /setplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
+    if(sscanf(params, "ufD("#CURRENCY_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /setplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
 
-    new Float:iReturn = SetPlayerMoney(playerid, ammount, MONEY_TYPE:moneyType);
+    new Float:iReturn = SetPlayerMoney(playerid, ammount, eCurrency:moneyType);
     SendClientMessage(playerid, x_green, "DEBUG: SetPlayerMoney returned %f", iReturn);
     return 1;
 }
@@ -142,9 +142,9 @@ YCMD:giveplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, Float:ammount, moneyType;
-    if(sscanf(params, "ufD("#MONEY_TYPE_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /giveplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
+    if(sscanf(params, "ufD("#CURRENCY_DOLLAR")", playerid, ammount, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /giveplayermoney [PlayerID/Name][Ammount](Type - 1,2,3)");
 
-    new Float:iReturn = GivePlayerMoney(playerid, ammount, MONEY_TYPE:moneyType);
+    new Float:iReturn = GivePlayerMoney(playerid, ammount, eCurrency:moneyType);
     SendClientMessage(playerid, x_green, "DEBUG: GivePlayerMoney returned %f", iReturn);
     return 1;
 }
@@ -155,10 +155,10 @@ YCMD:getplayermoney(adminid, params[], help)
     if(!GetPlayerStaffLevel(adminid)) return 0;
 
     new playerid, moneyType;
-    if(sscanf(params, "uD("#MONEY_TYPE_DOLLAR")", playerid, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /getplayermoney [PlayerID/Name](Type - 1,2,3)");
+    if(sscanf(params, "uD("#CURRENCY_DOLLAR")", playerid, moneyType)) return SendClientMessage(playerid, x_yellow, "USAGE: /getplayermoney [PlayerID/Name](Type - 1,2,3)");
 
-    new Float:money = GetPlayerMoney(playerid, MONEY_TYPE:moneyType);
+    new Float:money = GetPlayerMoney(playerid, eCurrency:moneyType);
 
-    SendClientMessage(playerid, x_yellow, "INFO: Player %s(%d) has %f %s", ReturnPlayerName(playerid), playerid, money, GetMoneyTypeString(MONEY_TYPE:moneyType));
+    SendClientMessage(playerid, x_yellow, "INFO: Player %s(%d) has %f %s", ReturnPlayerName(playerid), playerid, money, GetCurrencyString(eCurrency:moneyType));
     return 1;
 }

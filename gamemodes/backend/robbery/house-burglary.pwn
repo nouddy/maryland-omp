@@ -129,7 +129,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                 if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_ELECTRONIC_GOODS)) {
 
-                    ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, false, true, true, false, 2);
+                    ApplyAnimation(playerid, !"CARRY", !"putdwn", 4.1, false, true, true, true, SYNC_NONE);
                     RemovePlayerAttachedObject(playerid, INDEX_SLOT_ELECTRONIC_GOODS);
                     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
                     stolenObjects[playerid]++;
@@ -141,12 +141,8 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         RemovePlayerMapIcon(playerid, burglary_Icon[playerid]);
 
                         burglary_Icon[playerid] = SetPlayerMapIcon(playerid, 11, 2087.1863, -1557.7731, 12.8787, 51, -1, MAPICON_GLOBAL);
-
-                        SendClientMessage(playerid, -1, " ");
-
                         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Kada stignete na lokaciju pritisnite tipku 'N' kako bi zavrsili provalu!");
 
-                        //bool:ApplyAnimation(playerid, const animationLibrary[], const animationName[], Float:delta, bool:loop, bool:lockX, bool:lockY, bool:freeze, time, FORCE_SYNC:forceSync = SYNC_NONE)
                         RemovePlayerAttachedObject(playerid, INDEX_SLOT_ELECTRONIC_GOODS);
                         SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 
@@ -158,9 +154,9 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                 for(new i = 0; i < sizeof burglary_Objects[]; i++) { 
                     
-                    if(!IsValidPlayerObject(playerid, burglary_Objects[playerid][i])) {
+                    if(stolenObjects[playerid] == 3) {
 
-                        new randomMoney = RandomMinMax(1500, 3500);
+                        new randomMoney = RandomMinMax(50, 150);
 
                         GivePlayerMoney(playerid, randomMoney);
 
@@ -204,7 +200,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                     DeletePlayer3DTextLabel(playerid, burglary_Labels[playerid][i]);
                     DestroyPlayerObject(playerid, burglary_Objects[playerid][i]);
-
                     return Y_HOOKS_BREAK_RETURN_1;
                 }
             }
@@ -221,9 +216,9 @@ YCMD:burglary(playerid, params[], help)
 
     if(burglary_InProgress[playerid]) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste zapoceli provalu kuce!");
 
-    if(burglary_CoolDown[playerid] > gettime()) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pokusajte za %s", ConvertToMinutes(burglary_CoolDown[playerid]));
+    if(burglary_CoolDown[playerid] > gettime()) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pokusajte za %s", convertTime( burglary_CoolDown[playerid] - gettime()));
 
-    burglary_CoolDown[playerid] = gettime()+1200; // CoolDown on 20 minutes!
+    burglary_CoolDown[playerid] = gettime()+1200; 
 
     SendClientMessage(playerid, x_server, "maryland \187; "c_white"Idite do kombija koji vam je oznacen na mapi!");
 
@@ -243,24 +238,6 @@ YCMD:burglary(playerid, params[], help)
     return 1;
 }
 
-YCMD:burglaryveh(playerid, params[], help) 
-{
-    
-    new Float:pPos[3];
-    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-
-    SetVehiclePos(burglary_Van[playerid], pPos[0], pPos[1], pPos[2]);
-    PutPlayerInVehicle(playerid, burglary_Van[playerid], 0);
-
-    return 1;
-}
-
-YCMD:burglaryhosue(playerid, params[], help) 
-{
-    SetPlayerPos(playerid, BurglaryInfo[burglary_HouseID[playerid]][house_Pos][0], BurglaryInfo[burglary_HouseID[playerid]][house_Pos][1], BurglaryInfo[burglary_HouseID[playerid]][house_Pos][2]);
-    
-    return 1;
-}
 
 /*
 

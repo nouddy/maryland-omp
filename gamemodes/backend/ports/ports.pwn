@@ -147,7 +147,17 @@ Dialog:dialog_ChosePort(const playerid, response, listitem, string:inputtext[]) 
 
     if(response) {
 
-        SetPlayerPos(playerid, PortInfo[listitem][portPosition][0], PortInfo[listitem][portPosition][1], PortInfo[listitem][portPosition][2]);
+        if(IsPlayerInAnyVehicle(playerid)) {
+
+            SendClientMessage(playerid, -1, "DEBUG: ALOOO U VOZILU SAM");
+            SendClientMessage(playerid, -1, "DEBUG: VEHICLE ID : %d", GetPlayerVehicleID(playerid));
+            // SetPlayerCompensatedPos(playerid, PortInfo[listitem][portPosition][0], PortInfo[listitem][portPosition][1], PortInfo[listitem][portPosition][2], 0, 0, 1000);
+            SetVehiclePos(GetPlayerVehicleID(playerid), PortInfo[listitem][portPosition][0], PortInfo[listitem][portPosition][1], PortInfo[listitem][portPosition][2]);
+            PutPlayerInVehicle(playerid, GetPlayerVehicleID(playerid), 0);
+            return Y_HOOKS_BREAK_RETURN_1;
+        }
+
+        SetPlayerCompensatedPos(playerid, PortInfo[listitem][portPosition][0], PortInfo[listitem][portPosition][1], PortInfo[listitem][portPosition][2], 0, 0, 1000);
     }
 
     return (true);

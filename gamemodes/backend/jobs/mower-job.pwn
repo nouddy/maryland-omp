@@ -38,8 +38,7 @@ new Text3D:storageLabel,
 new bool:player_IsMowing[MAX_PLAYERS],
        player_MowingJob[MAX_PLAYERS],
        player_MowingProgress[MAX_PLAYERS],
-       player_MowingObject[MAX_PLAYERS],
-       player_MowingMarker[MAX_PLAYERS];
+       player_MowingObject[MAX_PLAYERS];
 
 new player_MowingTimer[MAX_PLAYERS];
 

@@ -101,7 +101,6 @@ public quest_UpdateJasonInteraction(playerid, type) {
             GiveCharXP(playerid, sz_QuestList[0][questAwards][1]);
         }
     }
-
     return (true);
 }
 
@@ -145,15 +144,6 @@ hook OnGameModeInit() {
 
     CreateCustomMarker(""c_server"[ Jason ]\n"c_white"[ N ]", 810.6173,-1342.9711,13.5386, -1, -1, 50.0);
     //810.6173,-1342.9711,13.5386
-
-    return (true);
-}
-
-task jasonRefresh[5000]() 
-{
-    SetActorPos(jasonActor, 809.7028,-1342.9017,13.5402);
-    SetActorFacingAngle(jasonActor, 274.5583);
-    ApplyActorAnimation(jasonActor, !"PED", !"SEAT_down", 4.1, false, false, false, true, 0);
 
     return (true);
 }

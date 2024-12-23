@@ -155,6 +155,24 @@ public Faction_InsertData(id, member, playerid) {
     FactionMember[playerid][factionRank] = 4;
     FactionMember[playerid][factionRespect] = 1;
 
+    if(QuestData[playerid][questDone][6] == 0) {
+
+        QuestData[playerid][questDone][6] = 1;
+        UpdateSqlInt(SQL, "character_quests", "Quest_7", 1, "characterid", GetCharacterSQLID(playerid));
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[6][questName]);
+        GivePlayerMoney(playerid, sz_QuestList[6][questAwards][0]);
+        GiveCharXP(playerid, sz_QuestList[6][questAwards][1]);
+    }
+
+    if(QuestData[member][questDone][6] == 0) {
+
+        QuestData[member][questDone][6] = 1;
+        UpdateSqlInt(SQL, "character_quests", "Quest_7", 1, "characterid", GetCharacterSQLID(member));
+        SendClientMessage(member, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[6][questName]);
+        GivePlayerMoney(member, sz_QuestList[6][questAwards][0]);
+        GiveCharXP(member, sz_QuestList[6][questAwards][1]);
+    }
+
     return 1;
 }
 
@@ -168,9 +186,6 @@ public Member_LoadData(id) {
     cache_get_value_name_int(0, "faction_id", FactionMember[id][factionID]);
     cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
     cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
-
-    SendClientMessage(id, x_grey, "faction \187; "c_white"Vas ID fakcije je : %d", FactionMember[id][factionID]);
-
     return 1;
 }
 
@@ -265,7 +280,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         if(IsPlayerInRangeOfPoint(playerid, 1.70, 1006.0764,-1230.3038,11.7786)) {
 
-            SetPlayerPos(playerid, 1006.0764,-1230.3038,11.7786);
+            SetPlayerPos(playerid, -767.0725,-1966.6206,8.8245);
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerInterior(playerid, 3);
         }
@@ -286,9 +301,11 @@ YCMD:loadmember(playerid, params[], help)
 
 YCMD:members(playerid, params[], help) 
 {
+
+    if(FactionMember[playerid][factionID] == 0)
+        return SendClientMessage(playerid, x_grey, "#FACTION : Niste clan niti jedne organizacije!");
     
     new q[267];
-
     new orgID = FactionMember[playerid][factionID];
 
     mysql_format(MySQL:SQL, q, sizeof q, "SELECT `member_id` FROM `faction_members` WHERE `faction_id` = '%d'", orgID);
@@ -517,7 +534,7 @@ Dialog:dialog_factionName(playerid, response, listitem, string:inputtext[]) {
     format(fName, sizeof fName, "%s", inputtext);
 
     FactionInfo[fID][factionName] = fName;
-    FactionInfo[fID][factionBoss] = playerid;
+    FactionInfo[fID][factionBoss] = GetCharacterSQLID(playerid);
     FactionInfo[fID][factionRightHand] = PlayerInfo[faction_SecondBoss[playerid]][SQLID];
 
     FactionInfo[fID][factionType] = FACTION_TYPE_FRIENDS;

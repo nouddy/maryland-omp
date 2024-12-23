@@ -22,9 +22,9 @@ enum BankMenuButton {
     BankMenuAccounts,
     BankMenuDeposit,
     BankMenuWithdraw,
-    BankMenuTransfer,
-    BankMenuMyCards,
-    BankMenuMyAccount,
+    // BankMenuTransfer,
+    // BankMenuMyCards,
+    // BankMenuMyAccount,
     BankMenuLogOut,
     BankMenuUnknown,
 }
@@ -34,9 +34,9 @@ new BankMenuButtonStrings[BankMenuButton][16] = {
     "Accounts",
     "Deposit",
     "Withdraw",
-    "Transfer",
-    "My Cards",
-    "My Account",
+    // "Transfer",
+    // "My Cards",
+    // "My Account",
     "Log out",
     "Unknown"
 };
@@ -53,8 +53,8 @@ new BankMenuButton:BankShownPageForPlayer[MAX_PLAYERS];
 //Pages
 new PlayerText:BankHomePageTDs[MAX_PLAYERS][8];
 
-
 new PlayerText:BankDepositPageTDs[MAX_PLAYERS][27];
+new PlayerText:BankWithdrawPageTDs[MAX_PLAYERS][27];
 // new PlayerText:BankWithdrawPageTDs[MAX_PLAYERS][27];
 // new PlayerText:BankTransferPageTDs[MAX_PLAYERS][27];
 
@@ -70,6 +70,7 @@ new PlayerText:BankPaginationTDs[MAX_PLAYERS][4];
 #include "./frontend/textdraws/Bank/BankUiDeposit.pwn"
 #include "./frontend/textdraws/Bank/BankUiMyCards.pwn"
 #include "./frontend/textdraws/Bank/BankUiMyAccount.pwn"
+#include "./frontend/textdraws/Bank/BankUiWithdraw.pwn"
 
 //===========================================================================================
 //--->>> Hooks
@@ -106,7 +107,6 @@ hook OnPlayerConnect(playerid)
 
 
 
-
     for(new i = 0; i < sizeof(BankMyCardsPageTDs[]); i++)
     {
         BankMyCardsPageTDs[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
@@ -140,6 +140,13 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
     {
         BankDestroyMainUI(playerid);
         CancelSelectTextDraw(playerid);
+        ActivePlayerBankAccount[playerid] = -1;
+
+        WithdrawCurrency[playerid] = 0;
+        ActiveWithdrawAmmount[playerid] = 0.00;
+
+        ActiveChosenCurrency[playerid] = 0;
+        ActiveDepositAmmount[playerid] = 0.00;
 
         return Y_HOOKS_BREAK_RETURN_1;
     }
@@ -151,7 +158,7 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
     // SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw textid %d", playertextid);
 
     if(BankShownPageForPlayer[playerid] == BankMenuUnknown) return Y_HOOKS_CONTINUE_RETURN_1;
-    SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw BankShownPageForPlayer %s(%d)", BankMenuButtonStrings[BankShownPageForPlayer[playerid]], _:BankShownPageForPlayer[playerid]);
+    // SendClientMessage(playerid, -1, "OnPlayerClickPlayerTextDraw BankShownPageForPlayer %s(%d)", BankMenuButtonStrings[BankShownPageForPlayer[playerid]], _:BankShownPageForPlayer[playerid]);
 
 
     for(new BankMenuButton:i = BankMenuButton:0; i < BankMenuButton; i++)
@@ -169,25 +176,153 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
         if(IsBankAccountCreateNewButton(playerid, playertextid))
         {
             SendClientMessage(playerid, -1, "Clicked create new account button");
-            CreateBankAccount(3, OWNER_TYPE_PLAYER);
+            // CreateBankAccount(3, OWNER_TYPE_PLAYER);
+            
+            Dialog_Show(playerid, "dialog_CreateBankAccount", DIALOG_STYLE_LIST, ""c_ltorange"H4RBOR Bank \187; "c_white"Create Account", 
+                                                                                 ""c_white"#1 \187; "c_ltorange"Privatni Racun\n\
+                                                                                 "c_white"#2 \187; "c_ltorange"Racun za firmu\n\
+                                                                                 "c_white"#3 \187; "c_ltorange"Fakcijski Racun", "Odaberi", "Odustani");
 
         }
 
         if(IsBankAccountDeleteButton(playerid, playertextid))
         {
-            SendClientMessage(playerid, -1, "Clicked delete account button");
+            // PlayerBankAccounts
+
+            if(ActivePlayerBankAccount[playerid] == -1)
+                return (true);
+
+            new tmp_idx = ActivePlayerBankAccount[playerid];
+
+            // PlayerBankAccounts[playerid][tmp_idx][IBAN]
+
+            static dlgStr[367];
+            format(dlgStr, sizeof dlgStr, "Da li ste sigurni da zelite obrisati bankovni racun : IBAN %s\n\
+                                          Euro : %f\n\
+                                          Dollar : %f\n\
+                                          Pound : %f", FormatIBANString(PlayerBankAccounts[playerid][tmp_idx][IBAN]),
+                                                       PlayerBankAccounts[playerid][tmp_idx][Currencies][CURRENCY_EURO],
+                                                       PlayerBankAccounts[playerid][tmp_idx][Currencies][CURRENCY_DOLLAR],
+                                                       PlayerBankAccounts[playerid][tmp_idx][Currencies][CURRENCY_POUND]);
+            
+            Dialog_Show(playerid, "dialog_deleteBankAccount", DIALOG_STYLE_MSGBOX, ""c_ltorange"H4RBOR Bank \187; "c_white"Delete Account", 
+                                                                                    dlgStr, ""c_lred"DELETE", "DENY");
+
+            //-> Koji acc da delete
         }
 
         if(IsBankAccountTransferOwnershipButton(playerid, playertextid))
         {
             SendClientMessage(playerid, -1, "Clicked transfer account button");
+            //-> Koji acc da transfer i kome (sa firme na firmu, igraca na igraca, fakcije na fakciju)
         }
 
         if(IsBankAccountSwitchAccountButton(playerid, playertextid))
         {
             SendClientMessage(playerid, -1, "Clicked switch account button");
         }
+
+        for(new i = 0; i < sizeof BankAccountsPageListTDs[]; i++) {
+            if(BankAccountsPageListTDs[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+            if(BankAccountsPageListTDs[playerid][i] != playertextid) continue;
+            SendClientMessage(playerid, -1, "Chosed an account on textdraw index(%d)", i);
+            // BankAccountsPageListTDs[playerid][i]
+            SetPlayerActiveBankAccount(playerid, i);
+            break;
+        }
     }
+
+    if(BankShownPageForPlayer[playerid] == BankMenuDeposit) {
+
+        if(IsBankDepositConfirmButton(playerid, playertextid)) {
+
+            // SendClientMessage(playerid, -1, "Clicked deposit confirm button");
+
+            if( ActiveDepositAmmount[playerid] == 0.00 )
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste unijeli kolicinu novca koju zelite staviti na bankovni racun!");
+
+            if( ActiveChosenCurrency[playerid] == 0 )
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste izabrali zeljenu valutu za deposit!");
+
+            new tmp_idx = ActivePlayerBankAccount[playerid];
+
+            PlayerBankAccounts[playerid][tmp_idx][Currencies][ eCurrency:ActiveChosenCurrency[playerid] ] += ActiveDepositAmmount[playerid];
+
+            new q[128];
+            mysql_format(SQL, q, sizeof q, "UPDATE `bankaccounts` SET `%e` = '%f' WHERE `AccountID` = '%d'", GetCurrencyString(eCurrency: ( ActiveChosenCurrency[playerid] )), PlayerBankAccounts[playerid][tmp_idx][Currencies][ eCurrency: (ActiveChosenCurrency[playerid]) ], PlayerBankAccounts[playerid][tmp_idx][IBAN]);
+            mysql_tquery(SQL, q);
+
+            GivePlayerMoney(playerid, -ActiveDepositAmmount[playerid], eCurrency:ActiveChosenCurrency[playerid]);
+            
+            static current_val[122];
+            format(current_val, sizeof current_val, "CURRENT:_%.2f", PlayerBankAccounts[playerid][ tmp_idx ][Currencies][ eCurrency:ActiveChosenCurrency[playerid] ] );
+            PlayerTextDrawSetString(playerid, BankDepositPageTDs[playerid][20], current_val);
+
+            ActiveDepositAmmount[playerid] = 0.00;
+            ActiveChosenCurrency[playerid] = 0;
+        }
+
+        if(IsBankDepositCurrencyButton(playerid, playertextid)) {
+
+            // SendClientMessage(playerid, -1, "Clicked deposit currency button");
+            Dialog_Show(playerid, "dialog_depositChoseCurrency", DIALOG_STYLE_LIST, ""c_ltorange"H4RBOR BANK \187; "c_white"Deposit Currency", 
+                                                                                                "#1 \187; Dollar\n\
+                                                                                                 #2 \187; Euro\n\
+                                                                                                 #3 \187; Pound", "CHOOSE", "DENY");
+        }
+
+        if(IsBankDepositValueButton(playerid, playertextid)) {
+
+            Dialog_Show(playerid, "dialog_depositValue", DIALOG_STYLE_INPUT, ""c_ltorange"H4RBOR BANK \187; "c_white"Deposit Value",
+                                                                             "Unesite zeljenu kolicinu novca za deposit.", "INPUT", "DENY");
+        }
+    }
+
+    if(BankShownPageForPlayer[playerid] == BankMenuWithdraw) {
+
+        if(IsBankWithdrawConfirmButton(playerid, playertextid)) {
+
+            if( ActiveWithdrawAmmount[playerid] == 0.00 )
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste unijeli kolicinu novca koju zelite staviti na bankovni racun!");
+
+            if( WithdrawCurrency[playerid] == 0 )
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste izabrali zeljenu valutu za deposit!");
+
+            new tmp_idx = ActivePlayerBankAccount[playerid];
+
+            PlayerBankAccounts[playerid][tmp_idx][Currencies][ eCurrency:WithdrawCurrency[playerid] ] -= ActiveWithdrawAmmount[playerid];
+
+            new q[128];
+            mysql_format(SQL, q, sizeof q, "UPDATE `bankaccounts` SET `%e` = '%f' WHERE `AccountID` = '%d'", GetCurrencyString(eCurrency: ( WithdrawCurrency[playerid] )), PlayerBankAccounts[playerid][tmp_idx][Currencies][ eCurrency: (WithdrawCurrency[playerid]) ], PlayerBankAccounts[playerid][tmp_idx][IBAN]);
+            mysql_tquery(SQL, q);
+
+            GivePlayerMoney(playerid, ActiveWithdrawAmmount[playerid], eCurrency:WithdrawCurrency[playerid]);
+            
+            static current_val[122];
+            format(current_val, sizeof current_val, "CURRENT:_%.2f", PlayerBankAccounts[playerid][ tmp_idx ][Currencies][ eCurrency:WithdrawCurrency[playerid] ] );
+            PlayerTextDrawSetString(playerid, BankWithdrawPageTDs[playerid][20], current_val);
+
+            ActiveWithdrawAmmount[playerid] = 0.00;
+            WithdrawCurrency[playerid] = 0;
+
+        }
+
+        if(IsBankWithdrawCurrencyButton(playerid, playertextid)) {
+
+            Dialog_Show(playerid, "dialog_withdrawChoseCurrency", DIALOG_STYLE_LIST, ""c_ltorange"H4RBOR BANK \187; "c_white"Deposit Currency", 
+                                                                                                "#1 \187; Dollar\n\
+                                                                                                 #2 \187; Euro\n\
+                                                                                                 #3 \187; Pound", "CHOOSE", "DENY");
+        }
+
+        if(IsBankWithdrawValueButton(playerid, playertextid)) {
+
+            Dialog_Show(playerid, "dialog_withdrawValue", DIALOG_STYLE_INPUT, ""c_ltorange"H4RBOR BANK \187; "c_white"Withdraw Value",
+                                                                             "Unesite zeljenu kolicinu novca koju zelite podignuti za racuna.", "INPUT", "DENY");
+
+        }
+    }
+
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -201,7 +336,7 @@ public OnPlayerSelectBankMenuNavItem(playerid, BankMenuButton:button)
     HideBankAccountsPage(playerid);
     HideBankDepositPage(playerid);
     BankHideMyCardsPage(playerid);
-
+    HideBankWithdrawPage(playerid);
     HideBankMyAccountPage(playerid);
 
 
@@ -213,10 +348,38 @@ public OnPlayerSelectBankMenuNavItem(playerid, BankMenuButton:button)
         {
             
         }
+
+        case BankMenuAccounts: {
+
+
+        }
+
+        case BankMenuDeposit: {
+
+
+        }
+
+        case BankMenuWithdraw: {
+
+
+        }
+
+
         case BankMenuLogOut:
         {
             BankDestroyMainUI(playerid);
             CancelSelectTextDraw(playerid);
+            ActivePlayerBankAccount[playerid] = -1;
+            WithdrawCurrency[playerid] = 0;
+            ActiveWithdrawAmmount[playerid] = 0.00;
+
+            ActiveChosenCurrency[playerid] = 0;
+            ActiveDepositAmmount[playerid] = 0.00;
+        }
+
+        case BankMenuUnknown: {
+
+            
         }
     }
     return 1;
@@ -229,8 +392,10 @@ stock BankDestroyMainUI(playerid)
     HideBankAccountsPage(playerid);
     HideBankDepositPage(playerid);
     BankHideMyCardsPage(playerid);
+    HideBankWithdrawPage(playerid);
 
     HideBankMyAccountPage(playerid);
+
 
 
     for(new i = 0; i < sizeof(BankUiTDs[]); i++)
@@ -414,13 +579,19 @@ stock SetBankMenuActiveButton(playerid, BankMenuButton:button)
     {
         ShowBankDepositPage(playerid);
     }
-    if(button == BankMenuMyCards)
-    {
-        ShowBankMyCardsPage(playerid);
+
+    if(button == BankMenuWithdraw) {
+
+        ShowBankWithdrawPage(playerid);
     }
-    if(button == BankMenuMyAccount)
-    {   
-        ShowBankMyAccountPage(playerid);
-    }   
+
+    // if(button == BankMenuMyCards)
+    // {
+    //     ShowBankMyCardsPage(playerid);
+    // }
+    // if(button == BankMenuMyAccount)
+    // {   
+    //     ShowBankMyAccountPage(playerid);
+    // }   
     return 1;
 }

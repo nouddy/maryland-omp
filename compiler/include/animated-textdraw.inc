@@ -64,7 +64,7 @@ static FindFreeAnimDataID()
 
 stock CreateTextdrawAnimation(Text:textdraw, frame, const color[], string[])
 {
-	new id = FindFreeAnimDataID();
+	static id = FindFreeAnimDataID();
 	if (id == -1) return 1;
 
 	for (new i = 0; i < strlen(string); i++) {

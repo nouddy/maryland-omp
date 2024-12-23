@@ -125,7 +125,7 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
-    if(newkeys & KEY_YES)
+    if(newkeys & KEY_NO)
     {
         if(IsPlayerInRangeOfPoint(playerid, 3.0, 1671.4047,-1639.6481,14.2263)) //Kupovina elektronike
         {
@@ -369,7 +369,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
                 PlayerElectronic[playerid][eDronItem] = 1;
                 // - Dodati kada se odradi player_currency
                 //GiveMoneyEx(playerid, -700);
-                ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
+                ApplyAnimation(playerid, !"DEALER", !"shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Dobili ste dron (/dron)!");
 
@@ -383,7 +383,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
                 if(GetPlayerMoney(playerid) < 150) return SendClientMessage(playerid, x_red, "tehnomedia » "c_white"Nemate dovoljno novca!");
 
                 PlayerElectronic[playerid][eBatteryItem]++;
-                ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
+                ApplyAnimation(playerid, !"DEALER", !"shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste Battery!");
 
@@ -399,7 +399,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
                 PlayerElectronic[playerid][eGPSItem] = 1;
 
                 GivePlayerMoney(playerid, -300);
-                ApplyAnimation(playerid, "DEALER", "shop_pay", 4.1, false, false, false, false, 0);
+                ApplyAnimation(playerid, !"DEALER", !"shop_pay", 4.1, false, false, false, false, 0);
 
                 SendClientMessage(playerid, x_server, "tehnomedia » "c_white"Kupili ste navigaciju!");
 

@@ -1,4 +1,4 @@
-/*
+/***
  *
  *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
  *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
@@ -8,336 +8,456 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Ogy__
- *  @Date           12th Sept. 2023
- *  @Weburl         https://maryland-ogc.com
+ *  @Author         Vostic
+ *  @Date           27th May 2023
+ *  @Weburl         maryland-ogc.com
  *  @Project        maryland_project
  *
- *  @File           metros.script
- *  @Module         metros
+ *  @File           metro.pwn
+ *  @Module         modules
  */
 
 #include <ysilib\YSI_Coding\y_hooks>
 
-#define MAX_METROS 			(100)
-/*
-     ___                 _      
-    (  _)               ( )     
-    | |   ___  ____  __ | |  __ 
-    ( )_ ( o )( __ )(_' ( _)(_' 
-    /___\ \_/ /_\/_\/__)/_\ /__)
-                                
-*/
-new Text3D:MetroLabel[MAX_METROS],
-	MetroPickup[MAX_METROS],
-	bool:script_loaded = true,
-	MetroStation[MAX_PLAYERS],
-	MetroTimer[MAX_PLAYERS];
-/*
-     ____                        
-    (  __)                       
-    | |_   ____  _ _  __  __  __ 
-    (  _) ( __ )( U )( _`'_ )(_' 
-    /____\/_\/_\/___\/_\`'/_\/__)
+// Train types
+#define TRAIN_TYPE_SLOW   1
+#define TRAIN_TYPE_FAST   2
 
-*/
+// Price and time(seconds)
+#define SLOW_TRAIN_PRICE  2.00
+#define FAST_TRAIN_PRICE  5.00
+#define SLOW_TRAIN_TIME   30
+#define FAST_TRAIN_TIME   10
 
-enum metroEnum {
+//Train interior
+#define TRAIN_INTERIOR_ID 19
 
-	MetroSQLID,
-	MetroRouteID,
-	Float:MetroX,
-	Float:MetroY,
-	Float:MetroZ,
-	MetroInt,
-	MetroVirtual
+// Dizi ga nodi kolko hoces
+#define MAX_METRO_STATIONS    50
+
+#define train_interior_x	(-1097.1132)
+#define train_interior_y	(-203.0459)
+#define train_interior_z	(14.2131)
+
+enum E_METRO_STATION {
+    station_ID,
+    station_Name[32],
+    Float:station_X,
+    Float:station_Y,
+    Float:station_Z,
+    station_Pickup,
+    Text3D:station_Label
 }
-new metroInfo[MAX_METROS][metroEnum],
-	Iterator:Metros<MAX_METROS>;
+new g_MetroStations[MAX_METRO_STATIONS][E_METRO_STATION];
 
-/*
-     _  _            _        
-    ( )( )          ( )       
-    | L| | ___  ___ | | _  __ 
-    ( __ )( o )( o )( _'( (_' 
-    /_\/_\ \_/  \_/ /_\\_|/__)
+// Sound effects
+#define SOUND_TRAIN_ARRIVAL   1137
+#define SOUND_TRAIN_DEPARTURE 1138
+#define SOUND_TICKET_PURCHASE 1083
 
-*/
+new g_PlayerSelectedStation[MAX_PLAYERS];
+new g_PlayerTrainType[MAX_PLAYERS];
+new g_PlayerTrainVW[MAX_PLAYERS];
+
+new Iterator:MetroStations<MAX_METRO_STATIONS>;
 
 hook OnGameModeInit()
 {
-	if(script_loaded)
-    {
-        print("metros/metros.script loaded");  
-    }
+	Iter_Init(MetroStations);
+	mysql_tquery(SQL, "SELECT * FROM `metro_stations`", "OnMetroStationsLoad");
 
-    Iter_Init(Metros);
-    mysql_pquery(SQL, "SELECT * FROM `metros`", "LoadMetros" );
+    print("Metro system loaded");
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeExit()
+{
+   Iter_Clear(MetroStations);
+   print("Metro system unloaded");
+
+   return Y_HOOKS_CONTINUE_RETURN_1;   
 }
 
 hook OnPlayerConnect(playerid)
 {
-	MetroStation[playerid] = 0;
-	KillTimer(MetroTimer[playerid]);
-	return 1;
-}
-
-hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
-{
-	if(newkeys & KEY_CROUCH)
-	{
-		foreach(new idzz : Metros)
-	    {
-	        if(IsPlayerInRangeOfPoint(playerid, 1.0, metroInfo[ idzz ][ MetroX ], metroInfo[ idzz ][ MetroY ], metroInfo[ idzz ][ MetroZ ]))
-	        {
-	        	switch(metroInfo[idzz][MetroRouteID])
-	        	{
-	        		case 1: Dialog_Show(playerid, "dialog_metrostation1", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
-	        		case 2: Dialog_Show(playerid, "dialog_metrostation2", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
-	        		case 3: Dialog_Show(playerid, "dialog_metrostation3", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
-	        		case 4: Dialog_Show(playerid, "dialog_metrostation4", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
-	        		case 5: Dialog_Show(playerid, "dialog_metrostation5", DIALOG_STYLE_LIST, "Metro - Odabir Rute", "Banka\nOpstina", "Dalje", "Izlaz");
-	        	}
-	        }
-	    }
-	}
+	g_PlayerSelectedStation[playerid] = -1;
+	g_PlayerTrainType[playerid] = 0;
+	g_PlayerTrainVW[playerid] = 0;
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-/*
-	* DIalogs
-*/
+hook OnPlayerDisconnect(playerid, reason)
+{
+	g_PlayerSelectedStation[playerid] = -1;
+	g_PlayerTrainType[playerid] = 0;
+	g_PlayerTrainVW[playerid] = 0;
 
-Dialog:dialog_metrostation1(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStation[playerid] = 1;
-			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStation[playerid] = 2;
-		}
-	}
-	return (true);
-}
-Dialog:dialog_metrostation2(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStation[playerid] = 1;
-			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStation[playerid] = 2;
-		}
-	}
-	return (true);
-}
-Dialog:dialog_metrostation3(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStation[playerid] = 1;
-			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStation[playerid] = 2;
-		}
-	}
-	return (true);
-}
-Dialog:dialog_metrostation4(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStation[playerid] = 1;
-			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStation[playerid] = 2;
-		}
-	}
-	return (true);
-}
-Dialog:dialog_metrostation5(const playerid, response, listitem, string:inputtext[])
-{
-	if(!response) return 1;
-	if(response)
-	{
-		switch(listitem)
-		{
-			case 0: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 1), MetroStation[playerid] = 1;
-			case 1: SetTimerEx("MetroEnter", 4000, false, "ii",playerid, 2), MetroStation[playerid] = 2;
-		}
-	}
-	return (true);
-}
-/*
-     _                _      _   ___                 
-    ( )              ( )    / ) /  _)                
-    | |   ___  ___  _| |   / /  \_"-.  ___  _ _  ___ 
-    ( )_ ( o )( o )/ o )  ( /    __) )( o )( V )( o_)
-    /___\ \_/ /_^_\\___\ /_/    /___/ /_^_\ \_/  \(  
-
-*/
-
-forward LoadMetros();
-public LoadMetros()
-{
-	new iRows, id;
-	cache_get_row_count(iRows);
-	for(new i = 0; i < iRows; i++)
-	{
-	    cache_get_value_name_int(i, "metroID", id);
-	    cache_get_value_name_int(i, "MetroRoute", metroInfo[id][MetroRouteID]);
-	    cache_get_value_name_float(i, "metroX",metroInfo[id][MetroX]);
-	    cache_get_value_name_float(i, "metroY",metroInfo[id][MetroY]);
-	    cache_get_value_name_float(i, "metroZ",metroInfo[id][MetroZ]);
-	    cache_get_value_name_int(i, "metroInt", metroInfo[id][MetroInt]);
-	    cache_get_value_name_int(i, "metroVw", metroInfo[id][MetroVirtual]);
-		Iter_Add(Metros, 0);
-		Iter_Add(Metros, id);
-		MetrosLabel(id);
-	}
-	printf("Ucitavanje Metro Stanica(%d)... Uspesno",iRows);
-	return (true);
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-forward SaveMetros(metro);
-public SaveMetros(metro)
+forward OnMetroStationsLoad();
+public OnMetroStationsLoad()
 {
-	new query[300];
-    format(query, sizeof(query),"`metroX`='%f',`metroY`='%f',`metroZ`='%f',`metroInt`='%d',`metroVw`='%d',`MetroRoute`='%d'",
-		metroInfo[metro][MetroX],
-		metroInfo[metro][MetroY],
-		metroInfo[metro][MetroZ],
-		metroInfo[metro][MetroInt],
-		metroInfo[metro][MetroVirtual],
-		metroInfo[metro][MetroRouteID]
-	);
-	format(query, sizeof(query), "UPDATE `metros` SET %s WHERE `metroID`='%i'", query, metro);
-	mysql_tquery(SQL, query);
-	return (true);
-}
-
-
-forward CreateMetro(id);
-public CreateMetro(id)
-{
-	metroInfo[id][MetroSQLID] = cache_insert_id();
-	Iter_Add(Metros, id);
-	return (true);
-}
-/*
-     ____                _   _                
-    (  __)              ( ) (_)               
-    | |_   _ _  ____  __| |  _  ___  ____  __ 
-    ( __) ( U )( __ )/ /( _)( )( o )( __ )(_' 
-    /_\   /___\/_\/_\\_\/_\ /_\ \_/ /_\/_\/__)
-
-*/
-
-forward MetroEnter(playerid, id);
-public MetroEnter(playerid, id)
-{
-	// id == 1 = 30sec
-	// id == 2 = 60sec
-	switch(id)
-	{
-		case 1:
-		{
-			MetroTimer[playerid] = SetTimerEx("MetroExit", 30*1000, false, "ii", playerid, MetroStation[playerid]);
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Usli ste u metro stanicu, sacekajte dok metro dodje do lokacije.");
-		}
-		case 2:
-		{
-
-			MetroTimer[playerid] = SetTimerEx("MetroExit", 60*1000, false, "ii", playerid, MetroStation[playerid]);
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Usli ste u metro stanicu, sacekajte dok metro dodje do lokacije.");
-		}
-	}
-	return (true);
-}
-
-forward MetroExit(playerid, id);
-public MetroExit(playerid, id)
-{
-
-	KillTimer(MetroTimer[playerid]);
-	switch(id)
-	{
-		case 1:
-		{
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta1.");
-		}
-		case 2:
-		{
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta2");
-		}
-		case 3:
-		{
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta3");
-		}	
-		case 4:
-		{
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta4");
-		}
-		case 5:
-		{
-			SendClientMessage(playerid, 0x0086e3FF, "> Metro Stanica: {ffffff}Ruta5");
-		}
-	}
-	return (true);
-}
-forward sql_createmetro(id);
-public sql_createmetro(id)
-{
-	static q[850];
-	mysql_format(SQL, q, sizeof(q),
-	    "INSERT INTO `metros` (`metroX`, `metroY`, `metroZ`, `MetroRoute`, `metroInt`, `metroVw`) \
-		 VALUES('%f','%f','%f','%d','%d','%d')", 
-		 metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ],metroInfo[id][MetroRouteID],metroInfo[id][MetroInt],metroInfo[id][MetroVirtual]);
-
-	mysql_pquery(SQL, q, "CreateMetro", "i", id);
-	return (true);
-}
-StanicaIzRute(ruta)
-{
-	new rutazz[50] = "Nema Rute";
-	switch(metroInfo[ruta][MetroRouteID]) 
-	{
-	    case 0: rutazz = "Nema Rute";
-		case 1: rutazz = "Ruta1";
-		case 2: rutazz = "Ruta2";
-		case 3: rutazz = "Ruta3";
-		case 4: rutazz = "Ruta4";
-		case 5: rutazz = "Ruta5";
-		case 6: rutazz = "Ruta6";
-	}
-	return rutazz;
-}
-
-NearestMetro( playerid ) {
-
-    foreach(new i : Metros)
-    if(IsPlayerInRangeOfPoint( playerid, 5.0, metroInfo[ i ][ MetroX ], metroInfo[ i ][ MetroY ], metroInfo[ i ][ MetroZ ] ) ) 
+    new rows = cache_num_rows();
+    for(new i = 0; i < rows && i < MAX_METRO_STATIONS; i++)
     {
-		if( GetPlayerInterior( playerid ) == metroInfo[ i ][ MetroInt ] && GetPlayerVirtualWorld( playerid ) == metroInfo[ i ][ MetroVirtual ] )
-		return i;
-	}
-	return -1;
+        cache_get_value_name_int(i, "id", g_MetroStations[i][station_ID]);
+        cache_get_value_name(i, "name", g_MetroStations[i][station_Name], 32);
+        cache_get_value_name_float(i, "x", g_MetroStations[i][station_X]);
+        cache_get_value_name_float(i, "y", g_MetroStations[i][station_Y]);
+        cache_get_value_name_float(i, "z", g_MetroStations[i][station_Z]);
+        
+        new labelText[452];
+        format(labelText, sizeof(labelText), ""c_server"\187; "c_white"Metro Station "c_server"\171;\n"c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Use /metro to travel "c_server"\171;", 
+            g_MetroStations[i][station_Name]
+        );
+        
+        g_MetroStations[i][station_Pickup] = CreatePickup(1239, 1, 
+            g_MetroStations[i][station_X],
+            g_MetroStations[i][station_Y],
+            g_MetroStations[i][station_Z],
+            -1
+        );
+        
+        g_MetroStations[i][station_Label] = Create3DTextLabel(
+            labelText,
+            0xFFFF00FF,
+            g_MetroStations[i][station_X],
+            g_MetroStations[i][station_Y],
+            g_MetroStations[i][station_Z] + 0.5,
+            30.0,
+            0,
+            true
+        );
+        
+        Iter_Add(MetroStations, i);
+    }
 }
 
-forward MetrosLabel(id);
-public MetrosLabel(id)
+Dialog:METRO_MAIN(playerid, response, listitem, inputtext[])
 {
-	DestroyDynamic3DTextLabel(MetroLabel[id]);
-	DestroyDynamicPickup(MetroPickup[id]);
-	new stringic[100];
-	format(stringic, sizeof(stringic),"   » {ffffff}METRO STANICA{23DEEB} «   \n\nStanica: %s",StanicaIzRute(id));
-	MetroLabel[id] = CreateDynamic3DTextLabel(stringic, 0x23DEEBFF, metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ],10.0,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, 0, 0);
+    if(!response) return (true);
+	
+	g_PlayerSelectedStation[playerid] = listitem;
+	
+	if( GetPlayerCurrentStation(playerid) == g_PlayerSelectedStation[playerid])
+		return SendClientMessage(playerid, x_ltorange, "METRO: Vec se nalazite na toj stanici!");
 
-	CreateMarker(metroInfo[id][MetroX],metroInfo[id][MetroY],metroInfo[id][MetroZ]-1.0, 0, 0);
+	ShowTrainTypeSelection(playerid);
+    return (true);
+}
+
+Dialog:METRO_TYPE(playerid, response, listitem, inputtext[])
+{
+    if(!response) return ShowMetroStations(playerid);
+    g_PlayerTrainType[playerid] = (listitem == 0) ? TRAIN_TYPE_SLOW : TRAIN_TYPE_FAST;
+    ShowTravelConfirmation(playerid);
+    return (true);
+}
+
+Dialog:METRO_CONFIRM(playerid, response, listitem, inputtext[])
+{
+    if(!response) return ShowTrainTypeSelection(playerid);
+    StartTrainJourney(playerid);
+    return (true);
+}
+
+ShowTrainTypeSelection(playerid)
+{
+    new string[256];
+    format(string, sizeof(string), 
+        "Spori Voz\t$%.2f (%d sekundi)\n\
+        Brzi Voz\t$%.2f (%d sekundi)",
+        SLOW_TRAIN_PRICE, SLOW_TRAIN_TIME,
+        FAST_TRAIN_PRICE, FAST_TRAIN_TIME
+    );
+    
+    Dialog_Show(playerid, "METRO_TYPE", DIALOG_STYLE_TABLIST,
+        "Izaberi tip voza",
+        string,
+        "Odaberi", "Nazad"
+    );
+
 	return (true);
+}
+
+ShowTravelConfirmation(playerid)
+{
+    new string[256], type = g_PlayerTrainType[playerid];
+    new Float:xPrice = (type == TRAIN_TYPE_FAST) ? FAST_TRAIN_PRICE : SLOW_TRAIN_PRICE;
+    new time = (type == TRAIN_TYPE_FAST) ? FAST_TRAIN_TIME : SLOW_TRAIN_TIME;
+    
+    format(string, sizeof(string),
+        "Destinacija: %s\n\
+        Tip voza: %s\n\
+        Cena: $%.2f\n\
+        Vreme putovanja: %d sekundi\n\n\
+        Jesi li siguran da zelis da putujes?",
+        g_MetroStations[g_PlayerSelectedStation[playerid]][station_Name],
+        (type == TRAIN_TYPE_FAST) ? "Brzi Voz" : "Spori Voz",
+        xPrice,
+        time
+    );
+    
+    Dialog_Show(playerid, "METRO_CONFIRM", DIALOG_STYLE_MSGBOX,
+        "Potvrdi putovanje",
+        string,
+        "Da", "Ne"
+    );
+}
+
+ShowMetroStations(playerid)
+{
+    new string[512];
+    foreach(new i : MetroStations)
+    {
+        format(string, sizeof(string), "%s%s\n", string, g_MetroStations[i][station_Name]);
+    }
+    Dialog_Show(playerid, "METRO_MAIN", DIALOG_STYLE_LIST,
+        "Metro stanice",
+        string,
+        "Odaberi", "Odustani"
+    );
+
+	return (true);
+}
+
+YCMD:metro(playerid, params[], help)
+{
+	if(!IsPlayerNearStation(playerid))
+	{
+		SendClientMessage(playerid, x_ltorange, "METRO: Moras biti na metro stanici da koristis ovu komandu!");
+		return (true);
+	}
+	
+	ShowMetroStations(playerid);
+	return (true);
+}
+
+YCMD:editstation(playerid, params[], help)
+{
+    if(!IsPlayerAdmin(playerid)) return (false);
+    
+    new stationid, name[32];
+    if(sscanf(params, "ds[32]", stationid, name)) 
+        return SendClientMessage(playerid, x_red, "USAGE: /editstation [stationid] [new name]");
+    
+    if(!Iter_Contains(MetroStations, stationid))
+        return SendClientMessage(playerid, x_red, "Nevalidan ID stanice!");
+    
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    
+    new labelText[452];
+    format(labelText, sizeof(labelText), ""c_server"\187; "c_white"Metro Station "c_server"\171;\n"c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Koristi /metro da putujes "c_server"\171;",name);
+    
+    DestroyPickup(g_MetroStations[stationid][station_Pickup]);
+    Delete3DTextLabel(g_MetroStations[stationid][station_Label]);
+    
+    g_MetroStations[stationid][station_Pickup] = CreatePickup(1239, 1, x, y, z, -1);
+    g_MetroStations[stationid][station_Label] = Create3DTextLabel(
+        labelText,
+        0xFFFF00FF,
+        x, y, z + 0.5,
+        30.0,
+        0,
+        true
+    );
+    
+    format(g_MetroStations[stationid][station_Name], 32, name);
+    g_MetroStations[stationid][station_X] = x;
+    g_MetroStations[stationid][station_Y] = y;
+    g_MetroStations[stationid][station_Z] = z;
+    
+    new Query[256];
+    mysql_format(SQL, Query, sizeof(Query), 
+        "UPDATE metro_stations SET name='%e', x=%f, y=%f, z=%f WHERE id=%d",
+        name, x, y, z, g_MetroStations[stationid][station_ID]
+    );
+    mysql_tquery(SQL, Query);
+    
+    SendClientMessage(playerid, x_ltorange, "METRO: Metro stanica uspesno izmenjena!");
+    return (true);
+}
+
+YCMD:deletestation(playerid, params[], help)
+{
+    if(!IsPlayerAdmin(playerid)) return (false);
+    
+    new stationid;
+    if(sscanf(params, "d", stationid))
+        return SendClientMessage(playerid, x_red, "USAGE: /deletestation [stationid]");
+    
+    if(!Iter_Contains(MetroStations, stationid))
+        return SendClientMessage(playerid, x_red, "Nevalidan ID stanice!");
+    
+    DestroyPickup(g_MetroStations[stationid][station_Pickup]);
+    Delete3DTextLabel(g_MetroStations[stationid][station_Label]);
+    
+    new Query[128];
+    mysql_format(SQL, Query, sizeof(Query), 
+        "DELETE FROM metro_stations WHERE id=%d",
+        g_MetroStations[stationid][station_ID]
+    );
+    mysql_tquery(SQL, Query);
+    
+    Iter_Remove(MetroStations, stationid);
+    
+    SendClientMessage(playerid, x_ltorange, "METRO: Metro stanica uspesno izbrisana!");
+    return (true);
+}
+
+YCMD:liststations(playerid, params[], help)
+{
+    if(!IsPlayerAdmin(playerid)) return (false);
+    
+    new string[512];
+    SendClientMessage(playerid, x_green, "Lista metro stanica:");
+    
+    foreach(new i : MetroStations)
+    {
+        format(string, sizeof(string), "ID: %d | Name: %s", i, g_MetroStations[i][station_Name]);
+        SendClientMessage(playerid, x_white, string);
+    }
+    return (true);
+}
+
+StartTrainJourney(playerid)
+{
+    new type = g_PlayerTrainType[playerid];
+    new Float:xPrice = (type == TRAIN_TYPE_FAST) ? FAST_TRAIN_PRICE : SLOW_TRAIN_PRICE;
+    new time = (type == TRAIN_TYPE_FAST) ? FAST_TRAIN_TIME : SLOW_TRAIN_TIME;
+    
+    if(GetPlayerMoney(playerid) < xPrice)
+    {
+        SendClientMessage(playerid, x_ltorange, "METRO: Ne mozes da platis ovu voznju!");
+        return (false);
+    }
+    
+    GivePlayerMoney(playerid, -xPrice);
+    PlayerPlaySound(playerid, SOUND_TICKET_PURCHASE, 0.0, 0.0, 0.0);
+    
+    SetPlayerCompensatedPos(playerid, 
+        train_interior_x, 
+        train_interior_y, 
+        train_interior_z, 
+        g_PlayerTrainVW[playerid], 
+        TRAIN_INTERIOR_ID
+    );
+    
+    PlayerPlaySound(playerid, SOUND_TRAIN_DEPARTURE, 0.0, 0.0, 0.0);
+    
+    SetTimerEx("CompleteJourney", time * 1000, false, "i", playerid);
+    return (true);
+}
+
+forward CompleteJourney(playerid);
+public CompleteJourney(playerid)
+{
+    new stationid = g_PlayerSelectedStation[playerid];
+    
+    PlayerPlaySound(playerid, SOUND_TRAIN_ARRIVAL, 0.0, 0.0, 0.0);
+    
+    SetPlayerCompensatedPos(playerid, 
+        g_MetroStations[stationid][station_X],
+        g_MetroStations[stationid][station_Y],
+        g_MetroStations[stationid][station_Z],
+        0,
+        0 
+    );
+    
+    g_PlayerTrainVW[playerid] = 0;
+    SendClientMessage(playerid, x_ltorange, "METRO: Stigao si na destinaciju!");
+}
+
+YCMD:createstation(playerid, params[], help)
+{
+    if(!IsPlayerAdmin(playerid)) return 0;
+    
+    new name[32];
+    if(sscanf(params, "s[32]", name)) return SendClientMessage(playerid, x_ltorange, "USAGE: /createstation [name]");
+    
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    
+    CreateMetroStation(name, x, y, z);
+    SendClientMessage(playerid, x_ltorange, "METRO: Metro stanica uspesno kreirana!");
+    return 1;
+}
+
+stock IsPlayerNearStation(playerid)
+{
+    new Float:playerX, Float:playerY, Float:playerZ;
+    GetPlayerPos(playerid, playerX, playerY, playerZ);
+    
+    foreach(new i : MetroStations)
+    {
+        if(IsPlayerInRangeOfPoint(playerid, 
+			1.7, 
+            g_MetroStations[i][station_X],
+            g_MetroStations[i][station_Y],
+            g_MetroStations[i][station_Z]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+stock GetPlayerCurrentStation(playerid)
+{
+    new Float:playerX, Float:playerY, Float:playerZ;
+    GetPlayerPos(playerid, playerX, playerY, playerZ);
+    
+    foreach(new i : MetroStations)
+    {
+        if(IsPlayerInRangeOfPoint(playerid, 
+			1.7, 
+            g_MetroStations[i][station_X],
+            g_MetroStations[i][station_Y],
+            g_MetroStations[i][station_Z]))
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+stock CreateMetroStation(const name[], Float:x, Float:y, Float:z)
+{
+    new idx = Iter_Free(MetroStations);
+    if(idx == ITER_NONE) return 0;
+    
+    new labelText[452];
+    format(labelText, sizeof(labelText), ""c_server"\187; "c_white"Metro Station "c_server"\171;\n"c_server"\187; "c_white"%s "c_server"\171;\n"c_server"\187; "c_white"Use /metro to travel "c_server"\171;", name);
+    
+    g_MetroStations[idx][station_Pickup] = CreatePickup(1239, 1, x, y, z, -1);
+    g_MetroStations[idx][station_Label] = Create3DTextLabel(
+        labelText,
+        0xFFFF00FF,
+        x, y, z + 0.5,
+        30.0,
+        0,
+        true
+    );
+    
+    new Query[256];
+    mysql_format(SQL, Query, sizeof(Query), 
+        "INSERT INTO metro_stations (name, x, y, z) VALUES ('%e', %f, %f, %f)",
+        name, x, y, z
+    );
+    mysql_tquery(SQL, Query, "OnMetroStationCreated", "ifffs", idx, x, y, z, name);
+    return 1;
+}
+
+forward OnMetroStationCreated(idx, Float:x, Float:y, Float:z, name[]);
+public OnMetroStationCreated(idx, Float:x, Float:y, Float:z, name[])
+{
+    g_MetroStations[idx][station_ID] = cache_insert_id();
+    format(g_MetroStations[idx][station_Name], 32, name);
+    g_MetroStations[idx][station_X] = x;
+    g_MetroStations[idx][station_Y] = y;
+    g_MetroStations[idx][station_Z] = z;
+    Iter_Add(MetroStations, idx);
 }

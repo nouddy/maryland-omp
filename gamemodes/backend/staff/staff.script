@@ -22,10 +22,13 @@
 static  
 	bool:StaffDuty[MAX_PLAYERS];
 
+new answeringQuestion[MAX_PLAYERS];
+
 new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
 
 
 enum {
+
 	e_ASSISTANT = 1,
 	e_STAFF,
 	e_DIRECTOR,
@@ -33,9 +36,63 @@ enum {
 	e_OWNER
 }
 
+#define MAX_QUESTIONS       (1000)
+
+#define MAX_QUESTION_LEN    (36)
+
+enum e_STAFF_QUESTION_DATA {
+
+    ID,
+    PlayerID,
+    Question[MAX_QUESTION_LEN],
+    Date[36]
+}
+
+new QuestionInfo[MAX_QUESTIONS][e_STAFF_QUESTION_DATA];
+new Iterator:iter_Question<MAX_QUESTIONS>;
+
+forward mysql_SendQeustion(id);
+public mysql_SendQeustion(id) {
+
+    Iter_Add(iter_Question, id);
+
+    foreach(new i : Player) {
+
+        if(PlayerInfo[i][Staff] >= 1) {
+
+            SendClientMessage(i, x_server, "staff \187; "c_white"%s je postavio upit : "c_server"%s", ReturnPlayerName(QuestionInfo[id][PlayerID]), QuestionInfo[id][Question]);
+            break;
+        }
+    }
+
+    return (true);
+}
+
+forward mysql_LoadQuestions(playerid);
+public mysql_LoadQuestions(playerid) {
+
+    new rows = cache_num_rows();
+    if(!rows) return SendClientMessage(playerid, x_ltorange, "STAFF: "c_white"Nema pitanja...");
+
+	new dialogStr[460];
+	for(new i = 0; i < rows; i++) { 
+		new pID = 0, questionSTR[MAX_QUESTION_LEN], qDate[36];
+		cache_get_value_name_int(i, "PlayerID", pID);
+		cache_get_value_name(i, "Question", questionSTR, MAX_QUESTION_LEN);
+		cache_get_value_name(i, "Date", qDate, 36);
+	
+		format(dialogStr, sizeof dialogStr, "{737be1}%s%s {ffffff}| %s | {daa520}%s\n", dialogStr, ReturnPlayerName(pID), questionSTR, qDate);
+		Dialog_Show(playerid, "dialog_Questions", DIALOG_STYLE_LIST, "Questions", dialogStr, "Odaberi", "Odustani");
+	}
+
+    return(true);
+}
+
 hook OnGameModeInit()
 {
 	print("staff/staff.script loaded");
+
+	mysql_tquery(SQL, "TRUNCATE TABLE `staff_questions`");
 
 	return 1;
 }
@@ -99,6 +156,42 @@ stock ReturnStaffLevel(playerid) {
 		default: 	{ level = 	"[Unknown]"; 			}
 	}
 	return level;
+}
+
+YCMD:askq(playerid, params[], help) {
+
+    new text[MAX_QUESTION_LEN];
+    if(sscanf(params, "s[246]", text)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/askq [Pitanje]");
+
+    new question[MAX_QUESTION_LEN];
+    strmid(question, text, 0, sizeof text, MAX_QUESTION_LEN);
+
+    new qID = Iter_Free(iter_Question);
+
+    QuestionInfo[qID][ID] = qID;
+    QuestionInfo[qID][PlayerID] = playerid;
+    QuestionInfo[qID][Question] = question;
+    QuestionInfo[qID][Date] = ReturnDate();
+
+    new q[400];
+    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `staff_questions` (`ID`, `PlayerID`, `Question`, `Date`) \
+                                          VALUES ('%d', '%d', '%e', '%e')",
+                                          QuestionInfo[qID][ID], QuestionInfo[qID][PlayerID],
+                                          QuestionInfo[qID][Question], QuestionInfo[qID][Date]);
+    mysql_tquery(MySQL:SQL, q, "mysql_SendQeustion", "d", qID);
+    return (true);
+}
+
+YCMD:questions(playerid, params[], help) 
+{
+    
+    if(PlayerInfo[playerid][Staff] < 1) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste dovoljan staff level!");
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "SELECT * FROM `staff_questions`");
+    mysql_tquery(SQL, q, "mysql_LoadQuestions", "d", playerid);
+
+    return 1;
 }
 
 YCMD:sduty(playerid, params[], help)
@@ -178,7 +271,7 @@ YCMD:sveh(playerid, params[], help)
 		if (400 > modelid > 611)
 			return notification.Show(playerid, "Greska", "Invalid model vozila | 400 - 611 |", "!", BOXCOLOR_RED);
 
-		new vehicleid = stfveh[playerid] = CreateVehicleEx(modelid, x, y, z+2.0, 0.0, 1, 0, -1, false, false, 50);
+		new vehicleid = stfveh[playerid] = CreateVehicleEx(modelid, x, y, z+2.0, 0.0, 1, 0, 1500, false, false, 50);
 
 		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(playerid));
 		SetVehicleNumberPlate(vehicleid, "STAFF");
@@ -940,6 +1033,52 @@ YCMD:unprison(playerid, params[], help) {
     mysql_write_log(log_str, LOG_TYPE_STAFF);
 
 	return (true);
+}
+
+Dialog:dialog_Questions(const playerid, response, listitem, string: inputtext[]) {
+
+    if(!response) return (true);
+
+    new qID = listitem;
+    answeringQuestion[playerid] = qID;
+    Dialog_Show(playerid, "question_Answer", DIALOG_STYLE_INPUT, "Answer", "[ %s ] -> %s", "Odgovori", "Nazad", ReturnPlayerName(QuestionInfo[qID][PlayerID]), QuestionInfo[qID][Question]);
+    
+    return true;
+}
+
+Dialog:question_Answer(const playerid, response, listitem, string: inputtext[]) {
+
+    if(!response) {
+
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "SELECT * FROM `staff_questions`");
+        mysql_tquery(SQL, q, "mysql_LoadQuestions", "d", playerid);
+        return (true);
+    }
+
+    new qID = answeringQuestion[playerid];
+
+    new answer[MAX_QUESTION_LEN];
+    if(sscanf(inputtext, "s[246]", answer)) return Dialog_Show(playerid, "question_Answer", DIALOG_STYLE_INPUT, "Answer", "[ %s ] -> %s", "Odgovori", "Nazad", ReturnPlayerName(QuestionInfo[qID][PlayerID]), QuestionInfo[qID][Question]);
+    
+    new xResponse[MAX_QUESTION_LEN];
+    strmid(xResponse, answer, 0, sizeof answer, MAX_QUESTION_LEN);
+
+    SendClientMessage(QuestionInfo[qID][PlayerID], x_server, "maryland \187; "c_white"%s vam je odgovorio na pitanje : %s", ReturnPlayerName(playerid), xResponse);
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Odgovorili ste igracu %s odgovorom : %s", ReturnPlayerName(QuestionInfo[qID][PlayerID]), xResponse);
+
+    new q[246];
+    mysql_format(SQL, q, sizeof q, "DELETE FROM `staff_questions` WHERE `PlayerID` = '%d' AND `ID` = '%d'", QuestionInfo[qID][PlayerID], QuestionInfo[qID][ID]);
+    mysql_tquery(SQL, q);
+
+    QuestionInfo[qID][ID] = -1;
+    QuestionInfo[qID][PlayerID] = INVALID_PLAYER_ID;
+    QuestionInfo[qID][Question] = EOS;
+    QuestionInfo[qID][Date] = EOS;
+
+    Iter_Remove(iter_Question, qID);
+    return true;
+
 }
 
 #include "backend/staff/jails.pwn"								//* Jail script

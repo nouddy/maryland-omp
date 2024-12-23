@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 21, 2024 at 01:59 PM
+-- Generation Time: Dec 23, 2024 at 10:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -62,7 +62,8 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (28, 'Casey', '123456', 5, '2024-12-07 22:50:11', '2024-12-07 22:50:11', 'caseymacka@whiskas.com'),
 (29, 'Leon_Skandy', '123456', 5, '2024-12-07 23:13:21', '2024-12-07 23:13:21', '@.com'),
 (30, 'Midori_Smith', '123123', 0, '2024-12-07 23:13:40', '2024-12-07 23:13:40', 'midori123@gmail.com'),
-(31, 'Midori_Test', '123123', 0, '2024-12-07 23:16:34', '2024-12-07 23:16:34', 'dasdasd@gmail.com');
+(31, 'Midori_Test', '123123', 0, '2024-12-07 23:16:34', '2024-12-07 23:16:34', 'dasdasd@gmail.com'),
+(32, 'Frenkie_Deep', 'Burek12', 0, '2024-12-22 19:48:07', '2024-12-22 19:48:07', 'eldarhrnjictrovo@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -78,18 +79,6 @@ CREATE TABLE `bankaccounts` (
   `Euro` float NOT NULL DEFAULT 0,
   `Pound` float NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `bankaccounts`
---
-
-INSERT INTO `bankaccounts` (`AccountID`, `OwnerID`, `OwnerType`, `Dollar`, `Euro`, `Pound`) VALUES
-(12, 7, 'Player', 111, 222, 333),
-(13, 7, 'Player', 444, 555, 666),
-(14, 2, 'Faction', 123, 456, 789),
-(15, 11, 'Player', 123, 456, 789),
-(16, 11, 'Player', 213, 21412, 2151),
-(17, 1, 'Faction', 213, 4421, 21412400);
 
 -- --------------------------------------------------------
 
@@ -184,24 +173,25 @@ CREATE TABLE `characters` (
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`) VALUES
 (3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10003500, 0, 0, 0, '2024-12-20 14:01:25', 980.57, -1190.4, 22.8073, 0, 0, 0, 0, 0, 0),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 10003500, 0, 0, 0, '2024-12-22 13:23:38', 980.57, -1190.4, 22.5073, 0, 0, 0, 0, 0, 0),
 (5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(11, 13, 'Ferid_Olsun', 12, 0, 0, 0, 0, 5238, 0, 0, 0, '2024-12-21 13:58:39', 1299.31, 1450.05, 100.957, 8, 0, 0, 1110, 1, 1875),
+(11, 13, 'Ferid_Olsun', 23, 0, 0, 0, 0, 2744, 0, 0, 0, '2024-12-23 22:44:41', 815.192, -1344.01, 13.5308, 0, 0, 0, 1385, 1, 1875),
 (13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(19, 26, 'Silva_Rose', 60, 0, 0, 0, 0, 500, 0, 0, 0, '2024-12-20 20:40:39', 1688.05, -2329.41, 31.3094, 0, 0, 0, 0, 0, 0),
+(19, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 500, 0, 0, 0, '2024-12-21 19:42:20', 999.714, -1315.79, 13.3931, 0, 0, 0, 120, 1, 0),
 (20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0);
+(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250);
 
 -- --------------------------------------------------------
 
@@ -225,7 +215,28 @@ CREATE TABLE `character_quests` (
 --
 
 INSERT INTO `character_quests` (`characterid`, `Quest_1`, `Quest_2`, `Quest_3`, `Quest_4`, `Quest_5`, `Quest_6`, `Quest_7`) VALUES
-(11, 1, 1, 0, 0, 1, 0, 1);
+(4, 0, 0, 0, 0, 0, 0, 0),
+(11, 1, 1, 0, 1, 1, 0, 1),
+(19, 0, 0, 0, 0, 0, 0, 1),
+(24, 0, 0, 0, 0, 0, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `character_spawns`
+--
+
+CREATE TABLE `character_spawns` (
+  `character_id` int(11) NOT NULL,
+  `spawnType` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `character_spawns`
+--
+
+INSERT INTO `character_spawns` (`character_id`, `spawnType`) VALUES
+(11, 2);
 
 -- --------------------------------------------------------
 
@@ -243,6 +254,38 @@ CREATE TABLE `containers` (
   `con_rz` float DEFAULT 0,
   `con_jnumber` mediumint(9) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `containers`
+--
+
+INSERT INTO `containers` (`conID`, `con_x`, `con_y`, `con_z`, `con_rx`, `con_ry`, `con_rz`, `con_jnumber`) VALUES
+(1, 806.793, -1368.02, 13.2869, 0, 0, 90.0775, 0),
+(2, 955.785, -1334.21, 13.229, 0, 0, 341.648, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crypto_wallets`
+--
+
+CREATE TABLE `crypto_wallets` (
+  `character_id` int(11) NOT NULL,
+  `bitcoin` decimal(18,8) NOT NULL DEFAULT 0.00000000,
+  `ethereum` decimal(18,8) NOT NULL DEFAULT 0.00000000,
+  `litecoin` decimal(18,8) NOT NULL DEFAULT 0.00000000,
+  `dogecoin` decimal(18,8) NOT NULL DEFAULT 0.00000000,
+  `tether` decimal(18,8) NOT NULL DEFAULT 0.00000000
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `crypto_wallets`
+--
+
+INSERT INTO `crypto_wallets` (`character_id`, `bitcoin`, `ethereum`, `litecoin`, `dogecoin`, `tether`) VALUES
+(4, 0.00000000, 40.00000000, 0.00000000, 0.00000000, 0.00000000),
+(11, 3.14285707, 3.14999914, 0.00000000, 26400.00000000, 0.00000000),
+(24, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000);
 
 -- --------------------------------------------------------
 
@@ -269,7 +312,7 @@ CREATE TABLE `factions` (
 --
 
 INSERT INTO `factions` (`factionID`, `factionName`, `factionType`, `factionBoss`, `factionRightHand`, `factionAreaX`, `factionAreaY`, `factionAreaZ`, `factionInterior`, `factionVirtualWorld`, `factionHouseID`) VALUES
-(1, 'Niggers Family', 1, 1, 26, 0, 0, 0, 0, 0, 0);
+(1, 'Niggers Family', 1, 11, 26, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -377,7 +420,8 @@ CREATE TABLE `houses` (
 --
 
 INSERT INTO `houses` (`ID`, `hOwner`, `Price`, `Type`, `Adress`, `Locked`, `PosX`, `PosY`, `PosZ`, `ExitX`, `ExitY`, `ExitZ`, `Safe`, `Money`, `Weed`, `Cocaine`, `Extazy`, `WardX`, `WardY`, `WardZ`, `FridgeX`, `FridgeY`, `FridgeZ`, `Int`) VALUES
-(1, 11, 50000, 1, 'Brooklyn Park, Maryland', 0, 834.234, -1333.98, 13.5465, 224.28, 1289.19, 1082.14, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 1);
+(2, 0, 300000, 3, 'Brooklyn Park, Maryland', 0, 1000.25, -1334.22, 13.3828, 199.577, 4.8688, 1501.01, 0, 0, 0, 0, 0, 179.477, 15.5518, 1505.19, 224.28, 1289.19, 1082.14, 15),
+(3, 0, 120000, 2, 'Brooklyn Park, Maryland', 0, 1000.25, -1334.22, 13.3828, -285.25, 1471.19, 1084.37, 0, 0, 0, 0, 0, 224.28, 1289.19, 1082.14, 224.28, 1289.19, 1082.14, 15);
 
 -- --------------------------------------------------------
 
@@ -397,8 +441,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`PlayerID`, `ItemID`, `ItemQuantity`, `ItemType`) VALUES
-(11, 50, 1, 2),
-(11, 55, 1, 4);
+(11, 55, 1, 4),
+(19, 54, 3, 4),
+(19, 57, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -451,6 +496,25 @@ CREATE TABLE `jobs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `life_insurance`
+--
+
+CREATE TABLE `life_insurance` (
+  `character_id` int(11) NOT NULL,
+  `purchase_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `expiry` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `life_insurance`
+--
+
+INSERT INTO `life_insurance` (`character_id`, `purchase_date`, `expiry`) VALUES
+(24, '2024-12-22 20:49:13', '2024-12-22 20:49:13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `log_anticheat`
 --
 
@@ -475,7 +539,19 @@ INSERT INTO `log_anticheat` (`log_str`, `date`) VALUES
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-20 19:18:01'),
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-20 19:19:32'),
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-21 13:14:49'),
-('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-21 13:17:09');
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-21 13:17:09'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-21 17:15:31'),
+('ANTICHEAT-LOG:  Silva se uspjesno prijavio kao RCON | IP: -1532966630', '2024-12-21 19:25:26'),
+('ANTICHEAT-LOG:  Silva se uspjesno prijavio kao RCON | IP: -1532966630', '2024-12-21 19:41:14'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-22 09:33:30'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-22 09:40:43'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-22 13:20:41'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-22 15:29:33'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 18:51:47'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:00:05'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:04:31'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:13:44'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 21:46:46');
 
 -- --------------------------------------------------------
 
@@ -1470,7 +1546,496 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /testnigger', '2024-12-21 13:53:13'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 13:57:30'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-21 13:57:32'),
-('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 13:57:33');
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 13:57:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 14:53:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-21 14:53:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 14:53:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-21 14:56:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 8', '2024-12-21 14:58:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 1298.4663,1560.8510,100.6721', '2024-12-21 14:58:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:01:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-21 15:01:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:01:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-21 15:09:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-21 15:12:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:26:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:27:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:27:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:27:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:27:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 15:30:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-21 15:31:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-21 17:15:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spanel', '2024-12-21 17:15:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-21 17:17:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 17:20:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /burglary', '2024-12-21 17:24:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /burglary', '2024-12-21 17:25:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /burglary', '2024-12-21 17:30:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto 2087.1863, -1557.7731, 12.8787', '2024-12-21 17:34:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /burglary', '2024-12-21 19:10:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-21 19:13:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:14:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:20:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:21:55'),
+('COMMAND:  Silva je iskoristio komandu /goto 0', '2024-12-21 19:23:36'),
+('COMMAND:  Silva je iskoristio komandu /cc', '2024-12-21 19:23:46'),
+('COMMAND:  Silva je iskoristio komandu /bank', '2024-12-21 19:23:51'),
+('COMMAND:  Silva je iskoristio komandu /port', '2024-12-21 19:24:13'),
+('COMMAND:  Silva je iskoristio komandu /bank', '2024-12-21 19:25:07'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:28'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:33'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:35'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:37'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:39'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:42'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:44'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:50'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:25:55'),
+('COMMAND:  Silva je iskoristio komandu /cc', '2024-12-21 19:26:01'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:26:03'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:26:17'),
+('COMMAND:  Silva je iskoristio komandu /server', '2024-12-21 19:26:31'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:26:33'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:26:50'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:27:09'),
+('COMMAND:  Silva je iskoristio komandu /anims', '2024-12-21 19:28:24'),
+('COMMAND:  Silva je iskoristio komandu /anim', '2024-12-21 19:28:25'),
+('COMMAND:  Silva je iskoristio komandu /jetpack', '2024-12-21 19:28:27'),
+('COMMAND:  Silva je iskoristio komandu /jetpack', '2024-12-21 19:29:12'),
+('COMMAND:  Silva je iskoristio komandu /spanek', '2024-12-21 19:29:20'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:29:21'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:00'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:03'),
+('COMMAND:  Silva je iskoristio komandu /metro', '2024-12-21 19:30:19'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:22'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:25'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:28'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:31'),
+('COMMAND:  Silva je iskoristio komandu /port', '2024-12-21 19:30:47'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:30:51'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:05'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:11'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:17'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:21'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:21'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:25'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:31:30'),
+('COMMAND:  Silva je iskoristio komandu /port', '2024-12-21 19:31:39'),
+('COMMAND:  Silva je iskoristio komandu /ainvite', '2024-12-21 19:32:07'),
+('COMMAND:  Silva je iskoristio komandu /ubacime', '2024-12-21 19:32:09'),
+('COMMAND:  Silva je iskoristio komandu /ubaci', '2024-12-21 19:32:12'),
+('COMMAND:  Silva je iskoristio komandu /makelider', '2024-12-21 19:32:17'),
+('COMMAND:  Silva je iskoristio komandu /makeleader', '2024-12-21 19:32:19'),
+('COMMAND:  Silva je iskoristio komandu /cc', '2024-12-21 19:32:23'),
+('COMMAND:  Silva je iskoristio komandu /org', '2024-12-21 19:32:40'),
+('COMMAND:  Silva je iskoristio komandu /orginvite', '2024-12-21 19:32:43'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:32:45'),
+('COMMAND:  Silva je iskoristio komandu /arrest', '2024-12-21 19:33:17'),
+('COMMAND:  Silva je iskoristio komandu /wl', '2024-12-21 19:33:18'),
+('COMMAND:  Silva je iskoristio komandu /su', '2024-12-21 19:33:20'),
+('COMMAND:  Silva je iskoristio komandu /aubaci', '2024-12-21 19:33:25'),
+('COMMAND:  Silva je iskoristio komandu /inviteme', '2024-12-21 19:33:29'),
+('COMMAND:  Silva je iskoristio komandu /pd', '2024-12-21 19:33:32'),
+('COMMAND:  Silva je iskoristio komandu /police', '2024-12-21 19:33:34'),
+('COMMAND:  Silva je iskoristio komandu /f a', '2024-12-21 19:33:41'),
+('COMMAND:  Silva je iskoristio komandu /f kuraccc', '2024-12-21 19:33:43'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-21 19:33:44'),
+('COMMAND:  Silva je iskoristio komandu /setint 0 3', '2024-12-21 19:35:24'),
+('COMMAND:  Silva je iskoristio komandu /xgoto -767.463134 -1977.023803 5.113958', '2024-12-21 19:35:28'),
+('COMMAND:  Silva je iskoristio komandu /f a', '2024-12-21 19:36:22'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-21 19:36:23'),
+('COMMAND:  Silva je iskoristio komandu /setint 0 0', '2024-12-21 19:36:40'),
+('COMMAND:  Silva je iskoristio komandu /setint 0 0', '2024-12-21 19:36:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:39:17'),
+('COMMAND:  Silva je iskoristio komandu /f silva je tata', '2024-12-21 19:39:59'),
+('COMMAND:  Silva je iskoristio komandu /f silva je tata', '2024-12-21 19:40:01'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-21 19:40:02'),
+('COMMAND:  Silva je iskoristio komandu /inv', '2024-12-21 19:40:43'),
+('COMMAND:  Silva je iskoristio komandu /inventory', '2024-12-21 19:40:46'),
+('COMMAND:  Silva je iskoristio komandu /inventory', '2024-12-21 19:40:53'),
+('COMMAND:  Silva je iskoristio komandu /inventory', '2024-12-21 19:40:56'),
+('COMMAND:  Silva je iskoristio komandu /spec', '2024-12-21 19:41:03'),
+('COMMAND:  Silva je iskoristio komandu /sms', '2024-12-21 19:41:06'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:41:16'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:41:17'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:41:32'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:41:36'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:41:49'),
+('COMMAND:  Silva je iskoristio komandu /giveplayermoney', '2024-12-21 19:41:59'),
+('COMMAND:  Silva je iskoristio komandu /givemoney', '2024-12-21 19:42:05'),
+('COMMAND:  Silva je iskoristio komandu /givemoney 1 120000', '2024-12-21 19:42:10'),
+('COMMAND:  Silva je iskoristio komandu /sever', '2024-12-21 19:42:11'),
+('COMMAND:  Silva je iskoristio komandu /spanel', '2024-12-21 19:42:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:43:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:44:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 19:56:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-21 19:57:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 20:00:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 20:28:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 20:30:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 20:31:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-21 20:39:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 21:12:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-21 21:12:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 09:13:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:13:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:13:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:14:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:14:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:14:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:14:46'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 09:16:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 0', '2024-12-22 09:16:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 19', '2024-12-22 09:16:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -1098.321777, -203.046279, 16.343063', '2024-12-22 09:16:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -1098.321777, -203.046279, 10.343063', '2024-12-22 09:16:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -1098.321777, -203.046279, 10.343063', '2024-12-22 09:16:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /xgoto -1098.321777, -203.046279, 14.343063', '2024-12-22 09:17:01'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 09:32:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /getint', '2024-12-22 09:32:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createmetro', '2024-12-22 09:33:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:33:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation', '2024-12-22 09:33:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation', '2024-12-22 09:33:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation Voki Supercharged', '2024-12-22 09:33:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation Debela Guza', '2024-12-22 09:33:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /stationlist', '2024-12-22 09:34:01'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /liststations', '2024-12-22 09:34:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:34:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:34:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:35:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:39:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:40:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:40:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:40:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 09:40:31');
+INSERT INTO `log_commands` (`log_str`, `date`) VALUES
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /editstation', '2024-12-22 09:40:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /editstation', '2024-12-22 09:40:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /editstation 1 Fjerit Olsun', '2024-12-22 09:40:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:40:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:41:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:41:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /deletestation', '2024-12-22 09:41:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /deletestation 1', '2024-12-22 09:41:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /travel', '2024-12-22 09:41:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:41:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-22 09:41:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 09:45:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:46:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:46:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:46:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:49:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:49:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:49:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:49:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:49:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:50:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:51:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:54:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 09:54:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 10:08:57'),
+('COMMAND:  Vostic je iskoristio komandu /goto 0', '2024-12-22 13:21:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gethere 1', '2024-12-22 13:21:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /givecrypto', '2024-12-22 13:21:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /givecrypto 0 1 100', '2024-12-22 13:21:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchange', '2024-12-22 13:21:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchangecrypto', '2024-12-22 13:21:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchangecrypto 1 0 500', '2024-12-22 13:21:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchangecrypto 1 0 50', '2024-12-22 13:21:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /transfercrypto', '2024-12-22 13:22:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /transfer', '2024-12-22 13:22:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sendcrypto', '2024-12-22 13:22:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sendcrypto 1 1 40', '2024-12-22 13:22:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /mycrypto', '2024-12-22 13:23:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:41:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:44:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:44:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:44:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:47:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:47:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:48:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:49:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:49:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:49:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:50:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:50:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:53:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:58:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:58:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:58:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 13:59:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 15:28:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-22 15:29:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createsz', '2024-12-22 15:29:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createsz', '2024-12-22 15:29:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 15:30:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchangecrypto', '2024-12-22 15:33:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /exchangecrypto 1 3 3', '2024-12-22 15:33:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 15:33:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-22 15:33:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 15:37:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 15:37:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 15:37:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-22 15:39:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-22 15:40:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-22 15:40:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 15:47:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 15:47:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 15:50:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 15:51:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 15:54:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:00:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:12:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:13:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:13:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:19:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:23:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:24:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 16:28:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:26:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:27:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:27:46'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:28:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:28:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:28:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 17:29:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:29:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:30:01'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 17:30:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:13:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:17:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:33:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:33:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:39:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:39:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:40:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:54:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:55:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:55:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setplayermoney ', '2024-12-22 18:55:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setplayermoney  0 1000 1', '2024-12-22 18:56:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:56:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /ccc', '2024-12-22 18:56:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 18:56:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setplayermoney 0 1 5000', '2024-12-22 18:56:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setplayermoney 0', '2024-12-22 18:56:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setplayermoney 0 5000 1', '2024-12-22 18:56:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:56:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 18:57:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:57:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 18:58:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 18:59:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 19:00:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-22 19:00:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gps', '2024-12-22 19:00:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 19:01:01'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 19:01:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 19:02:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 19:02:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quitjob', '2024-12-22 19:02:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 19:03:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /startservice', '2024-12-22 19:03:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bumpers', '2024-12-22 19:03:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 19:03:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spoilers', '2024-12-22 19:03:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 19:04:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /wheels', '2024-12-22 19:04:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 19:04:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /nitrous', '2024-12-22 19:04:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-22 19:05:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quitjob', '2024-12-22 19:06:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-22 19:06:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sethunger', '2024-12-22 19:20:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /givehunger', '2024-12-22 19:20:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /startservice', '2024-12-22 20:42:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spoilers', '2024-12-22 20:42:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 20:42:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bumpers', '2024-12-22 20:42:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 20:43:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spoilers', '2024-12-22 20:43:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lsclist', '2024-12-22 20:43:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /wheels', '2024-12-22 20:43:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /nitrous', '2024-12-22 20:44:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-22 20:44:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:45:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:45:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:46:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:46:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:49:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-22 20:49:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /goto 1', '2024-12-22 20:50:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /goto 0', '2024-12-22 20:50:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gethere 0', '2024-12-22 20:50:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /giveplayermoney', '2024-12-22 20:51:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /giveplayermoney 0 1 1000', '2024-12-22 20:51:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /giveplayermoney 0 1000 1', '2024-12-22 20:51:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 14:38:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /g eee', '2024-12-23 14:38:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /g ojsa', '2024-12-23 14:38:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 14:38:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 14:50:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 14:50:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 14:51:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 15:06:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 15:08:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:10:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:10:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:10:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:16:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:17:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 15:17:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 560 1 1', '2024-12-23 15:18:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /fv', '2024-12-23 15:25:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 15:52:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /pinrandomvehicle', '2024-12-23 15:54:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /pinradnomvehicle', '2024-12-23 15:57:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /pinrandomvehicle', '2024-12-23 15:57:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 520 1 1', '2024-12-23 16:15:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 16:19:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /qw', '2024-12-23 16:25:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:27:01'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:27:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-23 16:27:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-23 16:27:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:27:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:28:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setint 0 0', '2024-12-23 16:29:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /setvw 0 0', '2024-12-23 16:29:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:29:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:30:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-23 16:30:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:34:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:34:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:34:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:34:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 16:35:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:35:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 16:35:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:36:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:36:53'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 16:37:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 16:40:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 16:50:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 16:50:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu //q', '2024-12-23 17:18:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /pinrandomvehicle', '2024-12-23 17:28:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /pinrandomvehicle', '2024-12-23 17:28:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 17:30:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:30:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:30:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:51:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /bank', '2024-12-23 17:51:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 17:52:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 17:52:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:52:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:52:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 17:53:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /askq', '2024-12-23 18:38:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /askq Volim garave', '2024-12-23 18:38:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /lp', '2024-12-23 18:38:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /questions', '2024-12-23 18:38:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:49:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:50:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 18:50:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:50:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:50:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:50:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /refresh', '2024-12-23 18:50:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:52:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:52:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:52:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 18:52:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 18:56:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 19:11:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 19:11:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 19:13:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createmetro', '2024-12-23 19:13:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-23 19:13:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /kreirajmetro', '2024-12-23 19:13:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation', '2024-12-23 19:14:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation Maryland - Market Station', '2024-12-23 19:14:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 19:14:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 19:14:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation', '2024-12-23 19:14:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createstation Maryland - H4RBOR Bank', '2024-12-23 19:14:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 19:14:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-23 19:14:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-23 19:56:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 19:57:16'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 19:57:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 19:57:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 19:57:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /quests', '2024-12-23 19:57:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:45:00'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:45:02'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:45:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /notifyme', '2024-12-23 20:45:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:48:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:48:49'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:49:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /unrent', '2024-12-23 20:49:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:49:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 560 1 1', '2024-12-23 20:49:17'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:49:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:52:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:52:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:54:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:54:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:54:40'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:54:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:55:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 20:55:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:55:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:57:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu //dl', '2024-12-23 20:57:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 20:57:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:57:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-23 20:57:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /portw', '2024-12-23 20:57:42'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 20:57:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:07:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:07:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:07:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /sveh 522 1 1', '2024-12-23 21:19:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /fv', '2024-12-23 21:36:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /katana', '2024-12-23 21:41:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /mask', '2024-12-23 21:41:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:41:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:41:27'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /fv', '2024-12-23 21:45:21'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 21:45:56'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /help createbusiness', '2024-12-23 21:46:43'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /help createbusiness', '2024-12-23 21:46:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createbusiness', '2024-12-23 21:46:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createbusiness 7Elven 1 1 450000', '2024-12-23 21:47:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 21:47:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /katana', '2024-12-23 21:59:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /metro', '2024-12-23 22:27:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /medic', '2024-12-23 22:27:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /port', '2024-12-23 22:27:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /help', '2024-12-23 22:28:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /komande', '2024-12-23 22:28:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /komande', '2024-12-23 22:28:32'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /komande', '2024-12-23 22:28:34'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /giveitem', '2024-12-23 22:29:05'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /giveitem 50 1', '2024-12-23 22:29:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /inventory', '2024-12-23 22:29:09'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-23 22:29:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:37:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:39:48'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spawnchange', '2024-12-23 22:43:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /chagnespawn', '2024-12-23 22:43:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spawn', '2024-12-23 22:43:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:43:30'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:44:35');
 
 -- --------------------------------------------------------
 
@@ -1659,7 +2224,113 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 13:45:35'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 13:49:34'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 13:52:26'),
-('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 13:57:16');
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 13:57:16'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 14:52:51'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 15:01:08'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 15:09:21'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 15:11:47'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 15:26:40'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 15:30:12'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 17:15:00'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 17:23:13'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 17:30:06'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:09:54'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:14:38'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:20:30'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-21 19:23:21'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-21 19:24:48'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:39:02'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-21 19:39:41'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:42:58'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 19:56:37'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 20:28:07'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 20:30:17'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-21 21:12:15'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:13:11'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:32:37'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:39:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:45:29'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:49:03'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 09:53:53'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 10:08:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:20:26'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 26.93.86.234', '2024-12-22 13:20:35'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:41:19'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:43:54'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:48:20'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:52:48'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 13:58:22'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 15:28:09'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 15:37:02'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 15:47:14'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 15:50:08'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 15:53:49'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 16:12:41'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 16:23:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 16:28:41'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 17:26:23'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 17:29:34'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 18:13:40'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 18:17:08'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 18:33:11'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 18:39:05'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 18:54:21'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 19:20:08'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 20:42:00'),
+('CONNECT-LOG:  Frenkie_Deep se konektuje na server | IP : 26.14.197.215', '2024-12-22 20:47:27'),
+('CONNECT-LOG:  Frenkie_Deep se konektuje na server | IP : 26.14.197.215', '2024-12-22 20:47:45'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-22 20:47:51'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 14:37:56'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 14:49:47'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 15:05:49'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 15:08:41'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 15:16:08'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 15:52:44'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 15:55:53'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:15:32'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:18:54'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:23:31'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:25:13'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:26:05'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:28:36'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:30:18'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:34:20'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:36:30'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:39:51'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:43:10'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:46:24'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:51:42'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:55:44'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 16:57:42'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 17:13:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 17:19:09'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 17:23:49'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 17:27:57'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 17:50:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 18:37:49'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 18:49:44'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 18:56:36'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 18:58:15'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 19:00:42'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 19:05:31'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 19:08:25'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 19:10:23'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 20:44:43'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 20:48:23'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 20:51:46'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 20:54:11'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:06:54'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:15:35'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:19:18'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:33:45'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:41:06'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 21:59:26'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:24:14'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:26:52'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:37:14'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:39:30'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:43:01'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:44:07');
 
 -- --------------------------------------------------------
 
@@ -1737,25 +2408,25 @@ INSERT INTO `log_staff` (`log_str`, `date`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `metros`
+-- Table structure for table `metro_stations`
 --
 
-CREATE TABLE `metros` (
-  `metroID` int(11) NOT NULL,
-  `metroX` float NOT NULL,
-  `metroY` float NOT NULL,
-  `metroZ` float NOT NULL,
-  `MetroRoute` int(11) NOT NULL DEFAULT 1,
-  `metroInt` int(11) NOT NULL DEFAULT 0,
-  `metroVw` int(11) NOT NULL DEFAULT 0
+CREATE TABLE `metro_stations` (
+  `id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `x` float NOT NULL,
+  `y` float NOT NULL,
+  `z` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `metros`
+-- Dumping data for table `metro_stations`
 --
 
-INSERT INTO `metros` (`metroID`, `metroX`, `metroY`, `metroZ`, `MetroRoute`, `metroInt`, `metroVw`) VALUES
-(1, 869.928, -1337.28, 13.6469, 1, 0, 0);
+INSERT INTO `metro_stations` (`id`, `name`, `x`, `y`, `z`) VALUES
+(1, 'Voki Supercharged', 2004.93, -1452.46, 13.5547),
+(3, 'Maryland - Market Station', 827.046, -1333.97, 13.5469),
+(4, 'Maryland - H4RBOR Bank', 1007.32, -1154.45, 23.8321);
 
 -- --------------------------------------------------------
 
@@ -1830,35 +2501,34 @@ CREATE TABLE `player_documents` (
   `DriveLicense` int(11) NOT NULL,
   `MotoLicense` int(11) NOT NULL,
   `BoatLicense` int(11) NOT NULL,
-  `GunLicense` int(11) NOT NULL,
-  `LifeInsurance` tinyint(4) NOT NULL DEFAULT -1,
-  `LifeInsuranceValidUntil` datetime NOT NULL DEFAULT current_timestamp()
+  `GunLicense` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_documents`
 --
 
-INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, `DriveLicense`, `MotoLicense`, `BoatLicense`, `GunLicense`, `LifeInsurance`, `LifeInsuranceValidUntil`) VALUES
-(3, 0, 0, 0, 0, 0, 0, -1, '2023-12-02 17:46:46'),
-(4, 0, 0, 0, 0, 0, 0, -1, '2023-12-02 17:09:30'),
-(5, 0, 0, 0, 0, 0, 0, -1, '2023-12-02 17:47:36'),
-(6, 0, 0, 0, 0, 0, 0, -1, '2023-12-02 17:52:48'),
-(7, 0, 0, 0, 0, 0, 0, -1, '2023-12-02 17:57:26'),
-(8, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 12:47:58'),
-(9, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 13:53:44'),
-(10, 0, 0, 0, 0, 0, 0, -1, '2023-12-03 16:38:15'),
-(11, 0, 0, 0, 0, 0, 0, -1, '2023-12-10 21:05:19'),
-(13, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 15:32:18'),
-(14, 0, 0, 0, 0, 0, 0, -1, '2024-06-03 16:03:59'),
-(15, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 16:42:58'),
-(17, 0, 0, 0, 0, 0, 0, -1, '2024-10-28 18:41:45'),
-(18, 0, 0, 0, 0, 0, 0, -1, '2024-12-03 20:06:45'),
-(19, 0, 0, 0, 0, 0, 0, -1, '2024-12-03 20:07:29'),
-(20, 0, 0, 0, 0, 0, 0, -1, '2024-12-07 23:48:01'),
-(21, 0, 0, 0, 0, 0, 0, -1, '2024-12-07 23:51:10'),
-(22, 0, 0, 0, 0, 0, 0, -1, '2024-12-08 00:14:21'),
-(23, 0, 0, 0, 0, 0, 0, -1, '2024-12-08 13:26:44');
+INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, `DriveLicense`, `MotoLicense`, `BoatLicense`, `GunLicense`) VALUES
+(3, 0, 0, 0, 0, 0, 0),
+(4, 0, 0, 0, 0, 0, 0),
+(5, 0, 0, 0, 0, 0, 0),
+(6, 0, 0, 0, 0, 0, 0),
+(7, 0, 0, 0, 0, 0, 0),
+(8, 0, 0, 0, 0, 0, 0),
+(9, 0, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0, 0),
+(11, 0, 0, 1, 0, 0, 0),
+(13, 0, 0, 0, 0, 0, 0),
+(14, 0, 0, 0, 0, 0, 0),
+(15, 0, 0, 0, 0, 0, 0),
+(17, 0, 0, 0, 0, 0, 0),
+(18, 0, 0, 0, 0, 0, 0),
+(19, 0, 0, 0, 0, 0, 0),
+(20, 0, 0, 0, 0, 0, 0),
+(21, 0, 0, 0, 0, 0, 0),
+(22, 0, 0, 0, 0, 0, 0),
+(23, 0, 0, 0, 0, 0, 0),
+(24, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1881,12 +2551,13 @@ CREATE TABLE `player_electronic` (
 
 INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GPS`, `phoneModel`, `phoneNumber`) VALUES
 (4, 0, 0, 0, 0, '60 | 826 | 245'),
-(11, 0, 0, 1, 3, '61 | 179 | 872'),
+(11, 0, 1, 1, 3, '61 | 179 | 872'),
 (19, 0, 0, 1, -1, '0 | 0 | 0'),
 (20, 0, 0, 0, -1, '0 | 0 | 0'),
 (21, 0, 0, 0, -1, '0 | 0 | 0'),
 (22, 0, 0, 0, -1, '0 | 0 | 0'),
-(23, 0, 0, 0, -1, '0 | 0 | 0');
+(23, 0, 0, 0, -1, '0 | 0 | 0'),
+(24, 0, 0, 0, -1, '0 | 0 | 0');
 
 -- --------------------------------------------------------
 
@@ -1929,7 +2600,8 @@ INSERT INTO `player_jewlery` (`character_id`, `Gold`) VALUES
 (20, 0),
 (21, 0),
 (22, 0),
-(23, 0);
+(23, 0),
+(24, 0);
 
 -- --------------------------------------------------------
 
@@ -1980,7 +2652,7 @@ CREATE TABLE `player_property` (
 INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VALUES
 (3, 0, -1, 0),
 (4, 0, 1, 0),
-(11, 1, 1, 0),
+(11, 1, 1, 1),
 (15, 0, -1, 0),
 (17, 0, -1, 0),
 (18, 0, -1, 0),
@@ -1988,7 +2660,8 @@ INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`) VAL
 (20, 0, -1, 0),
 (21, 0, -1, 0),
 (22, 0, -1, 0),
-(23, 0, -1, 0);
+(23, 0, -1, 0),
+(24, 0, -1, 0);
 
 -- --------------------------------------------------------
 
@@ -2129,9 +2802,10 @@ CREATE TABLE `re_business` (
 --
 
 INSERT INTO `re_business` (`bID`, `bOwner`, `bName`, `bLocked`, `bType`, `bPrice`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bProducts`, `bInt`, `bVW`) VALUES
-(1, 0, 'Ammunation', 0, 11, 250000, 10, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1),
+(1, 11, 'Ammunation', 0, 11, 250000, 10, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1),
 (2, 0, '7Eleven', 0, 1, 250000, 1, 973.081, -1288.71, 13.454, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 2),
-(3, 0, 'Binco', 0, 13, 250000, 1, 961.075, -1288.42, 13.454, 161.097, -96.6359, 1001.8, 179.544, -83.1313, 1001.79, 1, 181, -83, 1002, 91, 100, 0, 3);
+(3, 0, 'Binco', 0, 13, 250000, 1, 961.075, -1288.42, 13.454, 161.097, -96.6359, 1001.8, 179.544, -83.1313, 1001.79, 1, 181, -83, 1002, 91, 100, 0, 3),
+(4, 0, '7Elven', 0, 1, 250000, 1, 1832.97, -1842.59, 13.5781, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 4);
 
 -- --------------------------------------------------------
 
@@ -2183,17 +2857,33 @@ INSERT INTO `re_centar` (`re_BCenterID`, `re_BCenterOwner`, `re_BCenterName`, `r
 --
 
 CREATE TABLE `safezones` (
-  `safeSQLID` int(11) NOT NULL,
-  `MinX` float NOT NULL DEFAULT 0,
-  `MinY` float NOT NULL DEFAULT 0,
-  `MaxX` float NOT NULL DEFAULT 0,
-  `MaxY` float NOT NULL DEFAULT 0,
-  `Radius` float NOT NULL DEFAULT 0,
-  `Color` int(11) NOT NULL DEFAULT 0,
-  `PickupX` float NOT NULL DEFAULT 0,
-  `PickupY` float NOT NULL DEFAULT 0,
-  `PickupZ` float NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `min_x` float NOT NULL,
+  `min_y` float NOT NULL,
+  `max_x` float NOT NULL,
+  `max_y` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `safezones`
+--
+
+INSERT INTO `safezones` (`id`, `name`, `min_x`, `min_y`, `max_x`, `max_y`) VALUES
+(1, 'Maryland Central Park', 1436.85, -1722.31, 1521.03, -1600.54);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_questions`
+--
+
+CREATE TABLE `staff_questions` (
+  `ID` int(11) NOT NULL,
+  `PlayerID` int(11) NOT NULL,
+  `Question` varchar(246) NOT NULL,
+  `Date` varchar(36) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2295,7 +2985,8 @@ INSERT INTO `winter_settings` (`username`, `map`, `breath`, `fallsnow`) VALUES
 ('Casey', 0, 0, 0),
 ('Leon_Skandy', 0, 0, 0),
 ('Midori_Smith', 0, 0, 0),
-('Midori_Test', 0, 0, 0);
+('Midori_Test', 0, 0, 0),
+('Frenkie_Deep', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -2344,16 +3035,34 @@ ALTER TABLE `character_quests`
   ADD UNIQUE KEY `cahracterid` (`characterid`);
 
 --
+-- Indexes for table `character_spawns`
+--
+ALTER TABLE `character_spawns`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
 -- Indexes for table `containers`
 --
 ALTER TABLE `containers`
   ADD PRIMARY KEY (`conID`);
 
 --
+-- Indexes for table `crypto_wallets`
+--
+ALTER TABLE `crypto_wallets`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
 -- Indexes for table `factions`
 --
 ALTER TABLE `factions`
   ADD PRIMARY KEY (`factionID`);
+
+--
+-- Indexes for table `faction_members`
+--
+ALTER TABLE `faction_members`
+  ADD UNIQUE KEY `member_id` (`member_id`);
 
 --
 -- Indexes for table `faction_police`
@@ -2381,10 +3090,16 @@ ALTER TABLE `jobs`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `metros`
+-- Indexes for table `life_insurance`
 --
-ALTER TABLE `metros`
-  ADD PRIMARY KEY (`metroID`);
+ALTER TABLE `life_insurance`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
+-- Indexes for table `metro_stations`
+--
+ALTER TABLE `metro_stations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `player_crypto`
@@ -2429,6 +3144,12 @@ ALTER TABLE `player_property`
   ADD UNIQUE KEY `player_id` (`pOwner`);
 
 --
+-- Indexes for table `police_members`
+--
+ALTER TABLE `police_members`
+  ADD UNIQUE KEY `character_id` (`character_id`);
+
+--
 -- Indexes for table `ports`
 --
 ALTER TABLE `ports`
@@ -2463,7 +3184,7 @@ ALTER TABLE `re_centar`
 -- Indexes for table `safezones`
 --
 ALTER TABLE `safezones`
-  ADD PRIMARY KEY (`safeSQLID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `vehicles`
@@ -2486,13 +3207,13 @@ ALTER TABLE `warns`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `bankaccounts`
 --
 ALTER TABLE `bankaccounts`
-  MODIFY `AccountID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `AccountID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `bans`
@@ -2504,7 +3225,7 @@ ALTER TABLE `bans`
 -- AUTO_INCREMENT for table `benches`
 --
 ALTER TABLE `benches`
-  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `seat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cash_registers`
@@ -2516,13 +3237,13 @@ ALTER TABLE `cash_registers`
 -- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `containers`
 --
 ALTER TABLE `containers`
-  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `conID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `factions`
@@ -2540,7 +3261,7 @@ ALTER TABLE `faction_police`
 -- AUTO_INCREMENT for table `houses`
 --
 ALTER TABLE `houses`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `inv_containers`
@@ -2555,10 +3276,10 @@ ALTER TABLE `jobs`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `metros`
+-- AUTO_INCREMENT for table `metro_stations`
 --
-ALTER TABLE `metros`
-  MODIFY `metroID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `metro_stations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `player_plants`
@@ -2588,7 +3309,7 @@ ALTER TABLE `rent`
 -- AUTO_INCREMENT for table `re_business`
 --
 ALTER TABLE `re_business`
-  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `bID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `re_centar`
@@ -2600,7 +3321,7 @@ ALTER TABLE `re_centar`
 -- AUTO_INCREMENT for table `safezones`
 --
 ALTER TABLE `safezones`
-  MODIFY `safeSQLID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vehicles`

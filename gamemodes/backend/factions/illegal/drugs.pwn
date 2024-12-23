@@ -597,7 +597,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                         new xRand = RandomMinMax(1, 8);
 
                         Inventory_AddItem(playerid, INVENTORY_ITEM_HASH, xRand);
-                        ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
+                        ApplyAnimation(playerid, !"BOMBER", !"BOM_Plant_Loop", 4.0, false, false, false, false, false, SYNC_NONE);
                         SetTimerEx("Weed_RefreshPlayer", 5000, false, "d", playerid);      
                         
                         new tmp_str[488];
@@ -644,7 +644,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
         HerbTimer[HerbID] = SetTimerEx("RespawnHerb", 240 * 1000, false, "d", HerbID);
 
         Inventory_AddItem(playerid, INVENTORY_ITEM_HERBS, 1);
-        ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
+        ApplyAnimation(playerid, !"BOMBER", !"BOM_Plant_Loop", 4.0, false, false, false, false, false, SYNC_NONE);
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ubrao si retku biljku sa poda");
 
     }
@@ -755,7 +755,7 @@ YCMD:posadi(playerid, params[], help)
     }
 
     Inventory_Remove(playerid, INVENTORY_ITEM_SEED, 1);
-    ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.0, false, false, false, false, false);
+    ApplyAnimation(playerid, !"BOMBER", !"BOM_Plant_Loop", 4.0, false, false, false, false, false, SYNC_NONE);
 
     SendClientMessage(playerid, x_server, "maryland "c_white"Posadili ste sjeme trave, priblizno vrjeme rasta je 20 minuta.");
     SendClientMessage(playerid, x_server, "maryland "c_white"Kada stabljika naraste, necete biti obavjesteni!");
