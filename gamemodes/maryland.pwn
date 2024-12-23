@@ -259,7 +259,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/npcs/end/do-not-look.temp"
 
 //-------------------------------------------------------------------------------------------------------- Crypto Wallets
-#include "backend/crypto/crypto_ogy.script"
+#include "backend/crypto/crypto.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Tehnomedia
 #include "backend/tehnomedia/tehnomedia.script"						//* Tehnomedia prodavnica
@@ -279,7 +279,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- Ports
 
-#include "backend/ports/ports.pwn"								//* Kontejner system
+#include "backend/ports/ports.pwn"								//* Port sys
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/trash/end/do-not-look.temp"
@@ -397,6 +397,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/misc/lastpos.pwn"								//* Last position saved
 
 #include "backend/metros/metros.script"								//* Metro System
+#include "backend/misc/dynweather.pwn"								//* Dynamic Weather
 
 //-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"								//* Chat Stock
@@ -408,38 +409,22 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 * TODO:
 
 	- Odraditi attach objekta koji se ne cuva nigdje(za karaktera!)
-	- Odraditi GivePLayerMoney za karaktera kada se odradit player_currency.
-	- Osposobiti kripto i dodati ga u player_currency.
-	- Karakter Level insertovati u bazu i cuvanje.
-	- Uraditi OnPlayerDeath provere
-	- Odraditi TD-ove za karaktera
-	- Popraviti karakterizacijske objekte pri Y/N da se ne odaljavaju daleko
-	- Zamjeniti login mape!
 	- Odraditi redesign databaze za sve stvari.
-	- Odraditi functions.stock gdje ce se kreirati funkcije koje ce se koristiti!
-	- PlayerLogged fixati, ne rade cuvanja zbog njega
 	- Za open verziju zakljucati ljude unutar Marylanda sa custom streamer zonama.
 	! Srediti login/reg do kraja i izmeniti ostatak funckija na engleski i dialoge, takodje izbaciti visak dialoga jer postoji...
-	! Bazu koju sam ja pushao dodati u nju sta fali (business, re_centar itd jer nisi pushao bazu zadnju kalega.)
-
-	* Markerplus inc reworkati prebaciti objekte u dynamic objekte i dodati priliko stocka u custom_marker.asset da se moze setup vw i int.
-	* Kreiranja prebaciti u spanel itd (Misli se na createhouse itd)
-	* Srediti help komand za svaku komandu koja ima dodatne parametre.
-	* Dodati provere za death i uraditi custom dmg.
 	* I proveriti dialoge da li svaki ima proveru koju treba da ima (ISNumeric)
-	* Fixati house bulgrary
-	* Sve onplayerkeystatechange prebaciti u hook u svakom sistemu posebno jer ovako se izgubis
 	* Dodati proveru za warn i ban na login da ne moze uci na srv ako je banned
 	* napraviti player_jewrely tabelu posto imamo bank accounts za valute i player crypto za kripto ovo ce biti za (silver,gold)
+	
+	?XMAX?
+	*Ledene površine
+	Opis: Odre?ene površine postaju klizave, pa vozila i igra?i proklizavaju.
+
+	*Dinami?ke ledenice
+	Opis: Ledenice padaju sa zgrada i mogu oštetiti igra?e ili vozila ispod.
+
 
 */
-
-// CMD:bank(playerid, params[])
-// {
-// 	BankCreateMainUI(playerid);
-// 	SelectTextDraw(playerid, -1);
-// 	return 1;
-// }
 
 CMD:cls(playerid, params[])
 {
