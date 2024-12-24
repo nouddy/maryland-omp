@@ -383,7 +383,7 @@ Dialog:dialog_CreateBankAccount(const playerid, response, listitem, string: inpu
 
             case 2: {
 
-                if(FactionMember[playerid][factionID] == 0 && FactionMember[playerid][factionRank] != 4)
+                if(FactionMember[playerid][factionID] == 0 || FactionMember[playerid][factionRank] != 4)
                     return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste leader niti jedne fakcije!");
 
                 new q[128];

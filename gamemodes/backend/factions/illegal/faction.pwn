@@ -13,38 +13,6 @@ enum {
 }
 
 
-static const faction_ProhibitedSkins[17] = {
-
-    //      >> [ Grove Street Families ] <<
-
-    105,
-    106,
-    107,
-    269,
-    270,
-    271,
-    86,
-    149,
-
-    //      >> [ Los Santos Ballas ] <<
-
-    102,
-    103,
-    104,
-
-    //      >> [ Los Santos Vagos ] <<
-
-    108,
-    109,
-    110,
-
-    //      >> [ Varios Los Aztecas ] <<
-
-    114,
-    115,
-    116
-};
-
 enum FACTION_CORE {
 
     factionID,                              // Faction SQL ID
@@ -139,7 +107,7 @@ public Faction_InsertData(id, member, playerid) {
     new q[260];
 
     mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
-                                          VALUES('%d', '%d', '1', '1')", 
+                                          VALUES('%d', '%d', '4', '1')", 
                                       GetCharacterSQLID(member), FactionInfo[id][factionID]);
     mysql_tquery(MySQL:SQL, q);
 
@@ -155,22 +123,22 @@ public Faction_InsertData(id, member, playerid) {
     FactionMember[playerid][factionRank] = 4;
     FactionMember[playerid][factionRespect] = 1;
 
-    if(QuestData[playerid][questDone][6] == 0) {
+    if(QuestData[playerid][questDone][5] == 0) {
 
-        QuestData[playerid][questDone][6] = 1;
-        UpdateSqlInt(SQL, "character_quests", "Quest_7", 1, "characterid", GetCharacterSQLID(playerid));
-        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[6][questName]);
-        GivePlayerMoney(playerid, sz_QuestList[6][questAwards][0]);
-        GiveCharXP(playerid, sz_QuestList[6][questAwards][1]);
+        QuestData[playerid][questDone][5] = 1;
+        UpdateSqlInt(SQL, "character_quests", "Quest_6", 1, "characterid", GetCharacterSQLID(playerid));
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[5][questName]);
+        GivePlayerMoney(playerid, sz_QuestList[5][questAwards][0]);
+        GiveCharXP(playerid, sz_QuestList[5][questAwards][1]);
     }
 
-    if(QuestData[member][questDone][6] == 0) {
+    if(QuestData[member][questDone][5] == 0) {
 
-        QuestData[member][questDone][6] = 1;
-        UpdateSqlInt(SQL, "character_quests", "Quest_7", 1, "characterid", GetCharacterSQLID(member));
-        SendClientMessage(member, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[6][questName]);
-        GivePlayerMoney(member, sz_QuestList[6][questAwards][0]);
-        GiveCharXP(member, sz_QuestList[6][questAwards][1]);
+        QuestData[member][questDone][5] = 1;
+        UpdateSqlInt(SQL, "character_quests", "Quest_6", 1, "characterid", GetCharacterSQLID(member));
+        SendClientMessage(member, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[5][questName]);
+        GivePlayerMoney(member, sz_QuestList[5][questAwards][0]);
+        GiveCharXP(member, sz_QuestList[5][questAwards][1]);
     }
 
     return 1;
@@ -637,6 +605,15 @@ Dialog:dialog_factionInvite(playerid, response, listitem, string:inputtext[]) {
         }
     }
 
+    if(QuestData[playerid][questDone][5] == 0) {
+
+        QuestData[playerid][questDone][5] = 1;
+        UpdateSqlInt(SQL, "character_quests", "Quest_6", 1, "characterid", GetCharacterSQLID(playerid));
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste zavrsili quest : %s", sz_QuestList[5][questName]);
+        GivePlayerMoney(playerid, sz_QuestList[5][questAwards][0]);
+        GiveCharXP(playerid, sz_QuestList[5][questAwards][1]);
+    }
+
     Faction_SendMessage(fID, tmp_message);
 
     faction_InviteID[target] = INVALID_PLAYER_ID;
@@ -748,7 +725,7 @@ stock Faction_ReturnNameByPlayer(playerid) {
     foreach(new i : iter_Factions) {
 
         if(FactionMember[playerid][factionID] == FactionInfo[i][factionID])
-        format(str, sizeof str, "%s", FactionInfo[i][factionName]);
+        { format(str, sizeof str, "%s", FactionInfo[i][factionName]); break; }
     }
 
     return str;

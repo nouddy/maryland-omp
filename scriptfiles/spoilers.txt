@@ -1,0 +1,10 @@
+1138, Alien Spoiler
+1139, X-Flow Spoiler
+1140, Win Spoiler
+1141, Champ Spoiler
+1142, Drag Spoiler
+1147, Fury Spoiler
+1162, Race Spoiler
+1146, Worx Spoiler
+1003, Alpha Spoiler
+1060, Pro Spoiler

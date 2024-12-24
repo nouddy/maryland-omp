@@ -87,8 +87,14 @@ public UpdateWeather()
     
     if(oldWeather != g_CurrentWeather) {
         new temp = random(15) + 10; // Temperatura izmedju 10-25°C
-        new string[128];
-        format(string, sizeof(string), WeatherMessages[weather], temp);
+        new string[256];
+
+        if(weather == 0)
+            format(string, sizeof(string), WeatherMessages[weather], temp);
+        
+        else
+            format(string, sizeof(string), WeatherMessages[weather]);
+
         SendClientMessageToAll(0xFFFF00AA, string);
     }
     
@@ -109,7 +115,7 @@ public UpdateTime()
     g_CurrentHour++;
     if(g_CurrentHour >= 24) g_CurrentHour = 0;
     
-    new string[128];
+    new string[255];
     
     // Posebne poruke za odredjena doba dana, uzimajuci u obzir trenutno vreme
     switch(g_CurrentHour)

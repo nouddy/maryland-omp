@@ -189,6 +189,7 @@ hook OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
             new randValue = RandomMinMax(20, 250);
             GivePlayerMoney(playerid, randValue);
             DestroyDynamicPickup(CashRegister_Money[i]);
+            break;
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;

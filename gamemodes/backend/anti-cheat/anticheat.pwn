@@ -157,6 +157,7 @@ p_sendboxmessage(const msg[])
 	    if ( (GetPlayerStaffLevel(i) > 0 ) && ALTPoruke[ i ] == true ) 
 		{
  			SendAltChatMessage(i, msg);
+			break;
 	    }
 	}
 }

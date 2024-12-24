@@ -555,7 +555,7 @@ stock IsPlayerSprayingVehicle(playerid, vehicleid)
 // Native hooks
 // --------------------------------------------------
 
-stock CB_CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, bool:addsiren)
+stock CB_CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, bool:addsiren = false)
 {
 	new
 	    vehicleid = CreateVehicle(modelid, x, y, z, rotation, color1, color2, respawn_delay, addsiren);
@@ -581,7 +581,7 @@ stock CB_AddStaticVehicle(modelid, Float:x, Float:y, Float:z, Float:rotation, co
 	return vehicleid;
 }
 
-stock CB_AddStaticVehicleEx(modelid, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, addsiren = 0)
+stock CB_AddStaticVehicleEx(modelid, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, bool:addsiren = false)
 {
 	new
 	    vehicleid = AddStaticVehicleEx(modelid, x, y, z, rotation, color1, color2, respawn_delay, addsiren);

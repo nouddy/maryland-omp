@@ -845,9 +845,12 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         new tmp_item = ContainerData[cID[0]][containerItem];
 
-        new tmp_sum = Inventory_GetItemQuantity(playerid, tmp_item) + tmp_item;
+        new tmp_sum = Inventory_GetItemQuantity(playerid, tmp_item) + ContainerData[cID[0]][containerItemQuantity];
 
         if(ContainerData[cID[0]][containerItemType] != INVENTORY_ITEM_TYPE_WEAPON) {
+
+            if(Inventory_GetItemQuantity(playerid, tmp_item) >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity])
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete pokupiti ovaj item, vec imate maksimalnu kolicinu istog!");
 
             if( tmp_sum >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity]) {
 
@@ -870,10 +873,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                 return Y_HOOKS_BREAK_RETURN_1;
             }
-
-            if(Inventory_GetItemQuantity(playerid, tmp_item) >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity])
-                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete pokupiti ovaj item, vec imate maksimalnu kolicinu istog!");
-
         }
 
         Inventory_AddItem(playerid, ContainerData[cID[0]][containerItem], ContainerData[cID[0]][containerItemQuantity]);
@@ -1015,65 +1014,83 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
                 return Y_HOOKS_BREAK_RETURN_1;
             }
 
-            new chosen_ContainerItem = Iter_Index(iter_Containers, i);
+            new cID[12];
+            new containerCount = Container_GeatNearestToPlayer(playerid, cID);
+            if(containerCount == 0) return Y_HOOKS_CONTINUE_RETURN_1;
 
-            new tmp_item = ContainerData[chosen_ContainerItem][containerItem];
+            new tdModel = PlayerTextDrawGetPreviewModel(playerid, container_item_model[playerid][i]);
 
-            new tmp_sum = Inventory_GetItemQuantity(playerid, tmp_item) + ContainerData[chosen_ContainerItem][containerItemQuantity];
+            if(sz_ItemModels[ ContainerData[cID[0]][containerItem] - 50 ][itemModel] == tdModel) {
 
-            if(ContainerData[chosen_ContainerItem][containerItemType] != INVENTORY_ITEM_TYPE_WEAPON) {
+                new tmp_item = ContainerData[cID[0]][containerItem];
 
+                new chosen_ContainerItem = cID[0];
 
-                if( tmp_sum >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity]) {
+                new tmp_sum = Inventory_GetItemQuantity(playerid, tmp_item) + ContainerData[chosen_ContainerItem][containerItemQuantity];
 
-                    new tmp_quantity = sz_quantityInfo[ tmp_item - 50 ][maxQuantity] - Inventory_GetItemQuantity(playerid, tmp_item);
+                if(ContainerData[chosen_ContainerItem][containerItemType] != INVENTORY_ITEM_TYPE_WEAPON) {
 
-                    Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], tmp_quantity);
-                    ContainerData[chosen_ContainerItem][containerItemQuantity] -= tmp_quantity;
+                    if(Inventory_GetItemQuantity(playerid, tmp_item) >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity])
+                        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete pokupiti ovaj item, vec imate maksimalnu kolicinu istog!");
 
-                    new q[248];
-                    mysql_format(SQL, q, sizeof q, "UPDATE `inv_containers` SET `Quantity` = '%d' WHERE `Item` = '%d' AND `ID` = '%d'",
-                                                    ContainerData[chosen_ContainerItem][containerItemQuantity], ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
-                    mysql_tquery(SQL, q);
+                    if( tmp_sum >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity]) {
 
-                    if(ContainerData[chosen_ContainerItem][containerItemQuantity] == 0) {
+                        new tmp_quantity = sz_quantityInfo[ tmp_item - 50 ][maxQuantity] - Inventory_GetItemQuantity(playerid, tmp_item);
 
+                        Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], tmp_quantity);
+                        ContainerData[chosen_ContainerItem][containerItemQuantity] -= tmp_quantity;
 
-                        mysql_format(SQL, q, sizeof q, "DELETE FROM `inv_containers` WHERE `Item` = '%d' AND `ID` = '%d'",
-                                            ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
+                        new q[248];
+                        mysql_format(SQL, q, sizeof q, "UPDATE `inv_containers` SET `Quantity` = '%d' WHERE `Item` = '%d' AND `ID` = '%d'",
+                                                        ContainerData[chosen_ContainerItem][containerItemQuantity], ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
                         mysql_tquery(SQL, q);
+
+                        if(ContainerData[chosen_ContainerItem][containerItemQuantity] == 0) {
+
+                            mysql_format(SQL, q, sizeof q, "DELETE FROM `inv_containers` WHERE `Item` = '%d' AND `ID` = '%d'",
+                                                ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
+                            mysql_tquery(SQL, q);
+
+                            ContainerData[chosen_ContainerItem][containerType] = CONTAINER_TYPE_INVALID;
+                            ContainerData[chosen_ContainerItem][containerItem] = INVALID_INVENTORY_ITEM;
+                            ContainerData[chosen_ContainerItem][containerItemType] = INVENTORY_INVALID_ITEM_TYPE;
+                            ContainerData[chosen_ContainerItem][containerItemQuantity] = 0;
+                            ContainerData[chosen_ContainerItem][containerModel] = 0;
+                            ContainerData[chosen_ContainerItem][containerPos][0] = 0.00;
+                            ContainerData[chosen_ContainerItem][containerPos][1] = 0.00;
+                            ContainerData[chosen_ContainerItem][containerPos][2] = 0.00;
+
+                        }
+                        
+                        return Y_HOOKS_BREAK_RETURN_1;
                     }
-                    return Y_HOOKS_BREAK_RETURN_1;
+
                 }
 
-                if(Inventory_GetItemQuantity(playerid, tmp_item) >= sz_quantityInfo[ tmp_item - 50 ][maxQuantity])
-                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete pokupiti ovaj item, vec imate maksimalnu kolicinu istog!");
+                Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerItemQuantity]);
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pokupili ste %s sa poda", Inventory_ReturnItemName(ContainerData[chosen_ContainerItem][containerItem]));
+
+                new q[248];
+                mysql_format(SQL, q, sizeof q, "DELETE FROM `inv_containers` WHERE `Item` = '%d' AND `ID` = '%d'",
+                                                ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
+                mysql_tquery(SQL, q);
+
+                DestroyObject(containerObject[chosen_ContainerItem]);
+                Delete3DTextLabel(containerLabel[chosen_ContainerItem]);
+
+                ContainerData[chosen_ContainerItem][containerType] = CONTAINER_TYPE_INVALID;
+                ContainerData[chosen_ContainerItem][containerItem] = INVALID_INVENTORY_ITEM;
+                ContainerData[chosen_ContainerItem][containerItemType] = INVENTORY_INVALID_ITEM_TYPE;
+                ContainerData[chosen_ContainerItem][containerItemQuantity] = 0;
+                ContainerData[chosen_ContainerItem][containerModel] = 0;
+                ContainerData[chosen_ContainerItem][containerPos][0] = 0.00;
+                ContainerData[chosen_ContainerItem][containerPos][1] = 0.00;
+                ContainerData[chosen_ContainerItem][containerPos][2] = 0.00;
+
+                Iter_Remove(iter_Containers, chosen_ContainerItem);
+
+                return Y_HOOKS_BREAK_RETURN_1;
             }
-
-            Inventory_AddItem(playerid, ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerItemQuantity]);
-            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pokupili ste %s sa poda", Inventory_ReturnItemName(ContainerData[chosen_ContainerItem][containerItem]));
-
-            new q[248];
-            mysql_format(SQL, q, sizeof q, "DELETE FROM `inv_containers` WHERE `Item` = '%d' AND `ID` = '%d'",
-                                            ContainerData[chosen_ContainerItem][containerItem], ContainerData[chosen_ContainerItem][containerID]);
-            mysql_tquery(SQL, q);
-
-            DestroyObject(containerObject[chosen_ContainerItem]);
-            Delete3DTextLabel(containerLabel[chosen_ContainerItem]);
-
-            ContainerData[chosen_ContainerItem][containerType] = CONTAINER_TYPE_INVALID;
-            ContainerData[chosen_ContainerItem][containerItem] = INVALID_INVENTORY_ITEM;
-            ContainerData[chosen_ContainerItem][containerItemType] = INVENTORY_INVALID_ITEM_TYPE;
-            ContainerData[chosen_ContainerItem][containerItemQuantity] = 0;
-            ContainerData[chosen_ContainerItem][containerModel] = 0;
-            ContainerData[chosen_ContainerItem][containerPos][0] = 0.00;
-            ContainerData[chosen_ContainerItem][containerPos][1] = 0.00;
-            ContainerData[chosen_ContainerItem][containerPos][2] = 0.00;
-
-            Iter_Remove(iter_Containers, chosen_ContainerItem);
-
-            return Y_HOOKS_BREAK_RETURN_1;
-            
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;

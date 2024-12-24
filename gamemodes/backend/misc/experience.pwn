@@ -168,6 +168,10 @@ hook OnCharacterLoaded(playerid)
 
 stock GiveCharXP(playerid, amount)
 {
+
+    if(amount <= 0)
+        return (true);
+
     CharacterInfo[playerid][XP] += amount;
 
     if (CharacterInfo[playerid][XP] >= CharacterInfo[playerid][NeedXP])
@@ -181,6 +185,7 @@ stock GiveCharXP(playerid, amount)
 
     UpdateSqlInt(SQL, "characters", "XP", CharacterInfo[playerid][XP], "character_id", GetCharacterSQLID(playerid));
     // SendClientMessage(playerid, -1, "Dobili ste XP!");
+    return (true);
 }
 
 stock RemoveCharXP(playerid, amount)

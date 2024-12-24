@@ -120,6 +120,11 @@ hook OnPlayerConnect(playerid) {
     p_CallWith[playerid] = INVALID_PLAYER_ID;
     p_CallStatus[playerid] = CALL_STATUS_NONE;
 
+    PlayerElectronic[playerid][ePhoneModel] = -1;
+    PlayerElectronic[playerid][ePhoneNumber][0] = 0;
+    PlayerElectronic[playerid][ePhoneNumber][1] = 0; 
+    PlayerElectronic[playerid][ePhoneNumber][2] = 0;
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -428,12 +433,10 @@ public SQL_ElectronicLoad(playerid)
            "INSERT INTO `player_electronic` (character_electronics, Dron, Battery, GPS) \
             VALUES('%d', '0', '0', '0')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
-
-        PlayerElectronic[playerid][ePhoneModel] = -1;
     }
     else 
     {   
-        static xNumm[MAX_NUMBER_LEN];
+        new xNumm[MAX_NUMBER_LEN];
 
         cache_get_value_name_int(0, "Dron", PlayerElectronic[playerid][eDronItem]);
         cache_get_value_name_int(0, "Battery", PlayerElectronic[playerid][eBatteryItem]);

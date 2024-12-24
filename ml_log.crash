@@ -455,3 +455,14 @@
 [13:29:28] 57fe0000 - 57ff6000 log-plugin.DLL
 [13:29:28] 57f50000 - 57fda000 pawnregex.DLL
 [13:29:28] 74f60000 - 74f6e000 MSASN1.dll
+[16:52:28] Run time error 4: "Array index out of bounds"
+[16:52:28]  Attempted to read/write array element at negative index -50
+[16:52:28] AMX backtrace:
+[16:52:28] #0 00187a40 in public mysql_AddInventoryItem (0, 0, 51) in <unknown>
+[21:03:37] Run time error 11: "Divide by zero"
+[21:03:37] AMX backtrace:
+[21:03:37] #0 00880194 in ?? (1, 25) in <unknown>
+[21:03:37] #1 008824fc in ?? (1, 25) in <unknown>
+[21:03:37] #2 0082cff0 in ?? (1, 230) in <unknown>
+[21:03:37] #3 00840a14 in ?? (1, 11) in <unknown>
+[21:03:37] #4 00080024 in public OnPlayerPickUpDynamicPickup (1, 11) in <unknown>

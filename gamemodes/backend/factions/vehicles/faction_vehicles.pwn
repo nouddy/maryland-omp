@@ -112,7 +112,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 
     for(new i = 0; i < sizeof FVehicle; i++) {
 
-        if(IsValidVehicle(FVehicle[i])) {
+        if(vehicleid == FVehicle[i]) {
 
             if(FactionMember[playerid][factionID] != FactionVehicle[i][fvFaction]) {
 

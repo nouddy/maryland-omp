@@ -73,7 +73,7 @@ new const sz_TiresList[][e_LSC_TIRE_DATA] = {
 
 };
 
-new const sz_NitrousList[][] = {
+new const sz_NitrousList[][e_LSC_NITROUS_DATA] = {
 
     { "Small Nitrous",      1008},
     { "Medium Nitrous",     1009},
@@ -81,7 +81,7 @@ new const sz_NitrousList[][] = {
 
 };
 
-new const sz_BumperList[][] = {
+new const sz_BumperList[][e_LSC_BUMPER_DATA] = {
 
     { "Alien Front Bumper",	    1171},
     { "X-Flow Front Bumper",	1172},
@@ -90,17 +90,17 @@ new const sz_BumperList[][] = {
     { "Hyperflow",              1173}
 };
 
-new const sz_SpoilerList[][] = {
+new const sz_SpoilerList[][e_LSC_SPOILER_DATA] = {
 
     { "Alien Spoiler",	1138},
     { "X-Flow Spoiler",	1139},
     { "Win Spoiler",	1140},
     { "Champ Spoiler",	1141},
     { "Drag Spoiler",	1142},
-    { "Fury Spoiler",	1060},
-    { "Race Spoiler",	1060},
-    { "Worx Spoiler",	1060},
-    { "Alpha Spoiler",	1060},
+    { "Fury Spoiler",	1147},
+    { "Race Spoiler",	1162},
+    { "Worx Spoiler",	1146},
+    { "Alpha Spoiler",	1003},
     { "Pro Spoiler",	1060}
 };
 
@@ -125,6 +125,13 @@ new mechanic_List[MAX_PLAYERS][4],
 
 new mechanic_pPickup;
 
+new lsc_tmp_idx[MAX_PLAYERS][4];
+
+new msBumpers = mS_INVALID_LISTID,
+    msSpoilers = mS_INVALID_LISTID,
+    msNitrous = mS_INVALID_LISTID,
+    msWheels = mS_INVALID_LISTID;
+
 hook OnGameModeInit() {
 
     CreateCustomMarker(""c_server"[ Los Santos Customs ]\n"c_server"» "c_white"'/bumpers'\n"c_server"» "c_white"'/spoilers'", 1085.8417,-1205.1615,17.8047, -1, -1, 50.0); // Tehnicki Pregled
@@ -133,6 +140,11 @@ hook OnGameModeInit() {
     CreateCustomMarker(""c_server"[ Los Santos Customs ]\n"c_server"» "c_white"'/wheels'", 1084.4229,-1197.7640,17.9871, -1, -1, 50.0); // Tehnicki Pregled
 
     mechanic_pPickup = CreateDynamicPickup(19627, 1, 1103.2499,-1227.9851,15.8271);
+
+    msBumpers = LoadModelSelectionMenu("bumpers.txt");
+    msSpoilers = LoadModelSelectionMenu("spoilers.txt");
+    msNitrous = LoadModelSelectionMenu("nitrous.txt");
+    msWheels = LoadModelSelectionMenu("wheels.txt");
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -150,6 +162,11 @@ hook OnPlayerConnect(playerid) {
     mechanic_CurrentList[playerid][1] = -1;
     mechanic_CurrentList[playerid][2] = -1;
     mechanic_CurrentList[playerid][3] = -1;
+
+    lsc_tmp_idx[playerid][0] = -1;
+    lsc_tmp_idx[playerid][1] = -1;
+    lsc_tmp_idx[playerid][2] = -1;
+    lsc_tmp_idx[playerid][3] = -1;
 
     if(IsValidVehicle(mechanic_pVehicle[playerid]))
         DestroyVehicle(mechanic_pVehicle[playerid]);
@@ -208,16 +225,7 @@ YCMD:bumpers(playerid, params[], help)
     if(!IsPlayerInRangeOfPoint(playerid, 1.7, 1085.8417,-1205.1615,17.8047))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se na mjestu za uzimanje djelova (branik)!");
 
-    new dlgStr[2040], dlgStrcat[64];
-
-    for(new i = 0; i < sizeof sz_BumperList; i++) {
-
-        format(dlgStrcat, sizeof dlgStrcat, ""c_server"#%d \187; "c_green"%s\n", i, sz_BumperList[i][bumperName]);
-        strcat(dlgStr, dlgStrcat);
-
-    }
-
-    Dialog_Show(playerid, "dialog_BumperList", DIALOG_STYLE_LIST, "Los Santos Customs \187; "c_green"Bumpers", dlgStr, "Izaberi", "Odustani");
+    ShowModelSelectionMenu(playerid, msBumpers, "Bumpers");
     return 1;
 }
 
@@ -233,15 +241,7 @@ YCMD:spoilers(playerid, params[], help)
     if(!IsPlayerInRangeOfPoint(playerid, 1.7, 1085.8417,-1205.1615,17.8047))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se na mjestu za uzimanje djelova (spojler)!");
 
-    new dlgStr[2040], dlgStrcat[288];
-
-    for(new i = 0; i < sizeof sz_SpoilerList; i++) {
-
-        format(dlgStrcat, sizeof dlgStrcat, ""c_server"#%d \187; "c_green"%s\n", i, sz_SpoilerList[i][bumperName]);
-        strcat(dlgStr, dlgStrcat);
-    }
-
-    Dialog_Show(playerid, "dialog_SpoilerList", DIALOG_STYLE_LIST, "Los Santos Customs \187; "c_green"Spoilers", dlgStr, "Izaberi", "Odustani");
+    ShowModelSelectionMenu(playerid, msSpoilers, "Spoilers");
     return 1;
 }
 
@@ -257,16 +257,7 @@ YCMD:nitrous(playerid, params[], help)
     if(!IsPlayerInRangeOfPoint(playerid, 1.7, 1094.5205,-1186.4772,18.3243))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se na mjestu za uzimanje djelova (nitro)!");
 
-    new dlgStr[2040], dlgStrcat[64];
-
-    for(new i = 0; i < sizeof sz_NitrousList; i++) {
-
-        format(dlgStrcat, sizeof dlgStrcat, ""c_server"#%d \187; "c_green"%s\n", i, sz_NitrousList[i][bumperName]);
-        strcat(dlgStr, dlgStrcat);
-    }
-
-    Dialog_Show(playerid, "dialog_NitrousList", DIALOG_STYLE_LIST, "Los Santos Customs \187; "c_green"Nitrous", dlgStr, "Izaberi", "Odustani");
-
+    ShowModelSelectionMenu(playerid, msNitrous, "Nitrous");
     return 1;
 }
 
@@ -282,15 +273,7 @@ YCMD:wheels(playerid, params[], help)
     if(!IsPlayerInRangeOfPoint(playerid, 1.7, 1084.4229,-1197.7640,17.9871))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se na mjestu za uzimanje djelova (nitro)!");
 
-    new dlgStr[2040], dlgStrcat[64];
-
-    for(new i = 0; i < sizeof sz_TiresList; i++) {
-
-        format(dlgStrcat, sizeof dlgStrcat, ""c_server"#%d \187; "c_green"%s\n", i, sz_TiresList[i][tireName]);
-        strcat(dlgStr, dlgStrcat);
-    }
-
-    Dialog_Show(playerid, "dialog_WheelsList", DIALOG_STYLE_LIST, "Los Santos Customs \187; "c_green"Wheels", dlgStr, "Izaberi", "Odustani");
+    ShowModelSelectionMenu(playerid, msWheels, "Wheels");
 
     return 1;
 }
@@ -315,7 +298,7 @@ YCMD:lsclist(playerid, params[], help) {
                                 "c_white"Spojler : "c_green"%s\n\
                                 "c_white"Felne : "c_green"%s\n\
                                 "c_white"Nitro : "c_green"%s",
-                                sz_BumperList[mechanic_List[playerid][0]][bumperName], sz_SpoilerList[mechanic_List[playerid][1]][spoilerName], sz_TiresList[mechanic_List[playerid][2]][tireName], sz_NitrousList[mechanic_List[playerid][3]][nitroName] );
+                                sz_BumperList[lsc_tmp_idx[playerid][0]][bumperName], sz_SpoilerList[lsc_tmp_idx[playerid][1]][spoilerName], sz_TiresList[lsc_tmp_idx[playerid][2]][tireName], sz_NitrousList[lsc_tmp_idx[playerid][3]][nitroName] );
 
     Dialog_Show(playerid, "dialog_tuneList", DIALOG_STYLE_MSGBOX, "Los Santos Customs \187; "c_green"TODO List", dlgStr, "Ok", "");
 
@@ -340,14 +323,32 @@ YCMD:startservice(playerid, params[], help) {
     mechanic_pVehicle[playerid] = CreateVehicle(sz_LSCVehicles[xRand], 1103.0853,-1227.4819,18.0958,179.5994, cColor, cColor, 1500);
     SetVehicleVirtualWorld(mechanic_pVehicle[playerid], playerid+1);
 
+    new bool:engine, bool:lights, bool:alarm, bool:doors, bool:bonnet, bool:boot, bool:objective;
+    GetVehicleParamsEx(mechanic_pVehicle[playerid], engine, lights, alarm, doors, bonnet, boot, objective);
+
+    SetVehicleParamsEx(mechanic_pVehicle[playerid], engine, VEHICLE_PARAMS_ON, alarm, true, true, boot, objective);
+
+    new VEHICLE_PANEL_STATUS:xpanels,
+        VEHICLE_DOOR_STATUS:xdoors,
+        VEHICLE_LIGHT_STATUS:xlights,
+        VEHICLE_TIRE_STATUS:xtires;
+    GetVehicleDamageStatus(mechanic_pVehicle[playerid], xpanels, xdoors, xlights, xtires);
+    xdoors = ( VEHICLE_DOOR_STATUS_HOOD_OPEN | VEHICLE_DOOR_STATUS_TRUNK_OPEN  | VEHICLE_DOOR_STATUS_PASSENGER_OPEN | VEHICLE_DOOR_STATUS_DRIVER_OPEN);
+    UpdateVehicleDamageStatus(mechanic_pVehicle[playerid], xpanels, xdoors, xlights, xtires);
+
     new dlgStr[2049];
 
     mechanic_InProgress[playerid] = true;
 
-    mechanic_List[playerid][0] = random( sizeof sz_BumperList ); 
-    mechanic_List[playerid][1] = random( sizeof sz_SpoilerList ); 
-    mechanic_List[playerid][2] = random( sizeof sz_TiresList );
-    mechanic_List[playerid][3] = random( sizeof sz_NitrousList ); 
+    lsc_tmp_idx[playerid][0] = random( sizeof sz_BumperList ); 
+    lsc_tmp_idx[playerid][1] = random( sizeof sz_SpoilerList ); 
+    lsc_tmp_idx[playerid][2] = random( sizeof sz_TiresList );
+    lsc_tmp_idx[playerid][3] = random( sizeof sz_NitrousList ); 
+
+    mechanic_List[playerid][0] = sz_BumperList[lsc_tmp_idx[playerid][0]][bumperModel];
+    mechanic_List[playerid][1] = sz_SpoilerList[lsc_tmp_idx[playerid][1]][spoilerModel];
+    mechanic_List[playerid][2] = sz_TiresList[lsc_tmp_idx[playerid][2]][tireModel];
+    mechanic_List[playerid][3] = sz_NitrousList[lsc_tmp_idx[playerid][3]][nitroModel];
 
     format(dlgStr, sizeof dlgStr, 
                                 ""c_green" SPISAK STVARI\n\
@@ -355,7 +356,7 @@ YCMD:startservice(playerid, params[], help) {
                                 "c_white"Spojler : "c_green"%s\n\
                                 "c_white"Felne : "c_green"%s\n\
                                 "c_white"Nitro : "c_green"%s",
-                                sz_BumperList[mechanic_List[playerid][0]][bumperName], sz_SpoilerList[mechanic_List[playerid][1]][spoilerName], sz_TiresList[mechanic_List[playerid][2]][tireName], sz_NitrousList[mechanic_List[playerid][3]][nitroName] );
+                                sz_BumperList[lsc_tmp_idx[playerid][0]][bumperName], sz_SpoilerList[lsc_tmp_idx[playerid][1]][spoilerName], sz_TiresList[lsc_tmp_idx[playerid][2]][tireName], sz_NitrousList[lsc_tmp_idx[playerid][3]][nitroName] );
 
     Dialog_Show(playerid, "dialog_tuneList", DIALOG_STYLE_MSGBOX, "Los Santos Customs \187; "c_green"TODO List", dlgStr, "Ok", "");
 
@@ -363,103 +364,95 @@ YCMD:startservice(playerid, params[], help) {
     return (true);
 }
 
+hook OnPlayerModelSelection( playerid, response, listid, modelid) {
+    if(listid == msBumpers) {
+        if( response ) {
+            
+            if(!mechanic_InProgress[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
 
-Dialog:dialog_BumperList(const playerid, response, listitem, string: inputtext[]) {
-
-    if(response) {
-
-        if(!mechanic_InProgress[playerid])
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
-
-        if(mechanic_Carry1[playerid] != -1)
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
-    
-        mechanic_Carry1[playerid] = 0;
-        mechanic_Carry2[playerid] = listitem;
-
-        if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
-            RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
+            if(mechanic_Carry1[playerid] != -1)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
         
-        SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, 1141, 5, 0.028000, 0.103999, 1.371999, -83.699821, -4.400029, 118.499832, 1.000000, 1.000000, 1.000000);
+            mechanic_Carry1[playerid] = 0;
+            mechanic_Carry2[playerid] = modelid;
 
-        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
-    }
+            if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
+                RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
+            
+            if(modelid == 1174) 
+                SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, modelid, 5, 0.114998, -0.387000, -1.009997, 64.799934, -163.399826, 82.999961, 1.000000, 1.000000, 1.000000);
+            else
+                SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, modelid, 5, -0.563001, -0.426999, -1.316998, 64.799934, -163.399826, 82.999961, 1.000000, 1.000000, 1.000000);
 
-    return (true);
-}
-
-Dialog:dialog_SpoilerList(const playerid, response, listitem, string: inputtext[]) {
-
-    if(response) {
-
-        if(!mechanic_InProgress[playerid])
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
-
-        if(mechanic_Carry1[playerid] != -1)
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
-    
-        mechanic_Carry1[playerid] = 1;
-        mechanic_Carry2[playerid] = listitem;
-        
-        if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
-            RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
-
-        SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, 1003, 5, 0.208000, -0.160999, 0.040999, -83.699821, -4.400029, -74.300056, 1.000000, 1.000000, 1.000000);
-        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
-    }
-
-    return (true);
-}
-
-Dialog:dialog_WheelsList(const playerid, response, listitem, string: inputtext[]) {
-
-    if(response) {
-
-        if(mechanic_Carry1[playerid] != -1)
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
-        
-        if(!mechanic_InProgress[playerid])
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
-    
-        mechanic_Carry1[playerid] = 2;
-        mechanic_Carry2[playerid] = listitem;
-        RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
-        SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, sz_TiresList[listitem][tireModel], 5, 0.1, 0.0, 0.0, 0.0, 0.0);
-        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
-    }
-
-    return (true);
-}
-
-Dialog:dialog_NitrousList(const playerid, response, listitem, string: inputtext[]) {
-
-    if(response) {
-        
-        if(!mechanic_InProgress[playerid])
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
-
-        if(mechanic_Carry1[playerid] != -1)
-            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
-    
-        mechanic_Carry1[playerid] = 3;
-        mechanic_Carry2[playerid] = listitem;
-
-        if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
-            RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
-        
-        switch(listitem) {
-
-            case 0:
-                SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, 1009, 5, 0.137000, 0.000999, 0.091000, -83.699821, -4.400029, -74.100051, 1.000000, 1.000000, 1.000000);
-            case 1:
-                SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, 1008, 5, 0.083000, 0.000999, 0.020000, -83.699821, -4.400029, -74.100051, 1.000000, 1.000000, 1.000000);
-            case 2:
-                SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, 1010, 5, 0.083000, 0.000999, 0.100000, -83.699821, -4.400029, -74.100051, 1.000000, 1.000000, 1.000000);
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
         }
-        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
     }
 
-    return (true);
+    if(listid == msSpoilers) {
+        if( response ) {
+            
+            if(!mechanic_InProgress[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
+
+            if(mechanic_Carry1[playerid] != -1)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
+        
+            mechanic_Carry1[playerid] = 1;
+            mechanic_Carry2[playerid] = modelid;
+
+            if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
+                RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
+            
+            SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, modelid, 5, 0.208000, -0.160999, 0.040999, -83.699821, -4.400029, -74.300056, 1.000000, 1.000000, 1.000000);
+
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+        }
+    }
+
+    if(listid == msWheels) {
+        if( response ) {
+            
+            if(!mechanic_InProgress[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
+
+            if(mechanic_Carry1[playerid] != -1)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
+        
+            mechanic_Carry1[playerid] = 2;
+            mechanic_Carry2[playerid] = modelid;
+
+            if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
+                RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
+            
+            SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, modelid, 5, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0);
+
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+        }
+    }
+
+    if(listid == msNitrous) {
+        if( response ) {
+            
+            if(!mechanic_InProgress[playerid])
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste zapoceli servis auta!");
+
+            if(mechanic_Carry1[playerid] != -1)
+                return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite neki dio!");
+
+            mechanic_Carry1[playerid] = 3;
+            mechanic_Carry2[playerid] = modelid;
+
+            if(IsPlayerAttachedObjectSlotUsed(playerid, INDEX_SLOT_MECHANIC))
+                RemovePlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC);
+            
+            SetPlayerAttachedObject(playerid, INDEX_SLOT_MECHANIC, modelid, 5, 0.137000, 0.000999, 0.091000, -83.699821, -4.400029, -74.100051, 1.000000, 1.000000, 1.000000);
+
+            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
+        }
+    }
+
+    return 1;
 }
 
 hook OnPlayerPickUpDynPickup(playerid, pickupid) {
@@ -475,6 +468,7 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
 
         mechanic_CurrentList[playerid][ mechanic_Carry1[playerid] ] = mechanic_Carry2[playerid]; 
         mechanic_Carry1[playerid] = -1;
+        mechanic_Carry2[playerid] = -1;
 
         LCS_ShowTuneListDialog(playerid);  
         PlayerPlaySound(playerid,32000,0,0,0.0);
@@ -508,6 +502,11 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
             mechanic_CurrentList[playerid][1] = -1;
             mechanic_CurrentList[playerid][2] = -1;
             mechanic_CurrentList[playerid][3] = -1;
+
+            lsc_tmp_idx[playerid][0] = -1;
+            lsc_tmp_idx[playerid][1] = -1;
+            lsc_tmp_idx[playerid][2] = -1;
+            lsc_tmp_idx[playerid][3] = -1;
 
             mechanic_Carry1[playerid] = -1;
         }

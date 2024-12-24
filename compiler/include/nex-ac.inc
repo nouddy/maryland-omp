@@ -2086,7 +2086,7 @@ stock acc_AddStaticVehicle(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z,
 #define AddStaticVehicle acc_AddStaticVehicle
 
 #if defined OnVehicleSirenStateChange
-	stock acc_AddStaticVehicleEx(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, color1, color2, respawn_delay, addsiren = 0)
+	stock acc_AddStaticVehicleEx(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, color1, color2, respawn_delay, bool:addsiren = false)
 	{
 		new ac_vehid = AddStaticVehicleEx(modelid, spawn_x, spawn_y, spawn_z, z_angle, color1, color2, respawn_delay, !!addsiren);
 #else
@@ -2113,7 +2113,7 @@ stock acc_AddStaticVehicle(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z,
 #define AddStaticVehicleEx acc_AddStaticVehicleEx
 
 #if defined OnVehicleSirenStateChange
-	stock acc_CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, addsiren = 0)
+	stock acc_CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay, bool:addsiren = false)
 	{
 		new ac_vehid = CreateVehicle(vehicletype, x, y, z, rotation, color1, color2, respawn_delay, !!addsiren);
 #else
@@ -2139,7 +2139,7 @@ stock acc_AddStaticVehicle(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z,
 #endif
 #define CreateVehicle acc_CreateVehicle
 
-stock acc_AddPlayerClass(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
+stock acc_AddPlayerClass(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo)
 {
 	new ac_class = AddPlayerClass(modelid, spawn_x, spawn_y, spawn_z, z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 	#if defined FILTERSCRIPT
@@ -2157,7 +2157,7 @@ stock acc_AddPlayerClass(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, F
 #endif
 #define AddPlayerClass acc_AddPlayerClass
 
-stock acc_AddPlayerClassEx(teamid, modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
+stock acc_AddPlayerClassEx(teamid, modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo)
 {
 	new ac_class = AddPlayerClassEx(teamid, modelid, spawn_x, spawn_y, spawn_z, z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 	#if defined FILTERSCRIPT
@@ -2175,10 +2175,10 @@ stock acc_AddPlayerClassEx(teamid, modelid, Float:spawn_x, Float:spawn_y, Float:
 #endif
 #define AddPlayerClassEx acc_AddPlayerClassEx
 
-stock orig_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo)
+stock bool:orig_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo)
 	return SetSpawnInfo(playerid, team, skin, x, y, z, rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo);
 
-stock acc_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo)
+stock acc_SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo)
 {
 	#if defined FILTERSCRIPT
 		return CallRemoteFunction("ac_SetSpawnInfo", "iiiffffididid", playerid, team, skin, x, y, z, rotation, WEAPON:weapon1, weapon1_ammo, WEAPON:weapon2, weapon2_ammo, WEAPON:weapon3, weapon3_ammo);
@@ -2436,7 +2436,7 @@ stock acc_EnableStuntBonusForPlayer(playerid, enable)
 #endif
 #define EnableStuntBonusForPlayer acc_EnableStuntBonusForPlayer
 
-stock orig_ShowPlayerDialog(playerid, dialogid, style, const caption[], const info[], const button1[], const button2[]) return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
+stock bool:orig_ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE:style, const caption[], const info[], const button1[], const button2[]) return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
 
 stock acc_ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE:style, const caption[], const info[], const button1[], const button2[])
 {
@@ -2458,9 +2458,9 @@ stock acc_ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE:style, const caption
 #endif
 #define ShowPlayerDialog acc_ShowPlayerDialog
 
-stock orig_TogglePlayerControllable(playerid, toggle) return TogglePlayerControllable(playerid, toggle);
+stock orig_TogglePlayerControllable(playerid, bool:toggle) return TogglePlayerControllable(playerid, toggle);
 
-stock acc_TogglePlayerControllable(playerid, toggle)
+stock acc_TogglePlayerControllable(playerid, bool:toggle)
 {
 	#if defined FILTERSCRIPT
 		return CallRemoteFunction("ac_TogglePlayerControllable", "ii", playerid, toggle);
@@ -2476,9 +2476,9 @@ stock acc_TogglePlayerControllable(playerid, toggle)
 #endif
 #define TogglePlayerControllable acc_TogglePlayerControllable
 
-stock orig_TogglePlayerSpectating(playerid, toggle) return TogglePlayerSpectating(playerid, toggle);
+stock orig_TogglePlayerSpectating(playerid, bool:toggle) return TogglePlayerSpectating(playerid, toggle);
 
-stock acc_TogglePlayerSpectating(playerid, toggle)
+stock acc_TogglePlayerSpectating(playerid, bool:toggle)
 {
 	#if defined FILTERSCRIPT
 		return CallRemoteFunction("ac_TogglePlayerSpectating", "ii", playerid, toggle);
@@ -2567,7 +2567,7 @@ stock acc_GivePlayerWeapon(playerid, WEAPON:weaponid, ammo)
 #endif
 #define GivePlayerWeapon acc_GivePlayerWeapon
 
-stock orig_SetPlayerAmmo(playerid, weaponslot, ammo) return SetPlayerAmmo(playerid, weaponslot, ammo);
+stock orig_SetPlayerAmmo(playerid, WEAPON:weaponslot, ammo) return SetPlayerAmmo(playerid, weaponslot, ammo);
 
 stock acc_SetPlayerAmmo(playerid, WEAPON:weaponslot, ammo)
 {
@@ -2677,9 +2677,9 @@ stock acc_SetPlayerSpecialAction(playerid, SPECIAL_ACTION:actionid)
 #endif
 #define SetPlayerSpecialAction acc_SetPlayerSpecialAction
 
-stock orig_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NORMAL) return PlayerSpectatePlayer(playerid, targetplayerid, mode);
+stock orig_PlayerSpectatePlayer(playerid, targetplayerid, SPECTATE_MODE:mode = SPECTATE_MODE_NORMAL) return PlayerSpectatePlayer(playerid, targetplayerid, mode);
 
-stock acc_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NORMAL)
+stock acc_PlayerSpectatePlayer(playerid, targetplayerid, SPECTATE_MODE:mode = SPECTATE_MODE_NORMAL)
 {
 	if(0 <= playerid < MAX_PLAYERS)
 	{
@@ -2699,9 +2699,9 @@ stock acc_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NO
 #endif
 #define PlayerSpectatePlayer acc_PlayerSpectatePlayer
 
-stock orig_PlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_NORMAL) return PlayerSpectateVehicle(playerid, targetvehicleid, mode);
+stock orig_PlayerSpectateVehicle(playerid, targetvehicleid, SPECTATE_MODE:mode = SPECTATE_MODE_NORMAL) return PlayerSpectateVehicle(playerid, targetvehicleid, mode);
 
-stock acc_PlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_NORMAL)
+stock acc_PlayerSpectateVehicle(playerid, targetvehicleid, SPECTATE_MODE:mode = SPECTATE_MODE_NORMAL)
 {
 	if(0 <= playerid < MAX_PLAYERS)
 	{
@@ -2987,7 +2987,7 @@ stock acc_RepairVehicle(vehicleid)
 #endif
 #define RepairVehicle acc_RepairVehicle
 
-stock orig_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires) return UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires);
+stock bool:orig_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires) return UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires);
 
 stock acc_UpdateVehicleDamageStatus(vehicleid, VEHICLE_PANEL_STATUS:panels, VEHICLE_DOOR_STATUS:doors, VEHICLE_LIGHT_STATUS:lights, VEHICLE_TYRE_STATUS:tires)
 {
@@ -4375,7 +4375,7 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
 	if(ACInfo[playerid][acIntRet] > 0)
 	{
 		SetPlayerInterior(playerid, ACInfo[playerid][acInt]);
-		if(ACInfo[playerid][acIntRet] == 2) TogglePlayerControllable(playerid, 1);
+		if(ACInfo[playerid][acIntRet] == 2) TogglePlayerControllable(playerid, true);
 		ACInfo[playerid][acIntRet] = 0;
 		// Log(nex_ac_log, DEBUG, "NEX-AC:SUCCESS New interior id : %d | Current player interior id : %d", newinteriorid, GetPlayerInterior(playerid));
 	}
@@ -6416,8 +6416,7 @@ public OnPlayerRequestClass(playerid, classid)
 		ACInfo[playerid][acCall][27] = ACInfo[playerid][acCall][9] = ac_i;
 		#if defined GetPlayerClass
 			GetPlayerClass(classid, ac_i, ac_i,
-			ACInfo[playerid][acSpawnPosX], ACInfo[playerid][acSpawnPosY], ACInfo[playerid][acSpawnPosZ], _,
-			WEAPON:ACInfo[playerid][acSpawnWeapon1], ACInfo[playerid][acSpawnAmmo1], WEAPON:ACInfo[playerid][acSpawnWeapon2],
+			ACInfo[playerid][acSpawnPosX], ACInfo[playerid][acSpawnPosY], ACInfo[playerid][acSpawnPosZ], _, WEAPON:ACInfo[playerid][acSpawnWeapon1], ACInfo[playerid][acSpawnAmmo1], WEAPON:ACInfo[playerid][acSpawnWeapon2],
 			ACInfo[playerid][acSpawnAmmo2], WEAPON:ACInfo[playerid][acSpawnWeapon3], ACInfo[playerid][acSpawnAmmo3]);
 		#else
 			ACInfo[playerid][acSpawnPosX] = ac_ClassPos[classid][0];

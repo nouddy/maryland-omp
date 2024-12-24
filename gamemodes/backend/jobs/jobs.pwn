@@ -139,7 +139,6 @@ stock Job_LoadData() {
             printf("[ JOB ] %s #LOADED", jobInfo[i][jobName]);
 
             Iter_Add(iter_Jobs, i);
-
         }
     }
 

@@ -87,7 +87,7 @@ new PlayerText:dealership_TD[MAX_PLAYERS][69],
     bool:e_CHOSEN_NITRO[MAX_PLAYERS]
 ;
 
-static Text3D:dealership_Catalogue;
+new Text3D:dealership_Catalogue;
 
 static temp_Vehicle[MAX_PLAYERS] = INVALID_VEHICLE_ID;
 
@@ -894,9 +894,12 @@ hook OnPlayerConnect(playerid) {
 
     dealership_UI[playerid] = false;
 
-    for(new j = 0; j < sizeof dealership_TD[]; j++) {
+    for(new i = 0; i < sizeof dealership_TD[]; i++) {
 
-        dealership_TD[playerid][j] = INVALID_PLAYER_TEXT_DRAW;
+        if(dealership_TD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
+        PlayerTextDrawDestroy(playerid, dealership_TD[playerid][i]);
+        dealership_TD[playerid][i] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -915,14 +918,11 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 YCMD:catalogue(playerid, params[], help) 
 {
-    
-    new Float:lb_Pos[3];
-    Get3DTextLabelPos(dealership_Catalogue, lb_Pos[0], lb_Pos[1], lb_Pos[2]);
 
-    if(!IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]))
+    if(!IsPlayerInRangeOfPoint(playerid, 3.50, 970.1960,-1702.6202,13.5727))
         return SendClientMessage(playerid, x_server, "maryland \187;"c_white" Ne nalazite se blizu kataloga!");
 
-    if(IsPlayerInRangeOfPoint(playerid, 3.50, lb_Pos[0], lb_Pos[1], lb_Pos[2]) && dealership_UI[playerid]) {
+    if(IsPlayerInRangeOfPoint(playerid, 3.50, 970.1960,-1702.6202,13.5727) && dealership_UI[playerid]) {
 
         Dealership_ShowInterface(playerid, false);
         

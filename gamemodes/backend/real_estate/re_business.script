@@ -1291,10 +1291,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     return GameTextForPlayer(playerid, "~r~ZAKLJUCANO", 1500, 3);
 
                 re_InBusiness[playerid] = j;
-                SetPlayerPos(playerid, re_BusinessData[j][bExit][0], re_BusinessData[j][bExit][1], re_BusinessData[j][bExit][2]);
-                SetPlayerInterior(playerid, re_BusinessData[j][bInt]);
-                SetPlayerVirtualWorld(playerid, re_BusinessData[j][bVW]);
-
+                SetPlayerCompensatedPos(playerid, re_BusinessData[j][bExit][0], re_BusinessData[j][bExit][1], re_BusinessData[j][bExit][2], re_BusinessData[j][bVW], re_BusinessData[j][bInt]);
                 business_Type[playerid] = re_BusinessData[j][bType];
 
                 return Y_HOOKS_BREAK_RETURN_1;
@@ -1302,9 +1299,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
             else if(IsPlayerInRangeOfPoint(playerid, 3.50, re_BusinessData[j][bExit][0], re_BusinessData[j][bExit][1], re_BusinessData[j][bExit][2]) && GetPlayerVirtualWorld(playerid) == re_BusinessData[j][bVW]) {
 
-                SetPlayerPos(playerid, re_BusinessData[j][bEntrance][0], re_BusinessData[j][bEntrance][1], re_BusinessData[j][bEntrance][2]);
-                SetPlayerInterior(playerid, 0);
-                SetPlayerVirtualWorld(playerid, 0);
+                SetPlayerCompensatedPos(playerid, re_BusinessData[j][bEntrance][0], re_BusinessData[j][bEntrance][1], re_BusinessData[j][bEntrance][2], 0, 0);
 
                 re_InBusiness[playerid] = INVALID_BUSINESS_ID;
 
@@ -1368,6 +1363,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     case BUSINESS_TYPE_BOUTIQUE: {
 
                         ShowModelSelectionMenu( playerid, skinlist, "Select Skin");
+                        // skinlist = LoadModelSelectionMenu("skins.txt");
                     }
                 }
             }

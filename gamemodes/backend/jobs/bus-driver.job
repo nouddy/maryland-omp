@@ -99,6 +99,7 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 
             routeID[playerid] = 0;
             SetPlayerCheckpoint(playerid, RouteInfo[routeID[playerid]][route_Position][0], RouteInfo[routeID[playerid]][route_Position][1], RouteInfo[routeID[playerid]][route_Position][2], 3.50);
+            break;
         }
     }
 

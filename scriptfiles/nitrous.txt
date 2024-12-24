@@ -1,0 +1,3 @@
+1008, Small Nitrous
+1009, Medium Nitrous
+1010, Large Nitrous

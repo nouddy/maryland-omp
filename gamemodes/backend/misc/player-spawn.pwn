@@ -75,6 +75,18 @@ public mysql_LoadSpawnType(playerid) {
 
             SetPlayerCompensatedPos(playerid, 1401.7791,1591.3466,12.0481, 6, 6);
         }
+
+        if(PlayerSpawn[playerid] == SPAWN_TYPE_HOUSE) {
+
+            foreach(new i : iHouse) {
+
+                if(player_House[playerid] == house_ID[i]) {
+
+                    SetPlayerCompensatedPos(playerid, house_Exit[i][0], house_Exit[i][1], house_Exit[i][2], house_ID[i], house_Int[i]);
+                    break;
+                }
+            }
+        }
     }
 
     return (true);
@@ -103,6 +115,13 @@ Dialog:dialog_changeSpawn(const playerid, response, listitem, string:inputtext[]
 
 
     new eSpawnType:idx = eSpawnType:( listitem + 1 );
+    
+    if(idx == SPAWN_TYPE_HOUSE) {
+
+        if(player_House[playerid] == -1)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete kucu!");
+    }
+    
     PlayerSpawn[playerid] = idx;
 
     new q[128];
