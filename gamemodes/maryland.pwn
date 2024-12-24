@@ -198,7 +198,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/real_estate/re_centar.script"						//* Business Centar
 #include "backend/real_estate/re_business.script"					//* Bizovi
-
+#include "backend/real_estate/re_hotel.script"						//* Hotel
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/real_estate/end/do-not-look.temp"

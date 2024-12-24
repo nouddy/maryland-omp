@@ -87,6 +87,10 @@ public mysql_LoadSpawnType(playerid) {
                 }
             }
         }
+        if(PlayerSpawn[playerid] == SPAWN_TYPE_HOTEL) {
+
+            SetPlayerCompensatedPos(playerid, 1802.7803,-1300.5082,54.9062, 7, -1);
+        }
     }
 
     return (true);
@@ -104,9 +108,13 @@ hook OnCharacterLoaded(playerid)
 
 YCMD:changespawn(playerid, params[], help) {
 
-    Dialog_Show(playerid, "dialog_changeSpawn", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_white"Change Spawn", 
-                                                                    ""c_server"#1 \187; "c_white"Market Station\n\
-                                                                    "c_server"#2 \187; "c_white"Zadnja Pozicija", "Odaberi", "Odustani");
+    Dialog_Show(playerid, "dialog_changeSpawn", DIALOG_STYLE_LIST, 
+        c_server"Maryland \187; "c_white"Change Spawn", 
+        c_server"#1 \187; "c_white"Market Station\n"\
+        c_server"#2 \187; "c_white"Zadnja Pozicija\n"\
+        c_server"#3 \187; "c_white"Kuca\n"\
+        c_server"#4 \187; "c_white"Hotel",
+        "Odaberi", "Odustani");
 
     return 1;
 }

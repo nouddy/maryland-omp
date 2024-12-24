@@ -160,6 +160,14 @@ hook OnGameModeInit()
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnGameModeExit()
+{
+    if(IsValid3DTextLabel(dealership_Catalogue))
+        Delete3DTextLabel(dealership_Catalogue);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 stock Dealership_ShowInterface(playerid, const bool:option) {
 
     if(option == true) {

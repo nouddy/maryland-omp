@@ -39,7 +39,7 @@
 
 
 new PlayerText3D:re_BCenter_Label[MAX_PLAYERS],
-    re_BCenter_SafeLabel[MAX_BUSINESS_CENTER],
+    //re_BCenter_SafeLabel[MAX_BUSINESS_CENTER], Dodati kasnije label za sef
     re_BCenter_WardrobeLabel[MAX_BUSINESS_CENTER],
     re_BCenter_ArmoryLabel[MAX_BUSINESS_CENTER];
 

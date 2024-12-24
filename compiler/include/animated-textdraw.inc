@@ -52,7 +52,7 @@ static AnimData[MAX_ANIM_DATA][E_ANIM_DATA];
 
 forward OnTextdrawAnimationFinish(Text:textdraw);
 
-static FindFreeAnimDataID()
+stock FindFreeAnimDataID()
 {
 	for (new i = 0; i < MAX_ANIM_DATA; i++) {
 		if (strlen(AnimData[i][data_string]) <= 0) {
