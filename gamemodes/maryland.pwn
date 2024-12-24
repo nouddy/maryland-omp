@@ -224,6 +224,9 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/factions/illegal/bunker.script"					//* Bunker
 #include "backend/factions/illegal/faction.pwn"					    //* Core
 #include "backend/factions/illegal/drugs.pwn"						//* Drugs
+
+#include "backend/factions/vehicles/faction_vehicles.pwn"
+
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/factions/end/do-not-look.temp"
 

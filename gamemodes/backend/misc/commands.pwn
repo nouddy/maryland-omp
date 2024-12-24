@@ -97,6 +97,38 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
 
 }
 
+YCMD:pay(playerid, params[], help) {
+
+    new targetid, Float:money;
+
+    if(sscanf(params, "uf", targetid, money))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pay <id/ime> <kolicina>");
+
+    if(money <= 0.00 || money > 5000.00)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Kolicina novca ne moze biti manja od 0.00 ili veca od 5000.00");
+
+    if(GetPlayerMoney(playerid) < money)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca!");
+
+    if(targetid == INVALID_PLAYER_ID) return (true);
+
+    if(!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, x_server, "maryalnd \187; "c_white"Taj igrac nije konektovan na server!");
+
+    if(!DistanceBetweenPlayers(3.40, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+
+    ApplyAnimation(playerid, !"DEALER", !"shop_pay", 4.1, false, false, false, false, 0);
+
+    GivePlayerMoney(playerid, -money);
+    GivePlayerMoney(targetid, money);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Dali ste igracu %s %.2f$", ReturnCharacterName(targetid), money);
+    SendClientMessage(targetid, x_server, "maryland \187; "c_white"Igrac %s vam je dao %.2f$", ReturnCharacterName(playerid), money);
+
+    return (true);
+}
+
 YCMD:spa(playerid, params[], help) {
 
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);

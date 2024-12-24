@@ -42,7 +42,6 @@ hook OnGameModeInit()
 	new timeStr[32];
 	format(timeStr, sizeof(timeStr), ":clock3: %02d:%02d:%02d", hour, minute, second);
 	DCC_AddEmbedField(embed, "Start Time", timeStr, true);
-	
 	DCC_SendChannelEmbedMessage(channel, embed);
 	
 	print("discord/discord.pwn loaded");
@@ -127,4 +126,11 @@ stock ReturnPlayerNameFromIP(const ip[])
         }
     }
     return name;
+}
+
+stock ReturnPlayerIP(playerid) {
+
+	static str[32];
+	GetPlayerIp(playerid, str, sizeof str);
+	return string;
 }

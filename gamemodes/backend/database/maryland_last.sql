@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 23, 2024 at 10:45 PM
+-- Generation Time: Dec 24, 2024 at 03:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -180,13 +180,13 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(11, 13, 'Ferid_Olsun', 23, 0, 0, 0, 0, 2744, 0, 0, 0, '2024-12-23 22:44:41', 815.192, -1344.01, 13.5308, 0, 0, 0, 1385, 1, 1875),
+(11, 13, 'Ferid_Olsun', 23, 0, 0, 0, 0, 2744, 0, 0, 0, '2024-12-24 14:41:14', 828.637, -1333.71, 13.5469, 0, 0, 0, 1385, 1, 1875),
 (13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (17, 13, 'Nigger_123', 0, 0, 0, 0, 0, 5700, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(19, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 500, 0, 0, 0, '2024-12-21 19:42:20', 999.714, -1315.79, 13.3931, 0, 0, 0, 120, 1, 0),
+(19, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 500, 0, 0, 0, '2024-12-24 14:23:10', 819.367, -1343.12, 14.34, 0, 0, 0, 270, 2, 0),
 (20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
@@ -217,7 +217,7 @@ CREATE TABLE `character_quests` (
 INSERT INTO `character_quests` (`characterid`, `Quest_1`, `Quest_2`, `Quest_3`, `Quest_4`, `Quest_5`, `Quest_6`, `Quest_7`) VALUES
 (4, 0, 0, 0, 0, 0, 0, 0),
 (11, 1, 1, 0, 1, 1, 0, 1),
-(19, 0, 0, 0, 0, 0, 0, 1),
+(19, 1, 0, 0, 0, 0, 0, 1),
 (24, 0, 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
@@ -236,7 +236,8 @@ CREATE TABLE `character_spawns` (
 --
 
 INSERT INTO `character_spawns` (`character_id`, `spawnType`) VALUES
-(11, 2);
+(11, 2),
+(19, 1);
 
 -- --------------------------------------------------------
 
@@ -285,6 +286,7 @@ CREATE TABLE `crypto_wallets` (
 INSERT INTO `crypto_wallets` (`character_id`, `bitcoin`, `ethereum`, `litecoin`, `dogecoin`, `tether`) VALUES
 (4, 0.00000000, 40.00000000, 0.00000000, 0.00000000, 0.00000000),
 (11, 3.14285707, 3.14999914, 0.00000000, 26400.00000000, 0.00000000),
+(19, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000),
 (24, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000);
 
 -- --------------------------------------------------------
@@ -333,7 +335,8 @@ CREATE TABLE `faction_members` (
 
 INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) VALUES
 (0, 1, 1, 1),
-(11, 1, 4, 1);
+(11, 1, 4, 1),
+(19, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -381,6 +384,32 @@ CREATE TABLE `faction_police` (
 
 INSERT INTO `faction_police` (`fPoliceID`, `fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceBoss`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, `fPoliceExitX`, `fPoliceExitY`, `fPoliceExitZ`, `fPoliceInt`, `fPoliceVault`, `fPoliceMoney`, `fPoliceDirtMoney`, `fConfiscatedDrugs`, `fDutyPointX`, `fDutyPointY`, `fDutyPointZ`, `fEquipmentX`, `fEquipmentY`, `fEquipmentZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) VALUES
 (1, 'Maryland Police Department', 'MLPD', 'Rockville, Maryland', 'Maryland', 0, 2, 327.207, -1515.58, 36.1391, 796.306, 1769.43, -61.9399, 6, 0, 0, 0, 0, 739.103, 1781.27, -61.9399, 741.049, 1763.12, -61.9399, 'Rookie', 'Recruit', 'Officer', 280, 281, 267, 265);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `faction_vehicles`
+--
+
+CREATE TABLE `faction_vehicles` (
+  `ID` int(11) NOT NULL,
+  `factionID` int(11) NOT NULL,
+  `factionType` int(11) NOT NULL DEFAULT 1,
+  `fvModel` int(11) NOT NULL,
+  `X` float NOT NULL,
+  `Y` float NOT NULL,
+  `Z` float NOT NULL,
+  `A` float NOT NULL,
+  `fvColor1` int(11) NOT NULL DEFAULT 1,
+  `fvColor2` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `faction_vehicles`
+--
+
+INSERT INTO `faction_vehicles` (`ID`, `factionID`, `factionType`, `fvModel`, `X`, `Y`, `Z`, `A`, `fvColor1`, `fvColor2`) VALUES
+(1, 1, 1, 411, 877.317, -1320.31, 13.5567, 278.685, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -551,7 +580,10 @@ INSERT INTO `log_anticheat` (`log_str`, `date`) VALUES
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:00:05'),
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:04:31'),
 ('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 19:13:44'),
-('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 21:46:46');
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-23 21:46:46'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-24 14:32:32'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-24 14:34:45'),
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2024-12-24 14:38:52');
 
 -- --------------------------------------------------------
 
@@ -2035,7 +2067,105 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /chagnespawn', '2024-12-23 22:43:22'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /spawn', '2024-12-23 22:43:25'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:43:30'),
-('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:44:35');
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /changespawn', '2024-12-23 22:44:35'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 13:25:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite', '2024-12-24 13:27:06'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 0', '2024-12-24 13:27:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f e', '2024-12-24 13:27:10'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:27:12'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:27:15'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:29:10'),
+('COMMAND:  Silva je iskoristio komandu /fre', '2024-12-24 13:29:12'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:29:14'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:29:18'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f e', '2024-12-24 13:29:22'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f e', '2024-12-24 13:29:23'),
+('COMMAND:  Silva je iskoristio komandu /port', '2024-12-24 13:29:23'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:29:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f aaa', '2024-12-24 13:31:39'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:31:41'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 13:31:47'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:31:52'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 1', '2024-12-24 13:32:15'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 1', '2024-12-24 13:32:19'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:32:23'),
+('COMMAND:  Silva je iskoristio komandu /f a', '2024-12-24 13:32:24'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:32:26'),
+('COMMAND:  Silva je iskoristio komandu /f a', '2024-12-24 13:35:24'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 13:35:26'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 1', '2024-12-24 13:35:29'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f ee', '2024-12-24 13:35:32'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:35:33'),
+('COMMAND:  Silva je iskoristio komandu /metro', '2024-12-24 13:36:44'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faciton', '2024-12-24 13:36:57'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:36:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:37:02'),
+('COMMAND:  Silva je iskoristio komandu /stas', '2024-12-24 13:41:26'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 13:41:27'),
+('COMMAND:  Silva je iskoristio komandu /crypto', '2024-12-24 13:41:30'),
+('COMMAND:  Silva je iskoristio komandu /exchangecrypto', '2024-12-24 13:41:35'),
+('COMMAND:  Silva je iskoristio komandu /komande', '2024-12-24 13:41:48'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:43:36'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:43:37'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:43:41'),
+('COMMAND:  Silva je iskoristio komandu /cc', '2024-12-24 13:48:09'),
+('COMMAND:  Silva je iskoristio komandu /cc', '2024-12-24 13:48:45'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f eee', '2024-12-24 13:54:50'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 1', '2024-12-24 13:55:02'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:55:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f eeee', '2024-12-24 13:55:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:55:25'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /leader', '2024-12-24 13:55:31'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:55:33'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:56:33'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:56:34'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:56:36'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:56:37'),
+('COMMAND:  Silva je iskoristio komandu /winter', '2024-12-24 13:56:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gethere 1', '2024-12-24 13:58:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 1', '2024-12-24 13:58:13'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f ALOOO', '2024-12-24 13:58:27'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:58:27'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 13:58:35'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:58:38'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 13:58:42'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:58:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f aa', '2024-12-24 13:59:02'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 13:59:07'),
+('COMMAND:  Silva je iskoristio komandu /port', '2024-12-24 14:00:46'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gethere 0', '2024-12-24 14:00:48'),
+('COMMAND:  Silva je iskoristio komandu /setint 0 0', '2024-12-24 14:00:50'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 14:00:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f ee', '2024-12-24 14:00:55'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 0', '2024-12-24 14:00:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f e', '2024-12-24 14:01:03'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 14:01:03'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:01:07'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:01:11'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /f alo', '2024-12-24 14:01:22'),
+('COMMAND:  Silva je iskoristio komandu /f e', '2024-12-24 14:01:51'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-24 14:01:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /finvite 0 ', '2024-12-24 14:02:04'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:02:08'),
+('COMMAND:  Silva je iskoristio komandu /faction', '2024-12-24 14:02:10'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:02:13'),
+('COMMAND:  Silva je iskoristio komandu /faction', '2024-12-24 14:02:29'),
+('COMMAND:  Silva je iskoristio komandu /faction', '2024-12-24 14:02:32'),
+('COMMAND:  Silva je iskoristio komandu /faction', '2024-12-24 14:02:37'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:04:39'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-24 14:30:59'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv', '2024-12-24 14:32:28'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-24 14:32:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv', '2024-12-24 14:32:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv 1 411 1', '2024-12-24 14:32:41'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv', '2024-12-24 14:35:20'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv', '2024-12-24 14:35:33'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv 1 411 1', '2024-12-24 14:35:36'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv', '2024-12-24 14:38:54'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createfv 1 411 1 ', '2024-12-24 14:38:58'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:39:35'),
+('COMMAND:  Silva je iskoristio komandu /stats', '2024-12-24 14:40:08'),
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /faction', '2024-12-24 14:40:16');
 
 -- --------------------------------------------------------
 
@@ -2330,7 +2460,25 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:37:14'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:39:30'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:43:01'),
-('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:44:07');
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-23 22:44:07'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:25:41'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:26:46'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:28:58'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:29:01'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:31:27'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:31:27'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:34:57'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:35:03'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:54:34'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:54:38'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 13:57:52'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 13:57:57'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 14:00:26'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 14:00:31'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 14:32:01'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 14:34:26'),
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-24 14:38:32'),
+('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-24 14:39:40');
 
 -- --------------------------------------------------------
 
@@ -3071,6 +3219,12 @@ ALTER TABLE `faction_police`
   ADD PRIMARY KEY (`fPoliceID`);
 
 --
+-- Indexes for table `faction_vehicles`
+--
+ALTER TABLE `faction_vehicles`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `houses`
 --
 ALTER TABLE `houses`
@@ -3256,6 +3410,12 @@ ALTER TABLE `factions`
 --
 ALTER TABLE `faction_police`
   MODIFY `fPoliceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `faction_vehicles`
+--
+ALTER TABLE `faction_vehicles`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `houses`

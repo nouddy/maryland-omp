@@ -110,6 +110,5 @@ Dialog:dialog_changeSpawn(const playerid, response, listitem, string:inputtext[]
     mysql_tquery(SQL, q);
 
     SendClientMessage(playerid, x_server, "maryland \187; "c_white"Promjenili ste spawn  "c_server"[ %s ]", sz_SpawnNames[ ( _:idx ) ]);
-
     return (true);
 }
