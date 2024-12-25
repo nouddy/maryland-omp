@@ -576,11 +576,17 @@ stock SetBankMenuActiveButton(playerid, BankMenuButton:button)
         ShowBankAccountsPage(playerid);
     }
     if(button == BankMenuDeposit)
-    {
+    {   
+        if(ActivePlayerBankAccount[playerid] == -1)
+            return (true);
+
         ShowBankDepositPage(playerid);
     }
 
     if(button == BankMenuWithdraw) {
+
+        if(ActivePlayerBankAccount[playerid] == -1)
+            return (true);
 
         ShowBankWithdrawPage(playerid);
     }

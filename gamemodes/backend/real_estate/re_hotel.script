@@ -18,5 +18,26 @@
 
 */
 
+#include <ysilib\YSI_Coding\y_hooks>
+
 #define HOTEL_RENTAL_PRICE          (150.99)
+
+YCMD:hotel(playerid, params[], help) {
+
+    if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1283.8699,-24.6124,1001.0156) && GetPlayerInterior(playerid) != 22)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na recepciji!");
+
+    if(PlayerProperty[playerid][HotelRoom] != 0.00)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec imate hotelsku sobu na najam!");
+
+    if(GetPlayerMoney(playerid) < HOTEL_RENTAL_PRICE)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljnu kolicinu novca!");
+    
+    GivePlayerMoney(playerid, HOTEL_RENTAL_PRICE);
+    PlayerProperty[playerid][HotelRoom] = HOTEL_RENTAL_PRICE;
+    SavePropForPlayer(playerid);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste iznajmili hotelsku sobu!");
+    return 1;
+}
 

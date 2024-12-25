@@ -37,7 +37,6 @@ new HerbObject[MAX_HERBS],
     HerbTimer[MAX_HERBS],
     Text3D:HerbLabel[MAX_HERBS];
 
-
 //* Inventory item ID's
 
 enum {
@@ -733,8 +732,8 @@ YCMD:checkgrowth(playerid, params[], help) {
 
 YCMD:posadi(playerid, params[], help) 
 {
-    if(Faction_PlayerGroupType(playerid) != FACTION_TYPE_FRIENDS || Faction_PlayerGroupType(playerid) != FACTION_TYPE_GANG)
-        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti clan bande ili ulicne grupe!");
+    if(Faction_PlayerGroupType(playerid) != FACTION_TYPE_GANG)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti clan bande!");
 
     if(!IsPlayerInDynamicArea(playerid, weed_zone))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se kod plantaze za posadjivanje!");

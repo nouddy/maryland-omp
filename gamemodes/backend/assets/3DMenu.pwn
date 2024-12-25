@@ -84,6 +84,7 @@ stock Create3DMenu(Float:x,Float:y,Float:z,Float:rotation,boxes,playerid)
 	}
 	return INVALID_3D_MENU;
 }
+
 forward Delay3DMenuUpdate(playerid, Float:x,Float:y,Float:z);
 public Delay3DMenuUpdate(playerid, Float:x,Float:y,Float:z)
 {

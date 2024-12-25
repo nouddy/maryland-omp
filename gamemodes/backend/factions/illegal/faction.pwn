@@ -582,8 +582,11 @@ Dialog:dialog_factionInvite(playerid, response, listitem, string:inputtext[]) {
     FactionMember[playerid][factionRank] = 1;
     FactionMember[playerid][factionRespect] = 1;
 
-    new q[260];
+    new query[128];
+    mysql_format(SQL, query, sizeof query, "SELECT count(`member_id`) as `fMembers` FROM `faction_members` WHERE `faction_id` = '%d'", FactionMember[target][factionID]);
+    mysql_tquery(SQL, query, "Faction_CheckMemberUpgrade", "d", target);
 
+    new q[260];
     mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `faction_members` (`member_id`, `faction_id`, `faction_rank`, `faction_respekt`) \
                                           VALUES('%d', '%d', '1', '1')", 
                                       GetCharacterSQLID(playerid), faction_InviteFID[playerid]);
@@ -619,7 +622,7 @@ Dialog:dialog_factionInvite(playerid, response, listitem, string:inputtext[]) {
     faction_InviteID[target] = INVALID_PLAYER_ID;
     faction_InviteID[playerid] = INVALID_PLAYER_ID;
     faction_InviteFID[playerid] = 0;
-    
+
     return 1;
 }
 
@@ -746,8 +749,86 @@ stock Faction_GiveRespect(playerid, amount)
     return true;
 }
 
+stock Faction_ConnectHouse( faction, playerid) {
+
+    new hID = House_ReturnIndexByPlayer(playerid);
+
+    FactionInfo[faction][factionHouseID] = house_ID[ hID ];
+
+    static tmp_message[248];
+    format(tmp_message, sizeof tmp_message, ""c_faction"Faction \187; %s[%d] je povezao kucu SQLID %d sa organizacijom.", ReturnCharacterName(playerid), playerid, house_ID[ hID ]);
+    Faction_SendMessage(FactionMember[playerid][factionID], tmp_message);
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "UPDATE `factions` SET `factionHouseID` = '%d' WHERE `factionID` = '%d'", house_ID[ hID ], FactionMember[playerid][factionID]);
+    mysql_tquery(SQL, q);
+
+    return (true);
+}
+
+stock GetPlayerFactionRank(playerid) 
+    return FactionMember[playerid][factionRank];
 
 // Stock for counting members of some org by SIKA 101 PLUS
+
+forward Faction_CheckMemberUpgrade(target);
+public Faction_CheckMemberUpgrade(target) {
+
+    new rows = cache_num_rows();
+    if(!rows)
+        return (true);
+
+    new faction_members;
+    cache_get_value_name_int(0, "fMembers", faction_members);
+
+    if(faction_members >= 6 && faction_members <= 10) {
+
+        new fID = FactionMember[target][factionID];
+        new tmp_message[320];
+
+        foreach(new i : iter_Factions) {
+
+            if(fID == FactionInfo[i][factionID]) {
+                
+                format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; Vasa fakcija je unapredjena - GANG.");
+                Faction_SendMessage(fID, tmp_message);
+                FactionInfo[i][factionType] = FACTION_TYPE_GANG;
+
+                new q[128];
+                mysql_format(SQL, q, sizeof q, "UPDATE `factions` SET `factionType` = '%d' WHERE `factionID` = '%d'", FactionInfo[i][factionID], FactionInfo[i][factionID]);
+                mysql_tquery(SQL, q);
+
+                break;
+            }
+        }
+        return ~1;
+    }
+
+    if(faction_members >= 11) {
+
+        new fID = FactionMember[target][factionID];
+        new tmp_message[320];
+
+        foreach(new i : iter_Factions) {
+
+            if(fID == FactionInfo[i][factionID]) {
+                
+                format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; Vasa fakcija je unapredjena - MAFIA.");
+                Faction_SendMessage(fID, tmp_message);
+                FactionInfo[i][factionType] = FACTION_TYPE_MAFIA;
+
+                new q[128];
+                mysql_format(SQL, q, sizeof q, "UPDATE `factions` SET `factionType` = '%d' WHERE `factionID` = '%d'", FactionInfo[i][factionID], FactionInfo[i][factionID]);
+                mysql_tquery(SQL, q);
+                break;
+            }
+        }
+        return ~1;
+    }
+
+    return 1;
+}
+
 stock Faction_CountMembers(fID)
 {
     new countQuery[256];

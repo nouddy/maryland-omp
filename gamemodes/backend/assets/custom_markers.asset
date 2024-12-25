@@ -110,7 +110,7 @@ CreatePickupsAnd3Ds()
     CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"'Za izllaz pritisnite 'F'", 1372.1616,-22.0082,1000.9615,  25, 0, 50.0); //Izlaz stolarija
     CreateCustomMarker(""c_server"[ Carpentry Factory ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 122.7126,-298.3658,1.5781, 0, 0, 50.0); //Ulaz Stolarija
 
-    CreateCustomMarker(""c_server"[ Hoter Reception ]\n"c_server"» "c_white"'Za najam hotelske sobe '/hotel'", 1283.8699,-24.6124,1001.0156, 23, -1, 50.0); // Hotel Recepcija
+    CreateCustomMarker(""c_server"[ Hoter Reception ]\n"c_server"» "c_white"'Za najam hotelske sobe '/hotel'", 1283.8699,-24.6124,1001.0156, 22, -1, 50.0); // Hotel Recepcija
     
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

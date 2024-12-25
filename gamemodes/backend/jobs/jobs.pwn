@@ -82,7 +82,13 @@ stock Job_GetQualification(job) {
     return (string);
 }
 
-stock Job_SetPlayerJob(const playerid, job) {
+stock Job_SetPlayerJob(playerid, job) {
+
+    if(!IsPlayerConnected(playerid)) return 0;
+    if(playerid == INVALID_PLAYER_ID) return 0;
+
+    if(playerJob[playerid] != INVALID_JOB_ID && job != INVALID_JOB_ID) 
+        return SendClientMessage(playerid, x_server, "posao \187; "c_white"Vec ste zaposleni!");
 
     if(job == INVALID_JOB_ID)
     {
@@ -90,10 +96,8 @@ stock Job_SetPlayerJob(const playerid, job) {
         playerJob[playerid] = INVALID_JOB_ID;
         playerUniform[playerid] = INVALID_JOB_ID;    
         SetPlayerSkin(playerid, CharacterInfo[playerid][Skin]);
+        return ~1;
     }
-
-    if(playerJob[playerid] != INVALID_JOB_ID) return 
-        SendClientMessage(playerid, x_server, "posao \187; "c_white"Vec ste zaposleni!");
 
     playerContract[playerid] = gettime() + jobInfo[job][jobContract]*3600;
     playerJob[playerid] = jobInfo[job][jobID];
@@ -102,7 +106,7 @@ stock Job_SetPlayerJob(const playerid, job) {
     SendClientMessage(playerid, x_server, "posao \187; "c_white"Ugovor posla traje : "c_white"%d sata", jobInfo[job][jobContract]);
     SendClientMessage(playerid, x_server, "posao \187; "c_white"Da vidite informacije o poslu /job");
 
-    return (true);
+    return 1;
 }
 
 stock Job_GivePlayerSalary(playerid, salary) {

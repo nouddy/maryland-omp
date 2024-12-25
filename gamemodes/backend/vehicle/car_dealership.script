@@ -77,6 +77,25 @@ new sz_MarylandModels[][e_DEALERSHIP_VEHICLES] = {
 
 };
 
+new Float:sz_dealershipParking[][] = {
+
+    { 943.3003,-1757.4449,13.2715,349.36 },
+    { 946.8536,-1758.3108,13.2716,348.11 },
+    { 954.3464,-1760.0745,13.2720,348.48 },
+    { 958.1918,-1760.9727,13.2719,347.76 },
+    { 969.3285,-1749.6781,13.2622,89.183 },
+    { 969.4026,-1745.9326,13.2618,89.825 },
+    { 969.1901,-1741.9963,13.2618,90.566 },
+    { 951.1943,-1725.3265,13.2721,89.212 },
+    { 951.1041,-1721.3522,13.2721,90.077 },
+    { 951.4789,-1717.5802,13.2720,88.022 },
+    { 951.4196,-1713.7729,13.2722,89.301 },
+    { 951.3990,-1709.9066,13.2718,90.511 },
+    { 951.0038,-1697.6115,13.2717,88.938 },
+    { 950.9849,-1694.0712,13.2719,88.711 },
+    { 951.2731,-1690.2751,13.2721,90.256 }
+};
+
 new PlayerText:dealership_TD[MAX_PLAYERS][69],
     bool:dealership_UI[MAX_PLAYERS],
     e_CHOSEN_MODEL[MAX_PLAYERS],
@@ -1127,10 +1146,12 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
         eVehicle[id][vRegDate] = gettime()+2592000; // danasnji datum + 30 dana sto znaci da ce trajati do 19.11.2023 / exmp.
 
-        eVehicle[id][vPos][0] = 950.8036;
-        eVehicle[id][vPos][1] = -1759.5557;
-        eVehicle[id][vPos][2] = 13.2938;
-        eVehicle[id][vPos][3] = 347.8997;
+        new idx = random( sizeof sz_dealershipParking );
+
+        eVehicle[id][vPos][0] = sz_dealershipParking[idx][0];
+        eVehicle[id][vPos][1] = sz_dealershipParking[idx][1];
+        eVehicle[id][vPos][2] = sz_dealershipParking[idx][2];
+        eVehicle[id][vPos][3] = sz_dealershipParking[idx][3];
 
         if(PetroleumVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_PETROL; }
         else if(DieselVehicle(id)) { eVehicle[id][vFuelType] = FUEL_TYPE_DIESEL; }

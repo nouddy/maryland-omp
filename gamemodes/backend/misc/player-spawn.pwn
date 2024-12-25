@@ -89,7 +89,7 @@ public mysql_LoadSpawnType(playerid) {
         }
         if(PlayerSpawn[playerid] == SPAWN_TYPE_HOTEL) {
 
-            SetPlayerCompensatedPos(playerid, 1802.7803,-1300.5082,54.9062, 7, -1);
+            SetPlayerCompensatedPos(playerid, 1802.7803,-1300.5082,54.9062, 7, 0);
         }
     }
 
@@ -130,6 +130,13 @@ Dialog:dialog_changeSpawn(const playerid, response, listitem, string:inputtext[]
             return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete kucu!");
     }
     
+
+    if(idx == SPAWN_TYPE_HOTEL) {
+
+        if(PlayerProperty[playerid][HotelRoom] == 0.00)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne iznajmljivate hotelsku sobu!");
+    }
+
     PlayerSpawn[playerid] = idx;
 
     new q[128];

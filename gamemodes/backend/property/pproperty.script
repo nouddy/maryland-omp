@@ -24,7 +24,8 @@
 enum p_PROPERTY_DATA {
 
 	BCenter,
-    BusinessID
+    BusinessID,
+    Float:HotelRoom
 }
 new PlayerProperty[MAX_PLAYERS][p_PROPERTY_DATA];
 
@@ -33,6 +34,7 @@ hook OnPlayerConnect(playerid)
     
     // Business Centre
     PlayerProperty[playerid][BCenter] = 0;
+    PlayerProperty[playerid][HotelRoom] = 0.00;
     // House Script
     player_House[playerid] = -1;
 
@@ -57,8 +59,8 @@ public LoadPlayerProperty(playerid)
     {  
         new q[300];
         mysql_format(SQL, q, sizeof(q), 
-           "INSERT INTO `player_property` (pOwner, BCenter, HouseID, BusinessID) \
-            VALUES('%d', '0', '-1', '0')", GetCharacterSQLID(playerid));
+           "INSERT INTO `player_property` (pOwner, BCenter, HouseID, BusinessID, HotelRoom) \
+            VALUES('%d', '0', '-1', '0', '0.00')", GetCharacterSQLID(playerid));
         mysql_tquery(SQL, q);
 
         PreloadBusinessCentreLabels(playerid);
@@ -68,8 +70,8 @@ public LoadPlayerProperty(playerid)
 		cache_get_value_name_int(0, "HouseID", player_House[playerid]);
         cache_get_value_name_int(0, "BCenter", PlayerProperty[playerid][BCenter]);
         cache_get_value_name_int(0, "BusinessID", PlayerProperty[playerid][BusinessID]);
+        cache_get_value_name_float(0, "HotelRoom", PlayerProperty[playerid][HotelRoom]);
 
         PreloadBusinessCentreLabels(playerid);
-
     }
 }

@@ -210,6 +210,17 @@ GetHouseType(id)
     return typezz;
 }
 
+stock House_ReturnIndexByPlayer(playerid) {
+
+	foreach(new i : iHouse) {
+
+		if(player_House[playerid] == house_ID[i])
+			return i;
+	}
+
+	return -1;
+}
+
 hook OnGameModeInit() {
 
 	mysql_tquery(SQL, "SELECT * FROM `houses`", "House_LoadData");
@@ -249,25 +260,6 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-// YCMD:wardrobe(playerid, params[], help) {
-
-// 	foreach(new i : iHouse) {
-
-// 		if(player_House[playerid] == house_ID[i]) {
-
-// 			if(IsPlayerInRangeOfPoint(playerid, 3.50, house_Wardrobe[i][0], house_Wardrobe[i][1], house_Wardrobe[i][2])) {
-
-				
-
-// 				break;
-// 			}
-// 		}
-// 	}
-
-// 	return (true);
-// }
-
-
 YCMD:buyhouse(playerid, params[], help) {
 
 	new ID = GetNearestHouse(playerid);
@@ -303,7 +295,104 @@ YCMD:buyhouse(playerid, params[], help) {
 	mysql_format(SQL, query, sizeof query, "UPDATE `houses` SET `hOwner` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ID]);
 	mysql_tquery(SQL, query);
 
-	House_UpdateLabel(house_ID[ID], 2);
+	House_UpdateLabel(ID, 2);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:house(playerid, params[], help) {
+
+	new ID = GetNearestHouse(playerid);
+
+	if(ID == -1)
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se blizu kuce!");
+
+	if(player_House[playerid] != house_ID[ID])
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne posjedujete ovu kucu!");
+
+	Dialog_Show(playerid, "dialog_propHouse", DIALOG_STYLE_LIST, "Maryland \187; "c_white"House", 
+																  ""c_server"#1 \187; "c_ltorange"Zakljucaj - Otkljucaj\n\
+																  "c_server"#2 \187; "c_ltorange"Prodaj Drzavi\n\
+																  "c_server"#3 \187; "c_ltorange"Prodaj Igracu\n\
+																  "c_server"#4 \187; "c_ltorange"Povezi sa fakcijom", 
+																  "Odaberi", "Odustani");
+
+	return (true);
+}
+
+Dialog:dialog_propHouse(const playerid, response, listitem, string: inputtext[]) {
+
+	if(response) {
+
+		switch(listitem) {
+
+			case 0: {
+				
+				new houseID = House_ReturnIndexByPlayer(playerid);
+
+				if(player_House[playerid] == -1)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+			
+				if(house_Locked[ houseID ]) {
+
+					house_Locked[ houseID ] = false;
+					SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste kucu.");
+				}
+
+				else {
+
+					house_Locked[ houseID ] = true;
+					SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste kucu.");
+				}
+			}
+
+			case 1: {
+				
+				new houseID = House_ReturnIndexByPlayer(playerid);
+
+				if(player_House[playerid] == -1)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+
+				new Float:tmp_price = ( house_Price[ houseID ] / 2 );
+
+				static houseStr[248];
+				format(houseStr, sizeof houseStr, ""c_server"Da li ste sigurni da zelite prodati ovu kucu drzavi, za "c_ltorange"%.2f?", tmp_price);
+				Dialog_Show(playerid, "dialog_propHouseSell", DIALOG_STYLE_MSGBOX, ""c_white"Maryland \187; "c_white"Sell House", houseStr, "Sell", "<<");
+
+			}
+
+			case 2: {
+
+				//
+				SendClientMessage(playerid, x_server, "maryland \187; "c_white"Hmm let me think let me see, kristiano kuluneta!");
+			}
+
+			case 3: {
+
+				if(player_House[playerid] == -1)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+
+				if(GetPlayerFactionRank(playerid) != 4)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste lider fakcije!");
+
+				if(Faction_PlayerGroupType(playerid) < 2)
+					return SendClientMessage(playerid, x_faction, "Faction \187; "c_white"Vas tip fakcije nije gang ili mafija!");
+			
+				new fid = Faction_ReturnIndexId(playerid);
+
+				Faction_ConnectHouse( fid, playerid );
+
+				// FactionInfo[fid][factionHouseID] = house_ID[ player_House[playerid] ];
+
+				// static tmp_message[248];
+				// format(tmp_message, sizeof tmp_message, ""c_faction"Faction \187; %s[%d] je povezao kucu SQLID %d sa organizacijom.", ReturnCharacterName(playerid), playerid, house_ID[ player_House[playerid] ]);
+    			// Faction_SendMessage(FactionMember[playerid][factionID], tmp_message);
+
+				// new q[128];
+				// mysql_format(SQL, q, sizeof "UPDATE `factions` SET `factionHouseID` = '%d' WHERE `factionID` = '%d'", house_ID[ player_House[playerid] ], FactionMember[playerid][factionID]);
+				// mysql_tquery(SQL, q);
+			}
+		}
+	}
+	return 1;
 }
