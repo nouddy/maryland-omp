@@ -232,6 +232,9 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
     if(PRESSED(KEY_NO)) {
 
         if(IsPlayerInRangeOfPoint(playerid, 3.50, -776.4226, -1977.0199, 8.7799) && !faction_InProgress[playerid]) {
+            
+            if(FactionMember[playerid][factionID] != 0)
+                return (true)
 
             faction_InProgress[playerid] = true;
 
@@ -646,6 +649,12 @@ Dialog:dialog_createFaction(playerid, response, listitem, string:inputtext[]) {
 
     if(target == INVALID_PLAYER_ID)
         return Dialog_Show(playerid, "dialog_createFaction", DIALOG_STYLE_INPUT, "Faction Invitation", "Unjeli ste krivi ID\nMolimo vas unesite ID osobe sa kojom zelite osnovati grupu!", "Unesi", "Odustani");
+
+    if(target == playerid)
+        return Dialog_Show(playerid, "dialog_createFaction", DIALOG_STYLE_INPUT, "Faction Invitation", "Ne mozete pozvati samog sebe\nMolimo vas unesite ID osobe sa kojom zelite osnovati grupu!", "Unesi", "Odustani");
+
+    if(FactionMember[target][factionID] != 0)
+        return Dialog_Show(playerid, "dialog_createFaction", DIALOG_STYLE_INPUT, "Faction Invitation", "Taj igrac je clan neke grupe\nMolimo vas unesite ID osobe sa kojom zelite osnovati grupu!", "Unesi", "Odustani");
 
     if(!IsPlayerInRangeOfPlayer(playerid, target, 4.0, false, false)) 
         return Dialog_Show(playerid, "dialog_createFaction", DIALOG_STYLE_INPUT, "Faction Invitation", "Ne nalazite se blizu te osobe!\nMolimo vas unesite ID osobe sa kojom zelite osnovati grupu!", "Unesi", "Odustani");

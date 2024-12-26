@@ -93,6 +93,7 @@ new eVehicle[MAX_CARS][e_VEHICLE_DATA],
 
 	Iterator:iter_Vehicles<MAX_CARS>;
 
+new bool:pVehicleLocate[MAX_PLAYERS];
 
 #include "backend/stocks/vehicle.stock"								//* Vehicle Stock Provere
 
@@ -171,12 +172,60 @@ public CreateVehicleData(id) {
 	return 1;
 }
 
+stock IsPlayerNearPersonalVehicle(playerid) {
+
+	foreach(new i : iter_Vehicles) {
+
+		if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
+			
+			new Float:tmpPos[3];
+			GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+		
+			if(IsPlayerInRangeOfPoint(playerid, 3.0, tmpPos[0], tmpPos[1], tmpPos[2]))
+				return (true);
+		}
+	}
+
+	return false;
+}
+
+stock IsPlayerInPersonalVehicle(playerid) {
+
+	foreach(new i : iter_Vehicles) {
+
+		if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
+
+			if(IsPlayerInVehicle(playerid, pvVehicle[i]))
+				return true;
+		}
+	}
+
+	return false
+}
+
+stock CharacterHasVehicle(playerid) {
+
+	foreach(new i : iter_Vehicles) {
+
+		if(eVehicle[i][vOwner] == GetCharacterSQLID(playerid))
+			return true;
+	}
+
+	return false;
+}
 
 hook OnGameModeInit() {
 
 	Iter_Init(iter_Vehicles);
 
 	mysql_tquery(SQL, "SELECT * FROM `vehicles`", "LoadVehicleData");
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+	pVehicleLocate[playerid] = false;
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -251,4 +300,90 @@ YCMD:createvehicle(playerid, params[], help) {
 	mysql_tquery(SQL, q, "CreateVehicleData", "d", id);
 
 	return 1;
+}
+
+YCMD:v(playerid, params[], help) {
+
+	if(!CharacterHasVehicle(playerid))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete vozilo!");
+
+	Dialog_Show(playerid, "dialog_vehicleOptions", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_ltorange"Vehicle Panel", 
+						                                              ""c_server"#1 \187; "c_white"Otkljucaj - Zakljucaj\n\
+																	  "c_server"#2 \187; "c_white"Lociraj", "Odaberi", "Odustani");
+
+	return 1;
+}
+
+Dialog:dialog_vehicleOptions(playerid, response, listitem, string:inputtext[]) {
+
+	if(response) {
+
+		switch(listitem) {
+
+			case 0: {
+
+				if(!IsPlayerNearPersonalVehicle(playerid))
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se blizu vozila!");
+
+				foreach(new i : iter_Vehicles) {
+
+					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
+
+						if(eVehicle[i][vLock]) {
+							
+							eVehicle[i][vLock] = false;
+							SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste vozilo!");
+							new q[128];
+							mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vLock` = '%d' WHERE `vID` = '%d'", eVehicle[i][vLock], eVehicle[i][vID]);
+							mysql_tquery(SQL, q);
+							break;
+						}
+
+						if(!eVehicle[i][vLock]) {
+							
+							eVehicle[i][vLock] = true;
+							SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zakljucali ste vozilo!");
+							new q[128];
+							mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vLock` = '%d' WHERE `vID` = '%d'", eVehicle[i][vLock], eVehicle[i][vID]);
+							mysql_tquery(SQL, q);
+							break;
+						}
+						break;
+					}
+				}
+			}
+
+			case 1: {
+
+				
+				foreach(new i : iter_Vehicles) {
+
+					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
+						
+						static Float:tmpPos[3];
+						GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+						SetPlayerCheckpoint(playerid, tmpPos[0], tmpPos[1], tmpPos[2], 3.50);
+						SendClientMessage(playerid, x_server, "maryland \187; "c_white"Locirali ste vozilo, marker vam je oznacen na mapi!");
+
+						pVehicleLocate[playerid] = true;
+
+						break;
+					}
+				}
+
+			}
+		}
+	}
+
+	return 1;
+}
+
+
+hook OnPlayerEnterCheckpoint(playerid) {
+
+	if(pVehicleLocate[playerid])
+	{
+		pVehicleLocate[playerid] = false;
+		DisablePlayerCheckpoint(playerid);
+	}
 }

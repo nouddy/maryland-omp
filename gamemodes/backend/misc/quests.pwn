@@ -53,7 +53,6 @@ enum E_QUEST_DATA {
     questDescription[248],
     questAwards[2],
     questHints[128]
-
 }
 
 enum E_PLAYER_QUEST_DATA {
@@ -63,6 +62,8 @@ enum E_PLAYER_QUEST_DATA {
 }
 
 new QuestData[MAX_PLAYERS][E_PLAYER_QUEST_DATA];
+
+new jason_InProgress[MAX_PLAYERS];
 
 new const sz_QuestList[][E_QUEST_DATA] = {
 
@@ -91,7 +92,7 @@ public quest_UpdateJasonInteraction(playerid, type) {
 
         case 2: {
 
-            SendClientMessage(playerid, x_forestgreen, "Jason : Najbolje je da se drzis legalne strane Marylanda, ukoliko ti zatreba pomoc, znas gdje ces me pornaci.");
+            SendClientMessage(playerid, x_forestgreen, "Jason : Najbolje je da se drzis legalne strane Marylanda, ukoliko ti zatreba pomoc, znas gdje ces me pronaci.");
             ApplyActorAnimation(jasonActor, !"PED", !"SEAT_down", 4.1, false, false, false, true, 0);
 
             QuestData[playerid][questDone][0] = 1;
@@ -163,8 +164,13 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
         if(IsPlayerInRangeOfPoint(playerid, 1.7, 810.6173,-1342.9711,13.5386)) {
 
+            if(jason_InProgress[playerid])
+                return (true);
+
             if(QuestData[playerid][questDone][0] == 1)
                 return (true);
+            
+            jason_InProgress[playerid] = true;
 
             SendClientMessage(playerid, x_forestgreen, "Jason : Dobrodosao u Maryland, vidim da si novi i nece ti biti tako lako na pocetku.");
             SetTimerEx("quest_UpdateJasonInteraction", 3500, false, "dd", playerid, 1);

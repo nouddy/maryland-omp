@@ -44,6 +44,15 @@ static const sz_SpawnNames[][32] = {
 
 new eSpawnType:PlayerSpawn[MAX_PLAYERS];
 
+forward LoadCharacterAttach_Delayed(playerid);
+public LoadCharacterAttach_Delayed(playerid) {
+
+    new q[248];
+    mysql_format(SQL, q, sizeof q, "SELECT * FROM `character_attachs` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, q, "mysql_LoadCharacterAttachs", "d", playerid);
+    return (true);
+}
+
 forward mysql_LoadSpawnType(playerid);
 public mysql_LoadSpawnType(playerid) {
 
@@ -61,6 +70,8 @@ public mysql_LoadSpawnType(playerid) {
     }
 
     cache_get_value_name_int(0, "spawnType", PlayerSpawn[playerid]);
+
+    SetTimerEx("LoadCharacterAttach_Delayed", 500, false, "d", playerid);
 
     if(!IsPlayerJailed(playerid))
     {   

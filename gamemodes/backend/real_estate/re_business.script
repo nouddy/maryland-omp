@@ -54,6 +54,8 @@
 #define AGRICULTURAL_STORE_ACTOR_SKIN           (158)
 #define BOUTIQUE_ACTOR_SKIN                     (93)
 
+#define MAX_CHARACTER_ATTACHS                   (5)
+
 enum e_BUSINESS_DATA {
 
     bID,
@@ -144,7 +146,7 @@ enum e_BUSINESS_INTERIORS {
 }
 
 
-new business_Interiors[13][e_BUSINESS_INTERIORS] = {
+new business_Interiors[13][e_BUSINESS_INTERIORS] = { 
 
     { { 1414.3778,430.5065,1081.5009     },    18 },
     { { 6.08, -28.89, 1003.54     },    10 },
@@ -162,7 +164,8 @@ new business_Interiors[13][e_BUSINESS_INTERIORS] = {
 
 };
 
-new skinlist = mS_INVALID_LISTID;
+new skinlist = mS_INVALID_LISTID,
+    attachlist = mS_INVALID_LISTID;
 
 //      >> [ AMMUNATION ] <<
 
@@ -182,6 +185,26 @@ enum e_AMMUNATION_WEAPON {
 
 new ammunation_WeaponPickup[MAX_PLAYERS],
     ammunation_ChosenWeapon[MAX_PLAYERS];
+
+enum e_ATTACH_DATA {
+
+    aoID,
+    aoCharacter,
+    aoModel,
+    aoBone,
+    Float:ao_x,
+    Float:ao_y,
+    Float:ao_z,
+    Float:ao_rx,
+    Float:ao_ry,
+    Float:ao_rz,
+    Float:ao_sx,
+    Float:ao_sy,
+    Float:ao_sz
+}
+
+new CharacterAttach[MAX_PLAYERS][MAX_CHARACTER_ATTACHS][e_ATTACH_DATA],
+    Iterator:iAttachs[MAX_PLAYERS]<MAX_CHARACTER_ATTACHS>;
 
 //*             >> [ SYNTAX ] <<
 
@@ -311,6 +334,71 @@ stock Business_Type(biz) {
 }
 
 //      >> [ BUSINESS GLOBAL ] <<
+
+new bool:p_AttachEdit[MAX_PLAYERS],
+    bool:p_AttachChange[MAX_PLAYERS];
+
+stock Attach_ReturnModelName(modelid) {
+
+    static str[64];
+
+    switch(modelid) {
+
+        case 18947: { str =  "Kapa"; }
+        case 19066: { str =  "Bozicna Kapica"; }
+        case 19521: { str =  "Policisjka Kapa";}
+        case 18923: { str =  "Beretka"; }
+        case 18961: { str =  "Kapa";}
+        case 19039: { str =  "Sat";}
+        case 19042: { str =  "Sat";}
+        case 19053: { str =  "Sat";}
+        case 19043: { str =  "Sat";}
+        case 18894: { str =  "Bandana";}
+        case 18903: { str =  "Bandana";}
+        case 18898: { str =  "Bandana";}
+        case 18899: { str =  "Bandana";}
+        case 19559: { str =  "Turisticki Ranac";}
+        case 3026: { str = "Ranac";}
+        case 1550: {str = "Moneybag";}
+        case 3044: {str = "Cigareta";}
+        case 19625: { str = "Cigareta";}
+        case 19025: { str = "Naocare";}
+        case 19026: { str = "Naocare";}
+        case 19031: { str = "Naocare";}
+        case 19028: { str = "Naocare";}
+        case 19023: { str = "Naocare";}
+        case 19033: { str = "Naocare";}
+        case 19140: { str = "Brze Naocare";}
+        case 19139: { str = "Brze Naocare v2";}
+        case 19607: { str = "Pickup";}
+        case 19198: { str = "Pickup";}
+        case 19318: { str = "Gitara";}
+        case 19317: { str = "Gitara";}
+        case 339: { str = "Katana";}
+        case 19079: { str = "Papagaj";}
+        default: {str = "[Undefined]:"; }
+    }
+
+    return str;
+}
+
+stock Attach_GetBoneFromModel(modelid) {
+
+    new bone;
+
+    switch(modelid) {
+
+        case 18947,19066,19521,18923,18961,18894,18903,18898,18899: { bone = 2; }
+        case 19025,19026,19031,19028,19023,19033,19140,19139,19607,19198: {bone = 2; }
+        case 19039,19042,19053,19043: { bone = 5; }
+        case 19559,3026,1550,19318,19317,339: { bone = 1; }
+        case 3044,19625: { bone = 18; }
+        case 19079: { bone = 15; }
+
+    }
+
+    return bone;
+}
 
 stock Business_UpdateProductInfo(playerid, productID) {
 
@@ -581,6 +669,21 @@ stock Business_ResetInterface(playerid) {
 
 //      >> [ AMMUNATION ] <<
 
+stock Ammunation_ResetInterface(playerid) {
+
+    for(new i = 0; i < sizeof ammunation_PTD[]; i++) {
+
+        if(ammunation_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
+        PlayerTextDrawHide(playerid, ammunation_PTD[playerid][i]);
+        PlayerTextDrawDestroy(playerid, ammunation_PTD[playerid][i]);
+        ammunation_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+
+    }
+
+    return (true);
+}
+
 stock Ammunation_UpdateDamageStatus(playerid, WEAPON_ID) {
 
     switch(WEAPON_ID) {
@@ -681,15 +784,7 @@ stock Ammunation_ShowInterfaceForPlayer(playerid, const bool:option) {
 
     if(option) {
 
-        for(new i = 0; i < sizeof ammunation_PTD[]; i++) {
-
-            if(ammunation_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
-            PlayerTextDrawHide(playerid, ammunation_PTD[playerid][i]);
-            PlayerTextDrawDestroy(playerid, ammunation_PTD[playerid][i]);
-            ammunation_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-
-        }
+        Ammunation_ResetInterface(playerid);
 
         ammunation_PTD[playerid][0] = CreatePlayerTextDraw(playerid, 519.666748, 161.636932, "");
         PlayerTextDrawTextSize(playerid, ammunation_PTD[playerid][0], 105.000000, 129.000000);
@@ -874,15 +969,7 @@ stock Ammunation_ShowInterfaceForPlayer(playerid, const bool:option) {
 
     else {
 
-        for(new i = 0; i < sizeof ammunation_PTD[]; i++) {
-
-            if(ammunation_PTD[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
-
-            PlayerTextDrawHide(playerid, ammunation_PTD[playerid][i]);
-            PlayerTextDrawDestroy(playerid, ammunation_PTD[playerid][i]);
-            ammunation_PTD[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-
-        }
+        Ammunation_ResetInterface(playerid);
 
         CancelSelectTextDraw(playerid);
         ammunation_InterfaceShown[playerid] = false;
@@ -907,6 +994,48 @@ stock GetNearestBusiness(playerid) {
             return j;
     }
     return INVALID_BUSINESS_ID;
+}
+
+forward mysql_LoadCharacterAttachs(playerid);
+public mysql_LoadCharacterAttachs(playerid) {
+
+    new rows = cache_num_rows();
+    if(!rows) return (true);
+
+    for(new j = 0; j < MAX_CHARACTER_ATTACHS; j++) {
+
+        if(IsPlayerAttachedObjectSlotUsed(playerid, j))
+            RemovePlayerAttachedObject(playerid, j);
+    }
+
+    for(new i = 0; i < rows; i++) {
+
+        cache_get_value_name_int(i, "id", CharacterAttach[playerid][i][aoID]);
+        cache_get_value_name_int(i, "character_id", CharacterAttach[playerid][i][aoCharacter]);
+        cache_get_value_name_int(i, "modelid", CharacterAttach[playerid][i][aoModel]);
+        cache_get_value_name_int(i, "boneid", CharacterAttach[playerid][i][aoBone]);
+
+        cache_get_value_name_float(i, "x", CharacterAttach[playerid][i][ao_x]);
+        cache_get_value_name_float(i, "y", CharacterAttach[playerid][i][ao_y]);
+        cache_get_value_name_float(i, "z", CharacterAttach[playerid][i][ao_z]);
+
+        cache_get_value_name_float(i, "rX", CharacterAttach[playerid][i][ao_rx]);
+        cache_get_value_name_float(i, "rY", CharacterAttach[playerid][i][ao_ry]);
+        cache_get_value_name_float(i, "rZ", CharacterAttach[playerid][i][ao_rz]);
+
+        cache_get_value_name_float(i, "sX", CharacterAttach[playerid][i][ao_sx]);
+        cache_get_value_name_float(i, "sY", CharacterAttach[playerid][i][ao_sy]);
+        cache_get_value_name_float(i, "sZ", CharacterAttach[playerid][i][ao_sz]);
+
+        SetPlayerAttachedObject(playerid, i, CharacterAttach[playerid][i][aoModel], CharacterAttach[playerid][i][aoBone], 
+                                CharacterAttach[playerid][i][ao_x], CharacterAttach[playerid][i][ao_y], CharacterAttach[playerid][i][ao_z], 
+                                CharacterAttach[playerid][i][ao_rx], CharacterAttach[playerid][i][ao_ry], CharacterAttach[playerid][i][ao_rz], 
+                                CharacterAttach[playerid][i][ao_sx], CharacterAttach[playerid][i][ao_sy], CharacterAttach[playerid][i][ao_sz]);
+
+        Iter_Add(iAttachs[playerid], i);
+    }
+
+    return (true);
 }
 
 forward Business_LoadData();
@@ -1015,6 +1144,7 @@ hook OnGameModeInit() {
     mysql_tquery(SQL, "SELECT * FROM `re_business`", "Business_LoadData", "");
 
     skinlist = LoadModelSelectionMenu("skins.txt"); // load skins for buy
+    attachlist = LoadModelSelectionMenu("attachlist.txt");
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -1024,12 +1154,19 @@ hook OnPlayerConnect(playerid) {
     ammunation_ChosenWeapon[playerid] = -1;
     business_ChosenItem[playerid] = INVALID_PRODUCT_ID;
     re_InBusiness[playerid] = INVALID_BUSINESS_ID;
-
     Business_ResetInterface(playerid);
+    Ammunation_ResetInterface(playerid);
+
+    p_AttachEdit[playerid] = false;
+    p_AttachChange[playerid] = false;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnCharacterLoaded(playerid) {
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
@@ -1361,9 +1498,13 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                     }
 
                     case BUSINESS_TYPE_BOUTIQUE: {
+                        
+                        if(p_AttachEdit[playerid])
+                            return (true);
 
-                        ShowModelSelectionMenu( playerid, skinlist, "Select Skin");
-                        // skinlist = LoadModelSelectionMenu("skins.txt");
+                        Dialog_Show(playerid, "dialog_boutiqueOption", DIALOG_STYLE_MSGBOX, ""c_server"Maryland \187; "c_ltorange"Boutique", 
+                                                                       "Sta zelite?\nNovi izgled ili dodaci?", "Izgled", "Dodaci");
+                        //ShowModelSelectionMenu( playerid, skinlist, "Select Skin");
                     }
                 }
             }
@@ -1590,10 +1731,45 @@ YCMD:buybusiness(playerid, params[], help)
 YCMD:firma(playerid, params[], help) = business;
 YCMD:business(playerid, params[], help) {
 
-
-    SendClientMessage(playerid, x_info, "DEBUG: YCMD:business!");
-
     return 1;
+}
+
+YCMD:attachments(playerid, params[], help) {
+
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete ovo dok ste u vozilu!");
+
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti van vozila!");
+
+    if(p_AttachChange[playerid] || p_AttachEdit[playerid])
+        return (true);
+
+    new bool:attachFound = false;
+
+    foreach(new i : iAttachs[playerid]) {
+
+        if(GetCharacterSQLID(playerid) == CharacterAttach[playerid][i][aoCharacter])
+        {
+            attachFound = true;
+            break;
+        }
+    }
+
+    if(!attachFound)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dodatke!");
+
+    new dlgStr[2048], str[288];
+
+    foreach(new i : iAttachs[playerid]) {
+
+        format(str, sizeof str, ""c_white"#%d \187; "c_ltorange"%s\n", CharacterAttach[playerid][i][aoID], Attach_ReturnModelName( CharacterAttach[playerid][i][aoModel] ));
+        strcat(dlgStr, str);
+    }
+
+    Dialog_Show(playerid, "dialog_characterAttachs", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_ltorange"Attachments", dlgStr, "Odaberi", "Odustani");
+
+    return (true);
 }
 
 hook OnPlayerModelSelection( playerid, response, listid, modelid) {
@@ -1617,5 +1793,126 @@ hook OnPlayerModelSelection( playerid, response, listid, modelid) {
             return 1;
         }
     }
+
+    if(listid == attachlist) {
+
+        if(response) {
+
+            if( GetPlayerMoney(playerid) < 500.00 )
+                return SendClientMessage( playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca." );
+            
+            if(Iter_Count(iAttachs[playerid]) == 5)
+                return SendClientMessage( playerid, x_server, "maryland \187; "c_white"Zauzeli ste sve slotove - 5." );
+
+            p_AttachEdit[playerid] = true;
+
+            SetPlayerAttachedObject(playerid, Iter_Free(iAttachs[playerid]), modelid, Attach_GetBoneFromModel(modelid));
+            EditAttachedObject(playerid, Iter_Free(iAttachs[playerid]));
+        }
+    }
+
     return 1;
+}
+
+hook OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ) {
+
+    if(p_AttachEdit[playerid]) {
+
+        if(response == EDIT_RESPONSE_FINAL) {
+
+            new idx = Iter_Free(iAttachs[playerid]);
+
+            CharacterAttach[playerid][idx][aoID] = idx;
+            CharacterAttach[playerid][idx][aoCharacter] = GetCharacterSQLID(playerid);
+            CharacterAttach[playerid][idx][aoModel] = modelid;
+            CharacterAttach[playerid][idx][aoBone] = boneid;
+
+            CharacterAttach[playerid][idx][ao_x] = fOffsetX;
+            CharacterAttach[playerid][idx][ao_y] = fOffsetY;
+            CharacterAttach[playerid][idx][ao_z] = fOffsetZ;
+
+            CharacterAttach[playerid][idx][ao_rx] = fRotX;
+            CharacterAttach[playerid][idx][ao_ry] = fRotY;
+            CharacterAttach[playerid][idx][ao_rz] = fRotZ;
+
+            CharacterAttach[playerid][idx][ao_sx] = fScaleX;
+            CharacterAttach[playerid][idx][ao_sy] = fScaleY;
+            CharacterAttach[playerid][idx][ao_sz] = fScaleZ;
+
+            new q[368];
+            mysql_format(SQL, q, sizeof q, "INSERT INTO `character_attachs` (`id`, `character_id`, `modelid`, `boneid`, `x`, `y`, `z`, `rX`, `rY`, `rZ`, `sX`, `sY`, `sZ`)\
+                                            VALUES ('%d', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f')",
+                                            idx, GetCharacterSQLID(playerid), modelid, boneid, fOffsetX, fOffsetY, fOffsetZ,
+                                            fRotX, fRotY, fRotZ, fScaleX, fScaleY, fScaleZ);
+            mysql_tquery(SQL, q);
+
+            GivePlayerMoney(playerid, -500.00);
+            Iter_Add(iAttachs[playerid], idx);
+
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s", Attach_ReturnModelName(modelid));
+
+            p_AttachEdit[playerid] = false;
+        }
+
+        else if(response == EDIT_RESPONSE_CANCEL) {
+
+            RemovePlayerAttachedObject(playerid, Iter_Free(iAttachs[playerid]));
+            p_AttachEdit[playerid] = false;
+
+        }
+    }
+
+    if(p_AttachChange[playerid]) {
+
+        if(response == EDIT_RESPONSE_FINAL) {
+
+            p_AttachChange[playerid] = false;
+
+            CharacterAttach[playerid][index][ao_x] = fOffsetX;
+            CharacterAttach[playerid][index][ao_y] = fOffsetY;
+            CharacterAttach[playerid][index][ao_z] = fOffsetZ;
+
+            CharacterAttach[playerid][index][ao_rx] = fRotX;
+            CharacterAttach[playerid][index][ao_ry] = fRotY;
+            CharacterAttach[playerid][index][ao_rz] = fRotZ;
+
+            CharacterAttach[playerid][index][ao_sx] = fScaleX;
+            CharacterAttach[playerid][index][ao_sy] = fScaleY;
+            CharacterAttach[playerid][index][ao_sz] = fScaleZ;
+
+            new q[428];
+            mysql_format(SQL, q, sizeof q, "UPDATE `character_attachs` SET `x` = '%f', `y` = '%f', `z` = '%f', `rX` = '%f', `rY` = '%f', `rZ` = '%f', `sX` = '%f', `sY` = '%f', `sZ` = '%f' WHERE `character_id` = '%d' AND `id` = '%d'",
+                                            fOffsetX, fOffsetY, fOffsetZ,
+                                            fRotX, fRotY, fRotZ, fScaleX, fScaleY, fScaleZ, GetCharacterSQLID(playerid), index);
+            mysql_tquery(SQL, q);
+        }
+
+        if(response == EDIT_RESPONSE_CANCEL) {
+
+            p_AttachChange[playerid] = false;
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog:dialog_boutiqueOption(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) 
+        ShowModelSelectionMenu( playerid, skinlist, "Select Skin");
+    if(!response)
+        ShowModelSelectionMenu( playerid, attachlist, "Attach");
+
+    return (true);
+}
+
+Dialog:dialog_characterAttachs(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) {
+            
+        p_AttachChange[playerid] = true;
+        EditAttachedObject(playerid, CharacterAttach[playerid][listitem][aoID]);
+    }
+
+    return (true);
 }
