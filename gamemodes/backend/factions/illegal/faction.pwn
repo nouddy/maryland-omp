@@ -234,7 +234,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
         if(IsPlayerInRangeOfPoint(playerid, 3.50, -776.4226, -1977.0199, 8.7799) && !faction_InProgress[playerid]) {
             
             if(FactionMember[playerid][factionID] != 0)
-                return (true)
+                return (true);
 
             faction_InProgress[playerid] = true;
 
