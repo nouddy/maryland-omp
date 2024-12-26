@@ -46,6 +46,13 @@ stock StopPlayerKeysUpdate(playerid)
     return true;
 }
 
+stock IsPlayerKeysUpdatePaused(playerid) {
+    if(!IsPlayerConnected(playerid)) return 0;
+    if(pKeysUpdate[playerid][pKeysUpdTimer] == 0) return 0;
+
+    return pKeysUpdate[playerid][pKeysUpdPaused];
+}
+
 stock bool:PausePlayerKeysUpdate(playerid, bool: bPause = true)
 {
     if(!IsPlayerConnected(playerid)) return false;

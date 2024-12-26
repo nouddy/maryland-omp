@@ -806,7 +806,7 @@ stock CreateCharacterSetupMenu(playerid)
 public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 {	
 	if(MenuID != p3DMenu[playerid]) return Y_HOOKS_CONTINUE_RETURN_1;
-
+	if(IsPlayerKeysUpdatePaused(playerid)) return Y_HOOKS_BREAK_RETURN_1;
 	//==============================================================================
 	if(pSelectionType[playerid] == PLAYER_SELECTION_GENDER)
 	{
@@ -823,6 +823,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 		printf("(OnPlayerSelect3DMenuBox) - Selected Gender : %d", CharacterInfo[playerid][Gender]);
 
 		Destroy3DMenuDelayed(MenuID);
+		PausePlayerKeysUpdate(playerid, true);
+		SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+
 		CreateCharacterSetupMenu(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
@@ -832,6 +835,8 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 		CharacterInfo[playerid][State] = selected;
 
 		Destroy3DMenuDelayed(MenuID);
+		SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+		PausePlayerKeysUpdate(playerid, true);
 		CreateCharacterSetupMenu(playerid);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
@@ -847,6 +852,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 				pSelectionType[playerid] = PLAYER_SELECTION_GENDER;
 
 				Destroy3DMenuDelayed(MenuID);
+				PausePlayerKeysUpdate(playerid, true);
+				SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+
 				p3DMenu[playerid] = Create3DMenu(-1635.7273,1043.8788,54.1497,177.9148, 2, playerid);
 				SetBoxText(p3DMenu[playerid], 0, "Male", OBJECT_MATERIAL_SIZE_128x32, "Arial", 22, 1, boxtextcolor, boxtextbg, 0);
 				SetBoxText(p3DMenu[playerid], 1, "Female", OBJECT_MATERIAL_SIZE_128x32, "Arial", 22, 1, boxtextcolor, boxtextbg, 0);
@@ -862,6 +870,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 				pSelectionType[playerid] = PLAYER_SELECTION_SKIN;
 
 				Destroy3DMenuDelayed(MenuID);
+				PausePlayerKeysUpdate(playerid, true);
+				SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+
 				CreatePlayerSlider(playerid, -1635.7273,1043.8788,54.1497,177.9148, "Skin", OBJECT_MATERIAL_SIZE_128x32);
 				
 				SetPlayerPos(playerid, CHAR_WALK_STYLE_POS);
@@ -879,6 +890,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 				pSelectionType[playerid] = PLAYER_SELECTION_WALKING_STYLE;
 
 				Destroy3DMenuDelayed(MenuID);
+				PausePlayerKeysUpdate(playerid, true);
+				SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+
 				CreatePlayerSlider(playerid, -1635.7273,1043.8788,54.1497,177.9148, "Walk Style", OBJECT_MATERIAL_SIZE_128x32);
 
 				SetPlayerPos(playerid, CHAR_WALK_STYLE_POS);
@@ -896,6 +910,9 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 				pSelectionType[playerid] = PLAYER_SELECTION_STATE;
 
 				Destroy3DMenuDelayed(MenuID);
+				PausePlayerKeysUpdate(playerid, true);
+				SetTimerEx("UnpausePlayerUpdateKeys", 3500, false, "d", playerid);
+
 				p3DMenu[playerid] = Create3DMenu(-1635.7273,1043.8788,54.1497,177.9148, 3, playerid);
 				SetBoxText(p3DMenu[playerid], 0, "Maryland", OBJECT_MATERIAL_SIZE_128x32, "Arial", 22, 1, boxtextcolor, boxtextbg, 0);
 				SetBoxText(p3DMenu[playerid], 1, "Egypt", OBJECT_MATERIAL_SIZE_128x32, "Arial", 22, 1, boxtextcolor, boxtextbg, 0);
@@ -1111,4 +1128,10 @@ stock CheckCharNameRegex(const nickname[])
   if (!charname) charname = Regex_New("^[A-Z][a-z]{2,9}_[A-Z][a-z]+([A-Z][a-z]+)?$");
 
   return Regex_Check(nickname, charname);
+}
+
+forward UnpausePlayerUpdateKeys(playerid);
+public UnpausePlayerUpdateKeys(playerid) {
+	PausePlayerKeysUpdate(playerid, false);
+	return 1;
 }
