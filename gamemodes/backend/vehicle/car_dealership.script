@@ -106,7 +106,6 @@ new PlayerText:dealership_TD[MAX_PLAYERS][69],
     bool:e_CHOSEN_NITRO[MAX_PLAYERS]
 ;
 
-new Text3D:dealership_Catalogue;
 
 static temp_Vehicle[MAX_PLAYERS] = INVALID_VEHICLE_ID;
 
@@ -157,8 +156,6 @@ hook OnGameModeInit()
 {
     print("backend/vehicles/car_dealership.pwn loaded");
 
-    dealership_Catalogue = Create3DTextLabel("{DAA520}Car Dealership\n{FFFFFF}/catalogue", -1, 970.1960,-1702.6202,13.5727, 3.50, 0);
-
     dealership_Vehicle[0] = AddStaticVehicle(562,961.5083,-1693.0735,13.7107,270.5628,0,0); // cmrlj1
     dealership_Vehicle[1] = AddStaticVehicle(411,961.6058,-1712.5038,13.6952,269.5265,0,0); // cmrlj2
     dealership_Vehicle[2] = AddStaticVehicle(402,973.5029,-1712.8794,13.6544,89.8228,0,0); // cmrlj3
@@ -181,8 +178,6 @@ hook OnGameModeInit()
 
 hook OnGameModeExit()
 {
-    if(IsValid3DTextLabel(dealership_Catalogue))
-        Delete3DTextLabel(dealership_Catalogue);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

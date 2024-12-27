@@ -758,6 +758,19 @@ stock Faction_GiveRespect(playerid, amount)
     return true;
 }
 
+stock Faction_CheckConnectedHouse(faction, playerid) {
+
+
+    if(FactionMember[playerid][factionID] == FactionInfo[faction][factionID]) {
+
+        if(FactionInfo[faction][factionHouseID] != 0)
+            return false;
+
+    }
+
+    return (true);
+}
+
 stock Faction_ConnectHouse( faction, playerid) {
 
     new hID = House_ReturnIndexByPlayer(playerid);
@@ -773,6 +786,14 @@ stock Faction_ConnectHouse( faction, playerid) {
     mysql_tquery(SQL, q);
 
     return (true);
+}
+
+stock IsPlayerFactionLeader(playerid) {
+
+    if(FactionMember[playerid][factionRank] == 4)
+        return true;
+
+    return false;
 }
 
 stock GetPlayerFactionRank(playerid) 

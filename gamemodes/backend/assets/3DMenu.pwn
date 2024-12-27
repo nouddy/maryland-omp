@@ -26,6 +26,8 @@ enum MenuParams {
 			Boxes,
 	bool:	IsExist,
 			Objects[MAX_BOXES],
+	Float:  BaseX,
+	Float: 	BaseY,
 	Float:	AddingX,
 	Float:	AddingY
 };
@@ -53,6 +55,10 @@ stock Create3DMenu(Float:x,Float:y,Float:z,Float:rotation,boxes,playerid)
 			if(rotation == 180) { MenuInfo[i][AddingX] = 0.0; MenuInfo[i][AddingY] = 0.25; }
 			if(rotation == 90) { MenuInfo[i][AddingX] = 0.25; MenuInfo[i][AddingY] = 0.0; }
 			if(rotation == 270) { MenuInfo[i][AddingX] = -0.25; MenuInfo[i][AddingY] = 0.0; }
+
+			MenuInfo[i][BaseX] = x;
+			MenuInfo[i][BaseY] = y;
+
 			if((rotation > 0 && rotation < 90) || (rotation > 270 && rotation < 360))
 			{
 				MenuInfo[i][AddingX] = 0.25*floatsin(rotation,degrees);
@@ -62,7 +68,7 @@ stock Create3DMenu(Float:x,Float:y,Float:z,Float:rotation,boxes,playerid)
 			{
 				MenuInfo[i][AddingX] = 0.25*floatsin(rotation,degrees);
 				MenuInfo[i][AddingY] = -floatcos(rotation,degrees)*0.25;
-			}
+			}			
 	        for(new b = 0; b < boxes; b++)
 			{
 				if(b < 6) MenuInfo[i][Objects][b] = CreateDynamicObject(2661,x,y,z+1.65-0.55*b,0,0,rotation,-1,-1,playerid,100.0);
@@ -82,6 +88,7 @@ stock Create3DMenu(Float:x,Float:y,Float:z,Float:rotation,boxes,playerid)
 			return i;
 		}
 	}
+	printf("Unable to create 3D menu. Please increase limit!");
 	return INVALID_3D_MENU;
 }
 
@@ -107,7 +114,7 @@ stock bool:Select3DMenu(playerid,MenuID, menubox = 0)
 	SelectedBox[playerid] = menubox;
 	SelectedMenu[playerid] = MenuID;
  	GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
-	MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x+MenuInfo[MenuID][AddingX],y+MenuInfo[MenuID][AddingY], z, 1.0);
+	MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],MenuInfo[MenuID][BaseX]+MenuInfo[MenuID][AddingX],MenuInfo[MenuID][BaseY]+MenuInfo[MenuID][AddingY], z, 1.0);
 	return true;
 }
 
@@ -155,7 +162,7 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 		SelectedBox[playerid]++;
 		if(SelectedBox[playerid] >= MenuInfo[MenuID][Boxes]) SelectedBox[playerid] = 0;
 		GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
-		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x+MenuInfo[MenuID][AddingX],y+MenuInfo[MenuID][AddingY],z, 1.0);
+		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],MenuInfo[MenuID][BaseX]+MenuInfo[MenuID][AddingX],MenuInfo[MenuID][BaseY]+MenuInfo[MenuID][AddingY],z, 1.0);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	else if(updown == KEY:KEY_UP && oldupdown != KEY:KEY_UP)
@@ -163,12 +170,12 @@ hook OnPlayerKeysUpdate(playerid, KEY:keys, KEY:oldkeys, KEY:updown, KEY:oldupdo
 		//SendClientMessage(playerid, -1, "Debug: Menu UP");
 
 	    GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
-		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x-MenuInfo[MenuID][AddingX],y-MenuInfo[MenuID][AddingY],z, 1.0);
+		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],MenuInfo[MenuID][BaseX]-MenuInfo[MenuID][AddingX],MenuInfo[MenuID][BaseY]-MenuInfo[MenuID][AddingY],z, 1.0);
 
 		SelectedBox[playerid]--;
 		if(SelectedBox[playerid] < 0) SelectedBox[playerid] = (MenuInfo[MenuID][Boxes]-1);
 		GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
-		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x+MenuInfo[MenuID][AddingX],y+MenuInfo[MenuID][AddingY],z, 1.0);
+		MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],MenuInfo[MenuID][BaseX]+MenuInfo[MenuID][AddingX],MenuInfo[MenuID][BaseY]+MenuInfo[MenuID][AddingY],z, 1.0);
 		return Y_HOOKS_BREAK_RETURN_1;
 	}
 	else if(keys == KEY:KEY_NO || keys == KEY:KEY_UP) 
@@ -189,7 +196,7 @@ stock bool:CancelSelect3DMenu(playerid,MenuID)
     if(!MenuInfo[MenuID][IsExist]) return false;
 	new Float:x,Float:y,Float:z;
  	GetDynamicObjectPos(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x,y,z);
-	MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],x-MenuInfo[MenuID][AddingX],y-MenuInfo[MenuID][AddingY],z, 1.0);
+	MoveDynamicObject(MenuInfo[MenuID][Objects][SelectedBox[playerid]],MenuInfo[MenuID][BaseX]-MenuInfo[MenuID][AddingX],MenuInfo[MenuID][BaseY]-MenuInfo[MenuID][AddingY],z, 1.0);
 	SelectedMenu[playerid] = INVALID_3D_MENU;
 	SelectedBox[playerid] = 0;
 	return true;
@@ -220,6 +227,8 @@ public bool:Destroy3DMenu(MenuID)
 	}
  	MenuInfo[MenuID][Boxes] = 0;
  	MenuInfo[MenuID][IsExist] = false;
+	MenuInfo[MenuID][BaseX] = 0.0;
+	MenuInfo[MenuID][BaseY] = 0.0;
  	MenuInfo[MenuID][AddingX] = 0.0;
  	MenuInfo[MenuID][AddingY] = 0.0;
 	return true;

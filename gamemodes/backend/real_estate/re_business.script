@@ -66,6 +66,7 @@ enum e_BUSINESS_DATA {
     bType,
     bPrice,
     bLevel,
+    Float:bCashRegister,
 
     Float:bEntrance[3],
     Float:bExit[3],
@@ -1058,6 +1059,7 @@ public Business_LoadData() {
             cache_get_value_name_int(i, "bType", re_BusinessData[i][bType]);
             cache_get_value_name_int(i, "bPrice", re_BusinessData[i][bPrice]);
             cache_get_value_name_int(i, "bLevel", re_BusinessData[i][bLevel]);
+            cache_get_value_name_float(i, "bCashRegister", re_BusinessData[i][bCashRegister]);
 
             cache_get_value_name_float(i, "bEnterX", re_BusinessData[i][bEntrance][0]);
             cache_get_value_name_float(i, "bEnterY", re_BusinessData[i][bEntrance][1]);
@@ -1137,6 +1139,15 @@ public mysql_AddBusiness(id, playerid) {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+stock Business_UpdateCashRegister(business) {
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "UPDATE `re_business` SET `bCashRegister` = '%f' WHERE `bID` = '%d'", re_BusinessData[business][bCashRegister], re_BusinessData[business][bID]);
+    mysql_tquery(SQL, q);
+
+    return (true);
+}
+
 hook OnGameModeInit() {
 
     print("real_estate/re_business.script loaded");
@@ -1145,6 +1156,16 @@ hook OnGameModeInit() {
 
     skinlist = LoadModelSelectionMenu("skins.txt"); // load skins for buy
     attachlist = LoadModelSelectionMenu("attachlist.txt");
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnGameModeExit() {
+
+    foreach(new i : iter_Business) {
+
+        Business_UpdateCashRegister(i);
+    }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -1245,6 +1266,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
             SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", ammunation_ItemList[WeaponID][weaponName] );
             GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponPrice]);
 
+            re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( ammunation_ItemList[WeaponID][weaponPrice] / 2 );
+            Business_UpdateCashRegister( re_InBusiness[playerid] );
             return Y_HOOKS_BREAK_RETURN_1;
         }
 
@@ -1258,12 +1281,18 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
             SetPlayerArmour(playerid, set);
             GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponPrice]);
 
+            re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( ammunation_ItemList[WeaponID][weaponPrice] / 2 );
+            Business_UpdateCashRegister( re_InBusiness[playerid] );
+
             return Y_HOOKS_BREAK_RETURN_1;
         }
 
         GivePlayerWeapon(playerid, ammunation_ItemList[WeaponID][weaponID], 30);
-        SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s sa 30 municije!", ammunation_ItemList[WeaponID][weaponName] );
+        SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s sa 30 municije!", ammunation_ItemList[WeaponID][weaponName]);
         GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponPrice]);
+
+        re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( ammunation_ItemList[WeaponID][weaponPrice] / 2 );
+        Business_UpdateCashRegister( re_InBusiness[playerid] );
 
     }
 
@@ -1298,6 +1327,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %d municije za %d$", ammunation_ItemList[WeaponID][weaponMag], ammunation_ItemList[WeaponID][weaponMagPrice] );
         GivePlayerMoney(playerid, -ammunation_ItemList[WeaponID][weaponMagPrice]);
 
+        re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( ammunation_ItemList[WeaponID][weaponMagPrice] / 2 );
+        Business_UpdateCashRegister( re_InBusiness[playerid] );
+
         SetPlayerArmedWeapon(playerid, ammunation_ItemList[WeaponID][weaponID]);
     }
 
@@ -1321,7 +1353,9 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
                 GivePlayerMoney(playerid, -business_ItemList[ProductID][productPrice]);
                 SendClientMessage(playerid,x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
                 GivePlayerWeapon(playerid, business_ItemList[ProductID][productWeaponID], 1);
-
+                
+                re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( business_ItemList[ProductID][productPrice] / 2 );
+                Business_UpdateCashRegister( re_InBusiness[playerid] );
 
                 return Y_HOOKS_BREAK_RETURN_1;
 
@@ -1349,7 +1383,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
         GivePlayerMoney(playerid, -business_ItemList[ProductID][productPrice]);
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s!", business_ItemList[ProductID][productName]);
-
+        re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += ( business_ItemList[ProductID][productPrice] / 2 );
+        Business_UpdateCashRegister( re_InBusiness[playerid] );
         Inventory_AddItem(playerid, business_ItemList[ProductID][productInventory], 1);
 
         if(business_ItemList[ProductID][productBusiness] == BUSINESS_TYPE_MARKET) {
@@ -1612,6 +1647,7 @@ YCMD:createbusiness(playerid, params[], help)
     re_BusinessData[id][bLocked] = false;
     re_BusinessData[id][bPrice] = bprice;
     re_BusinessData[id][bLevel] = blvl;
+    re_BusinessData[id][bCashRegister] = 0.00;
 
     GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
 
@@ -1628,10 +1664,11 @@ YCMD:createbusiness(playerid, params[], help)
 
     new q[660];
 
-    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bCashRegister`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
                                     `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bInt`, `bVW`)
-                                    VALUES ('%e', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
+                                    VALUES ('%e', '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
                                     re_BusinessData[id][bName],  re_BusinessData[id][bLocked], re_BusinessData[id][bType], re_BusinessData[id][bLevel],
+                                    re_BusinessData[id][bCashRegister],
                                     re_BusinessData[id][bEntrance][0], re_BusinessData[id][bEntrance][1], re_BusinessData[id][bEntrance][2],
                                     re_BusinessData[id][bExit][0], re_BusinessData[id][bExit][1], re_BusinessData[id][bExit][2],
                                     re_BusinessData[id][bInteract][0], re_BusinessData[id][bInteract][1], re_BusinessData[id][bInteract][2],
@@ -1669,12 +1706,14 @@ YCMD:saveinteract(playerid, params[], help)
     re_BusinessData[idx][bInt] = 0;
     re_BusinessData[idx][bVW] = 0;
 
+    re_BusinessData[idx][bCashRegister] = 0.00;
+
     new q[660];
 
-    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `re_business` (`bName`, `bLocked`, `bType`, `bLevel`, `bCashRegister`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, \
                                     `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bInt`, `bVW`)
-                                    VALUES ('%e', '1', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
-                                    re_tempFirmName[playerid], BUSINESS_TYPE_KIOSK, re_BusinessData[idx][bLevel],
+                                    VALUES ('%e', '1', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
+                                    re_tempFirmName[playerid], BUSINESS_TYPE_KIOSK, re_BusinessData[idx][bLevel], 0.00,
                                     re_tempFirmPos[playerid][0], re_tempFirmPos[playerid][1], re_tempFirmPos[playerid][2],
                                     re_BusinessData[idx][bExit][0], re_BusinessData[idx][bExit][1], re_BusinessData[idx][bExit][2],
                                     re_BusinessData[idx][bInteract][0], re_BusinessData[idx][bInteract][1], re_BusinessData[idx][bInteract][2],
@@ -1698,11 +1737,8 @@ YCMD:buybusiness(playerid, params[], help)
     if(re_BusinessData[BID][bOwner] > 0)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ova firma nije na prodaju!");    
 
-    if(GetPlayerMoney2(playerid, CURRENCY_DOLLAR) < re_BusinessData[BID][bPrice])
+    if(GetPlayerMoney(playerid, CURRENCY_DOLLAR) < re_BusinessData[BID][bPrice])
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca kako biste kupili ovu firmu!!");    
-
-    if(GetPlayerScore(playerid) < re_BusinessData[BID][bLevel])
-        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljan level kako biste kupili ovu firmu!");    
 
     re_BusinessData[BID][bOwner] = CharacterInfo[playerid][SQLID];
     re_BusinessData[BID][bLocked] = false;
@@ -1731,6 +1767,21 @@ YCMD:buybusiness(playerid, params[], help)
 YCMD:firma(playerid, params[], help) = business;
 YCMD:business(playerid, params[], help) {
 
+    if(PlayerProperty[playerid][BusinessID] == 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete biznis!");
+
+    if(re_InBusiness[playerid] == INVALID_BUSINESS_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u svom biznisu!");
+
+    if(re_BusinessData[re_InBusiness[playerid]][bID] != PlayerProperty[playerid][BusinessID])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u svom biznisu!");
+
+    Dialog_Show(playerid, "dialog_propBusiness", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_white"Business Panel", 
+                                                                    ""c_server"#1 \187; "c_white"Otkljucaj - Zakljucaj\n\
+                                                                    "c_server"#2 \187; "c_white"Podigni novac\n\
+                                                                    "c_server"#3 \187; "c_white"Prodaj drzavi\n\
+                                                                    "c_server"#4 \187; "c_white"Prodaj igracu\n\
+                                                                    "c_server"#5 \187; "c_white"Informacije", "Odaberi", "Odustani");
     return 1;
 }
 
@@ -1780,6 +1831,10 @@ hook OnPlayerModelSelection( playerid, response, listid, modelid) {
             CharacterInfo[playerid][Skin] = modelid;
             SetPlayerSkin(playerid, modelid);
             GivePlayerMoney( playerid, -150.45 );
+            
+            re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += 150.45;
+            Business_UpdateCashRegister( re_InBusiness[playerid] );
+
             UpdateSqlInt(SQL, "characters", "cSkin", modelid, "character_id", GetCharacterSQLID(playerid));
 
             if(QuestData[playerid][questDone][6] == 0){
@@ -1847,6 +1902,8 @@ hook OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid
             mysql_tquery(SQL, q);
 
             GivePlayerMoney(playerid, -500.00);
+            re_BusinessData[ re_InBusiness[playerid] ][bCashRegister] += 500.00;
+            Business_UpdateCashRegister( re_InBusiness[playerid] );
             Iter_Add(iAttachs[playerid], idx);
 
             SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili %s", Attach_ReturnModelName(modelid));
@@ -1894,6 +1951,58 @@ hook OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+Dialog:dialog_propBusiness(const playerid, response, listitem, string:inputtext[]) {
+    
+    if(response) {
+
+        switch(listitem) {
+
+            case 0: {
+
+                if(re_BusinessData[re_InBusiness[playerid]][bID] != PlayerProperty[playerid][BusinessID])
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u svojoj firmi!");
+
+                new idx = re_InBusiness[playerid];
+
+                if(re_BusinessData[idx][bLocked]) {
+
+                    re_BusinessData[idx][bLocked] = false;
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste firmu!");
+                    return (true);
+                }
+
+                if(!re_BusinessData[idx][bLocked]) {
+
+                    re_BusinessData[idx][bLocked] = true;
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zakljucali ste firmu!");
+                    return (true);
+                }
+            }
+
+            case 1: {
+
+                if(re_BusinessData[re_InBusiness[playerid]][bID] != PlayerProperty[playerid][BusinessID])
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u svojoj firmi!");
+
+                new idx = re_InBusiness[playerid];
+
+                if(re_BusinessData[idx][bCashRegister] <= 0.00)
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Kasa je prazna!");
+                
+                GivePlayerMoney(playerid, re_BusinessData[idx][bCashRegister]);
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uzeli ste %.2f iz kase!", re_BusinessData[idx][bCashRegister]);
+                re_BusinessData[idx][bCashRegister] = 0.00;
+
+                new q[128];
+                mysql_format(SQL, q, sizeof q, "UPDATE `re_business` SET `bCashRegister` = 0.00 WHERE `bID` = '%d'", PlayerProperty[playerid][BusinessID]);
+                mysql_tquery(SQL, q);
+            }
+        }
+    }
+
+    return (true);
 }
 
 Dialog:dialog_boutiqueOption(const playerid, response, listitem, string:inputtext[]) {

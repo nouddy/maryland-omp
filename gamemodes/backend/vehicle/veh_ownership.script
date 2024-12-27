@@ -157,6 +157,15 @@ public LoadVehicleData() {
 	return 1;
 }
 
+forward Vehicle_PreloadPosition(idx);
+public Vehicle_PreloadPosition(idx) {
+
+	DestroyVehicle(pvVehicle[idx]);
+	pvVehicle[idx] = CreateVehicle(eVehicle[idx][vModel], eVehicle[idx][vPos][0], eVehicle[idx][vPos][1], eVehicle[idx][vPos][2], eVehicle[idx][vPos][3], eVehicle[idx][vColor][0], eVehicle[idx][vColor][1], 1500);
+
+	return (true);
+}
+
 forward CreateVehicleData(id);
 public CreateVehicleData(id) {
 
@@ -200,7 +209,7 @@ stock IsPlayerInPersonalVehicle(playerid) {
 		}
 	}
 
-	return false
+	return false;
 }
 
 stock CharacterHasVehicle(playerid) {
@@ -309,7 +318,8 @@ YCMD:v(playerid, params[], help) {
 
 	Dialog_Show(playerid, "dialog_vehicleOptions", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_ltorange"Vehicle Panel", 
 						                                              ""c_server"#1 \187; "c_white"Otkljucaj - Zakljucaj\n\
-																	  "c_server"#2 \187; "c_white"Lociraj", "Odaberi", "Odustani");
+																	  "c_server"#2 \187; "c_white"Lociraj\n\
+																	  "c_server"#3 \187; "c_white"Parkiraj", "Odaberi", "Odustani");
 
 	return 1;
 }
@@ -371,6 +381,37 @@ Dialog:dialog_vehicleOptions(playerid, response, listitem, string:inputtext[]) {
 					}
 				}
 
+			}
+
+			case 2: {
+				
+				if(!IsPlayerInPersonalVehicle(playerid))
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u vasem vozilu!");
+
+				foreach(new i : iter_Vehicles) {
+
+					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
+						
+						static Float:tmpPos[4];
+						GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+						GetVehicleZAngle(pvVehicle[i], tmpPos[3]);
+
+						eVehicle[i][vPos][0] = tmpPos[0];
+						eVehicle[i][vPos][1] = tmpPos[1];
+						eVehicle[i][vPos][2] = tmpPos[2];
+						eVehicle[i][vPos][3] = tmpPos[3];
+
+						
+
+						SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste parkirali vozilo!");
+
+						new q[244];
+						mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vPosX` = '%f', `vPosY` = '%f', `vPosZ` = '%f', `vPosA` = '%f' WHERE `vID` = '%d'",
+						 tmpPos[0], tmpPos[1], tmpPos[2], tmpPos[3], eVehicle[i][vID]);
+						mysql_tquery(SQL, q, "Vehicle_PreloadPosition", "d", i);
+						break;
+					}
+				}
 			}
 		}
 	}

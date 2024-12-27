@@ -596,3 +596,147 @@
 [12:08:06] 5d470000 - 5d486000 log-plugin.DLL
 [12:08:06] 5d3e0000 - 5d46a000 pawnregex.DLL
 [12:08:06] 74c70000 - 74c7e000 MSASN1.dll
+[19:53:36] Server crashed due to an unknown error
+[19:53:37] Native backtrace:
+[19:53:37] #0 7598c8d3 in ?? () in C:\Windows\System32\ucrtbase.dll
+[19:53:37] #1 5f53a678 in ?? () in components\Pawn.dll
+[19:53:37] #2 5f53b24b in ?? () in components\Pawn.dll
+[19:53:37] #3 5d5735e9 in ?? () in plugins\mysql.DLL
+[19:53:37] #4 5d576688 in ?? () in plugins\mysql.DLL
+[19:53:37] #5 5d55c52e in ?? () in plugins\mysql.DLL
+[19:53:37] #6 5d55dc7f in ?? () in plugins\mysql.DLL
+[19:53:37] #7 5d55e3d3 in ?? () in plugins\mysql.DLL
+[19:53:37] #8 5f5365c1 in ?? () in components\Pawn.dll
+[19:53:37] #9 0040fe2e in ?? () in omp-server.exe
+[19:53:37] #10 004092a6 in ?? () in omp-server.exe
+[19:53:37] #11 0062ea90 in ?? () in omp-server.exe
+[19:53:37] #12 76f2fcc9 in ?? () in C:\Windows\System32\KERNEL32.DLL
+[19:53:37] #13 7770809e in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[19:53:37] #14 7770806e in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[19:53:37] Registers:
+[19:53:37] EAX: 007df6cc EBX: 22b7d880 ECX: 4c25bf88 EDX: 7efefeff
+[19:53:37] ESI: 4c25bf88 EDI: 007df6cc EBP: 00000008 ESP: 007df558
+[19:53:37] EIP: 7598c8d3 EFLAGS: 00010246
+[19:53:37] Stack:
+[19:53:37] ESP+00000000: fffec5a8 5f53a678 007df6cc 4c25bf88
+[19:53:37] ESP+00000020: 5f53b24b 220fafe0 ffffd8b5 007df6cc
+[19:53:37] ESP+00000040: d98a59d1 00000429 2e50d624 00000000
+[19:53:37] ESP+00000060: 00000429 5d556f6f 00000000 77728073
+[19:53:37] ESP+00000080: 00000000 77728063 00000001 00c40063
+[19:53:37] ESP+000000a0: 5d58a888 007df718 73000064 2e5b06b8
+[19:53:37] ESP+000000c0: 22263008 22270028 1daaee68 0000032d
+[19:53:37] ESP+000000e0: 20c90448 2220acb0 00000005 22809b24
+[19:53:37] ESP+00000100: 00000000 0000000f 22383400 75973c68
+[19:53:37] ESP+00000120: 72657500 22809b00 6d652073 2e50d500
+[19:53:37] ESP+00000140: 0000000f 2e50d500 00797470 00000000
+[19:53:37] ESP+00000160: 22263008 ffffd8b5 22263008 00000005
+[19:53:37] ESP+00000180: 5d5735d4 007df710 007df718 220fafe0
+[19:53:37] ESP+000001a0: ffffffff 007df744 5d5735e9 d98a5869
+[19:53:37] ESP+000001c0: 00000000 4dce4f00 03b7f72a 03b7f728
+[19:53:37] ESP+000001e0: 007df79c 5d585398 00000002 007df76c
+[19:53:37] ESP+00000200: 6d652073 00797470 0000000f 0000000f
+[19:53:37] ESP+00000220: 007df780 d98a5885 72657500 61772079
+[19:53:37] ESP+00000240: 00000429 007df7f4 5d583a30 00000001
+[19:53:37] ESP+00000260: 61772079 6d652073 00797470 00000000
+[19:53:37] ESP+00000280: 007df800 5d55e3d3 d98a572d 03b7f72b
+[19:53:37] ESP+000002a0: 5d583d98 00000000 007df868 5f5365c1
+[19:53:37] ESP+000002c0: 6383f3fc 007df830 05241060 000000ce
+[19:53:37] ESP+000002e0: 000005dc 00000000 007df868 007df818
+[19:53:37] ESP+00000300: ffffffff 02a05ef0 ac0ae74c 02a05f20
+[19:53:37] ESP+00000320: ac0ae74c 00006ef6 007d0031 00006ef6
+[19:53:37] ESP+00000340: 2e332e31 02686020 00000000 027f001f
+[19:53:37] ESP+00000360: 00d07f87 02686020 007df7ac 007dfa7c
+[19:53:37] ESP+00000380: 007df8e8 007df8e8 007dfa94 004092a6
+[19:53:37] ESP+000003a0: 00000026 0000002f 00cd2598 00000004
+[19:53:37] ESP+000003c0: 00cd25c0 00007470 007dfa94 00408f13
+[19:53:37] ESP+000003e0: 007dfa94 00408f13 0000001f 0000001f
+[19:53:37] Loaded modules:
+[19:53:37] 00400000 - 006e0000 omp-server.exe
+[19:53:37] 776a0000 - 77844000 ntdll.dll
+[19:53:37] 76f10000 - 77000000 KERNEL32.DLL
+[19:53:37] 77000000 - 7723f000 KERNELBASE.dll
+[19:53:37] 76220000 - 76283000 WS2_32.dll
+[19:53:37] 75880000 - 7593c000 RPCRT4.dll
+[19:53:37] 76410000 - 769e9000 SHELL32.dll
+[19:53:37] 762f0000 - 7636b000 msvcp_win.dll
+[19:53:37] 75940000 - 75a60000 ucrtbase.dll
+[19:53:37] 75a60000 - 75bfc000 USER32.dll
+[19:53:37] 76370000 - 76388000 win32u.dll
+[19:53:37] 76a40000 - 76a63000 GDI32.dll
+[19:53:37] 76dc0000 - 76ea5000 gdi32full.dll
+[19:53:37] 75710000 - 7580e000 CRYPT32.dll
+[19:53:37] 76390000 - 7640e000 ADVAPI32.dll
+[19:53:37] 75520000 - 755df000 msvcrt.dll
+[19:53:37] 76110000 - 76187000 sechost.dll
+[19:53:37] 76cf0000 - 76d09000 bcrypt.dll
+[19:53:37] 74cb0000 - 74cd8000 WINMM.dll
+[19:53:37] 74500000 - 74515000 VCRUNTIME140.dll
+[19:53:37] 714f0000 - 7155d000 MSVCP140.dll
+[19:53:37] 75ec0000 - 75ee5000 IMM32.DLL
+[19:53:37] 69d70000 - 69d92000 Actors.dll
+[19:53:37] 73500000 - 7351c000 Checkpoints.dll
+[19:53:37] 69d50000 - 69d6f000 Classes.dll
+[19:53:37] 63830000 - 63861000 Console.dll
+[19:53:37] 63550000 - 635bd000 CustomModels.dll
+[19:53:37] 63480000 - 63547000 Databases.dll
+[19:53:37] 69d30000 - 69d4d000 Dialogs.dll
+[19:53:37] 5f6c0000 - 5fb8d000 discord-connector.dll
+[19:53:37] 5fdd0000 - 5fe16000 log-core2.dll
+[19:53:37] 5fda0000 - 5fdc1000 GangZones.dll
+[19:53:37] 5fd70000 - 5fd95000 LegacyConfig.dll
+[19:53:37] 5fcc0000 - 5fd6b000 LegacyNetwork.dll
+[19:53:37] 5fc90000 - 5fcb1000 Menus.dll
+[19:53:37] 5fc50000 - 5fc82000 Objects.dll
+[19:53:37] 5f520000 - 5f6ba000 Pawn.dll
+[19:53:37] 769f0000 - 76a35000 SHLWAPI.dll
+[19:53:37] 5f480000 - 5f517000 pawnraknet.dll
+[19:53:37] 5f450000 - 5f471000 Pickups.dll
+[19:53:37] 5f420000 - 5f449000 Recordings.dll
+[19:53:37] 5f3f0000 - 5f41a000 sscanf.dll
+[19:53:37] 5f3c0000 - 5f3e5000 TextDraws.dll
+[19:53:37] 5f390000 - 5f3b4000 TextLabels.dll
+[19:53:37] 5f370000 - 5f389000 Timers.dll
+[19:53:37] 5d6c0000 - 5f36c000 Unicode.dll
+[19:53:37] 5d6a0000 - 5d6bd000 Variables.dll
+[19:53:37] 5d670000 - 5d69f000 Vehicles.dll
+[19:53:37] 74c50000 - 74c63000 CRYPTSP.dll
+[19:53:37] 74c20000 - 74c4f000 rsaenh.dll
+[19:53:37] 74c10000 - 74c1a000 CRYPTBASE.dll
+[19:53:37] 75ce0000 - 75d3f000 bcryptPrimitives.dll
+[19:53:37] 744b0000 - 744bf000 kernel.appcore.dll
+[19:53:37] 73d90000 - 73de2000 mswsock.dll
+[19:53:37] 74180000 - 74210000 DNSAPI.dll
+[19:53:37] 75210000 - 75242000 IPHLPAPI.DLL
+[19:53:37] 77240000 - 77247000 NSI.dll
+[19:53:37] 73740000 - 73748000 rasadhlp.dll
+[19:53:37] 73750000 - 737a8000 fwpuclnt.dll
+[19:53:37] 5d610000 - 5d66c000 crashdetect.DLL
+[19:53:37] 5d5a0000 - 5d606000 streamer.DLL
+[19:53:37] 5d550000 - 5d59e000 mysql.DLL
+[19:53:37] 5d530000 - 5d54a000 log-core.dll
+[19:53:37] 5d460000 - 5d52d000 libmariadb.dll
+[19:53:37] 731f0000 - 731fa000 Secur32.dll
+[19:53:37] 74fd0000 - 74ff1000 SSPICLI.DLL
+[19:53:37] 737e0000 - 737f1000 napinsp.dll
+[19:53:37] 737c0000 - 737d6000 pnrpnsp.dll
+[19:53:37] 73a50000 - 73a60000 wshbth.dll
+[19:53:37] 738c0000 - 738d6000 NLAapi.dll
+[19:53:37] 737b0000 - 737be000 winrnr.dll
+[19:53:37] 5d390000 - 5d457000 ColAndreas.DLL
+[19:53:37] 5d370000 - 5d386000 log-plugin.DLL
+[19:53:37] 5d150000 - 5d1da000 pawnregex.DLL
+[19:53:37] 74c70000 - 74c7e000 MSASN1.dll
+[19:57:29] Run time error 4: "Array index out of bounds"
+[19:57:29]  Attempted to read/write array element at negative index -1
+[19:57:29] AMX backtrace:
+[19:57:29] #0 001ba114 in ?? (0, 51232852, 0) in <unknown>
+[19:57:29] #1 000c5dc8 in ?? (0, 86606408, 0) in <unknown>
+[19:57:29] #2 000cb7f0 in ?? (0, 86606408) in <unknown>
+[19:57:29] #3 0007db70 in public OnPlayerCommandText (0, 86606408) in <unknown>
+[19:57:32] Run time error 4: "Array index out of bounds"
+[19:57:32]  Attempted to read/write array element at negative index -1
+[19:57:32] AMX backtrace:
+[19:57:32] #0 001ba114 in ?? (0, 51232852, 0) in <unknown>
+[19:57:32] #1 000c5dc8 in ?? (0, 86606408, 0) in <unknown>
+[19:57:32] #2 000cb7f0 in ?? (0, 86606408) in <unknown>
+[19:57:32] #3 0007db70 in public OnPlayerCommandText (0, 86606408) in <unknown>

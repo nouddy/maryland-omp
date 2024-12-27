@@ -147,7 +147,7 @@ stock GetNearestHouse(playerid) {
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]))
 			return i;
 	}
-	return false;
+	return -1;
 }
 
 stock GetFreeHouseID() {
@@ -308,7 +308,7 @@ YCMD:house(playerid, params[], help) {
 		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se blizu kuce!");
 
 	if(player_House[playerid] != house_ID[ID])
-		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne posjedujete ovu kucu!");
+		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se u blizini vase kuce!");
 
 	Dialog_Show(playerid, "dialog_propHouse", DIALOG_STYLE_LIST, "Maryland \187; "c_white"House", 
 																  ""c_server"#1 \187; "c_ltorange"Zakljucaj - Otkljucaj\n\
@@ -342,7 +342,7 @@ Dialog:dialog_propHouse(const playerid, response, listitem, string: inputtext[])
 				else {
 
 					house_Locked[ houseID ] = true;
-					SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste kucu.");
+					SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zakljucali ste kucu.");
 				}
 			}
 
@@ -368,17 +368,20 @@ Dialog:dialog_propHouse(const playerid, response, listitem, string: inputtext[])
 			}
 
 			case 3: {
-
-				if(player_House[playerid] == -1)
-					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+				
+				new fid = Faction_ReturnIndexId(playerid);
 
 				if(GetPlayerFactionRank(playerid) != 4)
 					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste lider fakcije!");
 
+				if(!Faction_CheckConnectedHouse(fid, playerid))
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ta fakcija vec ima kucu u svom vlasnistvu");
+
+				if(player_House[playerid] == -1)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+
 				if(Faction_PlayerGroupType(playerid) < 2)
 					return SendClientMessage(playerid, x_faction, "Faction \187; "c_white"Vas tip fakcije nije gang ili mafija!");
-			
-				new fid = Faction_ReturnIndexId(playerid);
 
 				Faction_ConnectHouse( fid, playerid );
 

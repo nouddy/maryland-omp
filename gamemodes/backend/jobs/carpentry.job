@@ -35,6 +35,7 @@ new carpentryProgress[MAX_PLAYERS],
     carpentryObject[MAX_PLAYERS],
     bool:carpentryTools[MAX_PLAYERS],
     bool:carryObj[MAX_PLAYERS],
+    bool:toolsFinish[MAX_PLAYERS],
     mvProgress[MAX_PLAYERS];
 
 forward Carpentry_ContinueTimer(playerid, option); 
@@ -144,6 +145,7 @@ hook OnPlayerConnect(playerid) {
     carpentryProgress[playerid] = CARPENTRY_PROGRESS_UNKNOWN;
     carpentryTools[playerid] = false;
     mvProgress[playerid] = 0;
+    toolsFinish[playerid] = false;
     
     if(IsValidPlayerObject(playerid, carpentryObject[playerid]))
         DestroyPlayerObject(playerid, carpentryObject[playerid]);
@@ -221,7 +223,11 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(carryObj[playerid])
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec nosite drvo!");
 
+            if(toolsFinish[playerid])
+                return true;
+
             carryObj[playerid] = true;
+            toolsFinish[playerid] = false;
             AttachPlayerObjectToPlayer(playerid, carpentryObject[playerid], playerid, 0.5, 0.5, 0.00, 0.00, 0.00, 0.00);
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
             return (true);
@@ -263,7 +269,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste stigli do procesa premazivanja!");
 
             DestroyPlayerObject(playerid, carpentryObject[playerid]);
-
+            toolsFinish[playerid] = true;
             carpentryObject[playerid] = CreatePlayerObject(playerid, 2096, 1395.9418,-28.8385,1001.6611 - 1.0, 0.000000, 0.000000, 0.000000, 30.0); 
             SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 0, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
             SetPlayerObjectMaterial(playerid, carpentryObject[playerid], 1, 7070, "ab_sfammumain", "plywood_gym", 0x00000000);
@@ -301,6 +307,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             carpentryProgress[playerid] = CARPENTRY_PROGRESS_UNKNOWN;
             carpentryTools[playerid] = false;
             mvProgress[playerid] = 0;
+            toolsFinish[playerid] = false;
             DestroyPlayerObject(playerid, carpentryObject[playerid]);
             return (true);
         }
