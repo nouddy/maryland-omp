@@ -988,7 +988,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	pConnectState[playerid] = PLAYER_CONNECT_STATE_SPAWNED;
 	ToggleGlobalTextDraw(playerid, true);
 
-	CharacterInfo[playerid][XP] = 0;
+	CharacterInfo[playerid][XP] = 1;
 	CharacterInfo[playerid][NeedXP] = 1250;
 	CharacterInfo[playerid][Score] = 0;
 	
@@ -1102,7 +1102,7 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
 
-	CharacterInfo[playerid][XP] = 0;
+	CharacterInfo[playerid][XP] = 1;
 	CharacterInfo[playerid][NeedXP] = 1250;
 
 	PlayerInfo[playerid][SQLID] = 0;

@@ -62,7 +62,6 @@
 #include <macroes>
 #include <maryland-tp>
 #include <mSelection>
-#include <discord-connector>
 
 main()
 {
@@ -402,7 +401,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/metros/metros.script"								//* Metro System
 #include "backend/misc/dynweather.pwn"								//* Dynamic Weather
-#include "backend/discord/discord.pwn"								//* Discord Connector
 //-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"								//* Chat Stock
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
@@ -429,33 +427,3 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 
 */
-
-CMD:cls(playerid, params[])
-{
-	for(new i = 0; i < 20; i++)
-		SendClientMessage(playerid, -1, " ");
-		
-	return 1;
-}
-
-CMD:createbankaccount(playerid, params[])
-{
-	CreateBankAccount(GetCharacterSQLID(playerid), OWNER_TYPE_PLAYER);
-
-	return 1;
-}
-
-CMD:deletemybankaccounts(playerid, params[])
-{
-	DeleteBankAccountByOwner(GetCharacterSQLID(playerid), OWNER_TYPE_PLAYER);
-	return 1;
-}
-
-YCMD:refresh(playerid, params[], help) {
-
-	new Float:pPos[3];
-	GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
-	Streamer_UpdateEx(playerid, pPos[0], pPos[1], pPos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
-
-	return 1;
-}

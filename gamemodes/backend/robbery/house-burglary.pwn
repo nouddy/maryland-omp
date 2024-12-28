@@ -65,6 +65,7 @@ hook OnPlayerDeath(playerid, killerid, WEAPON:reason) {
 
         SendClientMessage(playerid, x_server, "maryland \187; "c_white"Provala kuce je propala jer ste umrli!");
         burglary_CoolDown[playerid] = 0;
+        burglary_InProgress[playerid] = false;
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -103,7 +104,9 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
     if(PRESSED( KEY_SECONDARY_ATTACK)) {
 
         if(burglary_InProgress[playerid]) {
-
+            printf(" House ID : %d", burglary_HouseID[playerid]);
+            SendClientMessage(playerid, x_server, "Error > House ID : %d", burglary_HouseID[playerid]);
+            if(burglary_HouseID[playerid] == -1) return 1;
             if(IsPlayerInRangeOfPoint(playerid, 3.50, BurglaryInfo[burglary_HouseID[playerid]][house_Pos][0], BurglaryInfo[burglary_HouseID[playerid]][house_Pos][1], BurglaryInfo[burglary_HouseID[playerid]][house_Pos][2])) {
 
                 SetPlayerPos(playerid, 224.28,1289.19,1082.14);

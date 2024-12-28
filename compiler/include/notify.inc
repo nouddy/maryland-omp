@@ -62,6 +62,7 @@ stock getSizeMessage(const string:message[], maxWidth=500) {
 //main function for show notification
 stock InternalNotification_Show(const playerid, const string:title[], const string:message[], const string:icon[] = "hud:radar_triads", boxcolor)
 {
+	if(notifyIndex[playerid] >= MAX_NOTIFY) return 0;
 	for(new x=-1;++x<notifyIndex[playerid];) {
 		for(new i=-1;++i<6;) PlayerTextDrawDestroy(playerid, notifyPTD[playerid][(x*6) + i]);
 		notifyInfo[playerid][notifyIndex[playerid]-x] = notifyInfo[playerid][(notifyIndex[playerid]-x)-1];

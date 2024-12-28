@@ -43,6 +43,9 @@ stock Exp_UpdateInterface(playerid, amount) {
         exp_UI[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
     }
 
+    if(CharacterInfo[playerid][XP] == 0) CharacterInfo[playerid][XP] = 1;
+    if(CharacterInfo[playerid][NeedXP] == 0) CharacterInfo[playerid][NeedXP] = 1;
+
     new tmpstr[200];
     format(tmpstr, sizeof tmpstr, "%d / %d", CharacterInfo[playerid][XP], CharacterInfo[playerid][NeedXP]);
 
@@ -64,7 +67,7 @@ stock Exp_UpdateInterface(playerid, amount) {
     PlayerTextDrawFont(playerid, exp_UI[playerid][1], TEXT_DRAW_FONT_SPRITE_DRAW);
     PlayerTextDrawSetProportional(playerid, exp_UI[playerid][1], false);
 
-    new Float:progressCalc = ( CharacterInfo[playerid][XP] ) / ( CharacterInfo[playerid][NeedXP] / 100 ) * 1.1;
+    new Float:progressCalc = ((CharacterInfo[playerid][XP] ) / floatround( CharacterInfo[playerid][NeedXP] / 100, floatround_ceil )) * 1.1;
 
     exp_UI[playerid][2] = CreatePlayerTextDraw(playerid, 271.166809, 12.933365, "ld_spac:white");
     PlayerTextDrawTextSize(playerid, exp_UI[playerid][2], 113.000000, 11.00);
@@ -191,9 +194,9 @@ stock GiveCharXP(playerid, amount)
 stock RemoveCharXP(playerid, amount)
 {
     CharacterInfo[playerid][XP] -= amount;
-    if (CharacterInfo[playerid][XP] < 0)
+    if (CharacterInfo[playerid][XP] < 1)
     {
-        CharacterInfo[playerid][XP] = 0;
+        CharacterInfo[playerid][XP] = 1;
     }
     Exp_UpdateInterface(playerid, amount);
     UpdateSqlInt(SQL, "characters", "XP", CharacterInfo[playerid][XP], "character_id", GetCharacterSQLID(playerid));
@@ -213,7 +216,7 @@ stock SetCharXP(playerid, amount)
 
 stock LevelUpChar(playerid)
 {
-    CharacterInfo[playerid][XP] -= CharacterInfo[playerid][NeedXP];
+    CharacterInfo[playerid][XP] = 1;
     CharacterInfo[playerid][Score]++;
     CharacterInfo[playerid][NeedXP] = floatround(CharacterInfo[playerid][NeedXP] * 1.5); // Svaki nivo zahteva 50% vise XP-a
 

@@ -194,11 +194,3 @@ stock notify_ResetInterface(playerid) {
 
     return (true);
 }
-
-YCMD:notifyme(playerid, params[], help) 
-{
-    Notify_SendNotification(playerid, "Kuca poso poso kuca~n~\
-                                       Sta znam nista ne znam", "Header1", 1247);
-
-    return 1;
-}

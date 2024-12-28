@@ -13,9 +13,7 @@
     },
     "logo": "https://i.ibb.co/dJnpWFt/transparent.png",
     "discord": {
-        "invite": "https://discord.gg/CzaAhXjPak",
-        "bot_token": "MTMyMTAzMjU4MjY0ODk1ODk4Ng.GF5eN7.eIFRqpJ9Nf1yIf3VoPjyNvrqzAIdNhFTrld0HA",
-        "intents": 131071
+        "invite": "https://discord.gg/CzaAhXjPak"
     },
     "chat_input_filter": true,
     "enable_query": true,

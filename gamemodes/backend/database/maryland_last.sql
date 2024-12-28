@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2024 at 10:40 AM
+-- Generation Time: Dec 27, 2024 at 06:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -89,7 +89,8 @@ CREATE TABLE `bankaccounts` (
 INSERT INTO `bankaccounts` (`AccountID`, `OwnerID`, `OwnerType`, `Dollar`, `Euro`, `Pound`) VALUES
 (1, 11, 'Player', 0, 0, 0),
 (2, 11, 'Player', 0, 0, 0),
-(3, 11, 'Player', 0, 0, 0);
+(3, 11, 'Player', 0, 0, 0),
+(4, 4, 'Player', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -173,7 +174,7 @@ CREATE TABLE `characters` (
   `cVW` int(11) NOT NULL DEFAULT 6,
   `cInt` int(11) NOT NULL DEFAULT 6,
   `cWanted` int(11) NOT NULL DEFAULT 0,
-  `XP` int(11) NOT NULL DEFAULT 0,
+  `XP` int(11) NOT NULL DEFAULT 1,
   `Score` int(11) NOT NULL DEFAULT 0,
   `NeedXP` int(11) NOT NULL DEFAULT 1250
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -183,27 +184,11 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`) VALUES
-(3, 13, 'Mehmed_Melijekovic', 12, 1, 0, 0, 0, 99002000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 18052800, 0, 0, 0, '2024-12-24 21:16:32', 1103.6, -1198.48, 17.9282, 0, 0, 0, 25, 1, 0),
-(5, 15, 'Ogi_Ivanov', 26, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(6, 16, 'Capital_Camora', 0, 0, 0, 0, 0, 99000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(7, 11, 'Frosty_Saints', 60, 0, 0, 0, 0, 1120400000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(8, 18, 'Tyrone_Rowe', 22, 0, 0, 0, 0, 90000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(9, 19, 'Klaus_Brt', 22, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(10, 20, 'Dickey_Corleone', 22, 0, 0, 0, 0, 123, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 18054100, 0, 0, 0, '2024-12-27 18:47:58', 1417.25, 1586.96, 15.1547, 6, 6, 0, 1, 3, 2813),
 (11, 13, 'Ferid_Olsun', 20, 0, 0, 0, 0, 8549960, 0, 0, 0, '2024-12-26 20:03:49', 165.478, -91.5456, 1001.8, 3, 0, 0, 1585, 1, 1875),
-(13, 21, 'Ferid_Olsunchek', 12, 1, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(14, 22, 'macka_macic', 22, 0, 0, 0, 0, 100000000, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(15, 23, 'Vostic_Doktor', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(18, 24, 'Daco_Delahunt', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(19, 26, 'Silva_Rose', 5, 0, 0, 0, 0, 500, 0, 0, 0, '2024-12-26 19:49:24', 1397.5, 1593.93, 10.8125, 6, 0, 0, 270, 2, 0),
-(20, 27, 'Sila_Rose', 156, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:55:52', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(21, 28, 'Casey_Skandy', 178, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 00:25:31', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(22, 29, 'Leon_Skandy', 177, 0, 0, 0, 0, -1000, 0, 0, 0, '2024-12-08 00:24:43', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
-(23, 30, 'Midori_Smith', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-08 13:31:15', 1401.78, 1591.35, 12.0481, 0, 0, 0, 0, 0, 0),
 (24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250),
-(25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 0, 0, 1250),
-(26, 34, 'Ferid_Kulusevski', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-26 15:33:12', 831.325, -1341.15, 9.87468, 0, 0, 0, 0, 0, 1250);
+(25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 1, 0, 1250),
+(26, 34, 'Ferid_Kulusevski', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-26 15:33:12', 831.325, -1341.15, 9.87468, 0, 0, 0, 1, 0, 1250);
 
 -- --------------------------------------------------------
 
@@ -236,7 +221,8 @@ INSERT INTO `character_attachs` (`id`, `character_id`, `modelid`, `boneid`, `x`,
 (1, 11, 339, 1, 0.382999, -0.117, 0.103, 0, -125.6, -2.1, 1, 1, 1),
 (2, 11, 339, 1, 0.402, -0.121, -0.108, 0, -67.6001, 171.3, 1, 1, 1),
 (3, 11, 19140, 2, 0.099, 0.034, -0.003, 1.3, 91.7997, 87.6998, 1, 1.068, 1),
-(4, 11, 19079, 15, 0.101, 0.054, 0.056, 139.4, 89.4002, 36.4, 1, 1, 1);
+(4, 11, 19079, 15, 0.101, 0.054, 0.056, 139.4, 89.4002, 36.4, 1, 1, 1),
+(0, 4, 19025, 2, 0.067, 0.021, 0.002, 87.6, 70.1, 0, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -260,7 +246,7 @@ CREATE TABLE `character_quests` (
 --
 
 INSERT INTO `character_quests` (`characterid`, `Quest_1`, `Quest_2`, `Quest_3`, `Quest_4`, `Quest_5`, `Quest_6`, `Quest_7`) VALUES
-(4, 0, 0, 0, 0, 0, 0, 0),
+(4, 1, 1, 0, 1, 1, 0, 1),
 (11, 1, 1, 1, 1, 1, 0, 1),
 (19, 1, 0, 0, 0, 0, 0, 1),
 (24, 0, 0, 0, 0, 0, 0, 1),
@@ -522,7 +508,9 @@ INSERT INTO `inventory` (`PlayerID`, `ItemID`, `ItemQuantity`, `ItemType`) VALUE
 (11, 1, 5, 3),
 (11, 51, 5, 2),
 (11, 56, 5, 2),
-(11, 53, 4, 2);
+(11, 53, 4, 2),
+(4, 53, 1, 2),
+(4, 54, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -2535,7 +2523,107 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /firma', '2024-12-26 20:03:39'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /firma', '2024-12-26 20:03:40'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /firma', '2024-12-26 20:03:42'),
-('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-26 20:03:48');
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2024-12-26 20:03:48'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:42:54'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:42:58'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:42:59'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:42:59'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:00'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:00'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:02'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:12'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:13'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:14'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:15'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:15'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:16'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:17'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:18'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:19'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:20'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:21'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:32'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:33'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:43:34'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:43:35'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:36'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:37'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:38'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:39'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:39'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:43:40'),
+('COMMAND:  Vostic je iskoristio komandu /testnotify', '2024-12-27 17:48:16'),
+('COMMAND:  Vostic je iskoristio komandu /testnotify', '2024-12-27 17:48:17'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:23'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:24'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:25'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:25'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:26'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:26'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:27'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:48:27'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:48:33'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:48:34'),
+('COMMAND:  Vostic je iskoristio komandu /notifytestt', '2024-12-27 17:48:34'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:36'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:37'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:37'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:38'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:38'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:39'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:40'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:42'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:43'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:43'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:44'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:45'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:45'),
+('COMMAND:  Vostic je iskoristio komandu /notifytest', '2024-12-27 17:48:46'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2024-12-27 18:13:14'),
+('COMMAND:  Vostic je iskoristio komandu /quests', '2024-12-27 18:36:52'),
+('COMMAND:  Vostic je iskoristio komandu /startservice', '2024-12-27 18:37:35'),
+('COMMAND:  Vostic je iskoristio komandu /bumpers', '2024-12-27 18:37:41'),
+('COMMAND:  Vostic je iskoristio komandu /lsclist', '2024-12-27 18:38:01'),
+('COMMAND:  Vostic je iskoristio komandu /spoilers', '2024-12-27 18:38:07'),
+('COMMAND:  Vostic je iskoristio komandu /lsclist', '2024-12-27 18:38:23'),
+('COMMAND:  Vostic je iskoristio komandu /wheels', '2024-12-27 18:38:29'),
+('COMMAND:  Vostic je iskoristio komandu /lsclist', '2024-12-27 18:38:47'),
+('COMMAND:  Vostic je iskoristio komandu /nitrous', '2024-12-27 18:38:53'),
+('COMMAND:  Vostic je iskoristio komandu /quests', '2024-12-27 18:39:20'),
+('COMMAND:  Vostic je iskoristio komandu /portr', '2024-12-27 18:39:30'),
+('COMMAND:  Vostic je iskoristio komandu /port', '2024-12-27 18:39:32'),
+('COMMAND:  Vostic je iskoristio komandu /quitjob', '2024-12-27 18:39:50'),
+('COMMAND:  Vostic je iskoristio komandu /otkaz', '2024-12-27 18:39:52'),
+('COMMAND:  Vostic je iskoristio komandu /bank', '2024-12-27 18:39:58'),
+('COMMAND:  Vostic je iskoristio komandu /bank', '2024-12-27 18:40:16'),
+('COMMAND:  Vostic je iskoristio komandu /quests', '2024-12-27 18:40:19'),
+('COMMAND:  Vostic je iskoristio komandu /por', '2024-12-27 18:40:26'),
+('COMMAND:  Vostic je iskoristio komandu /port', '2024-12-27 18:40:27'),
+('COMMAND:  Vostic je iskoristio komandu /setint 0 0', '2024-12-27 18:40:36'),
+('COMMAND:  Vostic je iskoristio komandu /setvw 0 0', '2024-12-27 18:40:39'),
+('COMMAND:  Vostic je iskoristio komandu /quests', '2024-12-27 18:42:19'),
+('COMMAND:  Vostic je iskoristio komandu /port', '2024-12-27 18:42:27'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2024-12-27 18:42:35'),
+('COMMAND:  Vostic je iskoristio komandu /quests', '2024-12-27 18:43:01'),
+('COMMAND:  Vostic je iskoristio komandu /port', '2024-12-27 18:43:11'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:11'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:13'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:14'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:15'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:41'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:42'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:42'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:43'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:43'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:44'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:44'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:45'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:45'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:46'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:47'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:48'),
+('COMMAND:  Vostic je iskoristio komandu /givexpgej', '2024-12-27 18:47:49'),
+('COMMAND:  Vostic je iskoristio komandu /q/q', '2024-12-27 18:47:57');
 
 -- --------------------------------------------------------
 
@@ -2919,7 +3007,13 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Silva se konektuje na server | IP : 26.201.160.164', '2024-12-26 19:52:54'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-26 19:55:42'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-26 19:59:49'),
-('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-26 20:02:55');
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2024-12-26 20:02:55'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 17:42:37'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 17:47:59'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 18:12:39'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 18:27:03'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 18:35:57'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2024-12-27 18:46:55');
 
 -- --------------------------------------------------------
 
@@ -3101,24 +3195,8 @@ CREATE TABLE `player_documents` (
 --
 
 INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, `DriveLicense`, `MotoLicense`, `BoatLicense`, `GunLicense`) VALUES
-(3, 0, 0, 0, 0, 0, 0),
-(4, 0, 0, 0, 0, 0, 0),
-(5, 0, 0, 0, 0, 0, 0),
-(6, 0, 0, 0, 0, 0, 0),
-(7, 0, 0, 0, 0, 0, 0),
-(8, 0, 0, 0, 0, 0, 0),
-(9, 0, 0, 0, 0, 0, 0),
-(10, 0, 0, 0, 0, 0, 0),
+(4, 0, 0, 1, 0, 0, 0),
 (11, 0, 0, 1, 0, 0, 0),
-(13, 0, 0, 0, 0, 0, 0),
-(14, 0, 0, 0, 0, 0, 0),
-(15, 0, 0, 0, 0, 0, 0),
-(18, 0, 0, 0, 0, 0, 0),
-(19, 0, 0, 0, 0, 0, 0),
-(20, 0, 0, 0, 0, 0, 0),
-(21, 0, 0, 0, 0, 0, 0),
-(22, 0, 0, 0, 0, 0, 0),
-(23, 0, 0, 0, 0, 0, 0),
 (24, 0, 0, 0, 0, 0, 0),
 (25, 0, 0, 0, 0, 0, 0),
 (26, 0, 0, 0, 0, 0, 0);
@@ -3145,11 +3223,6 @@ CREATE TABLE `player_electronic` (
 INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GPS`, `phoneModel`, `phoneNumber`) VALUES
 (4, 0, 0, 0, 0, '60 | 826 | 245'),
 (11, 0, 1, 1, 3, '61 | 179 | 872'),
-(19, 0, 0, 1, -1, '0 | 0 | 0'),
-(20, 0, 0, 0, -1, '0 | 0 | 0'),
-(21, 0, 0, 0, -1, '0 | 0 | 0'),
-(22, 0, 0, 0, -1, '0 | 0 | 0'),
-(23, 0, 0, 0, -1, '0 | 0 | 0'),
 (24, 0, 0, 0, -1, '0 | 0 | 0'),
 (25, 0, 0, 0, -1, '0 | 0 | 0'),
 (26, 0, 0, 0, -1, '0 | 0 | 0');
@@ -3248,16 +3321,8 @@ CREATE TABLE `player_property` (
 --
 
 INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`, `HotelRoom`) VALUES
-(3, 0, -1, 0, 0),
 (4, 1, 1, 0, 0),
 (11, 2, 4, 3, 150.99),
-(15, 0, -1, 0, 0),
-(18, 0, -1, 0, 0),
-(19, 0, -1, 0, 0),
-(20, 0, -1, 0, 0),
-(21, 0, -1, 0, 0),
-(22, 0, -1, 0, 0),
-(23, 0, -1, 0, 0),
 (24, 0, -1, 0, 0),
 (25, 0, -1, 0, 0),
 (26, 0, -1, 0, 0);
@@ -3403,8 +3468,8 @@ CREATE TABLE `re_business` (
 
 INSERT INTO `re_business` (`bID`, `bOwner`, `bName`, `bLocked`, `bType`, `bPrice`, `bLevel`, `bCashRegister`, `bEnterX`, `bEnterY`, `bEnterZ`, `bExitX`, `bExitY`, `bExitZ`, `bInteractX`, `bInteractY`, `bInteractZ`, `bActorSkin`, `bActorX`, `bActorY`, `bActorZ`, `bActorA`, `bProducts`, `bInt`, `bVW`) VALUES
 (1, 0, 'Ammunation', 0, 11, 250000, 10, 0, 1367.08, -1280.09, 13.6461, 297.14, -109.87, 1001.51, 288.258, -109.782, 1001.52, 179, 288, -112, 1002, 1, 100, 6, 1),
-(2, 0, '7Eleven', 0, 1, 250000, 1, 0, 973.081, -1288.71, 13.454, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 2),
-(3, 11, 'Binco', 0, 13, 250000, 1, 0, 961.075, -1288.42, 13.454, 161.097, -96.6359, 1001.8, 179.544, -83.1313, 1001.79, 1, 181, -83, 1002, 91, 100, 0, 3),
+(2, 0, '7Eleven', 0, 1, 250000, 1, 3.4, 973.081, -1288.71, 13.454, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 2),
+(3, 11, 'Binco', 0, 13, 250000, 1, 650.45, 961.075, -1288.42, 13.454, 161.097, -96.6359, 1001.8, 179.544, -83.1313, 1001.79, 1, 181, -83, 1002, 91, 100, 0, 3),
 (4, 0, '7Elven', 0, 1, 250000, 1, 0, 1832.97, -1842.59, 13.5781, 1414.38, 430.507, 1081.5, 1421.31, 432.656, 1081.5, 20, 1423, 433, 1082, 92, 100, 18, 4);
 
 -- --------------------------------------------------------
@@ -3822,7 +3887,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `bankaccounts`
 --
 ALTER TABLE `bankaccounts`
-  MODIFY `AccountID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `AccountID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `bans`
