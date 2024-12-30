@@ -113,11 +113,23 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
     for(new i = 0; i < sizeof FVehicle; i++) {
 
         if(vehicleid == FVehicle[i]) {
+            
+            if(FactionVehicle[i][fvFactionType] == FACTION_TYPE_ILLEGAL) {
+                
+                if(FactionMember[playerid][factionID] != FactionVehicle[i][fvFaction]) {
 
-            if(FactionMember[playerid][factionID] != FactionVehicle[i][fvFaction]) {
+                    ClearAnimations(playerid);
+                    return Y_HOOKS_BREAK_RETURN_1;
+                }
+            }
 
-                ClearAnimations(playerid);
-                return Y_HOOKS_BREAK_RETURN_1;
+            if(FactionVehicle[i][fvFactionType] == FACTION_TYPE_STATE) {
+
+                if(PoliceMember[playerid][policeID] != FactionVehicle[i][fvFaction]) {
+
+                    ClearAnimations(playerid);
+                    return Y_HOOKS_BREAK_RETURN_1;
+                }
             }
         }
     }
@@ -130,18 +142,32 @@ YCMD:createfv(playerid, params[], help) {
     if(!IsPlayerAdmin(playerid))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Samo RCON Admini!");
 
-    new fID, model, color;
+    new fID, model, color, v_FACTION_TYPE:ftype;
     
-    if(sscanf(params, "ddd", fID, model, color))
-        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/createfv <Faction> <Model> <Color>");
+    if(sscanf(params, "dddd", fID, model, color, ftype))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/createfv <Faction> <Model> <Color> <Faction Type>");
 
     new bool:factionFound = false;
 
-    foreach(new i : iter_Factions) {
+    if(ftype == FACTION_TYPE_ILLEGAL) {
 
-        if(FactionInfo[i][factionID] == fID)
-        {
-            factionFound = true; break;
+        foreach(new i : iter_Factions) {
+
+            if(FactionInfo[i][factionID] == fID)
+            {
+                factionFound = true; break;
+            }
+        }
+    }
+
+    else {
+
+        foreach(new j : iter_Police) {
+
+            if(fPoliceInfo[j][fPoliceID] == fID)
+            {
+                factionFound = true; break;
+            }
         }
     }
 
@@ -167,11 +193,13 @@ YCMD:createfv(playerid, params[], help) {
     
     FactionVehicle[xID][fvColor][0] = color;
     FactionVehicle[xID][fvColor][1] = color;
+
+    FactionVehicle[xID][fvFactionType] = ftype;
     
     new q[428];
     mysql_format(SQL, q, sizeof q, "INSERT INTO `faction_vehicles` (`factionID`, `factionType`, `fvModel`, `X`, `Y`, `Z`, `A`, `fvColor1`, `fvColor2`) \
                                    VALUES ('%d', '%d', '%d', '%f', '%f', '%f', '%f', '%d', '%d')", 
-                                   fID, 1, model, pPos[0], pPos[1], pPos[2], pPos[3], color, color);
+                                   fID, ftype, model, pPos[0], pPos[1], pPos[2], pPos[3], color, color);
     mysql_tquery(SQL, q, "Faction_CreateVehicle", "d", xID);
 
     return (true);

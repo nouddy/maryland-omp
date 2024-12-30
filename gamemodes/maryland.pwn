@@ -110,11 +110,11 @@ public OnGameModeInit()
 }
 
 /*
-      ___
-     / __|___ _ __  _ __  ___ _ _
-    | (__/ _ \ '  \| '  \/ _ \ ' \
-     \___\___/_|_|_|_|_|_\___/_||_|
-
+*       ___
+*      / __|___ _ __  _ __  ___ _ _
+*     | (__/ _ \ '  \| '  \/ _ \ ' \
+*     \___\___/_|_|_|_|_|_\___/_||_|
+*
 */
 
 public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_ERRORS:success) {
@@ -401,6 +401,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/metros/metros.script"								//* Metro System
 #include "backend/misc/dynweather.pwn"								//* Dynamic Weather
+#include "backend/events/gun-game.pwn"								//* Dynamic Weather
 //-------------------------------------------------------------------------------------------------------- Stocks
 #include "backend/stocks/chat.stock"								//* Chat Stock
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
