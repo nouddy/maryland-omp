@@ -154,6 +154,7 @@ public Member_LoadData(id) {
     cache_get_value_name_int(0, "faction_id", FactionMember[id][factionID]);
     cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
     cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
+    
     return 1;
 }
 
@@ -798,6 +799,14 @@ stock IsPlayerFactionLeader(playerid) {
 
 stock GetPlayerFactionRank(playerid) 
     return FactionMember[playerid][factionRank];
+
+stock IsPlayerFactionMember(playerid) {
+
+    if(FactionMember[playerid][factionID] != 0)
+        return true;
+
+    return false;
+}
 
 // Stock for counting members of some org by SIKA 101 PLUS
 

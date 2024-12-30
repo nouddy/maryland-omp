@@ -122,6 +122,9 @@ stock PrepareGunGame(playerid) {
     SetPlayerPos(playerid, sz_RandomGunGamePositions[idx][ggSpawn][0], sz_RandomGunGamePositions[idx][ggSpawn][1], sz_RandomGunGamePositions[idx][ggSpawn][2]);
     SendClientMessage(playerid, x_faction, "GUN-GAME: Uspjesno ste se pridruzili gun game-u!");
 
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][19], gg_WeaponModels[ WEAPON:WEAPON_SNIPER ]  );
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ WEAPON: (WEAPON_SNIPER-1) ]  );
+
     Iter_Add(iter_GunGamePlayers, playerid);
 
     SetPlayerInterior(playerid, 0);
@@ -402,6 +405,10 @@ stock GunGame_GivePlayerWeapon(playerid) {
     new WEAPON:wep = WEAPON:( GunGame[playerid][ggWeapon] );
     ResetPlayerWeapons(playerid);
     GivePlayerWeapon(playerid, wep, 9999);
+
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][19], gg_WeaponModels[ wep ]  );
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ wep-1 ]  );
+
     return 1;
 }
 
@@ -433,6 +440,15 @@ stock GunGame_DemotePlayer(playerid) {
 YCMD:startgg(playerid, params[], help) 
 {
     gunGameActive = true;
+
+    TopPlayers[0][tp_level] = -1;
+    TopPlayers[1][tp_level] = -1;
+    TopPlayers[2][tp_level] = -1;
+
+    TopPlayers[0][tp_playerid] = INVALID_PLAYER_ID;
+    TopPlayers[1][tp_playerid] = INVALID_PLAYER_ID;
+    TopPlayers[2][tp_playerid] = INVALID_PLAYER_ID;
+
     return 1;
 }
 
@@ -570,7 +586,7 @@ task UpdateTopPlayers[1000]() {
             PlayerTextDraw_UpdateModel(j, gungame_UI[j][13], gg_WeaponModels[ GetPlayerWeapon( TopPlayers[1][tp_playerid] ) ]);
 
         }
-        if(TopPlayers[2][tp_playerid] == INVALID_PLAYER_ID) {
+        if(TopPlayers[2][tp_playerid] != INVALID_PLAYER_ID) {
 
             PlayerTextDrawSetString(j, gungame_UI[j][11], "%s", ReturnPlayerName(TopPlayers[2][tp_playerid]));
             PlayerTextDraw_UpdateModel(j, gungame_UI[j][5], GetPlayerSkin(TopPlayers[2][tp_playerid]));

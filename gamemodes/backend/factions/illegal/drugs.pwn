@@ -689,26 +689,26 @@ hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 //?--->>> Commands
 //*==============================================================================
 
-YCMD:cookmdma(playerid, params[], help) {
+// YCMD:cookmdma(playerid, params[], help) {
 
-    if(!MDMA_ReturnPlayerIngridients(playerid))
-        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate sastojke za pripremu mdme");
+//     if(!MDMA_ReturnPlayerIngridients(playerid))
+//         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate sastojke za pripremu mdme");
 
-    if(cookingMdma[playerid]) 
-        return SendClientMessage(playerid, -1, "DEBUG: He cookin already");
+//     if(cookingMdma[playerid]) 
+//         return SendClientMessage(playerid, -1, "DEBUG: He cookin already");
 
-    // Notify_SendNotification(playerid, "Zapoceli ste proces kuvanja MDME ~n~ \
-    //                                   Kako bi povecali temperaturu pritisnite gumb ~b~ [ N ]",
-    //                                   "MDMA", 
-    // 1241);
+//     // Notify_SendNotification(playerid, "Zapoceli ste proces kuvanja MDME ~n~ \
+//     //                                   Kako bi povecali temperaturu pritisnite gumb ~b~ [ N ]",
+//     //                                   "MDMA", 
+//     // 1241);
 
-    MDMA_Interface(playerid, true);
-    MdmaCookTimer[playerid] = SetTimerEx("updatebar", 100, true, "d", playerid);
+//     MDMA_Interface(playerid, true);
+//     MdmaCookTimer[playerid] = SetTimerEx("updatebar", 100, true, "d", playerid);
 
-    cookingMdma[playerid] = true;
+//     cookingMdma[playerid] = true;
 
-    return 1;
-}
+//     return 1;
+// }
 
 YCMD:checkgrowth(playerid, params[], help) {
 

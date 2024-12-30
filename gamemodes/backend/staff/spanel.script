@@ -447,7 +447,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 			case 0: {
 
 
-				house_Price[id] = 50000;
+				house_Price[id] = 90000;
 				house_Type[id] = 1;
 
 				house_Entrance[id][0] = pPos[0];
@@ -497,7 +497,7 @@ Dialog:dialog_kreirajkucu(const playerid, response, listitem, string:inputtext[]
 		
 			case 2: {
 
-				house_Price[id] = 300000;
+				house_Price[id] = 250000;
 				house_Type[id] = 3;
 
 				house_Entrance[id][0] = pPos[0];

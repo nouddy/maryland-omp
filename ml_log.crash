@@ -762,3 +762,79 @@
 [17:58:17]  Attempted to read/write array element at negative index -1
 [17:58:17] AMX backtrace:
 [17:58:17] #0 008a04d8 in public UpdateTopPlayers () in <unknown>
+[11:49:45] Run time error 4: "Array index out of bounds"
+[11:49:45]  Attempted to read/write array element at negative index -1
+[11:49:45] AMX backtrace:
+[11:49:45] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:46] Run time error 4: "Array index out of bounds"
+[11:49:46]  Attempted to read/write array element at negative index -1
+[11:49:46] AMX backtrace:
+[11:49:46] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:47] Run time error 4: "Array index out of bounds"
+[11:49:47]  Attempted to read/write array element at negative index -1
+[11:49:47] AMX backtrace:
+[11:49:47] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:48] Run time error 4: "Array index out of bounds"
+[11:49:48]  Attempted to read/write array element at negative index -1
+[11:49:48] AMX backtrace:
+[11:49:48] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:49] Run time error 4: "Array index out of bounds"
+[11:49:49]  Attempted to read/write array element at negative index -1
+[11:49:49] AMX backtrace:
+[11:49:49] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:50] Run time error 4: "Array index out of bounds"
+[11:49:50]  Attempted to read/write array element at negative index -1
+[11:49:50] AMX backtrace:
+[11:49:50] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:51] Run time error 4: "Array index out of bounds"
+[11:49:51]  Attempted to read/write array element at negative index -1
+[11:49:51] AMX backtrace:
+[11:49:51] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:52] Run time error 4: "Array index out of bounds"
+[11:49:52]  Attempted to read/write array element at negative index -1
+[11:49:52] AMX backtrace:
+[11:49:52] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:53] Run time error 4: "Array index out of bounds"
+[11:49:53]  Attempted to read/write array element at negative index -1
+[11:49:53] AMX backtrace:
+[11:49:53] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:54] Run time error 4: "Array index out of bounds"
+[11:49:54]  Attempted to read/write array element at negative index -1
+[11:49:54] AMX backtrace:
+[11:49:54] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:55] Run time error 4: "Array index out of bounds"
+[11:49:55]  Attempted to read/write array element at negative index -1
+[11:49:55] AMX backtrace:
+[11:49:55] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:56] Run time error 4: "Array index out of bounds"
+[11:49:56]  Attempted to read/write array element at negative index -1
+[11:49:56] AMX backtrace:
+[11:49:56] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:57] Run time error 4: "Array index out of bounds"
+[11:49:57]  Attempted to read/write array element at negative index -1
+[11:49:57] AMX backtrace:
+[11:49:57] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:58] Run time error 4: "Array index out of bounds"
+[11:49:58]  Attempted to read/write array element at negative index -1
+[11:49:58] AMX backtrace:
+[11:49:58] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:49:59] Run time error 4: "Array index out of bounds"
+[11:49:59]  Attempted to read/write array element at negative index -1
+[11:49:59] AMX backtrace:
+[11:49:59] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:50:00] Run time error 4: "Array index out of bounds"
+[11:50:00]  Attempted to read/write array element at negative index -1
+[11:50:00] AMX backtrace:
+[11:50:00] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:50:01] Run time error 4: "Array index out of bounds"
+[11:50:01]  Attempted to read/write array element at negative index -1
+[11:50:01] AMX backtrace:
+[11:50:01] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:50:02] Run time error 4: "Array index out of bounds"
+[11:50:02]  Attempted to read/write array element at negative index -1
+[11:50:02] AMX backtrace:
+[11:50:02] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[11:50:03] Run time error 4: "Array index out of bounds"
+[11:50:03]  Attempted to read/write array element at negative index -1
+[11:50:03] AMX backtrace:
+[11:50:03] #0 008a041c in public UpdateTopPlayers () in <unknown>

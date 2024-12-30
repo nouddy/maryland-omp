@@ -1828,6 +1828,9 @@ hook OnPlayerModelSelection( playerid, response, listid, modelid) {
         if( response ) {
             if( GetPlayerMoney(playerid) < 150.45 ) return SendClientMessage( playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca." );
             
+            if( GetPlayerSkin(playerid) == modelid) 
+                return SendClientMessage( playerid, x_server, "maryland \187; "c_white"Vec posjedujete taj skin." );
+
             CharacterInfo[playerid][Skin] = modelid;
             SetPlayerSkin(playerid, modelid);
             GivePlayerMoney( playerid, -150.45 );

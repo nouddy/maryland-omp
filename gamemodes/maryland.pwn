@@ -342,7 +342,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
 #include "frontend/interior/sewers.map"								//* Kanalizacija map (interior 3)
 #include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
-#include "frontend/interior/cityhall_int.map"						//* Opstina int map (interior 5)
+#include "frontend/interior/city_hall.map"						//* Opstina int map (interior 5)
 #include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
 #include "frontend/interior/hotel-int.map"							//* Hotel interior (virtual world 7)
 #include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)

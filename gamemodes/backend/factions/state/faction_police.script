@@ -92,6 +92,9 @@ new bool:memberDuty[MAX_PLAYERS],
     bool:playerTied[MAX_PLAYERS],
     cuffedPoliceMan[MAX_PLAYERS];
 
+new police_InviteID[MAX_PLAYERS],
+    police_InviteFID[MAX_PLAYERS];
+
 //============================================================ Prison
 
 enum e_PRISON_DATA {
@@ -134,6 +137,22 @@ public Cuff_UpdatePlayerPosition(playerid) {
 }
 
 /* Stocks */
+
+stock Police_ReturnNameByPlayer(playerid) {
+
+    static str[60];
+
+    foreach(new i : iter_Police) {
+
+        if(fPoliceInfo[i][fPoliceID] == PoliceMember[playerid][policeID]) {
+
+            format(str, sizeof str, "%s", fPoliceInfo[i][fPoliceName]);
+            break;
+        }
+    }
+
+    return str;
+}
 
 stock GetPlayerPoliceID(playerid) {
 
@@ -319,6 +338,9 @@ hook OnPlayerConnect(playerid) {
     playerTied[playerid] = false;
     playerTazed[playerid] = false;
     cuffedPoliceMan[playerid] = INVALID_PLAYER_ID;
+
+    police_InviteID[playerid] = INVALID_PLAYER_ID;
+    police_InviteFID[playerid] = 0;
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -543,6 +565,56 @@ YCMD:tazer(playerid, params[], help) {
         return (true);
 
     GivePlayerWeapon(playerid, WEAPON_SILENCED, 5);
+    return 1;
+}
+
+YCMD:pinvite(playerid, params[], help) {
+
+    new targetid;
+    
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pinvite [ID/Ime]!");
+
+    if(!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Igrac nije konektovan na server!");
+    
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozes ubaciti samog sebe :/...");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Momak?!");
+
+    if(IsPlayerFactionMember(targetid)) 
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je vec clan neke fakcije!");
+
+    if(IsPlayerPoliceMember(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac je vec clan neke fakcije!"); 
+
+    if(police_InviteID[playerid] != INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste poslali poziv nekom igracu!"); 
+
+    if(police_InviteFID[targetid] != 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Tom igracu je vec ponudjen poziv!"); 
+
+    if(!DistanceBetweenPlayers(3.40, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+
+    //*
+
+    police_InviteID[playerid] = targetid;
+    police_InviteID[targetid] = playerid;
+    police_InviteFID[targetid] = PoliceMember[playerid][policeID];
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Poslali ste invite igracu %s!", ReturnPlayerName(targetid));
+
+    new sstr[2048];
+    format(sstr, sizeof sstr, "%s[%d] vas je pozvao da se priduzite policiji.\n\
+                              "c_white"Policija : "c_server"%s[%d].\n\
+                              "c_white"Leader : "c_server"%s[%d].\n\
+                              "c_white"Ukoliko zelite prihvatiti poziv pritisnite "c_server"PRIHVATI.", 
+                              ReturnPlayerName(playerid), playerid, Police_ReturnNameByPlayer(playerid), PoliceMember[playerid][policeID], ReturnPlayerName(playerid), playerid);
+
+    Dialog_Show(police_InviteID[playerid], "dialog_pdInvite", DIALOG_STYLE_MSGBOX, "Maryland \187; "c_server"Policija Deparment", sstr, ""c_green"PRIHVATI", ""c_lred"ODBIJ");
     return 1;
 }
 
@@ -836,12 +908,13 @@ public police_LoadMember(playerid) {
     }
 
     cache_get_value_name_int(0, "police_id", PoliceMember[playerid][policeID]);
-    cache_get_value_name_int(0, "characterid", PoliceMember[playerid][characterID]);
+    cache_get_value_name_int(0, "character_id", PoliceMember[playerid][characterID]);
     cache_get_value_name_int(0, "police_rank", PoliceMember[playerid][policeRank]);
     cache_get_value_name_int(0, "arrests", PoliceMember[playerid][arrests]);
     cache_get_value_name(0, "joinDate", PoliceMember[playerid][joinDate]);
 
     return (true);
+
 }
 
 forward PoliceLoad();
@@ -951,6 +1024,57 @@ public CreateEquPoint(id) {
 }
 
 /* Dialogs */
+
+Dialog:dialog_pdInvite(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) {
+
+        new target = police_InviteID[playerid];
+
+        SendClientMessage(target, x_server, "maryland \187; "c_white"%s je odbio vas poziv za pridruzivanje u policju", ReturnPlayerName(playerid));
+
+        police_InviteID[target] = INVALID_PLAYER_ID;
+        police_InviteID[playerid] = INVALID_PLAYER_ID;
+        police_InviteFID[playerid] = 0;
+        return ~1;
+    }
+
+    new target = police_InviteID[playerid];
+
+    SendClientMessage(target, x_server, "maryland \187; "c_white"%s je prihvatio vas poziv za pridruzivanje u organizaciju", ReturnPlayerName(playerid));
+
+    PoliceMember[playerid][policeID] = police_InviteFID[playerid];
+    PoliceMember[playerid][characterID] = GetCharacterSQLID(playerid);
+    PoliceMember[playerid][policeRank] = 1;
+    PoliceMember[playerid][arrests] = 1;
+
+    new q[260];
+    mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `police_members` (`character_id`, `police_id`, `police_rank`, `arrests`, `joinDate`) \
+                                          VALUES('%d', '%d', '1', '0', NOW())", 
+                                      GetCharacterSQLID(playerid), police_InviteFID[playerid]);
+    mysql_tquery(MySQL:SQL, q);
+
+    //*
+
+    new fID = PoliceMember[playerid][policeID];
+    new tmp_message[320];
+
+    foreach(new i : iter_Police) {
+
+        if(fID == PoliceMember[i][policeID]) {
+            
+            format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; %s[%d] se je uspjesno pridruzio policiji.",
+            fPoliceInfo[i][fPoliceName], ReturnPlayerName(playerid), playerid);
+            SendClientMessage(i, -1, tmp_message);
+        }
+    }
+
+    police_InviteID[target] = INVALID_PLAYER_ID;
+    police_InviteID[playerid] = INVALID_PLAYER_ID;
+    police_InviteFID[playerid] = 0;
+
+    return (true);
+}
 
 Dialog:dialog_createPolice(const playerid, response, listitem, string:inputtext[]) {
 
@@ -1259,4 +1383,21 @@ Dialog:dialog_createEqu(const playerid, response, listitem, string:inputtext[]) 
                                               fPoliceInfo[fpID][fEquipment][0], fPoliceInfo[fpID][fEquipment][1], fPoliceInfo[fpID][fEquipment][2], fpID);
     mysql_tquery(SQL, queryS, "CreateEquPoint", "i", fpID);
     return true;
+}
+
+ptask Police_AwardPlayer[3600000](playerid) {
+
+    if(playerid == INVALID_PLAYER_ID) return 0;
+
+    if(IsPlayerConnected(playerid)) {
+
+        if(PoliceMember[playerid][policeID] != 0) {
+
+            new Float:randMoney = RandomFloatMinMax(1567.48, 2457.99);
+            SendClientMessage(playerid, x_faction, "CITY-AWARD: "c_white"Kao clan policije, primili ste drzavnu platu u iznosu %.2f$", randMoney);
+            GivePlayerMoney(playerid, randMoney);
+        }
+    }
+
+    return (true);
 }
