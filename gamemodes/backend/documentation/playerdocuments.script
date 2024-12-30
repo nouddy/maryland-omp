@@ -68,7 +68,7 @@ hook OnCharacterLoaded(playerid)
 YCMD:getidcard(playerid, params[], help)
 {
 
-    if(IsPlayerInRangeOfPoint(playerid, 3.0, -2334.3879,1244.1754,-31.6301))
+    if(IsPlayerInRangeOfPoint(playerid, 3.0, 1505.4467,1337.0447,10.9788))
     {
         if(PlayerDocuments[playerid][pNationalID] == 1) return notification.Show(playerid, "GRESKA", "Vec imate licnu kartu", "!", BOXCOLOR_RED);
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
@@ -89,7 +89,7 @@ YCMD:getidcard(playerid, params[], help)
 
 YCMD:getpassport(playerid, params[], help)
 {
-    if(IsPlayerInRangeOfPoint(playerid, 3.0, -2334.7085,1255.7548,-31.6301))
+    if(IsPlayerInRangeOfPoint(playerid, 3.0, 1505.4467,1337.0447,10.9788))
     {
         if(PlayerDocuments[playerid][pPassport] == 1) return notification.Show(playerid, "GRESKA", "Vec imate pasos", "!", BOXCOLOR_RED);
         if(GetPlayerMoney(playerid) < 200) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);

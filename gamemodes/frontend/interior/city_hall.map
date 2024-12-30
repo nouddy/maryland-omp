@@ -251,12 +251,12 @@ hook OnGameModeInit() {
     blch = Maryland_CreateDynamicObject(2161, 1509.887695, 1336.793579, 9.978754, 0.000014, -0.000007, 89.999939, -1, 5);
     SetDynamicObjectMaterial(blch, 1, 19598, "sfbuilding1", "darkwood1", 0);
     blch = Maryland_CreateDynamicObject(2728, 1510.271729, 1337.013184, 12.028759, 89.999992, 25.528797, -115.528732, -1, 5);
-    SetDynamicObjectMaterialText(blch, 0, "OPCINA", 140, "Arial", 100, 1, 0xFFFFFFFFFFFFFFFF, 0, 1);
+    SetDynamicObjectMaterialText(blch, 0, "CITY HALL", 140, "Arial", 100, 1, 0xFFFFFFFFFFFFFFFF, 0, 1);
     blch = Maryland_CreateDynamicObject(1827, 1502.877197, 1325.076538, 13.848752, -0.000003, 179.999985, -45.000011, -1, 5);
     SetDynamicObjectMaterial(blch, 1, 10023, "bigwhitesfe", "bigwhite_3", 0);
     SetDynamicObjectMaterial(blch, 0, 18646, "matcolours", "grey-80-percent", 0);
     blch = Maryland_CreateDynamicObject(2728, 1510.271729, 1337.013184, 12.428754, 89.999992, 25.528797, -115.528732, -1, 5);
-    SetDynamicObjectMaterialText(blch, 0, "LOS SANTOS", 140, "Arial", 70, 0, 0xFFFFFFFFFFFFFFFF, 0, 1);
+    SetDynamicObjectMaterialText(blch, 0, "MARYLAND", 140, "Arial", 70, 0, 0xFFFFFFFFFFFFFFFF, 0, 1);
     blch = Maryland_CreateDynamicObject(19866, 1506.645142, 1327.558472, 13.468750, 0.000000, 0.000000, 450.000000, -1, 5);
     SetDynamicObjectMaterial(blch, 0, 15048, "labigsave", "ah_GRYSKT", 0xFFFFFFFFFFFFFFFF);
     blch = Maryland_CreateDynamicObject(1827, 1502.877197, 1349.182251, 13.848752, -0.000003, 179.999985, -134.999985, -1, 5);

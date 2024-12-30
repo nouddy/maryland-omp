@@ -39,10 +39,10 @@ hook OnGameModeInit()
 CreatePickupsAnd3Ds()
 {
 
-    CreateCustomMarker(""c_server"[ Salter ]\n"c_white"'/getidcard'", -2334.3879,1244.1754,-31.6301, -1, -1, 50.0); //licna
-    CreateCustomMarker(""c_server"[ Salter ]\n"c_white"'/quitjob'", -2334.6438,1249.9271,-31.6301, -1, -1, 50.0); //licna
-    CreateCustomMarker(""c_server"[ Salter ]\n"c_white"'/getpassport'", -2334.7085,1255.7548,-31.6301, -1, -1, 50.0); //licna
-    CreateCustomMarker(""c_server"[ Salter ]\n"c_white"'/donatetostate'\n'/dozvolazarad'", -2334.6843,1261.4663,-31.6301, -1, -1, 50.0); //licna
+    CreateCustomMarker(""c_server"[ Salter ]\n"c_white"'/getidcard'\n'/getpassport'\n'/quitjob'\n'/donatetostate'\n'/dozvolazarad'", 1505.4467,1337.0447,10.9788, 5, -1, 50.0); //licna
+
+    CreateCustomMarker(""c_server"[ Opstina ]\n"c_white"'Za ulaz pritisnite 'F'", 1481.2990,-1812.2191,24.1161, -1, -1, 50.0); //Opstina Maryland ulaz
+    CreateCustomMarker(""c_server"[ Opstina ]\n"c_white"'Za izlaz pritisnite 'F'", 1496.5078,1337.1660,10.9788, 5, -1, 50.0); //Opstina Maryland izlaz
 
     // //? Salteri
     //CreateDynamic3DTextLabel(""c_server"[ Blagajna ]\n"c_white"'/blagajna'\n'/balans'\n'/promenipinkod'", 0x0059FFAA, 1689.8605,-1455.4658,13.5597+0.3, 50.0, -1, -1, 0, -1, -1, -1, 20.0);
@@ -93,12 +93,10 @@ CreatePickupsAnd3Ds()
     
     //? Bolnica
 
-    CreateCustomMarker(""c_server"[ Medical Department ]\n"c_server"» "c_white"'Za izllaz pritisnite 'F'", 1171.4449,-1311.7319,1019.4160,  23, 0, 50.0); //Izlaz
+    CreateCustomMarker(""c_server"[ Medical Department ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1171.4449,-1311.7319,1019.4160,  23, 0, 50.0); //Izlaz
     CreateCustomMarker(""c_server"[ Medical Department ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 2025.2113,-1401.9033,17.2094, 0, 0, 50.0); //Ulaz recepcija
 
     //      * MARKERS WITHOUT 3D TEXT LABELS
-
-    //CittyHallEnterExit[0] = CreateMarker(1482.6442,-1805.5509,18.7957-0.9, 50.0, 0, 0);
 
     //
     
@@ -140,18 +138,14 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         }
 
         //? Maryland Opstina
-        if(IsPlayerInRangeOfPoint(playerid, 3.0, 1482.6442,-1805.5509,18.7957) || IsPlayerInRangeOfPoint(playerid, 3.0, 1451.9034,-1805.8535,13.5661)) //Opstina Maryland ulaz
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 1481.2990,-1812.2191,24.1161)) //Opstina Maryland ulaz
         {
-            SetPlayerInterior(playerid, 5);
-            SetPlayerVirtualWorld(playerid, 5);
-            SetPlayerPos(playerid, -2304.2190,1253.0327,-31.6301);
+            SetPlayerCompensatedPos(playerid, 1496.5078,1337.1660,10.9788, 5, 5, 5000);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, -2304.2190,1253.0327,-31.6301)) //Opstina Maryland Izlaz
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1496.5078,1337.1660,10.9788)) //Opstina Maryland Izlaz
         {
-            SetPlayerInterior(playerid, 0);
-            SetPlayerVirtualWorld(playerid, 0);
-            SetPlayerPos(playerid, 1482.6442,-1805.5509,18.7957);
+            SetPlayerCompensatedPos(playerid, 1481.2990,-1812.2191,24.1161, 0, 0, 5000);
             SetCameraBehindPlayer(playerid);
         }
         //? Maryland Spawn
