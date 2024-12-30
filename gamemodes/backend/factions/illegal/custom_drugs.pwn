@@ -228,7 +228,7 @@ GetDrugName(drugType) {
 // Commands
 // ========================================================================
 
-CMD:droge(playerid, params[]) {
+YCMD:droge(playerid, params[], help) {
     if(!IsPlayerInAnyDrugZone(playerid))
         return SendClientMessage(playerid, x_red, "Nisi na odgovarajucoj lokaciji!");
     
