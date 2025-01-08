@@ -2,6 +2,7 @@
 
 #define     MAX_FACTIONS            (400)
 #define     MAX_FACTION_NAME_LEN    (30)
+#define     VEHICLE_TYPE_FACTION    (1)
 
 
 enum {
@@ -25,7 +26,8 @@ enum FACTION_CORE {
     Float:factionArea[3],                   // Faction will have their area for cars etc.. If is duo they will get random street cords for their area. When they upgrade prop is area.
     factionInterior,                        // When they got upgrade this is interior of prop
     factionVirtualWorld,                    // When they got upgrade this is virtual world of prop
-    factionHouseID                          // Faction House for members
+    factionHouseID,                        // Faction House for members
+    factionBunker                          // Faction Bunker - for heist etc...
 }
 
 new FactionInfo[MAX_FACTIONS][FACTION_CORE];
@@ -54,6 +56,23 @@ new FactionMember[MAX_PLAYERS][e_FACTION_MEMBERS];
 new faction_InviteID[MAX_PLAYERS],
     faction_InviteFID[MAX_PLAYERS];
 
+new PlayerText3D:fa_BunkerLabel[MAX_PLAYERS];
+
+forward PreloadFacitonBunkerLabel(playerid);
+public PreloadFacitonBunkerLabel(playerid) {
+
+
+    new fa_id = Faction_ReturnIndexId(playerid);
+
+    if(FactionInfo[fa_id][factionBunker] != 0)
+    {
+        fa_BunkerLabel[playerid] = CreatePlayer3DTextLabel(playerid, ""c_server"\187; "c_white"Bunker\n"c_server"\187; "c_white"Za ulaz pritisni 'F'", -1, -1584.0164,-2572.3108,28.8232, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID);  
+    }
+    else fa_BunkerLabel[playerid] = CreatePlayer3DTextLabel(playerid, ""c_server"\187; "c_white"Bunker\n"c_server"\187; "c_white"Za kupovinu '/buybunker'", -1, -1584.0164,-2572.3108,28.8232, 3.5, INVALID_PLAYER_ID, INVALID_VEHICLE_ID);
+
+    return 1;
+}
+
 forward Faction_LoadData();
 public Faction_LoadData() {
 
@@ -77,6 +96,7 @@ public Faction_LoadData() {
         cache_get_value_name_int(i, "factionInterior", FactionInfo[i][factionInterior]);
         cache_get_value_name_int(i, "factionVirtualWorld", FactionInfo[i][factionVirtualWorld]);
         cache_get_value_name_int(i, "factionHouseID", FactionInfo[i][factionHouseID]);
+        cache_get_value_name_int(i, "factionBunker", FactionInfo[i][factionBunker]);
 
         if(FactionInfo[i][factionArea][0] != 0.00) {
 
@@ -155,7 +175,8 @@ public Member_LoadData(id) {
     cache_get_value_name_int(0, "faction_rank", FactionMember[id][factionRank]);
     cache_get_value_name_int(0, "faction_respekt", FactionMember[id][factionRespect]);
     
-    return 1;
+    CallLocalFunction("PreloadFacitonBunkerLabel", "d", id);
+    return 1;   
 }
 
 forward Member_ShowList(playerid);
@@ -385,12 +406,53 @@ YCMD:faction(playerid, params[], help) {
                                                                                     "c_server"#2 \187; "c_ltorange"Clanovi\n\
                                                                                     "c_server"#3 \187; "c_ltorange"Vozila\n\
                                                                                     "c_server"#4 \187; "c_ltorange"Izbaci Clana\n\
-                                                                                    "c_server"#5 \187; "c_ltorange"Ubaci Clana\n", "Ok", "Odustani");
+                                                                                    "c_server"#5 \187; "c_ltorange"Ubaci Clana\n\
+                                                                                    "c_server"#6 \187; "c_ltorange"Respawn Vozila", "Ok", "Odustani");
     }
 
     return 1;
 }
 
+YCMD:buybunker(playerid, params[], help) {
+
+    if(!IsPlayerInRangeOfPoint(playerid, 2.0, -1584.0164,-2572.3108,28.8232))
+        return SendServerMessage(playerid, "Niste u blizini bunkera!");
+
+    if(FactionMember[playerid][factionRank] != 4)
+        return SendServerMessage(playerid, "Niste lider fakcije!");
+
+    new fa_id = Faction_ReturnIndexId(playerid);
+
+    if(FactionInfo[fa_id][factionBunker] != 0)
+        return SendServerMessage(playerid, "Vasa fakcija vec posjeduje bunker");
+
+    if(GetPlayerMoney(playerid) < 50000.00)
+        return SendServerMessage(playerid, "Za bunker vam treba 50.000,00$");
+
+    FactionInfo[fa_id][factionBunker] = 1;
+
+    GivePlayerMoney(playerid, -50000.00);
+    SendServerMessage(playerid, "Uspjesno ste kupili bunker za fakciju!");
+    Faction_SendMessage(FactionInfo[fa_id][factionID], ""c_grey"#FACTION \187; "c_white"Lider je uspjesno kupio bunker za fakciju!");
+
+    SendClientMessage(playerid, x_ltorange, "Bunker \187; "c_white"Uspjesno ste kupili bunker, bunker vam sluzi za pokretanje heista!");
+    SendClientMessage(playerid, x_ltorange, "Bunker \187; "c_white"Heist pokrecete komandom /startheist!");
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "UPDATE `factions` SET `factionBunker` = '%d' WHERE `factionID` = '%d'", 1, FactionInfo[fa_id][factionID]);
+    mysql_tquery(SQL, q);
+
+    foreach(new j : Player) {
+
+        if(FactionMember[j][factionID] == FactionMember[playerid][factionID]) {
+
+            if(IsValidPlayer3DTextLabel(j, fa_BunkerLabel[j]))
+                UpdatePlayer3DTextLabelText(j, fa_BunkerLabel[j], x_white, ""c_server"\187; "c_white"Bunker\n"c_server"\187; "c_white"Za ulaz pritisni 'F'");
+        }
+    }
+
+    return (true);
+}
 
 Dialog:dialog_factionOption(playerid, response, listitem, string:inputtext[]) {
 
@@ -438,6 +500,12 @@ Dialog:dialog_factionOption(playerid, response, listitem, string:inputtext[]) {
             case 4: {
 
                 Dialog_Show(playerid, "dialog_fLeaderInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_ltorange"Invite Member", "Unesi ime/id igraca kojeg zelite pozvati u vasu fakciju", "Unesi", "Odustani");
+            }
+
+            case 5: {
+
+                Faction_RespawnVehicles( v_FACTION_TYPE:VEHICLE_TYPE_FACTION );
+                SendClientMessage(playerid, x_faction, "vehicle-respawn \187; "c_white"Uspjesno ste pokrenuli respawn svih vozila!");
             }
         }
     }
@@ -759,8 +827,29 @@ stock Faction_GiveRespect(playerid, amount)
     return true;
 }
 
-stock Faction_CheckConnectedHouse(faction, playerid) {
+stock Faction_IsBunkerConnected(playerid) {
 
+    new fa_id = Faction_ReturnIndexId(playerid);
+
+    if(FactionInfo[fa_id][factionBunker] != 0)
+        return (true);
+
+    return false;
+}
+
+stock ReturnFactionSQLID(player) 
+{
+    if(player == INVALID_PLAYER_ID) return -1;
+    if(!IsPlayerConnected(player)) return -1;
+
+    if(FactionMember[player][factionID] != 0)
+        return FactionMember[player][factionID];
+
+    return -1;
+} 
+
+
+stock Faction_CheckConnectedHouse(faction, playerid) {
 
     if(FactionMember[playerid][factionID] == FactionInfo[faction][factionID]) {
 
@@ -807,6 +896,9 @@ stock IsPlayerFactionMember(playerid) {
 
     return false;
 }
+
+
+
 
 // Stock for counting members of some org by SIKA 101 PLUS
 

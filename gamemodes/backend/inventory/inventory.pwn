@@ -53,7 +53,7 @@ enum e_CONTAINER_TYPE {
     CONTAINER_TYPE_INVALID = 0,
     CONTAINER_TYPE_TRUNK = 1,
     CONTAINER_TYPE_WARDROBE,
-    CONTAINER_TYPE_FLOOR
+    CONTAINER_TYPE_FLOOR 
 }
 
 enum e_CONTAINER_INFO {
@@ -102,7 +102,8 @@ enum {
     INVENTORY_ITEM_CHICKEN_BURGER,
     INVENTORY_ITEM_HASH,        
     INVENTORY_ITEM_COCAINE,     
-    INVENTORY_ITEM_MDMA,       
+    INVENTORY_ITEM_SHROOMS,  
+    INVENTORY_ITEM_SPEED,     
 
     //*     >> [ DRUG PREP ITEMS ] <<
 
@@ -111,7 +112,11 @@ enum {
     INVENTORY_ITEM_GASOLINE,        //* Za Cocaine
     INVENTORY_ITEM_DISTILLED_WATER, //* Za MDMU i Cocaine
     INVENTORY_ITEM_ALCOHOL,         //* Za MDMU
-    INVENTORY_ITEM_OMEPRAZOLE       //* Za MDMU
+    INVENTORY_ITEM_OMEPRAZOLE,       //* Za MDMU,
+    INVENTORY_ITEM_PSEUDOEPHEDRINE,  //1241
+    INVENTORY_ITEM_CHEMICALS,
+    INVENTORY_ITEM_LAB_EQUIPMENT,
+    INVENTORY_ITEM_JAMMER        //* 71
 }
 
 enum e_QUANTITY_DATA {
@@ -171,14 +176,21 @@ new const sz_quantityInfo[][e_QUANTITY_DATA] = {
     { INVENTORY_ITEM_CHICKEN_BURGER,    3 },
     { INVENTORY_ITEM_HASH,              100},
     { INVENTORY_ITEM_COCAINE,            50},
-    { INVENTORY_ITEM_MDMA,               75},
+    { INVENTORY_ITEM_SHROOMS,               75},
+    { INVENTORY_ITEM_SPEED,              50},
     { INVENTORY_ITEM_SEED,               10},
     { INVENTORY_ITEM_HERBS,              15},
     { INVENTORY_ITEM_GASOLINE,            3},
     { INVENTORY_ITEM_DISTILLED_WATER,     2},
     { INVENTORY_ITEM_ALCOHOL,             1},
-    { INVENTORY_ITEM_OMEPRAZOLE,         50}
+    { INVENTORY_ITEM_OMEPRAZOLE,         50},
+    { INVENTORY_ITEM_PSEUDOEPHEDRINE,        5 },
+    { INVENTORY_ITEM_CHEMICALS,        5 },
+    { INVENTORY_ITEM_LAB_EQUIPMENT,        1 },
+    { INVENTORY_ITEM_JAMMER,            1 }
 };
+
+// Kemikalije - 5  Alkohol - 1  Destilovana Voda - 2 --> Spidara
 
 new const sz_itemType[][e_ITEM_TYPE_DATA] = {
 
@@ -192,13 +204,18 @@ new const sz_itemType[][e_ITEM_TYPE_DATA] = {
     { INVENTORY_ITEM_CHICKEN_BURGER,    INVENTORY_ITEM_TYPE_FOOD },
     { INVENTORY_ITEM_HASH,              INVENTORY_ITEM_TYPE_DRUG },
     { INVENTORY_ITEM_COCAINE,           INVENTORY_ITEM_TYPE_DRUG },
-    { INVENTORY_ITEM_MDMA,              INVENTORY_ITEM_TYPE_DRUG },
+    { INVENTORY_ITEM_SHROOMS,              INVENTORY_ITEM_TYPE_DRUG },
+    { INVENTORY_ITEM_SPEED,             INVENTORY_ITEM_TYPE_DRUG },
     { INVENTORY_ITEM_SEED,              INVENTORY_ITEM_TYPE_DRUG_PREP },
     { INVENTORY_ITEM_HERBS,             INVENTORY_ITEM_TYPE_DRUG_PREP },
     { INVENTORY_ITEM_GASOLINE,          INVENTORY_ITEM_TYPE_DRUG_PREP },
     { INVENTORY_ITEM_DISTILLED_WATER,   INVENTORY_ITEM_TYPE_DRUG_PREP },
     { INVENTORY_ITEM_ALCOHOL,           INVENTORY_ITEM_TYPE_DRUG_PREP },
-    { INVENTORY_ITEM_OMEPRAZOLE,        INVENTORY_ITEM_TYPE_DRUG_PREP }
+    { INVENTORY_ITEM_OMEPRAZOLE,        INVENTORY_ITEM_TYPE_DRUG_PREP },
+    { INVENTORY_ITEM_PSEUDOEPHEDRINE,        INVENTORY_ITEM_TYPE_DRUG_PREP },
+    { INVENTORY_ITEM_CHEMICALS,        INVENTORY_ITEM_TYPE_DRUG_PREP },
+    { INVENTORY_ITEM_LAB_EQUIPMENT,        INVENTORY_ITEM_TYPE_DRUG_PREP },
+    { INVENTORY_ITEM_JAMMER,           INVENTORY_ITEM_TYPE_NORMAL }
 
 };
 
@@ -220,13 +237,19 @@ new const sz_ItemModels[][e_ITEM_MODEL_DATA] = {
     { INVENTORY_ITEM_CHICKEN_BURGER,    19811 },
     { INVENTORY_ITEM_HASH,              1279 },
     { INVENTORY_ITEM_COCAINE,           1575 },
-    { INVENTORY_ITEM_MDMA,              1580 },
+    { INVENTORY_ITEM_SHROOMS,              2250 },
+    { INVENTORY_ITEM_SPEED,             1575},
     { INVENTORY_ITEM_SEED,              19573 },
     { INVENTORY_ITEM_HERBS,             2972 },
     { INVENTORY_ITEM_GASOLINE,          1650 },
     { INVENTORY_ITEM_DISTILLED_WATER,   19570 },
     { INVENTORY_ITEM_ALCOHOL,           19570 },
-    { INVENTORY_ITEM_OMEPRAZOLE,        1241 }
+    { INVENTORY_ITEM_OMEPRAZOLE,        1241 },
+    { INVENTORY_ITEM_PSEUDOEPHEDRINE,  1241 },
+    { INVENTORY_ITEM_CHEMICALS,        1241 },
+    { INVENTORY_ITEM_LAB_EQUIPMENT,        2437 },
+    { INVENTORY_ITEM_JAMMER,           364 }
+      
 };
 
 //*==============================================================================
@@ -341,6 +364,9 @@ public mysql_CheckRemoveItem(playerid, item, quantity) {
 
             if(InventoryInfo[playerid][idx][ItemID] == item) {
 
+
+                InventoryInfo[playerid][idx][ItemQuantity]-= quantity;
+
                 if( ( InventoryInfo[playerid][idx][ItemQuantity] - quantity ) <= 0 ) {
 
                     new q[128];
@@ -348,8 +374,6 @@ public mysql_CheckRemoveItem(playerid, item, quantity) {
                     mysql_tquery(SQL, q);
                     return (true);
                 }
-
-                InventoryInfo[playerid][idx][ItemQuantity]--;
 
                 new _q[128];
                 mysql_format(SQL, _q, sizeof _q, "UPDATE `inventory` SET `ItemQuantity` = '%d' WHERE `ItemID` = '%d' AND `PlayerID` = '%d'", InventoryInfo[playerid][idx][ItemQuantity], InventoryInfo[playerid][idx][ItemID], GetCharacterSQLID(playerid));
@@ -376,14 +400,17 @@ public mysql_AddInventoryItem(playerid, item, quantity) {
         else    
             xType = sz_itemType[item-50][itemType];
 
+        new nextID = Iter_Free(iter_Items[playerid]);
+
+        if(nextID >= 12 || nextID == INVALID_ITERATOR_SLOT)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Popunjeni su vam svi slotovi u inventory-u!");
+
         new q[240];
         mysql_format(SQL, q, sizeof q, "INSERT INTO `inventory` (`PlayerID`, `ItemID`, `ItemQuantity`, `ItemType`) \
                                         VALUES (%d, %d, %d, %d)",
                                         GetCharacterSQLID(playerid), item,
                                         quantity, xType);
         mysql_tquery(SQL, q);
-
-        new nextID = Iter_Free(iter_Items[playerid]);
         
         InventoryInfo[playerid][nextID][PlayerID] = GetCharacterSQLID(playerid);
         InventoryInfo[playerid][nextID][ItemID] = item;
@@ -392,7 +419,7 @@ public mysql_AddInventoryItem(playerid, item, quantity) {
 
         Iter_Add(iter_Items[playerid], nextID);
 
-        //Inventory_InterfaceControl(playerid, true);
+        // Inventory_InterfaceControl(playerid, true);
 
         // printf("PlayerID - %d, ItemID - %d, ItemQuantity - %d, ItemType - %s", playerid, item, quantity, Inventory_ReturnItemName(item) );
         // printf("Array ID - %d", nextID);
@@ -426,7 +453,7 @@ public mysql_AddInventoryItem(playerid, item, quantity) {
                 mysql_tquery(SQL, q);
             }
         }
-
+        //* Ovaj dio se ne svidja Frosty-u (Misli na ovo ItemID-50)
         // Inventory_InterfaceControl(playerid, true);
     }
 
@@ -699,6 +726,20 @@ Dialog:inventoryItemOption(const playerid, response, listitem, string: inputtext
                                       Inventory_ReturnItemName(InventoryInfo[playerid][tmp_id][ItemID]),
                                       InventoryInfo[playerid][tmp_id][ItemQuantity], MAX_AMMO_QUANTITY
                 );
+            
+            else if(InventoryInfo[playerid][tmp_id][ItemType] == INVENTORY_ITEM_TYPE_DRUG) {
+
+                ApplyDrugEffect(playerid, InventoryInfo[playerid][tmp_id][ItemID]);
+                return ~1;
+            }
+
+            else if(InventoryInfo[playerid][tmp_id][ItemType] == INVENTORY_ITEM_TYPE_NORMAL) {
+
+                if(InventoryInfo[playerid][tmp_id][ItemID] == INVENTORY_ITEM_JAMMER) {
+
+                    CallLocalFunction("Robbery_OnPlayerUseJammer", "d", playerid);
+                }
+            }
         }
 
         case 1: {
@@ -910,12 +951,20 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 
         if(playertextid == item_model[playerid][i]) {
 
-            inventory_ChosenItem[playerid] = Iter_Index(iter_Items[playerid], i);
+            new tdModel = PlayerTextDrawGetPreviewModel(playerid, item_model[playerid][i]);
+
+            foreach(new j : iter_Items[playerid]) {
+
+                if(sz_ItemModels[ InventoryInfo[playerid][j][ItemID] - 50 ][itemModel] == tdModel) {
+
+                    inventory_ChosenItem[playerid] = j;
+                    break;
+                }
+            }
 
             new tmp_str[64];
             format(tmp_str, sizeof tmp_str, "{737be1}INVENTORY \187; {FFFFFF}%s", Inventory_ReturnItemName(InventoryInfo[playerid][inventory_ChosenItem[playerid]][ItemID]));
             Dialog_Show(playerid, "inventoryItemOption", DIALOG_STYLE_LIST, tmp_str, "Iskoristi\nBaci\nDaj Igracu", "Odaberi", "Odustani");
-
             return Y_HOOKS_BREAK_RETURN_1;
         }
 

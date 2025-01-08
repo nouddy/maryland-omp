@@ -77,6 +77,8 @@ hook OnPlayerConnect(playerid)
     PlayerRentalVehicle[playerid] = INVALID_VEHICLE_ID;
     PlayerRentalTimer[playerid] = -1;
 
+    RentaCar_Interface(playerid, false);
+
     if(IsValid3DTextLabel(RentVehLabel[playerid]))
         Delete3DTextLabel(RentVehLabel[playerid]);
 

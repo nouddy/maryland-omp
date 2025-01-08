@@ -4,7 +4,7 @@ hook OnGameModeInit() {
 
 	print("interior/harbor_int.map loaded");
 
-    static harborInt, object_world = 10, object_int = 0;
+    static harborInt, object_world = -1, object_int = 29;
 
     harborInt = Maryland_CreateDynamicObject(2010, 1311.126342, 2584.588378, -22.268243, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 3897, "libertyhi", "Newtreeb256", 0x00000000);
@@ -1005,10 +1005,6 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(harborInt, 0, 19480, "signsurf", "sign", 0x00000000);
     harborInt = Maryland_CreateDynamicObject(19447, 1277.819458, 2559.752197, -19.228584, 0.000000, -0.000004, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 19480, "signsurf", "sign", 0x00000000);
-    harborInt = Maryland_CreateDynamicObject(18886, 1311.197387, 2555.796142, -20.740623, 89.800209, -208.298553, 89.998527, object_world, object_int, -1, 300.00, 300.00); 
-    SetDynamicObjectMaterial(harborInt, 0, 3440, "airportpillar", "metalic_64", 0xFFFFFFFF);
-    SetDynamicObjectMaterial(harborInt, 1, 3440, "airportpillar", "metalic_64", 0x00000000);
-    SetDynamicObjectMaterial(harborInt, 2, 3440, "airportpillar", "metalic_64", 0x00000000);
     harborInt = Maryland_CreateDynamicObject(19376, 1307.055786, 2556.842041, -25.967971, 45.699932, 179.999984, -89.999992, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 3292, "cxrf_payspray", "sf_spray1", 0x00000000);
     harborInt = Maryland_CreateDynamicObject(19376, 1316.955444, 2556.842041, -24.316001, 45.699913, -179.999984, 89.999969, object_world, object_int, -1, 300.00, 300.00); 
@@ -1191,8 +1187,18 @@ hook OnGameModeInit() {
     harborInt = Maryland_CreateDynamicObject(2184, 1224.934448, 2540.774902, -22.679052, -0.000001, 0.000000, 90.000000, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 3440, "airportpillar", "metalic_64", 0x00000000);
     SetDynamicObjectMaterial(harborInt, 1, 14581, "ab_mafiasuitea", "cof_wood2", 0x00000000);
-    harborInt = Maryland_CreateDynamicObject(2025, 1311.957641, 2555.150146, -22.058546, 0.000014, 0.000001, -120.600006, object_world, object_int, -1, 300.00, 300.00); 
-    SetDynamicObjectMaterial(harborInt, 0, 19962, "samproadsigns", "materialtext1", 0x00000000);
+
+    // * harborInt = Maryland_CreateDynamicObject(2025, 1311.957641, 2555.150146, -22.058546, 0.000014, 0.000001, -120.600006, 10, 0, -1, 300.00, 300.00); 
+    // * SetDynamicObjectMaterial(harborInt, 0, 19962, "samproadsigns", "materialtext1", 0x00000000);
+    //tmpobjid = CreateDynamicObject(2025, 1311.702270, 2556.406494, -22.058546, 0.000014, 0.000000, 177.499816, 10, 0, -1, 300.00, 300.00); 
+    //tmpobjid = CreateDynamicObject(18886, 1311.098876, 2557.819824, -20.740982, 89.800209, 91.301528, 89.998527, 10, 0, -1, 300.00, 300.00); 
+
+
+    // * harborInt = Maryland_CreateDynamicObject(18886, 1311.197387, 2555.796142, -20.740623, 89.800209, -208.298553, 89.998527, object_world, object_int, -1, 300.00, 300.00); 
+    // * SetDynamicObjectMaterial(harborInt, 0, 3440, "airportpillar", "metalic_64", 0xFFFFFFFF);
+    // * SetDynamicObjectMaterial(harborInt, 1, 3440, "airportpillar", "metalic_64", 0x00000000);
+    // * SetDynamicObjectMaterial(harborInt, 2, 3440, "airportpillar", "metalic_64", 0x00000000);
+
     harborInt = Maryland_CreateDynamicObject(2145, 1304.980102, 2553.123291, -22.718563, -0.000014, 0.000004, 90.000061, object_world, object_int, -1, 300.00, 300.00); 
     SetDynamicObjectMaterial(harborInt, 0, 10765, "airportgnd_sfse", "black64", 0x00000000);
     SetDynamicObjectMaterial(harborInt, 1, 3440, "airportpillar", "metalic_64", 0x00000000);

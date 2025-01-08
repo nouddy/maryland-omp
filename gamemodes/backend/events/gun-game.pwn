@@ -123,7 +123,7 @@ stock PrepareGunGame(playerid) {
     SendClientMessage(playerid, x_faction, "GUN-GAME: Uspjesno ste se pridruzili gun game-u!");
 
     PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][19], gg_WeaponModels[ WEAPON:WEAPON_SNIPER ]  );
-    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ WEAPON: (WEAPON_SNIPER-1) ]  );
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ WEAPON:(WEAPON_SNIPER-WEAPON:1) ]  );
 
     Iter_Add(iter_GunGamePlayers, playerid);
 
@@ -407,7 +407,7 @@ stock GunGame_GivePlayerWeapon(playerid) {
     GivePlayerWeapon(playerid, wep, 9999);
 
     PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][19], gg_WeaponModels[ wep ]  );
-    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ wep-1 ]  );
+    PlayerTextDraw_UpdateModel(playerid, gungame_UI[playerid][20], gg_WeaponModels[ wep-WEAPON:1 ]  );
 
     return 1;
 }

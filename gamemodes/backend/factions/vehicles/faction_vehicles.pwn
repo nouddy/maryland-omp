@@ -52,6 +52,20 @@ new FactionVehicle[MAX_FACTION_VEHICLES][e_FACTION_VEHICLES],
 //?--->>> Querys n funcs
 //*==============================================================================
 
+stock Faction_RespawnVehicles( v_FACTION_TYPE:vFtype ) {
+
+    foreach(new j : iter_FVehicles) {
+
+        if(FactionVehicle[j][fvFactionType] == vFtype) {
+
+            if(!IsVehicleOccupied(FVehicle[j]))
+                SetVehicleToRespawn(FVehicle[j]);
+        }
+    }
+
+    return (true);
+}
+
 forward Faction_CreateVehicle(id);
 public Faction_CreateVehicle(id) {
 

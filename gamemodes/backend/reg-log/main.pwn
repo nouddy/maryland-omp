@@ -639,8 +639,8 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 
 	foreach(new j : Player) {
 
-		if(PlayerInfo[playerid][Staff] >= 1)
-			SendClientMessage(playerid, x_white, register_str);
+		if(PlayerInfo[j][Staff] >= 1)
+			SendClientMessage(j, x_white, register_str);
 	}
 	return 1;
 }

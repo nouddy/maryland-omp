@@ -178,6 +178,7 @@ stock ReturnDate()
     return date;
 }
 
+
 /*
 stock GiveMoneyEx(playerid, novac)
 {
@@ -269,3 +270,4 @@ stock UpdateSqlFloat(dbHandle, tableName[], columnName[], Float:newValue, condit
     mysql_format(query, sizeof(query), "UPDATE %s SET %s = %.2f WHERE %s = %d", tableName, columnName, newValue, conditionColumn, conditionValue);
     mysql_tquery(dbHandle, query);
 }
+

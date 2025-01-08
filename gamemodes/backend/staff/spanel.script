@@ -85,7 +85,9 @@ Dialog: dialog_spanel(const playerid, response, listitem, string: inputtext[])
 					"Noc\nDan\nSunce\nKisa\nOluja\nMagla\nPjescana Oluja\nToxic\nDraw Distance",
 					"Odaberi", "Izlaz");
 			}
-			case 3:
+			case 3:	
+
+			//0 Kuca 1 Klupa 2 Biznis 3 Policija 4 KOntejner 5 Port
 			{
 				Dialog_Show(playerid, "dialog_napravi", DIALOG_STYLE_LIST,
 					"Napravi Funkcije",
@@ -174,6 +176,8 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 	{
 		switch(listitem)
 		{
+			// 0 Kuca 1 Klupa 2 Biznis 3 Policija 4 KOntejner 5 Port
+
 			case 0:
 			{
 				Dialog_Show(playerid, dialog_kreirajkucu, DIALOG_STYLE_LIST, "Maryland - Kreiraj Kucu:", "01\tMala Kuca\n02\tVelika Kuca\n03\tVila", "Dalje", "Izlaz");
@@ -201,17 +205,11 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 					"Upisite cenu za biznis i vrstu biznisa\n1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture",
 					"Odaberi", "Izlaz");
 			}
-			case 3:
-			{
-				Dialog_Show(playerid, "dialog_odabirstanice", DIALOG_STYLE_INPUT, "Maryland - Metro Kreiraj:", "** Upisite zeljenu rutu za vas metro\n\nMetro stanice: 1 - Ruta1 | 1 - Ruta2 | 2 - Ruta2 | 3 - Ruta3 | 4 - Ruta4 | 5 - Ruta5", "Dalje", "Izlaz");
-
-			}
-
-			case 4: {
+			case 3: {
 
 				Dialog_Show(playerid, "dialog_createPolice", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Upisite zeljeno ime za policiju", "Unesi", "Odustani");
 			}
-			case 5: {
+			case 4: {
 
 				new conID = 0;
 				for( new j = 0; j < MAX_CONTAINERS; j++ ) {
@@ -251,7 +249,7 @@ Dialog: dialog_napravi(const playerid, response, listitem, string: inputtext[])
 				EditContainer[ playerid ] = conID;
 				creatingContainer[ playerid ] = true;
 			}
-			case 6: {
+			case 5: {
 
 				Dialog_Show(playerid, "dialog_CreatePort", DIALOG_STYLE_INPUT, "Maryland - Port Creation", "** Upisite zeljeno ime za port", "Unesi", "Odustani");
 			}

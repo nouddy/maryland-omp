@@ -43,11 +43,7 @@ hook OnPlayerConnect(playerid)
 	ht_PlayerHunger[playerid][playerHunger] = MAX_HUNGER;
 	ht_PlayerHunger[playerid][playerThirst] = MAX_THIRST;
 
-	for(new i = 0; i < sizeof ht_Interface[]; i++) {
-
-		PlayerTextDrawDestroy(playerid, ht_Interface[playerid][i]);
-		ht_Interface[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-	}
+	ResetSurvivalInterface(playerid);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -107,13 +103,20 @@ stock Float:GetPlayerThirst(playerid)
 	return ht_PlayerHunger[playerid][playerThirst];
 }
 
-stock CreateSurvivalInterface(playerid) {
+stock ResetSurvivalInterface(playerid) {
 
 	for(new i = 0; i < sizeof ht_Interface[]; i++) {
 
 		PlayerTextDrawDestroy(playerid, ht_Interface[playerid][i]);
 		ht_Interface[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
 	}
+
+	return (true);
+}
+
+stock CreateSurvivalInterface(playerid) {
+
+	ResetSurvivalInterface(playerid);
 
 	ht_Interface[playerid][0] = CreatePlayerTextDraw(playerid, 543.999938, 400.570343, "");
 	PlayerTextDrawTextSize(playerid, ht_Interface[playerid][0], 47.000000, 55.000000);

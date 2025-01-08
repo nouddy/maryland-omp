@@ -85,7 +85,11 @@ CreatePickupsAnd3Ds()
     CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 978.1812, -1188.2797, 23.8752, -1, -1, 50.0);
     CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1201.1162, 2565.0740, -21.6386, 0, 10, 50.0);
     CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_white"'/bank'", 1276.6034,2567.2729,-21.6486, -1, -1, 50.0); //Bank menu fml
+    CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_white"'/bruteforce'", 1307.5564,2557.7239,-21.6686, -1, -1, 50.0); //* Breach Marker
+    CreateCustomMarker(""c_server"[ H4RBOR BANK ]\n"c_white"'/dynamite'", 1311.0708,2557.8801,-21.6686, -1, -1, 50.0); //* Dynamite Marker
+
     //? Hotel Maryland
+
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 1785.1909,-1296.4972,13.3967,  0, 0, 50.0); //ulaz
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1284.1803,5.6575,1004.5601, 22, 0, 50.0); //izlaz recepcija
     CreateCustomMarker(""c_server"[ Hotel ]\n"c_server"» "c_white"'Da koristite lift 'F'", 1281.4939,-45.6868,1000.8384, 22, 0, 50.0); //lift kod recepcije
@@ -205,12 +209,14 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
         //? Maryland Harbor Bankss
         else if(IsPlayerInRangeOfPoint(playerid, 3.0, 978.1812, -1188.2797, 23.8752) && GetPlayerVirtualWorld(playerid) == 0 && GetPlayerInterior(playerid) == 0) //Ulaz
         {
-            SetPlayerCompensatedPos(playerid, 1201.1162, 2565.0740, -21.6386, 10);
+            SetPlayerCompensatedPos(playerid, 1201.1162, 2565.0740, -21.6386, 0, 29);
+            CallLocalFunction("Robbery_CheckPlayerGasMask", "d", playerid);
             SetCameraBehindPlayer(playerid);
         }
-        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerVirtualWorld(playerid) == 10) // izlaz
+        else if(IsPlayerInRangeOfPoint(playerid, 3.0, 1201.1162, 2565.0740, -21.6386) && GetPlayerInterior(playerid) == 29) // izlaz
         {
             SetPlayerCompensatedPos(playerid, 980.5701, -1190.3965, 23.8752, 0, 0);
+            SetPlayerWeather(playerid, 0);
             SetCameraBehindPlayer(playerid);
         }
         //? Medical Department

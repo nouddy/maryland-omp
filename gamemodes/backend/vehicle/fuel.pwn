@@ -266,6 +266,14 @@ hook OnPlayerConnect(playerid) {
 
     nearestPump[playerid] = -1;
 
+    for(new i = 0; i < sizeof Fuel_UI[]; i++) {
+
+        if(Fuel_UI[playerid][i] == INVALID_PLAYER_TEXT_DRAW) continue;
+
+        PlayerTextDrawDestroy(playerid,Fuel_UI[playerid][i]);
+        Fuel_UI[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 

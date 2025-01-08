@@ -63,6 +63,10 @@
 #include <maryland-tp>
 #include <mSelection>
 
+#define SendServerMessage(%0,%1) \
+	SendClientMessage(%0, -1, ""c_server"maryland \187; {FFFFFF} "%1)
+
+
 main()
 {
     print("-                                     -");
@@ -82,6 +86,7 @@ public OnGameModeInit()
 {
 	mysql_log(ALL);
 	mainLog = CreateLog("main_log");
+	
 	//!Streamer za ucitavanje mapa
 
 	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 550);
@@ -218,6 +223,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- State Factions
 #include "backend/factions/state/faction_police.script"				//* Faction police zapocet (treba dodati novu kategoriju factions i tu dodati player_faction u kom ce se cuvati da li je clan factiona)
+#include "backend/factions/state/prison_cells.script"
 
 //-------------------------------------------------------------------------------------------------------- Illegal Factions
 #include "backend/factions/illegal/bunker.script"					//* Bunker
@@ -237,6 +243,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Robbery
 #include "backend/robbery/cash-register.pwn"
 #include "backend/robbery/house-burglary.pwn"
+#include "backend/robbery/bank-robbery.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Safe Zone
 #include "backend/safezone/safezone.script"
@@ -365,6 +372,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/police_int.map"							//* Police Int (24)
 #include "frontend/exterior/alcatraz_int.map"						//* Police Int (-1)
 #include "frontend/interior/carpentry_int.map"						//* Stolarija Int (25) znaci boze
+#include "frontend/interior/drug_lab.map"							//* Druglab Int (28) Neki tripovi
 
 
 
@@ -406,6 +414,9 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/stocks/chat.stock"								//* Chat Stock
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
+
+#include "backend/factions/illegal/custom_drugs.pwn"				//* Ozbiljnooo
+
 
 /*
 

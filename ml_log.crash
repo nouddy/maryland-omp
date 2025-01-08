@@ -838,3 +838,385 @@
 [11:50:03]  Attempted to read/write array element at negative index -1
 [11:50:03] AMX backtrace:
 [11:50:03] #0 008a041c in public UpdateTopPlayers () in <unknown>
+[09:38:43] Run time error 4: "Array index out of bounds"
+[09:38:43]  Attempted to read/write array element at negative index -2147483648
+[09:38:43] AMX backtrace:
+[09:38:43] #0 00192dec in ?? (0, 65) in <unknown>
+[09:38:43] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 65) in <unknown>
+[09:47:12] Run time error 4: "Array index out of bounds"
+[09:47:12]  Attempted to read/write array element at index 68 in array of size 12
+[09:47:12] AMX backtrace:
+[09:47:12] #0 00192dc4 in ?? (0, 57) in <unknown>
+[09:47:12] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 57) in <unknown>
+[09:47:13] Run time error 4: "Array index out of bounds"
+[09:47:13]  Attempted to read/write array element at index 68 in array of size 12
+[09:47:13] AMX backtrace:
+[09:47:13] #0 00192dc4 in ?? (0, 57) in <unknown>
+[09:47:13] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 57) in <unknown>
+[09:47:14] Run time error 4: "Array index out of bounds"
+[09:47:14]  Attempted to read/write array element at index 51 in array of size 12
+[09:47:14] AMX backtrace:
+[09:47:14] #0 00192dc4 in ?? (0, 61) in <unknown>
+[09:47:14] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 61) in <unknown>
+[09:47:15] Run time error 4: "Array index out of bounds"
+[09:47:15]  Attempted to read/write array element at index 56 in array of size 12
+[09:47:15] AMX backtrace:
+[09:47:15] #0 00192dc4 in ?? (0, 45) in <unknown>
+[09:47:15] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 45) in <unknown>
+[09:47:15] Run time error 4: "Array index out of bounds"
+[09:47:15]  Attempted to read/write array element at index 55 in array of size 12
+[09:47:15] AMX backtrace:
+[09:47:15] #0 00192dc4 in ?? (0, 41) in <unknown>
+[09:47:15] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 41) in <unknown>
+[09:47:18] Run time error 4: "Array index out of bounds"
+[09:47:18]  Attempted to read/write array element at index 56 in array of size 12
+[09:47:18] AMX backtrace:
+[09:47:18] #0 00192dc4 in ?? (0, 45) in <unknown>
+[09:47:18] #1 0007e0e4 in public OnPlayerClickPlayerTextDraw (0, 45) in <unknown>
+[16:08:09] Run time error 19: "File or function is not found"
+[16:08:09]  procexec
+[16:08:09] Run time error 19: "File or function is not found"
+[16:08:09]  procexec
+[16:08:18] Run time error 19: "File or function is not found"
+[16:08:18]  procexec
+[18:58:31] Run time error 4: "Array index out of bounds"
+[18:58:31]  Attempted to read/write array element at index 3 in array of size 3
+[18:58:31] AMX backtrace:
+[18:58:31] #0 00246a10 in ?? (0, 1) in <unknown>
+[18:58:31] #1 00247610 in public dialog_dialog_RobberyOption (0, 1, 0, 86877988) in <unknown>
+[18:58:31] #2 native CallLocalFunction () in Pawn.dll
+[18:58:31] #3 000ae048 in ?? (0, 32700, 1, 0, 86877988) in <unknown>
+[18:58:31] #4 0007c0cc in public OnDialogResponse (0, 32700, 1, 0, 86877988) in <unknown>
+[21:05:08] Run time error 4: "Array index out of bounds"
+[21:05:08]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:08] AMX backtrace:
+[21:05:08] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:08] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:08] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:08] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:08] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:08] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:12] Run time error 4: "Array index out of bounds"
+[21:05:12]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:12] AMX backtrace:
+[21:05:12] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:12] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:12] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:12] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:12] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:12] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:22] Run time error 4: "Array index out of bounds"
+[21:05:22]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:22] AMX backtrace:
+[21:05:22] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:22] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:22] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:22] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:22] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:22] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:25] Run time error 4: "Array index out of bounds"
+[21:05:25]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:25] AMX backtrace:
+[21:05:25] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:25] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:25] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:25] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:25] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:25] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:45] Run time error 4: "Array index out of bounds"
+[21:05:45]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:45] AMX backtrace:
+[21:05:45] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:45] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:45] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:45] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:45] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:45] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:47] Run time error 4: "Array index out of bounds"
+[21:05:47]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:47] AMX backtrace:
+[21:05:47] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:47] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:47] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:47] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:47] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:47] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:55] Run time error 4: "Array index out of bounds"
+[21:05:55]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:55] AMX backtrace:
+[21:05:55] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:55] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:55] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:55] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:55] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:55] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:56] Run time error 4: "Array index out of bounds"
+[21:05:56]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:56] AMX backtrace:
+[21:05:56] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:56] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:56] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:56] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:56] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:56] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:58] Run time error 4: "Array index out of bounds"
+[21:05:58]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:58] AMX backtrace:
+[21:05:58] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:58] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:58] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:58] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:58] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:58] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:05:59] Run time error 4: "Array index out of bounds"
+[21:05:59]  Attempted to read/write array element at index 21 in array of size 21
+[21:05:59] AMX backtrace:
+[21:05:59] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:05:59] #1 00899480 in ?? (0, 1) in <unknown>
+[21:05:59] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:05:59] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:05:59] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:05:59] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:11] Run time error 4: "Array index out of bounds"
+[21:06:11]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:11] AMX backtrace:
+[21:06:11] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:11] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:11] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:11] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:11] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:11] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:14] Run time error 4: "Array index out of bounds"
+[21:06:14]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:14] AMX backtrace:
+[21:06:14] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:14] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:14] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:14] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:14] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:14] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:18] Run time error 4: "Array index out of bounds"
+[21:06:18]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:18] AMX backtrace:
+[21:06:18] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:18] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:18] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:18] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:18] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:18] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:25] Run time error 4: "Array index out of bounds"
+[21:06:25]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:25] AMX backtrace:
+[21:06:25] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:25] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:25] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:25] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:25] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:25] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:30] Run time error 4: "Array index out of bounds"
+[21:06:30]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:30] AMX backtrace:
+[21:06:30] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:30] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:30] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:30] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:30] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:30] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:34] Run time error 4: "Array index out of bounds"
+[21:06:34]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:34] AMX backtrace:
+[21:06:34] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:34] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:34] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:34] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:34] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:34] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:40] Run time error 4: "Array index out of bounds"
+[21:06:40]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:40] AMX backtrace:
+[21:06:40] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:40] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:40] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:40] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:40] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:40] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:42] Run time error 4: "Array index out of bounds"
+[21:06:42]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:42] AMX backtrace:
+[21:06:42] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:42] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:42] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:42] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:42] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:42] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:46] Run time error 4: "Array index out of bounds"
+[21:06:46]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:46] AMX backtrace:
+[21:06:46] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:46] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:46] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:46] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:46] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:46] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:50] Run time error 4: "Array index out of bounds"
+[21:06:50]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:50] AMX backtrace:
+[21:06:50] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:50] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:50] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:50] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:50] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:50] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:53] Run time error 4: "Array index out of bounds"
+[21:06:53]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:53] AMX backtrace:
+[21:06:53] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:53] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:53] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:53] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:53] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:53] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:06:59] Run time error 4: "Array index out of bounds"
+[21:06:59]  Attempted to read/write array element at index 21 in array of size 21
+[21:06:59] AMX backtrace:
+[21:06:59] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:06:59] #1 00899480 in ?? (0, 1) in <unknown>
+[21:06:59] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:06:59] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:06:59] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:06:59] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:07:03] Run time error 4: "Array index out of bounds"
+[21:07:03]  Attempted to read/write array element at index 21 in array of size 21
+[21:07:03] AMX backtrace:
+[21:07:03] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:07:03] #1 00899480 in ?? (0, 1) in <unknown>
+[21:07:03] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:07:03] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:07:03] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:07:03] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:07:09] Run time error 4: "Array index out of bounds"
+[21:07:09]  Attempted to read/write array element at index 21 in array of size 21
+[21:07:09] AMX backtrace:
+[21:07:09] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:07:09] #1 00899480 in ?? (0, 1) in <unknown>
+[21:07:09] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:07:09] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:07:09] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:07:09] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:07:14] Run time error 4: "Array index out of bounds"
+[21:07:14]  Attempted to read/write array element at index 21 in array of size 21
+[21:07:14] AMX backtrace:
+[21:07:14] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:07:14] #1 00899480 in ?? (0, 1) in <unknown>
+[21:07:14] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:07:14] #3 000c6294 in ?? (0, 86921340, 0) in <unknown>
+[21:07:14] #4 000cbcbc in ?? (0, 86921340) in <unknown>
+[21:07:14] #5 0007e374 in public OnPlayerCommandText (0, 86921340) in <unknown>
+[21:08:36] Run time error 4: "Array index out of bounds"
+[21:08:36]  Attempted to read/write array element at index 21 in array of size 21
+[21:08:36] AMX backtrace:
+[21:08:36] #0 008928b0 in ?? (1, 71) in <unknown>
+[21:08:36] #1 00899480 in ?? (1, 1) in <unknown>
+[21:08:36] #2 0018cae0 in ?? (1, 51233120, 0) in <unknown>
+[21:08:36] #3 000c6294 in ?? (1, 86921340, 0) in <unknown>
+[21:08:36] #4 000cbcbc in ?? (1, 86921340) in <unknown>
+[21:08:36] #5 0007e374 in public OnPlayerCommandText (1, 86921340) in <unknown>
+[21:08:42] Run time error 4: "Array index out of bounds"
+[21:08:42]  Attempted to read/write array element at index 21 in array of size 21
+[21:08:42] AMX backtrace:
+[21:08:42] #0 008928b0 in ?? (1, 71) in <unknown>
+[21:08:42] #1 00899480 in ?? (1, 1) in <unknown>
+[21:08:42] #2 0018cae0 in ?? (1, 51233120, 0) in <unknown>
+[21:08:42] #3 000c6294 in ?? (1, 86921340, 0) in <unknown>
+[21:08:42] #4 000cbcbc in ?? (1, 86921340) in <unknown>
+[21:08:42] #5 0007e374 in public OnPlayerCommandText (1, 86921340) in <unknown>
+[21:08:45] Run time error 4: "Array index out of bounds"
+[21:08:45]  Attempted to read/write array element at index 21 in array of size 21
+[21:08:45] AMX backtrace:
+[21:08:45] #0 008928b0 in ?? (1, 71) in <unknown>
+[21:08:45] #1 00899480 in ?? (1, 1) in <unknown>
+[21:08:45] #2 0018cae0 in ?? (1, 51233120, 0) in <unknown>
+[21:08:45] #3 000c6294 in ?? (1, 86921340, 0) in <unknown>
+[21:08:45] #4 000cbcbc in ?? (1, 86921340) in <unknown>
+[21:08:45] #5 0007e374 in public OnPlayerCommandText (1, 86921340) in <unknown>
+[21:08:49] Run time error 4: "Array index out of bounds"
+[21:08:49]  Attempted to read/write array element at index 21 in array of size 21
+[21:08:49] AMX backtrace:
+[21:08:49] #0 008928b0 in ?? (1, 71) in <unknown>
+[21:08:49] #1 00899480 in ?? (1, 1) in <unknown>
+[21:08:49] #2 0018cae0 in ?? (1, 51233120, 0) in <unknown>
+[21:08:49] #3 000c6294 in ?? (1, 86921340, 0) in <unknown>
+[21:08:49] #4 000cbcbc in ?? (1, 86921340) in <unknown>
+[21:08:49] #5 0007e374 in public OnPlayerCommandText (1, 86921340) in <unknown>
+[21:09:02] Run time error 4: "Array index out of bounds"
+[21:09:02]  Attempted to read/write array element at index 21 in array of size 21
+[21:09:02] AMX backtrace:
+[21:09:02] #0 008928b0 in ?? (1, 71) in <unknown>
+[21:09:02] #1 00899480 in ?? (1, 1) in <unknown>
+[21:09:02] #2 0018cae0 in ?? (1, 51233120, 0) in <unknown>
+[21:09:02] #3 000c6294 in ?? (1, 86921340, 0) in <unknown>
+[21:09:02] #4 000cbcbc in ?? (1, 86921340) in <unknown>
+[21:09:02] #5 0007e374 in public OnPlayerCommandText (1, 86921340) in <unknown>
+[21:21:37] Run time error 4: "Array index out of bounds"
+[21:21:37]  Attempted to read/write array element at index 21 in array of size 21
+[21:21:37] AMX backtrace:
+[21:21:37] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:21:37] #1 00899480 in ?? (0, 1) in <unknown>
+[21:21:37] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:21:37] #3 000c6294 in ?? (0, 86921208, 0) in <unknown>
+[21:21:37] #4 000cbcbc in ?? (0, 86921208) in <unknown>
+[21:21:37] #5 0007e374 in public OnPlayerCommandText (0, 86921208) in <unknown>
+[21:25:15] Run time error 4: "Array index out of bounds"
+[21:25:15]  Attempted to read/write array element at index 21 in array of size 21
+[21:25:15] AMX backtrace:
+[21:25:15] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:25:15] #1 00899480 in ?? (0, 1) in <unknown>
+[21:25:15] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:25:15] #3 000c6294 in ?? (0, 86921208, 0) in <unknown>
+[21:25:15] #4 000cbcbc in ?? (0, 86921208) in <unknown>
+[21:25:15] #5 0007e374 in public OnPlayerCommandText (0, 86921208) in <unknown>
+[21:29:09] Run time error 4: "Array index out of bounds"
+[21:29:09]  Attempted to read/write array element at index 21 in array of size 21
+[21:29:09] AMX backtrace:
+[21:29:09] #0 008928b0 in ?? (0, 71) in <unknown>
+[21:29:09] #1 00899480 in ?? (0, 1) in <unknown>
+[21:29:09] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:29:09] #3 000c6294 in ?? (0, 86921208, 0) in <unknown>
+[21:29:09] #4 000cbcbc in ?? (0, 86921208) in <unknown>
+[21:29:09] #5 0007e374 in public OnPlayerCommandText (0, 86921208) in <unknown>
+[21:32:10] Run time error 4: "Array index out of bounds"
+[21:32:10]  Attempted to read/write array element at index 21 in array of size 21
+[21:32:10] AMX backtrace:
+[21:32:10] #0 00892570 in ?? (0, 71) in <unknown>
+[21:32:10] #1 00899140 in ?? (0, 1) in <unknown>
+[21:32:10] #2 0018cae0 in ?? (0, 51233120, 0) in <unknown>
+[21:32:10] #3 000c6294 in ?? (0, 86920524, 0) in <unknown>
+[21:32:10] #4 000cbcbc in ?? (0, 86920524) in <unknown>
+[21:32:10] #5 0007e374 in public OnPlayerCommandText (0, 86920524) in <unknown>
+[21:48:10] Run time error 4: "Array index out of bounds"
+[21:48:10]  Attempted to read/write array element at index 21 in array of size 21
+[21:48:10] AMX backtrace:
+[21:48:10] #0 00892960 in ?? (1, 71) in <unknown>
+[21:48:10] #1 00899530 in ?? (1, 1) in <unknown>
+[21:48:10] #2 0018cb90 in ?? (1, 51233120, 0) in <unknown>
+[21:48:10] #3 000c6294 in ?? (1, 86921460, 0) in <unknown>
+[21:48:10] #4 000cbcbc in ?? (1, 86921460) in <unknown>
+[21:48:10] #5 0007e374 in public OnPlayerCommandText (1, 86921460) in <unknown>
+[21:31:58] Run time error 4: "Array index out of bounds"
+[21:31:58]  Attempted to read/write array element at index 4 in array of size 4
+[21:31:58] AMX backtrace:
+[21:31:58] #0 00247c70 in ?? (0) in <unknown>
+[21:31:58] #1 002527c0 in ?? (0, 131072, 0) in <unknown>
+[21:31:58] #2 00080580 in public OnPlayerKeyStateChange (0, 131072, 0) in <unknown>
+[21:47:14] Run time error 4: "Array index out of bounds"
+[21:47:14]  Attempted to read/write array element at index 4 in array of size 4
+[21:47:14] AMX backtrace:
+[21:47:14] #0 00247be0 in ?? (0) in <unknown>
+[21:47:14] #1 0025292c in ?? (0, 131072, 0) in <unknown>
+[21:47:14] #2 00080580 in public OnPlayerKeyStateChange (0, 131072, 0) in <unknown>
+[21:52:14] Run time error 4: "Array index out of bounds"
+[21:52:14]  Attempted to read/write array element at index 4 in array of size 4
+[21:52:14] AMX backtrace:
+[21:52:14] #0 00247be0 in ?? (0) in <unknown>
+[21:52:14] #1 0025292c in ?? (0, 131072, 0) in <unknown>
+[21:52:14] #2 00080580 in public OnPlayerKeyStateChange (0, 131072, 0) in <unknown>

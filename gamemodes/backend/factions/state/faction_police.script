@@ -27,6 +27,8 @@ const INVALID_POLICE_ID = -1;
 
 const JAIL_TYPE_PRISON  = 1;
 
+const VEHICLE_TYPE_POLICE = 2;
+
 //============================================================ Enums (sufix f = Faction)
 
 enum E_POLICE_DATA {
@@ -71,6 +73,7 @@ new dutyPickup[MAX_POLICE];
 
 new Text3D:equLabel[MAX_POLICE];
 new equPickup[MAX_POLICE];
+
 
 //============================================================ Police Members
 
@@ -120,6 +123,69 @@ new const Float:sz_PrisonPositions[][3] = {
 
 /* Timers */
 
+forward PoliceMember_ShowList(playerid);
+public PoliceMember_ShowList(playerid) {
+
+    new rows = cache_num_rows();
+    if(!rows) return SendClientMessage(playerid, x_green, ">> Nemate clanove!");
+
+    else {
+
+        new dialogStr[1024];
+        new stringicc[288];
+        for(new i = 0; i < rows; i++) {
+
+            new charID;
+            static charName[MAX_PLAYER_NAME+1];
+
+            cache_get_value_name(i, "cName", charName, sizeof charName);
+            cache_get_value_name_int(i, "character_id", charID);
+
+            format(stringicc, sizeof stringicc, ""c_server"#%d \187; "c_ltorange"%s   "c_server"SQLID \187; "c_ltorange"%d\n", i+1, charName, charID);
+            strcat(dialogStr, stringicc);
+        }
+
+        Dialog_Show(playerid, "dialog_noreturn-faction", DIALOG_STYLE_LIST, "Faction - Members", dialogStr, "Ok", "");
+    }
+    return 1;
+}
+
+forward Police_CheckMemberKick(playerid);
+public Police_CheckMemberKick(playerid) {
+
+    new rows = cache_num_rows();
+
+    if(!rows)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije clan vase policije!");
+
+    new xMemberID, xFactionID, xFactionRank;
+
+    cache_get_value_name_int(0, "character_id", xMemberID);
+    cache_get_value_name_int(0, "police_id", xFactionID);
+    cache_get_value_name_int(0, "police_rank", xFactionRank);
+
+
+    new q[128]; 
+    mysql_format(SQL, q, sizeof q, "DELETE FROM `police_members` WHERE `character_id` = '%d'", xMemberID);
+    mysql_tquery(SQL, q);
+
+    foreach(new i : Player) {
+
+        if(PoliceMember[i][policeID] == xFactionID && PoliceMember[i][characterID] == xMemberID) {
+
+            PoliceMember[i][policeID] = 0;
+            PoliceMember[i][characterID] = 0;
+            PoliceMember[i][arrests] = 0;
+            PoliceMember[i][policeRank] = 0;
+
+            SendClientMessage(i, x_server, "maryland \187; "c_white"Leader %s vas je izbacio iz policije!", ReturnPlayerName(playerid));
+            break;
+        }
+    }
+
+    return (true);
+}
+
 forward Cuff_UpdatePlayerPosition(playerid);
 public Cuff_UpdatePlayerPosition(playerid) {
 
@@ -137,6 +203,35 @@ public Cuff_UpdatePlayerPosition(playerid) {
 }
 
 /* Stocks */
+
+stock Police_CountOnlineMembers( police ) {
+
+    static members = 0;
+
+    foreach(new i : iter_Police) {
+
+        if(fPoliceInfo[i][fPoliceID] == police) {
+
+            members++;
+        }
+    }
+
+    return members;
+}
+
+stock ShowPlayerPolicePanel(playerid) {
+
+    if(playerid == INVALID_PLAYER_ID) return (0);
+    if(!IsPlayerConnected(playerid)) return (0);
+
+    Dialog_Show(playerid, "dialog_policePanel", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_white"Police Panel", 
+                                                                    ""c_server"#1 \187; "c_white"Informacije\n\
+                                                                    "c_server"#2 \187; "c_white"Clanovi\n\
+                                                                    "c_server"#3 \187; "c_white"Respawn Vozila\n\
+                                                                    "c_server"#4 \187; "c_white"Ubaci Clana\n\
+                                                                    "c_server"#5 \187; "c_white"Izbaci Clana\n", "Odaberi", "Odustani");
+    return (true);
+}
 
 stock Police_ReturnNameByPlayer(playerid) {
 
@@ -304,6 +399,14 @@ stock GetPoliceType(id) {
         case 3: { string = "Specijalne Jedinice"; }
     }
     return string;
+}
+
+stock IsPlayerPoliceLeader(playerid) {
+
+    if(PoliceMember[playerid][policeRank] == 4)
+        return true;
+
+    return false;
 }
 
 hook OnCharacterLoaded(playerid) {
@@ -568,7 +671,19 @@ YCMD:tazer(playerid, params[], help) {
     return 1;
 }
 
+YCMD:police(playerid, params[], help) {
+
+    if(!IsPlayerPoliceLeader(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste nacelnik policije!");
+
+    ShowPlayerPolicePanel(playerid);
+    return (true);
+}
+
 YCMD:pinvite(playerid, params[], help) {
+
+    if(!IsPlayerPoliceLeader(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste nacelnik policije!");
 
     new targetid;
     
@@ -1024,6 +1139,145 @@ public CreateEquPoint(id) {
 }
 
 /* Dialogs */
+
+Dialog:dialog_policePanel(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) {
+
+        switch(listitem) {
+
+            case 0: {
+
+                new dlgStr[560];
+                format(dlgStr, sizeof dlgStr, ""c_server"Police : "c_white"%s\n\
+                                              "c_server"Police ID : "c_white"%d\n\
+                                              "c_server"Online Clanovi : "c_white"%d", 
+                                                Police_ReturnNameByPlayer(playerid), PoliceMember[playerid][policeID], Police_CountOnlineMembers( PoliceMember[playerid][policeID] ));
+                Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, ""c_server"Maryland \187; "c_white"Police Panel", dlgStr, "Ok");
+
+            }
+
+            case 1: {
+
+                new q[267];
+                new orgID = PoliceMember[playerid][policeID];
+
+                mysql_format(MySQL:SQL, q, sizeof q, "SELECT fm.character_id, fm.police_id, fm.police_rank, c.cName \
+                                                    FROM police_members fm \
+                                                    JOIN characters c ON fm.character_id = c.character_id \
+                                                    WHERE fm.police_id = '%d';", orgID);
+                mysql_tquery(MySQL:SQL, q, "PoliceMember_ShowList", "d", playerid);
+
+            }
+
+            case 2: {
+
+                // Let me think let me calc...
+                Faction_RespawnVehicles( v_FACTION_TYPE:VEHICLE_TYPE_POLICE );
+                SendClientMessage(playerid, x_faction, "vehicle-respawn \187; "c_white"Uspjesno ste pokrenuli respawn svih vozila!");
+
+            }
+
+            case 3: {
+
+                Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Unesit zeljeni Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+            }
+
+            case 4: {
+
+                Dialog_Show(playerid, "dialog_policeKick", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Unesite SQLID igraca/karaktera kojeg zelite izbaciti iz policije!", "Unesi", "Nazad");
+
+            }
+        }
+    }
+
+    return (true);
+}
+
+Dialog:dialog_policeKick(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) {
+
+        new target;
+        if(sscanf(inputtext, "d", target))
+            return Dialog_Show(playerid, "dialog_policeKick", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_ltorange"Kick Member", 
+                                                                                "Unesite SQLID igraca/karaktera kojeg zelite izbaciti iz policije", "Unesi", "Odustani");
+        
+        if(isnull(inputtext))
+            Dialog_Show(playerid, "dialog_policeKick", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_ltorange"Kick Member", 
+                                                                                "Unesite SQLID igraca/karaktera kojeg zelite izbaciti iz policije", "Unesi", "Odustani");
+        if(!IsNumeric(inputtext))
+            Dialog_Show(playerid, "dialog_policeKick", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_ltorange"Kick Member", 
+                                                                                "Unesite SQLID igraca/karaktera kojeg zelite izbaciti iz policije", "Unesi", "Odustani");
+
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "SELECT * FROM `police_members` WHERE `character_id` = '%d' AND `police_id` = '%d'", target, PoliceMember[playerid][policeID]);
+        mysql_tquery(SQL, q, "Police_CheckMemberKick", "d", playerid);
+    }
+
+    return (true);
+}
+
+Dialog:dialog_policeInvite(const playerid, response, listitem, string:inputtext[]) {
+
+    if(!response) 
+        return ShowPlayerPolicePanel(playerid);
+
+    if(response) {
+
+        new targetid;
+    
+        if(sscanf(inputtext, "u", targetid))
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Unesite zeljeno Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+        if(!IsPlayerConnected(targetid))
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Taj igrac nije konektovan na server!\nUnesite zeljeno Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+        
+        if(targetid == playerid)
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Ne mozete pozvati samog sebe\nUnesiet zeljeno Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+        if(targetid == INVALID_PLAYER_ID)
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Unesit zeljeni Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+        if(IsPlayerFactionMember(targetid)) 
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Taj igrac je vec clan neke fakcije\nUnesit zeljeni Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+        if(IsPlayerPoliceMember(targetid))
+            return Dialog_Show(playerid, "dialog_policeInvite", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Taj igrac je vec clan neke fakcije\nUnesit zeljeni Ime / ID igraca kojeg zelite pozvati u policiju!", "Unesi", "Nazad");
+
+        if(police_InviteID[playerid] != INVALID_PLAYER_ID)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste poslali poziv nekom igracu!"); 
+
+        if(police_InviteFID[targetid] != 0)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Tom igracu je vec ponudjen poziv!"); 
+
+        if(!DistanceBetweenPlayers(3.40, playerid, targetid))
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u blizini tog igraca!");
+
+        //*
+
+        police_InviteID[playerid] = targetid;
+        police_InviteID[targetid] = playerid;
+        police_InviteFID[targetid] = PoliceMember[playerid][policeID];
+
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Poslali ste invite igracu %s!", ReturnPlayerName(targetid));
+
+        new sstr[2048];
+        format(sstr, sizeof sstr, "%s[%d] vas je pozvao da se priduzite policiji.\n\
+                                "c_white"Policija : "c_server"%s[%d].\n\
+                                "c_white"Leader : "c_server"%s[%d].\n\
+                                "c_white"Ukoliko zelite prihvatiti poziv pritisnite "c_server"PRIHVATI.", 
+                                ReturnPlayerName(playerid), playerid, Police_ReturnNameByPlayer(playerid), PoliceMember[playerid][policeID], ReturnPlayerName(playerid), playerid);
+
+        Dialog_Show(police_InviteID[playerid], "dialog_pdInvite", DIALOG_STYLE_MSGBOX, "Maryland \187; "c_server"Policija Deparment", sstr, ""c_green"PRIHVATI", ""c_lred"ODBIJ");
+
+    }
+
+    return (true);
+
+}
+
 
 Dialog:dialog_pdInvite(const playerid, response, listitem, string:inputtext[]) {
 

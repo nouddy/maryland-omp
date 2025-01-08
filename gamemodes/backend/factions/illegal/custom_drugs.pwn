@@ -14,7 +14,7 @@
 #define SPEED_EFFECT_TIME     120000  // 2 minutes
 #define MUSHROOM_EFFECT_TIME  180000  // 3 minutes
 #define COCAINE_EFFECT_TIME   180000  // 3 minutes
-#define PRODUCTION_TIME       300000  // 5 minutes
+#define PRODUCTION_TIME       180000  // 5 minutes
 #define COCA_GROWTH_TIME      600000  // 10 minutes
 
 // ========================================================================
@@ -54,24 +54,6 @@ enum E_PLAYER_DRUG_DATA {
 // ========================================================================
 
 new gPlayerDrugData[MAX_PLAYERS][E_PLAYER_DRUG_DATA];
-
-// Production locations (not real, change it)
-new Float:gSpeedLabLocations[][] = {
-    {1234.5, 2345.6, 10.5},  // Lab 1
-    {2345.6, 3456.7, 10.5}   // Lab 2
-};
-// Mushroom locations (not real, change it)
-new Float:gMushroomLocations[][] = {
-    {-1234.5, -2345.6, 10.5},  // Forest 1
-    {-2345.6, -3456.7, 10.5}   // Forest 2
-};
-
-// Coca plant locations (not real, change it)
-new Float:gCocaPlantLocations[][] = {
-    {3456.7, 4567.8, 10.5},  // Mountain 1
-    {4567.8, 5678.9, 10.5}   // Mountain 2
-};
-
 // ========================================================================
 // Player Speed Functions
 // ========================================================================
@@ -87,25 +69,6 @@ SetPlayerRunSpeed(playerid, Float:speed) {
     gPlayerDrugData[playerid][pOriginalRunSpeed] = speed;
     return 1;
 }
-
-hook OnPlayerUpdate(playerid) {
-    if(!IsPlayerConnected(playerid)) return 1;
-    if(gPlayerDrugData[playerid][pOriginalRunSpeed] <= 0.0) return 1;
-    
-    if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT && (GetPlayerKeys(playerid) & KEY_SPRINT)) {
-        new Float:x, Float:y, Float:z;
-        GetPlayerVelocity(playerid, x, y, z);
-        
-        // Multiply current velocity by speed multiplier
-        SetPlayerVelocity(playerid, 
-            x * gPlayerDrugData[playerid][pOriginalRunSpeed],
-            y * gPlayerDrugData[playerid][pOriginalRunSpeed],
-            z
-        );
-    }
-    return 1;
-}
-
 
 // ========================================================================
 // Dialog Handlers
@@ -128,7 +91,7 @@ Dialog:DRUGS_SPEED(playerid, response, listitem, string: inputtext[]) {
     if(!IsPlayerInDrugZone(playerid, DRUG_SPEED))
         return SendClientMessage(playerid, x_red, "Nisi na odgovarajucoj lokaciji!");
     
-    StartDrugProduction(playerid, DRUG_SPEED);
+    StartDrugProduction(playerid, _:DRUG_SPEED);
     return 1;
 }
 
@@ -138,7 +101,7 @@ Dialog:DRUGS_MUSHROOMS(playerid, response, listitem, string: inputtext[]) {
     if(!IsPlayerInDrugZone(playerid, DRUG_MUSHROOMS))
         return SendClientMessage(playerid, x_red, "Nisi na odgovarajucoj lokaciji!");
     
-    StartDrugProduction(playerid, DRUG_MUSHROOMS);
+    StartDrugProduction(playerid, _:DRUG_MUSHROOMS);
     return 1;
 }
 
@@ -148,7 +111,7 @@ Dialog:DRUGS_COCAINE(playerid, response, listitem, string: inputtext[]) {
     if(!IsPlayerInDrugZone(playerid, DRUG_COCAINE))
         return SendClientMessage(playerid, x_red, "Nisi na odgovarajucoj lokaciji!");
     
-    StartDrugProduction(playerid, DRUG_COCAINE);
+    StartDrugProduction(playerid, _:DRUG_COCAINE);
     return 1;
 }
 
@@ -197,23 +160,67 @@ ShowCocaineProductionDialog(playerid) {
         "Start", "Nazad");
 }
 
+Drugs_CheckValidPreparation(playerid, drugType) {
+
+    switch(E_DRUG_TYPES:drugType) {
+
+        // Kemikalije - 5  Alkohol - 1  Destilovana Voda - 2 --> Spidara
+
+        case DRUG_SPEED: {
+
+            if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_CHEMICALS) != 5 && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_ALCOHOL) != 1 \
+              && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_DISTILLED_WATER) != 2)
+            {
+                SendClientMessage(playerid, x_green, "DRUG-LAB: Nemate dovoljnu kolicinu potrebnih stvari za proces prerade!");
+                return ~1;
+            }
+        }
+
+        case DRUG_COCAINE: {
+
+            if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_CHEMICALS) != 5 && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_ALCOHOL) != 1 \
+              && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_DISTILLED_WATER) != 2 && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_HERBS) != 7)
+                {
+                SendClientMessage(playerid, x_green, "DRUG-LAB: Nemate dovoljnu kolicinu potrebnih stvari za proces prerade!");
+                return ~1;
+            }
+        }
+
+        case DRUG_MUSHROOMS: {
+
+            if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_CHEMICALS) != 5 && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_LAB_EQUIPMENT) != 1 \
+              && Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_HERBS) != 5)
+            {
+                SendClientMessage(playerid, x_green, "DRUG-LAB: Nemate dovoljnu kolicinu potrebnih stvari za proces prerade!");
+                return ~1;
+            }
+        }
+    }
+
+    return (1);
+}
+
 StartDrugProduction(playerid, drugType) {
     if(!IsPlayerConnected(playerid)) return 0;
+
+    Drugs_CheckValidPreparation(playerid, drugType);
+
     if(gPlayerDrugData[playerid][pIsProducingDrugs]) 
-        return SendClientMessage(playerid, x_red, "Vec proizvodis drogu!");
+        return SendClientMessage(playerid, x_red, "DRUG-LAB: Vec proizvodis drogu!");
 
     gPlayerDrugData[playerid][pIsProducingDrugs] = true;
-    gPlayerDrugData[playerid][pDrugProductionTimer] = SetTimerEx("FinishDrugProduction", 
-        PRODUCTION_TIME, false, "ii", playerid, drugType);
-    
+    gPlayerDrugData[playerid][pDrugProductionTimer] = SetTimerEx("FinishDrugProduction", PRODUCTION_TIME, false, "dd", playerid, drugType);
+
+    TogglePlayerControllable(playerid, false);
+
     new message[64];
-    format(message, sizeof(message), "Zapoceo si proizvodnju %s. Sacekaj 5 minuta.", 
-        GetDrugName(drugType));
+    format(message, sizeof(message), "DRUG-LAB: Zapoceo si proizvodnju %s. Sacekaj 5 minuta.", 
+        GetDrugName(E_DRUG_TYPES:drugType));
     SendClientMessage(playerid, x_green, message);
     return 1;
 }
 
-GetDrugName(drugType) {
+GetDrugName(E_DRUG_TYPES:drugType) {
     new drugName[32];
     switch(drugType) {
         case DRUG_SPEED: drugName = "Speed-a";
@@ -230,7 +237,7 @@ GetDrugName(drugType) {
 
 YCMD:droge(playerid, params[], help) {
     if(!IsPlayerInAnyDrugZone(playerid))
-        return SendClientMessage(playerid, x_red, "Nisi na odgovarajucoj lokaciji!");
+        return SendClientMessage(playerid, x_red, "DRUG-LAB: Nisi na odgovarajucoj lokaciji!");
     
     return ShowMainDrugDialog(playerid);
 }
@@ -239,45 +246,24 @@ YCMD:droge(playerid, params[], help) {
 // Location & Zone Functions
 // ========================================================================
 
-IsPlayerInDrugZone(playerid, drugType) {
-    if(!IsPlayerConnected(playerid)) return 0;
-    
-    new Float:x, Float:y, Float:z;
-    GetPlayerPos(playerid, x, y, z);
+IsPlayerInDrugZone(playerid, E_DRUG_TYPES:drugType) {
+    if(!IsPlayerConnected(playerid)) return false;
     
     switch(drugType) {
         case DRUG_SPEED: {
-            for(new i = 0; i < sizeof(gSpeedLabLocations); i++) {
-                if(IsPlayerInRangeOfPoint(playerid, 3.0, 
-                    gSpeedLabLocations[i][0], 
-                    gSpeedLabLocations[i][1], 
-                    gSpeedLabLocations[i][2])) {
-                    return 1;
-                }
-            }
+            if(IsPlayerInRangeOfPoint(playerid, 3.0, -2415.0857,-2466.1589,-77.8954))
+                return (true);
         }
         case DRUG_MUSHROOMS: {
-            for(new i = 0; i < sizeof(gMushroomLocations); i++) {
-                if(IsPlayerInRangeOfPoint(playerid, 3.0, 
-                    gMushroomLocations[i][0], 
-                    gMushroomLocations[i][1], 
-                    gMushroomLocations[i][2])) {
-                    return 1;
-                }
-            }
+            if(IsPlayerInRangeOfPoint(playerid, 3.0, -2415.0857,-2466.1589,-77.8954))
+                return (true);
         }
         case DRUG_COCAINE: {
-            for(new i = 0; i < sizeof(gCocaPlantLocations); i++) {
-                if(IsPlayerInRangeOfPoint(playerid, 3.0, 
-                    gCocaPlantLocations[i][0], 
-                    gCocaPlantLocations[i][1], 
-                    gCocaPlantLocations[i][2])) {
-                    return 1;
-                }
-            }
+            if(IsPlayerInRangeOfPoint(playerid, 3.0, -2415.0857,-2466.1589,-77.8954))
+                return (true);
         }
     }
-    return 0;
+    return false;
 }
 
 IsPlayerInAnyDrugZone(playerid) {
@@ -297,36 +283,33 @@ IsPlayerInAnyDrugZone(playerid) {
 ApplyDrugEffect(playerid, drugType) {
     if(!IsPlayerConnected(playerid)) return 0;
     if(gPlayerDrugData[playerid][pUnderInfluence])
-        return SendClientMessage(playerid, x_red, "Vec si pod uticajem droge!");
+        return SendClientMessage(playerid, x_red, "DRUGS: Vec si pod uticajem droge!");
 
     switch(drugType) {
-        case DRUG_SPEED: {
+        case INVENTORY_ITEM_SPEED: {
             // Store original speed and apply boost
-            gPlayerDrugData[playerid][pOriginalRunSpeed] = GetPlayerRunSpeed(playerid);
-            SetPlayerRunSpeed(playerid, gPlayerDrugData[playerid][pOriginalRunSpeed] * 1.3);
-            
             // Visual effects
-            SetPlayerDrunkLevel(playerid, 2000);
+            SetPlayerDrunkLevel(playerid, 6000);
             
             // Start effect timer
             gPlayerDrugData[playerid][pUnderInfluence] = true;
             gPlayerDrugData[playerid][pDrugEffectTimer] = SetTimerEx("DrugEffectTimeout", 
-                SPEED_EFFECT_TIME, false, "ii", playerid, DRUG_SPEED);
+                SPEED_EFFECT_TIME, false, "ii", playerid, _:DRUG_SPEED);
         }
-        case DRUG_MUSHROOMS: {
+        case INVENTORY_ITEM_SHROOMS: {
             // Visual and weather effects
             SetPlayerWeather(playerid, random(20));
-            SetPlayerDrunkLevel(playerid, 4000);
+            SetPlayerDrunkLevel(playerid, 7000);
             
             // Start hallucination effects
             gPlayerDrugData[playerid][pUnderInfluence] = true;
             gPlayerDrugData[playerid][pDrugEffectTimer] = SetTimerEx("DrugEffectTimeout", 
-                MUSHROOM_EFFECT_TIME, false, "ii", playerid, DRUG_MUSHROOMS);
+                MUSHROOM_EFFECT_TIME, false, "ii", playerid, _:DRUG_MUSHROOMS);
             
             // Update hallucinations every 10 seconds
             SetTimerEx("UpdateHallucination", 10000, true, "i", playerid);
         }
-        case DRUG_COCAINE: {
+        case INVENTORY_ITEM_COCAINE: {
             // Speed and armor boost
             gPlayerDrugData[playerid][pOriginalRunSpeed] = GetPlayerRunSpeed(playerid);
             SetPlayerRunSpeed(playerid, gPlayerDrugData[playerid][pOriginalRunSpeed] * 1.2);
@@ -338,9 +321,12 @@ ApplyDrugEffect(playerid, drugType) {
             // Start effect timer
             gPlayerDrugData[playerid][pUnderInfluence] = true;
             gPlayerDrugData[playerid][pDrugEffectTimer] = SetTimerEx("DrugEffectTimeout", 
-                COCAINE_EFFECT_TIME, false, "ii", playerid, DRUG_COCAINE);
+                COCAINE_EFFECT_TIME, false, "ii", playerid, _:DRUG_COCAINE);
         }
     }
+
+    Inventory_Remove(playerid, drugType, 5);
+
     return 1;
 }
 
@@ -350,16 +336,36 @@ ApplyDrugEffect(playerid, drugType) {
 
 forward FinishDrugProduction(playerid, drugType);
 public FinishDrugProduction(playerid, drugType) {
+    
+    if(playerid == INVALID_PLAYER_ID) return 0;
     if(!IsPlayerConnected(playerid)) return 0;
     
     gPlayerDrugData[playerid][pIsProducingDrugs] = false;
+    TogglePlayerControllable(playerid, true);
     
-    // Here you would add the drug to player's inventory
-    // AddItemToInventory(playerid, GetDrugItemID(drugType), 1);
     
     new message[128];
-    format(message, sizeof(message), "Uspesno si proizveo %s!", GetDrugName(drugType));
+    format(message, sizeof(message), "DRUG-LAB: Uspesno si proizveo %s!", GetDrugName(E_DRUG_TYPES:drugType));
     SendClientMessage(playerid, x_green, message);
+
+    switch(E_DRUG_TYPES:drugType) {
+
+        case DRUG_COCAINE: {
+
+            Inventory_AddItem(playerid, INVENTORY_ITEM_COCAINE, 10);
+        }
+
+        case DRUG_SPEED: {
+
+            Inventory_AddItem(playerid, INVENTORY_ITEM_SPEED, 15);
+        }
+
+        case DRUG_MUSHROOMS: {
+
+            Inventory_AddItem(playerid, INVENTORY_ITEM_SHROOMS, 20);
+        }
+    }
+
     return 1;
 }
 
@@ -367,7 +373,7 @@ forward DrugEffectTimeout(playerid, drugType);
 public DrugEffectTimeout(playerid, drugType) {
     if(!IsPlayerConnected(playerid)) return 0;
 
-    switch(drugType) {
+    switch(E_DRUG_TYPES:drugType) {
         case DRUG_SPEED: {
             if(random(100) < 20) { // 20% chance of overdose
                 new Float:health;
@@ -460,6 +466,28 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     return 1;
 }
 
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED(KEY_SECONDARY_ATTACK)) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, 800.8521,-545.9084,16.3359))
+        {
+            SetPlayerCompensatedPos(playerid, -2406.4624,-2447.5037,-77.8954, 0, 28);
+            SetPlayerFacingAngle(playerid, 180.0);
+            return ~1;
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, -2406.4624,-2447.5037,-77.8954)) {
+
+            SetPlayerCompensatedPos(playerid, 800.8521,-545.9084,16.3359, 0, 0);
+            SetPlayerFacingAngle(playerid, 180.0);
+            return ~1;
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 // ========================================================================
 // Drug Dealer Actor System
 // ========================================================================
@@ -471,14 +499,13 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
 // Dealer locations array (not real, change it)
 new Float:gDealerLocations[][] = {
-    {1234.5, 2345.6, 10.5, 90.0},    // X, Y, Z, Rotation
-    {2345.6, 3456.7, 10.5, 180.0},
-    {3456.7, 4567.8, 10.5, 270.0},
-    {4567.8, 5678.9, 10.5, 0.0},
-    {5678.9, 6789.0, 10.5, 45.0},
-    {6789.0, 7890.1, 10.5, 135.0},
-    {7890.1, 8901.2, 10.5, 225.0},
-    {8901.2, 9012.3, 10.5, 315.0}
+    { 992.7467,-1084.8202,26.0313,135.8911 },
+    { 1937.9640,-1067.0531,24.4174,311.6073},
+    { 2698.0137,-1116.9785,69.5781,175.8074},
+    { 2840.2112,-1345.9681,11.0625,345.8921},
+    { 2209.4211,-2532.9670,13.5469,1.9793 },
+    { 2058.5972,-2151.6001,13.6328,84.7816},
+    { 1395.2142,-1894.2020,13.4873,89.6369}
 };
 
 // Dealer data structure
@@ -530,6 +557,8 @@ SpawnRandomDealer(dealerid) {
         -1     // Interior
     );
     
+    printf("[DEALERS]: Dealer ID %d has ben created", dealerid);
+
     // Set up next location change
     if(gDealerData[dealerid][dealerUpdateTimer]) {
         KillTimer(gDealerData[dealerid][dealerUpdateTimer]);
@@ -599,16 +628,17 @@ hook OnDynamicActorStreamIn(STREAMER_TAG_ACTOR:actorid, forplayerid) {
 // Dealer Commands
 // ========================================================================
 
+
 YCMD:kupidrogu(playerid, params[], help) {
     if(help) {
-        SendClientMessage(playerid, x_green, "Koristi /kupidrogu da kupis sastojke za drogu od dilera.");
+        SendClientMessage(playerid, x_green, "DEALER: Koristi /kupidrogu da kupis sastojke za drogu od dilera.");
         return 1;
     }
 
     if(!IsPlayerNearDealer(playerid))
-        return SendClientMessage(playerid, x_red, "Nisi blizu dilera!");
+        return SendClientMessage(playerid, x_red, "DEALER: Nisi blizu dilera!");
         
-    Dialog_Show(playerid, DRUGS_DEALER, DIALOG_STYLE_LIST,
+    Dialog_Show(playerid, DRUGS_DEALER, DIALOG_STYLE_TABLIST,
         "Kupovina droge",
         "Pseudoefedrin\tCena: $1000\n\
         Hemikalije\tCena: $800\n\
@@ -620,6 +650,34 @@ YCMD:kupidrogu(playerid, params[], help) {
     return 1;
 }
 
+YCMD:dealertp(playerid, params[], help) {
+
+    if(!IsPlayerAdmin(playerid))
+        return (true);
+
+    new dealerid;
+    if(sscanf(params, "d", dealerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/dealertp <dealer>");
+
+    new bool:dealerFound = false;
+
+    if(gDealerData[dealerid][dealerInUse])
+    {
+        dealerFound = true;
+    }
+
+    if(!dealerFound)
+        return SendClientMessage(playerid, x_faction, "DEALER: Unjeli ste krivi ID dilera!");
+
+
+    new locationIndex = gDealerData[dealerid][dealerLocationIndex];
+    SetPlayerCompensatedPos(playerid, gDealerLocations[locationIndex][0],
+                                      gDealerLocations[locationIndex][1],
+                                      gDealerLocations[locationIndex][2]);
+
+    return 1;
+}
+
 // ========================================================================
 // Dealer Dialogs
 // ========================================================================
@@ -627,52 +685,61 @@ YCMD:kupidrogu(playerid, params[], help) {
 Dialog:DRUGS_DEALER(playerid, response, listitem, string: inputtext[]) {
     if(!response) return 1;
     if(!IsPlayerNearDealer(playerid))
-        return SendClientMessage(playerid, x_red, "Nisi blizu dilera!");
+        return SendClientMessage(playerid, x_red, "DEALER: Nisi blizu dilera!");
     
-    new price;
+    new xPrice;
     new itemName[32];
+    new xitemID;
     
     switch(listitem) {
         case 0: { // Pseudoefedrin
-            price = 1000;
+            xPrice = 1000;
             itemName = "Pseudoefedrin";
+            xitemID = INVENTORY_ITEM_PSEUDOEPHEDRINE;
         }
         case 1: { // Hemikalije
-            price = 800;
+            xPrice = 800;
             itemName = "Hemikalije";
+            xitemID = INVENTORY_ITEM_CHEMICALS;
         }
         case 2: { // Lab oprema
-            price = 2000;
+            xPrice = 2000;
             itemName = "Laboratorijska oprema";
+            xitemID = INVENTORY_ITEM_LAB_EQUIPMENT;
+            
         }
         case 3: { // Koka listovi
-            price = 1500;
+            xPrice = 1500;
             itemName = "Koka listovi";
+            xitemID = INVENTORY_ITEM_HERBS;
         }
         case 4: { // Benzin
-            price = 500;
+            xPrice = 500;
             itemName = "Benzin";
+            xitemID = INVENTORY_ITEM_GASOLINE;
         }
         case 5: { // Omeprazol
-            price = 1000;
+            xPrice = 1000;
             itemName = "Omeprazol";
+            xitemID = INVENTORY_ITEM_OMEPRAZOLE;
         }
     }
     
     // Check if player has enough money
-    if(GetPlayerMoney(playerid) < price) {
-        SendClientMessage(playerid, x_red, "Nemas dovoljno novca!");
+    if(GetPlayerMoney(playerid) < xPrice) {
+        SendClientMessage(playerid, x_faction, "DEALER: Nemas dovoljno novca!");
         return 1;
     }
     
-    // Here you would implement your inventory system
-    // AddItemToInventory(playerid, listitem + ITEM_DRUG_INGREDIENTS_START, 1);
+    if(Inventory_GetItemQuantity(playerid, xitemID) >= sz_quantityInfo[xitemID-50][maxQuantity])
+        return SendClientMessage(playerid, x_faction, "DEALER: Vec posjedujete maksimalnu kolicinu ovog predmeta!");
     
-    GivePlayerMoney(playerid, -price);
+    Inventory_AddItem(playerid, xitemID, 1);
+    GivePlayerMoney(playerid, -xPrice);
     
     new message[128];
-    format(message, sizeof(message), "Kupio si %s za $%d.", itemName, price);
-    SendClientMessage(playerid, x_green, message);
+    format(message, sizeof(message), "DEALER: Kupio si %s za $%d.", itemName, xPrice);
+    SendClientMessage(playerid, x_faction, message);
     return 1;
 }
 

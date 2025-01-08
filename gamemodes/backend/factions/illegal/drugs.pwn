@@ -415,7 +415,7 @@ stock UpdateTemperatureTextDraw(playerid, count, Float:value) {
             new quantity = RandomMinMax(4, 10);
             quantity =  floatround( (quantity / xDivider), floatround_ceil );
 
-            Inventory_AddItem(playerid, INVENTORY_ITEM_MDMA, quantity);
+            // Inventory_AddItem(playerid, INVENTORY_ITEM_MDMA, quantity);
             MDMA_Interface(playerid, false);
 
             new header[228];
@@ -529,7 +529,7 @@ hook OnGameModeInit() {
 
     mysql_tquery(SQL, "SELECT * FROM `player_plants`", "mysql_LoadPlantData");
 
-    CreateAllHerbs();
+    // CreateAllHerbs();
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

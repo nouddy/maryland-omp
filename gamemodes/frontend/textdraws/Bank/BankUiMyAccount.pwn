@@ -7,7 +7,7 @@ enum eTransfersInfo {
     transferDescription[128],
     transferDate[24]//Should be timestamp
 }
-new TransfersDummyData[6][eTransfersInfo] = {
+new stock TransfersDummyData[6][eTransfersInfo] = {
     {-480.0, "0000_0000_0000", "1111_1111_1111", "Uplata_za_namirenje_dugova_elektro_potrosnje.", "12_/_05_/_2023"},
     {-80.0, "0000_0000_0000", "1111_1111_1111", "Prihod_na_osnovu_radnog_staza.", "12_/_05_/_2023"},
     {-420.0, "0000_0000_0000", "1111_1111_1111", "Dnevna_doza_od_najboljeg_dilera.", "12_/_05_/_2023"},

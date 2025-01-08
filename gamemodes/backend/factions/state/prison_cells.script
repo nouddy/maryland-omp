@@ -1,0 +1,129 @@
+/*
+ *
+ *  ##     ##    ###    ########  ##    ## ##          ###    ##    ## ########  
+ *  ###   ###   ## ##   ##     ##  ##  ##  ##         ## ##   ###   ## ##     ## 
+ *  #### ####  ##   ##  ##     ##   ####   ##        ##   ##  ####  ## ##     ## 
+ *  ## ### ## ##     ## ########     ##    ##       ##     ## ## ## ## ##     ## 
+ *  ##     ## ######### ##   ##      ##    ##       ######### ##  #### ##     ## 
+ *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
+ *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
+ *
+ *  @Author         Noddy
+ *  @Date           03th Jun 2023
+ *  @Weburl         https://maryland-ogc.com
+ *  @Project        maryland_project
+ *
+ *  @File           prison.script
+ *  @Module         backend
+ */
+
+#include <ysilib\YSI_Coding\y_hooks>
+
+const MAX_PRISON_CELLS      =      (6);
+const INVALID_PRISON_CELL   =      (-1);
+
+// CreateDynamicObjectEx(19303, 767.436157, 1794.156005, -69.999862, 0.000000, 0.000000, 0.000000);
+// CreateDynamicObjectEx(19303, 773.671936, 1794.156005, -69.999862, 0.000000, 0.000007, 0.000000);
+// CreateDynamicObjectEx(19303, 764.006286, 1798.116333, -69.999862, 0.000000, 0.000007, 179.999893);
+// CreateDynamicObjectEx(19303, 770.238342, 1798.116333, -69.999862, 0.000000, 0.000000, 179.999847);
+// CreateDynamicObjectEx(19303, 775.036437, 1804.357177, -69.999862, -0.000007, -0.000014, -90.000160);
+// CreateDynamicObjectEx(19303, 775.036437, 1810.579956, -69.999862, -0.000014, -0.000014, -90.000137);
+
+enum E_PRISON_CELL_DOORS {
+
+    bool:doorLocked,
+    Float:doorPos[6] //* X Y Z RX RY RZ
+}
+
+static ePrisonCellDoors[MAX_PRISON_CELLS][E_PRISON_CELL_DOORS] = {
+
+    { true, { 767.436157, 1794.156005, -69.999862, 0.000000, 0.000000, 0.000000 } },
+    { true, { 773.671936, 1794.156005, -69.999862, 0.000000, 0.000007, 0.000000 } },
+    { true, { 764.006286, 1798.116333, -69.999862, 0.000000, 0.000007, 179.999893 } },
+    { true, { 770.238342, 1798.116333, -69.999862, 0.000000, 0.000000, 179.999847 } },
+    { true, { 775.036437, 1804.357177, -69.999862, -0.000007, -0.000014, -90.000160 } },
+    { true, { 775.036437, 1810.579956, -69.999862, -0.000014, -0.000014, -90.000137 } }
+};
+
+static Text3D:ePrisonCellLabel[MAX_PRISON_CELLS];
+static ePrisonCellObject[MAX_PRISON_CELLS];
+
+stock PrisonCell_FormatLockStatus(cell) {
+
+    static str[248];
+
+    if(!ePrisonCellDoors[cell][doorLocked])
+        format(str, sizeof str, ""c_ltorange"OTVORENO");
+    if(ePrisonCellDoors[cell][doorLocked])
+        format(str, sizeof str, ""c_red"ZATVORENO");
+
+    return str;
+}
+
+stock PrisonCell_FormatLockLabel(cell) {
+
+
+    Update3DTextLabelText(ePrisonCellLabel[cell], x_white, "[CTRL]%s", PrisonCell_FormatLockStatus(cell));
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+stock PrisonCell_ReturnNearest(playerid) {
+
+    for(new i = 0; i < sizeof ePrisonCellDoors; i++) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 1.7, ePrisonCellDoors[i][doorPos][0], ePrisonCellDoors[i][doorPos][1], ePrisonCellDoors[i][doorPos][2]))
+            return i;
+    }
+    
+    return INVALID_PRISON_CELL;
+}
+
+hook OnGameModeInit() {
+
+    for(new i = 0; i < sizeof ePrisonCellDoors; i++) {
+
+        ePrisonCellLabel[i] = Create3DTextLabel("[CTRL]%s", x_white, ePrisonCellDoors[i][doorPos][0], ePrisonCellDoors[i][doorPos][1], ePrisonCellDoors[i][doorPos][2], 3.50, 1, false, PrisonCell_FormatLockStatus(i));
+        ePrisonCellObject[i] = CreateDynamicObjectEx(19303, ePrisonCellDoors[i][doorPos][0], ePrisonCellDoors[i][doorPos][1], ePrisonCellDoors[i][doorPos][2], ePrisonCellDoors[i][doorPos][3], ePrisonCellDoors[i][doorPos][4], ePrisonCellDoors[i][doorPos][5]);
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    if(PRESSED(KEY_FIRE)) {
+
+        if(IsPlayerPoliceMember(playerid)) {
+
+            new cell = PrisonCell_ReturnNearest(playerid);
+
+            if(cell != INVALID_PRISON_CELL) {
+
+                if(ePrisonCellDoors[cell][doorLocked]) {    
+                    
+                    if(cell == 5 || cell == 4) {
+
+                        MoveDynamicObject(ePrisonCellObject[cell], ePrisonCellDoors[cell][doorPos][0], ePrisonCellDoors[cell][doorPos][1]+2.0, ePrisonCellDoors[cell][doorPos][2], 2.0, ePrisonCellDoors[cell][doorPos][3], ePrisonCellDoors[cell][doorPos][4], ePrisonCellDoors[cell][doorPos][5]);
+                    }
+                    
+                    else
+                        MoveDynamicObject(ePrisonCellObject[cell], ePrisonCellDoors[cell][doorPos][0]+2.0, ePrisonCellDoors[cell][doorPos][1], ePrisonCellDoors[cell][doorPos][2], 2.0, ePrisonCellDoors[cell][doorPos][3], ePrisonCellDoors[cell][doorPos][4], ePrisonCellDoors[cell][doorPos][5]);
+                    
+                    ePrisonCellDoors[cell][doorLocked] = false;
+                    PrisonCell_FormatLockLabel(cell);
+                    return Y_HOOKS_BREAK_RETURN_1;
+                }
+
+                MoveDynamicObject(ePrisonCellObject[cell], ePrisonCellDoors[cell][doorPos][0], ePrisonCellDoors[cell][doorPos][1], ePrisonCellDoors[cell][doorPos][2], 2.0, ePrisonCellDoors[cell][doorPos][3], ePrisonCellDoors[cell][doorPos][4], ePrisonCellDoors[cell][doorPos][5]);
+                ePrisonCellDoors[cell][doorLocked] = true;
+                PrisonCell_FormatLockLabel(cell);
+                return Y_HOOKS_BREAK_RETURN_1;
+            }
+
+        }
+
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}

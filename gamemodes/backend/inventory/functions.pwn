@@ -69,13 +69,18 @@ stock Inventory_ReturnItemName(id) {
         case INVENTORY_ITEM_CHICKEN_BURGER: { string = "Pileci hamburger"; }
         case INVENTORY_ITEM_HASH: { string = "Marihuana"; }
         case INVENTORY_ITEM_COCAINE: { string = "Kokain"; }
-        case INVENTORY_ITEM_MDMA: { string = "MDMA"; }
+        case INVENTORY_ITEM_SHROOMS: { string = "Pecurke"; }
+        case INVENTORY_ITEM_SPEED: { string = "Speed"; }
         case INVENTORY_ITEM_SEED: { string = "Sjeme Trave"; }       
         case INVENTORY_ITEM_HERBS: { string = "Rjetke biljke"; }         
         case INVENTORY_ITEM_GASOLINE: { string = "Benzin"; }  
         case INVENTORY_ITEM_DISTILLED_WATER: { string = "Destilovana voda"; }
         case INVENTORY_ITEM_ALCOHOL: { string = "Alkohol"; }
         case INVENTORY_ITEM_OMEPRAZOLE: { string = "Omerpazol"; }
+        case INVENTORY_ITEM_PSEUDOEPHEDRINE: { string = "Pseudofedrin"; }
+        case INVENTORY_ITEM_CHEMICALS:   {string = "Kemikalije";}
+        case INVENTORY_ITEM_LAB_EQUIPMENT: { string = "Laboratorijska oprema"; }
+        case INVENTORY_ITEM_JAMMER: { string = "Ometac signala"; }
 
         default: { string = "Nema"; }
     }
@@ -544,6 +549,23 @@ stock Container_CreateInterface(playerid) {
     }
 }
 
+stock FormatInventoryStorageType(playerid, e_CONTAINER_TYPE:conType) {
+
+
+    new str[32];
+
+    switch(conType) {
+
+        case CONTAINER_TYPE_TRUNK: { str = "Gepek"; }
+        case CONTAINER_TYPE_WARDROBE: { str = "Garderoba"; }
+        case CONTAINER_TYPE_FLOOR: { str = "Pod"; }
+        default : { str = "[Undefined]:"; }
+    }
+
+    PlayerTextDrawSetString(playerid, Inventory_UI[playerid][14], str);
+
+}
+
 stock Container_GeatNearestToPlayer(playerid, containers[], containers_size = sizeof containers) {
 
     new count = 0;
@@ -562,6 +584,7 @@ stock Container_GeatNearestToPlayer(playerid, containers[], containers_size = si
                 if(count >= containers_size)
                     break;
 
+                // FormatInventoryStorageType(playerid, CONTAINER_TYPE_FLOOR);
                 containers[count] = i;
                 count++;
             }
@@ -594,6 +617,9 @@ stock Container_GetItems(playerid, containers[], containers_size = sizeof contai
                         pPos[0] = house_Wardrobe[j][0];
                         pPos[1] = house_Wardrobe[j][1];
                         pPos[2] = house_Wardrobe[j][2];
+
+                        // FormatInventoryStorageType(playerid, CONTAINER_TYPE_WARDROBE);
+
                         break;
                     }
                 }

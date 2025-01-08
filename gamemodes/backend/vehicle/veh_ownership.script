@@ -427,4 +427,6 @@ hook OnPlayerEnterCheckpoint(playerid) {
 		pVehicleLocate[playerid] = false;
 		DisablePlayerCheckpoint(playerid);
 	}
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }

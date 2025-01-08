@@ -88,6 +88,15 @@ public mysql_LoadQuestions(playerid) {
     return(true);
 }
 
+forward delayedKick(playerid);
+public delayedKick(playerid) {
+
+	CallLocalFunction("OnPlayerDisconnect", "dd", playerid, 5);
+	Kick(playerid);
+
+	return (true);
+}
+
 hook OnGameModeInit()
 {
 	print("staff/staff.script loaded");
@@ -111,6 +120,20 @@ hook OnPlayerDisconnect(playerid, reason)
 	stfveh[playerid] = INVALID_PLAYER_ID;
 	StaffDuty[playerid] = false;
 
+	static str[32];
+	switch(reason) {
+		case 1: { str="Disconnect"; }
+		case 0: { str="Crash"; }
+		case 5: { str="Kick"; }
+	}
+
+	foreach(new i : Player) {
+
+		if(PlayerInfo[i][Staff] >= 1) {
+
+			SendClientMessage(i, x_server, "DISCONNECT: "c_white"Igrac %s je napustio server | "c_server"%s", ReturnPlayerName(playerid), str);
+		}
+	}
 	return 1;
 }
 
@@ -156,6 +179,27 @@ stock ReturnStaffLevel(playerid) {
 		default: 	{ level = 	"[Unknown]"; 			}
 	}
 	return level;
+}
+
+stock Staff_KickPlayer(player, admin, const reason[] = "High Ping") {
+
+	if( player == INVALID_PLAYER_ID ) return (false);
+	if( admin == INVALID_PLAYER_ID ) return (false);
+
+	SendClientMessage(player, x_server, "KICK: "c_white"Kickovani ste sa servera.");
+	SendClientMessage(player, x_server, "KICK: "c_white"Admin : "c_server"%s", ReturnCharacterName(admin));
+	SendClientMessage(player, x_server, "KICK: "c_white"Razlog : "c_server"%s", reason);
+
+	SetTimerEx("delayedKick", 650, false, "d", player);
+
+	static tmp_str[248];
+	format(tmp_str, sizeof tmp_str, "KICK: "c_white"Staff %d \187; %s[%d] je kickovao igraca %s[%d]. Razlog : %s", PlayerInfo[admin][Staff], ReturnCharacterName(admin), admin, reason);
+
+	foreach (new i : Player)
+		if (PlayerInfo[i][Staff])
+			SendClientMessage(i, x_purple, tmp_str);
+
+	return (true);
 }
 
 YCMD:askq(playerid, params[], help) {
@@ -750,7 +794,7 @@ YCMD:sm(playerid, params[], help)
     }
 
 	if (GetPlayerStaffLevel(playerid)< e_ASSISTANT)
-		return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
 	new mess[128], chat_str[286];
 
@@ -758,6 +802,45 @@ YCMD:sm(playerid, params[], help)
 
 	format(chat_str, sizeof chat_str, ""c_blue"%s %s \171; "c_white"%s", ReturnStaffLevel(playerid), ReturnPlayerName(playerid), mess);
 	SendClientMessage(playerid, -1, chat_str);
+
+	return 1;
+}
+
+YCMD:spm(playerid, params[], help) 
+{
+	
+	if(help)
+    {
+		notification.Show(playerid, "HELP", "Komanda da posaljete poruku svim igracima", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+	if (GetPlayerStaffLevel(playerid)< e_ASSISTANT)
+		return notification.Show(playerid, "Greska", "Samo staff lvl. moze ovo!", "!", BOXCOLOR_RED);
+
+	new targetid, mess[128], chat_str[286];
+
+	if(sscanf(params, "us[128]", targetid, mess)) return notification.Show(playerid, "USAGE", "/spm [ID/Ime] [ message ]", "?", BOXCOLOR_GREEN);
+
+	if(targetid == playerid)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozes poslati staff poruku samom sebi!");
+
+	if(targetid == INVALID_PLAYER_ID)
+		return (true);
+
+	if(!IsPlayerConnected(targetid))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan na server!");
+
+	
+
+	format(chat_str, sizeof chat_str, ""c_ltorange"SPM \187; %s[%d]: %s", ReturnCharacterName(playerid), playerid, mess);
+	SendClientMessage(targetid, -1, chat_str);
+	
+	format(chat_str, sizeof chat_str, ""c_ltorange"SPM: \187; %s[%d] -> %s[%d]: %s", ReturnCharacterName(playerid), playerid, ReturnCharacterName(targetid), targetid, mess);
+
+	foreach(new i : Player)
+		if(PlayerInfo[i][Staff] > 0)
+			SendClientMessage(i, -1, chat_str);
 
 	return 1;
 }
@@ -879,6 +962,35 @@ YCMD:warn(playerid, params[], help)
 	return (true);
 }
 
+YCMD:kick(playerid, params[], help) 
+{
+	
+	if (GetPlayerStaffLevel(playerid)< e_STAFF)
+		return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+
+	new target, reason[64];
+	if(sscanf(params, "us[64]", target, reason))
+		return notification.Show(playerid, "Usage", "/kick ID/Ime Razlog", "?", BOXCOLOR_BLUE);
+
+	if(!IsPlayerConnected(target))
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan na server!");
+
+	if(target == INVALID_PLAYER_ID)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Invalid pid!");
+
+	if(target == playerid)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozes kickovati samog sebe!");
+
+	if(PlayerInfo[target][Staff] != 0)
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete kickovati igraca koji je dio Staff-a!");
+
+	if(strlen(reason) < 0 || strlen(reason) > sizeof reason)
+		return (true);
+
+	Staff_KickPlayer(target, playerid, reason);
+	return 1;
+}
+
 YCMD:ban(playerid, params[], help)
 {
 	if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/ban [id] [reason] [vreme(minuti) / perma]");
@@ -981,7 +1093,7 @@ YCMD:aclearwl(playerid, params[], help) {
 		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan na server!");
 
 	if(target == INVALID_PLAYER_ID)
-		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Invalid pid!");
+		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Invalid playerid!");
 
 	if(!IsPlayerWanted(target)) 
 		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije trazen!");
