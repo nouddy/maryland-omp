@@ -29,6 +29,9 @@ const JAIL_TYPE_PRISON  = 1;
 
 const VEHICLE_TYPE_POLICE = 2;
 
+#define MAX_POLICE_RANKS 13
+#define MAX_RANK_LEN     64
+
 //============================================================ Enums (sufix f = Faction)
 
 enum E_POLICE_DATA {
@@ -57,14 +60,15 @@ enum E_POLICE_DATA {
 
     fPolicePickup,                 
     Text3D:fPoliceLabel,           
-    fPoliceSkins[4]                
+    fPoliceSkins[13]
 }
 
+//* Poslje ovog ja ne radim do daljnjeg
+
+new PoliceRanks[MAX_POLICE][MAX_POLICE_RANKS][MAX_RANK_LEN];
 
 new fPoliceInfo[MAX_POLICE][E_POLICE_DATA];
 new Iterator:iter_Police<MAX_POLICE>;
-
-new fPoliceRanks[MAX_POLICE][3][MAX_RANK_NAME];
 
 new fCreatingID[MAX_PLAYERS] = -1;
 
@@ -229,8 +233,21 @@ stock ShowPlayerPolicePanel(playerid) {
                                                                     "c_server"#2 \187; "c_white"Clanovi\n\
                                                                     "c_server"#3 \187; "c_white"Respawn Vozila\n\
                                                                     "c_server"#4 \187; "c_white"Ubaci Clana\n\
-                                                                    "c_server"#5 \187; "c_white"Izbaci Clana\n", "Odaberi", "Odustani");
+                                                                    "c_server"#5 \187; "c_white"Izbaci Clana\n\
+                                                                    "c_server"#6 \187; "c_white"Izmjeni Rank\n\
+                                                                    "c_server"#7 \187; "c_white"Izmjeni Skin\n", "Odaberi", "Odustani");
     return (true);
+}
+
+stock Police_ReturnIndexID(playerid) {
+
+    foreach(new j : iter_Police) {
+
+        if(fPoliceInfo[j][fPoliceID] == PoliceMember[playerid][policeID])
+            return j;
+    }
+
+    return INVALID_POLICE_ID;
 }
 
 stock Police_ReturnNameByPlayer(playerid) {
@@ -506,7 +523,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
 
                         if(PoliceMember[j][policeID] == PoliceMember[playerid][policeID]) {
 
-                            SendClientMessage(j, x_server, "%s \187; "c_grey"%s [%s]: "c_white"se javlja na duznost. ", fPoliceRanks[i][ PoliceMember[playerid][policeRank] - 1 ], ReturnCharacterName(playerid), fPoliceInfo[i][fPoliceShortName]);
+                            SendClientMessage(j, x_server, "%s \187; "c_grey"[%s]: "c_white"se javlja na duznost. ", ReturnCharacterName(playerid), fPoliceInfo[i][fPoliceShortName]);
                         }
                     }
                     return ~1;
@@ -953,6 +970,85 @@ YCMD:rmv(playerid, params[], help) {
     return 1;
 }
 
+YCMD:setchief(playerid, params[], help) 
+{
+    
+    if(GetPlayerStaffLevel(playerid) < 3)
+		return notification.Show(playerid, "Greska", "Samo community manager moze ovo!", "!", BOXCOLOR_RED);
+
+	static
+		targetid,
+		police_id;
+
+    if(sscanf(params, "ud", targetid, police_id)) return SendServerMessage(playerid, "/setchief <id/ime> <police id>");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return (true);
+    
+    if(!IsPlayerConnected(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije konektovan na server!");
+
+    if(police_id < 0 || police_id >= Iter_Count(iter_Police))
+        return SendServerMessage(playerid, "Unijeli ste krivi ID policije!");
+
+    static bool:policeFound = false;
+
+    foreach(new i : iter_Police) {
+
+        if(fPoliceInfo[i][fPoliceID] == police_id) {
+
+            policeFound = true;
+            break;
+        }
+    }
+
+    if(!policeFound)
+        return (true);
+
+    if(police_id > 0) {
+
+        if(PoliceMember[targetid][policeID] != 0)
+            return SendServerMessage(playerid, "Taj igrac je vec clan neke policije!" );
+        
+        PoliceMember[targetid][policeID] = police_id;
+        PoliceMember[targetid][characterID] = GetCharacterSQLID(targetid);
+        PoliceMember[targetid][policeRank] = 1;
+        PoliceMember[targetid][arrests] = 1;
+
+        new q[260];
+        mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `police_members` (`character_id`, `police_id`, `police_rank`, `arrests`, `joinDate`) \
+                                            VALUES('%d', '%d', '4', '0', NOW())", 
+                                        GetCharacterSQLID(targetid), police_id);
+        mysql_tquery(MySQL:SQL, q);
+
+        SendServerMessage(playerid, "Uspjesno ste postavili igracu "c_server"%s "c_white"leadera policije "c_server"%s", ReturnCharacterName(targetid), Police_ReturnNameByPlayer(targetid));
+        SendServerMessage(targetid, "Admin "c_server"%s "c_white"vam je postavio leadera policije "c_server"%s", ReturnCharacterName(playerid), Police_ReturnNameByPlayer(targetid));
+        return ~1;
+    }
+
+    else if(police_id == 0) {
+
+        if(PoliceMember[targetid][policeID] == 0)
+            return SendServerMessage(playerid, "Taj igrac nije lider policije!" );
+        
+
+        new q[260];
+        mysql_format(MySQL:SQL, q, sizeof q, "DELETE FROM `police_members` WHERE `character_id` = '%d'", GetCharacterSQLID(targetid));
+        mysql_tquery(MySQL:SQL, q);
+
+        SendServerMessage(playerid, "Uspjesno ste skinuli igracu "c_server"%s "c_white"leadera policije "c_server"%s", ReturnCharacterName(targetid), Police_ReturnNameByPlayer(targetid));
+        SendServerMessage(targetid, "Admin "c_server"%s "c_white"vam je skinuo leadera policije "c_server"%s", ReturnCharacterName(playerid), Police_ReturnNameByPlayer(targetid));
+
+        PoliceMember[targetid][policeID] = 0;
+        PoliceMember[targetid][characterID] = GetCharacterSQLID(targetid);
+        PoliceMember[targetid][policeRank] = 0;
+        PoliceMember[targetid][arrests] = -1;
+        return ~1;
+    }
+
+    return (true);
+}
+
 /* Publics */
 
 forward SQL_LoadPlayerPrison(playerid);
@@ -1077,14 +1173,27 @@ public PoliceLoad()
 		cache_get_value_name_float(i, "fEquipmentY", fPoliceInfo[i][fEquipment][1]);
 		cache_get_value_name_float(i, "fEquipmentZ", fPoliceInfo[i][fEquipment][2]);
 
-        cache_get_value_name(i, "fPoliceRank1", fPoliceRanks[i][0], 32);
-        cache_get_value_name(i, "fPoliceRank2", fPoliceRanks[i][1], 32);
-        cache_get_value_name(i, "fPoliceRank3", fPoliceRanks[i][2], 32);
-
         cache_get_value_name_int(i, "fPoliceSkins1", fPoliceInfo[i][fPoliceSkins][0]);
         cache_get_value_name_int(i, "fPoliceSkins2", fPoliceInfo[i][fPoliceSkins][1]);
         cache_get_value_name_int(i, "fPoliceSkins3", fPoliceInfo[i][fPoliceSkins][2]);
         cache_get_value_name_int(i, "fPoliceSkins4", fPoliceInfo[i][fPoliceSkins][3]);
+        cache_get_value_name_int(i, "fPoliceSkins5", fPoliceInfo[i][fPoliceSkins][4]);
+        cache_get_value_name_int(i, "fPoliceSkins6", fPoliceInfo[i][fPoliceSkins][5]);
+        cache_get_value_name_int(i, "fPoliceSkins7", fPoliceInfo[i][fPoliceSkins][6]);
+        cache_get_value_name_int(i, "fPoliceSkins8", fPoliceInfo[i][fPoliceSkins][7]);
+        cache_get_value_name_int(i, "fPoliceSkins9", fPoliceInfo[i][fPoliceSkins][8]);
+        cache_get_value_name_int(i, "fPoliceSkins10", fPoliceInfo[i][fPoliceSkins][9]);
+        cache_get_value_name_int(i, "fPoliceSkins11", fPoliceInfo[i][fPoliceSkins][10]);
+        cache_get_value_name_int(i, "fPoliceSkins12", fPoliceInfo[i][fPoliceSkins][11]);
+        cache_get_value_name_int(i, "fPoliceSkins13", fPoliceInfo[i][fPoliceSkins][12]);
+
+        static rank_str[64];
+
+        for(new j = 0; j < MAX_POLICE_RANKS; j++) {
+
+            format(rank_str, sizeof rank_str, "fPoliceRank_%d", j+1);
+            cache_get_value_name(i, rank_str, PoliceRanks[i][j], 64);
+        }
 
         new tmp_str[420];
         format(tmp_str, sizeof tmp_str, ""c_server"%s \187; "c_white"%d\n "c_server"Tip \187; "c_white"%s\n"c_server"Adresa \187; "c_white"%s", fPoliceInfo[i][fPoliceName], fPoliceInfo[i][fPoliceID], GetPoliceType(i), fPoliceInfo[i][fPoliceAdress]);
@@ -1108,7 +1217,15 @@ forward CreatePolice(id);
 public CreatePolice(id) {
 
     fPoliceInfo[id][fPoliceID] = cache_insert_id();
-    Iter_Add(iter_Police, id);
+    Iter_Add(iter_Police, id);  
+
+    static rankStr[MAX_RANK_LEN];
+
+    for(new i = 0; i < MAX_POLICE_RANKS; i++) {
+
+        format(rankStr, sizeof rankStr, "Rank%d", i+1);
+        strmid(PoliceRanks[id][i], rankStr, 0, sizeof rankStr);
+    }
 
     new tmp_str[420];
 
@@ -1189,8 +1306,76 @@ Dialog:dialog_policePanel(const playerid, response, listitem, string:inputtext[]
                 Dialog_Show(playerid, "dialog_policeKick", DIALOG_STYLE_INPUT, ""c_server"Maryland \187; "c_white"Police Panel", "Unesite SQLID igraca/karaktera kojeg zelite izbaciti iz policije!", "Unesi", "Nazad");
 
             }
+
+            case 5: {
+
+                Dialog_Show(playerid, "police_editRank", DIALOG_STYLE_INPUT, "Police Rank", "Unesi zeljeni rank kojeg zelite editovati, i novo ime tog ranka!\nNpr: 1 Officer", "Izmjeni", "Odustani");
+            }
+
+            case 6: {
+
+                Dialog_Show(playerid, "police_editSkin", DIALOG_STYLE_INPUT, "Police Skins", "Unesi zeljeni skin kojeg zelite editovati, i novi ID skina!\nNpr: 1 28", "Izmjeni", "Odustani");
+            }
         }
     }
+
+    return (true);
+}
+
+Dialog:police_editRank(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) {
+
+        new rankID, rankName[64];
+        if(sscanf(inputtext, "ds[64]", rankID, rankName))
+            return Dialog_Show(playerid, "police_editRank", DIALOG_STYLE_INPUT, "Police Rank", "Unesi zeljeni rank kojeg zelite editovati, i novo ime tog ranka!\nNpr: 1 Officer", "Izmjeni", "Odustani");
+    
+        if(rankID <= 0 || rankID > 13)
+            return Dialog_Show(playerid, "police_editRank", DIALOG_STYLE_INPUT, "Police Rank", "Unesi zeljeni rank kojeg zelite editovati, i novo ime tog ranka!\nNpr: 1 Officer", "Izmjeni", "Odustani");
+
+        if(strlen(rankName) < 5 || strlen(rankName) > 64)
+            return Dialog_Show(playerid, "police_editRank", DIALOG_STYLE_INPUT, "Police Rank", "Novo ime ranka ne moze biti duzine manje od 5 a vece od 64\nUnesi zeljeni rank kojeg zelite editovati, i novo ime tog ranka!\nNpr: 1 Officer", "Izmjeni", "Odustani");
+
+        new police_id = Police_ReturnIndexID(playerid);
+
+        strmid(PoliceRanks[police_id][rankID - 1], rankName, 0, sizeof rankName);
+
+        SendServerMessage(playerid, "Uspjesno ste postavili novo ime za Rank %d - %s", rankID, PoliceRanks[police_id][rankID - 1]);
+
+        new q[328];
+        mysql_format(SQL, q, sizeof q, "UPDATE `faction_police` SET `fPoliceRank%d` = '%e' WHERE `fPoliceID` = '%d'", rankID, PoliceRanks[police_id][rankID - 1], fPoliceInfo[police_id][fPoliceID] );
+        mysql_tquery(SQL, q);
+
+    }
+
+    return (true);
+}
+
+Dialog:police_editSkin(const playerid, response, listitem, string:inputtext[]) {
+
+    if(response) {
+
+        new sRank, sID;
+        if(sscanf(inputtext, "dd", sRank, sID))
+            return Dialog_Show(playerid, "police_editSkin", DIALOG_STYLE_INPUT, "Police Skins", "Unesi zeljeni skin kojeg zelite editovati, i novi ID skina!\nNpr: 1 28", "Izmjeni", "Odustani");
+        
+        if(sRank <= 0 || sRank > 13)
+            return Dialog_Show(playerid, "police_editSkin", DIALOG_STYLE_INPUT, "Police Skins", "Unesi zeljeni skin kojeg zelite editovati, i novi ID skina!\nNpr: 1 28", "Izmjeni", "Odustani");
+
+        if (!(1 <= sID <= 311))
+		    return Dialog_Show(playerid, "police_editSkin", DIALOG_STYLE_INPUT, "Police Skins", "Skin ID ne moze biti manji od 1 a veci od 311!", "Izmjeni", "Odustani");
+    
+        new police_id = Police_ReturnIndexID(playerid);
+
+        fPoliceInfo[police_id][fPoliceSkins][ ( sRank-1 ) ] = sID;
+
+        new q[328];
+        mysql_format(SQL, q, sizeof q, "UPDATE `faction_police` SET `fPoliceSkin%d` = '%d' WHERE `fPoliceID` = '%d'", sRank, sID, fPoliceInfo[police_id][fPoliceID]);
+        mysql_tquery(SQL, q);
+
+        SendServerMessage(playerid, "Uspjesno ste postavili skinid %d za rank %d", sID, sRank);
+    }
+
 
     return (true);
 }
@@ -1370,7 +1555,6 @@ Dialog:dialog_policeShort(const playerid, response, listitem, string:inputtext[]
 
     Dialog_Show(playerid, "dialog_PoliceType", DIALOG_STYLE_LIST, "Maryland - Police Creation", "1) Saobracajna Policija\n2) Policija", "Odaberi", "Odustani");
 
-    
 
     return 1;
 }
@@ -1386,133 +1570,12 @@ Dialog:dialog_PoliceType(const playerid, response, listitem, string:inputtext[])
 
     fPoliceInfo[fpID][fPoliceType] = tmp_type;
 
-    Dialog_Show(playerid, "dialog_policeRank1", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 1", "Unesi", "Odustani");
-
-    return 1;
-}
-
-Dialog:dialog_policeRank1(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    if(strlen(inputtext) < 4 || strlen(inputtext) > MAX_RANK_NAME)
-        return Dialog_Show(playerid, "dialog_policeRank1", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 1", "Unesi", "Odustani");
-
-    new fpID = fCreatingID[playerid];
-
-    new str_rankName[MAX_RANK_NAME];
-    format(str_rankName, sizeof str_rankName, "%s", inputtext);
-
-    fPoliceRanks[fpID][0] = str_rankName;
-
-    Dialog_Show(playerid, "dialog_policeRank2", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 2", "Unesi", "Odustani");
-
-    
-
-    return 1;
-}
-
-Dialog:dialog_policeRank2(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    if(strlen(inputtext) < 4 || strlen(inputtext) > MAX_RANK_NAME)
-        return Dialog_Show(playerid, "dialog_policeRank2", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 2", "Unesi", "Odustani");
-
-    new fpID = fCreatingID[playerid];
-
-    new str_rankName[MAX_RANK_NAME];
-    format(str_rankName, sizeof str_rankName, "%s", inputtext);
-
-    fPoliceRanks[fpID][1] = str_rankName;
-
-    Dialog_Show(playerid, "dialog_policeRank3", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 3", "Unesi", "Odustani");
-
-    return 1;
-}
-
-Dialog:dialog_policeRank3(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    if(strlen(inputtext) < 4 || strlen(inputtext) > MAX_RANK_NAME)
-        return Dialog_Show(playerid, "dialog_policeRank3", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite ime za Rank 3", "Unesi", "Odustani");
-
-    new fpID = fCreatingID[playerid];
-
-    new str_rankName[MAX_RANK_NAME];
-    format(str_rankName, sizeof str_rankName, "%s", inputtext);
-
-    fPoliceRanks[fpID][2] = str_rankName;
-
-    Dialog_Show(playerid, "dialog_policeSkin1", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite zeljeni skin za Rank 1", "Unesi", "Odustani");
-
-
-    return 1;
-}
-
-Dialog:dialog_policeSkin1(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    new fpID = fCreatingID[playerid];
-    new skinid = strval(inputtext);
-
-    fPoliceInfo[fpID][fPoliceSkins][0] = skinid;
-
-    Dialog_Show(playerid, "dialog_policeSkin2", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite zeljeni skin za Rank 2", "Unesi", "Odustani");
-
-    return 1;
-}
-
-Dialog:dialog_policeSkin2(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    new fpID = fCreatingID[playerid];
-    new skinid = strval(inputtext);
-
-    fPoliceInfo[fpID][fPoliceSkins][1] = skinid;
-
-    Dialog_Show(playerid, "dialog_policeSkin3", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite zeljeni skin za Rank 3", "Unesi", "Odustani");
-
-    return 1;
-}
-
-Dialog:dialog_policeSkin3(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    new fpID = fCreatingID[playerid];
-    new skinid = strval(inputtext);
-
-    fPoliceInfo[fpID][fPoliceSkins][2] = skinid;
-
-    Dialog_Show(playerid, "dialog_policeSkin4", DIALOG_STYLE_INPUT, "Maryland - Police Creation", "** Unesite zeljeni skin za Rank 4", "Unesi", "Odustani");
-
-    return 1;
-}
-
-Dialog:dialog_policeSkin4(const playerid, response, listitem, string:inputtext[]) {
-
-    if(!response)
-        return false;
-
-    new fpID = fCreatingID[playerid];
-    new skinid = strval(inputtext);
-
-    fPoliceInfo[fpID][fPoliceSkins][3] = skinid;
-
     Dialog_Show(playerid, "dialog_policeAccept", DIALOG_STYLE_MSGBOX, "Maryland - Police Creation", "Ime Policije : %s\n Skracenica : %s\n Tip : %s", "Prihvati", "Odustani", 
                                                  fPoliceInfo[fpID][fPoliceName], fPoliceInfo[fpID][fPoliceShortName], GetPoliceType(fpID));
+
     return 1;
 }
+
 
 Dialog:dialog_policeAccept(const playerid, response, listitem, string:inputtext[]) {
 
@@ -1542,12 +1605,11 @@ Dialog:dialog_policeAccept(const playerid, response, listitem, string:inputtext[
 
         new query[789];
         mysql_format(SQL, query, sizeof query, "INSERT INTO `faction_police` (`fPoliceName`, `fPoliceShortName`, `fPoliceAdress`, `fPoliceState`, `fPoliceType`, `fPoliceX`, `fPoliceY`, `fPoliceZ`, \
-                                                `fPoliceExitX`, `fPoliceExitY`, `fPoliceExitZ`, `fPoliceRank1`, `fPoliceRank2`, `fPoliceRank3`, `fPoliceSkins1`, `fPoliceSkins2`, `fPoliceSkins3`, `fPoliceSkins4`) \
-                                                VALUES ('%e', '%e', '%e', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f', '%e', '%e', '%e', '%i', '%i', '%i', '%i')", 
+                                                `fPoliceExitX`, `fPoliceExitY`, `fPoliceExitZ`) \
+                                                VALUES ('%e', '%e', '%e', '%e', '%i', '%f', '%f', '%f', '%f', '%f', '%f')", 
                                                 fPoliceInfo[fpID][fPoliceName], fPoliceInfo[fpID][fPoliceShortName], fPoliceInfo[fpID][fPoliceAdress], fPoliceInfo[fpID][fPoliceState],
                                                 fPoliceInfo[fpID][fPoliceType], fPoliceInfo[fpID][fPoliceEntrance][0], fPoliceInfo[fpID][fPoliceEntrance][1],
-                                                fPoliceInfo[fpID][fPoliceEntrance][2], fPoliceInfo[fpID][fPoliceExit][0], fPoliceInfo[fpID][fPoliceExit][1], fPoliceInfo[fpID][fPoliceExit][2], fPoliceRanks[fpID][0], fPoliceRanks[fpID][1], fPoliceRanks[fpID][2], 
-                                                fPoliceInfo[fpID][fPoliceSkins][0], fPoliceInfo[fpID][fPoliceSkins][1], fPoliceInfo[fpID][fPoliceSkins][2], fPoliceInfo[fpID][fPoliceSkins][3]);
+                                                fPoliceInfo[fpID][fPoliceEntrance][2], fPoliceInfo[fpID][fPoliceExit][0], fPoliceInfo[fpID][fPoliceExit][1], fPoliceInfo[fpID][fPoliceExit][2]);
         mysql_tquery(SQL, query, "CreatePolice", "i", fpID);
 
     }

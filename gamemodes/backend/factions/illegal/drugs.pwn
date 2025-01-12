@@ -846,6 +846,20 @@ Dialog:dialog_BlackMarket(playerid, response, listitem, string:inputtext[]) {
                 Inventory_AddItem(playerid, INVENTORY_ITEM_SEED, 1);
                 SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili jedno sjeme trave za 100$");
             }
+
+            case 3: {
+
+                if(GetPlayerMoney(playerid) < 450.55)
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Za jedno sjeme trave potrebno vam je 450.55$!");
+
+                if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_JAMMER) == 1)
+                    return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec posjedujete ometac signala!");
+
+                GivePlayerMoney(playerid, -450.55);
+                Inventory_AddItem(playerid, INVENTORY_ITEM_JAMMER, 1);
+                SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste kupili ometac za 450.55$");
+
+            }
         }
     }
     return (true);

@@ -1155,7 +1155,7 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
             if(gRobberyCount[playerid] != 0)
                 return (true);
         
-            TogglePlayerControllable(playerid, false);
+            TogglePlayerControllable(playerid, true);
             gRobberyCount[playerid] = 120;
             gRobberyTimer[playerid] = SetTimerEx("Robbery_BurglarHarborVault", 1000, false, "d", playerid);
 
@@ -1175,6 +1175,9 @@ YCMD:heistplan(playerid, params[], help) {
 } 
 
 YCMD:startheist(playerid, params[], help) {
+
+    if(!IsPlayerInRangeOfPoint(playerid, 3.40, -1581.5887,-2697.9929,2.0221))
+        return SendServerMessage(playerid, "Morate biti u bunkeru!");
 
     if(gPlayerRobbery[playerid][gRobberyInPreparation])
         return SendClientMessage(playerid, x_faction, "HEIST: "c_white"Vec ste zapoceli planiranje heista!");
@@ -1299,8 +1302,13 @@ YCMD:dynamite(playerid, params[], help) {
     if(gPlayerRobbery[leaderid][gRobberyProgress] == ROBBERY_STEP_DYNAMITE)
         return SendClientMessage(playerid, x_faction, "HEIST: "c_white"Vec ste postavili dinamit!");
 
+    if(Inventory_GetItemQuantity(playerid, INVENTORY_ITEM_DYNAMITE) < 1)
+        return SendServerMessage(playerid, "Ne posjedujete dinamit!");
+
     gDynamiteTimer[playerid] = SetTimerEx("Robbery_CreateExplosion", 10 * 1000, false, "d", playerid);
     gPlayerRobbery[leaderid][gRobberyProgress] = ROBBERY_STEP_DYNAMITE;
+
+    Inventory_Remove(playerid, INVENTORY_ITEM_DYNAMITE, 1);
 
     static tmpMsg[248];
     format(tmpMsg, sizeof tmpMsg, ""c_white"%s[%d] je postavio dinamit, odaljite se i pricekajte 10 sekundi!", ReturnCharacterName(playerid), playerid);

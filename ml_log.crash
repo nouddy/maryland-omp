@@ -1220,3 +1220,16 @@
 [21:52:14] #0 00247be0 in ?? (0) in <unknown>
 [21:52:14] #1 0025292c in ?? (0, 131072, 0) in <unknown>
 [21:52:14] #2 00080580 in public OnPlayerKeyStateChange (0, 131072, 0) in <unknown>
+[22:14:01] Run time error 4: "Array index out of bounds"
+[22:14:01]  Attempted to read/write array element at index 20 in array of size 20
+[22:14:01] AMX backtrace:
+[22:14:01] #0 000e2b20 in public WStyle_OnGameModeInit () in <unknown>
+[22:14:01] #1 000da88c in public CB_OnGameModeInit () in <unknown>
+[22:14:01] #2 000afd34 in public Indirection_OnGameModeInit () in <unknown>
+[22:14:01] #3 00078598 in ?? () in <unknown>
+[22:14:01] #4 0007ddc0 in public OnScriptInit@E () in <unknown>
+[22:14:01] #5 native CallLocalFunction () in Pawn.dll
+[22:14:01] #6 0005fdfc in public ac_OnGameModeInit () in <unknown>
+[22:14:01] #7 00014694 in public PawnRakNet_OnGameModeInit () in <unknown>
+[22:14:01] #8 000060e0 in public SSCANF_OnGameModeInit () in <unknown>
+[22:14:01] #9 00002110 in public pr_rir_AC_RPC_DamageVehicle () in <unknown>

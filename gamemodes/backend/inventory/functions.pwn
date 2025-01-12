@@ -81,6 +81,7 @@ stock Inventory_ReturnItemName(id) {
         case INVENTORY_ITEM_CHEMICALS:   {string = "Kemikalije";}
         case INVENTORY_ITEM_LAB_EQUIPMENT: { string = "Laboratorijska oprema"; }
         case INVENTORY_ITEM_JAMMER: { string = "Ometac signala"; }
+        case INVENTORY_ITEM_DYNAMITE: { string = "Dinamit"; }
 
         default: { string = "Nema"; }
     }

@@ -306,7 +306,7 @@ YCMD:members(playerid, params[], help)
 
 YCMD:f(playerid, params[], help) {
 
-    if(FactionMember[playerid][factionID] < 0)
+    if(FactionMember[playerid][factionID] == 0)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan fakcije!");
 
     new message[128];
