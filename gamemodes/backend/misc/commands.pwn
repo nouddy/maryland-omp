@@ -13,19 +13,21 @@
 *  @Weburl         weburl
 *  @Project        maryland_project
 *
-*  @File           medical.pwn
+*  @File           commands.pwn
 *  @Module         misc
 */
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+YCMD:help(playerid, params[], help) = komande;
 YCMD:commands(playerid, params[], help) = komande;
 YCMD:komande(playerid, params[], help) {
 
     Dialog_Show(playerid, "dialog_Commands", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_white"Komande", 
                                                                 ""c_server"#1 \187; "c_white"Uopsteno\n\
                                                                 "c_server"#2 \187; "c_white"Organizacija\n\
-                                                                "c_server"#3 \187; "c_white"Staff", 
+                                                                "c_server"#3 \187; "c_white"Staff\n\
+                                                                "c_server"#4 \187; "c_white"VIP", 
                                                                 "Odbaeri", "Odustani");
     return 1;
 }
@@ -48,13 +50,22 @@ YCMD:stats(playerid, params[], help)
     return 1;
 }
 
-YCMD:g(playerid, params[], help) {
+YCMD:n(playerid, params[], help) {
 
     new msg[248];
     if(sscanf(params, "s[248]", msg))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/g [TEXT]");
 
-    SendClientMessageToAll(x_ltorange, "(( %s[%d] : %s. ))", ReturnPlayerName(playerid), playerid, msg);
+    if(!playerSettings[playerid][gNewbieChat])
+        return SendServerMessage(playerid, "Islkljucen vam je newbie chat, "c_ltorange"/tog");
+
+    foreach(new i : Player) {
+
+        if(playerSettings[playerid][gNewbieChat]) {
+
+            SendClientMessage(i, x_ltorange, "(( NEWBIE %s[%d] : %s. ))", ReturnPlayerName(playerid), playerid, msg);
+        }
+    }
 
     return (true);
 }
@@ -70,7 +81,8 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
                 Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX,""c_server"Maryland \187; "c_white"Komande",
                                                                         ""c_white"/me /do /b /inventory /ceolist /buzz /accept /buybizcenter\n\
                                                                         /burglary /dron /gps /gpsoff /smsad /sms /call /answer /hangup\n\
-                                                                        /fuel /fixengine /fullrepair /testplates /tinspect /winter /stats", "Ok", "");
+                                                                        /fuel /fixengine /fullrepair /testplates /tinspect /winter /stats\n\
+                                                                        /dropgun, /pickupgun /kuca /v /firma", "Ok", "");
             }
 
             case 1: {
@@ -78,7 +90,13 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
                 if(PoliceMember[playerid][policeID] > 0) {
 
                     Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX,""c_server"Maryland \187; "c_white"Police",
-                                                                        ""c_white"/cuff /tie /pu /su /bork /r", "Ok", "");
+                                                                        ""c_white"/cuff /tie /pu /su /bork /r /izbaci", "Ok", "");
+                }
+
+                if(FactionMember[playerid][factionID] > 0) {
+
+                    Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, ""c_server"Maryland \187; "c_white"Faction",
+                                                                            "/f /faction", "Ok", "");
                 }
             }
 
@@ -91,6 +109,17 @@ Dialog:dialog_Commands(const playerid, response, listitem, string:inputtext[]) {
                                                                         /jetpack /nitro /fv /setskin /xgoto /setint /setvw\n\
                                                                         /aclearwl /givegun /restart /slap /sm /freeze /tod", "Ok", "");
                 }
+            }
+
+            case 3: {
+
+                Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, ""c_server"Maryland \187; "c_white"Staff", 
+                                                                        ""c_ltorange"VIP BRONZE : "c_white"/vport, /vtod, /vweather, /g, /vpm, /vfv "c_ltorange"(3 min cooldown)\n\
+                                                                        "c_ltorange"VIP SILVER : "c_white"/vport, /vtod, /vweather, /g, /vpm, /vfv "c_ltorange"(2 min cooldown), "c_white"/vtp "c_ltorange"(uz zahtjev igracu - 60 sekundi cooldown)   DODATNO: Armor 25%% pri spawnu.\n\
+                                                                        "c_ltorange"VIP GOLD : "c_white"/vport, /vtod, /vweather, /g, /vfv "c_ltorange"(1 min cooldown), "c_white"/vtp "c_ltorange"(uz zahtjev igracu - 30 sekundi cooldown), "c_white"/vpm, /vgetveh "c_ltorange"(5 min cooldown), "c_white"/vipmenu   "c_ltorange"DODATNO: Armor 75%% pri spawnu.\n\
+                                                                        "c_ltorange"VIP PLATINUM : "c_white"/vport, /vtod, /vweather, /g, /vfv "c_ltorange"(30 sekundi cooldown), "c_white"/vtp "c_ltorange"(uz zahtjev igracu - 15 sekundi cooldown), /vgethere "c_ltorange"(30 sekundi cooldown) "c_white"/vpm, /vgetveh "c_ltorange"(3 min cooldown), \n\
+                                                                        VIP PLATINUM :"c_white"/vipmenu, /vipcolor, /vtransfer, /vgoto "c_ltorange"(1 - Kuca, 2 - Firma, 3 - Vozilo), "c_white"/viprac, /vipfill "c_ltorange"(1 sat cooldown), "c_white"/vipskin   "c_ltorange"\nDODATNO: Armor 100%% pri spawnu, zastita od /steal, zastita od radara, 5%% bonusa na svaku pljacku.", 
+                "Ok", "");
             }
         }
     }

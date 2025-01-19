@@ -55,6 +55,10 @@ new house_ID[MAX_HOUSES],
 
 	   house_Created[MAX_HOUSES];
 
+static gHouseBuyer[MAX_PLAYERS],
+	   gHouseSellID[MAX_PLAYERS],
+	   gHouseSellPrice[MAX_PLAYERS];
+
 forward House_LoadData();
 public House_LoadData() {
 
@@ -142,7 +146,7 @@ public House_Create(id) {
 
 stock GetNearestHouse(playerid) {
 
-	for(new i = 0; i < MAX_HOUSES; i++) {
+	foreach(new i : iHouse) {
 
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, house_Entrance[i][0], house_Entrance[i][1], house_Entrance[i][2]))
 			return i;
@@ -174,6 +178,9 @@ stock House_UpdateLabel(id, const option) {
 
 		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«\n"c_white"'/buyhouse'", house_ID[id], GetHouseType(house_Type[id]), house_Adress[id], FormatNumber(house_Price[id]));
 
+		DestroyDynamic3DTextLabel(house_Label[id]);
+		DestroyDynamicPickup(house_Pickup[id]);
+
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(19522, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
 	}
@@ -181,6 +188,9 @@ stock House_UpdateLabel(id, const option) {
 	else if(option == 2)
 	{
 		format( tmp_string, sizeof( tmp_string ), ""c_white"("c_server"%d"c_white")\n"c_white"» "c_server"%s "c_white"«\n"c_white"%s\n\n"c_white"» "c_server"%s "c_white"«", house_ID[id], GetHouseType(house_Type[id]), house_Adress[id], zakljucan1);
+
+		DestroyDynamic3DTextLabel(house_Label[id]);
+		DestroyDynamicPickup(house_Pickup[id]);
 
 		house_Label[id] = CreateDynamic3DTextLabel(tmp_string, -1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], 3.5,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, -1, -1);
 		house_Pickup[id] = CreateDynamicPickup(1273, 1, house_Entrance[id][0], house_Entrance[id][1], house_Entrance[id][2], -1, -1);
@@ -214,7 +224,7 @@ stock House_ReturnIndexByPlayer(playerid) {
 
 	foreach(new i : iHouse) {
 
-		if(player_House[playerid] == house_ID[i])
+		if(player_House[playerid] == i)
 			return i;
 	}
 
@@ -226,6 +236,14 @@ hook OnGameModeInit() {
 	mysql_tquery(SQL, "SELECT * FROM `houses`", "House_LoadData");
 
 	print("backend/property/houses.script * loaded...");
+
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+	gHouseBuyer[playerid] = INVALID_PLAYER_ID;
+	gHouseSellID[playerid] = INVALID_HOUSE_ID;
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -300,6 +318,7 @@ YCMD:buyhouse(playerid, params[], help) {
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+YCMD:kuca(playerid, params[], help)  = house;
 YCMD:house(playerid, params[], help) {
 
 	new ID = GetNearestHouse(playerid);
@@ -307,7 +326,7 @@ YCMD:house(playerid, params[], help) {
 	if(ID == -1)
 		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se blizu kuce!");
 
-	if(player_House[playerid] != house_ID[ID])
+	if(player_House[playerid] != ID)
 		return SendClientMessage(playerid, x_server, "maryland » "c_white"Ne nalazite se u blizini vase kuce!");
 
 	Dialog_Show(playerid, "dialog_propHouse", DIALOG_STYLE_LIST, "Maryland \187; "c_white"House", 
@@ -357,14 +376,19 @@ Dialog:dialog_propHouse(const playerid, response, listitem, string: inputtext[])
 
 				static houseStr[248];
 				format(houseStr, sizeof houseStr, ""c_server"Da li ste sigurni da zelite prodati ovu kucu drzavi, za "c_ltorange"%.2f?", tmp_price);
-				Dialog_Show(playerid, "dialog_propHouseSell", DIALOG_STYLE_MSGBOX, ""c_white"Maryland \187; "c_white"Sell House", houseStr, "Sell", "<<");
+				Dialog_Show(playerid, "dialog_propHouseSellToState", DIALOG_STYLE_MSGBOX, ""c_white"Maryland \187; "c_white"Sell House", houseStr, "Sell", "<<");
 
 			}
 
 			case 2: {
 
-				//
-				SendClientMessage(playerid, x_server, "maryland \187; "c_white"Hmm let me think let me see, kristiano kuluneta!");
+				new xHouseID = House_ReturnIndexByPlayer(playerid);
+
+				if(player_House[playerid] == -1)
+					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete ovu kucu!");
+				
+				Dialog_Show(playerid, "dialog_propHouseSellToPlayer", DIALOG_STYLE_INPUT, ""c_white"Maryland \187; "c_white"Sell House", 
+									  "Unesite ID igraca i cijenu kuce\nNpr. 20 45600", "Ponudi", "Odustani");
 			}
 
 			case 3: {
@@ -397,5 +421,102 @@ Dialog:dialog_propHouse(const playerid, response, listitem, string: inputtext[])
 			}
 		}
 	}
+	return 1;
+}
+
+Dialog:dialog_propHouseSellToPlayer(const playerid, response, listitem, string: inputtext[]) 
+{
+
+	if(response) {
+
+		new targetid, hPrice;
+
+		if(sscanf(inputtext, "ud", targetid, hPrice))
+			return Dialog_Show(playerid, "dialog_propHouseSellToPlayer", DIALOG_STYLE_INPUT, ""c_white"Maryland \187; "c_white"Sell House", 
+									  "Unesite ID igraca i cijenu kuce\nNpr. 20 45600", "Ponudi", "Odustani");
+		
+		if(targetid == INVALID_PLAYER_ID)
+			return Dialog_Show(playerid, "dialog_propHouseSellToPlayer", DIALOG_STYLE_INPUT, ""c_white"Maryland \187; "c_white"Sell House", 
+									  "Unesite ID igraca i cijenu kuce\nNpr. 20 45600", "Ponudi", "Odustani");
+		
+		if(!IsPlayerConnected(targetid))
+			return Dialog_Show(playerid, "dialog_propHouseSellToPlayer", DIALOG_STYLE_INPUT, ""c_white"Maryland \187; "c_white"Sell House", 
+									  "Unesite ID igraca i cijenu kuce\nNpr. 20 45600", "Ponudi", "Odustani");
+		
+		if(targetid == playerid)
+			return SendServerMessage(playerid, "Ne mozete prodati kucu samom sebi!");
+
+		new house_id = House_ReturnIndexByPlayer(playerid);
+
+		if(hPrice < house_Price[house_id])
+			return SendServerMessage(playerid, "Ne mozete prodati kucu po manjoj cjeni od prodajne!");
+
+		if(gHouseBuyer[targetid] != INVALID_PLAYER_ID)
+			return SendServerMessage(playerid, "Neko je vec ponudio neku kucu ovom igracu!");
+
+		if(gHouseSellID[targetid] != INVALID_HOUSE_ID)
+			return SendServerMessage(playerid, "Doslo je do greske!");
+
+		if(GetPlayerMoney(targetid) < hPrice)
+			return SendServerMessage(playerid, "Taj igrac nema dovoljno novca!");
+
+		gHouseBuyer[playerid] = targetid;
+		gHouseBuyer[targetid] = playerid;
+		gHouseSellID[targetid] = player_House[playerid];
+		gHouseSellPrice[targetid] = hPrice;
+
+		static dlgStr[488];
+		format(dlgStr, sizeof dlgStr, "%s[%d]: Vam je ponudio kucu(%d) za %d$\nUkoliko zelite prihvatiti ponudu pritisnite 'PRIHVATI'", ReturnCharacterName(playerid), playerid, house_ID[house_id], hPrice);
+		Dialog_Show(targetid, "dialog_propBuyHouse", DIALOG_STYLE_MSGBOX, "Maryland \187; "c_white"Buy House", dlgStr, "PRIHVATI", "ODBIJ");
+
+	}
+
+	return 1;
+}
+
+Dialog:dialog_propBuyHouse(const playerid, response, listitem, string: inputtext[]) {
+
+
+	if(!response) {
+
+		new targetid = gHouseBuyer[playerid];
+		SendServerMessage(targetid, "%s[%d] je odbio vasu ponudu za kucu.", ReturnCharacterName(playerid), playerid);
+	
+		gHouseBuyer[targetid] = INVALID_PLAYER_ID;
+		gHouseBuyer[playerid] = INVALID_PLAYER_ID;
+		gHouseSellID[playerid] = INVALID_HOUSE_ID;
+	}
+
+	else {
+
+		new targetid = gHouseBuyer[playerid];
+
+		SendServerMessage(targetid, "%s[%d] je prihvatio vasu ponudu za prodaju kuce.", ReturnCharacterName(playerid), playerid);
+		SendServerMessage(playerid, "Uspjesno ste kupili kucu od igraca %s za %.2f", ReturnCharacterName(targetid), targetid);
+
+		player_House[targetid] = INVALID_HOUSE_ID;
+		player_House[playerid] = gHouseSellID[playerid];
+
+		house_Owner[ gHouseSellID[playerid] ] = GetCharacterSQLID(playerid);
+
+		new q[488];
+		mysql_format(SQL, q, sizeof q, "UPDATE `player_property` SET `HouseID` = '-1' WHERE `pOwner` = '%d'", GetCharacterSQLID(targetid));
+		mysql_tquery(SQL, q);
+
+		mysql_format(SQL, q, sizeof q, "UPDATE `player_property` SET `HouseID` = '%d' WHERE `pOwner` = '%d'", gHouseSellID[playerid], GetCharacterSQLID(playerid));
+		mysql_tquery(SQL, q);
+
+		mysql_format(SQL, q, sizeof q, "UPDATE `houses` SET `hOwner` = '%d' WHERE `ID` = '%d'", GetCharacterSQLID(playerid), house_ID[ gHouseSellID[playerid] ]);
+		mysql_tquery(SQL, q);
+
+		GivePlayerMoney(playerid, -gHouseSellPrice[playerid]);
+		GivePlayerMoney(targetid, gHouseSellPrice[playerid]);
+
+		gHouseBuyer[targetid] = INVALID_PLAYER_ID;
+		gHouseBuyer[playerid] = INVALID_PLAYER_ID;
+		gHouseSellID[playerid] = INVALID_HOUSE_ID;
+
+	}
+
 	return 1;
 }

@@ -137,6 +137,7 @@ public PoliceMember_ShowList(playerid) {
 
         new dialogStr[1024];
         new stringicc[288];
+        
         for(new i = 0; i < rows; i++) {
 
             new charID;
@@ -298,7 +299,7 @@ stock ImprisonPlayer( player, time, const jBy[] = "Drzava" ) {
 
 
     new djura = random( sizeof sz_PrisonPositions);
-    SetPlayerCompensatedPos(player, sz_PrisonPositions[djura][0], sz_PrisonPositions[djura][1], sz_PrisonPositions[djura][2], ( player + 1 ));
+    SetPlayerCompensatedPos(player, sz_PrisonPositions[djura][0], sz_PrisonPositions[djura][1], sz_PrisonPositions[djura][2]);
 
     static sstr[64];
     format(sstr, sizeof sstr, "%s", jBy);
@@ -936,7 +937,7 @@ YCMD:arrest(playerid, params[], help)
     return 1;
 }
 
-YCMD:rmv(playerid, params[], help) {
+YCMD:eject(playerid, params[], help) {
 
     if(!IsPlayerPoliceMember(playerid))
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan niti jedne policije!"); 
@@ -947,7 +948,7 @@ YCMD:rmv(playerid, params[], help) {
     new target;
 
     if(sscanf(params, "u", target)) 
-        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/pu <igrac>");
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/eject <igrac>");
 
     if(target == playerid) return (true);
     else if(target == INVALID_PLAYER_ID) return (true);

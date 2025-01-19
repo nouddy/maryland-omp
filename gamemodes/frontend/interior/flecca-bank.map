@@ -4,7 +4,6 @@ hook OnGameModeInit()
 {
     print("frontend/flecca-bank.map loaded");
     
-	
 
 	static fleccamuay;
 	fleccamuay = Maryland_CreateDynamicObject(19325, 1693.373046, -1450.887329, 14.295684, 0.000000, 0.000000, 90.000000, -1, -1, -1, 300.00, 300.00); 
@@ -243,7 +242,6 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid)
 {
-    RemoveBuildingForPlayer(playerid, 4005, 1402.500, -1682.020, 25.546, 0.250);
     RemoveBuildingForPlayer(playerid, 4054, 1402.500, -1682.020, 25.546, 0.250);
     RemoveBuildingForPlayer(playerid, 4178, 1686.880, -1459.959, 16.296, 0.250);
     RemoveBuildingForPlayer(playerid, 4179, 1686.880, -1459.959, 16.296, 0.250);

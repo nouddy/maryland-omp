@@ -123,6 +123,8 @@ new gDynamiteTimer[MAX_PLAYERS];
 new gRobberyCount[MAX_PLAYERS];
 new gRobberyTimer[MAX_PLAYERS];
 
+new bool:gPoliceNotified[MAX_PLAYERS];
+
 // ========================================================================
 // Hacking
 // =======================================================================
@@ -180,6 +182,19 @@ public Robbery_UpdateHackingCombination(playerid) {
 
         if(combined != gRobberyCombination[playerid] && gCombinationIndex[playerid] == 3) {
             
+            if(!gPoliceNotified[playerid]) {
+
+                gPoliceNotified[playerid] = true;
+
+                foreach(new j : Player) {
+
+                    if(IsPlayerPoliceMember(j)) {
+
+                        SendClientMessage(j, x_faction, "SECURITY-BREACH: "c_white"Neko je pokusao iskljuciti alarme harbor banke, moli se policija da intervenise!");
+                    }
+                }
+            }
+
             KillTimer(gRobberyBreachTimer[playerid]);
             SendClientMessage(playerid, x_faction, "LAPSU$-R3M0T3: "c_white"Pokusajte ponovo!");
             Robbery_FormatHackingCombination(playerid);
@@ -234,6 +249,8 @@ stock Robbery_ResetPlayerVars(playerid) {
     gRobberyCombinationNumber[playerid][1] = 0;
     gRobberyCombinationNumber[playerid][2] = 0;
     gRobberyCombinationNumber[playerid][3] = 0;
+
+    gPoliceNotified[playerid] = false;
 
     return (true);
 }

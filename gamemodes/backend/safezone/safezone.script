@@ -38,16 +38,6 @@ new g_SafezoneData[MAX_SAFEZONES][E_SAFEZONE_DATA];
 new bool:g_PlayerCreatingSZ[MAX_PLAYERS];
 new Float:g_SZFirstPos[MAX_PLAYERS][2];
 
-// Nemamo float.inc ja mislim
-stock Float:floatmin(Float:value1, Float:value2)
-{
-    return (value1 < value2) ? value1 : value2;
-}
-
-stock Float:floatmax(Float:value1, Float:value2)
-{
-    return (value1 > value2) ? value1 : value2;
-}
 
 hook OnGameModeInit()
 {

@@ -120,12 +120,25 @@ hook OnPlayerConnect(playerid) {
     return (true);
 }
 
+YCMD:vport(playerid, params[], help) = port;
 YCMD:port(playerid, params[], help) 
 {
-    if(GetPlayerStaffLevel(playerid) < 1 )
-        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
-    Dialog_Show(playerid, "dialog_aPort", DIALOG_STYLE_LIST, "Maryland - Port", "1 - Glavno\n2 - Poslovi\n3 - Organizacije", "Odaberi", "Odustani");
+    new xVIP = GetPlayerVIPLevel(playerid);
+    
+    if(xVIP == VIP_BRONZE)
+        return Dialog_Show(playerid, "dialog_aPort", DIALOG_STYLE_LIST, "Maryland - VIP Port", "1 - Glavno", "Odaberi", "Odustani");
+    
+    if(xVIP == VIP_SILVER)
+        return Dialog_Show(playerid, "dialog_aPort", DIALOG_STYLE_LIST, "Maryland - VIP Port", "1 - Glavno\n2 - Poslovi", "Odaberi", "Odustani");
+    
+    if(xVIP >= VIP_GOLD)
+        return Dialog_Show(playerid, "dialog_aPort", DIALOG_STYLE_LIST, "Maryland - VIP Port", "1 - Glavno\n2 - Poslovi\n3 - Organizacije", "Odaberi", "Odustani");
+
+    if(GetPlayerStaffLevel(playerid) >= e_ASSISTANT)
+        return Dialog_Show(playerid, "dialog_aPort", DIALOG_STYLE_LIST, "Maryland - Port", "1 - Glavno\n2 - Poslovi\n3 - Organizacije", "Odaberi", "Odustani");
+
+    SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
 
     return 1;
 }

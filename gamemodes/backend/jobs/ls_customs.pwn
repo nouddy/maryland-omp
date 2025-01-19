@@ -140,7 +140,7 @@ hook OnGameModeInit() {
     CreateCustomMarker(""c_server"[ Los Santos Customs ]\n"c_server"» "c_white"'/wheels'", 1084.4229,-1197.7640,17.9871, -1, -1, 50.0); // Tehnicki Pregled
 
     mechanic_pPickup = CreateDynamicPickup(19627, 1, 1103.2499,-1227.9851,15.8271);
-
+    
     msBumpers = LoadModelSelectionMenu("bumpers.txt");
     msSpoilers = LoadModelSelectionMenu("spoilers.txt");
     msNitrous = LoadModelSelectionMenu("nitrous.txt");

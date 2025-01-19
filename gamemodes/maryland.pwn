@@ -62,6 +62,7 @@
 #include <macroes>
 #include <maryland-tp>
 #include <mSelection>
+#include <gangzone>
 
 #define SendServerMessage(%0,%1) \
 	SendClientMessage(%0, -1, ""c_server"maryland \187; {FFFFFF} "%1)
@@ -134,6 +135,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //-------------------------------------------------------------------------------------------------------- Includes List
 
+
 //* Bitno jako da bude medju prvima
 #include "backend/database/db-config.script" 
 #include "backend/assets/globalstuff.asset"
@@ -146,6 +148,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/misc/quests.pwn"
 #include "backend/misc/randomVehicle.pwn"
 #include "backend/misc/shell-minigame.pwn"
+#include "backend/misc/chat_settings.pwn"									//* Hospital
+#include "backend/misc/drop_gun.pwn"
 
 //-------------------------------------------------------------------------------------------------------- Assets
 #include "backend/assets/proxdetect.asset" 							//* ProxDetector
@@ -229,6 +233,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/factions/illegal/bunker.script"					//* Bunker
 #include "backend/factions/illegal/faction.pwn"					    //* Core
 #include "backend/factions/illegal/drugs.pwn"						//* Drugs
+#include "backend/factions/illegal/gang_turfs.pwn"
 
 #include "backend/factions/vehicles/faction_vehicles.pwn"
 
@@ -286,10 +291,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Trashs
 
 #include "backend/trash/trash.script"								//* Kontejner system
-
-//-------------------------------------------------------------------------------------------------------- Ports
-
-#include "backend/ports/ports.pwn"								//* Port sys
 
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "backend/trash/end/do-not-look.temp"
@@ -373,6 +374,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/exterior/alcatraz_int.map"						//* Police Int (-1)
 #include "frontend/interior/carpentry_int.map"						//* Stolarija Int (25) znaci boze
 #include "frontend/interior/drug_lab.map"							//* Druglab Int (28) Neki tripovi
+#include "frontend/interior/advertisement_int.map"				    //* Flecca bank map (0)
+#include "frontend/interior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
 
 
 
@@ -395,6 +398,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //--------------------------------------------------------------------------------------------------------Important for all systems
 #include "backend/staff/staff.script"								//* Staff script
+#include "backend/misc/vipsys.pwn"								//* VIP System
+#include "backend/ports/ports.pwn"								//* Port sys
 #include "backend/staff/spanel.script"								//* Staff Panel Dynamic Stuff
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
@@ -404,7 +409,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/misc/commands.pwn"							   //* Cmds
 #include "backend/misc/experience.pwn"							   //* Cmds
 #include "backend/misc/quiz.pwn"									//* Quiz
-#include "backend/misc/vipsys.pwn"								//* VIP System
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved
@@ -416,6 +420,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/stocks/chat.stock"								//* Chat Stock
 #include "backend/stocks/db.stock"									//* Database Stock Cuvanja
 #include "backend/stocks/textdraw.stock"							//* TextDraw Stocks
+
+//-------------------------------------------------------------------------------------------------------- Ports
 
 #include "backend/factions/illegal/custom_drugs.pwn"				//* Ozbiljnooo
 

@@ -117,6 +117,9 @@ CreatePickupsAnd3Ds()
     // 970.1960,-1702.6202,13.5727
     CreateCustomMarker(""c_server"[ Car Dealership ]\n"c_server"» "c_white"'Za kupovinu vozila '/catalogue'", 970.1960,-1702.6202,13.5727, 0, 0, 50.0);
 
+    CreateCustomMarker(""c_server"[ Advertisement ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 1597.4584,-1171.7689,24.0781, 0, 0, 50.00);
+    CreateCustomMarker(""c_server"[ Advertisement ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1609.3372,-1172.7767,24.0908, 0, 0, 50.00);
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -124,6 +127,22 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
     if(newkeys & KEY_SECONDARY_ATTACK)
     {
+
+        if(IsPlayerInRangeOfPoint(playerid, 2.01, 1597.4584,-1171.7689,24.0781)) {
+
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 1597.4281,-1173.2227,24.0908);
+            SetCameraBehindPlayer(playerid);
+        }
+
+        if(IsPlayerInRangeOfPoint(playerid, 2.01, 1609.3372,-1172.7767,24.0908)) {
+
+            SetPlayerInterior(playerid, 0);
+            SetPlayerVirtualWorld(playerid, 0);
+            SetPlayerPos(playerid, 1609.3290,-1171.2183,24.0781);
+            SetCameraBehindPlayer(playerid);
+        }
 
         if(IsPlayerInRangeOfPoint(playerid, 2.01, 1372.1616,-22.0082,1000.9615)) {
 

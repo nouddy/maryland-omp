@@ -14,7 +14,7 @@
  *  @Date           19th Sep 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
- *
+ *  
  *  @File           vipsys.pwn
  *  @Module         misc
 
@@ -23,6 +23,7 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 // VIP Levels
+
 enum {
     VIP_NONE,
     VIP_BRONZE,
@@ -73,6 +74,76 @@ new const VIPFeatures[][E_VIP_FEATURES] = {
 new PlayerVIPLevel[MAX_PLAYERS];
 new PlayerVIPExpiry[MAX_PLAYERS];
 
+#define MAX_VIP_VEHICLES        35
+
+enum e_VIP_VEHICLES {
+
+    vip_vID,
+    vip_vModel,
+    Float:vip_vPos[4]
+}
+
+new VipVehicleData[MAX_VIP_VEHICLES][e_VIP_VEHICLES];
+new vipVehicle[MAX_VIP_VEHICLES];
+new Iterator:iter_VIPVehicles<MAX_VIP_VEHICLES>;
+
+
+enum VIP_COMMAND_COOLDOWNS {
+
+    VIP_COMMAND_GOTO,
+    VIP_COMMAND_GETHERE,
+    VIP_COMMAND_FV,
+    VIP_COMMAND_PORT,
+    VIP_COMMAND_GOTOMARK,
+    VIP_COMMAND_RAC,
+    VIP_COMMAND_GETVEH,
+    VIP_COMMAND_FILL,
+    VIP_COMMAND_MENU,
+    VIP_COMMAND_PM
+
+}
+
+new gVipCooldowns[MAX_PLAYERS][VIP_COMMAND_COOLDOWNS];
+new gVipTeleportOffered[MAX_PLAYERS];
+
+new ms_VIPMenu = mS_INVALID_LISTID;
+
+forward mysql_LoadVipVehicles();    
+public  mysql_LoadVipVehicles() {
+
+    new rows = cache_num_rows();
+
+    if(!rows) return (true);
+
+    for(new i = 0; i < rows; i++) {
+
+        cache_get_value_name_int(i, "vip_vID", VipVehicleData[i][vip_vID]);
+        cache_get_value_name_int(i, "vip_vModel", VipVehicleData[i][vip_vModel]);
+
+        cache_get_value_name_float(i, "vip_vPosX", VipVehicleData[i][vip_vPos][0]);
+        cache_get_value_name_float(i, "vip_vPosY", VipVehicleData[i][vip_vPos][1]);
+        cache_get_value_name_float(i, "vip_vPosZ", VipVehicleData[i][vip_vPos][2]);
+        cache_get_value_name_float(i, "vip_vPosA", VipVehicleData[i][vip_vPos][3]);
+    
+        vipVehicle[i] = CreateVehicle(VipVehicleData[i][vip_vModel], VipVehicleData[i][vip_vPos][0], VipVehicleData[i][vip_vPos][1], VipVehicleData[i][vip_vPos][2], VipVehicleData[i][vip_vPos][3], 3, 3, 1500);
+
+        Iter_Add(iter_VIPVehicles, i);
+
+    }
+
+    return (true);
+}
+
+forward mysql_CreateVipVehicle(vip_idx);
+public mysql_CreateVipVehicle(vip_idx) {
+
+    VipVehicleData[vip_idx][vip_vID] = cache_insert_id();
+    Iter_Add(iter_VIPVehicles, vip_idx);
+    vipVehicle[vip_idx] = CreateVehicle(VipVehicleData[vip_idx][vip_vModel], VipVehicleData[vip_idx][vip_vPos][0], VipVehicleData[vip_idx][vip_vPos][1], VipVehicleData[vip_idx][vip_vPos][2], VipVehicleData[vip_idx][vip_vPos][3], 3, 3, 1500);
+
+    return (true);
+}
+
 // VIP Commands
 YCMD:vipinfo(playerid, params[], help)
 {
@@ -87,8 +158,8 @@ YCMD:vipinfo(playerid, params[], help)
     strcat(string, "• Obojen nametag\n");
     strcat(string, "• VIP Chat tag\n");
     strcat(string, "• Spawn sa 100 HP\n");
-    strcat(string, "• 20% bonus na payday\n");
-    strcat(string, "• 10% popust na rentanje vozila\n");
+    strcat(string, "• 20%% bonus na payday\n");
+    strcat(string, "• 10%% popust na rentanje vozila\n");
     strcat(string, "• VIP Chat\n\n");
 
     strcat(string, "SILVER VIP PAKET ($10/mesec)\n");
@@ -96,17 +167,17 @@ YCMD:vipinfo(playerid, params[], help)
     strcat(string, "• Spawn sa 50 armora\n");
     strcat(string, "• Custom tablice\n");
     strcat(string, "• VIP Garaza\n");
-    strcat(string, "• 50% bonus na payday\n\n");
+    strcat(string, "• 50%% bonus na payday\n\n");
 
     strcat(string, "GOLD VIP PAKET ($15/mesec)\n");
     strcat(string, "• Sve iz Silver paketa\n");
     strcat(string, "• Kontrola vremena\n");
     strcat(string, "• Kontrola vremenske prognoze\n");
-    strcat(string, "• 100% bonus na payday\n\n");
+    strcat(string, "• 100%% bonus na payday\n\n");
 
     strcat(string, "PLATINUM VIP PAKET ($20/mesec)\n");
     strcat(string, "• Sve iz Gold paketa\n");
-    strcat(string, "• 150% bonus na payday\n");
+    strcat(string, "• 150%% bonus na payday\n");
     strcat(string, "• Ekskluzivni VIP eventi\n");
     strcat(string, "• Prioritet na serveru\n\n");
 
@@ -121,6 +192,7 @@ YCMD:vipinfo(playerid, params[], help)
     return 1;
 }
 
+YCMD:g(playerid, params[], help) = vipchat;
 YCMD:vipchat(playerid, params[], help)
 {
     if(help)
@@ -134,6 +206,9 @@ YCMD:vipchat(playerid, params[], help)
 
     if(isnull(params))
         return notification.Show(playerid, "KORISCENJE", "/v [text]", "?", BOXCOLOR_BLUE);
+
+    if(!playerSettings[playerid][gVIPChat])
+        return SendServerMessage(playerid, "Islkljucen vam je vip chat, "c_ltorange"/tog");
 
     new vipRank[32];
     switch(PlayerVIPLevel[playerid])
@@ -149,7 +224,7 @@ YCMD:vipchat(playerid, params[], help)
     
     foreach(new i : Player)
     {
-        if(PlayerVIPLevel[i] >= VIP_BRONZE)
+        if(PlayerVIPLevel[i] >= VIP_BRONZE && playerSettings[playerid][gVIPChat] )
         {
             SendClientMessage(i, -1, stringicvip);
         }
@@ -157,18 +232,242 @@ YCMD:vipchat(playerid, params[], help)
     return 1;
 }
 
-// Hook for VIP features
-hook OnPlayerSpawn(playerid)
+YCMD:vtod(playerid, params[], help) 
 {
-    if(PlayerVIPLevel[playerid] >= VIP_BRONZE)
-    {
-        SetPlayerHealth(playerid, 100.0);
-    }
-    if(PlayerVIPLevel[playerid] >= VIP_SILVER)
-    {
-        SetPlayerArmour(playerid, 50.0);
-    }
+    
+    if(!VIPFeatures[GetPlayerVIPLevel(playerid)][vip_TimeControl])
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/vtod [ vreme (0-23) ]");
+
+	new time;
+	if(sscanf(params, "i", time)) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/vtod [ vreme (0-23) ]");
+
+	SetPlayerTime(playerid, time, 0);
+	SendClientMessageToAll(x_blue, "maryland \187; "c_white"VIP vrijeme je trenutno postavljeno na %d sati.", time);
+
     return 1;
+}
+
+YCMD:vweather(playerid, params[], help) = vipweather;
+YCMD:vipweather(playerid, params[], help) 
+{
+    if(!VIPFeatures[GetPlayerVIPLevel(playerid)][vip_TimeControl])
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    if(help) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/vtod [ vreme (0-23) ]");
+
+	new time;
+	if(sscanf(params, "i", time)) return SendClientMessage(playerid, x_blue, "maryland // "c_white"/vtod [ vreme (0-23) ]");
+
+    if(time < 0 || time > 22)
+        return SendServerMessage(playerid, "maryland // "c_white"Vrijeme ne moze biti vece od 22 ili manje od 0.");
+
+    SetPlayerWeather(playerid, time);
+    SendServerMessage(playerid, "maryland // "c_white"VIP weahter je postavljen na %d", time);
+    return 1;
+}
+
+YCMD:vtp(playerid, params[], help) {
+
+    if(GetPlayerVIPLevel(playerid) < VIP_SILVER)
+        return SendServerMessage(playerid, "Samo VIP moze ovo!");
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendServerMessage(playerid, "/vtp <ID/Ime Igraca>");
+
+    if(gVipCooldowns[playerid][VIP_COMMAND_GOTO] > gettime())
+        return SendServerMessage(playerid, "Ovu komandu mozete iskoristiti za %s", convertTime( gVipCooldowns[playerid][VIP_COMMAND_GOTO] - gettime( ) ) );
+
+    if(targetid == playerid)
+        return SendServerMessage(playerid, "Ne mozete se teleportovati do samog sebe!");
+
+    if(!IsPlayerConnected(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije konektovan na server!");
+
+    if(GetPlayerStaffLevel(targetid) > 0)
+        return SendServerMessage(playerid, "Ne mozete se teleportovati do igraca koji je dio staff team-a!");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendServerMessage(playerid, "Doslo je do greske, prijavite administraciji!");
+
+    if(gVipTeleportOffered[targetid] != INVALID_PLAYER_ID)
+        return SendServerMessage(playerid, "Neko je vec ponudio zahtjev za teleport ovom igracu!");
+
+    if(gVipTeleportOffered[targetid] == playerid)
+        return SendServerMessage(playerid, "Vec ste ponudili zahtjev za teleport ovom igracu!");
+
+    gVipTeleportOffered[targetid] = playerid;
+
+    SendClientMessage(playerid, x_ltorange, "#VIP \187; "c_white"Ponudili ste igracu %s[%d] zahtjev za teleport do njega.", ReturnCharacterName(playerid), playerid);
+
+    Dialog_Show(targetid, "dialog_vipOffer", DIALOG_STYLE_MSGBOX, "Maryland - VIP Teleport", 
+                           "Igrac "c_ltorange"%s[%d] "c_white"vam je ponudio zahtjev za teleport.\n\
+                           Ukoliko zelite da se igrac teleportuje do vas, pritisnite gumb "c_ltorange"'PRIHVATI'\n\
+                           "c_ltorange"SVAKI VID ISKORITAVANJA OVOG ZAHTJEVA SA SMATRA KAZNJIVIM.", ""c_ltorange"PRIHVATI", "ODBIJ");
+
+    switch(GetPlayerVIPLevel(playerid)) {
+
+        case VIP_SILVER: { gVipCooldowns[playerid][VIP_COMMAND_GOTO] = gettime() + 60; }
+        case VIP_GOLD: { gVipCooldowns[playerid][VIP_COMMAND_GOTO] = gettime() + 30; }
+        case VIP_PLATINUM: { gVipCooldowns[playerid][VIP_COMMAND_GOTO] = gettime() + 15; }
+    }
+
+    return (true);
+}
+
+YCMD:vgetveh(playerid, params[], help) 
+{
+
+    if(GetPlayerVIPLevel(playerid) < VIP_GOLD)
+        return SendServerMessage(playerid, "Samo VIP Gold ili Silver moze ovo!");
+
+    if(!CharacterHasVehicle(playerid))
+        return SendServerMessage(playerid, "Ne posjedujete personalno vozilo!");
+
+    if(gVipCooldowns[playerid][VIP_COMMAND_GETVEH] > gettime())
+        return SendServerMessage(playerid, "Ovu komandu mozete iskoristiti za %s", convertTime(gVipCooldowns[playerid][VIP_COMMAND_GETVEH] - gettime() ));
+
+    new evID = GetVehicleSQLID(playerid);
+
+    if(GetPlayerInterior(playerid) != 0 && GetPlayerVirtualWorld(playerid) != 0)
+        return SendServerMessage(playerid, "Ne mozete teleportovati vozilo do sebe ukoliko ste u interijeru!");
+
+    switch(GetPlayerVIPLevel(playerid)) {
+
+        case VIP_GOLD: { gVipCooldowns[playerid][VIP_COMMAND_GETVEH] = gettime() + (60 * 5); }
+        case VIP_PLATINUM: { gVipCooldowns[playerid][VIP_COMMAND_GETVEH] = gettime() + 30; }
+    }
+
+    foreach(new i : iter_Vehicles) {
+
+        if(eVehicle[i][vID] == evID) {
+
+            new Float:pPos[3];
+            GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+            SetVehiclePos(pvVehicle[i], pPos[0], pPos[1], pPos[2]);
+            PutPlayerInVehicle(playerid, pvVehicle[i], 0);
+            break;
+        }
+    }
+
+    return 1;
+}
+
+YCMD:vfv(playerid, params[], help) 
+{
+    
+    if(GetPlayerVIPLevel(playerid) < VIP_BRONZE)
+        return SendServerMessage(playerid, "Samo VIP moze ovo!");
+
+    if(gVipCooldowns[playerid][VIP_COMMAND_FV] > gettime())
+        return SendServerMessage(playerid, "Ovu komandu mozete iskoristiti za %s", convertTime(gVipCooldowns[playerid][VIP_COMMAND_FV] - gettime()));
+
+    if(!IsPlayerInAnyVehicle(playerid))
+        return SendServerMessage(playerid, "Ne nalazite se u vozilu!");
+
+    switch(GetPlayerVIPLevel(playerid)) {
+
+        case VIP_BRONZE: { gVipCooldowns[playerid][VIP_COMMAND_FV] = gettime() + (60 * 3); }
+        case VIP_SILVER: { gVipCooldowns[playerid][VIP_COMMAND_FV] = gettime() + (60 * 2); }
+        case VIP_GOLD: { gVipCooldowns[playerid][VIP_COMMAND_FV] = gettime() + (60 * 1); }
+        case VIP_PLATINUM: { gVipCooldowns[playerid][VIP_COMMAND_FV] = gettime() + 30; }
+    }
+
+    new tmp_veh = GetPlayerVehicleID(playerid);
+
+    SetVehicleHealth(tmp_veh, 900.00);
+    RepairVehicle(tmp_veh);
+
+    SendClientMessage(playerid, x_ltorange, "#VIP \187; "c_white"Uspjesno ste popravili vozilo!");
+
+    return 1;
+}
+
+YCMD:vippm(playerid, params[], help) = vpm;
+YCMD:vpm(playerid, params[], help) {
+
+    if(GetPlayerVIPLevel(playerid) < VIP_BRONZE)
+        return SendServerMessage(playerid, "Samo VIP moze ovo!");
+
+    if(gVipCooldowns[playerid][VIP_COMMAND_PM] > gettime())
+        return SendServerMessage(playerid, "Ovu komandu mozete iskoristiti za %s", convertTime(gVipCooldowns[playerid][VIP_COMMAND_FV] - gettime()));
+
+    new targetid, pm_message[128];
+
+    if(sscanf(params, "us[128]", targetid, pm_message))
+        return SendServerMessage(playerid, "/vpm <ID/Ime> <Message>");
+
+    if(targetid == playerid)
+        return SendServerMessage(playerid, "Ne mozete se poslati VIP PM samom sebi!");
+
+    if(!IsPlayerConnected(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije konektovan na server!");
+
+    if(GetPlayerStaffLevel(targetid) > 0)
+        return SendServerMessage(playerid, "Ne mozete poslati VIP PM igracu koji je dio staff team-a!");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendServerMessage(playerid, "Doslo je do greske, prijavite administraciji!");
+
+    
+    SendClientMessage(targetid, x_ltorange, "#VIP \187; %s[%d] : "c_white"%s", ReturnCharacterName(playerid), playerid, pm_message);
+    SendClientMessage(playerid, x_ltorange, "#VIP \187; %s[%d] -> %s[%d] : "c_white"%s", ReturnCharacterName(playerid), playerid, ReturnCharacterName(targetid), targetid, pm_message);
+
+    gVipCooldowns[playerid][VIP_COMMAND_PM] = gettime() + 10;
+
+    return 1;
+}
+
+YCMD:vipskin(playerid, params[], help) 
+{
+    
+    if(GetPlayerVIPLevel(playerid) < VIP_PLATINUM)
+        return SendServerMessage(playerid, "Samo VIP Platinum moze ovo!");
+
+    ShowModelSelectionMenu(playerid, ms_VIPMenu, "VIP Skins");
+    return 1;
+}
+
+YCMD:createvipveh(playerid, params[], help) {
+
+    if(!IsPlayerAdmin(playerid))
+        return SendServerMessage(playerid, "Samo RCON Admin moze ovo!");
+
+    new vip_model;
+    if(sscanf(params, "d", vip_model)) return SendServerMessage(playerid, "/createvipveh [modelid]");
+
+    if(vip_model < 400 || vip_model > 611)
+        return SendServerMessage(playerid, "Unijeli ste krivi model id vozila!");
+
+    new Float:pPos[4];
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+    GetPlayerFacingAngle(playerid, pPos[3]);
+
+    new vip_idx = Iter_Free(iter_VIPVehicles);
+
+    VipVehicleData[vip_idx][vip_vModel] = vip_model;
+    VipVehicleData[vip_idx][vip_vPos][0] = pPos[0];
+    VipVehicleData[vip_idx][vip_vPos][1] = pPos[1];
+    VipVehicleData[vip_idx][vip_vPos][2] = pPos[2];
+    VipVehicleData[vip_idx][vip_vPos][3] = pPos[3];
+
+    new q[488];
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `vip_vehicles` (`vip_vModel`, `vip_vPosX`, `vip_vPosY`, `vip_vPosZ`, `vip_vPosA`) VALUES ('%d', '%f', '%f', '%f', '%f')",
+                                    vip_model, pPos[0], pPos[1], pPos[2], pPos[3]);
+    mysql_tquery(SQL, q, "mysql_CreateVipVehicle", "d", vip_idx);
+
+    SetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]+3);
+
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    gVipTeleportOffered[playerid] = INVALID_PLAYER_ID;
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 // At the top with other variables
@@ -181,15 +480,18 @@ hook OnGameModeInit()
             character_id INT NOT NULL,\
             vip_level INT DEFAULT 0,\
             vip_expiry DATETIME DEFAULT NULL,\
-            PRIMARY KEY (character_id),\
-            FOREIGN KEY (character_id) REFERENCES characters(id)\
-        )"
+            PRIMARY KEY (character_id)\
+        );"
     );
 
     // Start the VIP expiry timer
     gVIPExpiryTimer = repeat CheckVIPExpiry();
 
-    return 1;
+    mysql_tquery(SQL, "SELECT * FROM `vip_vehicles`", "mysql_LoadVipVehicles");
+
+    ms_VIPMenu = LoadModelSelectionMenu("vip_skins.txt");
+
+    return 1;   
 }
 
 hook OnGameModeExit()
@@ -200,6 +502,37 @@ hook OnGameModeExit()
         stop gVIPExpiryTimer;
     }
     return 1;
+}
+
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
+
+    foreach( new i : iter_VIPVehicles ) {
+
+        if(vehicleid == vipVehicle[i]) {
+
+            if(GetPlayerVIPLevel(playerid) < VIP_BRONZE || GetPlayerStaffLevel(playerid) < 1)
+            {
+                ClearAnimations(playerid);
+                SendServerMessage(playerid, "Samo VIP clanovi mogu ovo.");
+                return Y_HOOKS_BREAK_RETURN_1;
+            }
+        }
+    }
+
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerModelSelection( playerid, response, listid, modelid) {
+    
+    if(listid == ms_VIPMenu) {
+        if( response ) {
+            SetPlayerSkin(playerid, modelid);
+        }
+    }
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+
 }
 
 timer CheckVIPExpiry[3600000]() // Check every hour
@@ -309,6 +642,25 @@ public OnVIPDataLoad(playerid)
             case VIP_PLATINUM: vipRank = "PLATINUM";
         }
         
+        if(PlayerVIPLevel[playerid] == VIP_SILVER)
+        {
+
+            SetPlayerArmour(playerid, 25.00);
+
+        }
+
+        if(PlayerVIPLevel[playerid] == VIP_GOLD) 
+        {
+        
+            SetPlayerArmour(playerid, 45.00);
+
+        }
+
+        if(PlayerVIPLevel[playerid] == VIP_PLATINUM) {
+
+            SetPlayerArmour(playerid, 100.00);
+        }
+
         new stringicvip[144];
         format(stringicvip, sizeof(stringicvip), "VIP » Dobrodosli nazad! Vas %s VIP status je aktivan jos %d dana.", 
             vipRank, days_remaining);
@@ -317,7 +669,9 @@ public OnVIPDataLoad(playerid)
     return 1;
 }
 
-// Function to set player's VIP level (call this when processing donations)
+stock GetPlayerVIPLevel(playerid)
+    return PlayerVIPLevel[playerid];
+
 stock SetPlayerVIP(playerid, level, days)
 {
     if(!IsPlayerConnected(playerid))
@@ -513,4 +867,30 @@ public OnCheckVIP(playerid, targetid)
         ReturnPlayerName(targetid), stringicvip, "Zatvori", "");
 
     return 1;
+}
+
+Dialog:dialog_vipOffer(playerid, response, listitem, string: inputtext[]) {
+
+    if(response) {
+
+        if(gVipTeleportOffered[playerid] == INVALID_PLAYER_ID)
+            return SendServerMessage(playerid, "Doslo je do greske, molimo vas da prijavite administraciji.");
+        
+        new targetid = gVipTeleportOffered[playerid];
+
+        new Float:pPos[3];
+        GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+        SetPlayerCompensatedPos(targetid, pPos[0], pPos[1], pPos[2], GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+
+        gVipTeleportOffered[playerid] = INVALID_PLAYER_ID;
+    }
+
+    if(!response) {
+
+        SendServerMessage(gVipTeleportOffered[playerid], "Igrac %s[%d] je odbio vas zahtjev za teleport.");
+        gVipTeleportOffered[playerid] = INVALID_PLAYER_ID;
+    }
+
+    return (true);
+
 }

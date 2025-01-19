@@ -332,6 +332,34 @@ YCMD:f(playerid, params[], help) {
     return 1;
 }
 
+YCMD:l(playerid, params[], help) 
+{
+    
+    if(FactionMember[playerid][factionRank] != 4)
+        return SendServerMessage(playerid, "Niste lider fakcije!");
+
+    if(!playerSettings[playerid][gLeaderChat])
+        return SendServerMessage(playerid, "Islkljucen vam je leader chat, "c_ltorange"/tog");
+
+    new tmp_str[128], tmp_mess[488];
+    if(sscanf(params, "s[128]", tmp_str)) return SendServerMessage(playerid, "/l <poruka>");
+
+    if(strlen(tmp_str) > sizeof tmp_str)
+        return (true);
+
+    format(tmp_mess, sizeof tmp_mess, ""c_server"[L] %s %s[%d] : "c_ltorange"%s", Faction_ReturnNameByPlayer(playerid), ReturnCharacterName(playerid), playerid, tmp_str);
+    
+    foreach(new i : Player) {
+
+        if(FactionMember[i][factionRank] == 4 && playerSettings[playerid][gLeaderChat]) {
+
+            SendClientMessage(i, x_server, tmp_mess);
+        }
+    }
+
+    return 1;
+}
+
 YCMD:finvite(playerid, params[], help) 
 {
     
@@ -848,6 +876,23 @@ stock ReturnFactionSQLID(player)
     return -1;
 } 
 
+stock Faction_ReturnNameBySQLID(faction) {
+
+    static str[MAX_FACTION_NAME_LEN];
+    
+    str = "[Undefined]:";
+
+    foreach(new j : iter_Factions) {
+
+        if(FactionInfo[j][factionID] == faction) {
+            static fa_str[MAX_FACTION_NAME_LEN];
+            format(fa_str, sizeof fa_str, "%s", FactionInfo[j][factionName]);
+            strmid(str, fa_str, 0, sizeof fa_str);
+        }
+    }
+
+    return str;
+}
 
 stock Faction_CheckConnectedHouse(faction, playerid) {
 

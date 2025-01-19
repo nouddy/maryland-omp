@@ -212,6 +212,17 @@ stock IsPlayerInPersonalVehicle(playerid) {
 	return false;
 }
 
+stock GetVehicleSQLID(playerid) {
+
+	foreach(new i : iter_Vehicles) {
+
+		if(eVehicle[i][vOwner] == GetCharacterSQLID(playerid))
+			return eVehicle[i][vOwner];
+	}
+
+	return -1;
+}
+
 stock CharacterHasVehicle(playerid) {
 
 	foreach(new i : iter_Vehicles) {

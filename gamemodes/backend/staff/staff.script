@@ -853,23 +853,6 @@ YCMD:spm(playerid, params[], help)
 	return 1;
 }
 
-@cmd() help(playerid, params[], help)
-{
-	if (help)
-	{
-		SendClientMessage(playerid, -1, "Iskoristi `/help <komanda>` da dobijete informacije o komandi.");
-	}
-	else if (IsNull(params))
-	{
-		SendClientMessage(playerid, -1, "Unesite validnu komandu.");
-	}
-	else
-	{
-		Command_ReProcess(playerid, params, true);
-	}
-	return 1;
-}
-
 
 //////////////////////////////////////////////////////////////
 // Player punishments
@@ -1499,6 +1482,7 @@ public OnPasswordChange(adminid, targetid, const newpass[])
 
 // Alias for easier use
 YCMD:sethpall(playerid, params[], help) = setallhp;
+YCMD:healall(playerid, params[], help) = setallhp;
 YCMD:setallhp(playerid, params[], help)
 {
     if(help)
@@ -1534,6 +1518,7 @@ YCMD:setallhp(playerid, params[], help)
 // Aliases for easier use
 YCMD:setarmorall(playerid, params[], help) = setallarmor;
 YCMD:setarmall(playerid, params[], help) = setallarmor;
+YCMD:armorall(playerid, params[], help) = setallarmor;
 YCMD:setallarmor(playerid, params[], help)
 {
     if(help)
