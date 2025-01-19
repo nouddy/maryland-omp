@@ -408,25 +408,33 @@ YCMD:cc(playerid, params[], help)
 
     return 1;
 }
-
-YCMD:fv(playerid, params[], help)
+YCMD:fv(playerid, params[], help) = fixveh;
+YCMD:fixveh(playerid, params[], help)
 {
 	if(help)
     {
-        notification.Show(playerid, "HELP", "Komanda koja Vam popravlja vozilo", "+", BOXCOLOR_BLUE);
+        notification.Show(playerid, "HELP", "Komanda koja Vam popravlja vozilo igracu", "+", BOXCOLOR_BLUE);
         return 1;
     }
 
 	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
 
-	new vehicleid = GetPlayerVehicleID(playerid);
+	new targetid;
+	if(sscanf(params, "u", targetid))
+		return notification.Show(playerid, "KORISCENJE", "/fv [ID/Ime]", "?", BOXCOLOR_BLUE);
 
-	if(!IsPlayerInAnyVehicle(playerid)) return notification.Show(playerid, "GRESKA", "Niste u vozilu", "!", BOXCOLOR_RED);
+	if(targetid == INVALID_PLAYER_ID)
+		return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+	new vehicleid = GetPlayerVehicleID(targetid);
+	if(!IsPlayerInAnyVehicle(targetid))
+		return notification.Show(playerid, "GRESKA", "Taj igrac nije u vozilu!", "!", BOXCOLOR_RED);
 
 	RepairVehicle(vehicleid);
-
 	SetVehicleHealth(vehicleid, 999.0);
+	
+	notification.Show(playerid, "USPESNO", "Popravili ste vozilo igracu!", "!", BOXCOLOR_GREEN);
 
 	return 1;
 }
@@ -1194,3 +1202,732 @@ Dialog:question_Answer(const playerid, response, listitem, string: inputtext[]) 
 }
 
 #include "backend/staff/jails.pwn"								//* Jail script
+
+YCMD:checkid(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja pronalazi ID igraca po imenu karaktera", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new charname[MAX_PLAYER_NAME];
+    if(sscanf(params, "s[24]", charname))
+        return notification.Show(playerid, "KORISCENJE", "/checkid [Ime_Karaktera]", "?", BOXCOLOR_BLUE);
+
+    new bool:found = false;
+    foreach(new i : Player)
+    {
+        if(strcmp(ReturnCharacterName(i), charname, true) == 0)
+        {
+            new string[128];
+            format(string, sizeof(string), "Igrac %s ima ID: %d", charname, i);
+            notification.Show(playerid, "INFO", string, "i", BOXCOLOR_GREEN);
+            found = true;
+            break;
+        }
+    }
+
+    if(!found)
+    {
+        new string[128];
+        format(string, sizeof(string), "Igrac sa imenom %s nije pronadjen na serveru!", charname);
+        notification.Show(playerid, "GRESKA", string, "!", BOXCOLOR_RED);
+    }
+
+    return 1;
+}
+
+YCMD:fvall(playerid, params[], help) = fixallcars;
+YCMD:fixallcars(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja popravlja sva vozila na serveru", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    for(new i = 1; i < MAX_VEHICLES; i++)
+    {
+        if(IsValidVehicle(i))
+        {
+            RepairVehicle(i);
+            SetVehicleHealth(i, 999.0);
+        }
+    }
+
+    new string[128];
+    format(string, sizeof(string), ""c_server"» "c_white"Staff %s je popravio sva vozila na serveru!", ReturnPlayerName(playerid));
+    SendClientMessageToAll(-1, string);
+    
+    notification.Show(playerid, "USPESNO", "Popravili ste sva vozila na serveru!", "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+YCMD:fuelall(playerid, params[], help) = fillallcars;
+YCMD:fillallcars(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja puni gorivo svim vozilima na serveru", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    for(new i = 1; i < MAX_VEHICLES; i++)
+    {
+        if(IsValidVehicle(i))
+        {
+            eVehicle[i][vFuel] = 100;
+        }
+    }
+
+    new string[128];
+    format(string, sizeof(string), ""c_server"» "c_white"Staff %s je napunio gorivo svim vozilima na serveru!", ReturnPlayerName(playerid));
+    SendClientMessageToAll(-1, string);
+    
+    notification.Show(playerid, "USPESNO", "Napunili ste gorivo svim vozilima na serveru!", "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+YCMD:sethp(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja postavlja HP igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid, Float:health;
+    if(sscanf(params, "uf", targetid, health))
+        return notification.Show(playerid, "KORISCENJE", "/sethp [ID] [HP]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(health < 0.0 || health > 100.0)
+        return notification.Show(playerid, "GRESKA", "HP mora biti izmedju 0 i 100!", "!", BOXCOLOR_RED);
+
+    SetPlayerHealth(targetid, health);
+
+    new string[128];
+    format(string, sizeof(string), "Postavili ste HP igracu %s na %.1f", ReturnCharacterName(targetid), health);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je postavio HP na %.1f", ReturnPlayerName(playerid), health);
+    notification.Show(targetid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    return 1;
+}
+// Alias for easier use
+YCMD:setarm(playerid, params[], help) = setarmor;
+YCMD:setarmor(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja postavlja Armor igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid, Float:armor;
+    if(sscanf(params, "uf", targetid, armor))
+        return notification.Show(playerid, "KORISCENJE", "/setarmor [ID] [Armor]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(armor < 0.0 || armor > 100.0)
+        return notification.Show(playerid, "GRESKA", "Armor mora biti izmedju 0 i 100!", "!", BOXCOLOR_RED);
+
+    SetPlayerArmour(targetid, armor);
+
+    new string[128];
+    format(string, sizeof(string), "Postavili ste Armor igracu %s na %.1f", ReturnCharacterName(targetid), armor);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je postavio Armor na %.1f", ReturnPlayerName(playerid), armor);
+    notification.Show(targetid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    return 1;
+}
+
+YCMD:getip(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja prikazuje IP adresu igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return notification.Show(playerid, "KORISCENJE", "/getip [ID]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    new ip[16];
+    GetPlayerIp(targetid, ip, sizeof(ip));
+
+    new string[128];
+    format(string, sizeof(string), "IP adresa igraca %s je: %s", ReturnCharacterName(targetid), ip);
+    notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    // Log the IP check for security
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je proverio IP adresu igraca %s", ReturnPlayerName(playerid), ReturnPlayerName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:passwordigraca(playerid, params[], help) = playerpassword;
+YCMD:playerpassword(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja prikazuje sifru igraca iz baze", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return notification.Show(playerid, "KORISCENJE", "/playerpassword [ID]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), "SELECT Password FROM accounts WHERE ID = %d", PlayerInfo[targetid][SQLID]);
+    mysql_tquery(SQL, query, "OnPasswordCheck", "dd", playerid, targetid);
+
+    return 1;
+}
+
+forward OnPasswordCheck(adminid, targetid);
+public OnPasswordCheck(adminid, targetid)
+{
+    if(!cache_num_rows())
+        return notification.Show(adminid, "GRESKA", "Nije pronadjen account u bazi!", "!", BOXCOLOR_RED);
+
+    new password[65];
+    cache_get_value_name(0, "Password", password, sizeof(password));
+
+    new string[128];
+    format(string, sizeof(string), "Sifra igraca %s je: %s", ReturnCharacterName(targetid), password);
+    notification.Show(adminid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    // Log the password check for security
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je proverio sifru igraca %s", ReturnPlayerName(adminid), ReturnCharacterName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Alias for easier use
+YCMD:setpass(playerid, params[], help) = changepass;
+YCMD:changepass(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja menja sifru igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid, newpass[65];
+    if(sscanf(params, "us[65]", targetid, newpass))
+        return notification.Show(playerid, "KORISCENJE", "/changepass [ID] [Nova_Sifra]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(strlen(newpass) < 6 || strlen(newpass) > 64)
+        return notification.Show(playerid, "GRESKA", "Sifra mora biti izmedju 6 i 64 karaktera!", "!", BOXCOLOR_RED);
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), "UPDATE accounts SET Password = '%e' WHERE ID = %d", newpass, PlayerInfo[targetid][SQLID]);
+    mysql_tquery(SQL, query, "OnPasswordChange", "dds", playerid, targetid, newpass);
+
+    return 1;
+}
+
+forward OnPasswordChange(adminid, targetid, const newpass[]);
+public OnPasswordChange(adminid, targetid, const newpass[])
+{
+    if(!cache_affected_rows())
+        return notification.Show(adminid, "GRESKA", "Doslo je do greske pri promeni sifre!", "!", BOXCOLOR_RED);
+
+    new string[128];
+    format(string, sizeof(string), "Promenili ste sifru igraca %s na: %s", ReturnCharacterName(targetid), newpass);
+    notification.Show(adminid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je promenio sifru na: %s", ReturnPlayerName(adminid), newpass);
+    notification.Show(targetid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    // Log the password change for security
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je promenio sifru igraca %s", ReturnPlayerName(adminid), ReturnPlayerName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Alias for easier use
+YCMD:sethpall(playerid, params[], help) = setallhp;
+YCMD:setallhp(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja postavlja HP svim igracima", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new Float:health;
+    if(sscanf(params, "f", health))
+        return notification.Show(playerid, "KORISCENJE", "/sethpall [HP]", "?", BOXCOLOR_BLUE);
+
+    if(health < 0.0 || health > 100.0)
+        return notification.Show(playerid, "GRESKA", "HP mora biti izmedju 0 i 100!", "!", BOXCOLOR_RED);
+
+    foreach(new i : Player)
+    {
+        SetPlayerHealth(i, health);
+    }
+
+    new string[128];
+    format(string, sizeof(string), ""c_server"» "c_white"Staff %s je postavio svim igracima HP na %.1f", ReturnPlayerName(playerid), health);
+    SendClientMessageToAll(-1, string);
+    
+    notification.Show(playerid, "USPESNO", "Postavili ste HP svim igracima!", "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+// Aliases for easier use
+YCMD:setarmorall(playerid, params[], help) = setallarmor;
+YCMD:setarmall(playerid, params[], help) = setallarmor;
+YCMD:setallarmor(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja postavlja Armor svim igracima", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new Float:armor;
+    if(sscanf(params, "f", armor))
+        return notification.Show(playerid, "KORISCENJE", "/setallarmor [Armor]", "?", BOXCOLOR_BLUE);
+
+    if(armor < 0.0 || armor > 100.0)
+        return notification.Show(playerid, "GRESKA", "Armor mora biti izmedju 0 i 100!", "!", BOXCOLOR_RED);
+
+    foreach(new i : Player)
+    {
+        SetPlayerArmour(i, armor);
+    }
+
+    new string[128];
+    format(string, sizeof(string), ""c_server"» "c_white"Staff %s je postavio svim igracima Armor na %.1f", ReturnPlayerName(playerid), armor);
+    SendClientMessageToAll(-1, string);
+    
+    notification.Show(playerid, "USPESNO", "Postavili ste Armor svim igracima!", "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+// Alias for easier use
+YCMD:fuelveh(playerid, params[], help) = fillveh;
+YCMD:fillveh(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja puni gorivo odredjenom vozilu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "Greska", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new vehicleid;
+    if(sscanf(params, "i", vehicleid))
+        return notification.Show(playerid, "KORISCENJE", "/fillveh [ID_Vozila]", "?", BOXCOLOR_BLUE);
+
+    if(!IsValidVehicle(vehicleid))
+        return notification.Show(playerid, "GRESKA", "Nevazeci ID vozila!", "!", BOXCOLOR_RED);
+
+    eVehicle[vehicleid][vFuel] = 100;
+
+    new string[128];
+    format(string, sizeof(string), "Napunili ste gorivo vozilu ID: %d", vehicleid);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+YCMD:unbanip(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja skida IP ban", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new ip[16];
+    if(sscanf(params, "s[16]", ip))
+        return notification.Show(playerid, "KORISCENJE", "/unbanip [IP]", "?", BOXCOLOR_BLUE);
+
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "SELECT COUNT(*) FROM bans WHERE ban_ip = '%e'", ip);
+    mysql_tquery(SQL, query, "OnUnbanIPCheck", "ds", playerid, ip);
+
+    return 1;
+}
+
+forward OnUnbanIPCheck(playerid, const ip[]);
+public OnUnbanIPCheck(playerid, const ip[])
+{
+    new count;
+    cache_get_value_name_int(0, "COUNT(*)", count);
+
+    if(count == 0)
+        return notification.Show(playerid, "GRESKA", "Ta IP adresa nije banovana!", "!", BOXCOLOR_RED);
+
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "DELETE FROM bans WHERE ban_ip = '%e'", ip);
+    mysql_tquery(SQL, query);
+
+    new string[128];
+    format(string, sizeof(string), "Uspesno ste unbannovali IP adresu: %s", ip);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je unbanovao IP adresu %s", ReturnPlayerName(playerid), ip);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:offbanip(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja banuje offline igraca po IP adresi", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new charname[MAX_PLAYER_NAME], ip[16], reason[64], ban_time[16];
+    if(sscanf(params, "s[24]s[16]s[64]s[16]", charname, ip, reason, ban_time))
+        return notification.Show(playerid, "KORISCENJE", "/offbanip [Ime_Prezime] [IP] [Razlog] [Vreme/perma]", "?", BOXCOLOR_BLUE);
+
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), "SELECT COUNT(*) FROM bans WHERE ban_ip = '%e'", ip);
+    mysql_tquery(SQL, query, "OnOffbanIPCheck", "dssss", playerid, charname, ip, reason, ban_time);
+
+    return 1;
+}
+
+forward OnOffbanIPCheck(playerid, const charname[], const ip[], const reason[], const ban_time[]);
+public OnOffbanIPCheck(playerid, const charname[], const ip[], const reason[], const ban_time[])
+{
+    new count;
+    cache_get_value_name_int(0, "COUNT(*)", count);
+
+    if(count > 0)
+        return notification.Show(playerid, "GRESKA", "Ta IP adresa je vec banovana!", "!", BOXCOLOR_RED);
+
+    new query[512];
+    if(strcmp(ban_time, "perma", true) == 0)
+    {
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, is_permanent) \
+            SELECT c.id, '%e', NOW(), '%e', 1 FROM characters c WHERE c.name = '%e'", 
+            reason, ip, charname);
+    }
+    else
+    {
+        new timeban = strval(ban_time);
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO bans (character_id, ban_reason, ban_date, ban_ip, ban_expire) \
+            SELECT c.id, '%e', NOW(), '%e', NOW() + INTERVAL %d MINUTE FROM characters c WHERE c.name = '%e'", 
+            reason, ip, timeban, charname);
+    }
+    mysql_tquery(SQL, query);
+
+    new string[128];
+    format(string, sizeof(string), "Uspesno ste banovali IP %s (Karakter: %s)", ip, charname);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je offline banovao IP %s (Karakter: %s)", ReturnPlayerName(playerid), ip, charname);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:offunbanip(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja unbana IP offline igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new charname[MAX_PLAYER_NAME];
+    if(sscanf(params, "s[24]", charname))
+        return notification.Show(playerid, "KORISCENJE", "/offunbanip [Ime_Prezime]", "?", BOXCOLOR_BLUE);
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT COUNT(*) FROM bans b \
+        INNER JOIN characters c ON b.character_id = c.id \
+        WHERE c.name = '%e'", charname);
+    mysql_tquery(SQL, query, "OnOffunbanIPCheck", "ds", playerid, charname);
+
+    return 1;
+}
+
+forward OnOffunbanIPCheck(playerid, const charname[]);
+public OnOffunbanIPCheck(playerid, const charname[])
+{
+    new count;
+    cache_get_value_name_int(0, "COUNT(*)", count);
+
+    if(count == 0)
+        return notification.Show(playerid, "GRESKA", "Taj karakter nije banovan!", "!", BOXCOLOR_RED);
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "DELETE b FROM bans b \
+        INNER JOIN characters c ON b.character_id = c.id \
+        WHERE c.name = '%e'", charname);
+    mysql_tquery(SQL, query);
+
+    new string[128];
+    format(string, sizeof(string), "Uspesno ste unbannovali IP za karaktera: %s", charname);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je offline unbanovao IP za karaktera %s", ReturnPlayerName(playerid), charname);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Helper function to validate IP format
+stock IsValidIP(const ip[])
+{
+    new len = strlen(ip);
+    if(len < 7 || len > 15) return 0;
+
+    new dots = 0, numbers = 0;
+    for(new i = 0; i < len; i++)
+    {
+        if(ip[i] == '.')
+        {
+            dots++;
+            numbers = 0;
+            continue;
+        }
+        if(ip[i] < '0' || ip[i] > '9') return 0;
+        numbers++;
+        if(numbers > 3) return 0;
+    }
+    return (dots == 3);
+}
+
+YCMD:rtc(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja respawna vozila u radiusu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new radius;
+    if(sscanf(params, "i", radius))
+        return notification.Show(playerid, "KORISCENJE", "/rtc [radius]", "?", BOXCOLOR_BLUE);
+
+    if(radius < 1 || radius > 100)
+        return notification.Show(playerid, "GRESKA", "Radius mora biti izmedju 1-100!", "!", BOXCOLOR_RED);
+
+    new Float:playerPos[3], count;
+    GetPlayerPos(playerid, playerPos[0], playerPos[1], playerPos[2]);
+
+    for(new vehicleid = 1; vehicleid <= MAX_VEHICLES; vehicleid++)
+    {
+        if(!IsValidVehicle(vehicleid)) 
+            continue;
+
+        new Float:vehPos[3];
+        GetVehiclePos(vehicleid, vehPos[0], vehPos[1], vehPos[2]);
+
+        new Float:dist = floatsqroot(
+            floatpower(playerPos[0] - vehPos[0], 2) + 
+            floatpower(playerPos[1] - vehPos[1], 2) + 
+            floatpower(playerPos[2] - vehPos[2], 2)
+        );
+
+        if(dist <= float(radius))
+        {
+            SetVehicleToRespawn(vehicleid);
+            count++;
+        }
+    }
+
+    new string[128];
+    format(string, sizeof(string), "Respawnali ste %d vozila u radiusu od %d metara", count, radius);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je respawnao %d vozila u radiusu od %d metara", ReturnPlayerName(playerid), count, radius);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:rac(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja respawna sva vozila na serveru", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new count;
+    for(new vehicleid = 1; vehicleid <= MAX_VEHICLES; vehicleid++)
+    {
+        if(!IsValidVehicle(vehicleid)) 
+            continue;
+
+        SetVehicleToRespawn(vehicleid);
+        count++;
+    }
+
+    new string[128];
+    format(string, sizeof(string), "Respawnali ste sva vozila na serveru (%d vozila)", count);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je respawnao sva vozila na serveru (%d vozila)", ReturnPlayerName(playerid), count);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:srecniid(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Nasumicno bira srecnog igraca za nagradu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new type[32], reward;
+    if(sscanf(params, "s[32]i", type, reward))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /srecniid [tip] [nagrada]");
+        SendClientMessage(playerid, x_server, "TIPOVI: novac, level, respect");
+        SendClientMessage(playerid, x_server, "PRIMER: /srecniid novac 5000");
+        return 1;
+    }
+
+    if(reward <= 0)
+        return notification.Show(playerid, "GRESKA", "Nagrada mora biti veca od 0!", "!", BOXCOLOR_RED);
+
+    // Create array of eligible players
+    new validPlayers[MAX_PLAYERS], playerCount;
+    foreach(new i : Player)
+    {
+        if(!IsPlayerConnected(i)) continue;
+        if(GetPlayerStaffLevel(i) > 0) continue;
+        if(GetPlayerState(i) == PLAYER_STATE_SPECTATING) continue;
+        
+        validPlayers[playerCount++] = i;
+    }
+
+    if(playerCount < 3)
+        return notification.Show(playerid, "GRESKA", "Potrebno je minimum 3 igraca online!", "!", BOXCOLOR_RED);
+
+    // Select random winner from valid players
+    new winner = validPlayers[random(playerCount)];
+
+    // Give reward
+    if(strcmp(type, "novac", true) == 0)
+    {
+        GivePlayerMoney(winner, reward);
+        SendClientMessageToAll(x_server, ""c_server"SRECNI ID: "c_white"Igrac %s je dobio nagradu od $%d!", ReturnPlayerName(winner), reward);
+    }
+    else if(strcmp(type, "level", true) == 0)
+    {
+        SetPlayerScore(winner, GetPlayerScore(winner) + reward);
+        SendClientMessageToAll(x_server, ""c_server"SRECNI ID: "c_white"Igrac %s je dobio nagradu od %d level-a!", ReturnPlayerName(winner), reward);
+    }
+    else if(strcmp(type, "respect", true) == 0)
+    {
+        SendClientMessageToAll(x_server, ""c_server"SRECNI ID: "c_white"Igrac %s je dobio nagradu od %d respect poena!", ReturnPlayerName(winner), reward);
+    }
+    else
+        return notification.Show(playerid, "GRESKA", "Nevazeci tip nagrade!", "!", BOXCOLOR_RED);
+
+    // Log
+    new log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je dodelio %s nagradu igracu %s (%s - %d)", 
+        ReturnPlayerName(playerid), type, ReturnPlayerName(winner), type, reward);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}

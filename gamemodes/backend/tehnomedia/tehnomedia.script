@@ -306,6 +306,45 @@ YCMD:hangup(playerid, params[], help) {
     return 1;
 }
 
+YCMD:broj(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja prikazuje broj telefona igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new targetname[MAX_PLAYER_NAME];
+    if(sscanf(params, "s[24]", targetname))
+        return notification.Show(playerid, "KORISCENJE", "/number [Ime_Prezime]", "?", BOXCOLOR_BLUE);
+
+    new bool:found = false;
+    foreach(new i : Player)
+    {
+        if(strcmp(ReturnCharacterName(i), targetname, true) == 0)
+        {
+            if(PlayerElectronic[i][ePhoneModel] == -1)
+                return notification.Show(playerid, "GRESKA", "Taj igrac nema telefon!", "!", BOXCOLOR_RED);
+
+            new string[128];
+            format(string, sizeof(string), "Broj telefona od %s je: %d-%d-%d", 
+                ReturnCharacterName(i), 
+                PlayerElectronic[i][ePhoneNumber][0],
+                PlayerElectronic[i][ePhoneNumber][1],
+                PlayerElectronic[i][ePhoneNumber][2]
+            );
+            notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+            found = true;
+            break;
+        }
+    }
+
+    if(!found)
+        notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    return 1;
+}
+
 //*==============================================================================
 //*--->>> Dialogs
 //*==============================================================================

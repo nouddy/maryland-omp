@@ -403,6 +403,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/misc/commands.pwn"							   //* Cmds
 #include "backend/misc/experience.pwn"							   //* Cmds
+#include "backend/misc/quiz.pwn"									//* Quiz
+#include "backend/misc/vipsys.pwn"								//* VIP System
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved

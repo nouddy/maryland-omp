@@ -620,3 +620,66 @@ IsPlayerNearRent(playerid) {
     }
     return INVALID_RENTAL_ID;
 }
+
+YCMD:najblizirent(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Komanda koja pokazuje najblizi rent", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!IsPlayerConnected(playerid))
+        return 0;
+
+    if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)
+        return notification.Show(playerid, "GRESKA", "Ne mozete koristiti ovu komandu dok spectate!", "!", BOXCOLOR_RED);
+
+    if(!PlayerElectronic[playerid][eGPSItem])
+        return notification.Show(playerid, "GRESKA", "Nemate GPS uredjaj!", "!", BOXCOLOR_RED);
+
+    if(PlayerRenting[playerid])
+        return notification.Show(playerid, "GRESKA", "Vec rentas vozilo!", "!", BOXCOLOR_RED);
+
+    if(!Iter_Count(iter_Rental))
+        return notification.Show(playerid, "GRESKA", "Nema dostupnih rent lokacija!", "!", BOXCOLOR_RED);
+
+    new Float:playerPos[3], Float:minDist = 99999.9, nearestRent = -1;
+    GetPlayerPos(playerid, playerPos[0], playerPos[1], playerPos[2]);
+
+    foreach(new i : iter_Rental)
+    {
+        if(!IsValidPickup(PlayerRental[i][rentalPickup]))
+            continue;
+
+        new Float:dist = floatsqroot(
+            floatpower(playerPos[0] - PlayerRental[i][rentalPos][0], 2) + 
+            floatpower(playerPos[1] - PlayerRental[i][rentalPos][1], 2) + 
+            floatpower(playerPos[2] - PlayerRental[i][rentalPos][2], 2)
+        );
+
+        if(dist < minDist)
+        {
+            minDist = dist;
+            nearestRent = i;
+            break; // Break after finding closest rent
+        }
+    }
+
+    if(nearestRent == -1)
+        return notification.Show(playerid, "GRESKA", "Nema dostupnih rent lokacija!", "!", BOXCOLOR_RED);
+
+    DisablePlayerCheckpoint(playerid);
+    SetPlayerCheckpoint(playerid, 
+        PlayerRental[nearestRent][rentalPos][0],
+        PlayerRental[nearestRent][rentalPos][1],
+        PlayerRental[nearestRent][rentalPos][2],
+        3.0
+    );
+
+    new string[128];
+    format(string, sizeof(string), "Najblizi rent je oznacen na mapi (%.0f metara)", minDist);
+    notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    return 1;
+}

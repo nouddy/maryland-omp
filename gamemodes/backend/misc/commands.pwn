@@ -135,3 +135,112 @@ YCMD:spa(playerid, params[], help) {
 
     return (true);
 }
+
+new g_TodayPlayerRecord = 0;
+new g_LastRecordCheck = 0;
+
+stock UpdatePlayerRecord()
+{
+    new query[256];
+    new year, month, day;
+    getdate(year, month, day);
+    
+    new today = year * 10000 + month * 100 + day;
+    if(g_LastRecordCheck == today) return 0;
+    
+    g_LastRecordCheck = today;
+    
+    mysql_format(SQL, query, sizeof(query), 
+        "INSERT INTO daily_records (record_date, player_count) \
+        VALUES (CURDATE(), %d) \
+        ON DUPLICATE KEY UPDATE player_count = GREATEST(player_count, %d)",
+        g_TodayPlayerRecord, g_TodayPlayerRecord
+    );
+    mysql_tquery(SQL, query);
+    
+    return 1;
+}
+
+hook OnPlayerConnect(playerid)
+{
+    new connected = Iter_Count(Player);
+    if(connected > g_TodayPlayerRecord)
+    {
+        g_TodayPlayerRecord = connected;
+        UpdatePlayerRecord();
+    }
+    return 1;
+}
+
+hook OnGameModeInit()
+{
+    mysql_tquery(SQL, 
+        "CREATE TABLE IF NOT EXISTS daily_records (\
+            record_date DATE PRIMARY KEY,\
+            player_count INT NOT NULL\
+        )"
+    );
+    g_TodayPlayerRecord = 0;
+    g_LastRecordCheck = 0;
+    return 1;
+}
+
+YCMD:dnevnirekord(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje dnevne rekorde igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new query[512];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT \
+            DATE_FORMAT(record_date, '%%d/%%m/%%Y') as formatted_date, \
+            player_count, \
+            CASE \
+                WHEN record_date = CURDATE() THEN 1 \
+                ELSE 0 \
+            END as is_today \
+        FROM daily_records \
+        WHERE record_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) \
+        ORDER BY record_date DESC"
+    );
+    mysql_tquery(SQL, query, "OnDailyRecordShow", "i", playerid);
+    return 1;
+}
+
+forward OnDailyRecordShow(playerid);
+public OnDailyRecordShow(playerid)
+{
+    new string[512] = "Dnevni rekordi (zadnjih 7 dana):\n\n";
+    new date[16], players, is_today;
+    new rows = cache_num_rows();
+
+    if(rows == 0)
+    {
+        strcat(string, "Nema zabelezenjih rekorda.");
+    }
+    else
+    {
+        for(new i = 0; i < rows; i++)
+        {
+            cache_get_value_name(i, "formatted_date", date, sizeof(date));
+            cache_get_value_name_int(i, "player_count", players);
+            cache_get_value_name_int(i, "is_today", is_today);
+
+            if(is_today)
+            {
+                if(g_TodayPlayerRecord > players)
+                    players = g_TodayPlayerRecord;
+            }
+
+            format(string, sizeof(string), "%s%s: %d igraca\n", 
+                string, date, players);
+        }
+    }
+
+    Dialog_Show(playerid, "DIALOG_DAILY_RECORD", DIALOG_STYLE_MSGBOX, 
+        "Dnevni Rekordi", string, "Zatvori", "");
+    return 1;
+}
