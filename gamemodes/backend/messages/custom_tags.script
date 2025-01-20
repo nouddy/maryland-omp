@@ -22,6 +22,7 @@
 #define CT_DISTANCE 25.0 //* Nametag render distance
  
 new Text3D:cNametag[MAX_PLAYERS];
+new bool:PlayerNametagsEnabled[MAX_PLAYERS];
  
 hook OnGameModeInit()
 {
@@ -32,22 +33,23 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
     cNametag[playerid] = CreateDynamic3DTextLabel("Loading nametag...", 0xFFFFFFFF, 0.0, 0.0, 0.1, CT_DISTANCE, .attachedplayer = playerid, .testlos = 1);
+    PlayerNametagsEnabled[playerid] = true; // Default: nametags enabled
     return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
     if(IsValidDynamic3DTextLabel(cNametag[playerid]))
-              DestroyDynamic3DTextLabel(cNametag[playerid]);
+        DestroyDynamic3DTextLabel(cNametag[playerid]);
+    PlayerNametagsEnabled[playerid] = true; // Reset to default
     return 1;
 }
 
-
 task SyncName[60000]() // OnPlayerUpdate causes lag
 {
-    foreach (new i : Player) // Trenutno nemam bolje resenje dok ne smislim (za sad proverava ime na 5 minuta)
+    foreach (new i : Player)
     {
-        if(IsPlayerConnected(i))
+        if(IsPlayerConnected(i) && PlayerNametagsEnabled[i])
         {
             new nametag[128], playername[MAX_PLAYER_NAME];
             GetPlayerName(i, playername, sizeof(playername));
@@ -56,4 +58,68 @@ task SyncName[60000]() // OnPlayerUpdate causes lag
         }
     }   
     return 1;
+}
+
+// Command to enable nametags
+YCMD:nameon(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Ukljucuje prikaz imena igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(PlayerNametagsEnabled[playerid])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec imate ukljucena imena!");
+
+    PlayerNametagsEnabled[playerid] = true;
+    
+    // Update nametags immediately
+    foreach (new i : Player)
+    {
+        if(IsPlayerConnected(i))
+        {
+            new nametag[128], playername[MAX_PLAYER_NAME];
+            GetPlayerName(i, playername, sizeof(playername));
+            format(nametag, sizeof(nametag), "%s (%i)", CharacterInfo[i][Name], i);
+            UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, nametag);
+        }
+    }
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ukljucili ste prikaz imena igraca.");
+    return 1;
+}
+
+// Command to disable nametags
+YCMD:nameoff(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Iskljucuje prikaz imena igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!PlayerNametagsEnabled[playerid])
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec imate iskljucena imena!");
+
+    PlayerNametagsEnabled[playerid] = false;
+    
+    // Hide all nametags
+    foreach (new i : Player)
+    {
+        if(IsPlayerConnected(i))
+        {
+            UpdateDynamic3DTextLabelText(cNametag[i], 0xFFFFFFFF, " ");
+        }
+    }
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Iskljucili ste prikaz imena igraca.");
+    return 1;
+}
+
+// Add this function to check nametag status
+stock bool:HasNametagsEnabled(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return false;
+    return PlayerNametagsEnabled[playerid];
 }

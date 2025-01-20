@@ -35,6 +35,12 @@ enum {
 	e_OWNER
 }
 
+enum E_LOCK_TYPE {
+    LOCK_TYPE_TEMPORARY = 1,
+    LOCK_TYPE_PERMANENT
+}
+
+
 #define MAX_QUESTIONS       (1000)
 
 #define MAX_QUESTION_LEN    (36)
@@ -2655,3 +2661,429 @@ public OnCharacterDisarmLoad(playerid)
 //     }
 //     return GivePlayerWeapon(playerid, weaponid, ammo);
 // }
+
+
+/*
+Add it in base pls..
+CREATE TABLE character_locks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    character_id INT NOT NULL,
+    admin_id INT NOT NULL,
+    reason VARCHAR(64) NOT NULL,
+    lock_type TINYINT NOT NULL,
+    lock_expire DATETIME DEFAULT NULL,
+    lock_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    active TINYINT DEFAULT 1
+);
+*/
+
+// Function to check if character is locked > Add it on character select when try to login character
+stock bool:IsCharacterLocked(characterid)
+{
+    new bool:isLocked = false;
+    new query[256];
+    
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT locked, lock_expire FROM character_locks \
+        WHERE character_id = %d AND \
+        (lock_expire > NOW() OR lock_expire IS NULL) \
+        AND active = 1 \
+        LIMIT 1", characterid);
+        
+    new Cache:result = mysql_query(SQL, query);
+    
+    if(cache_num_rows())
+    {
+        isLocked = true;
+    }
+    
+    cache_delete(result);
+    return isLocked;
+}
+
+// Function to get lock information - fixed parameter type
+stock GetCharacterLockInfo(characterid, admin_name[], reason[], &expire_timestamp)
+{
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT cl.reason, cl.lock_expire, c.Name as admin_name \
+        FROM character_locks cl \
+        LEFT JOIN characters c ON c.ID = cl.admin_id \
+        WHERE cl.character_id = %d \
+        AND (cl.lock_expire > NOW() OR cl.lock_expire IS NULL) \
+        AND cl.active = 1 \
+        LIMIT 1", characterid);
+        
+    new Cache:result = mysql_query(SQL, query);
+    
+    if(cache_num_rows())
+    {
+        cache_get_value_name(0, "admin_name", admin_name, MAX_PLAYER_NAME);
+        cache_get_value_name(0, "reason", reason, 64);
+        cache_get_value_name_int(0, "lock_expire", expire_timestamp);
+    }
+    
+    cache_delete(result);
+}
+
+// Lock account command
+YCMD:lockacc(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Zakljucava karakter igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, locktype[8], time, reason[64];
+    if(sscanf(params, "us[8]I(-1)s[64]", targetid, locktype, time, reason))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /lockacc [ID/Ime] [tip] [vreme] [razlog]");
+        SendClientMessage(playerid, x_server, "TIPOVI: perm, temp");
+        SendClientMessage(playerid, x_server, "VREME: Za temp lock, broj sati (1-720)");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(strcmp(locktype, "perm", true) != 0 && strcmp(locktype, "temp", true) != 0)
+        return notification.Show(playerid, "GRESKA", "Nevazeci tip! (perm/temp)", "!", BOXCOLOR_RED);
+
+    if(strcmp(locktype, "temp", true) == 0)
+    {
+        if(time < 1 || time > 720)
+            return notification.Show(playerid, "GRESKA", "Vreme mora biti izmedju 1-720 sati!", "!", BOXCOLOR_RED);
+    }
+
+    // Insert into database
+    new query[512];
+    if(strcmp(locktype, "perm", true) == 0)
+    {
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO character_locks (character_id, admin_id, reason, lock_expire, lock_type) \
+            VALUES (%d, %d, '%e', NULL, %d)", 
+            GetCharacterSQLID(targetid), GetCharacterSQLID(playerid), reason, _:LOCK_TYPE_PERMANENT);
+    }
+    else
+    {
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO character_locks (character_id, admin_id, reason, lock_expire, lock_type) \
+            VALUES (%d, %d, '%e', DATE_ADD(NOW(), INTERVAL %d HOUR), %d)", 
+            GetCharacterSQLID(targetid), GetCharacterSQLID(playerid), reason, time, _:LOCK_TYPE_TEMPORARY);
+    }
+    mysql_tquery(SQL, query);
+
+    // Notify players
+    new string[144];
+    if(strcmp(locktype, "perm", true) == 0)
+    {
+        format(string, sizeof(string), "Dali ste permanentni lock karakteru %s. Razlog: %s", 
+            ReturnPlayerName(targetid), reason);
+        notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+        format(string, sizeof(string), "Staff %s vam je dao permanentni lock. Razlog: %s", 
+            ReturnPlayerName(playerid), reason);
+        notification.Show(targetid, "INFO", string, "!", BOXCOLOR_RED);
+    }
+    else
+    {
+        format(string, sizeof(string), "Dali ste lock karakteru %s na %d sati. Razlog: %s", 
+            ReturnPlayerName(targetid), time, reason);
+        notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+        format(string, sizeof(string), "Staff %s vam je dao lock na %d sati. Razlog: %s", 
+            ReturnPlayerName(playerid), time, reason);
+        notification.Show(targetid, "INFO", string, "!", BOXCOLOR_RED);
+    }
+
+    // Log the action
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je dao %s lock karakteru %s. Razlog: %s", 
+        ReturnPlayerName(playerid), locktype, ReturnPlayerName(targetid), reason);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    // Kick the player
+    SetTimerEx("delayedKick", 500, false, "d", targetid);
+
+    return 1;
+}
+
+// Unlock account command
+YCMD:unlockacc(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Otkljucava karakter igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return notification.Show(playerid, "KORISCENJE", "/unlockacc [ID/Ime]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    // Update database
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE character_locks SET active = 0 \
+        WHERE character_id = %d AND active = 1", 
+        GetCharacterSQLID(targetid));
+    mysql_tquery(SQL, query);
+
+    // Notify players
+    new string[128];
+    format(string, sizeof(string), "Uklonili ste lock karakteru %s", ReturnPlayerName(targetid));
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je uklonio lock", ReturnPlayerName(playerid));
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    // Log the action
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je uklonio lock karakteru %s", 
+        ReturnPlayerName(playerid), ReturnPlayerName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Offline lock account command
+YCMD:offlinelockacc(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Zakljucava karakter offline igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new character_name[MAX_PLAYER_NAME], locktype[8], time, reason[64];
+    if(sscanf(params, "s[24]s[8]I(-1)s[64]", character_name, locktype, time, reason))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /offlinelockacc [Ime_Prezime] [tip] [vreme] [razlog]");
+        SendClientMessage(playerid, x_server, "TIPOVI: perm, temp");
+        SendClientMessage(playerid, x_server, "VREME: Za temp lock, broj sati (1-720)");
+        return 1;
+    }
+
+    if(strcmp(locktype, "perm", true) != 0 && strcmp(locktype, "temp", true) != 0)
+        return notification.Show(playerid, "GRESKA", "Nevazeci tip! (perm/temp)", "!", BOXCOLOR_RED);
+
+    if(strcmp(locktype, "temp", true) == 0)
+    {
+        if(time < 1 || time > 720)
+            return notification.Show(playerid, "GRESKA", "Vreme mora biti izmedju 1-720 sati!", "!", BOXCOLOR_RED);
+    }
+
+    // Get character ID from name
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), "SELECT ID FROM characters WHERE Name = '%e' LIMIT 1", character_name);
+    mysql_tquery(SQL, query, "OnOfflineLockCheck", "dsds", playerid, character_name, locktype, time, reason);
+
+    return 1;
+}
+
+// Callback for offline lock
+forward OnOfflineLockCheck(playerid, character_name[], locktype[], time, reason[]);
+public OnOfflineLockCheck(playerid, character_name[], locktype[], time, reason[])
+{
+    if(!cache_num_rows())
+        return notification.Show(playerid, "GRESKA", "Karakter nije pronadjen!", "!", BOXCOLOR_RED);
+
+    new character_id;
+    cache_get_value_name_int(0, "ID", character_id);
+
+    // Insert into database
+    new query[512];
+    if(strcmp(locktype, "perm", true) == 0)
+    {
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO character_locks (character_id, admin_id, reason, lock_expire, lock_type) \
+            VALUES (%d, %d, '%e', NULL, %d)", 
+            character_id, GetCharacterSQLID(playerid), reason, _:LOCK_TYPE_PERMANENT);
+    }
+    else
+    {
+        mysql_format(SQL, query, sizeof(query), 
+            "INSERT INTO character_locks (character_id, admin_id, reason, lock_expire, lock_type) \
+            VALUES (%d, %d, '%e', DATE_ADD(NOW(), INTERVAL %d HOUR), %d)", 
+            character_id, GetCharacterSQLID(playerid), reason, time, _:LOCK_TYPE_TEMPORARY);
+    }
+    mysql_tquery(SQL, query);
+
+    // Notify staff
+    new string[144];
+    if(strcmp(locktype, "perm", true) == 0)
+    {
+        format(string, sizeof(string), "Dali ste permanentni lock karakteru %s. Razlog: %s", 
+            character_name, reason);
+    }
+    else
+    {
+        format(string, sizeof(string), "Dali ste lock karakteru %s na %d sati. Razlog: %s", 
+            character_name, time, reason);
+    }
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Log the action
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je dao %s offline lock karakteru %s. Razlog: %s", 
+        ReturnPlayerName(playerid), locktype, character_name, reason);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Alias for shorter command
+YCMD:getv(playerid, params[], help) = getvehicle;
+YCMD:getvehicle(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Teleportuje vozilo do vas", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new vehicleid;
+    if(sscanf(params, "i", vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/getvehicle [ID vozila]");
+
+    if(vehicleid < 1 || vehicleid > MAX_VEHICLES || !IsValidVehicle(vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nevazeci ID vozila!");
+
+    // Get admin's position
+    new Float:x, Float:y, Float:z, Float:a;
+    GetPlayerPos(playerid, x, y, z);
+    GetPlayerFacingAngle(playerid, a);
+    
+    // Offset the vehicle slightly in front of the admin
+    x += (3.0 * floatsin(-a, degrees));
+    y += (3.0 * floatcos(-a, degrees));
+
+    // Set vehicle position
+    SetVehiclePos(vehicleid, x, y, z);
+    SetVehicleZAngle(vehicleid, a);
+    
+    // Optional: Fix and repair the vehicle
+    RepairVehicle(vehicleid);
+    SetVehicleHealth(vehicleid, 1000.0);
+
+    // Notify admin
+    new string[128];
+    format(string, sizeof(string), "maryland \187; "c_white"Teleportovali ste vozilo ID: %d do vas.", vehicleid);
+    SendClientMessage(playerid, x_server, string);
+
+    // Log the action
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je teleportovao vozilo ID: %d", 
+        ReturnPlayerName(playerid), vehicleid);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+// Alias for shorter command
+YCMD:ecar(playerid, params[], help) = entercar;
+YCMD:entercar(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Ulazi u najblize slobodno mesto u vozilu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new vehicleid;
+    if(sscanf(params, "i", vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/entercar [ID vozila]");
+
+    if(vehicleid < 1 || vehicleid > MAX_VEHICLES || !IsValidVehicle(vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nevazeci ID vozila!");
+
+    // Check if player is already in a vehicle
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste u vozilu!");
+
+    // Try to find an empty seat
+    new seatid = -1;
+    
+    // Check all seats by looking for players in them
+    new bool:seats[4];
+    foreach(new i : Player)
+    {
+        if(IsPlayerInVehicle(i, vehicleid))
+        {
+            new currentseat = GetPlayerVehicleSeat(i);
+            if(currentseat >= 0 && currentseat < 4)
+            {
+                seats[currentseat] = true;
+            }
+        }
+    }
+
+    // Find first empty seat
+    for(new i = 0; i < 4; i++)
+    {
+        if(!seats[i])
+        {
+            seatid = i;
+            break;
+        }
+    }
+
+    // If no empty seat found, kick a passenger and take their seat
+    if(seatid == -1)
+    {
+        // Find first passenger (not driver) and kick them
+        foreach(new i : Player)
+        {
+            if(IsPlayerInVehicle(i, vehicleid))
+            {
+                new pseat = GetPlayerVehicleSeat(i);
+                if(pseat > 0) // Don't kick driver
+                {
+                    RemovePlayerFromVehicle(i);
+                    SendClientMessage(i, x_server, "maryland \187; "c_white"Staff vas je izbacio iz vozila.");
+                    seatid = pseat;
+                    break;
+                }
+            }
+        }
+    }
+
+    // If still no seat (only driver in car), notify admin
+    if(seatid == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete izbaciti vozaca!");
+
+    // Put admin in the vehicle
+    PutPlayerInVehicle(playerid, vehicleid, seatid);
+
+    // Notify admin
+    new string[128];
+    format(string, sizeof(string), "maryland \187; "c_white"Usli ste u vozilo ID: %d (Sediste: %d)", vehicleid, seatid);
+    SendClientMessage(playerid, x_server, string);
+
+    // Log the action
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je usao u vozilo ID: %d (Sediste: %d)", 
+        ReturnPlayerName(playerid), vehicleid, seatid);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}

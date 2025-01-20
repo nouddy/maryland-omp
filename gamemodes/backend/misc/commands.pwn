@@ -19,6 +19,9 @@
 
 #include <ysilib\YSI_Coding\y_hooks>
 
+new PlayerStealCooldown[MAX_PLAYERS];
+new PlayerLastStealAttempt[MAX_PLAYERS];
+
 YCMD:help(playerid, params[], help) = komande;
 YCMD:commands(playerid, params[], help) = komande;
 YCMD:komande(playerid, params[], help) {
@@ -199,6 +202,8 @@ hook OnPlayerConnect(playerid)
         g_TodayPlayerRecord = connected;
         UpdatePlayerRecord();
     }
+    PlayerStealCooldown[playerid] = 0;
+    PlayerLastStealAttempt[playerid] = 0;
     return 1;
 }
 
@@ -322,5 +327,90 @@ YCMD:forum(playerid, params[], help)
     }
     
     SendClientMessage(playerid, x_server, "maryland \187; "c_white"Forum: https://forum.maryland-ogc.com");
+    return 1;
+}
+
+YCMD:steal(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Pokusaj da ukrades novac od igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    // Check if player is in vehicle
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete krasti iz vozila!");
+
+    // Get target player
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/steal [id/ime]");
+
+    // Basic checks
+    if(!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan!");
+    
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete krasti od sebe!");
+
+    if(IsPlayerInAnyVehicle(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete krasti od igraca u vozilu!");
+
+    // Distance check (3 meters)
+    if(!DistanceBetweenPlayers(3.0, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti blize igracu!");
+
+    // Cooldown check (2 minutes)
+    new currentTime = gettime();
+    if(currentTime - PlayerLastStealAttempt[playerid] < 120)
+    {
+        new timeLeft = 120 - (currentTime - PlayerLastStealAttempt[playerid]);
+        new string[128];
+        format(string, sizeof(string), "maryland \187; "c_white"Morate sacekati jos %d sekundi!", timeLeft);
+        return SendClientMessage(playerid, x_server, string);
+    }
+
+    // Check if target has money
+    new Float:targetMoney = GetPlayerMoney(targetid);
+    if(targetMoney < 100.0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nema dovoljno novca!");
+
+    // Update last attempt time
+    PlayerLastStealAttempt[playerid] = currentTime;
+
+    // Random success chance (30%)
+    if(random(100) < 30)
+    {
+        // Success - steal random amount between $100 and $1000 or max what player has
+        new Float:stolenAmount = float(random(900) + 100);
+        if(stolenAmount > targetMoney) stolenAmount = targetMoney;
+        
+        // Transfer money
+        GivePlayerMoney(playerid, stolenAmount);
+        GivePlayerMoney(targetid, -stolenAmount);
+
+        // Notify players
+        new string[128];
+        format(string, sizeof(string), "maryland \187; "c_white"Uspesno ste ukrali $%.2f od %s!", stolenAmount, ReturnPlayerName(targetid));
+        SendClientMessage(playerid, x_server, string);
+        
+        format(string, sizeof(string), "maryland \187; "c_white"%s vam je ukrao $%.2f!", ReturnPlayerName(playerid), stolenAmount);
+        SendClientMessage(targetid, x_server, string);
+    }
+    else
+    {
+        // Failed attempt
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Neuspesno ste pokusali da ukradete novac!");
+        SendClientMessage(targetid, x_server, "maryland \187; "c_white"Neko je pokusao da vas pokrade!");
+    }
+
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    PlayerStealCooldown[playerid] = 0;
+    PlayerLastStealAttempt[playerid] = 0;
     return 1;
 }

@@ -109,6 +109,54 @@ YCMD:getpassport(playerid, params[], help)
 
 }
 
+YCMD:pokazilicnu(playerid, params[], help) = showid;
+YCMD:showid(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Pokazite licnu kartu drugom igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    // Check if player has National ID
+    if(PlayerDocuments[playerid][pNationalID] == 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate licnu kartu!");
+
+    // Get target player
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/showid [id/ime]");
+
+    // Basic checks
+    if(!IsPlayerConnected(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan!");
+    
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete pokazati licnu kartu sami sebi!");
+
+    // Distance check (3 meters)
+    if(!DistanceBetweenPlayers(3.0, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti blize igracu!");
+
+    // Show ID information to target player
+    new string[256];
+    format(string, sizeof(string), "maryland \187; "c_white"Licna Karta\n\
+        Ime i Prezime: %s\n\
+        Godine: %d\n\
+        Skin ID: %d\n\
+        Drzava: Los Santos, San Andreas",
+        ReturnCharacterName(playerid),
+        CharacterInfo[playerid][Age],
+        GetPlayerSkin(playerid)
+    );
+    SendClientMessage(targetid, x_server, string);
+
+    // Notify the player showing the ID
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Pokazali ste licnu kartu.");
+
+    return 1;
+}
+
 /*
     * Funkcije:
 */

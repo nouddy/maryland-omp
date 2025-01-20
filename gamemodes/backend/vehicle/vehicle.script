@@ -23,7 +23,8 @@ new vehicleFuel[MAX_VEHICLES],
     bool:vehicleLocked[MAX_VEHICLES],
     vehicleFuelType[MAX_VEHICLES];
 
-new bool:PlayerSeatbelt[MAX_PLAYERS];
+new bool:PlayerSeatbelt[MAX_PLAYERS],
+    bool:PlayerHelmet[MAX_PLAYERS];
 
 enum {
 
@@ -88,6 +89,17 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
         {
             PlayerSeatbelt[playerid] = false;
             notification.Show(playerid, "INFO", "Odvezao si sigurnosni pojas.", "i", BOXCOLOR_BLUE);
+        }
+    }
+
+    // Remove helmet when leaving vehicle
+    if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+    {
+        if(PlayerHelmet[playerid])
+        {
+            PlayerHelmet[playerid] = false;
+            RemovePlayerAttachedObject(playerid, 0);
+            notification.Show(playerid, "INFO", "Skinuo si kacigu.", "i", BOXCOLOR_BLUE);
         }
     }
 
@@ -237,6 +249,8 @@ stock bool:IsPlayerWearingSeatbelt(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
     PlayerSeatbelt[playerid] = false;
+    PlayerHelmet[playerid] = false;
+    RemovePlayerAttachedObject(playerid, 0);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -290,5 +304,63 @@ YCMD:careject(playerid, params[], help)
     notification.Show(targetid, "INFO", "Izbaceni ste iz vozila.", "i", BOXCOLOR_BLUE);
 
     return 1;
+}
+
+// Helmet command
+// Alias for easier use
+YCMD:helmet(playerid, params[], help) = kaciga;
+YCMD:kaciga(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Stavlja/skida kacigu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!IsPlayerInAnyVehicle(playerid))
+        return notification.Show(playerid, "GRESKA", "Morate biti na motoru/biciklu!", "!", BOXCOLOR_RED);
+
+    new vehicleid = GetPlayerVehicleID(playerid);
+    new modelid = GetVehicleModel(vehicleid);
+
+    // Check if vehicle is bicycle or motorcycle
+    if(!IsVehicleBicycle(modelid) && !IsVehicleMotorbike(modelid))
+        return notification.Show(playerid, "GRESKA", "Kaciga se moze koristiti samo na motoru/biciklu!", "!", BOXCOLOR_RED);
+
+    // Toggle helmet state
+    PlayerHelmet[playerid] = !PlayerHelmet[playerid];
+    
+    // Set player helmet object (you might want to adjust the object ID)
+    if(PlayerHelmet[playerid])
+    {
+        SetPlayerAttachedObject(playerid, 0, 18645, 2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+    }
+    else
+    {
+        RemovePlayerAttachedObject(playerid, 0);
+    }
+    
+    new string[64];
+    format(string, sizeof(string), "%s si kacigu.", PlayerHelmet[playerid] ? ("Stavio") : ("Skinuo"));
+    notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    return 1;
+}
+
+// Function to check if player has helmet on
+stock bool:IsPlayerWearingHelmet(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return false;
+    return PlayerHelmet[playerid];
+}
+
+// Add this helper function if you don't already have it
+stock IsVehicleMotorbike(modelid)
+{
+    switch(modelid)
+    {
+        case 448, 461, 462, 463, 468, 471, 521, 522, 523, 581, 586: return 1;
+    }
+    return 0;
 }
 
