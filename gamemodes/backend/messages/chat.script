@@ -68,3 +68,31 @@ YCMD:b(playerid, params[], help)
  	ProxDetector(playerid, Float:30.0, x_server, string);
 	return 1;
 }
+
+YCMD:w(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Sapuce poruku obliznjem igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new targetid, text[80];
+    if(sscanf(params, "us[80]", targetid, text))
+        return SendClientMessage(playerid, x_usage, "KORISCENJE \187; "c_white"/w [ID/Ime] [Text]");
+        
+    if(targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije konektovan!");
+        
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete saptati sami sebi!");
+        
+    if(!DistanceBetweenPlayers(5.0, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste dovoljno blizu tog igraca!");
+
+    new string[256];
+    format(string, sizeof(string), "* %s sapuce %s: %s", ReturnPlayerName(playerid), ReturnPlayerName(targetid), text);
+    ProxDetector(playerid, 5.0, x_purple, string);
+    
+    return 1;
+}

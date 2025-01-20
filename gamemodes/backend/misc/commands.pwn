@@ -167,6 +167,7 @@ YCMD:spa(playerid, params[], help) {
 
 new g_TodayPlayerRecord = 0;
 new g_LastRecordCheck = 0;
+new g_ServerStartTime;
 
 stock UpdatePlayerRecord()
 {
@@ -211,6 +212,7 @@ hook OnGameModeInit()
     );
     g_TodayPlayerRecord = 0;
     g_LastRecordCheck = 0;
+    g_ServerStartTime = gettime();
     return 1;
 }
 
@@ -271,5 +273,54 @@ public OnDailyRecordShow(playerid)
 
     Dialog_Show(playerid, "DIALOG_DAILY_RECORD", DIALOG_STYLE_MSGBOX, 
         "Dnevni Rekordi", string, "Zatvori", "");
+    return 1;
+}
+
+YCMD:uptime(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje koliko je server online", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new current_time = gettime();
+    new uptime = current_time - g_ServerStartTime;
+    
+    new days = uptime / 86400;
+    new hours = (uptime % 86400) / 3600;
+    new minutes = (uptime % 3600) / 60;
+    new seconds = uptime % 60;
+    
+    new string[128];
+    format(string, sizeof(string), "Server Uptime: %d dana, %d sati, %d minuta, %d sekundi", 
+        days, hours, minutes, seconds);
+    
+    SendClientMessage(playerid, -1, string);
+    return 1;
+}
+
+YCMD:ts(playerid, params[], help) = teamspeak;
+YCMD:teamspeak(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje TeamSpeak IP adresu servera", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+    
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"TeamSpeak IP: maryland");
+    return 1;
+}
+
+YCMD:forum(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje forum adresu servera", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+    
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Forum: https://forum.maryland-ogc.com");
     return 1;
 }
