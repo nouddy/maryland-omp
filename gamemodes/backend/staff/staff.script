@@ -3334,3 +3334,126 @@ stock IsPlayerMuted(playerid) {
 
     return (false);
 }
+
+// Unmute command
+YCMD:unmute(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Skida mute igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendServerMessage(playerid, "/unmute <ID/Ime>");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendServerMessage(playerid, "Doslo je do greske, prijavite administraciji!");
+
+    if(!IsPlayerConnected(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije konektovan na server.");
+
+    if(!IsPlayerMuted(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije utisan!");
+
+    // Clear mute data
+    PlayerMute[targetid][muteTime] = 0;
+    PlayerMute[targetid][mutedBy][0] = EOS;
+    
+    // Kill timer if exists
+    if(Timer_UpdatePlayerMute[targetid] != 0)
+    {
+        KillTimer(Timer_UpdatePlayerMute[targetid]);
+        Timer_UpdatePlayerMute[targetid] = 0;
+    }
+
+    // Update database
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "UPDATE `player_mutes` SET active = 0 WHERE character_id = %d AND active = 1",
+        GetCharacterSQLID(targetid));
+    mysql_tquery(SQL, q);
+
+    // Notifications
+    SendServerMessage(targetid, "Staff %s[%d] vam je skinuo mute!", ReturnCharacterName(playerid), playerid);
+    SendServerMessage(playerid, "Uspjesno ste skinuli mute igracu %s[%d]!", ReturnCharacterName(targetid), targetid);
+
+    foreach (new i: Player)
+        if (PlayerInfo[i][Staff] && IsStaffChatEnabled())
+            SendClientMessage(i, x_purple, "#UNMUTE: "c_white"Staff %s[%d] je skinuo mute igracu %s[%d]!", 
+                ReturnCharacterName(playerid), playerid, ReturnCharacterName(targetid), targetid);
+
+    return 1;
+}
+
+// Offline mute command
+YCMD:offlinemute(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Mutira offline igraca", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    new character_name[MAX_PLAYER_NAME], minutes;
+    if(sscanf(params, "s[24]d", character_name, minutes))
+        return SendServerMessage(playerid, "/offlinemute <Ime_Prezime> <Minuti>");
+
+    if(minutes <= 0 || minutes > 300)
+        return SendServerMessage(playerid, "Minute ne mogu biti manje od 1 ili vece od 300.");
+
+    // Check if player is online
+    foreach(new i : Player)
+    {
+        if(!strcmp(ReturnCharacterName(i), character_name, true))
+            return SendServerMessage(playerid, "Taj igrac je online! Koristite /mute.");
+    }
+
+    // Get character ID and check if exists
+    new query[256];
+    mysql_format(SQL, query, sizeof query, "SELECT ID FROM characters WHERE Name = '%e' LIMIT 1", character_name);
+    mysql_tquery(SQL, query, "OnOfflineMuteCheck", "dsd", playerid, character_name, minutes);
+
+    return 1;
+}
+
+// Callback for offline mute
+forward OnOfflineMuteCheck(playerid, character_name[], minutes);
+public OnOfflineMuteCheck(playerid, character_name[], minutes)
+{
+    if(!cache_num_rows())
+        return SendServerMessage(playerid, "Taj karakter ne postoji!");
+
+    new character_id;
+    cache_get_value_name_int(0, "ID", character_id);
+
+    // Insert mute into database
+    new query[512];
+    mysql_format(SQL, query, sizeof query, 
+        "INSERT INTO `player_mutes` (`character_id`, `muteTime`, `mutedBy`, `muteDate`) \
+        VALUES ('%d', '%d', '%e', NOW())",
+        character_id, minutes, ReturnCharacterName(playerid));
+    mysql_tquery(SQL, query);
+
+    // Notify staff
+    foreach (new i: Player)
+        if (PlayerInfo[i][Staff] && IsStaffChatEnabled())
+            SendClientMessage(i, x_purple, "#OFFMUTE: "c_white"Staff %s je offline mutirao igraca %s na %d minuta!", 
+                ReturnCharacterName(playerid), character_name, minutes);
+
+    SendServerMessage(playerid, "Uspjesno ste offline mutirali %s na %d minuta!", character_name, minutes);
+
+    // Log action
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je offline mutirao igraca %s na %d minuta", 
+        ReturnCharacterName(playerid), character_name, minutes);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}

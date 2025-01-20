@@ -402,8 +402,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/advertisement_int.map"				    //* Flecca bank map (0)
 #include "frontend/interior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
 
-
-
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
 

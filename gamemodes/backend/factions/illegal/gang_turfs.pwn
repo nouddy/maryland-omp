@@ -113,7 +113,7 @@ public mysql_LoadGangTurfs() {
 
         GangTurfPickup[i] = CreateDynamicPickup(2035, 1, GangTurf[i][gtCapturePos][0], GangTurf[i][gtCapturePos][1], GangTurf[i][gtCapturePos][2]);
         GangTurfZone[i] = GangZone_Create(GangTurf[i][gtPosition][0], GangTurf[i][gtPosition][1], GangTurf[i][gtPosition][2], GangTurf[i][gtPosition][3], GangTurf[i][gtID]);
-        GangZone_ShowForAll(GangTurfZone[i], gt_col);
+        GangZone_ShowForAll(GangTurfZone[i], HexToInt(gt_col));
         
         static tmp_str[458];
         format(tmp_str, sizeof tmp_str, ""c_server"\187; "c_white"Gang Turf[%d] "c_server"\171;\n\187; "c_white"In Possession : %s "c_server"\171; \n\
@@ -272,16 +272,11 @@ hook OnPlayerConnect(playerid) {
 
     KillTimer(Timer_GangTurfOccupier[playerid]);
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
-hook OnPlayerConnect(playerid) {
-
     foreach(new i : iter_Turfs) {
-
+        
         static gt_col[32];
         format(gt_col, sizeof gt_col, "0x%sFF", GangTurf[i][gtColour]);
-        GangZoneShowForPlayer(playerid, GangTurfZone[i], gt_col);
+        GangZoneShowForPlayer(playerid, GangTurfZone[i], HexToInt(gt_col));
     }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
