@@ -23,6 +23,8 @@ new vehicleFuel[MAX_VEHICLES],
     bool:vehicleLocked[MAX_VEHICLES],
     vehicleFuelType[MAX_VEHICLES];
 
+new bool:PlayerSeatbelt[MAX_PLAYERS];
+
 enum {
 
     VEHICLE_FUEL_TYPE_DIESEL = 1,
@@ -79,6 +81,16 @@ hook OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
             notification.Show(playerid, "Info", "Da upalis vozilo koristi tipku 'CTRL', za svetla 'Y'.", "?", BOXCOLOR_BLUE);
         }
     }
+
+    if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+    {
+        if(PlayerSeatbelt[playerid])
+        {
+            PlayerSeatbelt[playerid] = false;
+            notification.Show(playerid, "INFO", "Odvezao si sigurnosni pojas.", "i", BOXCOLOR_BLUE);
+        }
+    }
+
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -183,5 +195,100 @@ stock ReturnVehicleFuelType(vehicle) {
         case VEHICLE_FUEL_TYPE_METAN:       { fuelType = "Metane"; }
     }
     return (fuelType);
+}
+
+// Seatbelt command
+// Alias for easier use
+YCMD:seatbelt(playerid, params[], help) = pojas;
+YCMD:pojas(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Stavlja/skida sigurnosni pojas", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!IsPlayerInAnyVehicle(playerid))
+        return notification.Show(playerid, "GRESKA", "Morate biti u vozilu!", "!", BOXCOLOR_RED);
+
+    if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER && GetPlayerState(playerid) != PLAYER_STATE_PASSENGER)
+        return notification.Show(playerid, "GRESKA", "Morate sedeti u vozilu!", "!", BOXCOLOR_RED);
+
+    if(IsVehicleBicycle(GetVehicleModel(GetPlayerVehicleID(playerid))))
+        return notification.Show(playerid, "GRESKA", "Ne mozete koristiti pojas na biciklu!", "!", BOXCOLOR_RED);
+
+    PlayerSeatbelt[playerid] = !PlayerSeatbelt[playerid];
+    
+    new string[64];
+    format(string, sizeof(string), "%s si sigurnosni pojas.", PlayerSeatbelt[playerid] ? ("Vezao") : ("Odvezao"));
+    notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+
+    return 1;
+}
+
+// Function to check if player has seatbelt on
+stock bool:IsPlayerWearingSeatbelt(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return false;
+    return PlayerSeatbelt[playerid];
+}
+
+// Reset seatbelt on player disconnect
+hook OnPlayerDisconnect(playerid, reason)
+{
+    PlayerSeatbelt[playerid] = false;
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+// Eject command
+YCMD:careject(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Izbacuje putnika iz vozila", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    // Check if player is in a vehicle and is the driver
+    if(!IsPlayerInAnyVehicle(playerid))
+        return notification.Show(playerid, "GRESKA", "Morate biti u vozilu!", "!", BOXCOLOR_RED);
+    
+    if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+        return notification.Show(playerid, "GRESKA", "Morate biti vozac!", "!", BOXCOLOR_RED);
+
+    // Get target player
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return notification.Show(playerid, "USAGE", "/eject [playerid/ime]", "!", BOXCOLOR_RED);
+
+    // Validate target player
+    if(!IsPlayerConnected(targetid))
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije konektovan!", "!", BOXCOLOR_RED);
+    
+    if(targetid == playerid)
+        return notification.Show(playerid, "GRESKA", "Ne mozete izbaciti sami sebe!", "!", BOXCOLOR_RED);
+
+    // Check if target is in the same vehicle
+    new vehicleid = GetPlayerVehicleID(playerid);
+    if(GetPlayerVehicleID(targetid) != vehicleid)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije u vasem vozilu!", "!", BOXCOLOR_RED);
+
+    // Check if target is not also a driver (shouldn't happen, but safety check)
+    if(GetPlayerState(targetid) == PLAYER_STATE_DRIVER)
+        return notification.Show(playerid, "GRESKA", "Ne mozete izbaciti vozaca!", "!", BOXCOLOR_RED);
+
+    // Eject the player
+    RemovePlayerFromVehicle(targetid);
+    
+    // Notify both players
+    new string[128], targetName[MAX_PLAYER_NAME];
+    GetPlayerName(targetid, targetName, sizeof(targetName));
+    
+    format(string, sizeof(string), "Izbacili ste %s iz vozila.", targetName);
+    notification.Show(playerid, "INFO", string, "i", BOXCOLOR_BLUE);
+    
+    notification.Show(targetid, "INFO", "Izbaceni ste iz vozila.", "i", BOXCOLOR_BLUE);
+
+    return 1;
 }
 
