@@ -62,6 +62,30 @@
 #include <macroes>
 #include <maryland-tp>
 #include <mSelection>
+
+stock SanitizeGangZoneCoords(&Float:x, &Float:y, &Float:x2, &Float:y2) {    
+    if(x > x2) {
+        new Float:tmpX = x;
+        x = x2;
+        x2 = tmpX;
+    }
+
+    if(y > y2) {
+        new Float:tmpY = y;
+        y = y2;
+        y2 = tmpY;
+    }
+}
+
+
+// #if defined _ALS_GangZoneCreate
+//     #undef GangZoneCreate
+// #else
+//     #define _ALS_GangZoneCreate
+// #endif
+// #define GangZoneCreate GangZoneCreate2
+// // #define GangZoneCreate GangZoneCreate2
+
 #include <gangzone>
 
 #define SendServerMessage(%0,%1) \
@@ -132,6 +156,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
     }
     return COMMAND_OK;
 }
+
 
 //-------------------------------------------------------------------------------------------------------- Includes List
 

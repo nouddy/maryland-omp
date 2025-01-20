@@ -309,6 +309,9 @@ YCMD:f(playerid, params[], help) {
     if(FactionMember[playerid][factionID] == 0)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan fakcije!");
 
+    if(!IsFactionChatEnabled())
+        return SendServerMessage(playerid, "Administrator je iskljucio faction chat!");
+
     new message[128];
 
     if(sscanf(params, "s[128]", message))
@@ -319,7 +322,7 @@ YCMD:f(playerid, params[], help) {
 
     foreach(new i : iter_Factions) {
 
-        if(fID == FactionInfo[i][factionID]) {
+        if(fID == FactionInfo[i][factionID] && IsFactionChatEnabled() ) {
             
             format(tmp_message, sizeof tmp_message, ""c_faction"%s \187; "c_white"%s[%d] %s.",
             FactionInfo[i][factionName], ReturnPlayerName(playerid), playerid, message);
@@ -341,6 +344,9 @@ YCMD:l(playerid, params[], help)
     if(!playerSettings[playerid][gLeaderChat])
         return SendServerMessage(playerid, "Islkljucen vam je leader chat, "c_ltorange"/tog");
 
+    if(!IsLeaderChatEnabled())
+        return SendServerMessage(playerid, "Administrator je iskljucio leader chat!");
+
     new tmp_str[128], tmp_mess[488];
     if(sscanf(params, "s[128]", tmp_str)) return SendServerMessage(playerid, "/l <poruka>");
 
@@ -351,7 +357,7 @@ YCMD:l(playerid, params[], help)
     
     foreach(new i : Player) {
 
-        if(FactionMember[i][factionRank] == 4 && playerSettings[playerid][gLeaderChat]) {
+        if(FactionMember[i][factionRank] == 4 && playerSettings[playerid][gLeaderChat] && IsLeaderChatEnabled() ) {
 
             SendClientMessage(i, x_server, tmp_mess);
         }

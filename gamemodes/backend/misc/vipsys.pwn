@@ -210,6 +210,9 @@ YCMD:vipchat(playerid, params[], help)
     if(!playerSettings[playerid][gVIPChat])
         return SendServerMessage(playerid, "Islkljucen vam je vip chat, "c_ltorange"/tog");
 
+    if(!IsVIPChatEnabled())
+        return SendServerMessage(playerid, "Administrator je iskljucio vip chat!");
+
     new vipRank[32];
     switch(PlayerVIPLevel[playerid])
     {
@@ -224,7 +227,7 @@ YCMD:vipchat(playerid, params[], help)
     
     foreach(new i : Player)
     {
-        if(PlayerVIPLevel[i] >= VIP_BRONZE && playerSettings[playerid][gVIPChat] )
+        if(PlayerVIPLevel[i] >= VIP_BRONZE && playerSettings[playerid][gVIPChat] && IsVIPChatEnabled() )
         {
             SendClientMessage(i, -1, stringicvip);
         }

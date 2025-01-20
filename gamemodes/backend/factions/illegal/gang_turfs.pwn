@@ -102,6 +102,8 @@ public mysql_LoadGangTurfs() {
         cache_get_value_name_float(i, "turf_captureY", GangTurf[i][gtCapturePos][1]);
         cache_get_value_name_float(i, "turf_captureZ", GangTurf[i][gtCapturePos][2]);
 
+        SanitizeGangZoneCoords(GangTurf[i][gtPosition][0], GangTurf[i][gtPosition][1], GangTurf[i][gtPosition][2], GangTurf[i][gtPosition][3]);
+
         cache_get_value_name(i, "turf_color", GangTurf[i][gtColour], 32);
 
         Iter_Add(iter_Turfs, i);
@@ -111,7 +113,7 @@ public mysql_LoadGangTurfs() {
 
         GangTurfPickup[i] = CreateDynamicPickup(2035, 1, GangTurf[i][gtCapturePos][0], GangTurf[i][gtCapturePos][1], GangTurf[i][gtCapturePos][2]);
         GangTurfZone[i] = GangZone_Create(GangTurf[i][gtPosition][0], GangTurf[i][gtPosition][1], GangTurf[i][gtPosition][2], GangTurf[i][gtPosition][3], GangTurf[i][gtID]);
-        GangZone_ShowForAll(GangTurfZone[i], HexToInt(gt_col));
+        GangZone_ShowForAll(GangTurfZone[i], gt_col);
         
         static tmp_str[458];
         format(tmp_str, sizeof tmp_str, ""c_server"\187; "c_white"Gang Turf[%d] "c_server"\171;\n\187; "c_white"In Possession : %s "c_server"\171; \n\
@@ -269,6 +271,18 @@ hook OnPlayerConnect(playerid) {
     g_TurfProgress[playerid] = 0;
 
     KillTimer(Timer_GangTurfOccupier[playerid]);
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnPlayerConnect(playerid) {
+
+    foreach(new i : iter_Turfs) {
+
+        static gt_col[32];
+        format(gt_col, sizeof gt_col, "0x%sFF", GangTurf[i][gtColour]);
+        GangZoneShowForPlayer(playerid, GangTurfZone[i], gt_col);
+    }
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -453,6 +467,37 @@ YCMD:createturf(playerid, params[], help) {
     SendServerMessage(playerid, "Zapoceli ste kreiranje gang turf-a (zone). Otidjite do zeljene pozicije i pritsinite 'Y'");
     g_PlayerCreatingTurf[playerid] = true;
     return (true);
+}
+
+YCMD:gotozona(playerid, params[], help) = gototurf;
+YCMD:gototurf(playerid, params[], help) 
+{
+    
+    if(GetPlayerStaffLevel(playerid) < 2)
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    new zoneID;
+    if(sscanf(params, "d", zoneID))
+        return SendServerMessage(playerid, "/gototurf <zona>");
+
+    static bool:foundZone = false;
+    new tmp_zone_idx;
+
+    foreach(new i : iter_Turfs) {
+
+        if(GangTurf[i][gtID] == zoneID)
+        {
+            foundZone = true;
+            tmp_zone_idx = i;
+            break;
+        }
+    }
+
+    if(!foundZone)
+        return SendServerMessage(playerid, "Unijeli ste krivi ID zone!");
+
+    SetPlayerCompensatedPos(playerid, GangTurf[tmp_zone_idx][gtCapturePos][0], GangTurf[tmp_zone_idx][gtCapturePos][1], GangTurf[tmp_zone_idx][gtCapturePos][2], 0, 0);
+    return 1;
 }
 
 YCMD:capture(playerid, params[], help) {

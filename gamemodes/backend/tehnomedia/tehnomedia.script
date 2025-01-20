@@ -62,6 +62,8 @@ static const sz_PhoneModels[][e_PHONE_MODELS] = {
     { "Huawei Mate 20 Lite", 350 }
 };
 
+new gAdvertisementCooldown;
+
 //*==============================================================================
 //*--->>> Timers
 //*==============================================================================
@@ -102,6 +104,8 @@ timer mobile_CallTimeout[30000](playerid)
 hook OnGameModeInit()
 {
     print("tehnomedia/tehnomedia.script loaded");
+
+    gAdvertisementCooldown = gettime();
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -166,9 +170,29 @@ hook OnPlayerText(playerid, text[])
 //*--->>> Commands 
 //*==============================================================================
 
+YCMD:oglas(playerid, params[], help) = advertisement;
+YCMD:advertisement(playerid, params[], help) 
+{
+    if(PlayerElectronic[playerid][ePhoneModel] == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
+
+    new text[128];
+    if(sscanf(params, "s[128]", text)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/advertisement <oglas>");
+    if(strlen(text) <= 0 || strlen(text) > sizeof text) return (true);
+
+    SendClientMessageToAll(x_server, "advertisement \187; "c_white"%s | telefonski broj : "c_server"%d-%d-%d", text, PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
+
+    gAdvertisementCooldown = gettime() + 300;
+
+    return 1;
+}
+
 YCMD:smsad(playerid, params[], help) 
 {
-    
+
+    if(gAdvertisementCooldown > gettime())
+        return SendClientMessage(playerid, x_server, "#ADVERTISEMENT: "c_white"Neko je nedavno postavio oglas!");
+
     if(PlayerElectronic[playerid][ePhoneModel] == -1)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
 
@@ -177,6 +201,8 @@ YCMD:smsad(playerid, params[], help)
     if(strlen(text) <= 0 || strlen(text) > sizeof text) return (true);
 
     SendClientMessageToAll(x_server, "advertisement \187; "c_white"%s | telefonski broj : "c_server"%d-%d-%d", text, PlayerElectronic[playerid][ePhoneNumber][0], PlayerElectronic[playerid][ePhoneNumber][1], PlayerElectronic[playerid][ePhoneNumber][2]);
+
+    gAdvertisementCooldown = gettime() + 300;
 
     return 1;
 }

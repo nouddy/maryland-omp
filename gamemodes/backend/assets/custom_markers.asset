@@ -120,6 +120,8 @@ CreatePickupsAnd3Ds()
     CreateCustomMarker(""c_server"[ Advertisement ]\n"c_server"» "c_white"'Za ulaz pritisnite 'F'", 1597.4584,-1171.7689,24.0781, 0, 0, 50.00);
     CreateCustomMarker(""c_server"[ Advertisement ]\n"c_server"» "c_white"'Za izlaz pritisnite 'F'", 1609.3372,-1172.7767,24.0908, 0, 0, 50.00);
 
+    CreateCustomMarker(""c_server"[ Advertisement ]\n"c_server"» "c_white"'Za oglas /advertisement", 1603.9784,-1179.5909,24.0908, 0, 0, 50.00);
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
