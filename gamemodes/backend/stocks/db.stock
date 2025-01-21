@@ -136,10 +136,11 @@ stock SavePropForPlayer(playerid)
     if(pConnectState[playerid] == PLAYER_CONNECT_STATE_SPAWNED)
     {
         new query[500];
-        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d', `HotelRoom` = '%f' WHERE `pOwner` = '%d'",
+        mysql_format(SQL,query,sizeof(query),"UPDATE `player_property` SET `BCenter` = '%d', `HouseID` = '%d', `HotelRoom` = '%f', `GarageID` = '%d' WHERE `pOwner` = '%d'",
             PlayerProperty[playerid][BCenter],
             player_House[playerid],
             PlayerProperty[playerid][HotelRoom],
+            PlayerProperty[playerid][GarageID],
             GetCharacterSQLID(playerid));
         mysql_tquery(SQL,query);      
     }

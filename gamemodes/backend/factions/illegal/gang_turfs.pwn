@@ -235,7 +235,7 @@ public GangTurf_UpdateCaptureStatus(turf_id) {
             }
         }
 
-        GangTurfOccupier_Counter[ GangTurfOccupier[turf_id] ] = 10;
+        GangTurfOccupier_Counter[ GangTurfOccupier[turf_id] ] = 300;
         Timer_GangTurfOccupier[ GangTurfOccupier[turf_id] ] = SetTimerEx("GangTurf_UpdateOccupierProgress", 1000, false, "d", GangTurfOccupier[turf_id]);
 
         return ~1;
@@ -538,7 +538,7 @@ YCMD:capture(playerid, params[], help) {
     }
 
     GangTurf[turf_id][gtCaptureStatus] = true;
-    GangTurf[turf_id][gtCaptureProgress] = 10;
+    GangTurf[turf_id][gtCaptureProgress] = 120;
 
     foreach(new k : Player) {
 

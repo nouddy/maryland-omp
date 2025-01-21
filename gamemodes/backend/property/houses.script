@@ -8,7 +8,7 @@
  *  ##     ## ##     ## ##    ##     ##    ##       ##     ## ##   ### ##     ## 
  *  ##     ## ##     ## ##     ##    ##    ######## ##     ## ##    ## ########   
  *
- *  @Author         Vostic & Nodi
+ *  @Author         Nodi
  *  @Date           24th May 2023
  *  @Weburl         https://maryland-ogc.com
  *  @Project        maryland_project
@@ -316,6 +316,36 @@ YCMD:buyhouse(playerid, params[], help) {
 	House_UpdateLabel(ID, 2);
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+YCMD:gotokuca(playerid, params[], help) = gotohouse;
+YCMD:gotohouse(playerid, params[], help) {
+
+	if(GetPlayerStaffLevel(playerid) < 2)
+		return SendClientMessage(playerid, "Niste u mogucnosti ovu komandu!");
+
+	new house_idx;
+
+	if(sscanf(params, "d", house_idx))
+		return SendServerMessage(playerid, "/gotohouse <House ID>");
+
+	static f = -1, bool:house_found = false;
+
+	foreach(new i : iHouse) {
+
+		if(house_ID[i] == house_idx) {
+
+			house_found = true;
+			f = i;
+			break;
+		}
+	}
+
+	if(!house_found)
+		return SendServerMessage(playerid, "Kuca pod tim ID-em ne postoji!");
+
+	SetPlayerCompensatedPos(playerid, house_Entrance[f][0], house_Entrance[f][1], house_Entrance[f][2], 0, 0);
+	return (true);
 }
 
 YCMD:kuca(playerid, params[], help)  = house;

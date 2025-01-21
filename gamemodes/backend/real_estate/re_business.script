@@ -1823,6 +1823,36 @@ YCMD:attachments(playerid, params[], help) {
     return (true);
 }
 
+YCMD:gotofirma(playerid, params[], help) = gotobusiness;
+YCMD:gotobusiness(playerid, params[], help) {
+
+    if(GetPlayerStaffLevel(playerid) < 2)
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    new bizzID;
+    if(sscanf(params, "d", bizzID))
+        return SendServerMessage(playerid, "/gotobusiness <ID Firme>");
+
+    static bool:businessFound = false;
+    new j = -1;
+    foreach(new i : iter_Business) {
+
+        if(re_BusinessData[i][bID] == bizzID)
+        {
+            businessFound = true;
+            j = i;
+            break;
+       }
+    }
+
+    if(!businessFound)
+        return SendServerMessage(playerid, "Taj ID firme ne postoji na serveru!");
+
+    SetPlayerCompensatedPos(playerid, re_BusinessData[j][bEntrance][0], re_BusinessData[j][bEntrance][1], re_BusinessData[j][bEntrance][2], 0, 0);
+
+    return (true);
+}
+
 hook OnPlayerModelSelection( playerid, response, listid, modelid) {
     if(listid == skinlist) {
         if( response ) {

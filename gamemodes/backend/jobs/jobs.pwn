@@ -174,6 +174,17 @@ stock Job_GetNearestUniform(const playerid) {
     return INVALID_JOB_ID;
 }
 
+stock Job_ReturnName(job_id) {
+
+    foreach(new i : iter_Jobs) {
+
+        if(job_id == jobInfo[i][jobID]);
+            return jobInfo[i][jobName];
+    }
+
+    return INVALID_JOB_ID;
+}
+
 hook OnGameModeInit() {
     
     print("- SELECT * jobs.pwn - LOADED");
@@ -257,8 +268,7 @@ YCMD:job(playerid, params[], help) {
     if(playerJob[playerid] == INVALID_JOB_ID) 
         return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
 
-    Dialog_Show(playerid, "job-noreturn", DIALOG_STYLE_MSGBOX, ">> Posao", ""c_white"Trenutni posao : "c_green"%s"c_white"\nUgovor "c_green"%s"c_white"\nDa pregledate dodatne komande za posao "c_green"/jobhelp",
-                                                                 "OK", "", jobInfo[playerJob[playerid]][jobName], jobInfo[playerJob[playerid]][jobContract]);
+    ShowPlayerJobDialog(playerid, playerJob[playerid]);
 
     return 1;
 }
@@ -273,14 +283,6 @@ YCMD:otkaz(playerid, params[], help) {
     return (true);
 }
 
-YCMD:jobhelp(playerid, params[], help) 
-{
-    
-    if(playerJob[playerid] == INVALID_JOB_ID) 
-        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
-
-    return 1;
-}
 YCMD:ugovor(playerid, params[], help) = contract;
 YCMD:contract(playerid, params[], help) 
 {
@@ -292,4 +294,77 @@ YCMD:contract(playerid, params[], help)
     SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Preostalo vrjeme do isteka ugovora %s", sTime);
     
     return 1;
+}
+
+YCMD:setjob(playerid, params[], help) 
+{
+    
+    if(GetPlayerStaffLevel(playerid) < 2)
+        return SendClientMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+
+    new s_JobID, targetid;
+    if(sscanf(params, "ud", s_JobID, targetid))
+        return SendServerMessage(playerid, "/setjob <ID/Ime Igraca> <posao>");
+
+    if(s_JobID <= JOB_UNKNOWN || s_JobID > JOB_MOWER )
+        return SendServerMessage(playerid, "Unjeli ste krivi ID posla.");
+
+    if(!IsPlayerConnected(targetid))
+        return SendServerMessage(playerid, "Taj igrac nije konektovan na server!");
+
+    if(GetPlayerStaffLevel(targetid) > 0 && targetid != playerid)
+        return SendServerMessage(playerid, "Ne mozes postaviti posao adminu!");
+
+
+    Job_SetPlayerJob(playerid, s_JobID);
+
+    SendClientMessage(targetid, x_ltorange, "#JOB: "c_white"Staff %s[%d] vam je postavio posao %s.", ReturnCharacterName(playerid), playerid, Job_ReturnName(s_JobID));
+    SendClientMessage(playerid, x_ltorange, "#JOB: "c_white"Uspjesno ste postavili posao %s igracu %s[%d].", Job_ReturnName(s_JobID), ReturnCharacterName(targetid), targetid);
+
+    return 1;
+}
+
+stock ShowPlayerJobDialog(playerid, job_id) {
+
+    if(job_id == JOB_BUS_DRIVER) {
+
+        Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, "Bus Vozac", 
+                                           ""c_ltorange"\
+                                           Posao vozaca autobusa u okrugu Los Santos omogucava igracima da zarade prevozeci putnike izmedju raznih stanica.\n\
+                                           Da biste zapoceli posao, potrebno je da obucete poslovnu uniformu i udjete u autobus. Nakon ulaska u vozilo, automatski \n\
+                                           ce se postaviti marker koji vodi do sledece stanice. Vozaci treba da prate rutu i tacno se zaustavljaju na oznacenim lokacijama kako bi uspesno obavili posao.\n\
+                                           Ovaj posao je idealan za one koji vole istrazivati grad i komunicirati s virtuelnim svetom, uz osiguranje stabilne zarade.", "Ok", "");
+        return ~1;
+    }
+
+    else if(job_id == JOB_BUS_DRIVER) {
+
+        Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, "Mehanicar", 
+                                           ""c_ltorange"\
+                                           Posao mehanicara omogucava igracima da popravljaju i unapredjuju vozila.\n\
+                                           Posao se zapocinje uzimanjem opreme i unosom komande "c_white"/startservice, "c_ltorange"nakon cega igrac dobije listu delova koje mora ugraditi. \n\
+                                           Da bi uzeo odredjeni deo, koristi komande kao sto su "c_white"/bumpers, /spoilers, /nitrous i /wheels.\n\
+                                           "c_ltorange"Deo se automatski ugradi kada igrac udje u oznaceni pickup. Ako igrac zaboravi koje delove treba ugraditi, listu moze proveriti komandom "c_white"/lsclist.\n\
+                                           Ovaj posao je idealan za one koji vole raditi na vozilima i zaradjivati kroz precizne zadatke.", "Ok", "");
+        return ~1;
+    }
+
+    else if(job_id == JOB_CARPENTRY) {
+
+        Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, "Mehanicar", 
+                                           ""c_ltorange"\
+                                           Posao stolara omogucava igracima da obradjuju drvo i prave proizvode spremne za transport.\n\
+                                           Posao zapocinje tako sto igrac, noseci poslovnu uniformu, ode do mesta za uzimanje alata. \n\
+                                           Ako ima alat, ide do lokacije za premazivanje alata. Kada je alat pripremljen, igrac odlazi do mesta gde preuzima neobradjeno drvo. \n\
+                                           Zatim, koristi masinu za obradu drveta kako bi oblikovao materijal. Kada je drvo uspesno obradjeno, igrac ga nosi do masine za premazivanje\n\
+                                           gde ga finalno zavrsava. Gotov proizvod se zatim nosi do polica spremnih za transport. \n\
+                                           Ovaj posao zahteva preciznost i strpljenje, a donosi stabilnu zaradu kroz proizvodnju kvalitetnih predmeta\
+                                           ", "Ok", "");
+        return ~1;
+    }
+
+    else if(job_id == JOB_MOWER) {
+
+        
+    }
 }
