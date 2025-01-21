@@ -61,7 +61,8 @@ enum E_GLOBAL_SETTINGS {
     bool:VIP_CHAT,
     bool:STAFF_CHAT,
     bool:LEADER_CHAT,
-    bool:FACTION_CHAT
+    bool:FACTION_CHAT,
+    bool:ASKQ_CHAT
 }
 
 new globalSettings[E_GLOBAL_SETTINGS];
@@ -239,6 +240,29 @@ stock Staff_KickPlayer(player, admin, const reason[] = "High Ping") {
 	return (true);
 }
 
+YCMD:askqon(playerid, params[], help) {
+
+    if(globalSettings[ASKQ_CHAT])
+        return SendClientMessage(playerid, x_ltorange, "#ASKQ: "c_white"Da iskljucite ASKQ koristite /askqoff.");
+
+    globalSettings[ASKQ_CHAT] = true;
+    SendClientMessageToAll(x_ltorange, "#ASKQ: "c_white"Staff %s[%d] je ukljucio askq!", ReturnCharacterName(playerid), playerid);
+
+    return (true);
+}
+
+YCMD:askqoff(playerid, params[], help) 
+{
+    
+    if(!globalSettings[ASKQ_CHAT])
+        return SendClientMessage(playerid, x_ltorange, "#ASKQ: "c_white"Da ukljucite ASKQ koristite /askqon.");
+
+    globalSettings[ASKQ_CHAT] = false;
+    SendClientMessageToAll(x_ltorange, "#ASKQ: "c_white"Staff %s[%d] je iskljucio askq!", ReturnCharacterName(playerid), playerid);
+
+    return 1;
+}
+
 YCMD:askq(playerid, params[], help) {
 
     new text[MAX_QUESTION_LEN];
@@ -292,7 +316,7 @@ YCMD:sduty(playerid, params[], help)
 		SetPlayerArmour( playerid, 99);
 		
 		StaffDuty[ playerid ] = true;
-		va_SendClientMessageToAll(-1,""c_server"» "c_white"Staff "c_server"%s "c_white"je sada na duznosti /report", ReturnPlayerName(playerid));
+		va_SendClientMessageToAll(-1,""c_server"» "c_white"Staff "c_server"%s "c_white"je sada na duznosti /askq", ReturnPlayerName(playerid));
 	}
 	else if(StaffDuty[playerid] == true)
 	{
@@ -2868,6 +2892,14 @@ public OnCharacterDisarmLoad(playerid)
     return 1;
 }
 
+// YCMD:disarmtime(playerid, params[], help) {
+
+//     DisarmInfo[playerid][Disarmed] = true;
+//     DisarmInfo[playerid][DisarmExpireTime] = expire_timestamp;
+
+//     return 1;
+// }
+
 // Example usage in weapon give function:
 // stock GivePlayerWeaponChecked(playerid, weaponid, ammo)
 // {
@@ -3456,4 +3488,36 @@ public OnOfflineMuteCheck(playerid, character_name[], minutes)
     mysql_write_log(log_str, LOG_TYPE_STAFF);
 
     return 1;
+}
+
+YCMD:count(playerid, params[], help) 
+{
+
+    if(GetPlayerStaffLevel(playerid) < 2)
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+    
+    if(gCountTime != 0)
+        return (true);
+
+    new time;
+
+    if(sscanf(params, "d", time))
+        return SendServerMessage(playerid, "/count <sekundi>");
+
+    if(count < 1 || count > 10 )
+        return SendServerMessage(playerid, "Count ne moze biti manji od 1 a veci od 10!");
+
+    SetTimer("Count_UpdateTime", 1000, true);
+    gCountTime = count;
+
+    return 1;
+}
+
+forward Count_UpdateTime();
+public Count_UpdateTime() {
+
+    if(gCountTime >= 0) {
+
+        gCountTime--;
+    }
 }

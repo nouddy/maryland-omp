@@ -178,7 +178,7 @@ stock Job_ReturnName(job_id) {
 
     foreach(new i : iter_Jobs) {
 
-        if(job_id == jobInfo[i][jobID]);
+        if(job_id == jobInfo[i][jobID]) 
             return jobInfo[i][jobName];
     }
 
@@ -300,7 +300,7 @@ YCMD:setjob(playerid, params[], help)
 {
     
     if(GetPlayerStaffLevel(playerid) < 2)
-        return SendClientMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
+        return SendServerMessage(playerid, "Niste u mogucnosti koristiti ovu komandu!");
 
     new s_JobID, targetid;
     if(sscanf(params, "ud", s_JobID, targetid))
@@ -363,8 +363,6 @@ stock ShowPlayerJobDialog(playerid, job_id) {
         return ~1;
     }
 
-    else if(job_id == JOB_MOWER) {
 
-        
-    }
+    return (true);
 }

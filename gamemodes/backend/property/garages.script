@@ -103,11 +103,115 @@ hook OnGameModeInit() {
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
+
+    
+
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+forward mysql_InsertGarage(garage_idx);
+public mysql_InsertGarage(garage_idx) {
+
+    GarageInfo[garage_idx][garageID] = cache_insert_id();
+    Iter_Add(iter_Garages, garage_idx);
+
+    static tmp_label[248];
+
+    format(tmp_label, sizeof tmp_label, "\
+                                                "c_server" \187; "c_white"Garage [%d] "c_server"\171;\n\
+                                                "c_server" \187; "c_white"Price : %.2f "c_server"\171; \n\
+                                                "c_server" \187; "c_white"/buygarage "c_server"\171;", GarageData[i][garageID], GarageData[i][garagePrice]);
+
+    GarageLabel[garage_idx] = Create3DTextLabel(tmp_label, -1, GarageData[garage_idx][garageEntrance][0], GarageData[garage_idx][garageEntrance][1], GarageData[garage_idx][garageEntrance][2], 3.50, 0);
+    GaragePickup[garage_idx] = CreatePickup(1318, 1, GarageData[garage_idx][garageEntrance][0], GarageData[garage_idx][garageEntrance][1], GarageData[garage_idx][garageEntrance][2]);
+
+    return (true);
+}
+
+stock ReturnNearestGarage(playerid) {
+
+    foreach(new i : iter_Garages) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, GarageInfo[i][garageEntrance][0], GarageInfo[i][garageEntrance][1], GarageInfo[i][garageEntrance][2]))
+            return i;
+    }
+
+    return -1;
+}
 
 YCMD:creategarage(playerid, params[], help) {
 
     if(!IsPlayerAdmin(playerid))
         return SendServerMessage(playerid, "Samo RCON Admin moze ovo!");
+
+    new garage_idx = Iter_Free(iter_Garages);
+
+    if(Iter_Count(iter_Garages))
+        return SendClientMessage(playerid, x_ltorange, "#GARAGE: "c_white"Dostignut je maksimalan broj garazi!");
+
+    new Float:pPos[3];
+    GetPlayerPos(playerid, pPos[0], pPos[1], pPos[2]);
+
+    GarageInfo[garage_idx][garageOwner] = 0;
+    GarageInfo[garage_idx][garagePrice] = 50000;
+
+    GarageInfo[garage_idx][garageEntrance][0] = pPos[0];
+    GarageInfo[garage_idx][garageEntrance][1] = pPos[1];
+    GarageInfo[garage_idx][garageEntrance][2] = pPos[2];
+
+    GarageInfo[garage_idx][garageExit][0] = 621.45;
+    GarageInfo[garage_idx][garageExit][1] = -23.72;
+    GarageInfo[garage_idx][garageExit][2] = 1000.92;
+
+    GarageInfo[garage_idx][garageInterior] = 1;
+    GarageInfo[garage_idx][garageVW] = garage_idx;
+
+    GarageInfo[garage_idx][garageWeed] = 0;
+    GarageInfo[garage_idx][garageMoney] = 0;
+
+    new q[488];
+    mysql_format(SQL, q, sizeof q, "INSERT INTO `garages`\
+                                    (`garage_owner`, `garage_price`, `garage_enterX`, `garage_enterY`, `garage_enterZ`, `garage_exitX`, `garage_exitY`, `garage_exitZ`, `garage_interior`, `garage_vw`, `garage_weed`, `garage_money`)\
+                                    VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%d', '%d', '%d', '%d')",
+                                    GarageInfo[garage_idx][garageOwner], GarageInfo[garage_idx][garagePrice], pPos[0], pPos[1], pPos[2],
+                                    GarageInfo[garage_idx][garageExit][0], GarageInfo[garage_idx][garageExit][1], GarageInfo[garage_idx][garageExit][2],
+                                    GarageInfo[garage_idx][garageInterior], GarageInfo[garage_idx][garageVW], GarageInfo[garage_idx][garageWeed], GarageInfo[garage_idx][garageMoney]);
+    mysql_tquery(SQL, q, "mysql_InsertGarage", "d", garage_idx);
+
+    return (true);
+}
+
+YCMD:buygarage(playerid, params[], help) {
+
+    static garage_id = ReturnNearestGarage(playerid);
+
+    if(garage_id)
+        return SendClientMessage(playerid, x_ltorange, "#GARAGE: "c_white"Niste u blizini garaze!");
+
+    if(Player_HasGarage(playerid))
+        return SendServerMessage(playerid, "Vec posjedujete garazu!");
+
+    if(GarageInfo[garage_id][garageOwner] != 0)
+        return SendServerMessage(playerid, "Ova garaza nije na prodaju!");
+
+    if(GetPlayerMoney(playerid) < GarageInfo[garage_id][garagePrice])
+        return SendServerMessage(playerid, "Nemate dovoljno novca!");
+
+    GarageInfo[garage_id][garageOwner] = GetCharacterSQLID(playerid);
+    PlayerProperty[playerid][GarageID] = GarageInfo[garage_id][garageID];
+
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "UPDATE `player_property` SET `GarageID` = '%d' WHERE `pOwner` = '%d'", PlayerProperty[playerid][GarageID], GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, q);
+
+    static tmp_str[488];
+    format(tmp_str, sizeof tmp_str, "\
+                                                "c_server" \187; "c_white"Garage [%d] "c_server"\171;\n\
+                                                "c_server" \187; "c_white"Za ulaz pritisnite 'F' "c_server"\171; \n\
+                                                ", GarageData[garage_id][garageID]);
+
+    Update3DTextLabelText(GarageLabel[garage_id], -1, tmp_str);
 
     return (true);
 }

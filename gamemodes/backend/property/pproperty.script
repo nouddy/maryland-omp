@@ -78,3 +78,12 @@ public LoadPlayerProperty(playerid)
         PreloadBusinessCentreLabels(playerid);
     }
 }
+
+
+stock Player_HasGarage(playerid) {
+
+    if(PlayerProperty[playerid][GarageID] != 0)
+        return true;
+
+    return false;
+}
