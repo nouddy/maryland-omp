@@ -1069,6 +1069,7 @@ YCMD:togchat(playerid, params[], help)
 
 stock AddPlayerWarn(playerid, const  reason[]) {
 
+    //dodati proveru za invalid igraca
 	new query[512], playercharid, warn_expire;
 	playercharid = GetCharacterSQLID(playerid);
 	warn_expire = gettime() + 30 * 24 * 60 * 60; // 30 days
@@ -2822,7 +2823,7 @@ public OnUndisarmCheck(adminid, targetid)
 }
 
 // Add these functions to check disarm status
-stock bool:HasDisarm(playerid)
+stock HasDisarm(playerid)
 {
     return DisarmInfo[playerid][Disarmed];
 }

@@ -322,7 +322,7 @@ YCMD:gotokuca(playerid, params[], help) = gotohouse;
 YCMD:gotohouse(playerid, params[], help) {
 
 	if(GetPlayerStaffLevel(playerid) < 2)
-		return SendClientMessage(playerid, "Niste u mogucnosti ovu komandu!");
+		return SendClientMessage(playerid, -1, "Niste u mogucnosti ovu komandu!");
 
 	new house_idx;
 

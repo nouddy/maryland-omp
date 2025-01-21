@@ -215,7 +215,7 @@ YCMD:vipchat(playerid, params[], help)
 
     new vipRank[32];
     
-    if(PlayerVipLevel[playerid] >= VIP_BRONZE) {
+    if(PlayerVIPLevel[playerid] >= VIP_BRONZE) {
 
         switch(PlayerVIPLevel[playerid])
         {
