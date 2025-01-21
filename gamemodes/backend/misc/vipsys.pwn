@@ -201,8 +201,8 @@ YCMD:vipchat(playerid, params[], help)
         return 1;
     }
 
-    if(PlayerVIPLevel[playerid] < VIP_BRONZE)
-        return notification.Show(playerid, "GRESKA", "Niste VIP clan!", "!", BOXCOLOR_RED);
+    if(PlayerVIPLevel[playerid] < VIP_BRONZE || GetPlayerStaffLevel(playerid) < 1 )
+        return notification.Show(playerid, "GRESKA", "Niste u mogucnosti koristiti ovu komandu", "!", BOXCOLOR_RED);
 
     if(isnull(params))
         return notification.Show(playerid, "KORISCENJE", "/v [text]", "?", BOXCOLOR_BLUE);
@@ -214,12 +214,28 @@ YCMD:vipchat(playerid, params[], help)
         return SendServerMessage(playerid, "Administrator je iskljucio vip chat!");
 
     new vipRank[32];
-    switch(PlayerVIPLevel[playerid])
-    {
-        case VIP_BRONZE: vipRank = "BRONZE";
-        case VIP_SILVER: vipRank = "SILVER";
-        case VIP_GOLD: vipRank = "GOLD";
-        case VIP_PLATINUM: vipRank = "PLATINUM";
+    
+    if(PlayerVipLevel[playerid] >= VIP_BRONZE) {
+
+        switch(PlayerVIPLevel[playerid])
+        {
+            case VIP_BRONZE: vipRank = "BRONZE";
+            case VIP_SILVER: vipRank = "SILVER";
+            case VIP_GOLD: vipRank = "GOLD";
+            case VIP_PLATINUM: vipRank = "PLATINUM";
+        }
+    }
+
+    if(GetPlayerStaffLevel(playerid) > 0) {
+
+        switch(GetPlayerStaffLevel(playerid)) {
+
+            case 1: { vipRank = "Asisstant"; }
+            case 2: { vipRank = "Staff"; }
+            case 3: { vipRank = "Director"; }
+            case 4: { vipRank = "Head Staff"; }
+            case 5: { vipRank = "Owner"; }
+        }
     }
 
     new stringicvip[144];

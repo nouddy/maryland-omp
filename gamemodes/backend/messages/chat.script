@@ -32,6 +32,12 @@ hook OnGameModeInit()
 hook OnPlayerText(playerid, text[])
 {
 
+	if(IsPlayerMuted(playerid)) {
+
+		SendClientMessage(playerid, x_ltorange, "#MUTE: "c_white"Ne mozes to muitran si!");
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
+
 	if(GetPlayerCallStatus(playerid) == CALL_STATUS_ACTIVE) return Y_HOOKS_BREAK_RETURN_0;
 
 	static string[256];

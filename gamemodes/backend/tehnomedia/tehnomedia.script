@@ -417,7 +417,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
 		{
             case 0:
             {
-
+                
                 static __str[128], dlgStrgEx[567];
 
                 for(new i = 0; i < sizeof sz_PhoneModels; i++) {

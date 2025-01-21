@@ -337,7 +337,7 @@ stock ShowPlayerJobDialog(playerid, job_id) {
         return ~1;
     }
 
-    else if(job_id == JOB_BUS_DRIVER) {
+    else if(job_id == JOB_MECHANIC) {
 
         Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, "Mehanicar", 
                                            ""c_ltorange"\

@@ -47,6 +47,12 @@ hook OnGameModeInit()
 
 hook OnPlayerCommandText(playerid, cmdtext[]) {
 
+    if(IsPlayerMuted(playerid)) {
+
+		SendClientMessage(playerid, x_ltorange, "#MUTE: "c_white"Ne mozes to muitran si!");
+		return Y_HOOKS_BREAK_RETURN_0;
+	}
+
     static log_str[128];
     format(log_str, sizeof log_str, "COMMAND:  %s je iskoristio komandu %s", ReturnPlayerName(playerid), cmdtext);
     mysql_write_log(log_str, LOG_TYPE_COMMANDS);

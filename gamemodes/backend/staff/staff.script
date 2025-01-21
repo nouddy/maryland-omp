@@ -26,6 +26,8 @@ new answeringQuestion[MAX_PLAYERS];
 
 new stfveh[MAX_PLAYERS] = { INVALID_VEHICLE_ID, ... };
 
+new gCountTime;
+
 enum {
 
 	e_ASSISTANT = 1,
@@ -264,6 +266,9 @@ YCMD:askqoff(playerid, params[], help)
 }
 
 YCMD:askq(playerid, params[], help) {
+
+    if(!globalSettings[ASKQ_CHAT])
+        return SendClientMessage(playerid, x_ltorange, "#ASKQ: "c_white"Askq je iskljucen!");
 
     new text[MAX_QUESTION_LEN];
     if(sscanf(params, "s[246]", text)) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/askq [Pitanje]");
@@ -893,7 +898,10 @@ YCMD:givegun(playerid, const params[], help) {
 	if( ammo <1 || ammo > 999 )
 	{ SendClientMessage(playerid, x_red, "Ne moze ispod 1 ili 999 metaka!"); return 1; }
 
-	if(IsPlayerConnected(targetid)) {
+    if(HasDisarm(targetid))
+        return SendServerMessage(playerid, "Taj igrac ima dissarm!");
+
+	if(IsPlayerConnected(targetid)) {   
 
 	    if(targetid != INVALID_PLAYER_ID) {
 		
@@ -985,70 +993,70 @@ YCMD:togchat(playerid, params[], help)
         return ~1;
     }
 
-    if(strcmp(option, "leader", true)) {
+    if(!strcmp(option, "leader", true)) {
 
         if(globalSettings[LEADER_CHAT]) {
 
             globalSettings[LEADER_CHAT] = false;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio leader chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio leader chat!", ReturnCharacterName(playerid));
             return ~1;
         }
 
         else if(!globalSettings[LEADER_CHAT]) {
 
             globalSettings[LEADER_CHAT] = true;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio leader chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio leader chat!", ReturnCharacterName(playerid));
             return ~1;
         }
     }
 
-    if(strcmp(option, "staff", true)) {
+    if(!strcmp(option, "staff", true)) {
 
         if(globalSettings[STAFF_CHAT]) {
 
             globalSettings[STAFF_CHAT] = false;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio staff chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio staff chat!", ReturnCharacterName(playerid));
             return ~1;
         }
 
         else if(!globalSettings[STAFF_CHAT]) {
 
             globalSettings[STAFF_CHAT] = true;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio staff chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio staff chat!", ReturnCharacterName(playerid));
             return ~1;
         }
     }
 
-    if(strcmp(option, "vip", true)) {
+    if(!strcmp(option, "vip", true)) {
 
         if(globalSettings[VIP_CHAT]) {
 
             globalSettings[VIP_CHAT] = false;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio vip chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio vip chat!", ReturnCharacterName(playerid));
             return ~1;
         }
 
         else if(!globalSettings[VIP_CHAT]) {
 
             globalSettings[VIP_CHAT] = true;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio vip chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio vip chat!", ReturnCharacterName(playerid));
             return ~1;
         }
     }
 
-    if(strcmp(option, "Faction", true)) {
+    if(!strcmp(option, "Faction", true)) {
 
         if(globalSettings[FACTION_CHAT]) {
 
             globalSettings[FACTION_CHAT] = false;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio faction chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je iskljucio faction chat!", ReturnCharacterName(playerid));
             return ~1;
         }
 
         else if(!globalSettings[FACTION_CHAT]) {
 
             globalSettings[FACTION_CHAT] = true;
-            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio faction chat!");
+            SendClientMessageToAll(x_ltorange, "#CHAT: "c_white"Admin %s je ukljucio faction chat!", ReturnCharacterName(playerid));
             return ~1;
         }
     }
@@ -3185,6 +3193,7 @@ public OnOfflineLockCheck(playerid, character_name[], locktype[], time, reason[]
 }
 
 // Alias for shorter command
+YCMD:getcar(playerid, params[], help) = getvehicle;
 YCMD:getv(playerid, params[], help) = getvehicle;
 YCMD:getvehicle(playerid, params[], help)
 {
@@ -3499,15 +3508,16 @@ YCMD:count(playerid, params[], help)
     if(gCountTime != 0)
         return (true);
 
-    new time;
+    new count;
 
-    if(sscanf(params, "d", time))
+    if(sscanf(params, "d", count))
         return SendServerMessage(playerid, "/count <sekundi>");
 
     if(count < 1 || count > 10 )
         return SendServerMessage(playerid, "Count ne moze biti manji od 1 a veci od 10!");
 
     SetTimer("Count_UpdateTime", 1000, true);
+    GameTextForAll("~g~%d", 1000, 3);
     gCountTime = count;
 
     return 1;

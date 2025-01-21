@@ -226,8 +226,8 @@ YCMD:pojas(playerid, params[], help)
     if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER && GetPlayerState(playerid) != PLAYER_STATE_PASSENGER)
         return notification.Show(playerid, "GRESKA", "Morate sedeti u vozilu!", "!", BOXCOLOR_RED);
 
-    if(IsVehicleBicycle(GetVehicleModel(GetPlayerVehicleID(playerid))))
-        return notification.Show(playerid, "GRESKA", "Ne mozete koristiti pojas na biciklu!", "!", BOXCOLOR_RED);
+    if(IsVehicleBicycle(GetVehicleModel(GetPlayerVehicleID(playerid))) || IsVehicleMotorbike(GetVehicleModel(GetPlayerVehicleID(playerid))))
+        return notification.Show(playerid, "GRESKA", "Ne mozete koristiti pojas na biciklu/motoru!", "!", BOXCOLOR_RED);
 
     PlayerSeatbelt[playerid] = !PlayerSeatbelt[playerid];
     
@@ -255,6 +255,7 @@ hook OnPlayerDisconnect(playerid, reason)
 }
 
 // Eject command
+YCMD:izbaci(playerid, params[], help) = careject;
 YCMD:careject(playerid, params[], help)
 {
     if(help)
