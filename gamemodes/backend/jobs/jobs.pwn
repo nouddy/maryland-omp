@@ -330,7 +330,7 @@ stock ShowPlayerJobDialog(playerid, job_id) {
 
         Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, "Bus Vozac", 
                                            ""c_ltorange"\
-                                           Posao vozaca autobusa u okrugu Los Santos omogucava igracima da zarade prevozeci putnike izmedju raznih stanica.\n\
+                                           Posao vozaca autobusa u okrugu Marylanda omogucava igracima da zarade prevozeci putnike izmedju raznih stanica.\n\
                                            Da biste zapoceli posao, potrebno je da obucete poslovnu uniformu i udjete u autobus. Nakon ulaska u vozilo, automatski \n\
                                            ce se postaviti marker koji vodi do sledece stanice. Vozaci treba da prate rutu i tacno se zaustavljaju na oznacenim lokacijama kako bi uspesno obavili posao.\n\
                                            Ovaj posao je idealan za one koji vole istrazivati grad i komunicirati s virtuelnim svetom, uz osiguranje stabilne zarade.", "Ok", "");

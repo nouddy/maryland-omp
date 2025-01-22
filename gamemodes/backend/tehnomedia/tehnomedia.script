@@ -376,7 +376,7 @@ YCMD:broj(playerid, params[], help)
 //*==============================================================================
 
 Dialog:dialog_chosePhone(const playerid, response, listitem, string: inputtext[]) {
-
+    if(!response) return Y_HOOKS_CONTINUE_RETURN_1;
     if(response) {
 
         new id = listitem;
@@ -419,6 +419,7 @@ Dialog:dialog_electronic(const playerid, response, listitem, string: inputtext[]
             {
                 
                 static __str[128], dlgStrgEx[567];
+                dlgStrgEx[0] = EOS; // Clear the string buffer
 
                 for(new i = 0; i < sizeof sz_PhoneModels; i++) {
 

@@ -404,7 +404,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
-
 //-------------------------------------------------------------------------------------------------------- Jobs
 #include "backend/jobs/jobs.pwn"
 #include "backend/jobs/bus-driver.job"
@@ -427,12 +426,12 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Temp
 #include "temp/end/do-not-look.temp"
 #include "backend/inventory/functions.pwn"
+#include "backend/misc/quiz.pwn"									//* Quiz
+#include "backend/misc/reaction.pwn"								//* Reaction
 #include "backend/messages/chat.script"								//* Chat
 
 #include "backend/misc/commands.pwn"							   //* Cmds
 #include "backend/misc/experience.pwn"							   //* Cmds
-#include "backend/misc/quiz.pwn"									//* Quiz
-#include "backend/misc/reaction.pwn"								//* Reaction
 #include "backend/misc/hj_hh.pwn"								//* Happy Jobs and Happy Hours
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent

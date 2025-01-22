@@ -23,8 +23,8 @@
 static 
     bool:QuizActive,
     QuizAnswer[64],
-    QuizStartTime,
-    QuizTimer;
+    QuizTimer,
+    QuizEndTimer;
 
 // Quiz questions and answers array
 static const QuizQuestions[][] = {
@@ -58,64 +58,93 @@ static const QuizQuestions[][] = {
 forward StartRandomQuiz();
 public StartRandomQuiz()
 {
-    if(QuizActive) return 0;
+    if(QuizActive) 
+        StopQuiz();
 
     new randQuestion = random(sizeof(QuizQuestions));
     
     QuizActive = true;
-    QuizStartTime = GetTickCount();
     format(QuizAnswer, sizeof(QuizAnswer), QuizQuestions[randQuestion][1]);
 
     new string[144];
     format(string, sizeof(string), ""c_server"[QUIZ] "c_white"Pitanje: %s", QuizQuestions[randQuestion][0]);
     SendClientMessageToAll(-1, string);
-    SendClientMessageToAll(-1, ""c_server"[QUIZ] "c_white"Prvi tacni odgovor dobija nagradu!");
+    SendClientMessageToAll(-1, ""c_server"[QUIZ] "c_white"Imate 60 sekundi da odgovorite!");
 
+    // Set timer to end quiz after 60 seconds
+    QuizEndTimer = SetTimer("EndQuiz", 60000, false);
     return 1;
+}
+
+// Add this new forward function
+forward EndQuiz();
+public EndQuiz()
+{
+    if(QuizActive)
+    {
+        QuizActive = false;
+        QuizAnswer[0] = EOS;
+        SendClientMessageToAll(-1, ""c_server"[QUIZ] "c_white"Vreme je isteklo! Niko nije tacno odgovorio.");
+        
+        // Start new timer for next quiz
+        KillTimer(QuizTimer);
+        QuizTimer = SetTimer("StartRandomQuiz", (random(600000) + 300000), true);
+    }
 }
 
 hook OnGameModeInit()
 {
-    QuizTimer = SetTimer("StartRandomQuiz", (random(600000) + 300000), false); // Removed 'true'
+    QuizTimer = SetTimer("StartRandomQuiz", (random(600000) + 300000), true);
     return 1;
 }
 
 hook OnGameModeExit()
 {
     KillTimer(QuizTimer);
+    KillTimer(QuizEndTimer);
+
+    return 1;
+}
+
+stock bool:GetQuizStatus() {
+
+    return QuizActive;
+}
+
+StopQuiz()
+{
+    QuizActive = false;
+    QuizAnswer[0] = EOS;
+
+    // Start new timer for next quiz
+    KillTimer(QuizTimer);
+    KillTimer(QuizEndTimer);
+    QuizTimer = SetTimer("StartRandomQuiz", (random(600000) + 300000), true);
+
     return 1;
 }
 
 hook OnPlayerText(playerid, text[])
 {
-    if(QuizActive)
+    if(QuizActive && !strcmp(text, QuizAnswer, true))
     {
-        if(!strcmp(text, QuizAnswer, true))
-        {
-            new responseTime = GetTickCount() - QuizStartTime;
-            new string[144];
-
-            // Give reward
-            GivePlayerMoney(playerid, 200);
-
-            // Announce winner
-            format(string, sizeof(string), ""c_server"[QUIZ] "c_white"%s je prvi tacno odgovorio za %dms i osvojio $200!", 
-                ReturnCharacterName(playerid), responseTime);
-            SendClientMessageToAll(-1, string);
-
-            // Reset quiz
-            QuizActive = false;
-            QuizAnswer[0] = EOS;
-
-            // Start new timer for next quiz
-            KillTimer(QuizTimer);
-            QuizTimer = SetTimer("StartRandomQuiz", (random(600000) + 300000), false); // Removed 'true'
-
-            return 0; // Don't show the answer in chat
-        }
+        // Kill the end timer since someone answered correctly
+        KillTimer(QuizEndTimer);
+        
+        new string[144];
+        // Give reward
+        GivePlayerMoney(playerid, 200);
+        // Announce winner
+        format(string, sizeof(string), ""c_server"[QUIZ] "c_white"%s je tacno odgovorio i osvojio $200!", 
+            ReturnCharacterName(playerid));
+        SendClientMessageToAll(-1, string);
+        // Reset quiz
+        StopQuiz();
+        return Y_HOOKS_CONTINUE_RETURN_0;
     }
     return 1;
 }
+
 
 // Function to manually start a quiz (for admins)
 YCMD:startquiz(playerid, params[], help)

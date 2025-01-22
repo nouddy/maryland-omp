@@ -55,8 +55,8 @@ GenerateReactionString()
     }
     else
     {
-        // Generate random characters (length between 5-8)
-        new length = random(4) + 5;
+        // Generate random characters
+        new length = random(10) + 5;
         for(new i = 0; i < length; i++)
         {
             reactionString[i] = ReactionChars[random(sizeof(ReactionChars) - 1)];
@@ -68,7 +68,8 @@ GenerateReactionString()
 
 StartReaction()
 {
-    if(reactionActive) return 0;
+    if(reactionActive)
+        StopReaction();  // Ako nije odgovorio niko na prethodnu da da novu zbog tajmera.
     
     GenerateReactionString();
     reactionActive = true;
@@ -108,6 +109,11 @@ public StartNewReaction()
     return 1;
 }
 
+stock bool:GetReactionStatus() {
+
+    return reactionActive;
+}
+
 hook OnPlayerText(playerid, text[])
 {
     if(reactionActive && !strcmp(text, reactionString, true))
@@ -123,6 +129,7 @@ hook OnPlayerText(playerid, text[])
         
         // Stop the current reaction
         StopReaction();
+        return Y_HOOKS_CONTINUE_RETURN_0;
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -138,9 +145,6 @@ YCMD:forcereaction(playerid, params[], help)
 
     if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
         return notification.Show(playerid, "Greska", "Samo head manager+ moze ovo!", "!", BOXCOLOR_RED);
-
-    if(reactionActive)
-        return notification.Show(playerid, "GRESKA", "Reakcija je vec aktivna!", "!", BOXCOLOR_RED);
 
     StartReaction();
     notification.Show(playerid, "USPESNO", "Uspesno ste pokrenuli novu reakciju!", "!", BOXCOLOR_GREEN);

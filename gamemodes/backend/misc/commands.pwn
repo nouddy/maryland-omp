@@ -414,3 +414,68 @@ hook OnPlayerDisconnect(playerid, reason)
     PlayerLastStealAttempt[playerid] = 0;
     return 1;
 }
+
+YCMD:update(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje informacije o trenutnoj verziji servera", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    #define UPDATE_VERSION "1.0.0"
+
+    new string[512];
+    format(string, sizeof(string), 
+        ""c_white"Current Version: "UPDATE_VERSION"\n\n\
+        Latest Updates:\n\
+        - Added /update command\n\
+        - Fixed bug in steal system\n\
+        - Animations added /anims\n\
+        - Fixed phone duplicate entries TEHNOMEDIA\n\
+        - Rection fixed (/forcereaction for test)\n\
+        - Improved server performance"
+    );
+
+    Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, 
+        ""c_server"Maryland \187; "c_white"Server Update Info",
+        string,
+        "Close", "");
+
+    return 1;
+}
+
+
+YCMD:anims(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje listu dostupnih animacija", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    #define ANIMS_UPDATE "3 new anims"
+
+    new string[2048];
+    format(string, sizeof(string), 
+        ""c_white"Current Version: "ANIMS_UPDATE"\n\n\
+        Anim list:\n\
+        \187; /fall /injured /push /handsup /kiss /cell /bomb /drunk /laugh /getarrested\n\
+        \187; /basket /medic /spray /robman /taichi /lookout /sit /lay /sup /crossarms*\n\
+        \187; /deal /crack /smoke /chat /hike /dance /fuck /strip /lean /rap /caract\n\
+        \187; /tired /box /scratch /hide /vomit /eats /cop /stance /wave /run\n\
+        \187; /flag /giver /look /show /shout /endchat /face /pull /reload /fallback\n\
+        \187; /lowbodypush /headbutt /lifejump /koface /kostomach /carjacked1 /carjacked2\n\
+        \187; /exhaust /leftslap /lifejump /rollfall /carlock /hoodfrisked /lightcig\n\
+        \187; /tapcig /bat /chant /finger /elbow /kneekick /fstance /gpuch /gkick /lowthrow\n\
+        \187; /higthrow /pee /dealstance /knife\n\
+        \187; Za Stopiranje animacije pritisnite Space."
+    );
+
+    Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, 
+        ""c_server"Maryland \187; "c_white"Server Anims Info",
+        string,
+        "Close", "");
+
+    return 1;
+}

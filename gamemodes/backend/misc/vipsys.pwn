@@ -205,7 +205,7 @@ YCMD:vipchat(playerid, params[], help)
         return notification.Show(playerid, "GRESKA", "Niste u mogucnosti koristiti ovu komandu", "!", BOXCOLOR_RED);
 
     if(isnull(params))
-        return notification.Show(playerid, "KORISCENJE", "/v [text]", "?", BOXCOLOR_BLUE);
+        return notification.Show(playerid, "KORISCENJE", "/g [text]", "?", BOXCOLOR_BLUE);
 
     if(!playerSettings[playerid][gVIPChat])
         return SendServerMessage(playerid, "Islkljucen vam je vip chat, "c_ltorange"/tog");
