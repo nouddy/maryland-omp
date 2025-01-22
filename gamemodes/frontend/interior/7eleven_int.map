@@ -1792,12 +1792,5 @@ hook OnGameModeInit() {
 
 hook OnPlayerConnect(playerid) {
 
-    RemoveBuildingForPlayer(playerid, 3681, 1323.757, -1066.429, 33.710, 0.250);
-    RemoveBuildingForPlayer(playerid, 727, 1334.164, -1051.367, 26.125, 0.250);
-    RemoveBuildingForPlayer(playerid, 3680, 1286.718, -1066.000, 33.828, 0.250);
-    RemoveBuildingForPlayer(playerid, 3678, 1286.718, -1066.000, 33.828, 0.250);
-    RemoveBuildingForPlayer(playerid, 3677, 1323.757, -1066.429, 33.710, 0.250);
-    RemoveBuildingForPlayer(playerid, 716, 1338.507, -1058.515, 25.875, 0.250);
-
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

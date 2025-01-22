@@ -96,10 +96,10 @@ hook OnGameModeInit()
 	SetDynamicObjectMaterial(bolnicaext, 0, 8618, "ceasersign", "ceaserspillar01_128", 0xFFFFFFFF);
 	bolnicaext = Maryland_CreateDynamicObject(19479, 2034.939941, -1411.240600, 21.972192, 0.000000, 0.000000, 270.000000, -1, -1, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(bolnicaext, 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
-	SetDynamicObjectMaterialText(bolnicaext, 0, "Bolnica", 130, "Segoe Script", 100, 1, 0xFFFFFFFF, 0x00000000, 1);
+	SetDynamicObjectMaterialText(bolnicaext, 0, "Hospital", 130, "Segoe Script", 100, 1, 0xFFFFFFFF, 0x00000000, 1);
 	bolnicaext = Maryland_CreateDynamicObject(19479, 2035.000000, -1411.220581, 21.942192, 0.000000, 0.000000, 270.000000, -1, -1, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(bolnicaext, 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
-	SetDynamicObjectMaterialText(bolnicaext, 0, "{121212}Bolnica", 130, "Segoe Script", 100, 1, 0xFFFFFFFF, 0x00000000, 1);
+	SetDynamicObjectMaterialText(bolnicaext, 0, "{121212}Hospital", 130, "Segoe Script", 100, 1, 0xFFFFFFFF, 0x00000000, 1);
 	bolnicaext = Maryland_CreateDynamicObject(19479, 2032.069458, -1411.160522, 22.902208, 0.000000, 0.000000, 270.000000, -1, -1, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(bolnicaext, 0, 10101, "2notherbuildsfe", "Bow_Abpave_Gen", 0x00000000);
 	SetDynamicObjectMaterialText(bolnicaext, 0, "{121212}MARYLAND", 130, "Arial", 100, 1, 0xFFFFFFFF, 0x00000000, 1);

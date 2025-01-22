@@ -1,0 +1,63 @@
+#include <ysilib\YSI_Coding\y_hooks>
+
+hook OnGameModeInit()
+{
+    print("frontend/egyptukrasi2.map loaded");
+
+    static object_world = -1, object_int = -1;
+    CreateDynamicObject(706, 1645.552490, -735.215820, 54.504676, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1604.824829, -639.438903, 69.522193, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1747.851928, -723.015991, 51.852951, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(708, 1740.657104, -565.562072, 40.004032, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(708, 1734.857177, -625.482116, 41.584022, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1586.216918, -573.881164, 60.883659, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1591.006835, -721.591186, 60.883659, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1589.336669, -831.920776, 57.413665, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1787.315185, -528.704711, 59.766689, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1777.135131, -603.844787, 59.766689, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1770.404907, -665.904846, 65.966712, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1762.274536, -415.654663, 66.866676, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1702.310302, -714.205139, 46.938720, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1708.429443, -662.144958, 42.008747, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1712.457885, -606.364685, 37.708763, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1710.587768, -540.704528, 34.248775, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1699.486083, -466.114440, 31.978792, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1645.520751, -30.156833, 35.512775, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1615.720092, 39.833152, 35.512775, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1611.589111, 102.203117, 36.382778, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1629.366821, 342.401885, 18.516660, 0.000000, 0.000000, 90.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1738.915161, 332.131835, 18.286651, 0.000000, 0.000000, 90.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1601.875488, 248.621795, 19.896648, 0.000000, 0.000000, 90.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1626.168701, 165.893081, 33.522789, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1643.339111, 237.263046, 29.072771, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1684.498291, 167.909423, 25.990068, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1684.498291, 84.509429, 26.180074, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1658.830932, 26.413875, 25.914184, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(709, 1537.757812, -105.348304, 17.678686, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1726.097900, -222.891769, 52.884307, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1621.436279, -372.454315, 54.111270, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1657.716308, -595.478271, 41.083808, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(791, 1546.691284, 331.935241, 15.453264, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(708, 1640.698608, -83.611549, 32.566642, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(708, 1646.038940, -223.151519, 35.456645, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1627.669189, 248.372985, 10.072772, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1659.958862, 240.942962, 12.882774, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1659.958862, 206.603012, 17.272771, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1693.669433, 342.262847, 14.912775, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1722.469848, 395.302825, 7.452774, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(620, 1670.330444, 395.302825, 11.032773, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1710.118652, -632.869384, 45.791687, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1711.768066, -575.359619, 41.881706, 0.000000, 0.000000, 0.200000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1705.921142, -505.412017, 38.981754, 0.000000, 0.000000, 3.500001, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1690.710449, -430.831604, 38.411788, 0.000000, 0.000000, 12.300004, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1663.821655, -90.722717, 40.471820, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1631.130981, 1.687298, 41.651813, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1609.301391, 66.427276, 42.421829, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1616.764648, 128.017593, 41.571929, 0.000000, 0.000000, -10.899993, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(1290, 1632.915649, 198.002304, 37.211978, 0.000000, 0.000000, -10.300001, object_world, object_int, -1, 300.00, 300.00); 
+    CreateDynamicObject(708, 1693.899047, -180.081527, 37.736648, 0.000000, 0.000000, 0.000000, object_world, object_int, -1, 300.00, 300.00); 
+
+ 
+
+    return 1;
+}

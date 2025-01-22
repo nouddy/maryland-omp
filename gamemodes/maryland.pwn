@@ -357,6 +357,12 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/exterior/bank_ml.map"							//* Banka Maryland
 #include "frontend/exterior/vinewood_mall.map"					    //* VineWood Mall
 #include "frontend/exterior/rp-hood.map"					        //* Rp Hood
+#include "frontend/exterior/jail_mlext.map"					        //* Jail Exterior
+#include "frontend/exterior/ml_markers.map"					        //* Ml markers
+#include "frontend/exterior/lcn_tunnel.map"					        //* Tunel ispod goverment
+#include "frontend/exterior/ukrasi_ispodlcn.map"					//* Ukrasi ispod goverment
+#include "frontend/exterior/vipbase.map"							//* Vip Base Maps
+#include "frontend/exterior/egyptukrasi2.map"						//* Egypt ukrasi 2
 
 //-------------------------------------------------------------------------------------------------------- Italy Exteriors
 #include "frontend/exterior/italy_zipline.map"						//* Zicara u Italy (SF)
@@ -396,12 +402,14 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
 #include "frontend/interior/hospital-int.map"						//* Hospital Int (23)
 #include "frontend/interior/police_int.map"							//* Police Int (24)
-#include "frontend/exterior/alcatraz_int.map"						//* Police Int (-1)
 #include "frontend/interior/carpentry_int.map"						//* Stolarija Int (25) znaci boze
 #include "frontend/interior/drug_lab.map"							//* Druglab Int (28) Neki tripovi
 #include "frontend/interior/advertisement_int.map"				    //* Flecca bank map (0)
+#include "frontend/exterior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
 #include "frontend/interior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
-
+#include "frontend/interior/case.map"    				    		//* Case za evente (31 interior)
+#include "frontend/interior/dedust2.map"    				    	//* Dedust2 za evente (32 interior)
+#include "frontend/interior/mining_room.map"    				    //* Mining room za crypto (33 interior)
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
 //-------------------------------------------------------------------------------------------------------- Jobs

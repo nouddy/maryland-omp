@@ -311,8 +311,6 @@ hook OnPlayerConnect(playerid)
 	RemoveBuildingForPlayer(playerid, 6371, 585.281, -1456.719, 45.898, 0.250);
 	RemoveBuildingForPlayer(playerid, 6479, 585.281, -1456.719, 45.898, 0.250);
 	RemoveBuildingForPlayer(playerid, 6372, 599.093, -1435.400, 19.882, 0.250);
-	RemoveBuildingForPlayer(playerid, 6324, 632.578, -1443.089, 13.687, 0.250);
-	RemoveBuildingForPlayer(playerid, 6380, 632.578, -1443.089, 13.687, 0.250);
 	RemoveBuildingForPlayer(playerid, 1215, 616.765, -1495.770, 14.320, 0.250);
 	RemoveBuildingForPlayer(playerid, 1215, 616.765, -1492.030, 14.320, 0.250);
 	RemoveBuildingForPlayer(playerid, 1215, 616.765, -1488.479, 14.320, 0.250);
