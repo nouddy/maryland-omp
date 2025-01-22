@@ -126,6 +126,16 @@ StopQuiz()
 
 hook OnPlayerText(playerid, text[])
 {
+    /* Mozda probati ovako da uradis da bi mogli koristiti chat dok je quiz aktivan ili reakcija
+
+    	static string[256];
+	    format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
+	    ProxDetector(playerid, Float:30.0, x_white, string);
+
+        if(QuizActive && !strcmp(text, string+QuizAnswer, true))
+
+        Mada nece ga resiti jer je ovo  gore sendclient message a ne text koi se unosi nemam blage iskr....
+    */
     if(QuizActive && !strcmp(text, QuizAnswer, true))
     {
         // Kill the end timer since someone answered correctly

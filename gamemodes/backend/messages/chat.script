@@ -42,7 +42,7 @@ hook OnPlayerText(playerid, text[])
 
 	if(GetQuizStatus() == true) return Y_HOOKS_BREAK_RETURN_0;
 
-	if(GetReactionStatus() == true) return Y_HOOKS_BREAK_RETURN_0;
+	if(GetReactionStatus() == true) return Y_HOOKS_BREAK_RETURN_0;   // problem je sto radi ali ne mozes za vreme reakcije nista da drugo kucas..
 
 	static string[256];
 	format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
