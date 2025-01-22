@@ -58,6 +58,7 @@ enum e_STAFF_QUESTION_DATA {
 new QuestionInfo[MAX_QUESTIONS][e_STAFF_QUESTION_DATA];
 new Iterator:iter_Question<MAX_QUESTIONS>;
 
+
 enum E_GLOBAL_SETTINGS {
 
     bool:VIP_CHAT,
@@ -66,6 +67,8 @@ enum E_GLOBAL_SETTINGS {
     bool:FACTION_CHAT,
     bool:ASKQ_CHAT
 }
+
+new Spectate[MAX_PLAYERS];
 
 new globalSettings[E_GLOBAL_SETTINGS];
 
@@ -138,6 +141,7 @@ hook OnGameModeInit()
 hook OnPlayerConnect(playerid)
 {
 	PlayerInfo[playerid][Staff] = 0;
+    Spectate[playerid] = INVALID_PLAYER_ID;
 	
 	return 1;
 }
@@ -292,6 +296,7 @@ YCMD:askq(playerid, params[], help) {
     return (true);
 }
 
+@alias(lp, questions);
 YCMD:questions(playerid, params[], help) 
 {
     
@@ -342,7 +347,7 @@ YCMD:sc(playerid, const string: params[], help)
 	if (GetPlayerStaffLevel(playerid) < e_ASSISTANT)
 		return notification.Show(playerid, "Greska", "Samo staff moze ovo!.", "!", BOXCOLOR_RED);
 
-    if(globalSettings[STAFF_CHAT])
+    if(!globalSettings[STAFF_CHAT])
         return SendServerMessage(playerid, "Trenutno je iskljucen staff chat!");
 
 	if (isnull(params))
@@ -686,12 +691,6 @@ YCMD:setvw(const playerid, params[], help)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-YCMD:spectate(playerid, params[], help) 
-{
-	
-	return 1;
-}
-
 YCMD:getint(playerid, params[], help) 
 {
 	SendClientMessage(playerid, -1, "PlayerVW %d | PlayerInt %d", GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
@@ -803,6 +802,27 @@ YCMD:mute(playerid, params[], help) {
 
 
     Timer_UpdatePlayerMute[playerid] = SetTimerEx("Mute_UpdatePlayerTime", 1000 * 60, false, "d", playerid);
+
+    return 1;
+}
+
+YCMD:mutirani(playerid, params[], help) {
+
+    if(GetPlayerStaffLevel(playerid) < 1)
+        return SendServerMessage(playerid, "Niste u mogucnosti ovu komandu!");
+
+    static dlgStr[2488], str[288];
+
+    foreach(new i : Player) {
+
+        if(IsPlayerMuted(i)) {
+
+            format(str, sizeof str, ""c_server"%s[%d]\tPreostalo Vrjeme : %d Minuta\n");
+            strcat(dlgStr, str);
+        }
+    }
+
+    Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_TABLIST, "Mutirani Igraci", dlgStr, "Ok", "");
 
     return 1;
 }
@@ -2901,6 +2921,64 @@ public OnCharacterDisarmLoad(playerid)
     return 1;
 }
 
+YCMD:spectate(playerid, params[], help) = spec;
+YCMD:spec( playerid, params[], help ) {
+    if( GetPlayerStaffLevel(playerid) > 1) {
+    
+		new id;
+	    if( sscanf( params, "u", id ) ) return SendServerMessage( playerid, "/spec [ ID/Ime ]");
+	    if( id == INVALID_PLAYER_ID ) return SendServerMessage( playerid, "Nepostojeci ID.");
+	    if( id == playerid ) return SendServerMessage( playerid, "Nepostojeci ID.");
+	    
+        if(PlayerInfo[playerid][Staff] < PlayerInfo[id][Staff]) return SendServerMessage( playerid, "Nisi u mogucnosti specati ovog igraca." );
+		Spectate[ playerid ] = id;
+
+    } else return SendServerMessage( playerid, "Niste u mogucnosti koristiti ovu komandu!" );
+    return true;
+}
+
+YCMD:specoff(playerid, params[], help) 
+{
+    
+    if( GetPlayerStaffLevel(playerid) > 1) {
+    
+		if(Spectate[playerid] == -1)
+            return SendServerMessage(playerid, "Ne specate ni jednog igraca!");
+
+        Spectate[playerid] = -1;
+        TogglePlayerSpectating(playerid, false);
+
+    } else return SendServerMessage( playerid, "Niste u mogucnosti koristiti ovu komandu!" );
+
+    return 1;
+}
+
+task Spectator[3030]()
+{
+	foreach( new i : Player ) {
+	    if( Spectate[ i ] > -1 && Spectate[ i ] < 500 ) {
+			new targetid = Spectate[ i ];
+			if( IsPlayerConnected( targetid ) ) {
+				TogglePlayerSpectating( i, true );
+				if( PlayerInfo[ i ][ Staff ] >= 2 ) {
+				    new Float:health;
+					GetPlayerHealth( targetid, health );
+				    if( IsPlayerInAnyVehicle( targetid ) ) {
+						new carid = GetPlayerVehicleID( targetid );
+					    PlayerSpectateVehicle( i, carid );
+					}
+				   	else {
+						PlayerSpectatePlayer( i, targetid );
+					}
+					SetPlayerInterior( i, GetPlayerInterior( targetid ) );
+				    SetPlayerVirtualWorld( i, GetPlayerVirtualWorld( targetid ) );
+				}
+			}
+		}
+	}
+	return 1;
+}
+
 // YCMD:disarmtime(playerid, params[], help) {
 
 //     DisarmInfo[playerid][Disarmed] = true;
@@ -3339,34 +3417,22 @@ YCMD:entercar(playerid, params[], help)
 
 stock IsFactionChatEnabled() {
 
-    if(globalSettings[FACTION_CHAT])
-        return true;
-
-    return false;
+    return globalSettings[FACTION_CHAT];
 }
 
 stock IsVIPChatEnabled() {
 
-    if(globalSettings[VIP_CHAT])
-        return true;
-
-    return false;
+    return globalSettings[VIP_CHAT];
 }
 
 stock IsStaffChatEnabled() {
 
-    if(globalSettings[STAFF_CHAT])
-        return true;
-
-    return false;
+    return globalSettings[STAFF_CHAT];
 }
 
 stock IsLeaderChatEnabled() {
 
-    if(globalSettings[LEADER_CHAT])
-        return true;
-
-    return (true);
+    return globalSettings[LEADER_CHAT];
 }
 
 stock IsPlayerMuted(playerid) {

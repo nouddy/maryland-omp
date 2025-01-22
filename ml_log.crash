@@ -1360,3 +1360,13 @@
 [16:52:54] 73330000 - 73388000 fwpuclnt.dll
 [16:52:54] 75520000 - 7557f000 bcryptprimitives.dll
 [16:52:54] 74880000 - 7488e000 MSASN1.dll
+[20:10:26] Run time error 4: "Array index out of bounds"
+[20:10:26]  Attempted to read/write array element at negative index -1
+[20:10:26] AMX backtrace:
+[20:10:26] #0 001da4e4 in ?? (0, 1, 0, 19197, 2, 1046495638, 0, 0, 0, 1117939302, ... <4 more arguments>) in <unknown>
+[20:10:26] #1 0008016c in public OnPlayerEditAttachedObject (0, 1, 0, 19197, 2, 1046495638, 0, 0, 0, 1117939302, ... <4 more arguments>) in <unknown>
+[20:12:53] Run time error 4: "Array index out of bounds"
+[20:12:53]  Attempted to read/write array element at negative index -1
+[20:12:53] AMX backtrace:
+[20:12:53] #0 001da4e4 in ?? (0, 1, 1, 19159, 2, -1087482397, -1108370020, -1111054349, -1027080193, 0, ... <4 more arguments>) in <unknown>
+[20:12:53] #1 0008016c in public OnPlayerEditAttachedObject (0, 1, 1, 19159, 2, -1087482397, -1108370020, -1111054349, -1027080193, 0, ... <4 more arguments>) in <unknown>

@@ -26,8 +26,14 @@ static
     QuizTimer,
     QuizEndTimer;
 
+enum e_QUESTION_DATA {
+
+    eQuestion[76],
+    eAnswer[32]
+}
+
 // Quiz questions and answers array
-static const QuizQuestions[][] = {
+static const QuizQuestions[25][e_QUESTION_DATA] = {
     {"Koji je glavni grad Srbije?", "beograd"},
     {"Koliko slova ima rec 'Automobil'?", "9"},
     {"Koje godine je osnovan GTA San Andreas?", "2004"},
@@ -64,10 +70,13 @@ public StartRandomQuiz()
     new randQuestion = random(sizeof(QuizQuestions));
     
     QuizActive = true;
-    format(QuizAnswer, sizeof(QuizAnswer), QuizQuestions[randQuestion][1]);
+
+    static tmp_str[ sizeof QuizAnswer ];
+    format(tmp_str, sizeof tmp_str, "%s", QuizQuestions[randQuestion][eAnswer]);
+    strmid(QuizAnswer, tmp_str, 0, sizeof tmp_str );
 
     new string[144];
-    format(string, sizeof(string), ""c_server"[QUIZ] "c_white"Pitanje: %s", QuizQuestions[randQuestion][0]);
+    format(string, sizeof(string), ""c_server"[QUIZ] "c_white"Pitanje: %s", QuizQuestions[randQuestion][eQuestion]);
     SendClientMessageToAll(-1, string);
     SendClientMessageToAll(-1, ""c_server"[QUIZ] "c_white"Imate 60 sekundi da odgovorite!");
 
@@ -126,21 +135,10 @@ StopQuiz()
 
 hook OnPlayerText(playerid, text[])
 {
-    /* Mozda probati ovako da uradis da bi mogli koristiti chat dok je quiz aktivan ili reakcija
 
-    	static string[256];
-	    format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
-	    ProxDetector(playerid, Float:30.0, x_white, string);
-
-        if(QuizActive && !strcmp(text, string+QuizAnswer, true))
-
-        Mada nece ga resiti jer je ovo  gore sendclient message a ne text koi se unosi nemam blage iskr....
-    */
     if(QuizActive && !strcmp(text, QuizAnswer, true))
     {
         // Kill the end timer since someone answered correctly
-        KillTimer(QuizEndTimer);
-        
         new string[144];
         // Give reward
         GivePlayerMoney(playerid, 200);
@@ -149,10 +147,11 @@ hook OnPlayerText(playerid, text[])
             ReturnCharacterName(playerid));
         SendClientMessageToAll(-1, string);
         // Reset quiz
+        KillTimer(QuizEndTimer);
         StopQuiz();
         return Y_HOOKS_CONTINUE_RETURN_0;
     }
-    return 1;
+    return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 

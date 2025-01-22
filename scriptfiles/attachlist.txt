@@ -30,3 +30,7 @@
 19317, Gitara
 339, Katana
 19079, Papagaj
+19135, Piramida
+19197, Piramida
+19198, Piramida
+19159, Nwn

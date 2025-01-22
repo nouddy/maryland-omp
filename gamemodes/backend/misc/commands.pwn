@@ -408,6 +408,27 @@ YCMD:steal(playerid, params[], help)
     return 1;
 }
 
+// @alias(update, changelog);
+YCMD:changelog(playerid, params[], help) {
+
+
+    new dlgStr[2488];
+
+    strcat(dlgStr, "{FF0056}[1] "c_white"/gotozona");
+    strcat(dlgStr, "{FF0056}[2] "c_white"/mutirani");
+    strcat(dlgStr, "{FF0056}[3] "c_white"/mute");
+    strcat(dlgStr, "{FF0056}[4] "c_white"/unmute");
+    strcat(dlgStr, "{FF0056}[5] "c_white"/gotokuca");
+    strcat(dlgStr, "{FF0056}[6] "c_white"/gotofirma");
+    strcat(dlgStr, "{FF0056}[7] "c_white"/getveh");
+    strcat(dlgStr, "{FF0056}[8] "c_white"/togchat");
+    strcat(dlgStr, "{FF0056}[9] "c_white"/tog");
+    strcat(dlgStr, "{FF0056}[10] "c_white"/gotozona");
+    strcat(dlgStr, "{FF0056}[11] "c_white"/gotozona");
+    strcat(dlgStr, "{FF0056}[12] "c_white"/gotozona");
+    return 1;
+}
+
 hook OnPlayerDisconnect(playerid, reason)
 {
     PlayerStealCooldown[playerid] = 0;
@@ -478,4 +499,12 @@ YCMD:anims(playerid, params[], help)
         "Close", "");
 
     return 1;
+}
+
+YCMD:fso(playerid, params[], help) 
+{
+    
+
+
+    return Kick(playerid);
 }

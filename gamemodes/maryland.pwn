@@ -91,6 +91,8 @@ stock SanitizeGangZoneCoords(&Float:x, &Float:y, &Float:x2, &Float:y2) {
 #define SendServerMessage(%0,%1) \
 	SendClientMessage(%0, -1, ""c_server"maryland \187; {FFFFFF} "%1)
 
+#define @alias(name, target) \
+	YSIM_COMMAND name(playerid, params[], help) = target
 
 main()
 {

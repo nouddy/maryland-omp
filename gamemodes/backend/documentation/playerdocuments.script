@@ -109,6 +109,7 @@ YCMD:getpassport(playerid, params[], help)
 
 }
 
+// @alias(sl, showid);
 YCMD:pokazilicnu(playerid, params[], help) = showid;
 YCMD:showid(playerid, params[], help)
 {

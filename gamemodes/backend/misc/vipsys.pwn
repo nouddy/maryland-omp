@@ -583,12 +583,11 @@ public OnVIPExpiryCheck(playerid)
     {
         PlayerVIPLevel[playerid] = VIP_NONE;
         
-        new query[128];
-        mysql_format(SQL, query, sizeof(query), 
-            "UPDATE character_vip SET vip_level = 0, vip_expiry = NULL WHERE character_id = %d",
-            GetCharacterSQLID(playerid)
-        );
-        mysql_tquery(SQL, query);
+        SendClientMessage(playerid, x_server, "VIP » Vas VIP status je istekao. Posetite www.maryland-ogc.com/donate za obnovu.");
+
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "DELETE FROM `character_vip` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
         
         SendClientMessage(playerid, x_server, "VIP » "c_white"Vas VIP status je istekao. Posetite "c_server"www.maryland-ogc.com/donate "c_white"za obnovu.");
     }
@@ -618,12 +617,6 @@ public OnVIPDataLoad(playerid)
     if(!cache_num_rows())
     {
         // No VIP data found, create new entry
-        new query[128];
-        mysql_format(SQL, query, sizeof(query), 
-            "INSERT INTO character_vip (character_id, vip_level, vip_expiry) VALUES (%d, 0, NULL)",
-            GetCharacterSQLID(playerid)
-        );
-        mysql_tquery(SQL, query);
         
         PlayerVIPLevel[playerid] = VIP_NONE;
         PlayerVIPExpiry[playerid] = 0;
@@ -640,14 +633,13 @@ public OnVIPDataLoad(playerid)
     if(current_vip_level == 0 && days_remaining <= 0)
     {
         // VIP has expired
-        new query[128];
-        mysql_format(SQL, query, sizeof(query), 
-            "UPDATE character_vip SET vip_level = 0, vip_expiry = NULL WHERE character_id = %d",
-            GetCharacterSQLID(playerid)
-        );
-        mysql_tquery(SQL, query);
         
         SendClientMessage(playerid, x_server, "VIP » Vas VIP status je istekao. Posetite www.maryland-ogc.com/donate za obnovu.");
+
+        new q[128];
+        mysql_format(SQL, q, sizeof q, "DELETE FROM `character_vip` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+        mysql_tquery(SQL, q);
+
     }
     else if(current_vip_level > VIP_NONE)
     {
@@ -702,9 +694,8 @@ stock SetPlayerVIP(playerid, level, days)
     // Update in database using MySQL date functions
     new query[256];
     mysql_format(SQL, query, sizeof(query), 
-        "UPDATE character_vip SET vip_level = %d, vip_expiry = DATE_ADD(NOW(), INTERVAL %d DAY) \
-        WHERE character_id = %d",
-        level, days, GetCharacterSQLID(playerid)
+        "INSERT INTO `character_vip` (`character_id`, `vip_level`, `vip_expiry`) VALUES ('%d', '%d', 'DATE_ADD(NOW(), INTERVAL %d DAY)')",
+        GetCharacterSQLID(playerid), level, days
     );
     mysql_tquery(SQL, query);
 
@@ -758,6 +749,9 @@ YCMD:setvip(playerid, params[], help)
 
     if(days < 1 || days > 365)
         return notification.Show(playerid, "GRESKA", "Dani moraju biti izmedju 1-365!", "!", BOXCOLOR_RED);
+
+    if(PlayerVIPLevel[playerid] != 0)
+        return SendServerMessage(playerid, "Taj igrac je vec VIP!");
 
     SetPlayerVIP(targetid, level, days);
 
