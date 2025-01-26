@@ -455,7 +455,10 @@ YCMD:update(playerid, params[], help)
         - Animations added /anims\n\
         - Fixed phone duplicate entries TEHNOMEDIA\n\
         - Rection fixed (/forcereaction for test)\n\
-        - Improved server performance"
+        - Improved server performance\n\
+        - Added ATM system\n\
+        - Added Accent system\n\
+        - Added gate system"
     );
 
     Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, 
