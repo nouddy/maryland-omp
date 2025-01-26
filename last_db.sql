@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2025 at 09:19 PM
+-- Generation Time: Jan 26, 2025 at 01:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,7 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (12, 'Nodislav', 'dino9099', 4, '2023-11-30 18:06:44', '2023-11-30 18:06:44', 'dino@mailer.com'),
 (13, 'Nodislav_Aleksienko', 'ferid420', 4, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com'),
 (14, 'Vostic', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com'),
-(15, 'Ogi', 'Aleksic999', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com'),
+(15, 'Ogi', '123456', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com'),
 (16, 'Capital_Camora', 'ichbruderman1', 4, '2023-12-02 17:52:35', '2023-12-02 17:52:35', 'capital@samp.com'),
 (17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com'),
 (18, 'djasa', '401253', 0, '2023-12-03 12:45:24', '2023-12-03 12:45:24', 'lazarradisavljevic5@gmail.com'),
@@ -181,28 +181,30 @@ CREATE TABLE `characters` (
   `cWanted` int(11) NOT NULL DEFAULT 0,
   `XP` int(11) NOT NULL DEFAULT 1,
   `Score` int(11) NOT NULL DEFAULT 0,
-  `NeedXP` int(11) NOT NULL DEFAULT 1250
+  `NeedXP` int(11) NOT NULL DEFAULT 1250,
+  `Accent` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `characters`
 --
 
-INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`) VALUES
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-17 14:47:35', 2208.75, -1240.25, 24.1496, 0, 0, 0, 244, 3, 2813),
-(11, 13, 'Ferid_Olsun', 20, 0, 0, 0, 0, 6181270, 0, 0, 0, '2025-01-20 23:11:20', 1671.13, -1093.33, 23.9062, 0, 0, 0, 108, 2, 2813),
-(24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250),
-(25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 1, 0, 1250),
-(26, 34, 'Ferid_Kulusevski', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-26 15:33:12', 831.325, -1341.15, 9.87468, 0, 0, 0, 1, 0, 1250),
-(27, 35, 'Pinky_Ljubav', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-01 21:07:49', 2192.35, -1221.43, 24.6977, 0, 0, 0, 0, 0, 1250),
-(28, 36, 'Frostyslav_Agronom', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-01 22:12:33', 1845.15, -1447.72, 12.9719, 0, 0, 0, 0, 0, 1250),
-(29, 13, 'Joy_Silencce', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-03 21:26:32', 1401.78, 1591.35, 12.0481, 6, 6, 0, 82, 0, 1250),
-(30, 11, 'Frosty_McSlav', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-05 17:13:46', 208.326, -230.405, 1.77862, 0, 0, 0, 0, 0, 1250),
-(31, 37, 'Frostyslav_Saints', 26, 0, 0, 0, 1, 0, 0, 0, 0, '2025-01-17 21:15:30', 1411.1, 1588.87, 12.0481, 6, 6, 0, 0, 0, 1250),
-(32, 13, 'Mein_Kampf', 93, 1, 0, 0, 0, 0, 0, 0, 0, '2025-01-17 21:17:00', 1421.72, 1587.31, 17.2366, 6, 6, 0, 0, 0, 1250),
-(33, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:13', 1404.78, 1624.14, 10.8125, 6, 0, 0, 231, 0, 1250),
-(34, 38, 'Kokolo_McGee', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 19:32:41', 805.416, -1328.31, 13.4843, 0, 0, 0, 0, 0, 1250),
-(35, 39, 'Silva_Gay', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:14', 1813.37, -1580.35, 13.5469, 0, 0, 0, 0, 0, 1250);
+INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`, `Accent`) VALUES
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-26 01:25:50', 800.247, -1326.85, 13.3828, 0, 0, 0, 244, 3, 2813, 2),
+(11, 13, 'Ferid_Olsun', 20, 0, 0, 0, 0, 6181270, 0, 0, 0, '2025-01-20 23:11:20', 1671.13, -1093.33, 23.9062, 0, 0, 0, 108, 2, 2813, 0),
+(24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250, 0),
+(25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 1, 0, 1250, 0),
+(26, 34, 'Ferid_Kulusevski', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2024-12-26 15:33:12', 831.325, -1341.15, 9.87468, 0, 0, 0, 1, 0, 1250, 0),
+(27, 35, 'Pinky_Ljubav', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-01 21:07:49', 2192.35, -1221.43, 24.6977, 0, 0, 0, 0, 0, 1250, 0),
+(28, 36, 'Frostyslav_Agronom', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-01 22:12:33', 1845.15, -1447.72, 12.9719, 0, 0, 0, 0, 0, 1250, 0),
+(29, 13, 'Joy_Silencce', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-03 21:26:32', 1401.78, 1591.35, 12.0481, 6, 6, 0, 82, 0, 1250, 0),
+(30, 11, 'Frosty_McSlav', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-05 17:13:46', 208.326, -230.405, 1.77862, 0, 0, 0, 0, 0, 1250, 0),
+(31, 37, 'Frostyslav_Saints', 26, 0, 0, 0, 1, 0, 0, 0, 0, '2025-01-17 21:15:30', 1411.1, 1588.87, 12.0481, 6, 6, 0, 0, 0, 1250, 0),
+(32, 13, 'Mein_Kampf', 93, 1, 0, 0, 0, 0, 0, 0, 0, '2025-01-17 21:17:00', 1421.72, 1587.31, 17.2366, 6, 6, 0, 0, 0, 1250, 0),
+(33, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:13', 1404.78, 1624.14, 10.8125, 6, 0, 0, 231, 0, 1250, 0),
+(34, 38, 'Kokolo_McGee', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 19:32:41', 805.416, -1328.31, 13.4843, 0, 0, 0, 0, 0, 1250, 0),
+(35, 39, 'Silva_Gay', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:14', 1813.37, -1580.35, 13.5469, 0, 0, 0, 0, 0, 1250, 0),
+(36, 15, 'Ogi_Ivanov', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-26 01:30:21', 1401.78, 1591.35, 12.0481, 6, 6, 0, 0, 0, 1250, 0);
 
 -- --------------------------------------------------------
 
@@ -307,7 +309,8 @@ INSERT INTO `character_quests` (`characterid`, `Quest_1`, `Quest_2`, `Quest_3`, 
 (32, 0, 0, 0, 0, 0, 0, 0),
 (33, 0, 0, 0, 0, 0, 1, 0),
 (34, 0, 0, 0, 0, 0, 0, 0),
-(35, 0, 0, 0, 0, 0, 0, 0);
+(35, 0, 0, 0, 0, 0, 0, 0),
+(36, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -338,7 +341,8 @@ INSERT INTO `character_spawns` (`character_id`, `spawnType`) VALUES
 (32, 1),
 (33, 1),
 (34, 1),
-(35, 1);
+(35, 1),
+(36, 1);
 
 -- --------------------------------------------------------
 
@@ -413,7 +417,8 @@ INSERT INTO `crypto_wallets` (`character_id`, `bitcoin`, `ethereum`, `litecoin`,
 (32, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000),
 (33, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000),
 (34, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000),
-(35, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000);
+(35, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000),
+(36, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000);
 
 -- --------------------------------------------------------
 
@@ -432,7 +437,8 @@ CREATE TABLE `daily_records` (
 
 INSERT INTO `daily_records` (`record_date`, `player_count`) VALUES
 ('2025-01-19', 1),
-('2025-01-20', 1);
+('2025-01-20', 1),
+('2025-01-26', 1);
 
 -- --------------------------------------------------------
 
@@ -578,6 +584,41 @@ INSERT INTO `faction_vehicles` (`ID`, `factionID`, `factionType`, `fvModel`, `X`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `gates`
+--
+
+CREATE TABLE `gates` (
+  `id` int(11) NOT NULL,
+  `model` int(11) NOT NULL,
+  `closed_x` float NOT NULL,
+  `closed_y` float NOT NULL,
+  `closed_z` float NOT NULL,
+  `closed_rx` float NOT NULL,
+  `closed_ry` float NOT NULL,
+  `closed_rz` float NOT NULL,
+  `open_x` float NOT NULL,
+  `open_y` float NOT NULL,
+  `open_z` float NOT NULL,
+  `open_rx` float NOT NULL,
+  `open_ry` float NOT NULL,
+  `open_rz` float NOT NULL,
+  `type` int(11) NOT NULL DEFAULT 1,
+  `owner_id` int(11) NOT NULL DEFAULT 0,
+  `faction_id` int(11) NOT NULL DEFAULT 0,
+  `police_division` int(11) NOT NULL DEFAULT 0,
+  `close_time` int(11) NOT NULL DEFAULT 5
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gates`
+--
+
+INSERT INTO `gates` (`id`, `model`, `closed_x`, `closed_y`, `closed_z`, `closed_rx`, `closed_ry`, `closed_rz`, `open_x`, `open_y`, `open_z`, `open_rx`, `open_ry`, `open_rz`, `type`, `owner_id`, `faction_id`, `police_division`, `close_time`) VALUES
+(1, 2933, 800.43, -1332.62, 14.0628, 0, 0, 0, 800.43, -1332.62, 10.6928, 0, 0, 0, 1, 4, 0, 0, 10);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `houses`
 --
 
@@ -713,7 +754,8 @@ INSERT INTO `life_insurance` (`character_id`, `purchase_date`, `expiry`) VALUES
 (32, '2025-01-17 21:16:20', '2025-01-17 21:16:20'),
 (33, '2025-01-19 22:06:00', '2025-01-19 22:06:00'),
 (34, '2025-01-19 19:30:58', '2025-01-19 19:30:58'),
-(35, '2025-01-19 22:05:35', '2025-01-19 22:05:35');
+(35, '2025-01-19 22:05:35', '2025-01-19 22:05:35'),
+(36, '2025-01-26 01:33:56', '2025-01-26 01:33:56');
 
 -- --------------------------------------------------------
 
@@ -3750,7 +3792,44 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gototurf', '2025-01-20 20:25:40'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /gototurf 1', '2025-01-20 20:25:41'),
 ('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /cc', '2025-01-20 22:47:01'),
-('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createturf', '2025-01-20 22:47:05');
+('COMMAND:  Nodislav_Aleksienko je iskoristio komandu /createturf', '2025-01-20 22:47:05'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:13:17'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:13:22'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:13:27'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:13:35'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:13:47'),
+('COMMAND:  Vostic je iskoristio komandu /chatsize 12', '2025-01-26 00:17:18'),
+('COMMAND:  Vostic je iskoristio komandu /chatsize 2', '2025-01-26 00:17:19'),
+('COMMAND:  Vostic je iskoristio komandu /fontsize/cc', '2025-01-26 00:17:33'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2025-01-26 00:17:35'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:17:47'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:17:54'),
+('COMMAND:  Vostic je iskoristio komandu /me ', '2025-01-26 00:18:01'),
+('COMMAND:  Vostic je iskoristio komandu /me a', '2025-01-26 00:18:02'),
+('COMMAND:  Vostic je iskoristio komandu /do a', '2025-01-26 00:18:06'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:18:18'),
+('COMMAND:  Vostic je iskoristio komandu /akcenat', '2025-01-26 00:18:26'),
+('COMMAND:  Vostic je iskoristio komandu /creategate', '2025-01-26 01:02:46'),
+('COMMAND:  Vostic je iskoristio komandu /creategate 981', '2025-01-26 01:02:52'),
+('COMMAND:  Vostic je iskoristio komandu /creategate 2933', '2025-01-26 01:06:21'),
+('COMMAND:  Vostic je iskoristio komandu /veh 522', '2025-01-26 01:07:06'),
+('COMMAND:  Vostic je iskoristio komandu /sveh 522', '2025-01-26 01:07:09'),
+('COMMAND:  Vostic je iskoristio komandu /editgate', '2025-01-26 01:07:27'),
+('COMMAND:  Vostic je iskoristio komandu /editgate 1', '2025-01-26 01:07:37'),
+('COMMAND:  Vostic je iskoristio komandu /editgate 0', '2025-01-26 01:07:41'),
+('COMMAND:  Vostic je iskoristio komandu /creategate 2933', '2025-01-26 01:19:15'),
+('COMMAND:  Vostic je iskoristio komandu /creategate 2933', '2025-01-26 01:25:10'),
+('COMMAND:  Vostic je iskoristio komandu /promenipasswordigracu', '2025-01-26 01:29:06'),
+('COMMAND:  Vostic je iskoristio komandu /changepass', '2025-01-26 01:29:14'),
+('COMMAND:  Vostic je iskoristio komandu /changepass 1 1', '2025-01-26 01:29:27'),
+('COMMAND:  Vostic je iskoristio komandu /changepass 1 123456', '2025-01-26 01:29:31'),
+('COMMAND:  Ogi je iskoristio komandu /gethere', '2025-01-26 01:34:03'),
+('COMMAND:  Vostic je iskoristio komandu /setstaff 1 0', '2025-01-26 01:35:09'),
+('COMMAND:  Vostic je iskoristio komandu /editgate', '2025-01-26 01:35:27'),
+('COMMAND:  Vostic je iskoristio komandu /setstaff 1 4', '2025-01-26 01:35:58'),
+('COMMAND:  Ogi je iskoristio komandu /editgate', '2025-01-26 01:36:09'),
+('COMMAND:  Ogi je iskoristio komandu /editgate', '2025-01-26 01:36:11'),
+('COMMAND:  Ogi je iskoristio komandu /bring 1', '2025-01-26 01:36:46');
 
 -- --------------------------------------------------------
 
@@ -4350,7 +4429,19 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2025-01-20 23:00:58'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2025-01-20 23:04:32'),
 ('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2025-01-20 23:08:12'),
-('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2025-01-20 23:11:03');
+('CONNECT-LOG:  Nodislav_Aleksienko se konektuje na server | IP : 127.0.0.1', '2025-01-20 23:11:03'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 00:12:12'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 00:16:56'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:02:21'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:05:51'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:18:46'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:24:43'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:28:23'),
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:28:28'),
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:29:24'),
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:29:57'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:32:22'),
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:33:48');
 
 -- --------------------------------------------------------
 
@@ -4447,7 +4538,10 @@ INSERT INTO `log_staff` (`log_str`, `date`) VALUES
 ('STAFF:  Nodislav_Aleksienko je dao oruzje id 24 igracu Nodislav_Aleksienko', '2025-01-02 19:12:01'),
 ('STAFF:  Nodislav_Aleksienko je dao oruzje id 24 igracu Nodislav_Aleksienko', '2025-01-16 21:50:09'),
 ('STAFF: Silva je dodelio Silva VIP nivo 1 na 10 dana', '2025-01-19 19:31:59'),
-('STAFF: Silva je dodelio Silva VIP nivo 2 na 10 dana', '2025-01-19 19:32:23');
+('STAFF: Silva je dodelio Silva VIP nivo 2 na 10 dana', '2025-01-19 19:32:23'),
+('STAFF: Vostic je promenio sifru igraca Ogi', '2025-01-26 01:29:31'),
+('STAFF:  Vostic je postavio staff level 0 igracu Ogi', '2025-01-26 01:35:09'),
+('STAFF:  Vostic je postavio staff level 4 igracu Ogi', '2025-01-26 01:35:58');
 
 -- --------------------------------------------------------
 
@@ -4566,7 +4660,8 @@ INSERT INTO `player_documents` (`character_document`, `NationalID`, `Passport`, 
 (32, 0, 0, 0, 0, 0, 0),
 (33, 0, 0, 0, 0, 0, 0),
 (34, 0, 0, 0, 0, 0, 0),
-(35, 0, 0, 0, 0, 0, 0);
+(35, 0, 0, 0, 0, 0, 0),
+(36, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -4601,7 +4696,8 @@ INSERT INTO `player_electronic` (`character_electronics`, `Dron`, `Battery`, `GP
 (32, 0, 0, 0, -1, '0 | 0 | 0'),
 (33, 0, 0, 0, -1, '0 | 0 | 0'),
 (34, 0, 0, 0, -1, '0 | 0 | 0'),
-(35, 0, 0, 0, -1, '0 | 0 | 0');
+(35, 0, 0, 0, -1, '0 | 0 | 0'),
+(36, 0, 0, 0, -1, '0 | 0 | 0');
 
 -- --------------------------------------------------------
 
@@ -4656,7 +4752,8 @@ INSERT INTO `player_jewlery` (`character_id`, `Gold`) VALUES
 (32, 0),
 (33, 0),
 (34, 0),
-(35, 0);
+(35, 0),
+(36, 0);
 
 -- --------------------------------------------------------
 
@@ -4718,21 +4815,23 @@ CREATE TABLE `player_property` (
   `BCenter` int(11) NOT NULL DEFAULT 0,
   `HouseID` int(11) NOT NULL DEFAULT -1,
   `BusinessID` int(11) NOT NULL,
-  `HotelRoom` float NOT NULL DEFAULT 0
+  `HotelRoom` float NOT NULL DEFAULT 0,
+  `GarageID` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `player_property`
 --
 
-INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`, `HotelRoom`) VALUES
-(4, 0, 0, 0, 0),
-(11, 4, -1, 0, 0),
-(31, 0, -1, 0, 0),
-(32, 0, -1, 0, 0),
-(33, 0, -1, 0, 0),
-(34, 0, -1, 0, 0),
-(35, 0, -1, 0, 0);
+INSERT INTO `player_property` (`pOwner`, `BCenter`, `HouseID`, `BusinessID`, `HotelRoom`, `GarageID`) VALUES
+(4, 0, 0, 0, 0, 0),
+(11, 4, -1, 0, 0, 0),
+(31, 0, -1, 0, 0, 0),
+(32, 0, -1, 0, 0, 0),
+(33, 0, -1, 0, 0, 0),
+(34, 0, -1, 0, 0, 0),
+(35, 0, -1, 0, 0, 0),
+(36, 0, -1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -5276,6 +5375,12 @@ ALTER TABLE `faction_vehicles`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `gates`
+--
+ALTER TABLE `gates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `houses`
 --
 ALTER TABLE `houses`
@@ -5473,7 +5578,7 @@ ALTER TABLE `cash_registers`
 -- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `character_disarms`
@@ -5510,6 +5615,12 @@ ALTER TABLE `faction_police`
 --
 ALTER TABLE `faction_vehicles`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `gates`
+--
+ALTER TABLE `gates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `houses`

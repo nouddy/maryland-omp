@@ -183,7 +183,8 @@ enum e_CHARACTER_DATA {
 	WantedLevel,
 	XP,
 	NeedXP,
-	Score
+	Score,
+	Accent
 }
 new CharacterInfo[MAX_PLAYERS][e_CHARACTER_DATA];
 
@@ -615,6 +616,7 @@ public SQL_PlayerChoseCharacter(playerid, characteridx)
 		cache_get_value_name_int(i, "XP", CharacterInfo[playerid][XP]);
 		cache_get_value_name_int(i, "Score", CharacterInfo[playerid][Score]);
 		cache_get_value_name_int(i, "NeedXP", CharacterInfo[playerid][NeedXP]);
+		cache_get_value_name_int(i, "Accent", CharacterInfo[playerid][Accent]);
 	}
 
 	DestroyPlayerChoseCharacterTextDraws(playerid);
@@ -952,7 +954,8 @@ public OnPlayerSelect3DMenuBox(playerid,MenuID,selected)
 																		cLastZ = %f,\
 																		XP = 0,\
 																		NeedXP = 1250,\
-																		Score = 0", 
+																		Score = 0,\
+																		Accent = 0", 
 																		PlayerInfo[playerid][SQLID],
 																		CharacterInfo[playerid][Name],
 																		CharacterInfo[playerid][Skin],
@@ -991,6 +994,7 @@ public SQL_InsertPlayerCharacter(playerid, characteridx)
 	CharacterInfo[playerid][XP] = 1;
 	CharacterInfo[playerid][NeedXP] = 1250;
 	CharacterInfo[playerid][Score] = 0;
+	CharacterInfo[playerid][Accent] = 0;
 	
 	SetPlayerScore(playerid, CharacterInfo[playerid][Score]);
 
@@ -1101,6 +1105,7 @@ ResetPlayerRegLogVars(playerid)
 	CharacterInfo[playerid][lastPos][0] = 0.0;
 	CharacterInfo[playerid][lastPos][1] = 0.0;
 	CharacterInfo[playerid][lastPos][2] = 0.0;
+	CharacterInfo[playerid][Accent] = 0;
 
 	CharacterInfo[playerid][XP] = 1;
 	CharacterInfo[playerid][NeedXP] = 1250;

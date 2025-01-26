@@ -508,3 +508,87 @@ YCMD:fso(playerid, params[], help)
 
     return Kick(playerid);
 }
+
+// Definicija akcenata
+#define MAX_AKCENTI 8
+new const AccentNames[MAX_AKCENTI][] = {
+    "American",
+    "Latino", 
+    "Colombian",
+    "Italian",
+    "Russian",
+    "British",
+    "German",
+    "French"
+};
+
+YCMD:akcenat(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje meni za izbor akcenta", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new string[512];
+    
+    for(new i = 0; i < MAX_AKCENTI; i++)
+    {
+        if(CharacterInfo[playerid][Accent] == i)
+            format(string, sizeof(string), "%s"c_white"%s "c_server"[Izabrano]\n", string, AccentNames[i]);
+        else
+            format(string, sizeof(string), "%s"c_white"%s\n", string, AccentNames[i]);
+    }
+
+    Dialog_Show(playerid, "dialog_Accent", DIALOG_STYLE_LIST, 
+        ""c_server"Maryland \187; "c_white"Izbor Akcenta",
+        string,
+        "Izaberi", "Izadji");
+
+    return 1;
+}
+
+Dialog:dialog_Accent(playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return 1;
+
+    if(listitem < 0 || listitem >= MAX_AKCENTI)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nevazeci izbor akcenta!");
+
+    // Sacuvaj izabrani akcenat
+    CharacterInfo[playerid][Accent] = listitem;
+
+    // Azuriraj u bazi
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE characters SET Accent = %d WHERE character_id = %d",
+        listitem, GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, query);
+
+    // Obavesti igraca
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspesno ste promenili vas akcenat u: "c_server"%s", 
+        AccentNames[listitem]);
+
+    return 1;
+}
+
+// Pomocna funkcija za dobijanje akcenta igraca
+stock GetPlayerAccentName(playerid)
+{
+    new accentName[32];
+    
+    if(CharacterInfo[playerid][Accent] >= 0 && CharacterInfo[playerid][Accent] < MAX_AKCENTI)
+        format(accentName, sizeof(accentName), "%s", AccentNames[CharacterInfo[playerid][Accent]]);
+    else
+        accentName = "Neutralni";
+        
+    return accentName;
+}
+
+// Funkcija za formatiranje imena sa akcentom
+stock ReturnCharacterNameWithAccent(playerid)
+{
+    new name[MAX_PLAYER_NAME + 32];
+    format(name, sizeof(name), "%s (%s)", ReturnCharacterName(playerid), GetPlayerAccentName(playerid));
+    return name;
+}

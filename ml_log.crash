@@ -1370,3 +1370,11 @@
 [20:12:53] AMX backtrace:
 [20:12:53] #0 001da4e4 in ?? (0, 1, 1, 19159, 2, -1087482397, -1108370020, -1111054349, -1027080193, 0, ... <4 more arguments>) in <unknown>
 [20:12:53] #1 0008016c in public OnPlayerEditAttachedObject (0, 1, 1, 19159, 2, -1087482397, -1108370020, -1111054349, -1027080193, 0, ... <4 more arguments>) in <unknown>
+[01:08:16] Run time error 4: "Array index out of bounds"
+[01:08:16]  Attempted to read/write array element at index 111 in array of size 100
+[01:08:16] AMX backtrace:
+[01:08:16] #0 00a25c70 in ?? (99, 32, 0, 89142492, 24, 89942256, 10010004, 89942428, 89942436, 89942440, ... <16 more arguments>) in <unknown>
+[01:08:16] #1 00000074 in public dialog_dialog_GateOwner () in <unknown>
+[01:08:16] #2 native CallLocalFunction () in Pawn.dll
+[01:08:16] #3 000ae194 in ?? (0, 32700, 1, 0, 89142492) in <unknown>
+[01:08:16] #4 0007c290 in public OnDialogResponse (0, 32700, 1, 0, 89142492) in <unknown>

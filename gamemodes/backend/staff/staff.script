@@ -3598,3 +3598,174 @@ public Count_UpdateTime() {
         gCountTime--;
     }
 }
+
+// Change email command
+// Helper function to validate email format
+stock bool:IsValidEmail(const email[])
+{
+    new len = strlen(email);
+    
+    // Check minimum length and @ symbol
+    if(len < 5 || strfind(email, "@", true) == -1)
+        return false;
+        
+    // Check for @ and . after @
+    new atPos = strfind(email, "@", true);
+    if(atPos == -1 || atPos == 0 || atPos == len-1)
+        return false;
+        
+    // Check for . after @
+    new dotPos = strfind(email, ".", true, atPos);
+    if(dotPos == -1 || dotPos == atPos+1 || dotPos == len-1)
+        return false;
+        
+    return true;
+}
+
+
+YCMD:changeemail(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Menja email igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, email[128];
+    if(sscanf(params, "us[128]", targetid, email))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /setemail [ID/Ime] [novi_email]");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    // Validate email format
+    if(!IsValidEmail(email))
+        return notification.Show(playerid, "GRESKA", "Nevazeci format email adrese!", "!", BOXCOLOR_RED);
+
+    // Update email in database
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE accounts SET Email = '%e' WHERE ID = %d",
+        email, PlayerInfo[targetid][SQLID]);
+    mysql_tquery(SQL, query);
+
+    // Update player's email in memory
+    format(PlayerInfo[targetid][Email], 128, "%s", email);
+
+    // Notify players
+    new string[144];
+    format(string, sizeof(string), "Promenili ste email igracu %s na: %s", 
+        ReturnPlayerName(targetid), email);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je promenio email na: %s", 
+        ReturnPlayerName(playerid), email);
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    // Log the action
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je promenio email igracu %s na: %s", 
+        ReturnPlayerName(playerid), ReturnPlayerName(targetid), email);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:apu(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Stavlja igraca u vozilo kao putnika", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_ASSISTANT)
+        return notification.Show(playerid, "GRESKA", "Samo staff moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid, vehicleid;
+    if(sscanf(params, "ui", targetid, vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/apu [ID/Ime] [ID vozila]");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije na serveru!");
+
+    if(!IsValidVehicle(vehicleid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nevazeci ID vozila!");
+
+    if(IsPlayerInAnyVehicle(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Igrac je vec u vozilu!");
+
+    // Try to find an empty passenger seat (1-3)
+    new seatid = -1;
+    
+    // Check all passenger seats
+    new bool:seats[4];
+    foreach(new i : Player)
+    {
+        if(IsPlayerInVehicle(i, vehicleid))
+        {
+            new currentseat = GetPlayerVehicleSeat(i);
+            if(currentseat >= 0 && currentseat < 4)
+            {
+                seats[currentseat] = true;
+            }
+        }
+    }
+
+    // Find first empty passenger seat (1-3)
+    for(new i = 1; i < 4; i++)
+    {
+        if(!seats[i])
+        {
+            seatid = i;
+            break;
+        }
+    }
+
+    // If no empty passenger seat found, kick a passenger and take their seat
+    if(seatid == -1)
+    {
+        // Find first passenger and kick them
+        foreach(new i : Player)
+        {
+            if(IsPlayerInVehicle(i, vehicleid))
+            {
+                new pseat = GetPlayerVehicleSeat(i);
+                if(pseat > 0) // Don't kick driver
+                {
+                    RemovePlayerFromVehicle(i);
+                    SendClientMessage(i, x_server, "maryland \187; "c_white"Staff vas je izbacio iz vozila.");
+                    seatid = pseat;
+                    break;
+                }
+            }
+        }
+    }
+
+    // If still no seat available, return error
+    if(seatid == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nema slobodnih putnickih mesta u vozilu!");
+
+    // Put player in vehicle
+    PutPlayerInVehicle(targetid, vehicleid, seatid);
+
+    // Notify players
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Stavili ste igraca %s u vozilo ID: %d (Sediste: %d)", 
+        ReturnPlayerName(targetid), vehicleid, seatid);
+    SendClientMessage(targetid, x_server, "maryland \187; "c_white"Staff %s vas je stavio u vozilo", 
+        ReturnPlayerName(playerid));
+
+    // Log action
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je stavio igraca %s u vozilo ID: %d (Sediste: %d)", 
+        ReturnPlayerName(playerid), ReturnPlayerName(targetid), vehicleid, seatid);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}

@@ -41,7 +41,7 @@ hook OnPlayerText(playerid, text[])
 	if(GetPlayerCallStatus(playerid) == CALL_STATUS_ACTIVE) return Y_HOOKS_BREAK_RETURN_0;
 
 	static string[256];
-	format(string,sizeof(string), "%s kaze » %s",ReturnPlayerName(playerid), text);
+	format(string,sizeof(string), "%s kaze » %s",ReturnCharacterNameWithAccent(playerid), text);
 	ProxDetector(playerid, Float:30.0, x_white, string);
 	return Y_HOOKS_BREAK_RETURN_0;
 }
@@ -51,7 +51,7 @@ YCMD:me(playerid, params[], help)
 	new text[80];
 	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/me [Text]");
 	new string[256];
- 	format(string,sizeof(string), "* %s %s",ReturnPlayerName(playerid), text);
+ 	format(string,sizeof(string), "* %s %s",ReturnCharacterName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_purple, string);
 	return 1;
 }
@@ -61,7 +61,7 @@ YCMD:do(playerid, params[], help)
 	new text[80];
 	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/do [Text]");
 	new string[256];
- 	format(string,sizeof(string), "* %s (( %s ))",ReturnPlayerName(playerid), text);
+ 	format(string,sizeof(string), "* %s (( %s ))",ReturnCharacterName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_purple, string);
 	return 1;
 }
@@ -70,7 +70,7 @@ YCMD:b(playerid, params[], help)
 	new text[80];
 	if(sscanf(params, "s[80]", text)) return SendClientMessage(playerid, x_usage,"KORISCENJE \187; "c_white"/b [Text]");
 	new string[256];
- 	format(string,sizeof(string), "{C0C0C0}(( [OOC] "c_white"%s kaze \187; %s {C0C0C0}))",ReturnPlayerName(playerid), text);
+ 	format(string,sizeof(string), "{C0C0C0}(( [OOC] "c_white"%s kaze \187; %s {C0C0C0}))",ReturnCharacterName(playerid), text);
  	ProxDetector(playerid, Float:30.0, x_server, string);
 	return 1;
 }
@@ -97,7 +97,7 @@ YCMD:w(playerid, params[], help)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste dovoljno blizu tog igraca!");
 
     new string[256];
-    format(string, sizeof(string), "* %s sapuce %s: %s", ReturnPlayerName(playerid), ReturnPlayerName(targetid), text);
+    format(string, sizeof(string), "* %s sapuce %s: %s", ReturnCharacterName(playerid), ReturnPlayerName(targetid), text);
     ProxDetector(playerid, 5.0, x_purple, string);
     
     return 1;
