@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2025 at 01:37 AM
+-- Generation Time: Jan 26, 2025 at 11:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,6 +71,30 @@ INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `Reg
 (37, 'Frostyslav_Saints', '123456', 0, '2025-01-17 20:14:33', '2025-01-17 20:14:33', 'fuck@off3.com'),
 (38, 'Fjerit_Olsun', 'kuracgejming', 0, '2025-01-19 18:30:20', '2025-01-19 18:30:20', 'feridAllah@skibidi.rizz'),
 (39, 'Djura_Ajradinovski', 'skibidisolja', 0, '2025-01-19 20:54:52', '2025-01-19 20:54:52', 'skibidi@rizz.gyat');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `atms`
+--
+
+CREATE TABLE `atms` (
+  `id` int(11) NOT NULL,
+  `model` int(11) NOT NULL DEFAULT 19324,
+  `pos_x` float NOT NULL,
+  `pos_y` float NOT NULL,
+  `pos_z` float NOT NULL,
+  `rot_x` float NOT NULL,
+  `rot_y` float NOT NULL,
+  `rot_z` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `atms`
+--
+
+INSERT INTO `atms` (`id`, `model`, `pos_x`, `pos_y`, `pos_z`, `rot_x`, `rot_y`, `rot_z`) VALUES
+(1, 19324, 805.339, -1320.21, 13.1228, 0, 0, 53.2619);
 
 -- --------------------------------------------------------
 
@@ -190,7 +214,7 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`, `Accent`) VALUES
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-26 01:25:50', 800.247, -1326.85, 13.3828, 0, 0, 0, 244, 3, 2813, 2),
+(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-26 11:16:10', 803.26, -1320.02, 13.3828, 0, 0, 0, 244, 3, 2813, 2),
 (11, 13, 'Ferid_Olsun', 20, 0, 0, 0, 0, 6181270, 0, 0, 0, '2025-01-20 23:11:20', 1671.13, -1093.33, 23.9062, 0, 0, 0, 108, 2, 2813, 0),
 (24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250, 0),
 (25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 1, 0, 1250, 0),
@@ -832,7 +856,8 @@ INSERT INTO `log_anticheat` (`log_str`, `date`) VALUES
 ('ANTICHEAT-LOG:  Silva se pokusao prijaviti kao RCON | IP: -1532966630', '2025-01-19 21:55:02'),
 ('JAIL | Silva je pusten iz alcatraza! | ODSLUZENA KAZNA', '2025-01-19 21:57:20'),
 ('JAIL | Djura_Ajradinovski je pusten iz alcatraza! | ODSLUZENA KAZNA', '2025-01-19 22:08:11'),
-('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2025-01-20 22:47:00');
+('ANTICHEAT-LOG:  Nodislav_Aleksienko se uspjesno prijavio kao RCON | IP: 16777343', '2025-01-20 22:47:00'),
+('ANTICHEAT-LOG:  Vostic se uspjesno prijavio kao RCON | IP: 16777343', '2025-01-26 10:39:36');
 
 -- --------------------------------------------------------
 
@@ -3829,7 +3854,35 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Vostic je iskoristio komandu /setstaff 1 4', '2025-01-26 01:35:58'),
 ('COMMAND:  Ogi je iskoristio komandu /editgate', '2025-01-26 01:36:09'),
 ('COMMAND:  Ogi je iskoristio komandu /editgate', '2025-01-26 01:36:11'),
-('COMMAND:  Ogi je iskoristio komandu /bring 1', '2025-01-26 01:36:46');
+('COMMAND:  Ogi je iskoristio komandu /bring 1', '2025-01-26 01:36:46'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:39:30'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:39:37'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:39:55'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:51:25'),
+('COMMAND:  Vostic je iskoristio komandu /slap 0', '2025-01-26 10:51:40'),
+('COMMAND:  Vostic je iskoristio komandu /slap 0', '2025-01-26 10:52:48'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:52:52'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 10:57:41'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:00:17'),
+('COMMAND:  Vostic je iskoristio komandu /deleteatm', '2025-01-26 11:04:12'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 11:04:20'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:04:26'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:04:39'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:04:54'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:04:56'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:04:57'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:05:12'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:08:00'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:10:47'),
+('COMMAND:  Vostic je iskoristio komandu /deletatm', '2025-01-26 11:11:04'),
+('COMMAND:  Vostic je iskoristio komandu /deletatm', '2025-01-26 11:11:06'),
+('COMMAND:  Vostic je iskoristio komandu /deleteatm', '2025-01-26 11:11:11'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 11:11:16'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:11:27'),
+('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 11:15:07'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:15:15'),
+('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:15:17'),
+('COMMAND:  Vostic je iskoristio komandu /cc', '2025-01-26 11:16:04');
 
 -- --------------------------------------------------------
 
@@ -4441,7 +4494,15 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:29:24'),
 ('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:29:57'),
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 01:32:22'),
-('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:33:48');
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-26 01:33:48'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 10:39:01'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 10:51:02'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 10:57:17'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:03:47'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:07:34'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:10:23'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:13:35'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:14:44');
 
 -- --------------------------------------------------------
 
@@ -4541,7 +4602,9 @@ INSERT INTO `log_staff` (`log_str`, `date`) VALUES
 ('STAFF: Silva je dodelio Silva VIP nivo 2 na 10 dana', '2025-01-19 19:32:23'),
 ('STAFF: Vostic je promenio sifru igraca Ogi', '2025-01-26 01:29:31'),
 ('STAFF:  Vostic je postavio staff level 0 igracu Ogi', '2025-01-26 01:35:09'),
-('STAFF:  Vostic je postavio staff level 4 igracu Ogi', '2025-01-26 01:35:58');
+('STAFF:  Vostic je postavio staff level 4 igracu Ogi', '2025-01-26 01:35:58'),
+('STAFF:  Vostic je slapovao igraca Vostic', '2025-01-26 10:51:40'),
+('STAFF:  Vostic je slapovao igraca Vostic', '2025-01-26 10:52:48');
 
 -- --------------------------------------------------------
 
@@ -5273,6 +5336,12 @@ ALTER TABLE `accounts`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `atms`
+--
+ALTER TABLE `atms`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `bankaccounts`
 --
 ALTER TABLE `bankaccounts`
@@ -5549,6 +5618,12 @@ ALTER TABLE `warns`
 --
 ALTER TABLE `accounts`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- AUTO_INCREMENT for table `atms`
+--
+ALTER TABLE `atms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `bankaccounts`
