@@ -4164,3 +4164,79 @@ YCMD:promenipol(playerid, params[], help)
 
     return 1;
 }
+
+YCMD:vpnlist(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Prikazuje sve accounte na istoj IP adresi", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_STAFF)
+        return notification.Show(playerid, "Greska", "Samo staff lvl. 2+ moze ovo!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return notification.Show(playerid, "KORISCENJE", "/vpnlist [ID/Ime]", "?", BOXCOLOR_BLUE);
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    new ip[16];
+    GetPlayerIp(targetid, ip, sizeof(ip));
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT a.Username, c.cName, a.last_ip \
+        FROM accounts a \
+        LEFT JOIN characters c ON a.ID = c.account_id \
+        WHERE a.last_ip = '%e' \
+        ORDER BY a.Username ASC", ip);
+    mysql_tquery(SQL, query, "OnVPNListLoad", "dd", playerid, targetid);
+
+    return 1;
+}
+
+forward OnVPNListLoad(playerid, targetid);
+public OnVPNListLoad(playerid, targetid)
+{
+    new rows = cache_num_rows();
+    if(!rows)
+        return notification.Show(playerid, "INFO", "Nema drugih accounta na ovoj IP adresi!", "i", BOXCOLOR_BLUE);
+
+    new string[1024], username[24], charname[MAX_PLAYER_NAME], ip[16];
+    new title[64];
+
+    GetPlayerIp(targetid, ip, sizeof(ip));
+    format(title, sizeof(title), "Accounti na IP: %s (%d pronadjeno)", ip, rows);
+
+    format(string, sizeof(string), "Username\tCharacter Name\n");
+    
+    for(new i = 0; i < rows; i++)
+    {
+        cache_get_value_name(i, "Username", username, sizeof(username));
+        cache_get_value_name(i, "cName", charname, sizeof(charname));
+        
+        format(string, sizeof(string), "%s%s\t%s\n", 
+            string, 
+            username,
+            (strlen(charname) > 0) ? charname : "Nema karaktera"
+        );
+    }
+
+    Dialog_Show(playerid, "dialog_VPNList", DIALOG_STYLE_TABLIST_HEADERS, title, string, "Zatvori", "");
+
+    // Log akcije
+    static log_str[128];
+    format(log_str, sizeof log_str, "STAFF: %s je proverio VPN listu za IP %s (%s)", 
+        ReturnPlayerName(playerid), ip, ReturnPlayerName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+Dialog:dialog_VPNList(playerid, response, listitem, inputtext[])
+{
+    return 1; // Dialog je samo za prikaz
+}

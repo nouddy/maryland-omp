@@ -69,7 +69,7 @@ enum e_VEHICLE_DATA {
 
 	Float:vPos[4],
 
-	vRegDate,
+	vRegDate[24],
 	vOil,
 	vRange,
 	vRangeKM,
@@ -121,7 +121,7 @@ public LoadVehicleData() {
 			cache_get_value_name_float(i, "vPosZ", eVehicle[i][vPos][2]);
 			cache_get_value_name_float(i, "vPosA", eVehicle[i][vPos][3]);
 
-			cache_get_value_name_int(i, "vRegDate", eVehicle[i][vRegDate]);
+			cache_get_value_name(i, "vRegDate", eVehicle[i][vRegDate], 24);
 			cache_get_value_name_int(i, "vOil", eVehicle[i][vOil]);
 			cache_get_value_name_int(i, "vRange", eVehicle[i][vRange]);
 			cache_get_value_name_int(i, "vRangeKM", eVehicle[i][vRangeKM]);
@@ -281,7 +281,7 @@ YCMD:createvehicle(playerid, params[], help) {
 
 	strmid(eVehicle[id][vPlate], plate_str, 0, strlen(plate_str), MAX_PLATE_LEN);
 
-	eVehicle[id][vRegDate] = 0;
+	eVehicle[id][vRegDate] = EOS;
 	eVehicle[id][vOil] = 100;
 	eVehicle[id][vRange] = 0;
 	eVehicle[id][vRangeKM] = 0;
@@ -311,7 +311,7 @@ YCMD:createvehicle(playerid, params[], help) {
 	mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vOwnerType`,`vModel`, `Color1`, `Color2`, `vPlate`, \
 								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, \
 									`vFuelType`, `vAlarm`, `vXenon`, `vLock`, `vNitro`, `vState`) \
-									VALUES ('%d', '%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '0', '100', '0', '0', '100', '%d', '0', '0', '0', '0', '%d')",
+									VALUES ('%d', '%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', NOW(), '100', '0', '0', '100', '%d', '0', '0', '0', '0', '%d')",
 									eVehicle[id][vOwner],
 									eVehicle[id][vOwnerType],
 									eVehicle[id][vModel], eVehicle[id][vColor][0], eVehicle[id][vColor][1],
@@ -323,113 +323,179 @@ YCMD:createvehicle(playerid, params[], help) {
 }
 
 YCMD:v(playerid, params[], help) {
+    if(!CharacterHasVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete vozilo!");
 
-	if(!CharacterHasVehicle(playerid))
-		return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete vozilo!");
-
-	Dialog_Show(playerid, "dialog_vehicleOptions", DIALOG_STYLE_LIST, ""c_server"Maryland \187; "c_ltorange"Vehicle Panel", 
-						                                              ""c_server"#1 \187; "c_white"Otkljucaj - Zakljucaj\n\
-																	  "c_server"#2 \187; "c_white"Lociraj\n\
-																	  "c_server"#3 \187; "c_white"Parkiraj", "Odaberi", "Odustani");
-
-	return 1;
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT v.vID, v.vModel, v.vPlate \
+        FROM vehicles v \
+        WHERE v.vOwner = %d \
+        ORDER BY v.vID ASC", 
+        GetCharacterSQLID(playerid)
+    );
+    mysql_tquery(SQL, query, "ShowPlayerVehicles", "d", playerid);
+    return 1;
 }
 
-Dialog:dialog_vehicleOptions(playerid, response, listitem, string:inputtext[]) {
+forward ShowPlayerVehicles(playerid);
+public ShowPlayerVehicles(playerid)
+{
+    new rows = cache_num_rows();
+    if(!rows) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete vozilo!");
 
-	if(response) {
+    new dialog[512], vehicleIDs[32]; // Niz za ?uvanje ID-eva
+    
+    for(new i = 0; i < rows; i++) {
+        new veh_model, plate[MAX_PLATE_LEN], veh_id;
+        cache_get_value_name_int(i, "vID", veh_id);
+        cache_get_value_name_int(i, "vModel", veh_model);
+        cache_get_value_name(i, "vPlate", plate, sizeof(plate));
+        
+        vehicleIDs[i] = veh_id; // ?uvamo ID
+        format(dialog, sizeof(dialog), "%s%d\t%s (%s)\n", 
+            dialog, i + 1, ReturnVehicleModelName(veh_model), plate);
+    }
+    
+    SetPVarInt(playerid, "VehicleListCount", rows);
+    for(new i = 0; i < rows; i++) {
+        new varname[32];
+        format(varname, sizeof(varname), "VehicleID_%d", i);
+        SetPVarInt(playerid, varname, vehicleIDs[i]);
+    }
 
-		switch(listitem) {
-
-			case 0: {
-
-				if(!IsPlayerNearPersonalVehicle(playerid))
-					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se blizu vozila!");
-
-				foreach(new i : iter_Vehicles) {
-
-					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
-
-						if(eVehicle[i][vLock]) {
-							
-							eVehicle[i][vLock] = false;
-							SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste vozilo!");
-							new q[128];
-							mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vLock` = '%d' WHERE `vID` = '%d'", eVehicle[i][vLock], eVehicle[i][vID]);
-							mysql_tquery(SQL, q);
-							break;
-						}
-
-						if(!eVehicle[i][vLock]) {
-							
-							eVehicle[i][vLock] = true;
-							SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zakljucali ste vozilo!");
-							new q[128];
-							mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vLock` = '%d' WHERE `vID` = '%d'", eVehicle[i][vLock], eVehicle[i][vID]);
-							mysql_tquery(SQL, q);
-							break;
-						}
-						break;
-					}
-				}
-			}
-
-			case 1: {
-
-				
-				foreach(new i : iter_Vehicles) {
-
-					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
-						
-						static Float:tmpPos[3];
-						GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
-						SetPlayerCheckpoint(playerid, tmpPos[0], tmpPos[1], tmpPos[2], 3.50);
-						SendClientMessage(playerid, x_server, "maryland \187; "c_white"Locirali ste vozilo, marker vam je oznacen na mapi!");
-
-						pVehicleLocate[playerid] = true;
-
-						break;
-					}
-				}
-
-			}
-
-			case 2: {
-				
-				if(!IsPlayerInPersonalVehicle(playerid))
-					return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u vasem vozilu!");
-
-				foreach(new i : iter_Vehicles) {
-
-					if(GetCharacterSQLID(playerid) == eVehicle[i][vOwner]) {
-						
-						static Float:tmpPos[4];
-						GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
-						GetVehicleZAngle(pvVehicle[i], tmpPos[3]);
-
-						eVehicle[i][vPos][0] = tmpPos[0];
-						eVehicle[i][vPos][1] = tmpPos[1];
-						eVehicle[i][vPos][2] = tmpPos[2];
-						eVehicle[i][vPos][3] = tmpPos[3];
-
-						
-
-						SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste parkirali vozilo!");
-
-						new q[244];
-						mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vPosX` = '%f', `vPosY` = '%f', `vPosZ` = '%f', `vPosA` = '%f' WHERE `vID` = '%d'",
-						 tmpPos[0], tmpPos[1], tmpPos[2], tmpPos[3], eVehicle[i][vID]);
-						mysql_tquery(SQL, q, "Vehicle_PreloadPosition", "d", i);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	return 1;
+    Dialog_Show(playerid, "dialog_selectVehicle", DIALOG_STYLE_TABLIST, 
+        ""c_server"Maryland \187; "c_ltorange"Odaberi Vozilo", 
+        dialog, 
+        "Odaberi", "Izlaz"
+    );
+    return 1;
 }
 
+Dialog:dialog_selectVehicle(playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return 1;
+
+    new varname[32];
+    format(varname, sizeof(varname), "VehicleID_%d", listitem);
+    new veh_id = GetPVarInt(playerid, varname);
+
+    foreach(new i : iter_Vehicles) {
+        if(eVehicle[i][vID] == veh_id && eVehicle[i][vOwner] == GetCharacterSQLID(playerid)) {
+            printf("Debug: Found vehicle in iterator, owner matches"); // Debug
+            
+            new string[512];
+            format(string, sizeof(string),
+                ""c_server"#1 \187; "c_white"Otkljucaj - Zakljucaj\n\
+                "c_server"#2 \187; "c_white"Lociraj\n\
+                "c_server"#3 \187; "c_white"Parkiraj\n\
+                "c_server"#4 \187; "c_white"Status registracije"
+            );
+            
+            SetPVarInt(playerid, "SelectedVehID", veh_id); // ?uvamo ID za vehicleOptions dialog
+            
+            Dialog_Show(playerid, "dialog_vehicleOptions", DIALOG_STYLE_LIST, 
+                ""c_server"Maryland \187; "c_ltorange"Vehicle Panel", 
+                string, 
+                "Odaberi", "Nazad"
+            );
+            return 1;
+        }
+    }
+    return 1;
+}
+
+Dialog:dialog_vehicleOptions(playerid, response, listitem, string:inputtext[])
+{
+    if(!response) return 1;
+
+    new veh_id = GetPVarInt(playerid, "SelectedVehID");
+    
+    foreach(new i : iter_Vehicles) {
+        if(eVehicle[i][vID] == veh_id && eVehicle[i][vOwner] == GetCharacterSQLID(playerid)) {
+            switch(listitem) {
+                case 0: { // Otkljucaj/Zakljucaj
+                    if(eVehicle[i][vLock]) {
+                        eVehicle[i][vLock] = false;
+                        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Otkljucali ste vozilo!");
+                    } else {
+                        eVehicle[i][vLock] = true;
+                        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zakljucali ste vozilo!");
+                    }
+                    // Update u bazi
+                    new q[128];
+                    mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vLock` = '%d' WHERE `vID` = '%d'", eVehicle[i][vLock], veh_id);
+                    mysql_tquery(SQL, q);
+                }
+                case 1: { // Lociraj
+                    static Float:tmpPos[3];
+                    GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+                    SetPlayerCheckpoint(playerid, tmpPos[0], tmpPos[1], tmpPos[2], 3.50);
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Locirali ste vozilo, marker vam je oznacen na mapi!");
+                    pVehicleLocate[playerid] = true;
+                }
+                case 2: { // Parkiraj
+                    if(!IsPlayerInVehicle(playerid, pvVehicle[i]))
+                        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne nalazite se u vasem vozilu!");
+
+                    static Float:tmpPos[4];
+                    GetVehiclePos(pvVehicle[i], tmpPos[0], tmpPos[1], tmpPos[2]);
+                    GetVehicleZAngle(pvVehicle[i], tmpPos[3]);
+
+                    eVehicle[i][vPos][0] = tmpPos[0];
+                    eVehicle[i][vPos][1] = tmpPos[1];
+                    eVehicle[i][vPos][2] = tmpPos[2];
+                    eVehicle[i][vPos][3] = tmpPos[3];
+
+                    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspjesno ste parkirali vozilo!");
+
+                    new q[244];
+                    mysql_format(SQL, q, sizeof q, "UPDATE `vehicles` SET `vPosX` = '%f', `vPosY` = '%f', `vPosZ` = '%f', `vPosA` = '%f' WHERE `vID` = '%d'",
+                        tmpPos[0], tmpPos[1], tmpPos[2], tmpPos[3], veh_id);
+                    mysql_tquery(SQL, q);
+                }
+                case 3: { // Status registracije
+                    new query[512]; // Pove?ana veli?ina
+                    mysql_format(SQL, query, sizeof(query), 
+                        "SELECT \
+                            CASE \
+                                WHEN vRegDate IS NULL THEN 'Vozilo nije registrovano' \
+                                WHEN NOW() > vRegDate THEN 'Registracija je istekla' \
+                                ELSE CONCAT('Registracija istice za: ', DATEDIFF(vRegDate, NOW()), ' dana') \
+                            END as reg_status \
+                        FROM vehicles WHERE vID = %d", 
+                        veh_id
+                    );
+                    mysql_tquery(SQL, query, "ShowVehicleRegStatus", "d", playerid);
+                }
+            }
+            return 1;
+        }
+    }
+    return 1;
+}
+
+forward ShowVehicleRegStatus(playerid);
+public ShowVehicleRegStatus(playerid)
+{
+    new reg_status[128];
+    cache_get_value_name(0, "reg_status", reg_status, sizeof(reg_status));
+
+    new string[256];
+    format(string, sizeof(string), ""c_server"Status registracije\n\n"c_white"%s", reg_status);
+
+    Dialog_Show(playerid, "dialog_regStatus", DIALOG_STYLE_MSGBOX, 
+        ""c_server"Maryland \187; "c_ltorange"Status Registracije", 
+        string, 
+        "Nazad", ""
+    );
+    return 1;
+}
+
+Dialog:dialog_regStatus(playerid, response, listitem, string:inputtext[])
+{
+    return 1;
+}
 
 hook OnPlayerEnterCheckpoint(playerid) {
 

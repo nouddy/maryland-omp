@@ -126,7 +126,16 @@ public Dealership_StreamVehicle(id, playerid) {
 	SetVehicleNumberPlate(pvVehicle[id], plate_string);
 
     vehicleBought[playerid] = CreateDynamicCP(eVehicle[id][vPos][0], eVehicle[id][vPos][1], eVehicle[id][vPos][2], 3.45, -1, -1, playerid, 70.0);
-    SendClientMessage(playerid, x_red, "Dealership // "c_white"Uspjesno ste kupili vozilo, oznaceno vam je crvenim markerom na lokaciji!");
+    
+    // Izmenjene poruke u zavisnosti od custom tablica
+    if(e_CUSTOM_PLATE[playerid]) {
+        SendClientMessage(playerid, x_red, "Dealership // "c_white"Uspjesno ste kupili vozilo, oznaceno vam je crvenim markerom na lokaciji!");
+        SendClientMessage(playerid, x_red, "Dealership // "c_white"Vase vozilo je registrovano na 30 dana.");
+    } else {
+        SendClientMessage(playerid, x_red, "Dealership // "c_white"Uspjesno ste kupili vozilo, oznaceno vam je crvenim markerom na lokaciji!");
+        SendClientMessage(playerid, x_red, "Dealership // "c_white"UPOZORENJE: Vase vozilo nije registrovano! Cuvajte se policije!");
+        SendClientMessage(playerid, x_red, "Dealership // "c_white"Vozilo ima probne tablice, posetite najblizi DMV za registraciju.");
+    }
 
     TogglePlayerControllable(playerid, true);
     SetCameraBehindPlayer(playerid);
@@ -138,6 +147,7 @@ public Dealership_StreamVehicle(id, playerid) {
     SetPlayerVirtualWorld(playerid, 0);
 
 	Iter_Add(iter_Vehicles, id);
+    return 1;
 }
 
 hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
@@ -1135,11 +1145,21 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         eVehicle[id][vColor][0] = eVehicle[id][vColor][1] = e_CHOSEN_COLOUR[playerid];
 
         new plate_str[MAX_PLATE_LEN];
-        format(plate_str, sizeof plate_str, "%s", ReturnPlayerName(playerid));
-
-        eVehicle[id][vPlate] = plate_str;
-
-        eVehicle[id][vRegDate] = gettime()+2592000; // danasnji datum + 30 dana sto znaci da ce trajati do 19.11.2023 / exmp.
+        // Generisanje tablica u zavisnosti od lokacije i custom opcije
+        if(e_CUSTOM_PLATE[playerid]) {
+            format(plate_str, sizeof plate_str, "%s", ReturnPlayerName(playerid));
+        } else {
+            if(IsPlayerInDynamicArea(playerid, italy_Area1) || IsPlayerInDynamicArea(playerid, italy_Area2)) {
+                format(plate_str, sizeof plate_str, "IT-%04d", id);
+            }
+            else if(IsPlayerInDynamicArea(playerid, egypt_Area1) || IsPlayerInDynamicArea(playerid, egypt_Area2)) {
+                format(plate_str, sizeof plate_str, "EG-%04d", id);
+            }
+            else {
+                format(plate_str, sizeof plate_str, "ML-%04d", id);
+            }
+        }
+        format(eVehicle[id][vPlate], MAX_PLATE_LEN, "%s", plate_str);
 
         new idx = random( sizeof sz_dealershipParking );
 
@@ -1166,11 +1186,12 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
         mysql_format(SQL, q, sizeof q, "INSERT INTO `vehicles` (`vOwner`, `vModel`, `Color1`, `Color2`, `vPlate`, \
 								    `vPosX`, `vPosY`, `vPosZ`, `vPosA`, `vRegDate`, `vOil`, `vRange`, `vRangeKM`, `vFuel`, `vFuelType`, `vAlarm`, `vXenon`, \
                                     `vLock`, `vNitro`, `vState`) \
-									VALUES ('%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', '%d', '100', '0', '0', '100', '%d', '%d', '%d', '0', '%d', '%d')",
+									VALUES ('%d', '%d', '%d', '%d', '%e', '%f', '%f', '%f', '%f', %s, '100', '0', '0', '100', '%d', '%d', '%d', '0', '%d', '%d')",
                                     GetCharacterSQLID(playerid), eVehicle[id][vModel], eVehicle[id][vColor][0], 
                                     eVehicle[id][vColor][1], eVehicle[id][vPlate], eVehicle[id][vPos][0],
                                     eVehicle[id][vPos][1], eVehicle[id][vPos][2], eVehicle[id][vPos][3], 
-                                    eVehicle[id][vRegDate], eVehicle[id][vFuelType], e_CHOSEN_ALARM[playerid], e_CHOSEN_XENON[playerid], e_CHOSEN_NITRO[playerid], eVehicle[id][vState]);
+                                    e_CUSTOM_PLATE[playerid] ? "DATE_ADD(NOW(), INTERVAL 30 DAY)" : "NULL", // Ako ima custom tablice, registracija 30 dana, ako ne NULL
+                                    eVehicle[id][vFuelType], e_CHOSEN_ALARM[playerid], e_CHOSEN_XENON[playerid], e_CHOSEN_NITRO[playerid], eVehicle[id][vState]);
 	    mysql_tquery(SQL, q, "Dealership_StreamVehicle", "dd", id, playerid);
     }
 

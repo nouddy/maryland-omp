@@ -21,7 +21,7 @@
 
 // Konstante
 #define MAX_STREETS         1000
-#define STREET_PRICE       50000  // Osnovna cena ulice
+#define STREET_PRICE       50000.0  // Osnovna cena ulice
 #define STREET_LABEL_DRAW   75.0  // Razdaljina sa koje se vidi label
 
 // Enumerator za podatke o ulici
@@ -30,7 +30,7 @@ enum E_STREET_DATA
     street_ID,
     street_Name[64],
     street_OwnerID,
-    street_Price,
+    Float:street_Price,
     Float:street_X,
     Float:street_Y,
     Float:street_Z,
@@ -63,7 +63,7 @@ public OnStreetsLoad()
         cache_get_value_name_int(i, "street_id", StreetInfo[streetid][street_ID]);
         cache_get_value_name(i, "name", StreetInfo[streetid][street_Name], 64);
         cache_get_value_name_int(i, "owner_id", StreetInfo[streetid][street_OwnerID]);
-        cache_get_value_name_int(i, "price", StreetInfo[streetid][street_Price]);
+        cache_get_value_name_float(i, "price", StreetInfo[streetid][street_Price]);
         cache_get_value_name_float(i, "pos_x", StreetInfo[streetid][street_X]);
         cache_get_value_name_float(i, "pos_y", StreetInfo[streetid][street_Y]);
         cache_get_value_name_float(i, "pos_z", StreetInfo[streetid][street_Z]);
@@ -89,8 +89,8 @@ stock UpdateStreetLabel(streetid)
     
     if(StreetInfo[streetid][street_OwnerID] == 0)
     {
-        format(string, sizeof(string), "%s{FFFFFF}Vlasnik: {A9A9A9}Drzava\n{87CEEB}/buystreet {FFFFFF}(%s)", 
-            string, FormatNumber(StreetInfo[streetid][street_Price]));
+        format(string, sizeof(string), "%s{FFFFFF}Vlasnik: {A9A9A9}Drzava\n{87CEEB}/buystreet {FFFFFF}(%d)", 
+            string, StreetInfo[streetid][street_Price]);
     }
     else
     {
@@ -212,7 +212,7 @@ YCMD:sellstreet(playerid, params[], help)
     if(StreetInfo[streetid][street_OwnerID] != GetCharacterSQLID(playerid))
         return notification.Show(playerid, "GRESKA", "Niste vlasnik ove ulice!", "!", BOXCOLOR_RED);
 
-    new sellPrice = StreetInfo[streetid][street_Price] / 2; // 50% od originalne cene
+    new Float:sellPrice = StreetInfo[streetid][street_Price] / 2; // 50% od originalne cene
     GivePlayerMoney(playerid, sellPrice);
     StreetInfo[streetid][street_OwnerID] = 0;
 

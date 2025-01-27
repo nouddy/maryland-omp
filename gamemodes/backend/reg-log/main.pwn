@@ -159,7 +159,7 @@ enum PlayerInformation
 	RegisterDate[50],
 	Email[50],
 	SpecialRank,        // Specijalni rank
-    bool:TagEnabled    // Da li je tag uklju?en
+    bool:TagEnabled,    // Da li je tag uklju?en
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 
@@ -468,6 +468,15 @@ forward SQL_InsertAccount(playerid);
 public SQL_InsertAccount(playerid)
 {
 	PlayerInfo[playerid][SQLID] = cache_insert_id();
+
+	// U login callback-u nakon uspešnog logina
+	new ip[16];
+	new query[128];
+	GetPlayerIp(playerid, ip, sizeof(ip));
+	mysql_format(SQL, query, sizeof(query), "UPDATE accounts SET last_ip = '%e' WHERE ID = %d", 
+		ip, PlayerInfo[playerid][SQLID]);
+	mysql_tquery(SQL, query);
+
 	if(PlayerInfo[playerid][SQLID] == -1)
 	{
 		SendClientMessage(playerid, -1, "Desila se greska prilikom kreiranja naloga. Reconnect i pokusajte ponovo.");		
