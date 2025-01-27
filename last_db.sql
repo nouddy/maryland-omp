@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2025 at 11:21 AM
+-- Generation Time: Jan 27, 2025 at 02:05 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,43 +34,44 @@ CREATE TABLE `accounts` (
   `Staff` int(11) NOT NULL DEFAULT 0,
   `LastLogin` timestamp NOT NULL DEFAULT current_timestamp(),
   `RegisterDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Email` varchar(50) NOT NULL DEFAULT '@gmail.com'
+  `Email` varchar(50) NOT NULL DEFAULT '@gmail.com',
+  `SpecialRank` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `RegisterDate`, `Email`) VALUES
-(11, 'Frosty', '123456', 4, '2023-11-29 17:25:33', '2023-11-29 17:25:33', 'fuck@off.com'),
-(12, 'Nodislav', 'dino9099', 4, '2023-11-30 18:06:44', '2023-11-30 18:06:44', 'dino@mailer.com'),
-(13, 'Nodislav_Aleksienko', 'ferid420', 4, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com'),
-(14, 'Vostic', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com'),
-(15, 'Ogi', '123456', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com'),
-(16, 'Capital_Camora', 'ichbruderman1', 4, '2023-12-02 17:52:35', '2023-12-02 17:52:35', 'capital@samp.com'),
-(17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com'),
-(18, 'djasa', '401253', 0, '2023-12-03 12:45:24', '2023-12-03 12:45:24', 'lazarradisavljevic5@gmail.com'),
-(19, 'Klaus', 'klaus021', 4, '2023-12-03 13:51:35', '2023-12-03 13:51:35', 'dada@gmail.com'),
-(20, 'Darko_Jovanovic', 'durant123', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com'),
-(21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com'),
-(22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com'),
-(23, 'Vostic_Dev', 'Voki23', 0, '2024-10-28 15:42:50', '2024-10-28 15:42:50', 'vostic@gmail.com'),
-(24, 'Daco_Delahunt', 'alemrjgh', 0, '2024-12-03 19:06:09', '2024-12-03 19:06:09', 'alem.cokoja@gmail.com'),
-(25, 'Eros_Bosandzeros', '123321', 0, '2024-12-03 19:06:10', '2024-12-03 19:06:10', 'dsad@gmail.com'),
-(26, 'Silva', '123321', 4, '2024-12-03 19:07:11', '2024-12-03 19:07:11', 'dsag@gmail.com'),
-(27, 'Silva_Rose', 'Moosy1312', 0, '2024-12-07 22:46:46', '2024-12-07 22:46:46', 'kurac@gmail.com'),
-(28, 'Casey', '123456', 5, '2024-12-07 22:50:11', '2024-12-07 22:50:11', 'caseymacka@whiskas.com'),
-(29, 'Leon_Skandy', '123456', 5, '2024-12-07 23:13:21', '2024-12-07 23:13:21', '@.com'),
-(30, 'Midori_Smith', '123123', 0, '2024-12-07 23:13:40', '2024-12-07 23:13:40', 'midori123@gmail.com'),
-(31, 'Midori_Test', '123123', 0, '2024-12-07 23:16:34', '2024-12-07 23:16:34', 'dasdasd@gmail.com'),
-(32, 'Frenkie_Deep', 'Burek12', 0, '2024-12-22 19:48:07', '2024-12-22 19:48:07', 'eldarhrnjictrovo@gmail.com'),
-(33, 'Filip_Panic', 'feridKruh', 0, '2024-12-25 16:33:55', '2024-12-25 16:33:55', 'oasndnoasdnoa@massdk'),
-(34, 'Gobejla_West', 'kokolo420', 0, '2024-12-26 14:32:38', '2024-12-26 14:32:38', 'ferid@kruh.ba'),
-(35, 'Pinky_Test', '123123123', 0, '2025-01-01 19:58:30', '2025-01-01 19:58:30', 'test@gmail.com'),
-(36, 'Frosty_Saints', '1234567', 0, '2025-01-01 20:16:08', '2025-01-01 20:16:08', 'fuckoff@forreal.com'),
-(37, 'Frostyslav_Saints', '123456', 0, '2025-01-17 20:14:33', '2025-01-17 20:14:33', 'fuck@off3.com'),
-(38, 'Fjerit_Olsun', 'kuracgejming', 0, '2025-01-19 18:30:20', '2025-01-19 18:30:20', 'feridAllah@skibidi.rizz'),
-(39, 'Djura_Ajradinovski', 'skibidisolja', 0, '2025-01-19 20:54:52', '2025-01-19 20:54:52', 'skibidi@rizz.gyat');
+INSERT INTO `accounts` (`ID`, `Username`, `Password`, `Staff`, `LastLogin`, `RegisterDate`, `Email`, `SpecialRank`) VALUES
+(11, 'Frosty', '123456', 4, '2023-11-29 17:25:33', '2023-11-29 17:25:33', 'fuck@off.com', 0),
+(12, 'Nodislav', 'dino9099', 4, '2023-11-30 18:06:44', '2023-11-30 18:06:44', 'dino@mailer.com', 0),
+(13, 'Nodislav_Aleksienko', 'ferid420', 4, '0000-00-00 00:00:00', '2023-12-01 09:19:52', 'ferid@mailer.com', 0),
+(14, 'Vostic', 'Vostica23', 4, '2023-12-02 17:08:50', '2023-12-02 17:08:50', 'silent@gmail.com', 1),
+(15, 'Ogi', '123456', 4, '2023-12-02 17:45:56', '2023-12-02 17:45:56', 'dexterwalton132@gmail.com', 0),
+(16, 'Capital_Camora', 'ichbruderman1', 4, '2023-12-02 17:52:35', '2023-12-02 17:52:35', 'capital@samp.com', 0),
+(17, 'Capital_Camoras', '12345678', 0, '2023-12-02 19:27:27', '2023-12-02 19:27:27', 'trake@smail.com', 0),
+(18, 'djasa', '401253', 0, '2023-12-03 12:45:24', '2023-12-03 12:45:24', 'lazarradisavljevic5@gmail.com', 0),
+(19, 'Klaus', 'klaus021', 4, '2023-12-03 13:51:35', '2023-12-03 13:51:35', 'dada@gmail.com', 0),
+(20, 'Darko_Jovanovic', 'durant123', 0, '2023-12-03 16:34:47', '2023-12-03 16:34:47', 'ladjevacpc@gmail.com', 0),
+(21, 'Nodislav_Alksienko', 'ferid420', 0, '2024-06-03 13:32:02', '2024-06-03 13:32:02', 'ferid420@gmail.com', 0),
+(22, 'Casey_Skendy', '123456', 4, '2024-06-03 14:03:00', '2024-06-03 14:03:00', 'macka@gmail.com', 0),
+(23, 'Vostic_Dev', 'Voki23', 0, '2024-10-28 15:42:50', '2024-10-28 15:42:50', 'vostic@gmail.com', 0),
+(24, 'Daco_Delahunt', 'alemrjgh', 0, '2024-12-03 19:06:09', '2024-12-03 19:06:09', 'alem.cokoja@gmail.com', 0),
+(25, 'Eros_Bosandzeros', '123321', 0, '2024-12-03 19:06:10', '2024-12-03 19:06:10', 'dsad@gmail.com', 0),
+(26, 'Silva', '123321', 4, '2024-12-03 19:07:11', '2024-12-03 19:07:11', 'dsag@gmail.com', 0),
+(27, 'Silva_Rose', 'Moosy1312', 0, '2024-12-07 22:46:46', '2024-12-07 22:46:46', 'kurac@gmail.com', 0),
+(28, 'Casey', '123456', 5, '2024-12-07 22:50:11', '2024-12-07 22:50:11', 'caseymacka@whiskas.com', 0),
+(29, 'Leon_Skandy', '123456', 5, '2024-12-07 23:13:21', '2024-12-07 23:13:21', '@.com', 0),
+(30, 'Midori_Smith', '123123', 0, '2024-12-07 23:13:40', '2024-12-07 23:13:40', 'midori123@gmail.com', 0),
+(31, 'Midori_Test', '123123', 0, '2024-12-07 23:16:34', '2024-12-07 23:16:34', 'dasdasd@gmail.com', 0),
+(32, 'Frenkie_Deep', 'Burek12', 0, '2024-12-22 19:48:07', '2024-12-22 19:48:07', 'eldarhrnjictrovo@gmail.com', 0),
+(33, 'Filip_Panic', 'feridKruh', 0, '2024-12-25 16:33:55', '2024-12-25 16:33:55', 'oasndnoasdnoa@massdk', 0),
+(34, 'Gobejla_West', 'kokolo420', 0, '2024-12-26 14:32:38', '2024-12-26 14:32:38', 'ferid@kruh.ba', 0),
+(35, 'Pinky_Test', '123123123', 0, '2025-01-01 19:58:30', '2025-01-01 19:58:30', 'test@gmail.com', 0),
+(36, 'Frosty_Saints', '1234567', 0, '2025-01-01 20:16:08', '2025-01-01 20:16:08', 'fuckoff@forreal.com', 0),
+(37, 'Frostyslav_Saints', '123456', 0, '2025-01-17 20:14:33', '2025-01-17 20:14:33', 'fuck@off3.com', 0),
+(38, 'Fjerit_Olsun', 'kuracgejming', 0, '2025-01-19 18:30:20', '2025-01-19 18:30:20', 'feridAllah@skibidi.rizz', 0),
+(39, 'Djura_Ajradinovski', 'skibidisolja', 0, '2025-01-19 20:54:52', '2025-01-19 20:54:52', 'skibidi@rizz.gyat', 0);
 
 -- --------------------------------------------------------
 
@@ -214,7 +215,7 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGender`, `cAge`, `cJob`, `cState`, `cDollars`, `cEuro`, `cEGPound`, `cLevel`, `cLastLogin`, `cLastX`, `cLastY`, `cLastZ`, `cVW`, `cInt`, `cWanted`, `XP`, `Score`, `NeedXP`, `Accent`) VALUES
-(4, 14, 'Joy_Silence', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-26 11:16:10', 803.26, -1320.02, 13.3828, 0, 0, 0, 244, 3, 2813, 2),
+(4, 14, 'Vostic', 2, 0, 0, 0, 0, 16293400, 0, 0, 0, '2025-01-27 01:32:54', 1408.47, 1573.24, 12.067, 6, 6, 0, 244, 3, 2813, 2),
 (11, 13, 'Ferid_Olsun', 20, 0, 0, 0, 0, 6181270, 0, 0, 0, '2025-01-20 23:11:20', 1671.13, -1093.33, 23.9062, 0, 0, 0, 108, 2, 2813, 0),
 (24, 32, 'Frenkie_Deep', 5, 0, 0, 0, 0, 899.55, 0, 0, 0, '2024-12-22 20:54:11', 1416.22, 445.523, 1081.5, 2, 18, 0, 120, 0, 1250, 0),
 (25, 33, 'Fejda_Olsun', 12, 1, 0, 0, 0, 0, 0, 0, 0, '2024-12-25 17:34:40', 1401.78, 1592.49, 10.8125, 6, 6, 0, 1, 0, 1250, 0),
@@ -228,7 +229,7 @@ INSERT INTO `characters` (`character_id`, `account_id`, `cName`, `cSkin`, `cGend
 (33, 26, 'Silva_Rose', 2, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:13', 1404.78, 1624.14, 10.8125, 6, 0, 0, 231, 0, 1250, 0),
 (34, 38, 'Kokolo_McGee', 60, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 19:32:41', 805.416, -1328.31, 13.4843, 0, 0, 0, 0, 0, 1250, 0),
 (35, 39, 'Silva_Gay', 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-19 22:08:14', 1813.37, -1580.35, 13.5469, 0, 0, 0, 0, 0, 1250, 0),
-(36, 15, 'Ogi_Ivanov', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-26 01:30:21', 1401.78, 1591.35, 12.0481, 6, 6, 0, 0, 0, 1250, 0);
+(36, 15, 'Ogi_Ivanov', 22, 0, 0, 0, 0, 0, 0, 0, 0, '2025-01-27 01:20:37', 838.58, -1345.91, 7.17879, 0, 0, 0, 0, 0, 1250, 0);
 
 -- --------------------------------------------------------
 
@@ -462,7 +463,8 @@ CREATE TABLE `daily_records` (
 INSERT INTO `daily_records` (`record_date`, `player_count`) VALUES
 ('2025-01-19', 1),
 ('2025-01-20', 1),
-('2025-01-26', 1);
+('2025-01-26', 1),
+('2025-01-27', 1);
 
 -- --------------------------------------------------------
 
@@ -767,6 +769,7 @@ CREATE TABLE `life_insurance` (
 --
 
 INSERT INTO `life_insurance` (`character_id`, `purchase_date`, `expiry`) VALUES
+(4, '2025-01-27 01:55:08', '2025-01-27 01:55:08'),
 (11, '2025-01-20 23:11:14', '2025-01-20 23:11:14'),
 (19, '2024-12-26 19:53:08', '2024-12-26 19:53:08'),
 (24, '2024-12-22 20:49:13', '2024-12-22 20:49:13'),
@@ -778,8 +781,7 @@ INSERT INTO `life_insurance` (`character_id`, `purchase_date`, `expiry`) VALUES
 (32, '2025-01-17 21:16:20', '2025-01-17 21:16:20'),
 (33, '2025-01-19 22:06:00', '2025-01-19 22:06:00'),
 (34, '2025-01-19 19:30:58', '2025-01-19 19:30:58'),
-(35, '2025-01-19 22:05:35', '2025-01-19 22:05:35'),
-(36, '2025-01-26 01:33:56', '2025-01-26 01:33:56');
+(35, '2025-01-19 22:05:35', '2025-01-19 22:05:35');
 
 -- --------------------------------------------------------
 
@@ -3882,7 +3884,46 @@ INSERT INTO `log_commands` (`log_str`, `date`) VALUES
 ('COMMAND:  Vostic je iskoristio komandu /createatm', '2025-01-26 11:15:07'),
 ('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:15:15'),
 ('COMMAND:  Vostic je iskoristio komandu /editatm', '2025-01-26 11:15:17'),
-('COMMAND:  Vostic je iskoristio komandu /cc', '2025-01-26 11:16:04');
+('COMMAND:  Vostic je iskoristio komandu /cc', '2025-01-26 11:16:04'),
+('COMMAND:  Vostic je iskoristio komandu /metro', '2025-01-26 11:31:58'),
+('COMMAND:  Vostic je iskoristio komandu /metro', '2025-01-26 11:35:19'),
+('COMMAND:  Vostic je iskoristio komandu /metro', '2025-01-26 11:40:52'),
+('COMMAND:  Vostic je iskoristio komandu /metro', '2025-01-26 11:44:51'),
+('COMMAND:  Vostic je iskoristio komandu /changename', '2025-01-27 00:51:44'),
+('COMMAND:  Vostic je iskoristio komandu /changename 0 Vostic', '2025-01-27 00:52:00'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank', '2025-01-27 01:17:07'),
+('COMMAND:  Vostic je iskoristio komandu /update', '2025-01-27 01:17:55'),
+('COMMAND:  Ogi je iskoristio komandu /togtag', '2025-01-27 01:18:28'),
+('COMMAND:  Vostic je iskoristio komandu /togtag', '2025-01-27 01:18:31'),
+('COMMAND:  Vostic je iskoristio komandu /togtag', '2025-01-27 01:18:34'),
+('COMMAND:  Ogi je iskoristio komandu /togtag', '2025-01-27 01:18:34'),
+('COMMAND:  Ogi je iskoristio komandu /togtag', '2025-01-27 01:18:36'),
+('COMMAND:  Ogi je iskoristio komandu /togtag', '2025-01-27 01:18:43'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 1', '2025-01-27 01:18:53'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 2', '2025-01-27 01:19:07'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 3', '2025-01-27 01:19:09'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 4', '2025-01-27 01:19:11'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 5', '2025-01-27 01:19:14'),
+('COMMAND:  Ogi je iskoristio komandu /zaduzenja', '2025-01-27 01:19:15'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 6', '2025-01-27 01:19:15'),
+('COMMAND:  Vostic je iskoristio komandu /setspecialrank Ogi 0', '2025-01-27 01:19:19'),
+('COMMAND:  Ogi je iskoristio komandu /setspecialrank', '2025-01-27 01:19:28'),
+('COMMAND:  Ogi je iskoristio komandu /setspecialrank 0 1', '2025-01-27 01:19:33'),
+('COMMAND:  Ogi je iskoristio komandu /setspecialrank 0 2', '2025-01-27 01:19:42'),
+('COMMAND:  Ogi je iskoristio komandu /setspecialrank 0 6', '2025-01-27 01:19:51'),
+('COMMAND:  Ogi je iskoristio komandu /setspecialrank 0 1', '2025-01-27 01:19:55'),
+('COMMAND:  Vostic je iskoristio komandu /changegender', '2025-01-27 01:32:30'),
+('COMMAND:  Vostic je iskoristio komandu /changegender Vostic 1', '2025-01-27 01:32:34'),
+('COMMAND:  Vostic je iskoristio komandu /changegender Vostic 0', '2025-01-27 01:32:49'),
+('COMMAND:  Vostic je iskoristio komandu /createstreet', '2025-01-27 01:51:47'),
+('COMMAND:  Vostic je iskoristio komandu /createstreet VokiUlica 25000', '2025-01-27 01:52:00'),
+('COMMAND:  Vostic je iskoristio komandu /createstreet', '2025-01-27 01:55:40'),
+('COMMAND:  Vostic je iskoristio komandu /createstreet Meow 30000', '2025-01-27 01:55:44'),
+('COMMAND:  Vostic je iskoristio komandu /buystreet', '2025-01-27 01:56:31'),
+('COMMAND:  Vostic je iskoristio komandu /streetname', '2025-01-27 01:57:37'),
+('COMMAND:  Vostic je iskoristio komandu /streetname Omg', '2025-01-27 01:57:39'),
+('COMMAND:  Vostic je iskoristio komandu /sellstreet', '2025-01-27 01:57:48'),
+('COMMAND:  Vostic je iskoristio komandu /deletestreet', '2025-01-27 01:57:58');
 
 -- --------------------------------------------------------
 
@@ -4502,7 +4543,17 @@ INSERT INTO `log_connection` (`log_str`, `date`) VALUES
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:07:34'),
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:10:23'),
 ('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:13:35'),
-('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:14:44');
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:14:44'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:31:31'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:34:58'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:40:30'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-26 11:44:30'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-27 00:51:29'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-27 01:16:48'),
+('CONNECT-LOG:  Ogi se konektuje na server | IP : 26.61.19.159', '2025-01-27 01:18:09'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-27 01:32:19'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-27 01:51:16'),
+('CONNECT-LOG:  Vostic se konektuje na server | IP : 127.0.0.1', '2025-01-27 01:54:59');
 
 -- --------------------------------------------------------
 
@@ -4604,7 +4655,12 @@ INSERT INTO `log_staff` (`log_str`, `date`) VALUES
 ('STAFF:  Vostic je postavio staff level 0 igracu Ogi', '2025-01-26 01:35:09'),
 ('STAFF:  Vostic je postavio staff level 4 igracu Ogi', '2025-01-26 01:35:58'),
 ('STAFF:  Vostic je slapovao igraca Vostic', '2025-01-26 10:51:40'),
-('STAFF:  Vostic je slapovao igraca Vostic', '2025-01-26 10:52:48');
+('STAFF:  Vostic je slapovao igraca Vostic', '2025-01-26 10:52:48'),
+('STAFF: Vostic je promenio ime igracu Joy_Silence u: Vostic', '2025-01-27 00:52:00'),
+('STAFF: Vostic je promenio pol igracu Vostic iz Musko u Zensko', '2025-01-27 01:32:34'),
+('STAFF: Vostic je promenio pol igracu Vostic iz Zensko u Musko', '2025-01-27 01:32:49'),
+('STAFF: Vostic je kreirao ulicu Meow (ID: 1, Cena: 30000)', '2025-01-27 01:55:44'),
+('STAFF: Vostic je obrisao ulicu Omg (ID: 1)', '2025-01-27 01:57:58');
 
 -- --------------------------------------------------------
 
@@ -5175,6 +5231,22 @@ CREATE TABLE `staff_questions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `streets`
+--
+
+CREATE TABLE `streets` (
+  `street_id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `owner_id` int(11) DEFAULT 0,
+  `price` int(11) DEFAULT 50000,
+  `pos_x` float NOT NULL,
+  `pos_y` float NOT NULL,
+  `pos_z` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `turfs`
 --
 
@@ -5585,6 +5657,12 @@ ALTER TABLE `safezones`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `streets`
+--
+ALTER TABLE `streets`
+  ADD PRIMARY KEY (`street_id`);
+
+--
 -- Indexes for table `turfs`
 --
 ALTER TABLE `turfs`
@@ -5774,6 +5852,12 @@ ALTER TABLE `robbery_history`
 --
 ALTER TABLE `safezones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `streets`
+--
+ALTER TABLE `streets`
+  MODIFY `street_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `turfs`

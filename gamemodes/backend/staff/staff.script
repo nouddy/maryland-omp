@@ -143,6 +143,13 @@ hook OnPlayerConnect(playerid)
 	PlayerInfo[playerid][Staff] = 0;
     Spectate[playerid] = INVALID_PLAYER_ID;
 	
+	// U?itaj specijalni rank
+	new query[128];
+	mysql_format(SQL, query, sizeof(query), 
+		"SELECT SpecialRank FROM accounts WHERE ID = %d",
+		GetPlayerSQLID(playerid));
+	mysql_tquery(SQL, query, "OnSpecialRankLoad", "i", playerid);
+	
 	return 1;
 }
 
@@ -3766,6 +3773,394 @@ YCMD:apu(playerid, params[], help)
     format(log_str, sizeof log_str, "STAFF: %s je stavio igraca %s u vozilo ID: %d (Sediste: %d)", 
         ReturnPlayerName(playerid), ReturnPlayerName(targetid), vehicleid, seatid);
     mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    return 1;
+}
+
+YCMD:changename(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Menja ime karakteru", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, newname[MAX_PLAYER_NAME];
+    if(sscanf(params, "us[24]", targetid, newname))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /changename [ID/Ime] [novo_ime]");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    // Provera da li ime ve? postoji
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT character_id FROM characters WHERE cName = '%e' AND character_id != %d LIMIT 1",
+        newname, GetCharacterSQLID(targetid));
+    mysql_tquery(SQL, query, "OnNameChangeCheck", "dds", playerid, targetid, newname);
+
+    return 1;
+}
+
+forward OnNameChangeCheck(playerid, targetid, newname[]);
+public OnNameChangeCheck(playerid, targetid, newname[])
+{
+    if(cache_num_rows() > 0)
+    {
+        notification.Show(playerid, "GRESKA", "To ime je vec zauzeto!", "!", BOXCOLOR_RED);
+        return 1;
+    }
+
+    // Sa?uvaj staro ime za log
+    new oldname[MAX_PLAYER_NAME];
+    format(oldname, sizeof(oldname), "%s", ReturnCharacterName(targetid));
+
+    // Update ime u bazi
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE characters SET cName = '%e' WHERE character_id = %d",
+        newname, GetCharacterSQLID(targetid));
+    mysql_tquery(SQL, query);
+
+    // Update ime u memoriji
+    SetPlayerName(targetid, newname);
+    format(CharacterInfo[targetid][Name], MAX_PLAYER_NAME, "%s", newname);
+
+    // Notify igra?e
+    new string[144];
+    format(string, sizeof(string), "Promenili ste ime igracu %s u: %s", 
+        oldname, newname);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je promenio ime u: %s", 
+        ReturnCharacterName(playerid), newname);
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    // Log akcije
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je promenio ime igracu %s u: %s", 
+        ReturnCharacterName(playerid), oldname, newname);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    // Obavesti ostale staffove
+    foreach(new i : Player)
+    {
+        if(PlayerInfo[i][Staff] && IsStaffChatEnabled())
+        {
+            SendClientMessage(i, x_purple, "#CHANGENAME: "c_white"Staff %s je promenio ime igracu %s u: %s", 
+            ReturnCharacterName(playerid), oldname, newname);
+        }
+    }
+
+    return 1;
+}
+
+YCMD:changeusername(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Menja username naloga", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, newusername[MAX_PLAYER_NAME];
+    if(sscanf(params, "us[24]", targetid, newusername))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /changeusername [ID/Ime] [novi_username]");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    // Provera da li username ve? postoji
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT ID FROM accounts WHERE Username = '%e' AND ID != %d LIMIT 1",
+        newusername, GetPlayerSQLID(targetid));
+    mysql_tquery(SQL, query, "OnUsernameChangeCheck", "dds", playerid, targetid, newusername);
+
+    return 1;
+}
+
+forward OnUsernameChangeCheck(playerid, targetid, newusername[]);
+public OnUsernameChangeCheck(playerid, targetid, newusername[])
+{
+    if(cache_num_rows() > 0)
+    {
+        notification.Show(playerid, "GRESKA", "Taj username je vec zauzet!", "!", BOXCOLOR_RED);
+        return 1;
+    }
+
+    // Sa?uvaj stari username za log
+    new oldusername[MAX_PLAYER_NAME];
+    format(oldusername, sizeof(oldusername), "%s", PlayerInfo[targetid][Username]);
+
+    // Update username u bazi
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE accounts SET Username = '%e' WHERE ID = %d",
+        newusername, GetPlayerSQLID(targetid));
+    mysql_tquery(SQL, query);
+
+    // Update username u memoriji
+    format(PlayerInfo[targetid][Username], MAX_PLAYER_NAME, "%s", newusername);
+
+    // Notify igra?e
+    new string[144];
+    format(string, sizeof(string), "Promenili ste username igracu %s u: %s", 
+        oldusername, newusername);
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je promenio username u: %s", 
+        ReturnCharacterName(playerid), newusername);
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    // Log akcije
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je promenio username igracu %s u: %s", 
+        ReturnCharacterName(playerid), oldusername, newusername);
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    // Obavesti ostale staffove
+    foreach(new i : Player)
+    {
+        if(PlayerInfo[i][Staff] && IsStaffChatEnabled())
+        {
+            SendClientMessage(i, x_purple, "#CHANGEUSERNAME: "c_white"Staff %s je promenio username igracu %s u: %s", 
+                ReturnCharacterName(playerid), oldusername, newusername);
+        }
+    }
+
+    return 1;
+}
+
+// Specijalni rankovi
+enum
+{
+    RANK_NONE = 0,
+    RANK_DEVELOPER,
+    RANK_MAPPER,
+    RANK_HEAD_STAFF,
+    RANK_HEAD_LEADERS,
+    RANK_HEAD_PROMOTERS,
+    RANK_HEAD_ASSOCIATE
+}
+
+// Funkcija za ažuriranje staff taga
+stock UpdateStaffTag(playerid)
+{
+    if(!IsPlayerConnected(playerid) || !PlayerInfo[playerid][Staff])
+        return 0;
+
+    if(!PlayerInfo[playerid][TagEnabled])
+    {
+        SetPlayerChatBubble(playerid, " ", 0xFFFFFFFF, 100.0, 1); // Prazan bubble da obriše postoje?i
+        return 1;
+    }
+
+    new tagText[32];
+    
+    // Prvo proveri specijalni rank
+    switch(PlayerInfo[playerid][SpecialRank])
+    {
+        case RANK_DEVELOPER: format(tagText, sizeof(tagText), "Developer");
+        case RANK_MAPPER: format(tagText, sizeof(tagText), "Mapper");
+        case RANK_HEAD_STAFF: format(tagText, sizeof(tagText), "Head of Staff");
+        case RANK_HEAD_LEADERS: format(tagText, sizeof(tagText), "Head of Leaders");
+        case RANK_HEAD_PROMOTERS: format(tagText, sizeof(tagText), "Head of Promoters");
+        case RANK_HEAD_ASSOCIATE: format(tagText, sizeof(tagText), "Head of Associate");
+        default: // Ako nema specijalni rank, koristi staff level
+        {
+            switch(GetPlayerStaffLevel(playerid))
+            {
+                case 1: format(tagText, sizeof(tagText), "Associate");
+                case 2: format(tagText, sizeof(tagText), "Staff");
+                case 3: format(tagText, sizeof(tagText), "Community Manager");
+                case 4: format(tagText, sizeof(tagText), "Owner");
+            }
+        }
+    }
+
+    // Postavi chat bubble sa neograni?enim vremenom (0x7FFFFFFF)
+    SetPlayerChatBubble(playerid, tagText, 0xFFFFFFFF, 100.0, 0x7FFFFFFF);
+    
+    return 1;
+}
+
+// Komanda za postavljanje specijalnog ranka
+YCMD:setspecialrank(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Postavlja specijalni rank staffu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < 4) // Samo owner može postavljati
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, rankid;
+    if(sscanf(params, "ud", targetid, rankid))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /setspecialrank [ID/Ime] [Rank ID]");
+        SendClientMessage(playerid, x_server, "Rankovi: 0: None, 1: Developer, 2: Mapper, 3: Head Staff");
+        SendClientMessage(playerid, x_server, "4: Head Leaders, 5: Head Promoters, 6: Head Associate");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(rankid < 0 || rankid > 6)
+        return notification.Show(playerid, "GRESKA", "Nevazeci ID ranka!", "!", BOXCOLOR_RED);
+
+    PlayerInfo[targetid][SpecialRank] = rankid;
+    UpdateStaffTag(targetid);
+
+    new string[128];
+    format(string, sizeof(string), "Postavili ste specijalni rank %d igracu %s", 
+        rankid, ReturnPlayerName(targetid));
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    // Sa?uvaj u bazi
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE accounts SET SpecialRank = %d WHERE ID = %d",
+        rankid, GetPlayerSQLID(targetid));
+    mysql_tquery(SQL, query);
+
+    return 1;
+}
+
+// Komanda za toggle staff taga
+YCMD:togtag(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Ukljucuje/iskljucuje staff tag", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!PlayerInfo[playerid][Staff])
+        return notification.Show(playerid, "GRESKA", "Niste staff!", "!", BOXCOLOR_RED);
+
+    PlayerInfo[playerid][TagEnabled] = !PlayerInfo[playerid][TagEnabled];
+    UpdateStaffTag(playerid);
+
+    new string[64];
+    format(string, sizeof(string), "Staff tag %s", PlayerInfo[playerid][TagEnabled] ? "ukljucen" : "iskljucen");
+    notification.Show(playerid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    return 1;
+}
+
+// Dodaj u OnPlayerConnect
+hook OnPlayerConnect(playerid)
+{
+    // ... postoje?i kod ...
+    PlayerInfo[playerid][SpecialRank] = RANK_NONE;
+    PlayerInfo[playerid][TagEnabled] = true;
+    UpdateStaffTag(playerid); // Postavi inicijalni tag
+    return 1;
+}
+
+
+// Dodaj u OnPlayerSpawn
+hook OnPlayerSpawn(playerid)
+{
+    // ... postoje?i kod ...
+    if(PlayerInfo[playerid][Staff])
+        UpdateStaffTag(playerid); // Osvezi tag pri spawnu
+    return 1;
+}
+
+// Callback za u?itavanje ranka
+forward OnSpecialRankLoad(playerid);
+public OnSpecialRankLoad(playerid)
+{
+    if(cache_num_rows() > 0)
+    {
+        cache_get_value_name_int(0, "SpecialRank", PlayerInfo[playerid][SpecialRank]);
+        if(PlayerInfo[playerid][Staff]) 
+            UpdateStaffTag(playerid);
+    }
+    return 1;
+}
+
+YCMD:promenipol(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Menja pol karakteru", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(GetPlayerStaffLevel(playerid) < e_HEAD_MANAGER)
+        return notification.Show(playerid, "GRESKA", "Niste ovlasceni!", "!", BOXCOLOR_RED);
+
+    new targetid, gender;
+    if(sscanf(params, "ud", targetid, gender))
+    {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /changegender [ID/Ime] [Pol (0-Musko, 1-Zensko)]");
+        return 1;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+
+    if(gender < 0 || gender > 1)
+        return notification.Show(playerid, "GRESKA", "Nevazeci pol! (0-Musko, 1-Zensko)", "!", BOXCOLOR_RED);
+
+    // Sa?uvaj stari pol za log
+    new oldGender = _:CharacterInfo[targetid][Gender];
+
+    // Update pol u bazi
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE characters SET cGender = %d WHERE character_id = %d",
+        gender, GetCharacterSQLID(targetid));
+    mysql_tquery(SQL, query);
+
+    // Update pol u memoriji
+    CharacterInfo[targetid][Gender] = eGender:gender;
+
+    // Notify igra?e
+    new string[144];
+    format(string, sizeof(string), "Promenili ste pol igracu %s u: %s", 
+        ReturnCharacterName(targetid), gender ? "Zensko" : "Musko");
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "Staff %s vam je promenio pol u: %s", 
+        ReturnCharacterName(playerid), gender ? "Zensko" : "Musko");
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_GREEN);
+
+    // Log akcije
+    static log_str[256];
+    format(log_str, sizeof log_str, "STAFF: %s je promenio pol igracu %s iz %s u %s", 
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid),
+        oldGender ? "Zensko" : "Musko", gender ? "Zensko" : "Musko");
+    mysql_write_log(log_str, LOG_TYPE_STAFF);
+
+    // Obavesti ostale staffove
+    foreach(new i : Player)
+    {
+        if(PlayerInfo[i][Staff] && IsStaffChatEnabled())
+        {
+            SendClientMessage(i, x_purple, "#CHANGEGENDER: "c_white"Staff %s je promenio pol igracu %s iz %s u %s", 
+                ReturnCharacterName(playerid), ReturnCharacterName(targetid),
+                oldGender ? "Zensko" : "Musko", gender ? "Zensko" : "Musko");
+        }
+    }
 
     return 1;
 }

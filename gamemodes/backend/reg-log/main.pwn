@@ -158,6 +158,8 @@ enum PlayerInformation
 	LastLogin,
 	RegisterDate[50],
 	Email[50],
+	SpecialRank,        // Specijalni rank
+    bool:TagEnabled    // Da li je tag uklju?en
 }
 new PlayerInfo[MAX_PLAYERS][PlayerInformation];
 

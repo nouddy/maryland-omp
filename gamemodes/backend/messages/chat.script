@@ -102,3 +102,79 @@ YCMD:w(playerid, params[], help)
     
     return 1;
 }
+
+YCMD:c(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Tiho pricanje", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new text[80];
+    if(sscanf(params, "s[80]", text))
+        return SendClientMessage(playerid, x_usage, "KORISCENJE \187; "c_white"/c [Text]");
+
+    new string[256];
+    format(string, sizeof(string), "* %s tiho kaze: %s", ReturnCharacterName(playerid), text);
+    ProxDetector(playerid, 3.0, x_purple, string); // Manji radius za tihi chat
+    
+    return 1;
+}
+
+YCMD:d(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Dranje/Vikanje", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    new text[80];
+    if(sscanf(params, "s[80]", text))
+        return SendClientMessage(playerid, x_usage, "KORISCENJE \187; "c_white"/d [Text]");
+
+    new string[256];
+    format(string, sizeof(string), "* %s dere se: %s!!", ReturnCharacterName(playerid), text);
+    ProxDetector(playerid, 50.0, x_purple, string); // Ve?i radius za dranje
+    
+    return 1;
+}
+
+// Alternativni naziv komande
+YCMD:window(playerid, params[], help) = wi;
+YCMD:wi(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Govor kroz prozor vozila", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    // Provera da li je igra? u vozilu
+    if(!IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti u vozilu!");
+        
+    // Provera tipa vozila (ne dozvoljavamo motore i bicikle)
+    new vehicleid = GetPlayerVehicleID(playerid);
+    new model = GetVehicleModel(vehicleid);
+    
+    // Bikes: 448-463, 461-463, 468, 471, 521-523, 581, 586
+    if(model >= 448 && model <= 463 || 
+       model == 468 || model == 471 || 
+       (model >= 521 && model <= 523) || 
+       model == 581 || model == 586)
+    {
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete koristiti ovu komandu na motoru ili bicikli!");
+    }
+
+    new text[80];
+    if(sscanf(params, "s[80]", text))
+        return SendClientMessage(playerid, x_usage, "KORISCENJE \187; "c_white"/wi [Text]");
+
+    new string[256];
+    format(string, sizeof(string), "* %s govori kroz prozor: %s", ReturnCharacterName(playerid), text);
+    ProxDetector(playerid, 15.0, x_purple, string); // Srednji radius za govor kroz prozor
+    
+    return 1;
+}
