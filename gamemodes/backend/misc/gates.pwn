@@ -71,12 +71,6 @@ forward OnGateDeleted(gateid);
 forward Timer_CloseGate(gateid);
 forward OnGateInserted(playerid, gateid);
 
-// Helper function for distance calculation
-Float:GetDistanceBetweenPoints(Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2)
-{
-    return floatsqroot(floatpower(floatabs(x1 - x2), 2) + floatpower(floatabs(y1 - y2), 2) + floatpower(floatabs(z1 - z2), 2));
-}
-
 // Initialization
 hook OnGameModeInit() {
     print("gates.pwn loaded");

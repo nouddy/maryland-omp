@@ -32,6 +32,21 @@ const VEHICLE_TYPE_POLICE = 2;
 #define MAX_POLICE_RANKS 13
 #define MAX_RANK_LEN     64
 
+#define MAX_BARRICADES_PER_OFFICER 3
+#define INVALID_BARRICADE_ID -1
+
+enum E_BARRICADE_DATA {
+    barricadeObject,
+    Float:barricadeX,
+    Float:barricadeY,
+    Float:barricadeZ,
+    Float:barricadeRX,
+    Float:barricadeRY,
+    Float:barricadeRZ,
+    barricadeOwner
+}
+new BarricadeData[MAX_PLAYERS][MAX_BARRICADES_PER_OFFICER][E_BARRICADE_DATA];
+new PlayerBarricades[MAX_PLAYERS];
 //============================================================ Enums (sufix f = Faction)
 
 enum E_POLICE_DATA {
@@ -77,6 +92,16 @@ new dutyPickup[MAX_POLICE];
 
 new Text3D:equLabel[MAX_POLICE];
 new equPickup[MAX_POLICE];
+
+static PlayerTrackingID[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...};
+static PlayerTrackingTimer[MAX_PLAYERS] = {-1, ...};
+
+static const PoliceSirens[][] = {
+    "POLICIJA, STANI SA STRANE!",
+    "POLICIJA, STOJ!",
+    "ZAUSTAVITE VOZILO, POLICIJA!",
+    "POLICIJA, SKLONITE SE SA PUTA!"
+};
 
 //============================================================ Police Members
 
@@ -462,6 +487,11 @@ hook OnPlayerConnect(playerid) {
     police_InviteID[playerid] = INVALID_PLAYER_ID;
     police_InviteFID[playerid] = 0;
 
+    PlayerBarricades[playerid] = 0;
+    for(new i = 0; i < MAX_BARRICADES_PER_OFFICER; i++) {
+        BarricadeData[playerid][i][barricadeObject] = INVALID_BARRICADE_ID;
+    }
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -553,6 +583,26 @@ hook OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys) {
                 format(string,sizeof(string), "%s uzima opremu iz sanduka", ReturnCharacterName(playerid));
                 ProxDetector(playerid, Float:10.0, x_grey, string);
                 return ~1;
+            }
+        }
+    }
+
+    if((newkeys & KEY_FIRE) && !(oldkeys & KEY_FIRE)) { // LEFT ALT je KEY_FIRE
+        if(IsPlayerPoliceMember(playerid) && IsPlayerOnPoliceDuty(playerid) && IsPlayerInAnyVehicle(playerid)) {
+
+            new Float:x, Float:y, Float:z;
+            GetPlayerPos(playerid, x, y, z);
+
+            new string[128];
+            format(string, sizeof(string), "[Megafon] %s: %s", 
+                ReturnCharacterName(playerid), 
+                PoliceSirens[random(sizeof(PoliceSirens))]
+            );
+
+            foreach(new i : Player) {
+                if(IsPlayerInRangeOfPoint(i, 30.0, x, y, z)) {
+                    SendClientMessage(i, x_blue, string);
+                }
             }
         }
     }
@@ -1779,7 +1829,7 @@ YCMD:razoruzaj(playerid, params[], help)
     return 1;
 }
 
-// Komanda za pokazivanje zna?ke
+// Komanda za pokazivanje znacke
 YCMD:pokaziznacku(playerid, params[], help) {
     if(help) {
         SendClientMessage(playerid, x_server, "KORISCENJE: /pokaziznacku [ID/Ime]");
@@ -1838,7 +1888,7 @@ YCMD:pokaziznacku(playerid, params[], help) {
     return 1;
 }
 
-// Funkcija za generisanje slede?eg broja znacke
+// Funkcija za generisanje sledeceg broja znacke
 stock Police_GetNextBadgeNumber() {
     new query[128], znacka;
     mysql_format(SQL, query, sizeof(query), 
@@ -1967,7 +2017,7 @@ public bool:Police_CheckDrugs(playerid) {
         INVENTORY_ITEM_SHROOMS
     };
     
-    // Provera za svaku vrstu droge koriste?i postoje?u funkciju
+    // Provera za svaku vrstu droge koristeci postojecu funkciju
     for(new i = 0; i < sizeof(DrugItems); i++) {
         if(Inventory_GetDrugQuantity(playerid, DrugItems[i]) > 0) {
             return true;
@@ -2044,5 +2094,756 @@ YCMD:kaucija(playerid, params[], help) {
         ReturnCharacterName(playerid), bail_amount);
     mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
 
+    return 1;
+}
+
+YCMD:wantedlist(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /wantedlist");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid) || GetPlayerStaffLevel(playerid) < 1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new count = 0;
+    new dlgString[1024];
+    strcat(dlgString, "Ime\tWanted Level\tID\n");
+
+    // Prolazimo kroz sve igra?e
+    foreach(new i : Player) {
+        new wantedLevel = GetPlayerWantedLevelEx(i);
+        if(wantedLevel >= 1) {
+            new line[128];
+            format(line, sizeof(line), "%s\t%d\t%d\n", 
+                ReturnCharacterName(i), 
+                wantedLevel,
+                GetCharacterSQLID(i)
+            );
+            strcat(dlgString, line);
+            count++;
+        }
+    }
+
+    if(count == 0) {
+        strcat(dlgString, "Nema trazenih igraca\t-\t-");
+    }
+
+    Dialog_Show(playerid, "WantedList", DIALOG_STYLE_TABLIST_HEADERS,
+        "Lista Trazenih",
+        dlgString,
+        "Zatvori", ""
+    );
+
+    return 1;
+}
+
+Dialog:WantedList(playerid, response, listitem, string:inputtext[]) {
+    return 1; // Samo zatvaranje dijaloga
+}
+
+// Funkcija za ažuriranje markera
+forward UpdateTrackingMarker(playerid, targetid);
+public UpdateTrackingMarker(playerid, targetid) {
+    if(!IsPlayerConnected(targetid) || GetPlayerWantedLevelEx(targetid) < 1) {
+        KillTimer(PlayerTrackingTimer[playerid]);
+        PlayerTrackingTimer[playerid] = -1;
+        PlayerTrackingID[playerid] = INVALID_PLAYER_ID;
+        RemovePlayerMapIcon(playerid, 99); // Broj 99 za tracking icon
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Lociranje je prekinuto!");
+        return 0;
+    }
+
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(targetid, x, y, z);
+    RemovePlayerMapIcon(playerid, 99);
+    SetPlayerMapIcon(playerid, 99, x, y, z, 0, 0xFF0000FF, MAPICON_GLOBAL); // Crveni marker
+    return 1;
+}
+
+YCMD:fs(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /fs [character_id] - Prazno za prekid lociranja");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    // Ako nema parametara, prekida lociranje
+    if(isnull(params)) {
+        if(PlayerTrackingID[playerid] == INVALID_PLAYER_ID)
+            return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Trenutno ne locirate nikoga!");
+
+        KillTimer(PlayerTrackingTimer[playerid]);
+        PlayerTrackingTimer[playerid] = -1;
+        RemovePlayerMapIcon(playerid, 99);
+        
+        new targetname[MAX_PLAYER_NAME];
+        GetPlayerName(PlayerTrackingID[playerid], targetname, sizeof(targetname));
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Prekinuli ste lociranje igraca %s", targetname);
+        
+        PlayerTrackingID[playerid] = INVALID_PLAYER_ID;
+        return 1;
+    }
+
+    // Provera da li vec nekog locira
+    if(PlayerTrackingID[playerid] != INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec locirate nekoga! Koristite /fs za prekid.");
+
+    new characterid;
+    if(sscanf(params, "d", characterid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"KORISCENJE: /fs [character_id]");
+
+    // Pronalazenje igraca po character ID-u
+    new targetid = INVALID_PLAYER_ID;
+    foreach(new i : Player) {
+        if(GetCharacterSQLID(i) == characterid) {
+            targetid = i;
+            break;
+        }
+    }
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj karakter nije online!");
+
+    if(GetPlayerWantedLevelEx(targetid) < 1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije trazen!");
+
+    if(IsPlayerPoliceMember(targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete locirati policajca!");
+
+    PlayerTrackingID[playerid] = targetid;
+    
+    // Prvo postavljanje markera
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(targetid, x, y, z);
+    SetPlayerMapIcon(playerid, 99, x, y, z, 0, 0xFF0000FF, MAPICON_GLOBAL);
+
+    // Pokretanje timera za azuriranje
+    PlayerTrackingTimer[playerid] = SetTimerEx("UpdateTrackingMarker", 1000, true, "ii", playerid, targetid);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Zapoceli ste lociranje igraca %s", ReturnCharacterName(targetid));
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+    // Ako je igrac bio lociran od strane nekog policajca
+    foreach(new i : Player) {
+        if(PlayerTrackingID[i] == playerid) {
+            KillTimer(PlayerTrackingTimer[i]);
+            PlayerTrackingTimer[i] = -1;
+            PlayerTrackingID[i] = INVALID_PLAYER_ID;
+            RemovePlayerMapIcon(i, 99);
+            SendClientMessage(i, x_server, "maryland \187; "c_white"Lociranje je prekinuto jer je igrac napustio server!");
+        }
+    }
+
+    // Ako je igrac policajac koji je nekog locirao
+    if(PlayerTrackingTimer[playerid] != -1) {
+        KillTimer(PlayerTrackingTimer[playerid]);
+        PlayerTrackingTimer[playerid] = -1;
+        RemovePlayerMapIcon(playerid, 99);
+    }
+    PlayerTrackingID[playerid] = INVALID_PLAYER_ID;
+    
+    // Ciscenje ticket varijabli
+    DeletePVar(playerid, "TicketTarget");
+    DeletePVar(playerid, "TicketReason");
+    DeletePVar(playerid, "TicketAmount");
+    DeletePVar(playerid, "TicketCustomReason");
+    DeletePVar(playerid, "TicketOfficer");
+
+    // Ako je igrac bio meta tiketa, ocisti varijable policajcu koji je pisao tiket
+    foreach(new i : Player) {
+        if(GetPVarInt(i, "TicketTarget") == playerid) {
+            DeletePVar(i, "TicketTarget");
+            DeletePVar(i, "TicketReason");
+            DeletePVar(i, "TicketAmount");
+            DeletePVar(i, "TicketCustomReason");
+        }
+    }
+    
+    // Brisanje svih barikada igraca
+    for(new i = 0; i < MAX_BARRICADES_PER_OFFICER; i++) {
+        if(BarricadeData[playerid][i][barricadeObject] != INVALID_BARRICADE_ID) {
+            DestroyDynamicObject(BarricadeData[playerid][i][barricadeObject]);
+            BarricadeData[playerid][i][barricadeObject] = INVALID_BARRICADE_ID;
+        }
+    }
+    PlayerBarricades[playerid] = 0;
+    
+    return 1;
+}
+
+YCMD:m(playerid, params[], help) = megafon;
+YCMD:megafon(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /m(egafon) [tekst]");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    if(isnull(params))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"KORISCENJE: /m(egafon) [tekst]");
+
+    if(!IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate biti u vozilu da biste koristili megafon!");
+
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+
+    new string[128];
+    format(string, sizeof(string), "[Megafon] %s: %s", ReturnCharacterName(playerid), params);
+
+    foreach(new i : Player) {
+        if(IsPlayerInRangeOfPoint(i, 30.0, x, y, z)) {
+            SendClientMessage(i, x_blue, string);
+        }
+    }
+
+    return 1;
+}
+
+YCMD:gov(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /gov [tekst]");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    if(PoliceMember[playerid][policeRank] < 3)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dozvolu za koriscenje ove komande!");
+
+    if(isnull(params))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"KORISCENJE: /gov [tekst]");
+
+    // Anti-spam sistem
+    static LastGovMessage[MAX_PLAYERS];
+    if(gettime() - LastGovMessage[playerid] < 60) // 60 sekundi cooldown
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Morate sacekati 60 sekundi izmedju poruka!");
+    
+    LastGovMessage[playerid] = gettime();
+
+    // Slanje poruke svim igracima
+    SendClientMessageToAll(x_server, "________________________________________");
+    SendClientMessageToAll(x_server, " ");
+    
+    new string[256];
+    format(string, sizeof(string), "POLICIJSKO OBAVESTENJE (( %s ))", ReturnCharacterName(playerid));
+    SendClientMessageToAll(x_blue, string);
+    
+    format(string, sizeof(string), "%s", params);
+    SendClientMessageToAll(x_white, string);
+    
+    SendClientMessageToAll(x_server, " ");
+    SendClientMessageToAll(x_server, "________________________________________");
+
+    // Log
+    format(string, sizeof(string), "GOV: %s: %s", ReturnCharacterName(playerid), params);
+    mysql_write_log(string, LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
+}
+
+// Na vrhu fajla
+enum {
+    TICKET_REASON_SPEEDING = 1,
+    TICKET_REASON_RECKLESS,
+    TICKET_REASON_PARKING,
+    TICKET_REASON_RED_LIGHT,
+    TICKET_REASON_CUSTOM
+}
+
+static const TicketReasons[][] = {
+    "Prekoracenje brzine\t$500",
+    "Bezobzirna voznja\t$750",
+    "Nepropisno parkiranje\t$300",
+    "Prolazak kroz crveno\t$400",
+    "Proizvoljni razlog"
+};
+
+static const TicketPrices[] = {
+    500,  // Speeding
+    750,  // Reckless
+    300,  // Parking
+    400,  // Red light
+    0     // Custom - set when writing ticket
+};
+
+YCMD:writeticket(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /writeticket [ID/Ime]");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"KORISCENJE: /writeticket [ID/Ime]");
+
+    if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije na serveru!");
+
+    if(targetid == playerid)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne mozete sebi napisati tiket!");
+
+    if(!DistanceBetweenPlayers(5.0, playerid, targetid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste dovoljno blizu igraca!");
+
+    new dlgString[512];
+    for(new i = 0; i < sizeof(TicketReasons); i++) {
+        format(dlgString, sizeof(dlgString), "%s%s\n", dlgString, TicketReasons[i]);
+    }
+
+    SetPVarInt(playerid, "TicketTarget", targetid);
+    Dialog_Show(playerid, "TicketReason", DIALOG_STYLE_LIST,
+        "Izaberite razlog za tiket",
+        dlgString,
+        "Izaberi", "Odustani"
+    );
+
+    return 1;
+}
+
+Dialog:TicketReason(playerid, response, listitem, string:inputtext[]) {
+    if(!response) {
+        DeletePVar(playerid, "TicketTarget");
+        return 1;
+    }
+
+    new targetid = GetPVarInt(playerid, "TicketTarget");
+    if(!IsPlayerConnected(targetid)) {
+        DeletePVar(playerid, "TicketTarget");
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Taj igrac nije vise na serveru!");
+    }
+
+    if(listitem == TICKET_REASON_CUSTOM - 1) {
+        Dialog_Show(playerid, "TicketCustomReason", DIALOG_STYLE_INPUT,
+            "Unesite razlog",
+            "Unesite razlog za tiket i iznos kazne (razlog|iznos):",
+            "Dalje", "Nazad"
+        );
+        return 1;
+    }
+
+    SetPVarInt(playerid, "TicketReason", listitem + 1);
+    SetPVarInt(playerid, "TicketAmount", TicketPrices[listitem]);
+
+    new string[256];
+    format(string, sizeof(string), "Razlog: %s\nIznos: $%d\n\nDa li zelite da napisete ovaj tiket?",
+        TicketReasons[listitem], TicketPrices[listitem]);
+
+    Dialog_Show(playerid, "TicketConfirm", DIALOG_STYLE_MSGBOX,
+        "Potvrda tiketa",
+        string,
+        "Da", "Ne"
+    );
+    return 1;
+}
+
+Dialog:TicketCustomReason(playerid, response, listitem, string:inputtext[]) {
+    if(!response) {
+        // Ponovo kreiramo string za dialog
+        new dlgString[512];
+        for(new i = 0; i < sizeof(TicketReasons); i++) {
+            format(dlgString, sizeof(dlgString), "%s%s\n", dlgString, TicketReasons[i]);
+        }
+        
+        Dialog_Show(playerid, "TicketReason", DIALOG_STYLE_LIST,
+            "Izaberite razlog za tiket",
+            dlgString,
+            "Izaberi", "Odustani"
+        );
+        return 1;
+    }
+
+    new reason[64], amount;
+    if(sscanf(inputtext, "p<|>s[64]d", reason, amount)) {
+        Dialog_Show(playerid, "TicketCustomReason", DIALOG_STYLE_INPUT,
+            "Unesite razlog",
+            "Pogresan format! Koristite: razlog|iznos\nPrimer: Nepropisno ponasanje|500",
+            "Dalje", "Nazad"
+        );
+        return 1;
+    }
+
+    if(amount < 100 || amount > 2000) {
+        Dialog_Show(playerid, "TicketCustomReason", DIALOG_STYLE_INPUT,
+            "Unesite razlog",
+            "Iznos mora biti izmedju $100 i $2000!",
+            "Dalje", "Nazad"
+        );
+        return 1;
+    }
+
+    SetPVarString(playerid, "TicketCustomReason", reason);
+    SetPVarInt(playerid, "TicketReason", TICKET_REASON_CUSTOM);
+    SetPVarInt(playerid, "TicketAmount", amount);
+
+    new string[256];
+    format(string, sizeof(string), "Razlog: %s\nIznos: $%d\n\nDa li zelite da napisete ovaj tiket?",
+        reason, amount);
+
+    Dialog_Show(playerid, "TicketConfirm", DIALOG_STYLE_MSGBOX,
+        "Potvrda tiketa",
+        string,
+        "Da", "Ne"
+    );
+    return 1;
+}
+
+Dialog:TicketConfirm(playerid, response, listitem, string:inputtext[]) {
+    if(!response) {
+        DeletePVar(playerid, "TicketTarget");
+        DeletePVar(playerid, "TicketReason");
+        DeletePVar(playerid, "TicketAmount");
+        DeletePVar(playerid, "TicketCustomReason");
+        return 1;
+    }
+
+    new targetid = GetPVarInt(playerid, "TicketTarget");
+    new reason_id = GetPVarInt(playerid, "TicketReason");
+    new amount = GetPVarInt(playerid, "TicketAmount");
+    new reason[64];
+
+    if(reason_id == TICKET_REASON_CUSTOM) {
+        GetPVarString(playerid, "TicketCustomReason", reason, sizeof(reason));
+    } else {
+        format(reason, sizeof(reason), "%s", TicketReasons[reason_id - 1]);
+    }
+
+    // Upis u bazu
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "INSERT INTO police_tickets (character_id, officer_id, reason, amount) VALUES (%d, %d, '%e', %d)",
+        GetCharacterSQLID(targetid), GetCharacterSQLID(playerid), reason, amount
+    );
+    mysql_tquery(SQL, query);
+
+    // Poruke
+    SendClientMessage(playerid, x_blue, "Napisali ste tiket igracu %s.", ReturnCharacterName(targetid));
+    
+    new string[256];
+    format(string, sizeof(string), "Dobili ste tiket od policajca %s\nRazlog: %s\nIznos: $%d\n\nDa li zelite da platite tiket odmah? (30%% jeftinije)",
+        ReturnCharacterName(playerid), reason, amount);
+    
+    SetPVarInt(targetid, "TicketOfficer", playerid);
+    SetPVarInt(targetid, "TicketAmount", amount);
+    
+    Dialog_Show(targetid, "TicketPayment", DIALOG_STYLE_MSGBOX,
+        "Placanje tiketa",
+        string,
+        "Plati", "Kasnije"
+    );
+
+    DeletePVar(playerid, "TicketTarget");
+    DeletePVar(playerid, "TicketReason");
+    DeletePVar(playerid, "TicketAmount");
+    DeletePVar(playerid, "TicketCustomReason");
+
+    return 1;
+}
+
+Dialog:TicketPayment(playerid, response, listitem, string:inputtext[]) {
+    new amount = GetPVarInt(playerid, "TicketAmount");
+    new officerid = GetPVarInt(playerid, "TicketOfficer");
+    
+    if(response) {
+        amount = floatround(amount * 0.7); // 30% popust
+        
+        if(GetPlayerMoney(playerid) < amount) {
+            SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca!");
+            return 1;
+        }
+
+        GivePlayerMoney(playerid, -amount);
+        GivePlayerMoney(officerid, amount);
+
+        new query[128];
+        mysql_format(SQL, query, sizeof(query), 
+            "UPDATE police_tickets SET paid = 1, paid_to_officer = 1 WHERE character_id = %d ORDER BY ticket_id DESC LIMIT 1",
+            GetCharacterSQLID(playerid)
+        );
+        mysql_tquery(SQL, query);
+
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Platili ste tiket policajcu!");
+        SendClientMessage(officerid, x_server, "maryland \187; "c_white"Igrac %s je platio tiket!", ReturnCharacterName(playerid));
+    }
+    else {
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Imate 7 dana da platite tiket u policijskoj stanici!");
+    }
+
+    DeletePVar(playerid, "TicketOfficer");
+    DeletePVar(playerid, "TicketAmount");
+    return 1;
+}
+
+task CheckUnpaidTickets[1800000]() { // Proverava svakih 30 minuta
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT t.*, c.online_id FROM police_tickets t \
+        JOIN characters c ON t.character_id = c.character_id \
+        WHERE t.paid = 0 AND t.issue_date < DATE_SUB(NOW(), INTERVAL 7 DAY)"
+    );
+    mysql_tquery(SQL, "OnCheckUnpaidTickets");
+}
+
+forward OnCheckUnpaidTickets();
+public OnCheckUnpaidTickets() {
+    new rows;
+    cache_get_row_count(rows);
+    
+    if(!rows) return 0;
+
+    for(new i = 0; i < rows; i++) {
+        new playerid;
+        cache_get_value_name_int(i, "online_id", playerid);
+        
+        if(IsPlayerConnected(playerid)) {
+            ImprisonPlayer(playerid, 60, "Neplaceni tiket"); // 60 minuta zatvora
+            
+            new query[128];
+            mysql_format(SQL, query, sizeof(query), 
+                "DELETE FROM police_tickets WHERE character_id = %d AND paid = 0",
+                GetCharacterSQLID(playerid)
+            );
+            mysql_tquery(SQL, query);
+        }
+    }
+    return 1;
+}
+
+YCMD:payticket(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /payticket");
+        return 1;
+    }
+
+    // if(!IsPlayerInRangeOfPoint(playerid, 3.0, POLICE_PAYMENT_X, POLICE_PAYMENT_Y, POLICE_PAYMENT_Z))
+    //     return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na mestu za placanje tiketa!");
+
+    new query[256];
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT * FROM police_tickets WHERE character_id = %d AND paid = 0",
+        GetCharacterSQLID(playerid)
+    );
+    mysql_tquery(SQL, query, "OnCheckPlayerTickets", "i", playerid);
+
+    return 1;
+}
+
+forward OnCheckPlayerTickets(playerid);
+public OnCheckPlayerTickets(playerid) {
+    new rows;
+    cache_get_row_count(rows);
+    
+    if(!rows)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate neplacenih tiketa!");
+
+    new amount;
+    cache_get_value_name_int(0, "amount", amount);
+    amount = floatround(amount * 1.3); // 30% skuplje
+
+    if(GetPlayerMoney(playerid) < amount) {
+        SendClientMessage(playerid, x_server, "maryland \187; "c_white"Nemate dovoljno novca! (Potrebno: $%d)", amount);
+        return 1;
+    }
+
+    GivePlayerMoney(playerid, -amount);
+
+    new query[128];
+    mysql_format(SQL, query, sizeof(query), 
+        "UPDATE police_tickets SET paid = 1 WHERE character_id = %d AND paid = 0",
+        GetCharacterSQLID(playerid)
+    );
+    mysql_tquery(SQL, query);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Platili ste tiket u iznosu od $%d!", amount);
+    return 1;
+}
+
+YCMD:postavibarikadu(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /postavibarikadu");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    if(PlayerBarricades[playerid] >= MAX_BARRICADES_PER_OFFICER)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vec ste postavili maksimalan broj barikada!");
+
+    new Float:x, Float:y, Float:z, Float:angle;
+    GetPlayerPos(playerid, x, y, z);
+    GetPlayerFacingAngle(playerid, angle);
+    
+    x += (3.0 * floatsin(-angle, degrees));
+    y += (3.0 * floatcos(-angle, degrees));
+
+    // Pronalazenje slobodnog slota
+    new slot = -1;
+    for(new i = 0; i < MAX_BARRICADES_PER_OFFICER; i++) {
+        if(BarricadeData[playerid][i][barricadeObject] == INVALID_BARRICADE_ID) {
+            slot = i;
+            break;
+        }
+    }
+
+    BarricadeData[playerid][slot][barricadeObject] = CreateDynamicObject(1228, x, y, z-0.7, 0.0, 0.0, angle); // ID 1228 je policijska barikada
+    BarricadeData[playerid][slot][barricadeX] = x;
+    BarricadeData[playerid][slot][barricadeY] = y;
+    BarricadeData[playerid][slot][barricadeZ] = z-0.7;
+    BarricadeData[playerid][slot][barricadeRX] = 0.0;
+    BarricadeData[playerid][slot][barricadeRY] = 0.0;
+    BarricadeData[playerid][slot][barricadeRZ] = angle;
+    BarricadeData[playerid][slot][barricadeOwner] = playerid;
+    
+    PlayerBarricades[playerid]++;
+
+    SendClientMessage(playerid, x_purple, "* Postavili ste barikadu. Koristite /editbarikadu za promenu pozicije ili /obrisibarikadu za brisanje.");
+    return 1;
+}
+
+YCMD:editbarikadu(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /editbarikadu");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    // Pronalazenje najblize barikade
+    new Float:px, Float:py, Float:pz;
+    GetPlayerPos(playerid, px, py, pz);
+    
+    new closest = -1, slot = -1;
+    new Float:closest_dist = 999999.9;
+    
+    for(new i = 0; i < MAX_BARRICADES_PER_OFFICER; i++) {
+        if(BarricadeData[playerid][i][barricadeObject] != INVALID_BARRICADE_ID) {
+            new Float:dist = GetDistanceBetweenPoints(px, py, pz,
+                BarricadeData[playerid][i][barricadeX],
+                BarricadeData[playerid][i][barricadeY],
+                BarricadeData[playerid][i][barricadeZ]
+            );
+            if(dist < closest_dist && dist < 5.0) {
+                closest_dist = dist;
+                closest = BarricadeData[playerid][i][barricadeObject];
+                slot = i;
+            }
+        }
+    }
+
+    if(closest == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste blizu nijedne vase barikade!");
+
+    EditDynamicObject(playerid, closest);
+    SetPVarInt(playerid, "EditingBarricadeSlot", slot);
+    
+    return 1;
+}
+
+YCMD:obrisibarikadu(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /obrisibarikadu");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste clan policije!");
+
+    if(!IsPlayerOnPoliceDuty(playerid))
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste na duznosti!");
+
+    // Pronalazenje najblize barikade
+    new Float:px, Float:py, Float:pz;
+    GetPlayerPos(playerid, px, py, pz);
+    
+    new slot = -1;
+    new Float:closest_dist = 999999.9;
+    
+    for(new i = 0; i < MAX_BARRICADES_PER_OFFICER; i++) {
+        if(BarricadeData[playerid][i][barricadeObject] != INVALID_BARRICADE_ID) {
+            new Float:dist = GetDistanceBetweenPoints(px, py, pz,
+                BarricadeData[playerid][i][barricadeX],
+                BarricadeData[playerid][i][barricadeY],
+                BarricadeData[playerid][i][barricadeZ]
+            );
+            if(dist < closest_dist && dist < 5.0) {
+                closest_dist = dist;
+                slot = i;
+            }
+        }
+    }
+
+    if(slot == -1)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste blizu nijedne vase barikade!");
+
+    DestroyDynamicObject(BarricadeData[playerid][slot][barricadeObject]);
+    BarricadeData[playerid][slot][barricadeObject] = INVALID_BARRICADE_ID;
+    PlayerBarricades[playerid]--;
+
+    SendClientMessage(playerid, x_purple, "* Uspesno ste obrisali barikadu.");
+    return 1;
+}
+
+// Callback za edit objekta
+hook OnPlayerEditDynamicObject(playerid, objectid, EDIT_RESPONSE:response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
+    new slot = GetPVarInt(playerid, "EditingBarricadeSlot");
+    if(slot != -1 && BarricadeData[playerid][slot][barricadeObject] == objectid) {
+        if(response == EDIT_RESPONSE_FINAL) {
+            BarricadeData[playerid][slot][barricadeX] = x;
+            BarricadeData[playerid][slot][barricadeY] = y;
+            BarricadeData[playerid][slot][barricadeZ] = z;
+            BarricadeData[playerid][slot][barricadeRX] = rx;
+            BarricadeData[playerid][slot][barricadeRY] = ry;
+            BarricadeData[playerid][slot][barricadeRZ] = rz;
+            
+            SendClientMessage(playerid, x_purple, "* Uspesno ste promenili poziciju barikade.");
+        }
+        else if(response == EDIT_RESPONSE_CANCEL) {
+            SetDynamicObjectPos(objectid,
+                BarricadeData[playerid][slot][barricadeX],
+                BarricadeData[playerid][slot][barricadeY],
+                BarricadeData[playerid][slot][barricadeZ]
+            );
+            SetDynamicObjectRot(objectid,
+                BarricadeData[playerid][slot][barricadeRX],
+                BarricadeData[playerid][slot][barricadeRY],
+                BarricadeData[playerid][slot][barricadeRZ]
+            );
+        }
+        DeletePVar(playerid, "EditingBarricadeSlot");
+    }
     return 1;
 }

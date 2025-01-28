@@ -453,7 +453,7 @@ YCMD:update(playerid, params[], help)
 
     #define UPDATE_VERSION "1.0.0"
 
-    new string[512];
+    new string[2048];
     format(string, sizeof(string), 
         ""c_white"Current Version: "UPDATE_VERSION"\n\n\
         Latest Updates:\n\
@@ -465,7 +465,20 @@ YCMD:update(playerid, params[], help)
         - Improved server performance\n\
         - Added ATM system\n\
         - Added Accent system\n\
-        - Added gate system"
+        - Added gate system\n\
+        - Policijske barikade /editbarikadu /obrisibarikadu /kreirajbarikadu\n\
+        - Registracija vozila /tinspect i podmicivanje vozila ako je hp ispod 700 /bribe\n\
+        - Kad zavrsis tehnicki komanda kod aktora /registrationend\n\
+        - Street system\n\
+        - Tiket sistem za pd\n\
+        - /gov, /m ili levi alt, /fs, /wantedlist, /kaucija, /pretresi, /pokaziznacku\n\
+        - /getvehvw, /setvehvw, /refresh, /donate\n\
+        - Fix za otkaz pre isteka ugovora\n\
+        - Advertisement fix za cooldown\n\
+        - Tod fix 0-24 samo moze sad\n\
+        - wheater izbacen lose vreme, 30%% za lose vreme 70 za dobro\n\
+        - Fixed anims\n\
+        - Promeni pol komanda, togtag, /fso, /refresh"
     );
 
     Dialog_Show(playerid, "_noReturn", DIALOG_STYLE_MSGBOX, 
