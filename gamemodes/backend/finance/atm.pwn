@@ -24,8 +24,7 @@
 #define MAX_ATMS            100
 #define INVALID_ATM_ID      -1
 #define ATM_RANGE           3.0
-#define ATM_DEFAULT_MODEL   19324 // Promeni na željeni model bankomata
-
+#define ATM_DEFAULT_MODEL   19324
 // ATM Data Structure
 enum E_ATM_DATA {
     atmID,
@@ -108,7 +107,7 @@ YCMD:createatm(playerid, params[], help) {
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, angle);
     
-    // Postavi bankomat 2 jedinice ispred igra?a
+    // Postavi bankomat 2 jedinice ispred igraca
     x += (2.0 * floatsin(-angle, degrees));
     y += (2.0 * floatcos(-angle, degrees));
     
@@ -126,7 +125,7 @@ YCMD:createatm(playerid, params[], help) {
     
     Iter_Add(ATMs, atmid);
     
-    // Prvo sa?uvaj u bazu
+    // Prvo sacuvaj u bazu
     new query[512];
     mysql_format(SQL, query, sizeof(query), 
         "INSERT INTO atms (model, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z) VALUES (%d, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f)",
@@ -134,7 +133,7 @@ YCMD:createatm(playerid, params[], help) {
     );
     mysql_tquery(SQL, query, "OnATMInserted", "dd", playerid, atmid);
     
-    // Zatim omogu?i editovanje
+    // Zatim omoguci editovanje
     gEditingATM[playerid] = atmid;
     EditDynamicObject(playerid, ATMData[atmid][atmObject]);
     
@@ -221,7 +220,6 @@ stock GetNearestATM(playerid) {
     return nearest_atm;
 }
 
-// Object editing callback
 hook OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, EDIT_RESPONSE:response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
     //printf("[ATM Debug] Edit callback started - Player: %d, Object: %d", playerid, _:objectid);
     

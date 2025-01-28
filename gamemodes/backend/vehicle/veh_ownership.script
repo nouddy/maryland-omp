@@ -507,3 +507,17 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
+
+
+// Stock funkcija za proveru vlasništva vozila
+stock IsPlayerVehicleOwner(playerid, vehicleid) {
+    foreach(new i : iter_Vehicles) {
+        if(pvVehicle[i] == vehicleid) {
+            if(eVehicle[i][vOwner] == GetCharacterSQLID(playerid)) {
+                return 1;
+            }
+            break;
+        }
+    }
+    return 0;
+}

@@ -445,6 +445,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/misc/gates.pwn"								//* Gates
 #include "backend/finance/atm.pwn"
 #include "backend/misc/streets.pwn"								//* Streets
+#include "backend/vehicle/vehiclereg.pwn"						//* Vehicle Registration
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved

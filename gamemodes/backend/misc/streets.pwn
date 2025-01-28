@@ -42,7 +42,7 @@ enum E_STREET_DATA
 new StreetInfo[MAX_STREETS][E_STREET_DATA];
 new Iterator:Streets<MAX_STREETS>;
 
-// Funkcija za u?itavanje ulica
+// Funkcija za ucitavanje ulica
 LoadStreets()
 {
     mysql_tquery(SQL, "SELECT * FROM streets", "OnStreetsLoad");
@@ -75,7 +75,7 @@ public OnStreetsLoad()
     return 1;
 }
 
-// Funkcija za ažuriranje labela ulice
+// Funkcija za azuriranje labela ulice
 stock UpdateStreetLabel(streetid)
 {
     if(StreetInfo[streetid][street_Label] != Text3D:INVALID_3DTEXT_ID)
@@ -336,18 +336,18 @@ YCMD:deletestreet(playerid, params[], help)
     if(streetid == -1)
         return notification.Show(playerid, "GRESKA", "Niste blizu nijedne ulice!", "!", BOXCOLOR_RED);
 
-    // Sa?uvaj ime za log
+    // Sacuvaj ime za log
     new streetName[64];
     format(streetName, sizeof(streetName), "%s", StreetInfo[streetid][street_Name]);
 
-    // Obriši iz baze
+    // Obrisi iz baze
     new query[128];
     mysql_format(SQL, query, sizeof(query), 
         "DELETE FROM streets WHERE street_id = %d",
         StreetInfo[streetid][street_ID]);
     mysql_tquery(SQL, query);
 
-    // Obriši label
+    // Obrisi label
     if(StreetInfo[streetid][street_Label] != Text3D:INVALID_3DTEXT_ID)
     {
         Delete3DTextLabel(StreetInfo[streetid][street_Label]);

@@ -112,18 +112,6 @@ YCMD:testplates(playerid, params[], help)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-YCMD:tinspect(playerid, params[], help)
-{
-
-	if(!IsPlayerInRangeOfPoint(playerid, 1.0, 1095.5005,-1225.7079,15.9721)) return notification.Show(playerid, "GRESKA", "Niste u servisu", "!", BOXCOLOR_RED);
-	if(GetPlayerMoney(playerid) < 800) return notification.Show(playerid, "GRESKA", "Nemate dovoljno novca", "!", BOXCOLOR_RED);
-
-    notification.Show(playerid, "SERVIS", "Ova funkcija jos nije dodata", "!", BOXCOLOR_RED);
-
-	
-	return Y_HOOKS_CONTINUE_RETURN_1;
-}
-
 hook OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid) {
 
 	if(areaid == CustomsDoorsArea)
