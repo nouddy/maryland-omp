@@ -742,4 +742,3 @@ Dialog:DRUGS_DEALER(playerid, response, listitem, string: inputtext[]) {
     SendClientMessage(playerid, x_faction, message);
     return 1;
 }
-

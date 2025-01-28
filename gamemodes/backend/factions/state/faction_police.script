@@ -78,7 +78,6 @@ new dutyPickup[MAX_POLICE];
 new Text3D:equLabel[MAX_POLICE];
 new equPickup[MAX_POLICE];
 
-
 //============================================================ Police Members
 
 enum e_POLICE_MEMBER_DATA {
@@ -87,6 +86,7 @@ enum e_POLICE_MEMBER_DATA {
     characterID,
     policeRank,
     arrests,
+    badge_number,  // Dodato
     joinDate[64]
 }
 
@@ -122,9 +122,8 @@ new const Float:sz_PrisonPositions[][3] = {
     { 765.5214,1791.8507,-70.2358 }
 };
 
-
 //============================================================ Boze Pomozi
-
+forward bool:Police_CheckDrugs(playerid);
 /* Timers */
 
 forward PoliceMember_ShowList(playerid);
@@ -429,9 +428,9 @@ stock IsPlayerPoliceLeader(playerid) {
 
 hook OnCharacterLoaded(playerid) {
 
-    new q[128];
-    mysql_format(SQL, q, sizeof q, "SELECT * FROM `police_members` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
-    mysql_tquery(SQL, q, "police_LoadMember", "d", playerid);
+    new query[128];
+    mysql_format(SQL, query, sizeof query, "SELECT * FROM `police_members` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, query, "Police_LoadMembers", "i", playerid);
 
     new qp[128];
     mysql_format(SQL, qp, sizeof qp, "SELECT * FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
@@ -973,15 +972,13 @@ YCMD:eject(playerid, params[], help) {
 
 YCMD:setchief(playerid, params[], help) 
 {
-    
     if(GetPlayerStaffLevel(playerid) < 3)
-		return notification.Show(playerid, "Greska", "Samo community manager moze ovo!", "!", BOXCOLOR_RED);
+        return notification.Show(playerid, "Greska", "Samo community manager moze ovo!", "!", BOXCOLOR_RED);
 
-	static
-		targetid,
-		police_id;
+    static targetid, police_id;
 
-    if(sscanf(params, "ud", targetid, police_id)) return SendServerMessage(playerid, "/setchief <id/ime> <police id>");
+    if(sscanf(params, "ud", targetid, police_id)) 
+        return SendServerMessage(playerid, "/setchief <id/ime> <police id>");
 
     if(targetid == INVALID_PLAYER_ID)
         return (true);
@@ -995,9 +992,7 @@ YCMD:setchief(playerid, params[], help)
     static bool:policeFound = false;
 
     foreach(new i : iter_Police) {
-
         if(fPoliceInfo[i][fPoliceID] == police_id) {
-
             policeFound = true;
             break;
         }
@@ -1007,23 +1002,30 @@ YCMD:setchief(playerid, params[], help)
         return (true);
 
     if(police_id > 0) {
-
         if(PoliceMember[targetid][policeID] != 0)
-            return SendServerMessage(playerid, "Taj igrac je vec clan neke policije!" );
+            return SendServerMessage(playerid, "Taj igrac je vec clan neke policije!");
+        
+        new policebadge = Police_GetNextBadgeNumber();
         
         PoliceMember[targetid][policeID] = police_id;
         PoliceMember[targetid][characterID] = GetCharacterSQLID(targetid);
-        PoliceMember[targetid][policeRank] = 1;
-        PoliceMember[targetid][arrests] = 1;
+        PoliceMember[targetid][policeRank] = 4; // Chief rank
+        PoliceMember[targetid][arrests] = 0;
+        PoliceMember[targetid][badge_number] = policebadge;
 
         new q[260];
-        mysql_format(MySQL:SQL, q, sizeof q, "INSERT INTO `police_members` (`character_id`, `police_id`, `police_rank`, `arrests`, `joinDate`) \
-                                            VALUES('%d', '%d', '4', '0', NOW())", 
-                                        GetCharacterSQLID(targetid), police_id);
-        mysql_tquery(MySQL:SQL, q);
+        mysql_format(SQL, q, sizeof q, "INSERT INTO `police_members` \
+            (`character_id`, `police_id`, `police_rank`, `arrests`, `badge_number`, `joinDate`) \
+            VALUES('%d', '%d', '4', '0', '%d', NOW())", 
+            GetCharacterSQLID(targetid), police_id, policebadge);
+        mysql_tquery(SQL, q);
 
         SendServerMessage(playerid, "Uspjesno ste postavili igracu "c_server"%s "c_white"leadera policije "c_server"%s", ReturnCharacterName(targetid), Police_ReturnNameByPlayer(targetid));
         SendServerMessage(targetid, "Admin "c_server"%s "c_white"vam je postavio leadera policije "c_server"%s", ReturnCharacterName(playerid), Police_ReturnNameByPlayer(targetid));
+        
+        new string[128];
+        format(string, sizeof string, "POLICE: Dobili ste znacku broj #%d", policebadge);
+        SendClientMessage(targetid, x_blue, string);
         return ~1;
     }
 
@@ -1108,9 +1110,8 @@ public Prisono_DecreasePlayerTime(playerid) {
     return (true);
 }
 
-forward police_LoadMember(playerid);
-public police_LoadMember(playerid) {
-
+forward Police_LoadMembers(playerid);
+public Police_LoadMembers(playerid) {
     new rows = cache_num_rows();
 
     if(!rows)  {
@@ -1123,10 +1124,10 @@ public police_LoadMember(playerid) {
     cache_get_value_name_int(0, "character_id", PoliceMember[playerid][characterID]);
     cache_get_value_name_int(0, "police_rank", PoliceMember[playerid][policeRank]);
     cache_get_value_name_int(0, "arrests", PoliceMember[playerid][arrests]);
+    cache_get_value_name_int(0, "badge_number", PoliceMember[playerid][badge_number]);
     cache_get_value_name(0, "joinDate", PoliceMember[playerid][joinDate]);
 
     return (true);
-
 }
 
 forward PoliceLoad();
@@ -1717,4 +1718,331 @@ ptask Police_AwardPlayer[3600000](playerid) {
     }
 
     return (true);
+}
+
+YCMD:razoruzaj(playerid, params[], help)
+{
+    if(help)
+    {
+        notification.Show(playerid, "HELP", "Oduzima oruzje igracu", "+", BOXCOLOR_BLUE);
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid) || GetPlayerStaffLevel(playerid) < 1)
+        return notification.Show(playerid, "Greska", "Samo policija i staff mogu koristiti ovu komandu!", "!", BOXCOLOR_RED);
+
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "KORISCENJE: /razoruzaj [ID/Ime]");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+        
+    if(targetid == playerid)
+        return notification.Show(playerid, "GRESKA", "Ne mozete razoruzati sami sebe!", "!", BOXCOLOR_RED);
+        
+    // Provera udaljenosti samo za policiju
+    if(IsPlayerPoliceMember(playerid))
+    {
+        if(!IsPlayerOnPoliceDuty(playerid)) return notification.Show(playerid, "GRESKA", "Moras biti na duznosti!", "!", BOXCOLOR_RED);
+
+        if(targetid == IsPlayerPoliceMember(targetid))
+            return notification.Show(playerid, "GRESKA", "Ne mozete razoruzati policijskog clana!", "!", BOXCOLOR_RED);
+
+        new Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2;
+        GetPlayerPos(playerid, x1, y1, z1);
+        GetPlayerPos(targetid, x2, y2, z2);
+        
+        if(GetPlayerDistanceFromPoint(targetid, x1, y1, z1) > 5.0)
+            return notification.Show(playerid, "GRESKA", "Igrac nije u vasoj blizini ili niste na duznosti!", "!", BOXCOLOR_RED);
+    }
+
+    // Remove all weapons
+    ResetPlayerWeapons(targetid);
+
+    // Notify players
+    new string[144];
+    format(string, sizeof(string), "Oduzeli ste oruzje igracu %s", ReturnCharacterName(targetid));
+    notification.Show(playerid, "USPESNO", string, "!", BOXCOLOR_GREEN);
+
+    format(string, sizeof(string), "%s vam je oduzeo oruzje", ReturnCharacterName(playerid));
+    notification.Show(targetid, "INFO", string, "!", BOXCOLOR_RED);
+
+    // Log the action
+    static log_str[128];
+    format(log_str, sizeof log_str, "%s: %s je oduzeo oruzje igracu %s", 
+        (GetPlayerStaffLevel(playerid) >= 1) ? ("STAFF") : ("POLICE"),
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid));
+    mysql_write_log(log_str, (GetPlayerStaffLevel(playerid) >= 1) ? LOG_TYPE_STAFF : LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
+}
+
+// Komanda za pokazivanje zna?ke
+YCMD:pokaziznacku(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /pokaziznacku [ID/Ime]");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return notification.Show(playerid, "Greska", "Niste clan policije!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "KORISCENJE: /pokaziznacku [ID/Ime]");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+        
+    if(targetid == playerid)
+        return notification.Show(playerid, "GRESKA", "Ne mozete pokazati znacku sami sebi!", "!", BOXCOLOR_RED);
+
+    // Provera udaljenosti
+    new Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2;
+    GetPlayerPos(playerid, x1, y1, z1);
+    GetPlayerPos(targetid, x2, y2, z2);
+    
+    if(GetPlayerDistanceFromPoint(targetid, x1, y1, z1) > 5.0)
+        return notification.Show(playerid, "GRESKA", "Igrac nije u vasoj blizini!", "!", BOXCOLOR_RED);
+
+    new police_id = Police_ReturnIndexID(playerid);
+    new rankid = PoliceMember[playerid][policeRank];
+    new rankName[MAX_RANK_LEN];
+    Police_GetRankName(police_id, rankid, rankName);
+
+    // Slanje poruka
+    new string[256];
+    format(string, sizeof(string), "* %s vadi policijsku znacku i pokazuje je %s", 
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid));
+    ProxDetector(playerid, Float:30.0, x_purple, string);
+
+    format(string, sizeof(string), "______________________________________");
+    SendClientMessage(targetid, x_blue, string);
+    format(string, sizeof(string), "Policijski Sluzbenik: %s", ReturnCharacterName(playerid));
+    SendClientMessage(targetid, x_white, string);
+    format(string, sizeof(string), "Broj Znacke: #%d", PoliceMember[playerid][badge_number]);
+    SendClientMessage(targetid, x_white, string);
+    format(string, sizeof(string), "Cin: %s", rankName);
+    SendClientMessage(targetid, x_white, string);
+    format(string, sizeof(string), "______________________________________");
+    SendClientMessage(targetid, x_blue, string);
+
+    // Log akcije
+    static log_str[128];
+    format(log_str, sizeof log_str, "POLICE: %s je pokazao znacku igracu %s", 
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid));
+    mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
+}
+
+// Funkcija za generisanje slede?eg broja znacke
+stock Police_GetNextBadgeNumber() {
+    new query[128], znacka;
+    mysql_format(SQL, query, sizeof(query), 
+        "SELECT MAX(badge_number) + 1 as next_badge FROM police_members"
+    );
+    new Cache:result = mysql_query(SQL, query);
+    
+    cache_get_value_name_int(0, "next_badge", znacka);
+    cache_delete(result);
+    
+    return (znacka > 0) ? znacka : 1000; // Pocinje od 1000 ako nema postojecih znacaka
+}
+
+// Funkcija za dobijanje imena ranka
+stock Police_GetRankName(police_id, rank, rankName[], len = sizeof(rankName)) {
+    if(rank < 1 || rank > MAX_POLICE_RANKS) {
+        format(rankName, len, "Invalid Rank");
+        return 0;
+    }
+    
+    if(police_id < 0 || police_id >= MAX_POLICE) {
+        format(rankName, len, "Invalid Police");
+        return 0;
+    }
+    
+    format(rankName, len, "%s", PoliceRanks[police_id][rank - 1]);
+    return 1;
+}
+
+YCMD:pretresi(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /pretresi [ID/Ime]");
+        return 1;
+    }
+
+    if(!IsPlayerPoliceMember(playerid))
+        return notification.Show(playerid, "Greska", "Niste clan policije!", "!", BOXCOLOR_RED);
+        
+    if(!IsPlayerOnPoliceDuty(playerid)) return notification.Show(playerid, "GRESKA", "Moras biti na duznosti!", "!", BOXCOLOR_RED);
+
+    new targetid;
+    if(sscanf(params, "u", targetid))
+        return SendClientMessage(playerid, x_server, "KORISCENJE: /pretresi [ID/Ime]");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return notification.Show(playerid, "GRESKA", "Taj igrac nije na serveru!", "!", BOXCOLOR_RED);
+        
+    if(targetid == playerid)
+        return notification.Show(playerid, "GRESKA", "Ne mozete pretraziti sami sebe!", "!", BOXCOLOR_RED);
+        
+    if(IsPlayerPoliceMember(targetid))
+        return notification.Show(playerid, "GRESKA", "Ne mozete pretraziti policajca!", "!", BOXCOLOR_RED);
+
+    // Provera udaljenosti
+    new Float:x1, Float:y1, Float:z1;
+    GetPlayerPos(playerid, x1, y1, z1);
+    
+    if(!IsPlayerInRangeOfPoint(targetid, 5.0, x1, y1, z1))
+        return notification.Show(playerid, "GRESKA", "Igrac nije u vasoj blizini!", "!", BOXCOLOR_RED);
+
+    // RP poruka o pretresu
+    new string[256];
+    format(string, sizeof(string), "* Policijski sluzbenik %s pretresa %s", 
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid));
+    ProxDetector(playerid, 30.0, x_purple, string);
+
+    // Provera za oruzje
+    new bool:hasWeapons = false;
+    new currentWeapon = GetPlayerWeapon(targetid);
+    if(currentWeapon > 0) { // 0 znaci da nema oruzje
+        new ammo = GetPlayerAmmo(targetid);
+        if(ammo > 0) {
+            hasWeapons = true;
+        }
+    }
+
+    // Provera za drogu
+    new bool:hasDrugs = Police_CheckDrugs(targetid);
+    new drugList[128];
+    if(hasDrugs) Police_GetPlayerDrugs(targetid, drugList);
+
+    // Slanje rezultata pretresa policajcu
+    if(!hasWeapons && !hasDrugs) {
+        format(string, sizeof(string), "* Pretres zavrsen - %s je cist, nista nije pronadjeno.", 
+            ReturnCharacterName(targetid));
+        SendClientMessage(playerid, x_blue, string);
+    }
+    else {
+        if(hasWeapons && hasDrugs) {
+            format(string, sizeof(string), "* Pretres zavrsen - %s poseduje oruzje i nedozvoljene supstance! (%s)", 
+                ReturnCharacterName(targetid), drugList);
+        }
+        else if(hasWeapons) {
+            format(string, sizeof(string), "* Pretres zavrsen - %s poseduje oruzje!", 
+                ReturnCharacterName(targetid));
+        }
+        else {
+            format(string, sizeof(string), "* Pretres zavrsen - %s poseduje nedozvoljene supstance! (%s)", 
+                ReturnCharacterName(targetid), drugList);
+        }
+        SendClientMessage(playerid, x_blue, string);
+    }
+
+    // Slanje poruke igracu koji se pretresa
+    format(string, sizeof(string), "* Policijski sluzbenik %s vas pretresa.", 
+        ReturnCharacterName(playerid));
+    SendClientMessage(targetid, x_blue, string);
+
+    // Log akcije
+    format(string, sizeof(string), "POLICE: %s je pretresao igraca %s [Oruzje: %s | Droga: %s]", 
+        ReturnCharacterName(playerid), ReturnCharacterName(targetid),
+        hasWeapons ? ("DA") : ("NE"), hasDrugs ? ("DA") : ("NE"));
+    mysql_write_log(string, LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
+}
+
+// Globalna funkcija za proveru droge u inventaru
+
+public bool:Police_CheckDrugs(playerid) {
+    // Lista ID-eva droga iz inventara
+    static const DrugItems[] = {
+        INVENTORY_ITEM_HASH,
+        INVENTORY_ITEM_COCAINE,
+        INVENTORY_ITEM_SPEED,
+        INVENTORY_ITEM_SHROOMS
+    };
+    
+    // Provera za svaku vrstu droge koriste?i postoje?u funkciju
+    for(new i = 0; i < sizeof(DrugItems); i++) {
+        if(Inventory_GetDrugQuantity(playerid, DrugItems[i]) > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Dodatna funkcija za dobijanje imena droge koju igrac poseduje (opciono)
+stock Police_GetPlayerDrugs(playerid, string[], len = sizeof(string)) {
+    new bool:first = true;
+    string[0] = EOS;
+    
+    static const DrugItems[] = {
+        INVENTORY_ITEM_HASH,
+        INVENTORY_ITEM_COCAINE,
+        INVENTORY_ITEM_SPEED,
+        INVENTORY_ITEM_SHROOMS
+    };
+    
+    for(new i = 0; i < sizeof(DrugItems); i++) {
+        new quantity = Inventory_GetDrugQuantity(playerid, DrugItems[i]);
+        if(quantity > 0) {
+            if(!first) strcat(string, ", ", len);
+            new drugName[50];
+            format(drugName, sizeof(drugName), "%s (%dg)", Inventory_ReturnItemName(DrugItems[i]), quantity);
+            strcat(string, drugName, len);
+            first = false;
+        }
+    }
+    
+    return string[0] != EOS;
+}
+
+YCMD:kaucija(playerid, params[], help) {
+    if(help) {
+        SendClientMessage(playerid, x_server, "KORISCENJE: /kaucija");
+        return 1;
+    }
+
+    if(PlayerPrison[playerid][jailTime] <= 0)
+        return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Niste u zatvoru!");
+
+    new bail_amount = (PlayerPrison[playerid][jailTime] / 5) * 500; // Vreme je * 5 u ImprisonPlayer, pa delimo
+    
+    // Provera da li igrac ima dovoljno novca
+    if(GetPlayerMoney(playerid) < bail_amount) {
+        new string[128];
+        format(string, sizeof(string), "maryland \187; "c_white"Nemate dovoljno novca za kauciju! (Potrebno: $%d)", bail_amount);
+        return SendClientMessage(playerid, x_server, string);
+    }
+
+    // Uzimanje novca
+    GivePlayerMoney(playerid, -bail_amount);
+    
+    // Reset zatvorskih varijabli
+    PlayerPrison[playerid][jailTime] = 0;
+    SendClientMessage(playerid, x_grey, "prison \187; "c_white"Platili ste kauciju i pusteni ste na slobodu, budite bolji gradjanin!");
+
+    // Brisanje iz baze
+    new q[128];
+    mysql_format(SQL, q, sizeof q, "DELETE FROM `player_prisons` WHERE `characterID` = '%d'", GetCharacterSQLID(playerid));
+    mysql_tquery(SQL, q);
+
+    // Reset wanted levela i teleport
+    Police_SetPlayerWantedLevel(playerid, 0);
+    SetPlayerPos(playerid, 1799.1263,-1577.9620,14.0765);
+    SetPlayerVirtualWorld(playerid, 0);
+    SetPlayerInterior(playerid, 0);
+
+    // Log
+    static log_str[128];
+    format(log_str, sizeof log_str, "PRISON: %s je platio kauciju od $%d i pusten iz zatvora", 
+        ReturnCharacterName(playerid), bail_amount);
+    mysql_write_log(log_str, LOG_TYPE_CRIMINAL_RECORD);
+
+    return 1;
 }

@@ -274,11 +274,19 @@ YCMD:job(playerid, params[], help) {
 }
 
 YCMD:otkaz(playerid, params[], help) {
-
     if(playerJob[playerid] == INVALID_JOB_ID) 
         return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Niste zaposleni!");
+    
+    // Provera da li je ugovor jos uvek aktivan
+    new remainingSeconds = playerContract[playerid] - gettime();
+    if(remainingSeconds > 0) {
+        new str[20];
+        GetReadableTime(remainingSeconds, str);
+        return SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Ne mozete dati otkaz dok vam ne istekne ugovor! (Preostalo vrijeme: %s)", str);
+    }
         
     job.SetPlayerJob(playerid, INVALID_JOB_ID);
+    SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Uspjesno ste dali otkaz!");
 
     return (true);
 }
@@ -286,11 +294,8 @@ YCMD:otkaz(playerid, params[], help) {
 YCMD:ugovor(playerid, params[], help) = contract;
 YCMD:contract(playerid, params[], help) 
 {
-
     new sTime[20];
-
     GetRemainingTime(playerContract[playerid], sTime);
-
     SendClientMessage(playerid, x_server, "[JOB] >> "c_white"Preostalo vrjeme do isteka ugovora %s", sTime);
     
     return 1;

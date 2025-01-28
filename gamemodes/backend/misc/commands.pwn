@@ -318,6 +318,13 @@ YCMD:teamspeak(playerid, params[], help)
     return 1;
 }
 
+YCMD:doniraj(playerid, params[], help) = donate;
+YCMD:donate(playerid, params[], help)
+{
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Vise informacija na Forumu: https://forum.maryland-ogc.com");
+    return 1;
+}
+
 YCMD:forum(playerid, params[], help)
 {
     if(help)
@@ -506,9 +513,6 @@ YCMD:anims(playerid, params[], help)
 
 YCMD:fso(playerid, params[], help) 
 {
-    
-
-
     return Kick(playerid);
 }
 
@@ -594,4 +598,33 @@ stock ReturnCharacterNameWithAccent(playerid)
     new name[MAX_PLAYER_NAME + 32];
     format(name, sizeof(name), "%s (%s)", ReturnCharacterName(playerid), GetPlayerAccentName(playerid));
     return name;
+}
+
+YCMD:refresh(playerid, params[], help) {
+    if(help) return SendClientMessage(playerid, x_server, "maryland \187; "c_white"/refresh - Osvezava vas karakter u slucaju da zabodete.");
+
+    // Provera da li je admin freezovao igraca
+    if(IsPlayerAdminFrozen(playerid))
+        return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Ne mozete se osveziti dok ste zamrznuti od strane admina!");
+
+    // Provera da li je igrac u vozilu
+    if(IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, x_red, "maryland \187; "c_white"Ne mozete koristiti ovu komandu u vozilu!");
+
+    // Cuvamo trenutnu poziciju
+    new Float:x, Float:y, Float:z, Float:angle;
+    GetPlayerPos(playerid, x, y, z);
+    GetPlayerFacingAngle(playerid, angle);
+
+    // Resetujemo sve
+    TogglePlayerControllable(playerid, true);
+    SetCameraBehindPlayer(playerid);
+    
+    // Vracamo igraca na istu poziciju
+    SetPlayerCompensatedPos(playerid, x, y, z, 0, 0, 5000);
+    SetPlayerFacingAngle(playerid, angle);
+
+    SendClientMessage(playerid, x_server, "maryland \187; "c_white"Uspesno ste osvezili vas karakter!");
+    
+    return 1;
 }

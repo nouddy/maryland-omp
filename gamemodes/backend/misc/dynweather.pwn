@@ -20,10 +20,9 @@
 #include <ysilib\YSI_Coding\y_hooks>
 
 // Konstante za vremenske uslove
-#define WEATHER_SUNNY      0
+#define WEATHER_SUNNY      0  // Clear weather
 #define WEATHER_RAINY      8
 #define WEATHER_FOGGY      9
-#define WEATHER_STORMY     16
 
 // Globalne varijable
 static 
@@ -36,8 +35,7 @@ static
 static const WeatherMessages[][] = {
     {"[METEOROLOG] Ocekuje se suncano vreme sa temperaturom do %d°C."},
     {"[METEOROLOG] Meteorolozi najavljuju kisu! Ponesite kisobrane sa sobom."},
-    {"[METEOROLOG] Upozorenje: Gusta magla smanjuje vidljivost na putevima!"},
-    {"[METEOROLOG] UPOZORENJE: Priblizava se olujni sistem! Ocekuju se grmljavina i jako nevreme!"}
+    {"[METEOROLOG] Upozorenje: Gusta magla smanjuje vidljivost na putevima!"}
 };
 
 hook OnGameModeInit()
@@ -67,6 +65,9 @@ hook OnPlayerConnect(playerid)
         SetPlayerWeather(playerid, g_CurrentWeather);
         SetPlayerTime(playerid, g_CurrentHour, 0);
     }
+    else {
+        SetPlayerWeather(playerid, WEATHER_SUNNY); // Clear weather u interioru
+    }
     return 1;
 }
 
@@ -74,27 +75,36 @@ hook OnPlayerConnect(playerid)
 forward UpdateWeather();
 public UpdateWeather()
 {
-    new weather = random(4);
     new oldWeather = g_CurrentWeather;
     
-    switch(weather)
-    {
-        case 0: g_CurrentWeather = WEATHER_SUNNY;
-        case 1: g_CurrentWeather = WEATHER_RAINY;
-        case 2: g_CurrentWeather = WEATHER_FOGGY;
-        case 3: g_CurrentWeather = WEATHER_STORMY;
+    // Generisanje random broja od 0-100 za verovatnocu
+    new chance = random(100);
+    
+    // 70% sansa za suncano, 15% za kisu, 15% za maglu
+    if(chance < 70) {
+        g_CurrentWeather = WEATHER_SUNNY;
+    }
+    else if(chance < 85) {
+        g_CurrentWeather = WEATHER_RAINY;
+    }
+    else {
+        g_CurrentWeather = WEATHER_FOGGY;
     }
     
     if(oldWeather != g_CurrentWeather) {
-        new temp = random(15) + 10; // Temperatura izmedju 10-25°C
         new string[256];
-
-        if(weather == 0)
-            format(string, sizeof(string), WeatherMessages[weather], temp);
         
-        else
-            format(string, sizeof(string), WeatherMessages[weather]);
-
+        if(g_CurrentWeather == WEATHER_SUNNY) {
+            new temp = random(15) + 10; // Temperatura izmedju 10-25°C
+            format(string, sizeof(string), WeatherMessages[0], temp);
+        }
+        else if(g_CurrentWeather == WEATHER_RAINY) {
+            format(string, sizeof(string), WeatherMessages[1]);
+        }
+        else {
+            format(string, sizeof(string), WeatherMessages[2]);
+        }
+        
         SendClientMessageToAll(0xFFFF00AA, string);
     }
     
@@ -102,6 +112,9 @@ public UpdateWeather()
     foreach(new i : Player) {
         if(GetPlayerInterior(i) == 0 && GetPlayerVirtualWorld(i) == 0) {
             SetPlayerWeather(i, g_CurrentWeather);
+        }
+        else {
+            SetPlayerWeather(i, WEATHER_SUNNY); // Clear weather u interioru
         }
     }
     
@@ -125,7 +138,6 @@ public UpdateTime()
                 case WEATHER_SUNNY: format(string, sizeof(string), "[METEOROLOG] Svice novi dan! Ocekuje se vedro jutro.");
                 case WEATHER_RAINY: format(string, sizeof(string), "[METEOROLOG] Kisno jutro pred nama! Ponesite kisobrane.");
                 case WEATHER_FOGGY: format(string, sizeof(string), "[METEOROLOG] Maglovito jutro! Vozaci, upalite maglenke.");
-                case WEATHER_STORMY: format(string, sizeof(string), "[METEOROLOG] UPOZORENJE: Olujno jutro! Ocekuje se jak vetar i grmljavina.");
             }
         }
         case 12: {
@@ -133,7 +145,6 @@ public UpdateTime()
                 case WEATHER_SUNNY: format(string, sizeof(string), "[METEOROLOG] Podne! UV index je povisen, zastitite se od sunca.");
                 case WEATHER_RAINY: format(string, sizeof(string), "[METEOROLOG] Podne donosi jake pljuskove! Budite oprezni.");
                 case WEATHER_FOGGY: format(string, sizeof(string), "[METEOROLOG] Neuobicajeno - magla se zadrzava i tokom podneva.");
-                case WEATHER_STORMY: format(string, sizeof(string), "[METEOROLOG] UPOZORENJE: Oluja dostize vrhunac! Ostanite u zatvorenom.");
             }
         }
         case 20: {
@@ -141,7 +152,6 @@ public UpdateTime()
                 case WEATHER_SUNNY: format(string, sizeof(string), "[METEOROLOG] Vece donosi prijatnije temperature i vedro nebo.");
                 case WEATHER_RAINY: format(string, sizeof(string), "[METEOROLOG] Kisovito vece pred nama. Ocekuje se zahladjenje.");
                 case WEATHER_FOGGY: format(string, sizeof(string), "[METEOROLOG] Magla se zgusnjava! Smanjena vidljivost u vecernjim satima.");
-                case WEATHER_STORMY: format(string, sizeof(string), "[METEOROLOG] UPOZORENJE: Olujno nevreme se nastavlja kroz noc!");
             }
         }
         case 0: {
@@ -149,7 +159,6 @@ public UpdateTime()
                 case WEATHER_SUNNY: format(string, sizeof(string), "[METEOROLOG] Ponoc je! Ocekuje se vedra noc sa zvezdanim nebom.");
                 case WEATHER_RAINY: format(string, sizeof(string), "[METEOROLOG] Kisovita noc pred nama. Vozaci, prilagodite brzinu.");
                 case WEATHER_FOGGY: format(string, sizeof(string), "[METEOROLOG] Gusta magla otezava nocnu vidljivost! Budite oprezni.");
-                case WEATHER_STORMY: format(string, sizeof(string), "[METEOROLOG] UPOZORENJE: Oluja se pojacava u nocnim satima!");
             }
         }
     }

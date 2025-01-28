@@ -25,25 +25,6 @@ new gPlayerAnimLibsPreloaded[MAX_PLAYERS];
 new BackOut[MAX_PLAYERS];
 new animation[MAX_PLAYERS];
 
-strtok(const string[], &index)
-{
-	new length = strlen(string);
-	while ((index < length) && (string[index] <= ' '))
-	{
-		index++;
-	}
-
-	new offset = index;
-	new result[20];
-	while ((index < length) && (string[index] > ' ') && ((index - offset) < (sizeof(result) - 1)))
-	{
-		result[index - offset] = string[index];
-		index++;
-	}
-	result[index - offset] = EOS;
-	return result;
-}
-
 OnePlayAnim(playerid, const animlib[], const animname[], Float:Speed, bool:looping, bool:lockx, bool:locky, bool:lockz, lp)
 {
 	ApplyAnimation(playerid, animlib, animname, Speed, looping, lockx, locky, lockz, lp);
@@ -173,780 +154,777 @@ hook OnPlayerConnect(playerid)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerCommandText(playerid, cmdtext[])
-{
-	new cmd[256];
-	new tmp[256];
-	new idx;
-	new dancestyle;
-	cmd = strtok(cmdtext, idx);
-//-----------------------------------[Animi u Autu]----------------------------------------------
-   	if(strcmp(cmd, "/caract", true) == 0)
+YCMD:caract(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-		{
-			SendClientMessage(playerid,x_white,"  Ova Animacija je omogucena samo u Autu!");
-			return Y_HOOKS_CONTINUE_RETURN_1;
-		}
-        if (!strlen(cmdtext[8])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /caract [1-7]");
-    	switch (cmdtext[8])
-    	{
-         	case '1': LoopingAnim(playerid,"PED","TAP_HAND",4.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"CAR", "sit_relaxed", 4.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"CAR", "tap_hand", 4.0, true, false, false, false, 0);
-        	case '4': BackAnim(playerid,"CAR_CHAT", "carfone_in", 4.0, false, true, true, true, 0,3);
-        	case '5': LoopingAnim(playerid,"CAR_CHAT", "carfone_loopa", 4.0, true, false, false, false, 0);
-        	case '6': LoopingAnim(playerid,"CAR_CHAT", "carfone_loopb", 4.0, true, false, false, false, 0);
-        	case '7': OnePlayAnim(playerid,"DRIVEBYS","Gang_DrivebyLHS",3.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /caract [1-7]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        SendClientMessage(playerid,x_white,"  Ova Animacija je omogucena samo u Autu!");
+        return 1;
     }
-//------------------------------------[OnFootAnims]--------------------------------------------
-    if(strcmp(cmd, "/scratch", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-	 	LoopingAnim(playerid,"MISC","Scratchballs_01",3.0, true, false, false, false, 0);
-   		return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/knife", true) == 0)
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /caract [1-7]");
+    
+    switch(params[0])
     {
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,0xFFFFFF,"{F9FF52}Koriscenje{FFFFFF}: /knife [1-4]");
-    	switch (cmdtext[7])
-    	{
-    	    case '1': LoopingAnim(playerid,"KNIFE","KILL_Knife_Ped_Damage",4.0, false, true, true, true, 0);
-        	case '2': LoopingAnim(playerid,"KNIFE","KILL_Knife_Ped_Die",4.0, false, true, true, true, 0);
-        	case '3': OnePlayAnim(playerid,"KNIFE","KILL_Knife_Player",4.0, false, false, false, false, 0);
-        	case '4': LoopingAnim(playerid,"KNIFE","KILL_Partial",4.0, false, true, true, true, 1);
-        	default: SendClientMessage(playerid,0xEFEFF7AA,"{F3FF02}Koriscenje{FFFFFF}: /knife [1-4]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","TAP_HAND",4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"CAR", "sit_relaxed", 4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"CAR", "tap_hand", 4.0, true, false, false, false, 0);
+        case '4': BackAnim(playerid,"CAR_CHAT", "carfone_in", 4.0, false, true, true, true, 0,3);
+        case '5': LoopingAnim(playerid,"CAR_CHAT", "carfone_loopa", 4.0, true, false, false, false, 0);
+        case '6': LoopingAnim(playerid,"CAR_CHAT", "carfone_loopb", 4.0, true, false, false, false, 0);
+        case '7': OnePlayAnim(playerid,"DRIVEBYS","Gang_DrivebyLHS",3.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /caract [1-7]");
     }
-    if(strcmp(cmd, "/highthrow", true) == 0) {
-		 OnePlayAnim(playerid,"GRENADE","WEAPON_throw",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/dealstance", true) == 0) {
-		 LoopingAnim(playerid,"DEALER","DEALER_IDLE",4.0, true, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+    return 1;
+}
 
-    if(strcmp(cmd, "/pee", true) == 0) {
-		 SetPlayerSpecialAction(playerid, SPECIAL_ACTION_PISSING);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/carjacked1", true) == 0) {
-		 LoopingAnim(playerid,"PED","CAR_jackedLHS",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:scratch(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
+    LoopingAnim(playerid,"MISC","Scratchballs_01",3.0, true, false, false, false, 0);
+    return 1;
+}
 
-    // Elbow
-    if(strcmp(cmd, "/elbow", true) == 0) {
-		 OnePlayAnim(playerid,"FIGHT_D","FightD_3",4.0, false, true, true, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
+YCMD:knife(playerid, params[], help) {
+    if(isnull(params)) return SendClientMessage(playerid,0xFFFFFF,"{F9FF52}Koriscenje{FFFFFF}: /knife [1-4]");
+    switch(params[0])
+    {
+        case '1': LoopingAnim(playerid,"KNIFE","KILL_Knife_Ped_Damage",4.0, false, true, true, true, 0);
+        case '2': LoopingAnim(playerid,"KNIFE","KILL_Knife_Ped_Die",4.0, false, true, true, true, 0);
+        case '3': OnePlayAnim(playerid,"KNIFE","KILL_Knife_Player",4.0, false, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"KNIFE","KILL_Partial",4.0, false, true, true, true, 1);
+        default: SendClientMessage(playerid,0xEFEFF7AA,"{F3FF02}Koriscenje{FFFFFF}: /knife [1-4]");
     }
+    return 1;
+}
 
-    // Knee kick
-    if(strcmp(cmd, "/kneekick", true) == 0) {
-		 OnePlayAnim(playerid,"FIGHT_D","FightD_2",4.0, false, true, true, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:highthrow(playerid, params[], help) {
+    OnePlayAnim(playerid,"GRENADE","WEAPON_throw",4.0, false, false, false, false, 0);
+    return 1;
+}
 
-    // Fight stance
-    if(strcmp(cmd, "/fstance", true) == 0) {
-		 LoopingAnim(playerid,"FIGHT_D","FightD_IDLE",4.0, true, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:dealstance(playerid, params[], help) {
+    LoopingAnim(playerid,"DEALER","DEALER_IDLE",4.0, true, false, false, false, 0);
+    return 1;
+}
 
-    // Ground punch
-    if(strcmp(cmd, "/gpunch", true) == 0) {
-		 OnePlayAnim(playerid,"FIGHT_B","FightB_G",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:pee(playerid, params[], help) {
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_PISSING);
+    return 1;
+}
 
+YCMD:carjacked1(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","CAR_jackedLHS",4.0, false, true, true, true, 0);
+    return 1;
+}
 
-    if(strcmp(cmd, "/airkick", true) == 0) {
-		 OnePlayAnim(playerid,"FIGHT_C","FightC_M",4.0, false, true, true, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:elbow(playerid, params[], help) {
+    OnePlayAnim(playerid,"FIGHT_D","FightD_3",4.0, false, true, true, false, 0);
+    return 1;
+}
 
-    if(strcmp(cmd, "/gkick", true) == 0) {
-		 OnePlayAnim(playerid,"FIGHT_D","FightD_G",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:kneekick(playerid, params[], help) {
+    OnePlayAnim(playerid,"FIGHT_D","FightD_2",4.0, false, true, true, false, 0);
+    return 1;
+}
 
-    if(strcmp(cmd, "/lowthrow", true) == 0) {
-		 OnePlayAnim(playerid,"GRENADE","WEAPON_throwu",3.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:fstance(playerid, params[], help) {
+    LoopingAnim(playerid,"FIGHT_D","FightD_IDLE",4.0, true, true, true, true, 0);
+    return 1;
+}
 
+YCMD:gpunch(playerid, params[], help) {
+    OnePlayAnim(playerid,"FIGHT_B","FightB_G",4.0, false, false, false, false, 0);
+    return 1;
+}
 
-    if(strcmp(cmd, "/carjacked2", true) == 0) {
-		 LoopingAnim(playerid,"PED","CAR_jackedRHS",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/exhaust", true) == 0) {
-		 LoopingAnim(playerid,"PED","IDLE_tired",3.0, true, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-	if(strcmp(cmd, "/hoodfrisked", true) == 0) {
-		 LoopingAnim(playerid,"POLICE","crm_drgbst_01",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:airkick(playerid, params[], help) {
+    OnePlayAnim(playerid,"FIGHT_C","FightC_M",4.0, false, true, true, false, 0);
+    return 1;
+}
 
-    if(strcmp(cmd, "/chant", true) == 0) {
-		 LoopingAnim(playerid,"RIOT","RIOT_CHANT",4.0, true, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:gkick(playerid, params[], help) {
+    OnePlayAnim(playerid,"FIGHT_D","FightD_G",4.0, false, false, false, false, 0);
+    return 1;
+}
 
-    // Finger
-    if(strcmp(cmd, "/finger", true) == 0) {
-		 OnePlayAnim(playerid,"RIOT","RIOT_FUKU",2.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    // Lighting cigarette
-    if(strcmp(cmd, "/lightcig", true) == 0) {
-		 OnePlayAnim(playerid,"SMOKING","M_smk_in",3.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:lowthrow(playerid, params[], help) {
+    OnePlayAnim(playerid,"GRENADE","WEAPON_throwu",3.0, false, false, false, false, 0);
+    return 1;
+}
 
-    // Tap cigarette
-    if(strcmp(cmd, "/tapcig", true) == 0) {
-		 OnePlayAnim(playerid,"SMOKING","M_smk_tap",3.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:carjacked2(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","CAR_jackedRHS",4.0, false, true, true, true, 0);
+    return 1;
+}
 
-    // Bat stance
-    if(strcmp(cmd, "/bat", true) == 0) {
-		 LoopingAnim(playerid,"BASEBALL","Bat_IDLE",4.0, true, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:exhaust(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","IDLE_tired",3.0, true, false, false, false, 0);
+    return 1;
+}
 
-    // Left big slap
-    if(strcmp(cmd, "/leftslap", true) == 0) {
-		 OnePlayAnim(playerid,"PED","BIKE_elbowL",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/carlock", true) == 0) {
-		 OnePlayAnim(playerid,"PED","CAR_doorlocked_LHS",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:hoodfrisked(playerid, params[], help) {
+    LoopingAnim(playerid,"POLICE","crm_drgbst_01",4.0, false, true, true, true, 0);
+    return 1;
+}
 
-    // Big fall
-    if(strcmp(cmd, "/rollfall", true) == 0) {
-		 LoopingAnim(playerid,"PED","BIKE_fallR",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/koface", true) == 0) {
-		 LoopingAnim(playerid,"PED","KO_shot_face",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:chant(playerid, params[], help) {
+    LoopingAnim(playerid,"RIOT","RIOT_CHANT",4.0, true, true, true, true, 0);
+    return 1;
+}
 
-    // KO Stomach
-    if(strcmp(cmd, "/kostomach", true) == 0) {
-		 LoopingAnim(playerid,"PED","KO_shot_stom",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
+YCMD:finger(playerid, params[], help) {
+    OnePlayAnim(playerid,"RIOT","RIOT_FUKU",2.0, false, false, false, false, 0);
+    return 1;
+}
 
-    // Jump for your life!
-    if(strcmp(cmd, "/lifejump", true) == 0) {
-		 LoopingAnim(playerid,"PED","EV_dive",4.0, false, true, true, true, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/headbutt", true) == 0) {
-		 OnePlayAnim(playerid,"WAYFARER","WF_Fwd",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if (strcmp("/getarrested", cmdtext, true) == 0) {
-	      LoopingAnim(playerid,"ped", "ARRESTgun", 4.0, false, true, true, true, -1); // Gun Arrest
-		  return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/giver", true) == 0)
+YCMD:lightcig(playerid, params[], help) {
+    OnePlayAnim(playerid,"SMOKING","M_smk_in",3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:tapcig(playerid, params[], help) {
+    OnePlayAnim(playerid,"SMOKING","M_smk_tap",3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:bat(playerid, params[], help) {
+    LoopingAnim(playerid,"BASEBALL","Bat_IDLE",4.0, true, true, true, true, 0);
+    return 1;
+}
+
+YCMD:leftslap(playerid, params[], help) {
+    OnePlayAnim(playerid,"PED","BIKE_elbowL",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:carlock(playerid, params[], help) {
+    OnePlayAnim(playerid,"PED","CAR_doorlocked_LHS",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:rollfall(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","BIKE_fallR",4.0, false, true, true, true, 0);
+    return 1;
+}
+
+YCMD:koface(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","KO_shot_face",4.0, false, true, true, true, 0);
+    return 1;
+}
+
+YCMD:kostomach(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","KO_shot_stom",4.0, false, true, true, true, 0);
+    return 1;
+}
+
+YCMD:lifejump(playerid, params[], help) {
+    LoopingAnim(playerid,"PED","EV_dive",4.0, false, true, true, true, 0);
+    return 1;
+}
+
+YCMD:headbutt(playerid, params[], help) {
+    OnePlayAnim(playerid,"WAYFARER","WF_Fwd",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:getarrested(playerid, params[], help) {
+    LoopingAnim(playerid,"ped", "ARRESTgun", 4.0, false, true, true, true, -1);
+    return 1;
+}
+
+YCMD:giver(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /giver [1-2]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /giver [1-2]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': OnePlayAnim(playerid,"KISSING","gift_give",3.0, false, false, false, false, 0);
-         	case '2': OnePlayAnim(playerid,"BAR","Barserve_give",3.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /giver [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"KISSING","gift_give",3.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"BAR","Barserve_give",3.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /giver [1-2]");
     }
-    if(strcmp(cmd, "/pull", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-	 	OnePlayAnim(playerid,"AIRPORT","thrw_barl_thrw ",3.0, false, false, false, false, 0);
-   		return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/face", true) == 0)
+    return 1;
+}
+
+YCMD:pull(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid,"AIRPORT","thrw_barl_thrw ",3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:face(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /face [1-6]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /face [1-6]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': LoopingAnim(playerid,"PED","facanger",3.0, true, true, true, true, 1);
-        	case '2': LoopingAnim(playerid,"PED","facgum",3.0, true, true, true, true, 1);
-        	case '3': LoopingAnim(playerid,"PED","facsurp",3.0, true, true, true, true, 1);
-        	case '4': LoopingAnim(playerid,"PED","facsurpm",3.0, true, true, true, true, 1);
-        	case '5': LoopingAnim(playerid,"PED","factalk",3.0, true, true, true, true, 1);
-        	case '6': LoopingAnim(playerid,"PED","facurios",3.0, true, true, true, true, 1);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /face [1-6]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","facanger",3.0, true, true, true, true, 1);
+        case '2': LoopingAnim(playerid,"PED","facgum",3.0, true, true, true, true, 1);
+        case '3': LoopingAnim(playerid,"PED","facsurp",3.0, true, true, true, true, 1);
+        case '4': LoopingAnim(playerid,"PED","facsurpm",3.0, true, true, true, true, 1);
+        case '5': LoopingAnim(playerid,"PED","factalk",3.0, true, true, true, true, 1);
+        case '6': LoopingAnim(playerid,"PED","facurios",3.0, true, true, true, true, 1);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /face [1-6]");
     }
-    if(strcmp(cmd, "/endchat", true) == 0)
+    return 1;
+}
+
+YCMD:endchat(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /endchat [1-3]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[9])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /endchat [1-3]");
-    	switch (cmdtext[9])
-    	{
-         	case '1': OnePlayAnim(playerid,"PED","endchat_01",8.0, false, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid,"PED","endchat_02",8.0, false, false, false, false, 0);
-        	case '3': OnePlayAnim(playerid,"PED","endchat_03",8.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /endchat [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"PED","endchat_01",8.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"PED","endchat_02",8.0, false, false, false, false, 0);
+        case '3': OnePlayAnim(playerid,"PED","endchat_03",8.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /endchat [1-3]");
     }
-    if(strcmp(cmd, "/show", true) == 0)
+    return 1;
+}
+
+YCMD:show(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    LoopingAnim(playerid,"ON_LOOKERS","point_loop",3.0, true, false, false, false, 0);
+    return 1;
+}
+
+YCMD:shout(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /shout [1-3]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        LoopingAnim(playerid,"ON_LOOKERS","point_loop",3.0, true, false, false, false, 0);
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': BackAnim(playerid,"ON_LOOKERS","shout_loop",3.0, true, false, false, false, 0,6);
+        case '2': LoopingAnim(playerid,"ON_LOOKERS","shout_01",3.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"ON_LOOKERS","shout_02",3.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /shout [1-3]");
     }
-    if(strcmp(cmd, "/shout", true) == 0)
+    return 1;
+}
+
+YCMD:look(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /look [1-4]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /shout [1-3]");
-    	switch (cmdtext[7])
-    	{
-         	case '1': BackAnim(playerid,"ON_LOOKERS","shout_loop",3.0, true, false, false, false, 0,6);
-        	case '2': LoopingAnim(playerid,"ON_LOOKERS","shout_01",3.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"ON_LOOKERS","shout_02",3.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /shout [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"ON_LOOKERS","lkup_loop",3.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"ON_LOOKERS","lkaround_loop",3.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"PED","flee_lkaround_01",3.0, true, true, true, true, 1);
+        case '4': OnePlayAnim(playerid,"BAR","Barserve_bottle",3.0, false, true, true, true, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /look [1-4]");
     }
-    if(strcmp(cmd, "/look", true) == 0)
+    return 1;
+}
+
+YCMD:flag(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid,"CAR","flag_drop",3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:handsup(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    LoopingAnim(playerid, "ROB_BANK","SHP_HandsUp_Scr", 4.0, false, true, true, true, 0);
+    return 1;
+}
+
+YCMD:cell(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    ClearAnimations(playerid);
+    SetPlayerSpecialAction(playerid,SPECIAL_ACTION_USECELLPHONE);
+    BackOut[playerid] = 2;
+    return 1;
+}
+
+YCMD:drunk(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /drunk [1-3]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /look [1-4]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': LoopingAnim(playerid,"ON_LOOKERS","lkup_loop",3.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"ON_LOOKERS","lkaround_loop",3.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"PED","flee_lkaround_01",3.0, true, true, true, true, 1);
-        	case '4': OnePlayAnim(playerid,"BAR","Barserve_bottle",3.0, false, true, true, true, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /look [1-4]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","WALK_DRUNK",4.1, true, true, true, true, 1);
+        case '2': LoopingAnim(playerid,"PAULNMAC", "pnm_loop_a", 3.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"PAULNMAC", "pnm_loop_b", 3.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /drunk [1-3]");
     }
-    if(strcmp(cmd, "/flag", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-	 	OnePlayAnim(playerid,"CAR","flag_drop",3.0, false, false, false, false, 0);
-   		return Y_HOOKS_CONTINUE_RETURN_1;
+    return 1;
+}
+
+YCMD:run(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) {
+        SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /run [1-11]");
+        return 1;
     }
- 	if(strcmp(cmd, "/handsup", true) == 0)
- 	{
- 	    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		LoopingAnim(playerid, "ROB_BANK","SHP_HandsUp_Scr", 4.0, false, true, true, true, 0);
-        return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-   	if(strcmp(cmd, "/cell", true) == 0)
- 	{
- 		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		ClearAnimations(playerid);
-  		SetPlayerSpecialAction(playerid,SPECIAL_ACTION_USECELLPHONE);
-    	BackOut[playerid] = 2;
-		return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	if(strcmp(cmd, "/drunk", true) == 0)
+    
+    new animid = strval(params);
+    if(animid == 1) { LoopingAnim(playerid,"FAT","FatRun",4.0, true, true, true, true, 1); }
+    else if(animid == 2) { LoopingAnim(playerid,"PED","run_player",4.0, true, true, true, true, 1); }
+    else if(animid == 3) { LoopingAnim(playerid,"PED","jog_femaleA",4.0, true, true, true, true, 1); }
+    else if(animid == 4) { LoopingAnim(playerid,"PED","jog_maleA",4.0, true, true, true, true, 1); }
+    else if(animid == 5) { LoopingAnim(playerid,"PED","run_old",4.0, true, true, true, true, 1); }
+    else if(animid == 6) { LoopingAnim(playerid,"PED","run_left",4.0, true, true, true, true, 1); }
+    else if(animid == 7) { LoopingAnim(playerid,"PED","run_fatold",4.0, true, true, true, true, 1); }
+    else if(animid == 8) { LoopingAnim(playerid,"PED","run_gang1",4.0, true, true, true, true, 1); }
+    else if(animid == 9) { LoopingAnim(playerid,"PED","run_fat",4.0, true, true, true, true, 1); }
+    else if(animid == 10) { LoopingAnim(playerid,"PED","run_right",4.0, true, true, true, true, 1); }
+    else if(animid == 11) { LoopingAnim(playerid,"PED","run_wuzi",4.0, true, true, true, true, 1); }
+    else { SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /run [1-11]"); }
+    return 1;
+}
+
+YCMD:bomb(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /bomb [1-2]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /drunk [1-3]");
-    	switch (cmdtext[7])
-    	{
-         	case '1': LoopingAnim(playerid,"PED","WALK_DRUNK",4.1, true, true, true, true, 1);
-        	case '2': LoopingAnim(playerid,"PAULNMAC", "pnm_loop_a", 3.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"PAULNMAC", "pnm_loop_b", 3.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /drunk [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "BOMBER","BOM_Plant_Loop",4.0, true, false, false, true, 1);
+        case '2': OnePlayAnim(playerid,"MISC", "plunger_01", 2.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /bomb [1-2]");
     }
-   	if(strcmp(cmd, "/run", true) == 0)
+    return 1;
+}
+
+YCMD:laugh(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid, "RAPPING", "Laugh_01", 4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:lookout(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lookout [1-2]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-    	tmp = strtok(cmdtext,idx);
-        if (!strlen(tmp))
-		{
-			SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /run [1-11]"); return Y_HOOKS_CONTINUE_RETURN_1;
-		}
-    	new animid = strval(tmp);
-        if(animid == 1) { LoopingAnim(playerid,"FAT","FatRun",4.0, true, true, true, true, 1); }
-        else if(animid == 2) { LoopingAnim(playerid,"PED","run_player",4.0, true, true, true, true, 1); }
-        else if(animid == 3) { LoopingAnim(playerid,"PED","jog_femaleA",4.0, true, true, true, true, 1); }
-        else if(animid == 4) { LoopingAnim(playerid,"PED","jog_maleA",4.0, true, true, true, true, 1); }
-        else if(animid == 5) { LoopingAnim(playerid,"PED","run_old",4.0, true, true, true, true, 1); }
-        else if(animid == 6) { LoopingAnim(playerid,"PED","run_left",4.0, true, true, true, true, 1); }
-        else if(animid == 7) { LoopingAnim(playerid,"PED","run_fatold",4.0, true, true, true, true, 1); }
-        else if(animid == 8) { LoopingAnim(playerid,"PED","run_gang1",4.0, true, true, true, true, 1); }
-        else if(animid == 9) { LoopingAnim(playerid,"PED","run_fat",4.0, true, true, true, true, 1); }
-        else if(animid == 10) { LoopingAnim(playerid,"PED","run_right",4.0, true, true, true, true, 1); }
-        else if(animid == 11) { LoopingAnim(playerid,"PED","run_wuzi",4.0, true, true, true, true, 1); }
-        else { SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /run [1-11]"); }
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid, "FOOD", "eat_vomit_sk", 4.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid, "PED", "handscower", 4.0, false, true, true, true, 1);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lookout [1-2]");
     }
-   	if(strcmp(cmd, "/bomb", true) == 0)
+    return 1;
+}
+
+YCMD:robman(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /robman [1-2]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /bomb [1-2]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': LoopingAnim(playerid, "BOMBER","BOM_Plant_Loop",4.0, true, false, false, true, 1);
-        	case '2': OnePlayAnim(playerid,"MISC", "plunger_01", 2.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /bomb [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "SHOP", "ROB_Loop_Threat", 4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"PED", "gang_gunstand", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /robman [1-2]");
     }
-    if (strcmp("/laugh", cmdtext, true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
- 		OnePlayAnim(playerid, "RAPPING", "Laugh_01", 4.0, false, false, false, false, 0);
-	  	return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-    if (strcmp("/lookout", cmdtext, true) == 0)
-	{
-          
-		  return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	if(strcmp(cmd, "/lookout", true) == 0)
+    return 1;
+}
+
+YCMD:crossarms(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crossarms [1-2]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[9])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lookout [1-2]");
-    	switch (cmdtext[9])
-    	{
-         	case '1': OnePlayAnim(playerid, "FOOD", "eat_vomit_sk", 4.0, false, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid, "PED", "handscower", 4.0, false, true, true, true, 1);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lookout [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "COP_AMBIENT", "Coplook_loop", 4.0, false, true, true, true, -1);
+        case '2': LoopingAnim(playerid,"OTB", "wtchrace_loop", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crossarms [1-2]");
     }
-	if(strcmp(cmd, "/robman", true) == 0)
+    return 1;
+}
+
+YCMD:lay(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lay [1-9]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[8])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /robman [1-2]");
-    	switch (cmdtext[8])
-    	{
-         	case '1': LoopingAnim(playerid, "SHOP", "ROB_Loop_Threat", 4.0, true, false, false, false, 0); // Rob
-        	case '2': LoopingAnim(playerid,"PED", "gang_gunstand", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /robman [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"BEACH", "bather", 4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"BEACH", "parksit_w_loop", 4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"BEACH","parksit_m_loop", 4.0, true, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"BEACH","lay_bac_loop", 4.0, true, false, false, false, 0);
+        case '5': LoopingAnim(playerid,"BEACH","sitnwait_loop_w", 4.0, true, false, false, false, 0);
+        case '6': BackAnim(playerid,"SUNBATHE","Lay_Bac_in",3.0, false, true, true, true, 0,5);
+        case '7': LoopingAnim(playerid,"SUNBATHE","batherdown",3.0, false, true, true, true, 0);
+        case '8': BackAnim(playerid,"SUNBATHE","parksit_m_in",3.0, false, true, true, true, 0,1);
+        case '9': LoopingAnim(playerid,"CAR", "Fixn_Car_Loop", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lay [1-9]");
     }
-	if(strcmp(cmd, "/crossarms", true) == 0)
+    return 1;
+}
+
+YCMD:hide(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hide [1-2]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[11])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crossarms [1-2]");
-    	switch (cmdtext[11])
-    	{
-         	case '1': LoopingAnim(playerid, "COP_AMBIENT", "Coplook_loop", 4.0, false, true, true, true, -1);
-        	case '2': LoopingAnim(playerid,"OTB", "wtchrace_loop", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crossarms [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "ped", "cower", 3.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"ON_LOOKERS","panic_hide",3.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hide [1-2]");
     }
-	if(strcmp(cmd, "/lay", true) == 0)
+    return 1;
+}
+
+YCMD:vomit(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid, "FOOD", "EAT_Vomit_P", 3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:eats(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid, "FOOD", "EAT_Burger", 3.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:wave(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /wave [1-5]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[5])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lay [1-9]");
-    	switch (cmdtext[5])
-    	{
-        	case '1': LoopingAnim(playerid,"BEACH", "bather", 4.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"BEACH", "parksit_w_loop", 4.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"BEACH","parksit_m_loop", 4.0, true, false, false, false, 0);
-        	case '4': LoopingAnim(playerid,"BEACH","lay_bac_loop", 4.0, true, false, false, false, 0);
-        	case '5': LoopingAnim(playerid,"BEACH","sitnwait_loop_w", 4.0, true, false, false, false, 0);
-         	case '6': BackAnim(playerid,"SUNBATHE","Lay_Bac_in",3.0, false, true, true, true, 0,5);
-         	case '7': LoopingAnim(playerid,"SUNBATHE","batherdown",3.0, false, true, true, true, 0);
-         	case '8': BackAnim(playerid,"SUNBATHE","parksit_m_in",3.0, false, true, true, true, 0,1);
-         	case '9': LoopingAnim(playerid,"CAR", "Fixn_Car_Loop", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lay [1-9]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "ON_LOOKERS", "wave_loop", 4.0, true, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"BD_Fire", "BD_GF_Wave", 4.0, false, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"RIOT","RIOT_CHANT",4.0, true, true, true, true, 0);
+        case '4': OnePlayAnim(playerid,"WUZI", "Wuzi_Follow", 5.0, false, false, false, false, 0);
+        case '5': OnePlayAnim(playerid,"KISSING", "gfwave2", 4.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /wave [1-5]");
     }
-   	if(strcmp(cmd, "/hide", true) == 0)
+    return 1;
+}
+
+YCMD:deal(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid, "DEALER", "DEALER_DEAL", 4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:crack(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crack [1-5]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hide [1-2]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': LoopingAnim(playerid, "ped", "cower", 3.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"ON_LOOKERS","panic_hide",3.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hide [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "CRACK", "crckdeth2", 4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"CRACK", "crckidle1", 4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"CRACK","crckidle2", 4.0, true, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"CRACK","crckidle3", 4.0, true, false, false, false, 0);
+        case '5': LoopingAnim(playerid,"CRACK","crckidle4", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crack [1-5]");
     }
-    if (strcmp("/vomit", cmdtext, true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-	    OnePlayAnim(playerid, "FOOD", "EAT_Vomit_P", 3.0, false, false, false, false, 0); // Vomit BAH!
-		return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-    if (strcmp("/eats", cmdtext, true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
- 		OnePlayAnim(playerid, "FOOD", "EAT_Burger", 3.0, false, false, false, false, 0); // Eat Burger
-	  	return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	if(strcmp(cmd, "/wave", true) == 0)
+    return 1;
+}
+
+YCMD:smoke(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /smoke [1-6]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /wave [1-5]");
-    	switch (cmdtext[6])
-    	{
-         	case '1': LoopingAnim(playerid, "ON_LOOKERS", "wave_loop", 4.0, true, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid,"BD_Fire", "BD_GF_Wave", 4.0, false, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"RIOT","RIOT_CHANT",4.0, true, true, true, true, 0);
-        	case '4': OnePlayAnim(playerid,"WUZI", "Wuzi_Follow", 5.0, false, false, false, false, 0);
-        	case '5': OnePlayAnim(playerid,"KISSING", "gfwave2", 4.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /wave [1-5]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"SMOKING", "M_smklean_loop", 4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"SMOKING", "F_smklean_loop", 4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"SMOKING","M_smkstnd_loop", 4.0, true, false, false, false, 0);
+        case '4': OnePlayAnim(playerid,"SMOKING","M_smk_out", 4.0, false, false, false, false, 0);
+        case '5': OnePlayAnim(playerid,"SMOKING","M_smk_in",3.0, false, false, false, false, 0);
+        case '6': OnePlayAnim(playerid,"SMOKING","M_smk_tap",3.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /smoke [1-6]");
     }
-    if (strcmp("/deal", cmdtext, true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		OnePlayAnim(playerid, "DEALER", "DEALER_DEAL", 4.0, false, false, false, false, 0); // Deal Drugs
-		return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	if(strcmp(cmd, "/crack", true) == 0)
+    return 1;
+}
+
+YCMD:chat(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /chat [1-3]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crack [1-5]");
-    	switch (cmdtext[7])
-    	{
-        	case '1': LoopingAnim(playerid, "CRACK", "crckdeth2", 4.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"CRACK", "crckidle1", 4.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"CRACK","crckidle2", 4.0, true, false, false, false, 0);
-        	case '4': LoopingAnim(playerid,"CRACK","crckidle3", 4.0, true, false, false, false, 0);
-        	case '5': LoopingAnim(playerid,"CRACK","crckidle4", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /crack [1-5]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","IDLE_CHAT",2.0, true, false, false, true, 1);
+        case '2': LoopingAnim(playerid,"MISC","IDLE_CHAT_02",2.0, true, false, false, true, 1);
+        case '3': OnePlayAnim(playerid,"BAR","Barcustom_order",3.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /chat [1-3]");
     }
-	if(strcmp(cmd, "/smoke", true) == 0)
+    return 1;
+}
+
+YCMD:hike(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hike [1-3]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /smoke [1-6]");
-    	switch (cmdtext[7])
-    	{
-        	case '1': LoopingAnim(playerid,"SMOKING", "M_smklean_loop", 4.0, true, false, false, false, 0); // male
-        	case '2': LoopingAnim(playerid,"SMOKING", "F_smklean_loop", 4.0, true, false, false, false, 0); //female
-        	case '3': LoopingAnim(playerid,"SMOKING","M_smkstnd_loop", 4.0, true, false, false, false, 0); // standing-fucked
-        	case '4': OnePlayAnim(playerid,"SMOKING","M_smk_out", 4.0, false, false, false, false, 0); // standing
-        	case '5': OnePlayAnim(playerid,"SMOKING","M_smk_in",3.0, false, false, false, false, 0);
-        	case '6': OnePlayAnim(playerid,"SMOKING","M_smk_tap",3.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /smoke [1-6]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"MISC","hiker_pose",4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"MISC","hiker_pose_l",4.0, true, false, false, false, 0);
+        case '3': OnePlayAnim(playerid,"PED","idle_taxi",3.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hike [1-3]");
     }
-    if(strcmp(cmd, "/chat", true) == 0)
+    return 1;
+}
+
+YCMD:fuck(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fuck [1-2]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /chat [1-3]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': LoopingAnim(playerid,"PED","IDLE_CHAT",2.0, true, false, false, true, 1);
-        	case '2': LoopingAnim(playerid,"MISC","IDLE_CHAT_02",2.0, true, false, false, true, 1);
-        	case '3': OnePlayAnim(playerid,"BAR","Barcustom_order",3.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /chat [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"PED","fucku",4.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"RIOT","RIOT_FUKU",2.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fuck [1-2]");
     }
-    if(strcmp(cmd, "/hike", true) == 0)
+    return 1;
+}
+
+YCMD:taichi(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    LoopingAnim(playerid,"PARK","Tai_Chi_Loop",4.0, true, false, false, false, 0);
+    return 1;
+}
+
+YCMD:sit(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sit [1-4]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hike [1-3]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': LoopingAnim(playerid,"MISC","hiker_pose",4.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"MISC","hiker_pose_l",4.0, true, false, false, false, 0);
-        	case '3': OnePlayAnim(playerid,"PED","idle_taxi",3.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /hike [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': BackAnim(playerid,"PED","SEAT_down",4.1, false, true, true, true, 0,8);
+        case '2': LoopingAnim(playerid,"MISC","seat_lr",2.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"MISC","seat_talk_01",2.0, true, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"MISC","seat_talk_02",2.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sit [1-4]");
     }
-    if(strcmp(cmd, "/fuck", true) == 0)
+    return 1;
+}
+
+YCMD:fall(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fall [1-2]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fuck [1-2]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': OnePlayAnim(playerid,"PED","fucku",4.0, false, false, false, false, 0);
-         	case '2': OnePlayAnim(playerid,"RIOT","RIOT_FUKU",2.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fuck [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","KO_skid_front",4.1, false, true, true, true, 0);
+        case '2': LoopingAnim(playerid, "PED","FLOOR_hit_f", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fall [1-2]");
     }
-    if(strcmp(cmd, "/taichi", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		LoopingAnim(playerid,"PARK","Tai_Chi_Loop",4.0, true, false, false, false, 0);
-        return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/sit", true) == 0)
+    return 1;
+}
+
+YCMD:kiss(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /kiss [1-2]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[5])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sit [1-4]");
-    	switch (cmdtext[5])
-    	{
-        	case '1': BackAnim(playerid,"PED","SEAT_down",4.1, false, true, true, true, 0,8);
-         	case '2': LoopingAnim(playerid,"MISC","seat_lr",2.0, true, false, false, false, 0);
-         	case '3': LoopingAnim(playerid,"MISC","seat_talk_01",2.0, true, false, false, false, 0);
-         	case '4': LoopingAnim(playerid,"MISC","seat_talk_02",2.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sit [1-4]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid, "KISSING", "Playa_Kiss_02", 3.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid, "BD_Fire", "grlfrd_kiss_03", 2.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /kiss [1-2]");
     }
-    if(strcmp(cmd, "/fall", true) == 0)
+    return 1;
+}
+
+YCMD:injured(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /injured [1-4]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fall [1-2]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': LoopingAnim(playerid,"PED","KO_skid_front",4.1, false, true, true, true, 0);
-         	case '2': LoopingAnim(playerid, "PED","FLOOR_hit_f", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /fall [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid, "SWEET", "Sweet_injuredloop", 4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid, "WUZI", "CS_Dead_Guy", 4.0, true, true, true, true, 1);
+        case '3': LoopingAnim(playerid, "PED", "gas_cwr", 4.0, true, true, true, true, 1);
+        case '4': LoopingAnim(playerid, "FINALE", "FIN_Cop1_Loop", 4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /injured [1-4]");
     }
-    if(strcmp(cmd, "/kiss", true) == 0)
+    return 1;
+}
+
+YCMD:sup(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sup [1-3]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /kiss [1-2]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': OnePlayAnim(playerid, "KISSING", "Playa_Kiss_02", 3.0, false, false, false, false, 0);
-         	case '2': OnePlayAnim(playerid, "BD_Fire", "grlfrd_kiss_03", 2.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /kiss [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"GANGS","hndshkba",4.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"GANGS","hndshkda",4.0, false, false, false, false, 0);
+        case '3': OnePlayAnim(playerid,"GANGS","hndshkfa_swt",4.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sup [1-3]");
     }
-    if(strcmp(cmd, "/injured", true) == 0)
+    return 1;
+}
+
+YCMD:rap(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /rap [1-5]");
+    
+    switch(params[0])
     {
-        if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[9])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /injured [1-4]");
-    	switch (cmdtext[9])
-    	{
-        	case '1': LoopingAnim(playerid, "SWEET", "Sweet_injuredloop", 4.0, true, false, false, false, 0);
-         	case '2': LoopingAnim(playerid, "WUZI", "CS_Dead_Guy", 4.0, true, true, true, true, 1);
-         	case '3': LoopingAnim(playerid, "PED", "gas_cwr", 4.0, true, true, true, true, 1);
-         	case '4': LoopingAnim(playerid, "FINALE", "FIN_Cop1_Loop", 4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /injured [1-4]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"RAPPING","RAP_A_Loop",4.0, true, false, false, false, 0);
+        case '2': LoopingAnim(playerid,"RAPPING","RAP_C_Loop",4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"GANGS","prtial_gngtlkD",4.0, true, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"GANGS","prtial_gngtlkH",4.0, true, false, false , true, 1);
+        case '5': OnePlayAnim(playerid,"BENCHPRESS","gym_bp_celebrate",4.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /rap [1-5]");
     }
-    if(strcmp(cmd, "/sup", true) == 0)
+    return 1;
+}
+
+YCMD:push(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /push [1-2]");
+    
+    switch(params[0])
     {
-   		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[5])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sup [1-3]");
-    	switch (cmdtext[5])
-    	{
-        	case '1': OnePlayAnim(playerid,"GANGS","hndshkba",4.0, false, false, false, false, 0);
-         	case '2': OnePlayAnim(playerid,"GANGS","hndshkda",4.0, false, false, false, false, 0);
-         	case '3': OnePlayAnim(playerid,"GANGS","hndshkfa_swt",4.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /sup [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"GANGS","shake_cara",4.0, false, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"GANGS","shake_carSH",4.0, false, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /push [1-2]");
     }
-    if(strcmp(cmd, "/rap", true) == 0)
+    return 1;
+}
+
+YCMD:lowbodypush(playerid, params[], help) {
+    OnePlayAnim(playerid,"GANGS","shake_carSH",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:spray(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid,"SPRAYCAN","spraycan_full",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:medic(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    OnePlayAnim(playerid,"MEDIC","CPR",4.0, false, false, false, false, 0);
+    return 1;
+}
+
+YCMD:tired(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /tired [1-2]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[5])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /rap [1-5]");
-    	switch (cmdtext[5])
-    	{
-    	    case '1': LoopingAnim(playerid,"RAPPING","RAP_A_Loop",4.0, true, false, false, false, 0);
-        	case '2': LoopingAnim(playerid,"RAPPING","RAP_C_Loop",4.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"GANGS","prtial_gngtlkD",4.0, true, false, false, false, 0);
-        	case '4': LoopingAnim(playerid,"GANGS","prtial_gngtlkH",4.0, true, false, false , true, 1);
-        	case '5': OnePlayAnim(playerid,"BENCHPRESS","gym_bp_celebrate",4.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /rap [1-5]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"PED","IDLE_tired",3.0, true, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"FAT","Idle_Tired",3.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /tired [1-2]");
     }
-    if(strcmp(cmd, "/push", true) == 0)
+    return 1;
+}
+
+YCMD:box(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    LoopingAnim(playerid,"GYMNASIUM","GYMshadowbox",4.0, true, true, true, true, 0);
+    return 1;
+}
+
+YCMD:cop(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /cop [1-7]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /push [1-2]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': OnePlayAnim(playerid,"GANGS","shake_cara",4.0, false, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid,"GANGS","shake_carSH",4.0, false, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /push [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': OnePlayAnim(playerid,"SWORD","sword_block",50.0, false, true, true, true, 1);
+        case '2': LoopingAnim(playerid,"POLICE","CopTraf_away",4.0, true, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"POLICE","CopTraf_come",4.0, true, false, false, false, 0);
+        case '4': LoopingAnim(playerid,"POLICE","CopTraf_left",4.0, true, false, false, false, 0);
+        case '5': LoopingAnim(playerid,"POLICE","CopTraf_stop",4.0, true, false, false, false, 0);
+        case '6': LoopingAnim(playerid,"POLICE","Cop_move_fwd",4.0, true, true, true, true, 1);
+        case '7': LoopingAnim(playerid,"ped", "ARRESTgun", 4.0, false, true, true, true, -1);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /cop [1-7]");
     }
-    if(strcmp(cmd, "/lowbodypush", true) == 0) {
-		 OnePlayAnim(playerid,"GANGS","shake_carSH",4.0, false, false, false, false, 0);
-         return Y_HOOKS_CONTINUE_RETURN_1;
+    return 1;
+}
+
+YCMD:stance(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) {
+        SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /stance [1-13]");
+        return 1;
     }
-    if(strcmp(cmd, "/spray", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		OnePlayAnim(playerid,"SPRAYCAN","spraycan_full",4.0, false, false, false, false, 0);
-		return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/medic", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		OnePlayAnim(playerid,"MEDIC","CPR",4.0, false, false, false, false, 0);
-		return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/tired", true) == 0)
+    
+    new animid = strval(params);
+    if(animid == 1) { LoopingAnim(playerid,"DEALER","DEALER_IDLE",4.0, true, false, false, false, 0); }
+    else if(animid == 2) { LoopingAnim(playerid,"PED","WOMAN_IDLESTANCE",4.0, true, false, false, false, 0); }
+    else if(animid == 3) { LoopingAnim(playerid,"PED","CAR_HOOKERTALK",4.0, true, false, false, false, 0); }
+    else if(animid == 4) { LoopingAnim(playerid,"FAT","FatIdle",4.0, true, false, false, false, 0); }
+    else if(animid == 5) { LoopingAnim(playerid,"WUZI","Wuzi_Stand_Loop",4.0, true, false, false, false, 0); }
+    else if(animid == 6) { LoopingAnim(playerid,"GRAVEYARD","mrnf_loop",4.0, true, false, false, false, 0); }
+    else if(animid == 7) { LoopingAnim(playerid,"GRAVEYARD","mrnm_loop",4.0, true, false, false, false, 0); }
+    else if(animid == 8) { LoopingAnim(playerid,"GRAVEYARD","prst_loopa",4.0, true, false, false, false, 0); }
+    else if(animid == 9) { LoopingAnim(playerid,"PED","idlestance_fat",4.0, true, false, false, false, 0); }
+    else if(animid == 10) { LoopingAnim(playerid,"PED","idlestance_old",4.0, true, false, false, false, 0); }
+    else if(animid == 11) { LoopingAnim(playerid,"PED","turn_l",4.0, true, false, false, false, 0); }
+    else if(animid == 12) { LoopingAnim(playerid,"BAR","Barcustom_loop",4.0, true, false, false, false, 0); }
+    else if(animid == 13) { LoopingAnim(playerid,"BAR","Barserve_loop",4.0, true, false, false, false, 0); }
+    else { SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /stance [1-13]"); }
+    return 1;
+}
+
+YCMD:basket(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /basket [1-4]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /tired [1-2]");
-    	switch (cmdtext[7])
-    	{
-        	case '1': LoopingAnim(playerid,"PED","IDLE_tired",3.0, true, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid,"FAT","Idle_Tired",3.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /tired [1-2]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"BSKTBALL","BBALL_idleloop",4.0, true, false, false, false, 0);
+        case '2': OnePlayAnim(playerid,"BSKTBALL","BBALL_Jump_Shot",4.0, false, false, false, false, 0);
+        case '3': LoopingAnim(playerid,"BSKTBALL","BBALL_run",4.1, true, true, true, true, 1);
+        case '4': LoopingAnim(playerid,"BSKTBALL","BBALL_def_loop",4.0, true, false, false, false, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /basket [1-4]");
     }
-    if(strcmp(cmd, "/box", true) == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		LoopingAnim(playerid,"GYMNASIUM","GYMshadowbox",4.0, true, true, true, true, 0);
-		return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/cop", true) == 0)
+    return 1;
+}
+
+YCMD:lean(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lean [1-3]");
+    
+    switch(params[0])
     {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[5])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /cop [1-7]");
-    	switch (cmdtext[5])
-    	{
-        	case '1': OnePlayAnim(playerid,"SWORD","sword_block",50.0, false, true, true, true, 1);
-        	case '2': LoopingAnim(playerid,"POLICE","CopTraf_away",4.0, true, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"POLICE","CopTraf_come",4.0, true, false, false, false, 0);
-        	case '4': LoopingAnim(playerid,"POLICE","CopTraf_left",4.0, true, false, false, false, 0);
-        	case '5': LoopingAnim(playerid,"POLICE","CopTraf_stop",4.0, true, false, false, false, 0);
-        	case '6': LoopingAnim(playerid,"POLICE","Cop_move_fwd",4.0, true, true, true, true, 1);
-	        case '7': LoopingAnim(playerid,"ped", "ARRESTgun", 4.0, false, true, true, true, -1);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /cop [1-7]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case '1': LoopingAnim(playerid,"GANGS","leanIDLE",4.0, false, true, true, true, 0);
+        case '2': LoopingAnim(playerid,"MISC","Plyrlean_loop",4.0, false, true, true, true, 0);
+        case '3': OnePlayAnim(playerid,"BAR","BARman_idle",3.0, false, true, true, true, 0);
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lean [1-3]");
     }
-    if(strcmp(cmd, "/stance", true) == 0)
+    return 1;
+}
+
+YCMD:strip(playerid, params[], help) {
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return 1; }
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /strip [A-G]");
+    
+    switch(params[0])
     {
-   		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-    	tmp = strtok(cmdtext,idx);
-        if (!strlen(tmp))
-		{
-			SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /stance [1-13]"); return Y_HOOKS_CONTINUE_RETURN_1;
-		}
-    	new animid = strval(tmp);
-        if(animid == 1) { LoopingAnim(playerid,"DEALER","DEALER_IDLE",4.0, true, false, false, false, 0); }
-        else if(animid == 2) { LoopingAnim(playerid,"PED","WOMAN_IDLESTANCE",4.0, true, false, false, false, 0); }
-       	else if(animid == 3) { LoopingAnim(playerid,"PED","CAR_HOOKERTALK",4.0, true, false, false, false, 0); }
-       	else if(animid == 4) { LoopingAnim(playerid,"FAT","FatIdle",4.0, true, false, false, false, 0); }
-       	else if(animid == 5) { LoopingAnim(playerid,"WUZI","Wuzi_Stand_Loop",4.0, true, false, false, false, 0); }
-       	else if(animid == 6) { LoopingAnim(playerid,"GRAVEYARD","mrnf_loop",4.0, true, false, false, false, 0); }
-       	else if(animid == 7) { LoopingAnim(playerid,"GRAVEYARD","mrnm_loop",4.0, true, false, false, false, 0); }
-       	else if(animid == 8) { LoopingAnim(playerid,"GRAVEYARD","prst_loopa",4.0, true, false, false, false, 0); }
-       	else if(animid == 9) { LoopingAnim(playerid,"PED","idlestance_fat",4.0, true, false, false, false, 0); }
-       	else if(animid == 10) { LoopingAnim(playerid,"PED","idlestance_old",4.0, true, false, false, false, 0); }
-       	else if(animid == 11) { LoopingAnim(playerid,"PED","turn_l",4.0, true, false, false, false, 0); }
-       	else if(animid == 12) { LoopingAnim(playerid,"BAR","Barcustom_loop",4.0, true, false, false, false, 0); }
-       	else if(animid == 13) { LoopingAnim(playerid,"BAR","Barserve_loop",4.0, true, false, false, false, 0); }
-        else { SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /stance [1-13]"); }
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+        case 'a', 'A': LoopingAnim(playerid,"STRIP", "strip_A", 4.1, true, true, true, true, 1 );
+        case 'b', 'B': LoopingAnim(playerid,"STRIP", "strip_B", 4.1, true, true, true, true, 1 );
+        case 'c', 'C': LoopingAnim(playerid,"STRIP", "strip_C", 4.1, true, true, true, true, 1 );
+        case 'd', 'D': LoopingAnim(playerid,"STRIP", "strip_D", 4.1, true, true, true, true, 1 );
+        case 'e', 'E': LoopingAnim(playerid,"STRIP", "strip_E", 4.1, true, true, true, true, 1 );
+        case 'f', 'F': LoopingAnim(playerid,"STRIP", "strip_F", 4.1, true, true, true, true, 1 );
+        case 'g', 'G': LoopingAnim(playerid,"STRIP", "strip_G", 4.1, true, true, true, true, 1 );
+        default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /strip [A-G]");
     }
-    if(strcmp(cmd, "/basket", true) == 0)
-    {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[8])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /basket [1-4]");
-    	switch (cmdtext[8])
-    	{
-        	case '1': LoopingAnim(playerid,"BSKTBALL","BBALL_idleloop",4.0, true, false, false, false, 0);
-        	case '2': OnePlayAnim(playerid,"BSKTBALL","BBALL_Jump_Shot",4.0, false, false, false, false, 0);
-        	case '3': LoopingAnim(playerid,"BSKTBALL","BBALL_run",4.1, true, true, true, true, 1);
-        	case '4': LoopingAnim(playerid,"BSKTBALL","BBALL_def_loop",4.0, true, false, false, false, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /basket [1-4]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+    return 1;
+}
+
+YCMD:dance(playerid, params[], help) {
+    if(isnull(params)) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /dance [style 1-4]");
+    
+    new dancestyle = strval(params);
+    if(dancestyle < 1 || dancestyle > 4)
+    { 
+        SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /dance [style 1-4]"); 
+        return 1; 
     }
-    if(strcmp(cmd, "/lean", true) == 0)
-    {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[6])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lean [1-3]");
-    	switch (cmdtext[6])
-    	{
-        	case '1': LoopingAnim(playerid,"GANGS","leanIDLE",4.0, false, true, true, true, 0);
-        	case '2': LoopingAnim(playerid,"MISC","Plyrlean_loop",4.0, false, true, true, true, 0);
-        	case '3': OnePlayAnim(playerid,"BAR","BARman_idle",3.0, false, true, true, true, 0);
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /lean [1-3]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
+    
+    switch(dancestyle) {
+        case 1: SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE1);
+        case 2: SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE2);
+        case 3: SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE3);
+        case 4: SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE4);
     }
-    if(strcmp(cmd, "/strip", true) == 0)
-    {
-    	if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) { return Y_HOOKS_CONTINUE_RETURN_1; }
-        if (!strlen(cmdtext[7])) return SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /strip [A-G]");
-    	switch (cmdtext[7])
-    	{
-        	case 'a', 'A': LoopingAnim(playerid,"STRIP", "strip_A", 4.1, true, true, true, true, 1 );
-        	case 'b', 'B': LoopingAnim(playerid,"STRIP", "strip_B", 4.1, true, true, true, true, 1 );
-        	case 'c', 'C': LoopingAnim(playerid,"STRIP", "strip_C", 4.1, true, true, true, true, 1 );
-        	case 'd', 'D': LoopingAnim(playerid,"STRIP", "strip_D", 4.1, true, true, true, true, 1 );
-        	case 'e', 'E': LoopingAnim(playerid,"STRIP", "strip_E", 4.1, true, true, true, true, 1 );
-        	case 'f', 'F': LoopingAnim(playerid,"STRIP", "strip_F", 4.1, true, true, true, true, 1 );
-        	case 'g', 'G': LoopingAnim(playerid,"STRIP", "strip_G", 4.1, true, true, true, true, 1 );
-        	default: SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /strip [A-G]");
-    	}
-    	return Y_HOOKS_CONTINUE_RETURN_1;
-    }
- 	if(strcmp(cmd, "/dance", true) == 0)
- 	{
- 		
-		dancestyle = strval(tmp);
-		if(dancestyle < 1 || dancestyle > 4)
-		{ SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje:{FFFFFF} /dance [style 1-4]"); return Y_HOOKS_CONTINUE_RETURN_1; }
-		if(dancestyle == 1) { SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE1); }
-		else if(dancestyle == 2) { SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE2); }
-		else if(dancestyle == 3) { SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE3); }
-		else if(dancestyle == 4) { SetPlayerSpecialAction(playerid,SPECIAL_ACTION_DANCE4); }
-		return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	if(strcmp(cmd, "/reload", true) == 0)
-    {
-        if (!strlen(cmdtext[8])) return SendClientMessage(playerid,0xEFEFF7AA,"{F3FF02}Koriscenje{FFFFFF}: /reload [deagle/smg/ak/m4]");
-       	if (strcmp("deagle",cmdtext[8],true) == 0)
-   	    {
-   			OnePlayAnim(playerid,"COLT45","colt45_reload",4.0, false, false, false, false, 1);
- 	    }
- 	    else if (strcmp("smg",cmdtext[8],true) == 0 || strcmp("ak",cmdtext[8],true) == 0 || strcmp("m4",cmdtext[8],true) == 0)
-   	    {
-   			OnePlayAnim(playerid,"UZI","UZI_reload",4.0, false, false, false, false, 0);
- 	    }
-       	else SendClientMessage(playerid,x_white,"{F9FF52}Koriscenje{FFFFFF}: /reload [deagle/smg/ak/m4]");
-    	return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-    if(strcmp(cmd, "/fallback", true) == 0) {
-		LoopingAnim(playerid, "PED","FLOOR_hit_f", 4.0, true, false, false, false, 0);
-        return Y_HOOKS_CONTINUE_RETURN_1;
-    }
-	if(strcmp(cmd,"/customization",true)==0)
-    {
-		new lib[50];
-		lib = strtok(cmdtext, idx);
-		if(!strlen(lib)) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		new anim[256];
-		anim = strtok(cmdtext, idx);
-		if(!strlen(anim)) { return Y_HOOKS_CONTINUE_RETURN_1; }
-		LoopingAnim(playerid,lib,anim,3.0, true, true, true, true, 1);
-		return Y_HOOKS_CONTINUE_RETURN_1;
-	}
-	return 0;
+    return 1;
+}
+
+YCMD:customization(playerid, params[], help) {
+    new lib[50], anim[256];
+    if(sscanf(params, "s[50]s[256]", lib, anim)) return 1;
+    
+    LoopingAnim(playerid,lib,anim,3.0, true, true, true, true, 1);
+    return 1;
 }

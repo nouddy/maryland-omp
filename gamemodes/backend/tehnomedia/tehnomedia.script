@@ -173,6 +173,9 @@ hook OnPlayerText(playerid, text[])
 YCMD:oglas(playerid, params[], help) = advertisement;
 YCMD:advertisement(playerid, params[], help) 
 {
+    if(gAdvertisementCooldown > gettime())
+        return SendClientMessage(playerid, x_server, "#ADVERTISEMENT: "c_white"Neko je nedavno postavio oglas!");
+        
     if(PlayerElectronic[playerid][ePhoneModel] == -1)
         return SendClientMessage(playerid, x_server, "maryland \187; "c_white"Ne posjedujete telefon!");
 
