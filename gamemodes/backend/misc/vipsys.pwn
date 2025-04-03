@@ -506,7 +506,7 @@ hook OnGameModeInit()
     // Start the VIP expiry timer
     gVIPExpiryTimer = repeat CheckVIPExpiry();
 
-    mysql_tquery(SQL, "SELECT * FROM `vip_vehicles`", "mysql_LoadVipVehicles");
+    // mysql_tquery(SQL, "SELECT * FROM `vip_vehicles`", "mysql_LoadVipVehicles");
 
     ms_VIPMenu = LoadModelSelectionMenu("vip_skins.txt");
 

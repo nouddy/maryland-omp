@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        #server-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: auto;
+        }
+
+        #right-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .money-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .time-date {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .gold {
+            color: #FFD700;
+        }
+
+        .money {
+            color: #32CD32;
+        }
+    </style>
+</head>
+<body>
+    <img id="server-logo" src="logo.png" alt="Server Logo">
+    
+    <div id="right-panel">
+        <div class="money-container">
+            <div class="gold">Gold: $<span id="player-gold">0</span></div>
+            <div class="money">Bank: $<span id="player-money">0</span></div>
+        </div>
+        
+        <div class="time-date">
+            <div id="game-time">00:00</div>
+            <div id="game-date">01/01/2024</div>
+        </div>
+    </div>
+
+    <script>
+        // Update time and date
+        function updateTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const date = now.toLocaleDateString('en-US');
+            
+            document.getElementById('game-time').textContent = time;
+            document.getElementById('game-date').textContent = date;
+        }
+        
+        setInterval(updateTime, 1000);
+        
+        // CEF Integration for SA:MP
+        if (typeof cef !== 'undefined') {
+            cef.on('updatePlayerMoney', (money) => {
+                document.getElementById('player-money').textContent = money;
+            });
+            
+            cef.on('updatePlayerGold', (gold) => {
+                document.getElementById('player-gold').textContent = gold;
+            });
+        }
+    </script>
+</body>
+</html>
+
+

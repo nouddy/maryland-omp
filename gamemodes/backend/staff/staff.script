@@ -140,34 +140,34 @@ hook OnGameModeInit()
 	return 1;
 }
 
-hook OnPlayerConnect(playerid)
-{
-	PlayerInfo[playerid][Staff] = 0;
-    Spectate[playerid] = INVALID_PLAYER_ID;
+// hook OnPlayerConnect(playerid)
+// {
+// 	PlayerInfo[playerid][Staff] = 0;
+//     Spectate[playerid] = INVALID_PLAYER_ID;
 	
-	// U?itaj specijalni rank
-	new query[128];
-	mysql_format(SQL, query, sizeof(query), 
-		"SELECT SpecialRank FROM accounts WHERE ID = %d",
-		GetPlayerSQLID(playerid));
-	mysql_tquery(SQL, query, "OnSpecialRankLoad", "i", playerid);
+// 	// U?itaj specijalni rank
+// 	new query[128];
+// 	mysql_format(SQL, query, sizeof(query), 
+// 		"SELECT SpecialRank FROM accounts WHERE ID = %d",
+// 		GetPlayerSQLID(playerid));
+// 	mysql_tquery(SQL, query, "OnSpecialRankLoad", "i", playerid);
 	
-	// Dodaj u OnPlayerConnect
-	AdminFreeze[playerid] = false;
+// 	// Dodaj u OnPlayerConnect
+// 	AdminFreeze[playerid] = false;
 	
-	return 1;
-}
+// 	return 1;
+// }
 
-hook OnCharacterLoaded(playerid)
-{    
-    LoadCharacterDisarm(playerid);
+// hook OnCharacterLoaded(playerid)
+// {    
+//     LoadCharacterDisarm(playerid);
 
-    new q[128];
-    mysql_format(SQL, q, sizeof q, "SELECT * FROM `player_mutes` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
-    mysql_tquery(SQL, q, "mysql_LoadPlayerMute", "d", playerid);
+//     new q[128];
+//     mysql_format(SQL, q, sizeof q, "SELECT * FROM `player_mutes` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+//     mysql_tquery(SQL, q, "mysql_LoadPlayerMute", "d", playerid);
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
+//     return Y_HOOKS_CONTINUE_RETURN_1;
+// }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
@@ -490,10 +490,10 @@ YCMD:cc(playerid, params[], help)
 	static fmt_string[120], sati, minuta, sekunda; gettime(sati, minuta, sekunda);
 	format(fmt_string, sizeof(fmt_string), ""c_server"CHAT"c_server2"BOX: "c_white"Chat je ocistio "c_server"%s", ReturnPlayerName(playerid));
 	SendClientMessageToAll(-1, fmt_string);
-	SendClientMessageToAll(-1, ""c_white"•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" );
+	SendClientMessageToAll(-1, ""c_white"\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;\175;" );
 	format( fmt_string, sizeof( fmt_string ), "\t\t\t\t\t\t"c_server" » "c_white"Trenutno vreme je: "c_server"%02d:%02d:%02d", sati, minuta, sekunda); 
 	SendClientMessageToAll(-1, fmt_string );
-	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" » "c_white"Ugodnu igru na serveru zeli vam "c_server"Maryland Staff Team");
+	SendClientMessageToAll(-1, "\t\t\t\t\t\t"c_server" » "c_white""c_server"");
 
     return 1;
 }

@@ -43,9 +43,9 @@ public mysql_LoadPlayerSettings(playerid) {
 
 hook OnCharacterLoaded(playerid) {
 
-    new q[128];
-    mysql_format(SQL, q, sizeof q, "SELECT * FROM `player_settings` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
-    mysql_tquery(SQL, q, "mysql_LoadPlayerSettings", "d", playerid);
+    // new q[128];
+    // mysql_format(SQL, q, sizeof q, "SELECT * FROM `player_settings` WHERE `character_id` = '%d'", GetCharacterSQLID(playerid));
+    // mysql_tquery(SQL, q, "mysql_LoadPlayerSettings", "d", playerid);
 
     return Y_HOOKS_CONTINUE_RETURN_1;
 }

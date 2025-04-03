@@ -18,6 +18,8 @@
  *  @File           maryland.core
  *  @Module         main
 
+ * Sto je muzo sisu muzo je....
+
 */
 
 #define YSI_NO_HEAP_MALLOC
@@ -55,7 +57,6 @@
 #include <animated-textdraw>
 #include <crashdetect>
 #include <colandreas>
-#include <marylandFix>
 #include <progress2>
 #include <walking_styles>
 #include <colors>
@@ -260,7 +261,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 #include "backend/factions/illegal/bunker.script"					//* Bunker
 #include "backend/factions/illegal/faction.pwn"					    //* Core
 #include "backend/factions/illegal/drugs.pwn"						//* Drugs
-#include "backend/factions/illegal/gang_turfs.pwn"
 
 #include "backend/factions/vehicles/faction_vehicles.pwn"
 
@@ -326,91 +326,6 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 //-------------------------------------------------------------------------------------------------------- Textdraws
 #include "frontend/textdraws/main.tde"								//* Glavni tdovi
 
-//-------------------------------------------------------------------------------------------------------- Exteriors
-#include "frontend/exterior/starbucks.map"							//* Starbucks map 
-#include "frontend/exterior/cityhall.map"							//* Opstina map
-#include "frontend/exterior/main_street.map"						//* Glavna ulica map
-#include "frontend/exterior/blackmarket.map"						//* Crno trziste map
-#include "frontend/exterior/tehnomedia.map"							//* Tehnomedia map Ogy
-#include "frontend/exterior/spawn.map"								//* Spawn Mapa
-#include "frontend/exterior/choose_skin.map"						//* Izbor skina mapa
-#include "frontend/exterior/glenpark.map"							//* Glen park map
-#include "frontend/exterior/maryland-pd.map"						//* MLPD Mapa Ext
-#include "frontend/exterior/hospital-ext.map"						//* Bolnica ext Mapa
-#include "frontend/exterior/hotel-ext.map"							//* Hotel Mapa
-#include "frontend/exterior/customs.map"							//* Customs Mapa
-#include "frontend/exterior/shopping-center.map"					//* Shopping Center Mapa
-#include "frontend/exterior/bizcent-ext.map"						//* Shopping Center Mapa
-#include "frontend/exterior/centar_park.map"						//* Center Park Mapa
-#include "frontend/exterior/binance_ext.map"						//* Binance Exterior Mapa
-#include "frontend/exterior/croswellas.map"							//* Auto Salon Croswell
-#include "frontend/exterior/employment_office.map"					//* Biro Rada
-#include "frontend/exterior/italy-border.map"						//* Granica Maryland-Italy
-#include "frontend/exterior/ml-gym.map"								//* ML Gym Map
-#include "frontend/exterior/ls-decorations.map"						//* ML Ukrasi po gradu
-#include "frontend/exterior/ml_bus_driver.map"						//* ML Bus Station
-#include "frontend/exterior/ml_jewelry.map"							//* ML Zlatara
-#include "frontend/exterior/gov_ext.map"							//* Goverment
-#include "frontend/exterior/beach.map"								//* Plaza
-#include "frontend/exterior/pizzeria.map"							//* Pizzeria
-#include "frontend/exterior/driving_school.map"						//* Driving_School
-#include "frontend/exterior/vinewood_map.map"						//* VineWood
-#include "frontend/exterior/bank_ml.map"							//* Banka Maryland
-#include "frontend/exterior/vinewood_mall.map"					    //* VineWood Mall
-#include "frontend/exterior/rp-hood.map"					        //* Rp Hood
-#include "frontend/exterior/jail_mlext.map"					        //* Jail Exterior
-#include "frontend/exterior/ml_markers.map"					        //* Ml markers
-#include "frontend/exterior/lcn_tunnel.map"					        //* Tunel ispod goverment
-#include "frontend/exterior/ukrasi_ispodlcn.map"					//* Ukrasi ispod goverment
-#include "frontend/exterior/vipbase.map"							//* Vip Base Maps
-#include "frontend/exterior/egyptukrasi2.map"						//* Egypt ukrasi 2
-
-//-------------------------------------------------------------------------------------------------------- Italy Exteriors
-#include "frontend/exterior/italy_zipline.map"						//* Zicara u Italy (SF)
-
-//-------------------------------------------------------------------------------------------------------- Egypt Exteriors
-
-#include "frontend/exterior/trainstation_egypt.map"					//* Zeleznicka u Egypt (LV)
-#include "frontend/exterior/egypt_centar.map"						//* Egypt Centar (PD - OPSTINA)
-#include "frontend/exterior/egypt_hotel.map"						//* Egypt Hotel
-#include "frontend/exterior/egypt_street.map"						//* Egypt Glavna Ulica
-#include "frontend/exterior/egypt_decorations.map"					//* Egypt Ukrasi
-#include "frontend/exterior/egypt_pump.map"							//* Egypt Pumpa
-
-//------------------------------------------------------------------------------------------------------------------- Interiors
-#include "frontend/interior/login-new.map"							//* Login interior novi Ogy (interior 1)
-#include "frontend/interior/garage.map"								//* Garaza mapa (interior 2)
-#include "frontend/interior/sewers.map"								//* Kanalizacija map (interior 3)
-#include "frontend/interior/bizcent-int.map"						//* Biz centar interior (interior 4)
-#include "frontend/interior/city_hall.map"						//* Opstina int map (interior 5)
-#include "frontend/interior/spawn-int.map"							//* Spawn Int Mapa (interior 6)
-#include "frontend/interior/hotel-int.map"							//* Hotel interior (virtual world 7)
-#include "frontend/exterior/polygon-as.map"							//* Auto Skola Poligon Mapa (virtual world 8)
-#include "frontend/interior/bizcent-lux-int.map"					//* Business Center Luxurious Interior (interior 9);
-#include "frontend/interior/harbor_int.map"							//* Main Maryland Bank Interior (interior 10);
-#include "frontend/interior/flecca-bank.map"						//* Flecca bank map (11)
-
-#include "frontend/interior/levis-int.map"							//* Levis (0) -> Becasuse of default Ds interior
-//#include "frontend/interior/eg-hotel-int.map"						//* Egypt Hotel (13)
-#include "frontend/exterior/train_tut.map"						    //* Train Tut (14)
-#include "frontend/interior/house-int.map"						    //* House Int (15)
-#include "frontend/interior/driving-school-int.map"					//* Driving_School (16)
-#include "frontend/interior/mob_int.map"						    //* Mob Int (17)
-#include "frontend/interior/7eleven_int.map"						//* Market 7/Eleven Int (18)
-#include "frontend/interior/train-int.map"						    //* Train Interior (19)
-#include "frontend/interior/bcenter-garage.map"						//* Business Centre Garage (20)
-#include "frontend/interior/jewlery_int.map"						//* Jewlery Int (21)
-#include "frontend/interior/reception_int.map"						//* Recpetion Int (22)
-#include "frontend/interior/hospital-int.map"						//* Hospital Int (23)
-#include "frontend/interior/police_int.map"							//* Police Int (24)
-#include "frontend/interior/carpentry_int.map"						//* Stolarija Int (25) znaci boze
-#include "frontend/interior/drug_lab.map"							//* Druglab Int (28) Neki tripovi
-#include "frontend/interior/advertisement_int.map"				    //* Flecca bank map (0)
-#include "frontend/exterior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
-#include "frontend/interior/alcatraz_int.map"    				    //* Alcatraz/Jail (30)
-#include "frontend/interior/case.map"    				    		//* Case za evente (31 interior)
-#include "frontend/interior/dedust2.map"    				    	//* Dedust2 za evente (32 interior)
-#include "frontend/interior/mining_room.map"    				    //* Mining room za crypto (33 interior)
 //--------------------------------------------------------------------------------------------------------- Temp
 #include "frontend/end/do-not-look.temp"
 //-------------------------------------------------------------------------------------------------------- Jobs
@@ -441,11 +356,11 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
 
 #include "backend/misc/commands.pwn"							   //* Cmds
 #include "backend/misc/experience.pwn"							   //* Cmds
-#include "backend/misc/hj_hh.pwn"								//* Happy Jobs and Happy Hours
-#include "backend/misc/gates.pwn"								//* Gates
-#include "backend/finance/atm.pwn"
-#include "backend/misc/streets.pwn"								//* Streets
-#include "backend/vehicle/vehiclereg.pwn"						//* Vehicle Registration
+// #include "backend/misc/hj_hh.pwn"								//* Happy Jobs and Happy Hours
+// #include "backend/misc/gates.pwn"								//* Gates
+// #include "backend/finance/atm.pwn"
+// #include "backend/misc/streets.pwn"								//* Streets
+// #include "backend/vehicle/vehiclereg.pwn"						//* Vehicle Registration
 
 #include "backend/vehicle/rent_vehicle.pwn"						//* Rent
 #include "backend/misc/lastpos.pwn"								//* Last position saved
